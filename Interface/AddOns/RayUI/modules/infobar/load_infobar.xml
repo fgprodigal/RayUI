@@ -1,0 +1,14 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="infobar.lua"/>
+	<Script file="infotext.lua"/>
+	<Script file="fps.lua"/>
+	<Script file="latency.lua"/>
+	<Script file="memory.lua"/>
+	<Script file="durability.lua"/>
+	<Script file="friend.lua"/>
+	<Script file="guild.lua"/>
+	<Script file="currency.lua"/>
+	<Script file="specswitch.lua"/>
+	<Script file="stat1.lua"/>
+	<Script file="stat2.lua"/>
+</Ui>

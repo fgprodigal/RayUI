@@ -1,0 +1,16 @@
+tag 4.1.0.35-Beta
+91cbffbb22b3af4d43c8c2527ec5f7a4a3a6680f
+tekkub :bear:  <tekkub@gmail.com>
+2011-05-23 19:02:22 -0600
+
+Weekly build
+
+
+--------------------
+
+tekkub :bear: :
+	- Weekly build 4.1.0.35-Beta
+	- Update changelog for 4.1.0.35-Beta
+tekkub :bear: :
+	- Add rogue pot, closes #9
+	- Fix conj. mana cake.

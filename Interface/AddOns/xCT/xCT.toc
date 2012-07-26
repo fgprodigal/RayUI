@@ -1,0 +1,9 @@
+﻿## Interface: 50001
+## Title: |cffFF0000x|rCT
+## Notes: X Combat Text
+## Author: Affli @ RU-Howling Fjord
+## Version: 1.8f
+## RequiredDeps: Blizzard_CombatText, RayUI
+
+config.lua
+xCT.lua

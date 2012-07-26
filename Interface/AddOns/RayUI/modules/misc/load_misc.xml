@@ -1,0 +1,22 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="misc.lua"/>
+	<Script file="afkfix.lua"/>
+	<Script file="announce.lua"/>
+	<Script file="auction.lua"/>
+	<Script file="autodez.lua"/>
+	<Script file="autorelease.lua"/>
+	<Script file="bubbles.lua"/>
+	<Script file="debugTools.lua"/>
+	<Script file="durability.lua"/>
+	<Script file="hattrick.lua"/>
+	<Script file="loot_roll.lua"/>
+	<Script file="merchant.lua"/>
+	<Script file="mirror.lua"/>
+	<Script file="quests.lua"/>
+	<Script file="raidBuffReminder.lua"/>
+	<Script file="raidmarker.lua"/>
+	<Script file="raidUtility.lua"/>
+	<Script file="timerTracker.lua"/>
+	<Script file="vehicle.lua"/>
+	<Script file="watchframe.lua"/>
+</Ui>

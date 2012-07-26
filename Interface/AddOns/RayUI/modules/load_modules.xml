@@ -1,0 +1,18 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">	
+	<Include file="skins\load_skins.xml"/>
+	<Include file="infobar\load_infobar.xml"/>
+	<Include file="actionbar\load_actionbar.xml"/>
+	<Include file="unitframes\load_unitframes.xml"/>
+	<Include file="raid\load_raid.xml"/>
+	<Include file="nameplates\load_nameplates.xml"/>
+	<Include file="buff\load_buff.xml"/>
+	<Include file="map\load_map.xml"/>
+	<Include file="bags\load_bags.xml"/>
+	<Include file="chat\load_chat.xml"/>
+	<Include file="cooldownflash\load_cooldownflash.xml"/>
+	<Include file="tooltip\load_tooltip.xml"/>
+	<Include file="watcher\load_watcher.xml"/>
+	<Include file="tutorial\load_tutorial.xml"/>
+	<Include file="reminder\load_reminder.xml"/>
+	<Include file="misc\load_misc.xml"/>
+</Ui>

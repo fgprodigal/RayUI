@@ -1,0 +1,4 @@
+﻿<Bindings>
+	<Binding name="EASYMOUNT_HOTKEY1" header="RAYUI"> </Binding>
+	<Binding name="EASYMOUNT_HOTKEY2"> </Binding>
+</Bindings>

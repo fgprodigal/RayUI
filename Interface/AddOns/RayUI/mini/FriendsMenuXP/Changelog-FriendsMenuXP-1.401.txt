@@ -1,0 +1,37 @@
+------------------------------------------------------------------------
+r5 | warbaby | 2009-06-06 04:46:04 +0000 (Sat, 06 Jun 2009) | 1 line
+Changed paths:
+   A /tags/1.401 (from /trunk:4)
+
+Tagging as 1.401
+------------------------------------------------------------------------
+r4 | warbaby | 2009-06-05 14:31:32 +0000 (Fri, 05 Jun 2009) | 1 line
+Changed paths:
+   M /trunk/ButtonSet.lua
+
+forgot to change armory site host according to the locale
+------------------------------------------------------------------------
+r2 | warbaby | 2009-06-05 14:08:58 +0000 (Fri, 05 Jun 2009) | 2 lines
+Changed paths:
+   A /trunk/ButtonSet.lua
+   A /trunk/FriendsMenuXP.lua
+   A /trunk/FriendsMenuXP.toc
+   A /trunk/FriendsMenuXP.xml
+   A /trunk/SpellNames.lua
+   A /trunk/localization.deDE.lua
+   A /trunk/localization.enUS.lua
+   A /trunk/localization.zhCN.lua
+   A /trunk/localization.zhTW.lua
+   A /trunk/others.txt
+
+svn initial version.
+Add armory link button.
+------------------------------------------------------------------------
+r1 | root | 2009-06-05 13:30:46 +0000 (Fri, 05 Jun 2009) | 1 line
+Changed paths:
+   A /branches
+   A /tags
+   A /trunk
+
+"friends-menu-xp/mainline: Initial Import"
+------------------------------------------------------------------------

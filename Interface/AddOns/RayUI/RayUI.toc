@@ -1,0 +1,17 @@
+﻿## Interface: 50001
+## Title: |cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r
+## Version: 5.0 beta
+## Author: Tukz, Elv, Ray
+## OptionalDeps: Skada, ACP, DBM-Core, BigWigs, AtlasLoot, BugSack
+## RequiredDeps: Blizzard_CombatText
+## X-oUF: RayUF
+## SavedVariables: RayUIData
+
+libs\load_libs.xml
+locales\load_locales.xml
+media\load_media.xml
+init.lua
+config\load_config.xml
+core\load_core.xml
+modules\load_modules.xml
+mini\load_mini.xml

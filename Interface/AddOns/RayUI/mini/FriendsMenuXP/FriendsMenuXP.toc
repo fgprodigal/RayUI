@@ -1,0 +1,16 @@
+## Interface: 40000
+## Author: Warbaby @ 聖光之願 <冰封十字軍>
+## Title: |cFF00FF00[B]|rFriendsMenuXP-玩家菜单增强
+## Notes: Greatly extends the player drop down menu without secure taint.
+## Notes-zhCN: 玩家超链接、查询列表、好友列表、工会列表中点击玩家名字增加更多选择。此外，按住alt点玩家链接可以邀请，按住ctrl点玩家链接选定目标。
+## Notes-zhTW: 玩家超鏈結、查詢列表、好友列表、工會列表中點擊玩家名字增加更多選擇。此外，按住alt點玩家鏈結可以邀請，按住ctrl點玩家鏈結選定目標。
+## X-Curse-Packaged-Version: 1.5
+## X-Curse-Project-Name: FriendsMenuXP
+## X-Curse-Project-ID: friends-menu-xp
+## X-Curse-Repository-ID: wow/friends-menu-xp/mainline
+SpellNames.lua
+localization.enUS.lua
+localization.zhCN.lua
+localization.zhTW.lua
+localization.deDE.lua
+FriendsMenuXP.xml

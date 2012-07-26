@@ -1,0 +1,21 @@
+h2(#readme). 
+
+!https://github.com/downloads/fangorRay/UIProject/logo.png!
+
+h2. RayUI
+
+h3. 下载
+
+h4. World of Warcraft (4.3)
+
+p. "最新版本":https://github.com/fangorRay/UIProject/zipball/master
+
+h3. 说明
+
+p. 常用命令
+
+* /moveui 解锁锚点
+
+* /hb 绑定快捷键
+
+* /rc RayUI控制台
