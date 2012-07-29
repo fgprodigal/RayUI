@@ -229,34 +229,26 @@ function UF:DPSLayout(frame, unit)
             elseif R.myclass == "MONK" then
 				count = 5
 				frame.maxChi = 5
-			else
+			elseif R.myclass == "WARLOCK" then
+                count = 4
+            else
                 count = 3 
             end
 
             local bars = CreateFrame("Frame", nil, frame)
-			-- bars:SetSize(200/count - 5, 5)
-			-- bars:SetFrameLevel(5)
-			-- if count == 3 then
-				-- bars:Point("BOTTOMRIGHT", frame, "TOP", bars:GetWidth()*1.5 + 5, 1)
-			-- else
-				-- bars:Point("BOTTOMRIGHT", frame, "TOP", bars:GetWidth()*3 + 12.5, 1)
-			-- end
 			bars:SetSize(200, 5)
 			bars:SetFrameLevel(5)
 			bars:Point("BOTTOM", frame, "TOP", 0, 1)
 
             local i = count
-            for index = 1, count do
+            for i = 1, count do
                 bars[i] = CreateFrame("StatusBar", nil, bars)
 				bars[i]:SetStatusBarTexture(R["media"].normal)
 				bars[i]:SetWidth((200 - (count - 1)*5)/count)
 				bars[i]:SetHeight(5)
 				bars[i]:GetStatusBarTexture():SetHorizTile(false)
 
-                if R.myclass == "WARLOCK" then
-                    local color = oUF.colors.class["WARLOCK"]
-                    bars[i]:SetStatusBarColor(color[1], color[2], color[3])
-                elseif R.myclass == "PALADIN" then
+                if R.myclass == "PALADIN" then
                     local color = oUF.colors.power["HOLY_POWER"]
                     bars[i]:SetStatusBarColor(color[1], color[2], color[3])
 				else
@@ -264,11 +256,17 @@ function UF:DPSLayout(frame, unit)
 					bars[i]:SetStatusBarColor(color.r, color.g, color.b)
                 end 
 
-                if i == count then
-                    bars[i]:SetPoint("RIGHT", bars, "RIGHT")
+                if i == 1 then
+                    bars[i]:SetPoint("LEFT", bars, "LEFT")
                 else
-                    bars[i]:Point("RIGHT", bars[i+1], "LEFT", -5, 0)
+                    bars[i]:Point("LEFT", bars[i-1], "RIGHT", 5, 0)
                 end
+
+                --if i == count then
+                    --bars[i]:SetPoint("RIGHT", bars, "RIGHT")
+                --else
+                    --bars[i]:Point("RIGHT", bars[i+1], "LEFT", -5, 0)
+                --end
 
                 bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
                 bars[i].bg:SetAllPoints(bars[i])
@@ -278,13 +276,13 @@ function UF:DPSLayout(frame, unit)
 				bars[i]:CreateShadow("Background")
 				bars[i].shadow:SetFrameStrata("BACKGROUND")
 				bars[i].shadow:SetFrameLevel(0)
-                i=i-1
+                --i=i-1
             end
 
             if R.myclass == "DEATHKNIGHT" then
                 frame.Runes = bars
             elseif R.myclass == "WARLOCK" then
-                frame.SoulShards = bars
+                frame.WarlockSpecBars = bars
             elseif R.myclass == "PALADIN" then
                 frame.HolyPower = bars
             elseif R.myclass == "PRIEST" then

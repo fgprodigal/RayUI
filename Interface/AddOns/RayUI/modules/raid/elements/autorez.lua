@@ -10,8 +10,8 @@ local classList = {
     },
 
     ["WARLOCK"] = {
-        combat = GetSpellInfo(6203), -- Soulstone
-        ooc = GetSpellInfo(6203), -- Soulstone
+        combat = GetSpellInfo(20707), -- Soulstone
+        ooc = GetSpellInfo(20707), -- Soulstone
     },
 
     ["PRIEST"] = {
@@ -42,10 +42,6 @@ local function macroBody(class)
 
         if oocspell then
             body = body .. "[help,dead,@mouseover] " .. oocspell .. "; "
-        end
-
-        if class == "WARLOCK" then
-            body = body .. "\n/cast "..GetSpellInfo(693).."\n "
         end
     elseif oocspell then
         body = body .. "/cast [help,dead,@mouseover] " .. oocspell .. "; "

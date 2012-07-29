@@ -8,4 +8,5 @@
 	<Script file="TotemBar.lua"/>
 	<Script file="Trinkets.lua"/>
 	<Script file="Vengeance.lua"/>
+	<Script file="WarlockSpecBars.lua"/>
 </Ui>

@@ -881,6 +881,8 @@ R["Watcher"] = {
 				{ spellID = 3409, unitId = "target", caster = "player", filter = "DEBUFF" },
 				--致傷毒藥
 				{ spellID = 13218, unitId = "target", caster = "player", filter = "DEBUFF" },
+				--吸血毒藥
+				{ spellID = 112961, unitId = "target", caster = "player", filter = "DEBUFF" },
 
 			},
 			{
