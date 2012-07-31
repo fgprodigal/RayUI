@@ -6,7 +6,10 @@ local function LoadSkin()
 	local AchievementHolder = CreateFrame("Frame", "AchievementHolder", UIParent)
 	AchievementHolder:SetWidth(180)
 	AchievementHolder:SetHeight(20)
-	AchievementHolder:SetPoint("CENTER", UIParent, "CENTER", 0, 170)
+	AchievementHolder:SetPoint("CENTER", UIParent, "CENTER", 0, 100)
+
+	AlertFrame:ClearAllPoints()
+	AlertFrame:SetPoint("TOP", AchievementHolder, "TOP")
 
 	local function ReskinAchievementPopup(self, event, ...)
 		local previousFrame
@@ -46,11 +49,6 @@ local function LoadSkin()
                 _G["AchievementAlertFrame"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
                 _G["AchievementAlertFrame"..i.."IconOverlay"]:Hide()
 
-				if ( previousFrame and previousFrame:IsShown() ) then
-					frame:SetPoint("TOP", previousFrame, "BOTTOM", 0, -10)
-				else
-					frame:SetPoint("TOP", AchievementHolder, "BOTTOM")
-				end
 				previousFrame = frame
 			end
 		end
@@ -59,18 +57,18 @@ local function LoadSkin()
 
 	hooksecurefunc("AlertFrame_FixAnchors", ReskinAchievementPopup)
 
-	hooksecurefunc("AlertFrame_FixAnchors", function()
-		for i=MAX_ACHIEVEMENT_ALERTS, 1, -1 do
-			local frame = _G["AchievementAlertFrame"..i]
-			if ( frame and frame:IsShown() ) then
-				DungeonCompletionAlertFrame1:ClearAllPoints()
-				DungeonCompletionAlertFrame1:SetPoint("TOP", frame, "BOTTOM", 0, -10)
-				return
-			end
-			DungeonCompletionAlertFrame1:ClearAllPoints()
-			DungeonCompletionAlertFrame1:SetPoint("TOP", AchievementHolder, "BOTTOM")
-		end
-	end)
+	-- hooksecurefunc("AlertFrame_FixAnchors", function()
+		-- for i=MAX_ACHIEVEMENT_ALERTS, 1, -1 do
+			-- local frame = _G["AchievementAlertFrame"..i]
+			-- if ( frame and frame:IsShown() ) then
+				-- DungeonCompletionAlertFrame1:ClearAllPoints()
+				-- DungeonCompletionAlertFrame1:SetPoint("TOP", frame, "BOTTOM", 0, -10)
+				-- return
+			-- end
+			-- DungeonCompletionAlertFrame1:ClearAllPoints()
+			-- DungeonCompletionAlertFrame1:SetPoint("TOP", AchievementHolder, "BOTTOM")
+		-- end
+	-- end)
 
 	local achieveframe = CreateFrame("Frame")
 	achieveframe:RegisterEvent("ACHIEVEMENT_EARNED")
@@ -123,11 +121,11 @@ local function LoadSkin()
 		end
 
 		GuildChallengeAlertFrame:ClearAllPoints()
-		if pos == "TOP" then
-			GuildChallengeAlertFrame:SetPoint("TOP", frame, "BOTTOM", 0, -10)
-		else
-			GuildChallengeAlertFrame:SetPoint("BOTTOM", frame, "TOP", 0, 10)
-		end
+		-- if pos == "TOP" then
+			-- GuildChallengeAlertFrame:SetPoint("TOP", frame, "BOTTOM", 0, -10)
+		-- else
+			-- GuildChallengeAlertFrame:SetPoint("BOTTOM", frame, "TOP", 0, 10)
+		-- end
 	end)
 
 	for i=1, GuildChallengeAlertFrame:GetNumRegions() do
@@ -139,6 +137,26 @@ local function LoadSkin()
 
 	S:SetBD(GuildChallengeAlertFrame)
 	GuildChallengeAlertFrame:Height(65)
+
+	SlashCmdList.TEST_ACHIEVEMENT = function()
+		PlaySound("LFG_Rewards")
+		AchievementFrame_LoadUI()
+		AchievementAlertFrame_ShowAlert(5780)
+		AchievementAlertFrame_ShowAlert(5000)
+		GuildChallengeAlertFrame_ShowAlert(3, 2, 5)
+		ChallengeModeAlertFrame_ShowAlert()
+		CriteriaAlertFrame_GetAlertFrame()
+		AlertFrame_AnimateIn(CriteriaAlertFrame1)
+		AlertFrame_AnimateIn(DungeonCompletionAlertFrame1)
+		AlertFrame_AnimateIn(ScenarioAlertFrame1)
+
+		local _, itemLink = GetItemInfo(6948)
+		LootWonAlertFrame_ShowAlert(itemLink, -1, 1, 1)
+		MoneyWonAlertFrame_ShowAlert(1)
+
+		AlertFrame_FixAnchors()
+	end
+	SLASH_TEST_ACHIEVEMENT1 = "/testalerts"
 end
 
 S:RegisterSkin("RayUI", LoadSkin)

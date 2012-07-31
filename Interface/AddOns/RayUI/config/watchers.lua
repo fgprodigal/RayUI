@@ -953,6 +953,8 @@ R["Watcher"] = {
 				{ spellID = 51722, unitId = "target", caster = "player", filter = "DEBUFF" },
 				--出血
 				{ spellID = 16511, unitId = "target", caster = "player", filter = "DEBUFF" },
+				--揭底之擊
+				{ spellID = 84617, unitId = "target", caster = "player", filter = "DEBUFF" },
 
 			},
 			{

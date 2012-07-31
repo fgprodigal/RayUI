@@ -35,24 +35,25 @@ local function LoadSkin()
 		end
 	end)
 
-	S:SetBD(ItemTextFrame, 16, -8, -28, 62)
-	ItemTextFrame:DisableDrawLayer("BORDER")
-
-	ItemTextPageText:SetTextColor(1, 1, 1)
-	ItemTextPageText.SetTextColor = R.dummy
-
-	S:ReskinArrow(ItemTextPrevPageButton, "left")
-	S:ReskinArrow(ItemTextNextPageButton, "right")
+	select(18, ItemTextFrame:GetRegions()):Hide()
+	InboxFrameBg:Hide()
+	ItemTextScrollFrameMiddle:SetAlpha(0)
+	ItemTextScrollFrameTop:SetAlpha(0)
+	ItemTextScrollFrameBottom:SetAlpha(0)
 	ItemTextPrevPageButton:GetRegions():Hide()
 	ItemTextNextPageButton:GetRegions():Hide()
-	ItemTextFrame:GetRegions():Hide()
-	ItemTextScrollFrameMiddle:Hide()
-	ItemTextScrollFrameTop:Hide()
-	ItemTextScrollFrameBottom:Hide()
 	ItemTextMaterialTopLeft:SetAlpha(0)
 	ItemTextMaterialTopRight:SetAlpha(0)
 	ItemTextMaterialBotLeft:SetAlpha(0)
 	ItemTextMaterialBotRight:SetAlpha(0)
+
+	S:ReskinPortraitFrame(ItemTextFrame, true)
+	S:ReskinScroll(ItemTextScrollFrameScrollBar)
+	S:ReskinArrow(ItemTextPrevPageButton, "left")
+	S:ReskinArrow(ItemTextNextPageButton, "right")
+
+	ItemTextPageText:SetTextColor(1, 1, 1)
+	ItemTextPageText.SetTextColor = R.dummy
 end
 
 S:RegisterSkin("RayUI", LoadSkin)

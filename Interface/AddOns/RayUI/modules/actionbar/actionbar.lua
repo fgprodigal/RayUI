@@ -278,7 +278,7 @@ function AB:HideBlizz()
 		"_BG",
 		"EndCapL",
 		"EndCapR",
-		--"_Boader",
+		"_Border",
 		"Divider1",
 		"Divider2",
 		"Divider3",

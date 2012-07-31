@@ -1,7 +1,7 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file='misc.lua'/>
 	<Script file='achievement.lua'/>
-	<Script file='achievement_popup.lua'/>
+	<Script file='alerts.lua'/>
 	<Script file='alteration.lua'/>
 	<Script file='archaeology.lua'/>
 	<Script file='auction.lua'/>
