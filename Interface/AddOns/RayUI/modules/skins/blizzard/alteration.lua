@@ -32,11 +32,7 @@ local function LoadSkin()
 			ic:SetTexCoord(.08, .92, .08, .92)
 			S:CreateBD(slot, 0)
 
-			slot:StyleButton()
-			slot:GetHighlightTexture():Point("TOPLEFT", 1, -1)
-			slot:GetHighlightTexture():Point("BOTTOMRIGHT", -1, 1)
-			slot:GetPushedTexture():Point("TOPLEFT", 1, -1)
-			slot:GetPushedTexture():Point("BOTTOMRIGHT", -1, 1)
+			slot:StyleButton(1)
 		end
 	end
 

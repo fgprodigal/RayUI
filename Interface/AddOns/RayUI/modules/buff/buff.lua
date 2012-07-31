@@ -88,10 +88,7 @@ function BF:StyleBuffs(button, index, framekind, anchor)
 		_G[buff.."Icon"]:Point("BOTTOMRIGHT", -1, 1)
 		_G[buff].shadow:SetBackdropColor(0, 0, 0)
 		_G[buff].border:SetBackdropBorderColor(color.r, color.g, color.b, 1)
-		_G[buff]:GetHighlightTexture():Point("TOPLEFT", 1, -1)
-		_G[buff]:GetHighlightTexture():Point("BOTTOMRIGHT", -1, 1)
-		_G[buff]:GetPushedTexture():Point("TOPLEFT", 1, -1)
-		_G[buff]:GetPushedTexture():Point("BOTTOMRIGHT", -1, 1)
+		_G[buff]:StyleButton(1)
 	end
     
     if index == 1 then _G[buff]:Point("CENTER", anchor, "CENTER", 0, 0) end

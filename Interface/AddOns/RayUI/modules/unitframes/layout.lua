@@ -295,14 +295,12 @@ function UF:DPSLayout(frame, unit)
 						for i = 1, 4 do
 							frame.Harmony[i]:SetWidth(185/4)
 						end
-						frame.Harmony[5]:SetPoint("RIGHT", frame.Harmony, "RIGHT", 41, 0)
 						frame.Harmony[5]:Hide()
 						frame.maxChi = maxChi
 					elseif maxChi > frame.maxChi then
 						for i = 1, 4 do
 							frame.Harmony[i]:SetWidth(180/5)
 						end
-						frame.Harmony[5]:SetPoint("RIGHT", frame.Harmony, "RIGHT")
 						frame.Harmony[5]:Show()
 						frame.maxChi = maxChi
 					end

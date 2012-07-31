@@ -177,10 +177,7 @@ local function LoadSkin()
 		local ic = _G["InspectTalentFrameTalent"..i.."IconTexture"]
 		if bu then
 			bu:StyleButton()
-			bu:GetHighlightTexture():Point("TOPLEFT", 1, -1)
-			bu:GetHighlightTexture():Point("BOTTOMRIGHT", -1, 1)
-			bu:GetPushedTexture():Point("TOPLEFT", 1, -1)
-			bu:GetPushedTexture():Point("BOTTOMRIGHT", -1, 1)
+			bu:GetPushedTexture():StyleButton(1)
 			bu.SetHighlightTexture = R.dummy
 			bu.SetPushedTexture = R.dummy
 

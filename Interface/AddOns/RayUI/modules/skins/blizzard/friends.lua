@@ -205,6 +205,24 @@ local function LoadSkin()
 	for i=1, MAX_CHANNEL_BUTTONS do
 		_G["ChannelButton"..i.."Text"]:SetFont(R["media"].font, R["media"].fontsize)
 	end
+
+	FriendsFrameBattlenetFrame:StripTextures()
+	FriendsFrameBattlenetFrame.BroadcastFrame:StripTextures()
+	FriendsFrameBattlenetFrame.BroadcastFrame:ClearAllPoints()
+	FriendsFrameBattlenetFrame.BroadcastFrame:Point("TOPLEFT", FriendsFrame, "TOPRIGHT", 1, 0)
+	S:CreateBD(FriendsFrameBattlenetFrame.BroadcastFrame)
+	S:Reskin(FriendsFrameBattlenetFrame.BroadcastFrame.ScrollFrame.CancelButton)
+	S:Reskin(FriendsFrameBattlenetFrame.BroadcastFrame.ScrollFrame.UpdateButton)
+	FriendsFrameBattlenetFrame.BroadcastFrame.ScrollFrame.TopBorder:Hide()
+	FriendsFrameBattlenetFrame.BroadcastFrame.ScrollFrame.BottomBorder:Hide()
+	FriendsFrameBattlenetFrame.BroadcastFrame.ScrollFrame.LeftBorder:Hide()
+	FriendsFrameBattlenetFrame.BroadcastFrame.ScrollFrame.RightBorder:Hide()
+	FriendsFrameBattlenetFrame.BroadcastFrame.ScrollFrame.MiddleBorder:Hide()
+	FriendsFrameBattlenetFrame.BroadcastFrame.ScrollFrame.TopRightBorder:Hide()
+	FriendsFrameBattlenetFrame.BroadcastFrame.ScrollFrame.TopLeftBorder:Hide()
+	FriendsFrameBattlenetFrame.BroadcastFrame.ScrollFrame.BottomRightBorder:Hide()
+	FriendsFrameBattlenetFrame.BroadcastFrame.ScrollFrame.BottomLeftBorder:Hide()
+	S:CreateBD(FriendsFrameBattlenetFrame.BroadcastFrame.ScrollFrame)
 end
 
 S:RegisterSkin("RayUI", LoadSkin)

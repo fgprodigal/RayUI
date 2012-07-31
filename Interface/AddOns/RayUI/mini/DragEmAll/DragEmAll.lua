@@ -13,9 +13,7 @@ local frames = {
   ["QuestLogFrame"] = false,
   ["QuestLogDetailFrame"] = false,
   ["FriendsFrame"] = false,
-  ["LFGParentFrame"] = false,
-  ["LFDQueueFrame"] = true,
-  ["LFRQueueFrame"] = true,
+  ["PVEFrame"] = false,
   ["LFRBrowseFrame"] = true,
   ["KnowledgeBaseFrame"] = true,
   ["HelpFrame"] = false,
@@ -96,6 +94,7 @@ local lodFrames = {
   Blizzard_VoidStorageUI = { ["VoidStorageFrame"] = false, ["VoidStorageBorderFrameMouseBlockFrame"] = "VoidStorageFrame" },
   Blizzard_ItemAlterationUI = { ["TransmogrifyFrame"] = false },
   Blizzard_EncounterJournal = { ["EncounterJournal"] = false }, -- as of 4.3
+  Blizzard_PetJournal = { ["PetJournalParent"] = false }, -- as of 5.0
 }
 
 local parentFrame = {}

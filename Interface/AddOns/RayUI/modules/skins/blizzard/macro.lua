@@ -35,12 +35,8 @@ local function LoadSkin()
 		local ic = _G["MacroButton"..i.."Icon"]
 
 		select(2, bu:GetRegions()):Hide()
-		bu:StyleButton()
+		bu:StyleButton(1)
 		bu:SetPushedTexture(nil)
-		bu:GetHighlightTexture():Point("TOPLEFT", 1, -1)
-		bu:GetHighlightTexture():Point("BOTTOMRIGHT", -1, 1)
-		bu:GetCheckedTexture():Point("TOPLEFT", 1, -1)
-		bu:GetCheckedTexture():Point("BOTTOMRIGHT", -1, 1)
 
 		ic:Point("TOPLEFT", 1, -1)
 		ic:Point("BOTTOMRIGHT", -1, 1)
@@ -54,12 +50,8 @@ local function LoadSkin()
 		local ic = _G["MacroPopupButton"..i.."Icon"]
 
 		select(2, bu:GetRegions()):Hide()
-		bu:StyleButton()
+		bu:StyleButton(1)
 		bu:SetPushedTexture(nil)
-		bu:GetHighlightTexture():Point("TOPLEFT", 1, -1)
-		bu:GetHighlightTexture():Point("BOTTOMRIGHT", -1, 1)
-		bu:GetCheckedTexture():Point("TOPLEFT", 1, -1)
-		bu:GetCheckedTexture():Point("BOTTOMRIGHT", -1, 1)
 
 		ic:SetPoint("TOPLEFT", 1, -1)
 		ic:SetPoint("BOTTOMRIGHT", -1, 1)

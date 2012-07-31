@@ -60,7 +60,6 @@ local function LoadSkin()
 	S:CreateTab(PVEFrameTab1)
 	S:CreateTab(PVEFrameTab2)
 
-	S:SetBD(LFDParentFrame)
 	S:Reskin(LFDQueueFrameFindGroupButton)
 	S:Reskin(LFDQueueFrameCancelButton)
 	S:Reskin(LFDRoleCheckPopupAcceptButton)
@@ -160,7 +159,6 @@ local function LoadSkin()
 	for i = 1, 7 do
 		_G["LFRBrowseFrameColumnHeader"..i]:DisableDrawLayer("BACKGROUND")
 	end
-	S:SetBD(RaidParentFrame)
 	RaidParentFrame:DisableDrawLayer("BACKGROUND")
 	RaidParentFrame:DisableDrawLayer("BORDER")
 	RaidParentFrameInset:DisableDrawLayer("BORDER")

@@ -129,22 +129,17 @@ local function LoadSkin()
 				if quality and quality > 1 then
 					icontexture:Point("TOPLEFT", 2, -2)
 					icontexture:Point("BOTTOMRIGHT", -2, 2)
-					button:GetHighlightTexture():Point("TOPLEFT", 2, -2)
-					button:GetHighlightTexture():Point("BOTTOMRIGHT", -2, 2)
-					button:GetPushedTexture():Point("TOPLEFT", 2, -2)
-					button:GetPushedTexture():Point("BOTTOMRIGHT", -2, 2)
+					button:StyleButton(2)
 					glow:SetBackdropBorderColor(GetItemQualityColor(quality))
 					button:SetBackdropColor(0, 0, 0)
 				else
 					icontexture:SetAllPoints()
-					button:GetHighlightTexture():SetAllPoints()
-					button:GetPushedTexture():SetAllPoints()
+					button:StyleButton(true)
 					glow:SetBackdropBorderColor(0, 0, 0)
 					button:SetBackdropColor(0, 0, 0, 0)
 				end
 			else
-				button:GetHighlightTexture():SetAllPoints()
-				button:GetPushedTexture():SetAllPoints()
+				button:StyleButton(true)
 				glow:SetBackdropBorderColor(0, 0, 0)
 				button:SetBackdropColor(0, 0, 0, 0)
 			end

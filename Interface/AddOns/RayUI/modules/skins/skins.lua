@@ -10,6 +10,10 @@ local alpha = .65 -- controls the backdrop opacity (0 = invisible, 1 = solid)
 
 S["media"] = {
 	["checked"] = "Interface\\AddOns\\RayUI\\media\\CheckButtonHilight",
+	["arrowUp"] = "Interface\\AddOns\\RayUI\\media\\arrow-up-active",
+	["arrowDown"] = "Interface\\AddOns\\RayUI\\media\\arrow-down-active",
+	["arrowLeft"] = "Interface\\AddOns\\RayUI\\media\\arrow-left-active",
+	["arrowRight"] = "Interface\\AddOns\\RayUI\\media\\arrow-right-active",
 	["classcolours"] = {
 		["HUNTER"] = { r = 0.58, g = 0.86, b = 0.49 },
 		["WARLOCK"] = { r = 0.6, g = 0.47, b = 0.85 },
@@ -22,7 +26,7 @@ S["media"] = {
 		["WARRIOR"] = { r = 0.9, g = 0.65, b = 0.45 },
 		["DEATHKNIGHT"] = { r = 0.77, g = 0.12 , b = 0.23 },
 		["MONK"] = { r = 0, g = 1 , b = 0.59 },
-	}
+	},
 }
 
 S["media"].DefGradient = {"VERTICAL", 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2}
@@ -425,7 +429,7 @@ function S:ReskinArrow(f, direction)
 	tex:Size(8, 8)
 	tex:SetPoint("CENTER")
 
-	tex:SetTexture("Interface\\AddOns\\Aurora\\media\\arrow-"..direction.."-active")
+	tex:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-"..direction.."-active")
 end
 
 function S:ReskinCheck(f)
@@ -521,6 +525,14 @@ function S:ReskinPortraitFrame(f, isButtonFrame)
 	S:CreateBD(f)
 	S:CreateSD(f)
 	S:ReskinClose(_G[name.."CloseButton"])
+end
+
+function S:CreateBDFrame(f, a)
+	local bg = CreateFrame("Frame", nil, f)
+	bg:Point("TOPLEFT", -1, 1)
+	bg:Point("BOTTOMRIGHT", 1, -1)
+	bg:SetFrameLevel(f:GetFrameLevel()-1)
+	S:CreateBD(bg, a or alpha)
 end
 
 function S:RegisterSkin(name, loadFunc)

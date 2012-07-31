@@ -315,11 +315,7 @@ local function LoadSkin()
 		ic:SetTexCoord(.08, .92, .08, .92)
 
 		S:CreateBD(bu, .25)
-		local hover = bu:CreateTexture(nil, "OVERLAY")
-		hover:SetTexture(1, 1, 1, 0.3)
-		hover:Point("TOPLEFT", 1, -1)
-		hover:Point("BOTTOMRIGHT", -1, 1)
-		bu:SetHighlightTexture(hover)
+		bu:StyleButton(1)
 	end
 
 	local sets = false

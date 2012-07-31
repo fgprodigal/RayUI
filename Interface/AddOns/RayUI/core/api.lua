@@ -143,54 +143,92 @@ local function CreateBorder(f, r, g, b, a)
 	f:SetBackdropBorderColor(r or R["media"]["bordercolor"][1], g or R["media"]["bordercolor"][2], b or R["media"]["bordercolor"][3], a or R["media"]["bordercolor"][4])
 end
 
-local function StyleButton(button, setallpoints)
+local function StyleButton(button, offset)
+	offset = offset or 2
+
 	if button.SetHighlightTexture and not button.hover then
 		local hover = button:CreateTexture(nil, "OVERLAY")
 		hover:SetTexture(1, 1, 1, 0.3)
-		if setallpoints then
+		if offset == true then
 			hover:SetAllPoints()
 		else
-			hover:Point("TOPLEFT", 2, -2)
-			hover:Point("BOTTOMRIGHT", -2, 2)
+			hover:Point("TOPLEFT", offset, -offset)
+			hover:Point("BOTTOMRIGHT", -offset, offset)
 		end
 		button.hover = hover
 		button:SetHighlightTexture(hover)
+	elseif button.SetHighlightTexture and button:GetHighlightTexture() and button.hover then
+		local hover = button.hover
+		hover:ClearAllPoints()
+		if offset == true then
+			hover:SetAllPoints()
+		else
+			hover:Point("TOPLEFT", offset, -offset)
+			hover:Point("BOTTOMRIGHT", -offset, offset)
+		end
 	end
 
 	if button.SetPushedTexture and not button.pushed then
 		local pushed = button:CreateTexture(nil, "OVERLAY")
 		pushed:SetTexture(0.9, 0.8, 0.1, 0.3)
-		if setallpoints then
+		if offset == true then
 			pushed:SetAllPoints()
 		else
-			pushed:Point("TOPLEFT", 2, -2)
-			pushed:Point("BOTTOMRIGHT", -2, 2)
+			pushed:Point("TOPLEFT", offset, -offset)
+			pushed:Point("BOTTOMRIGHT", -offset, offset)
 		end
 		button.pushed = pushed
 		button:SetPushedTexture(pushed)
+	elseif button.SetPushedTexture and button:GetPushedTexture() and button.pushed then
+		local pushed = button.pushed
+		pushed:ClearAllPoints()
+		if offset == true then
+			pushed:SetAllPoints()
+		else
+			pushed:Point("TOPLEFT", offset, -offset)
+			pushed:Point("BOTTOMRIGHT", -offset, offset)
+		end
 	end
 
 	if button.SetCheckedTexture and not button.checked then
 		local checked = button:CreateTexture(nil, "OVERLAY")
 		checked:SetTexture(23/255,132/255,209/255,0.3)
-		if setallpoints then
+		if offset == true then
 			checked:SetAllPoints()
 		else
-			checked:Point("TOPLEFT", 2, -2)
-			checked:Point("BOTTOMRIGHT", -2, 2)
+			checked:Point("TOPLEFT", offset, -offset)
+			checked:Point("BOTTOMRIGHT", -offset, offset)
 		end
 		button.checked = checked
 		button:SetCheckedTexture(checked)
+	elseif button.SetCheckedTexture and button:GetCheckedTexture() and button.checked then
+		local checked = button.checked
+		checked:ClearAllPoints()
+		if offset == true then
+			checked:SetAllPoints()
+		else
+			checked:Point("TOPLEFT", offset, -offset)
+			checked:Point("BOTTOMRIGHT", -offset, offset)
+		end
 	end
 
 	if button:GetName() and _G[button:GetName().."Cooldown"] then
 		local cooldown = _G[button:GetName().."Cooldown"]
 		cooldown:ClearAllPoints()
-		if setallpoints then
+		if offset == true then
 			cooldown:SetAllPoints()
 		else
-			cooldown:Point("TOPLEFT", 2, -2)
-			cooldown:Point("BOTTOMRIGHT", -2, 2)
+			cooldown:Point("TOPLEFT", offset, -offset)
+			cooldown:Point("BOTTOMRIGHT", -offset, offset)
+		end
+	elseif button:GetName() and _G[button:GetName().."Cooldown"] then
+		local cooldown = _G[button:GetName().."Cooldown"]
+		cooldown:ClearAllPoints()
+		if offset == true then
+			cooldown:SetAllPoints()
+		else
+			cooldown:Point("TOPLEFT", offset, -offset)
+			cooldown:Point("BOTTOMRIGHT", -offset, offset)
 		end
 	end
 end

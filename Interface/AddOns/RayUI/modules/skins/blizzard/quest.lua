@@ -238,11 +238,7 @@ local function LoadSkin()
 		line:Point("RIGHT", ic, 1, 0)
 		S:CreateBD(line)
 
-		bu:StyleButton()
-		bu:GetPushedTexture():Point("TOPLEFT", 1, -1)
-		bu:GetPushedTexture():Point("BOTTOMRIGHT", -1, 1)
-		bu:GetHighlightTexture():Point("TOPLEFT", 1, -1)
-		bu:GetHighlightTexture():Point("BOTTOMRIGHT", -1, 1)
+		bu:StyleButton(1)
 	end
 
 	for i = 1, MAX_NUM_ITEMS do
@@ -266,11 +262,7 @@ local function LoadSkin()
 		line:Point("RIGHT", ic, 1, 0)
 		S:CreateBD(line)
 
-		bu:StyleButton()
-		bu:GetPushedTexture():Point("TOPLEFT", 1, -1)
-		bu:GetPushedTexture():Point("BOTTOMRIGHT", -1, 1)
-		bu:GetHighlightTexture():Point("TOPLEFT", 1, -1)
-		bu:GetHighlightTexture():Point("BOTTOMRIGHT", -1, 1)
+		bu:StyleButton(1)
 	end
 	
 	hooksecurefunc("QuestFrame_ShowQuestPortrait", function(parentFrame, portrait, text, name, x, y)

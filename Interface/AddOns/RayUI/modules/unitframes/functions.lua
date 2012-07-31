@@ -729,14 +729,13 @@ function UF:PostUpdateIcon(unit, icon, index, offset)
 		if icon.owner == "player" or icon.owner == "pet" or icon.owner == "vehicle" or UnitIsFriend('player', unit) then
 			local color = DebuffTypeColor[dtype] or DebuffTypeColor.none
 			icon.border:SetBackdropBorderColor(color.r * 0.6, color.g * 0.6, color.b * 0.6)
-			icon:GetHighlightTexture():Point("TOPLEFT", 1, -1)
-			icon:GetHighlightTexture():Point("BOTTOMRIGHT", -1, 1)
+			icon:StyleButton(1)
 			texture:Point("TOPLEFT", icon, 1, -1)
 			texture:Point("BOTTOMRIGHT", icon, -1, 1)
 			texture:SetDesaturated(false)
 		else
 			icon.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))
-			icon:GetHighlightTexture():SetAllPoints()
+			icon:StyleButton(true)
 			texture:Point("TOPLEFT", icon)
 			texture:Point("BOTTOMRIGHT", icon)
 			texture:SetDesaturated(true)
@@ -744,12 +743,10 @@ function UF:PostUpdateIcon(unit, icon, index, offset)
 	else
 		if (canStealOrPurge or ((R.myclass == "PRIEST" or R.myclass == "SHAMAN" or R.myclass == "MAGE") and dtype == "Magic")) and not UnitIsFriend("player", unit) then
 			icon.border:SetBackdropBorderColor(237/255, 234/255, 142/255)
-			icon:GetHighlightTexture():Point("TOPLEFT", 1, -1)
-			icon:GetHighlightTexture():Point("BOTTOMRIGHT", -1, 1)
-			texture:Point("TOPLEFT", icon, 1, -1)
-			texture:Point("BOTTOMRIGHT", icon, -1, 1)
+			icon:GetHighlightTexture():StyleButton(1)
+			texture:StyleButton(1)
 		else
-			icon:GetHighlightTexture():SetAllPoints()
+			icon:GetHighlightTexture():StyleButton(true)
 			icon.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 			texture:Point("TOPLEFT", icon)
 			texture:Point("BOTTOMRIGHT", icon)

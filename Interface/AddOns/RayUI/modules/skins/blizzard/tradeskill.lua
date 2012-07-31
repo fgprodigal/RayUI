@@ -97,10 +97,8 @@ local function LoadSkin()
 			ic:Point("BOTTOMRIGHT", -1, 1)
 		end
 		if not reskinned == true then
-			TradeSkillSkillIcon:StyleButton()
+			TradeSkillSkillIcon:StyleButton(1)
 			TradeSkillSkillIcon:SetPushedTexture(nil)
-			TradeSkillSkillIcon:GetHighlightTexture():Point("TOPLEFT", 1, -1)
-			TradeSkillSkillIcon:GetHighlightTexture():Point("BOTTOMRIGHT", -1, 1)
 			if ic then
 				S:CreateBD(TradeSkillSkillIcon)
 				reskinned = true

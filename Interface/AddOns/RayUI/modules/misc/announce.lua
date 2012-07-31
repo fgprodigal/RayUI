@@ -37,9 +37,9 @@ local function LoadFunc()
 			local icon =GetSpellTexture(id)
 
 			if eventType=="SPELL_INTERRUPT" then
-				if GetRealNumRaidMembers() > 0 then
+				if GetNumGroupMembers() > 0 and IsInRaid() then
 					SendChatMessage(msg..": "..destName.." \124cff71d5ff\124Hspell:"..id.."\124h["..effect.."]\124h\124r!", "RAID")
-				elseif GetRealNumPartyMembers() > 0 then
+				elseif GetNumGroupMembers() > 0 then
 					SendChatMessage(msg..": "..destName.." \124cff71d5ff\124Hspell:"..id.."\124h["..effect.."]\124h\124r!", "PARTY")
 				end
 			end

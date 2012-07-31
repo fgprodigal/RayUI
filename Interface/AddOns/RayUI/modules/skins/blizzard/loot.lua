@@ -22,7 +22,7 @@ local function LoadSkin()
 		end
 
 		local function OnEnter(self)
-			if LootSlotIsItem(self.id) then
+			if GetLootSlotType(self.id) == LOOT_SLOT_ITEM then
 				GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 				GameTooltip:SetLootItem(self.id)
 				CursorUpdate(self)
@@ -260,11 +260,7 @@ local function LoadSkin()
 			})
 			loot.announce[i]:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 			loot.announce[i]:SetBackdropColor(unpack(chncolor[chn[i]]))
-			loot.announce[i]:StyleButton()
-			loot.announce[i]:GetHighlightTexture():Point("TOPLEFT", 1, -1)
-			loot.announce[i]:GetHighlightTexture():Point("BOTTOMRIGHT", -1, 1)
-			loot.announce[i]:GetPushedTexture():Point("TOPLEFT", 1, -1)
-			loot.announce[i]:GetPushedTexture():Point("BOTTOMRIGHT", -1, 1)
+			loot.announce[i]:StyleButton(1)
 		end
 	end
 end
