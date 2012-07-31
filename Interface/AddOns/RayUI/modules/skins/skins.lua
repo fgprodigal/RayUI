@@ -187,9 +187,10 @@ function S:CreatePulse(frame, speed, mult, alpha)
 end
 
 local function StartGlow(f)
-	if not f then return end
+	if not f:IsEnabled() then return end
 	f:SetBackdropColor(r, g, b, .1)
 	f:SetBackdropBorderColor(r, g, b)
+	f.glow:SetAlpha(1)
 	S:CreatePulse(f.glow)
 end
 
@@ -208,17 +209,11 @@ function S:Reskin(f, noGlow)
 	f:SetPushedTexture("")
 	f:SetDisabledTexture("")
 
-	local name = f:GetName()
-
-	if name then
-		local left = _G[name.."Left"]
-		local middle = _G[name.."Middle"]
-		local right = _G[name.."Right"]
-
-		if left then left:SetAlpha(0) end
-		if middle then middle:SetAlpha(0) end
-		if right then right:SetAlpha(0) end
-	end
+	if f.Left then f.Left:SetAlpha(0) end
+	if f.Middle then f.Middle:SetAlpha(0) end
+	if f.Right then f.Right:SetAlpha(0) end
+	if f.LeftSeparator then f.LeftSeparator:Hide() end
+	if f.RightSeparator then f.RightSeparator:Hide() end
 
 	S:CreateBD(f, .0)
 
@@ -430,11 +425,7 @@ function S:ReskinArrow(f, direction)
 	tex:Size(8, 8)
 	tex:SetPoint("CENTER")
 
-	if direction == 1 then
-		tex:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-left-active")
-	elseif direction == 2 then
-		tex:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-right-active")
-	end
+	tex:SetTexture("Interface\\AddOns\\Aurora\\media\\arrow-"..direction.."-active")
 end
 
 function S:ReskinCheck(f)
@@ -499,6 +490,37 @@ function S:SetBD(f, x, y, x2, y2)
 	f:HookScript("OnShow", function()
 		bg:SetFrameLevel(0)
 	end)
+end
+
+function S:ReskinPortraitFrame(f, isButtonFrame)
+	local name = f:GetName()
+	
+	_G[name.."Bg"]:Hide()
+	_G[name.."TitleBg"]:Hide()
+	_G[name.."Portrait"]:Hide()
+	_G[name.."PortraitFrame"]:Hide()
+	_G[name.."TopRightCorner"]:Hide()
+	_G[name.."TopLeftCorner"]:Hide()
+	_G[name.."TopBorder"]:Hide()
+	_G[name.."TopTileStreaks"]:SetTexture("")
+	_G[name.."BotLeftCorner"]:Hide()
+	_G[name.."BotRightCorner"]:Hide()
+	_G[name.."BottomBorder"]:Hide()
+	_G[name.."LeftBorder"]:Hide()
+	_G[name.."RightBorder"]:Hide()
+	
+	if isButtonFrame then
+		_G[name.."BtnCornerLeft"]:SetTexture("")
+		_G[name.."BtnCornerRight"]:SetTexture("")
+		_G[name.."ButtonBottomBorder"]:SetTexture("")
+		
+		f.Inset.Bg:Hide()
+		f.Inset:DisableDrawLayer("BORDER")
+	end
+
+	S:CreateBD(f)
+	S:CreateSD(f)
+	S:ReskinClose(_G[name.."CloseButton"])
 end
 
 function S:RegisterSkin(name, loadFunc)

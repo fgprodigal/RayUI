@@ -57,9 +57,9 @@ local function LoadSkin()
 
 	end
 
-	hooksecurefunc("AchievementAlertFrame_FixAnchors", ReskinAchievementPopup)
+	hooksecurefunc("AlertFrame_FixAnchors", ReskinAchievementPopup)
 
-	hooksecurefunc("DungeonCompletionAlertFrame_FixAnchors", function()
+	hooksecurefunc("AlertFrame_FixAnchors", function()
 		for i=MAX_ACHIEVEMENT_ALERTS, 1, -1 do
 			local frame = _G["AchievementAlertFrame"..i]
 			if ( frame and frame:IsShown() ) then
@@ -106,7 +106,7 @@ local function LoadSkin()
 
 	--Guild Alert
 	--/run GuildChallengeAlertFrame_ShowAlert(3, 2, 5)
-	hooksecurefunc("GuildChallengeAlertFrame_FixAnchors", function()
+	hooksecurefunc("AlertFrame_FixAnchors", function()
 		local frame
 		for i=MAX_ACHIEVEMENT_ALERTS, 1, -1 do
 			if _G["AchievementAlertFrame"..i] and _G["AchievementAlertFrame"..i]:IsShown() then

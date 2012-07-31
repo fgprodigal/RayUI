@@ -3,10 +3,90 @@ local S = R:GetModule("Skins")
 
 local function LoadSkin()
 	local r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b
-	S:SetBD(QuestLogFrame, 6, -9, -2, 6)
-	S:SetBD(QuestFrame, 6, -15, -26, 64)
-	S:SetBD(QuestLogDetailFrame, 6, -9, 0, 0)
-	QuestFramePortrait:Hide()
+	S:SetBD(QuestLogFrame)
+	S:SetBD(QuestFrame)
+	S:SetBD(QuestLogDetailFrame)
+
+	S:CreateBD(QuestLogCount, .25)
+
+	QuestLogFrame:DisableDrawLayer("BORDER")
+	QuestLogFrameInset:DisableDrawLayer("BORDER")
+	QuestLogDetailFrameInset:DisableDrawLayer("BORDER")
+	QuestFrame:DisableDrawLayer("BORDER")
+	QuestFrameInset:DisableDrawLayer("BORDER")
+	QuestFrameDetailPanel:DisableDrawLayer("BORDER")
+	QuestFrameRewardPanel:DisableDrawLayer("BORDER")
+
+	for i = 1, 7 do
+		select(i, QuestLogFrame:GetRegions()):Hide()
+		select(i, QuestLogDetailFrame:GetRegions()):Hide()
+		select(i, QuestFrame:GetRegions()):Hide()
+	end
+	select(18, QuestLogFrame:GetRegions()):Hide()
+	select(18, QuestLogDetailFrame:GetRegions()):Hide()
+
+	QuestLogDetailFrame:GetRegions():Hide()
+	QuestLogFramePageBg:Hide()
+	QuestLogFrameBookBg:Hide()
+	QuestLogFrameInsetBg:Hide()
+	QuestLogDetailFrameInsetBg:Hide()
+	QuestLogDetailFramePageBg:Hide()
+	QuestLogScrollFrameTop:Hide()
+	QuestLogScrollFrameBottom:Hide()
+	QuestLogScrollFrameMiddle:Hide()
+	QuestLogDetailScrollFrameTop:Hide()
+	QuestLogDetailScrollFrameBottom:Hide()
+	QuestLogDetailScrollFrameMiddle:Hide()
+	QuestDetailScrollFrameTop:Hide()
+	QuestDetailScrollFrameBottom:Hide()
+	QuestDetailScrollFrameMiddle:Hide()
+	QuestProgressScrollFrameTop:Hide()
+	QuestProgressScrollFrameBottom:Hide()
+	QuestProgressScrollFrameMiddle:Hide()
+	QuestRewardScrollFrameTop:Hide()
+	QuestRewardScrollFrameBottom:Hide()
+	QuestRewardScrollFrameMiddle:Hide()
+	QuestDetailLeftBorder:Hide()
+	QuestDetailBotLeftCorner:Hide()
+	QuestDetailTopLeftCorner:Hide()
+	QuestFrameBg:Hide()
+	QuestFrameInsetBg:Hide()
+
+	QuestNPCModelShadowOverlay:Hide()
+	QuestNPCModelBg:Hide()
+	QuestNPCModel:DisableDrawLayer("OVERLAY")
+	QuestNPCModelNameText:SetDrawLayer("ARTWORK")
+	QuestNPCModelTextFrameBg:Hide()
+	QuestNPCModelTextFrame:DisableDrawLayer("OVERLAY")
+	QuestLogDetailTitleText:SetDrawLayer("OVERLAY")
+	QuestLogFrameCompleteButton_LeftSeparator:Hide()
+	QuestLogFrameCompleteButton_RightSeparator:Hide()
+	QuestInfoItemHighlight:GetRegions():Hide()
+	QuestInfoSpellObjectiveFrameNameFrame:Hide()
+	QuestFrameProgressPanelMaterialTopLeft:SetAlpha(0)
+	QuestFrameProgressPanelMaterialTopRight:SetAlpha(0)
+	QuestFrameProgressPanelMaterialBotLeft:SetAlpha(0)
+	QuestFrameProgressPanelMaterialBotRight:SetAlpha(0)
+
+	QuestLogFramePushQuestButton:ClearAllPoints()
+	QuestLogFramePushQuestButton:SetPoint("LEFT", QuestLogFrameAbandonButton, "RIGHT", 1, 0)
+	QuestLogFramePushQuestButton:SetWidth(100)
+	QuestLogFrameTrackButton:ClearAllPoints()
+	QuestLogFrameTrackButton:SetPoint("LEFT", QuestLogFramePushQuestButton, "RIGHT", 1, 0)
+
+	local npcbd = CreateFrame("Frame", nil, QuestNPCModel)
+	npcbd:SetPoint("TOPLEFT", 0, 1)
+	npcbd:SetPoint("RIGHT", 1, 0)
+	npcbd:SetPoint("BOTTOM", QuestNPCModelTextScrollFrame)
+	npcbd:SetFrameLevel(QuestNPCModel:GetFrameLevel()-1)
+	S:CreateBD(npcbd)
+
+	local line = CreateFrame("Frame", nil, QuestNPCModel)
+	line:SetPoint("BOTTOMLEFT", 0, -1)
+	line:SetPoint("BOTTOMRIGHT", 0, -1)
+	line:SetHeight(1)
+	line:SetFrameLevel(QuestNPCModel:GetFrameLevel()-1)
+	S:CreateBD(line, 0)
 
 	NORMAL_QUEST_DISPLAY = "|cffffffff%s|r"
 	TRIVIAL_QUEST_DISPLAY = string.gsub(TRIVIAL_QUEST_DISPLAY, "|cff000000", "|cffffffff")
@@ -55,6 +135,9 @@ local function LoadSkin()
 	CurrentQuestsText:SetTextColor(1, 1, 1)
 	CurrentQuestsText.SetTextColor = R.dummy
 	CurrentQuestsText:SetShadowColor(0, 0, 0)
+	CurrentQuestsText:SetShadowColor(0, 0, 0)
+	CoreAbilityFont:SetTextColor(1, 1, 1)
+	SystemFont_Large:SetTextColor(1, 1, 1)
 	for i = 1, MAX_OBJECTIVES do
 		local objective = _G["QuestInfoObjective"..i]
 		objective:SetTextColor(1, 1, 1)
@@ -65,13 +148,6 @@ local function LoadSkin()
 	QuestInfoSkillPointFrameIconTexture:SetTexCoord(.08, .92, .08, .92)
 
 	local scrollbars = {
-		"QuestLogScrollFrameScrollBar",
-		"QuestLogDetailScrollFrameScrollBar",
-		"QuestProgressScrollFrameScrollBar",
-		"QuestRewardScrollFrameScrollBar",
-		"QuestDetailScrollFrameScrollBar",
-		"QuestGreetingScrollFrameScrollBar",
-		"QuestNPCModelTextScrollFrameScrollBar"
 	}
 	for i = 1, #scrollbars do
 		bar = _G[scrollbars[i]]
@@ -82,32 +158,13 @@ local function LoadSkin()
 		"QuestFrameDetailPanel",
 		"QuestFrameProgressPanel",
 		"QuestFrameRewardPanel",
-		"QuestFrameGreetingPanel",
 		"EmptyQuestLogFrame"
 	}
 	for i = 1, #layers do
 		_G[layers[i]]:DisableDrawLayer("BACKGROUND")
 	end
-	QuestFrameDetailPanel:DisableDrawLayer("BORDER")
-	QuestFrameRewardPanel:DisableDrawLayer("BORDER")
 	QuestLogDetailFrame:DisableDrawLayer("BORDER")
 	QuestLogDetailFrame:DisableDrawLayer("ARTWORK")
-	QuestLogDetailFrame:GetRegions():Hide()
-	QuestNPCModelShadowOverlay:Hide()
-	QuestNPCModelBg:Hide()
-	QuestNPCModel:DisableDrawLayer("OVERLAY")
-	QuestNPCModelNameText:SetDrawLayer("ARTWORK")
-	QuestNPCModelTextFrameBg:Hide()
-	QuestNPCModelTextFrame:DisableDrawLayer("OVERLAY")
-	QuestNPCModelTextScrollFrameScrollBarThumbTexture.bg:Hide()
-	QuestLogDetailTitleText:SetDrawLayer("OVERLAY")
-	QuestLogDetailScrollFrameScrollBackgroundTopLeft:SetAlpha(0)
-	QuestLogDetailScrollFrameScrollBackgroundBottomRight:SetAlpha(0)
-	QuestLogFrameCompleteButton_LeftSeparator:Hide()
-	QuestLogFrameCompleteButton_RightSeparator:Hide()
-	select(9, QuestFrameGreetingPanel:GetRegions()):Hide()
-	QuestInfoItemHighlight:GetRegions():Hide()
-	QuestInfoSpellObjectiveFrameNameFrame:Hide()
 
 	QuestLogFrameShowMapButton:StripTextures()
 	S:Reskin(QuestLogFrameShowMapButton)
@@ -118,24 +175,6 @@ local function LoadSkin()
 	for i = 1, 9 do
 		select(i, QuestLogCount:GetRegions()):Hide()
 	end
-
-	for i = 1, 3 do
-		select(i, QuestLogFrame:GetRegions()):Hide()
-	end
-
-	NPCBD = CreateFrame("Frame", nil, QuestNPCModel)
-	NPCBD:Point("TOPLEFT", 0, 1)
-	NPCBD:Point("RIGHT", 1, 0)
-	NPCBD:SetPoint("BOTTOM", QuestNPCModelTextScrollFrame)
-	NPCBD:SetFrameLevel(QuestNPCModel:GetFrameLevel()-1)
-	S:CreateBD(NPCBD)
-
-	local line1 = CreateFrame("Frame", nil, QuestNPCModel)
-	line1:Point("BOTTOMLEFT", 0, -1)
-	line1:Point("BOTTOMRIGHT", 0, -1)
-	line1:SetHeight(1)
-	line1:SetFrameLevel(QuestNPCModel:GetFrameLevel()-1)
-	S:CreateBD(line1, 0)
 
 	local bg = CreateFrame("Frame", nil, QuestInfoSkillPointFrame)
 	bg:Point("TOPLEFT", -3, 0)
@@ -149,7 +188,6 @@ local function LoadSkin()
 	QuestInfoSkillPointFrame:GetHighlightTexture():Point("TOPLEFT", 1, -1)
 	QuestInfoSkillPointFrame:GetHighlightTexture():Point("BOTTOMRIGHT", -3, 1)
 
-	S:CreateBD(QuestLogCount, .25)
 	QuestInfoSkillPointFrameNameFrame:Hide()
 	QuestInfoSkillPointFrameName:SetParent(bg)
 	QuestInfoSkillPointFrameIconTexture:SetParent(bg)
@@ -188,6 +226,7 @@ local function LoadSkin()
 
 		ic:SetSize(40, 40)
 		ic:SetTexCoord(.08, .92, .08, .92)
+		ic:SetDrawLayer("OVERLAY")
 
 		S:CreateBD(bu, .25)
 
@@ -233,33 +272,18 @@ local function LoadSkin()
 		bu:GetHighlightTexture():Point("TOPLEFT", 1, -1)
 		bu:GetHighlightTexture():Point("BOTTOMRIGHT", -1, 1)
 	end
-
-	QuestLogFramePushQuestButton:ClearAllPoints()
-	QuestLogFramePushQuestButton:Point("LEFT", QuestLogFrameAbandonButton, "RIGHT", 1, 0)
-	QuestLogFramePushQuestButton:SetWidth(100)
-	QuestLogFrameTrackButton:ClearAllPoints()
-	QuestLogFrameTrackButton:Point("LEFT", QuestLogFramePushQuestButton, "RIGHT", 1, 0)
-
+	
 	hooksecurefunc("QuestFrame_ShowQuestPortrait", function(parentFrame, portrait, text, name, x, y)
-		local parent = parentFrame:GetName()
-		if parent == "QuestLogFrame" or parent == "QuestLogDetailFrame" then
-			QuestNPCModel:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", x+4, y)
-		else
-			QuestNPCModel:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", x+8, y)
-		end
+		QuestNPCModel:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", x+6, y)
 	end)
 
-	local questlogcontrolpanel = function()
-		local parent
-		if QuestLogFrame:IsShown() then
-			parent = QuestLogFrame
-			QuestLogControlPanel:SetPoint("BOTTOMLEFT", parent, "BOTTOMLEFT", 9, 6)
-		elseif QuestLogDetailFrame:IsShown() then
-			parent = QuestLogDetailFrame
-			QuestLogControlPanel:SetPoint("BOTTOMLEFT", parent, "BOTTOMLEFT", 9, 0)
-		end
-	end
-	hooksecurefunc("QuestLogControlPanel_UpdatePosition", questlogcontrolpanel)
+	S:ReskinScroll(QuestLogScrollFrameScrollBar)
+	S:ReskinScroll(QuestLogDetailScrollFrameScrollBar)
+	S:ReskinScroll(QuestProgressScrollFrameScrollBar)
+	S:ReskinScroll(QuestRewardScrollFrameScrollBar)
+	S:ReskinScroll(QuestDetailScrollFrameScrollBar)
+	S:ReskinScroll(QuestGreetingScrollFrameScrollBar)
+	S:ReskinScroll(QuestNPCModelTextScrollFrameScrollBar)
 
 	local buttons = {
 		"QuestLogFrameAbandonButton",
@@ -278,9 +302,9 @@ local function LoadSkin()
 	local button = _G[buttons[i]]
 		S:Reskin(button)
 	end
-	S:ReskinClose(QuestLogFrameCloseButton, "TOPRIGHT", QuestLogFrame, "TOPRIGHT", -7, -14)
-	S:ReskinClose(QuestLogDetailFrameCloseButton, "TOPRIGHT", QuestLogDetailFrame, "TOPRIGHT", -5, -14)
-	S:ReskinClose(QuestFrameCloseButton, "TOPRIGHT", QuestFrame, "TOPRIGHT", -30, -20)
+	S:ReskinClose(QuestLogFrameCloseButton)
+	S:ReskinClose(QuestLogDetailFrameCloseButton)
+	S:ReskinClose(QuestFrameCloseButton)
 
 	S:Reskin(WatchFrameCollapseExpandButton)
 	local downtex = WatchFrameCollapseExpandButton:CreateTexture(nil, "ARTWORK")

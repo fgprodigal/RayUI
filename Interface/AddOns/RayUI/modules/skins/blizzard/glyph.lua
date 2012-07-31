@@ -6,19 +6,17 @@ local function LoadSkin()
 	GlyphFrameBackground:Hide()
 	GlyphFrameSideInset:DisableDrawLayer("BACKGROUND")
 	GlyphFrameSideInset:DisableDrawLayer("BORDER")
-	GlyphFrameClearInfoFrameIcon:Point("TOPLEFT", 1, -1)
-	GlyphFrameClearInfoFrameIcon:Point("BOTTOMRIGHT", -1, 1)
-	S:CreateBD(GlyphFrameClearInfoFrame)
+	S:CreateBG(GlyphFrameClearInfoFrame)
 	GlyphFrameClearInfoFrameIcon:SetTexCoord(.08, .92, .08, .92)
 
-	for i = 1, 3 do
+	for i = 1, 2 do
 		_G["GlyphFrameHeader"..i.."Left"]:Hide()
 		_G["GlyphFrameHeader"..i.."Middle"]:Hide()
 		_G["GlyphFrameHeader"..i.."Right"]:Hide()
 
 	end
 
-	for i = 1, 12 do
+	for i = 1, #GlyphFrame.scrollFrame.buttons do
 		local bu = _G["GlyphFrameScrollFrameButton"..i]
 		local ic = _G["GlyphFrameScrollFrameButton"..i.."Icon"]
 
@@ -31,7 +29,7 @@ local function LoadSkin()
 		_G["GlyphFrameScrollFrameButton"..i.."Name"]:SetParent(bg)
 		_G["GlyphFrameScrollFrameButton"..i.."TypeName"]:SetParent(bg)
 		bu:StyleButton()
-		select(3, bu:GetRegions()):SetAlpha(0)
+		bu.disabledBG:SetTexture("")
 		select(4, bu:GetRegions()):SetAlpha(0)
 
 		local check = select(2, bu:GetRegions())

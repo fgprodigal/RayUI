@@ -2,7 +2,30 @@ local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
-	S:SetBD(MailFrame, 10, -12, -34, 74)
+	S:CreateBD(MailFrame)
+	S:CreateSD(MailFrame)
+
+	MailFrameInset:DisableDrawLayer("BORDER")
+	SendMailMoneyInset:DisableDrawLayer("BORDER")
+	InboxFrame:GetRegions():Hide()
+	MailFrameInsetBg:Hide()
+	MailFrameTopBorder:Hide()
+	MailFrameTopTileStreaks:Hide()
+	SendMailMoneyBg:Hide()
+	SendMailMoneyInsetBg:Hide()
+
+	for i = 10, 14 do
+	select(i, MailFrame:GetRegions()):Hide()
+	end
+
+	for i = 15, 17 do
+	select(i, MailFrame:GetRegions()):SetAlpha(0)
+	end
+
+	select(18, MailFrame:GetRegions()):Hide()
+
+	S:ReskinClose(MailFrameCloseButton)
+
 	S:SetBD(OpenMailFrame, 10, -12, -34, 74)
 
 	MailTextFontNormal:SetTextColor(1, 1, 1)
@@ -67,10 +90,8 @@ local function LoadSkin()
 		S:ReskinInput(input)
 	end
 
-	S:ReskinArrow(InboxPrevPageButton, 1)
-	S:ReskinArrow(InboxNextPageButton, 2)
-	S:ReskinClose(InboxCloseButton, "TOPRIGHT", MailFrame, "TOPRIGHT", -38, -16)
-	S:ReskinClose(OpenMailCloseButton, "TOPRIGHT", OpenMailFrame, "TOPRIGHT", -38, -16)
+	S:ReskinArrow(InboxPrevPageButton, "left")
+	S:ReskinArrow(InboxNextPageButton, "right")
 	S:ReskinScroll(SendMailScrollFrameScrollBar)
 	S:ReskinScroll(OpenMailScrollFrameScrollBar)
 	OpenMailFrame:DisableDrawLayer("BORDER")

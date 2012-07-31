@@ -171,12 +171,16 @@ local function LoadSkin()
 	local bds = {
 		"AutoCompleteBox",
 		"BNToastFrame",
-		"LFGSearchStatus",
 		"TicketStatusFrameButton",
 		"GearManagerDialogPopup",
 		"TokenFramePopup",
 		"ReputationDetailFrame",
-		"RaidInfoFrame"
+		"RaidInfoFrame",
+		"MissingLootFrame",
+		"ScrollOfResurrectionSelectionFrame",
+		"ScrollOfResurrectionFrame",
+		"VoiceChatTalkers",
+		"QueueStatusFrame"
 	}
 
 	for i = 1, #bds do
@@ -250,6 +254,7 @@ local function LoadSkin()
 		"Graphics_ViewDistanceDropDown",
 		"Graphics_EnvironmentalDetailDropDown",
 		"Graphics_GroundClutterDropDown",
+		"Graphics_SSAODropDown",
 		"Advanced_BufferingDropDown",
 		"Advanced_LagDropDown",
 		"Advanced_HardwareCursorDropDown",
@@ -349,7 +354,6 @@ local function LoadSkin()
 		"InterfaceOptionsDisplayPanelShowHelm",
 		"InterfaceOptionsDisplayPanelShowAggroPercentage",
 		"InterfaceOptionsDisplayPanelPlayAggroSounds",
-		"InterfaceOptionsDisplayPanelDetailedLootInfo",
 		"InterfaceOptionsDisplayPanelShowSpellPointsAvg",
 		"InterfaceOptionsDisplayPanelemphasizeMySpellEffects",
 		"InterfaceOptionsDisplayPanelShowFreeBagSpace",
@@ -471,10 +475,10 @@ local function LoadSkin()
 		"InterfaceOptionsHelpPanelShowTutorials",
 		"InterfaceOptionsHelpPanelLoadingScreenTips",
 		"InterfaceOptionsHelpPanelEnhancedTooltips",
-		"InterfaceOptionsHelpPanelBeginnerTooltips",
 		"InterfaceOptionsHelpPanelShowLuaErrors",
 		"InterfaceOptionsHelpPanelColorblindMode",
-		"InterfaceOptionsHelpPanelMovePad"
+		"InterfaceOptionsHelpPanelMovePad",
+		"InterfaceOptionsControlsPanelAutoOpenLootHistory"
 	}
 	for i = 1, #checkboxes do
 		S:ReskinCheck(_G[checkboxes[i]])

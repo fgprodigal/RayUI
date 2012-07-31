@@ -19,11 +19,11 @@ local function LoadSkin()
 		_G["TabardFrameCustomization"..i.."Middle"]:Hide()
 		_G["TabardFrameCustomization"..i.."Right"]:Hide()
 	end
-	S:ReskinArrow(TabardCharacterModelRotateLeftButton, 1)
-	S:ReskinArrow(TabardCharacterModelRotateRightButton, 2)
+	S:ReskinArrow(TabardCharacterModelRotateLeftButton, "left")
+	S:ReskinArrow(TabardCharacterModelRotateRightButton, "right")
 	for i = 1, 5 do
-		S:ReskinArrow(_G["TabardFrameCustomization"..i.."LeftButton"], 1)
-		S:ReskinArrow(_G["TabardFrameCustomization"..i.."RightButton"], 2)
+		S:ReskinArrow(_G["TabardFrameCustomization"..i.."LeftButton"], "left")
+		S:ReskinArrow(_G["TabardFrameCustomization"..i.."RightButton"], "right")
 	end
 end
 

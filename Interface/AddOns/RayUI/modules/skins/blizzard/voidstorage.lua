@@ -7,11 +7,12 @@ local function LoadSkin()
 	for i = 1, 10 do
 		select(i, VoidStoragePurchaseFrame:GetRegions()):Hide()
 	end
-	VoidStorageBorderFrameBg:SetAlpha(0)
 	VoidStorageBorderFrame:SetFrameStrata("HIGH")
 	VoidStorageBorderFrame:SetFrameLevel(10)
 	VoidStorageBorderFrame:DisableDrawLayer("BACKGROUND")
 	VoidStorageBorderFrame:DisableDrawLayer("BORDER")
+	VoidStorageBorderFrame:DisableDrawLayer("BACKGROUND")
+	VoidStorageBorderFrame:DisableDrawLayer("OVERLAY")
 	VoidStorageDepositFrame:DisableDrawLayer("BACKGROUND")
 	VoidStorageDepositFrame:DisableDrawLayer("BORDER")
 	VoidStorageWithdrawFrame:DisableDrawLayer("BACKGROUND")
@@ -23,12 +24,6 @@ local function LoadSkin()
 	VoidStorageFrameMarbleBg:Hide()
 	select(2, VoidStorageFrame:GetRegions()):Hide()
 	VoidStorageFrameLines:Hide()
-	VoidStorageBorderFrameTitleBg:Hide()
-	VoidStorageBorderFrameTopLeftCorner:Hide()
-	VoidStorageBorderFrameTopBorder:Hide()
-	VoidStorageBorderFrameTopRightCorner:Hide()
-	VoidStorageBorderFrameTopEdge:Hide()
-	VoidStorageBorderFrameHeader:Hide()
 	VoidStorageStorageFrameLine1:Hide()
 	VoidStorageStorageFrameLine2:Hide()
 	VoidStorageStorageFrameLine3:Hide()
@@ -105,10 +100,24 @@ local function LoadSkin()
 		bu:SetFrameStrata("HIGH")
 	end
 
+	hooksecurefunc("VoidStorage_ItemsFilteredUpdate", function()
+		local button, isFiltered, _
+		for i = 1, 80 do
+			_, _, _, _, isFiltered = GetVoidItemInfo(i)
+			button = _G["VoidStorageStorageButton"..i]
+
+			if isFiltered then
+				button.glow:SetAlpha(0)
+			else
+				button.glow:SetAlpha(1)
+			end
+		end
+	end)
+
 	S:Reskin(VoidStoragePurchaseButton)
 	S:Reskin(VoidStorageHelpBoxButton)
 	S:Reskin(VoidStorageTransferButton)
-	S:ReskinClose(VoidStorageBorderFrameCloseButton)
+	S:ReskinClose(VoidStorageBorderFrame:GetChildren(), nil)
 	S:ReskinInput(VoidItemSearchBox)
 end
 

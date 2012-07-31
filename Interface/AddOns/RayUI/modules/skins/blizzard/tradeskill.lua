@@ -118,9 +118,9 @@ local function LoadSkin()
 	S:ReskinScroll(TradeSkillGuildCraftersFrameScrollBar)
 	S:ReskinInput(TradeSkillInputBox)
 	S:ReskinInput(TradeSkillFrameSearchBox)
-	S:ReskinArrow(TradeSkillDecrementButton, 1)
-	S:ReskinArrow(TradeSkillIncrementButton, 2)
-	S:ReskinArrow(TradeSkillLinkButton, 2)
+	S:ReskinArrow(TradeSkillDecrementButton, "left")
+	S:ReskinArrow(TradeSkillIncrementButton, "right")
+	S:ReskinArrow(TradeSkillLinkButton, "right")
 end
 
 S:RegisterSkin("Blizzard_TradeSkillUI", LoadSkin)

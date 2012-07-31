@@ -12,7 +12,6 @@ local function LoadSkin()
 	S:Reskin(GuildRegistrarFrameCancelButton)
 	select(6, GuildRegistrarFrameEditBox:GetRegions()):Hide()
 	select(7, GuildRegistrarFrameEditBox:GetRegions()):Hide()
-	select(2, GuildRegistrarGreetingFrame:GetRegions()):Hide()
 	S:ReskinClose(GuildRegistrarFrameCloseButton, "TOPRIGHT", GuildRegistrarFrame, "TOPRIGHT", -30, -20)
 end
 

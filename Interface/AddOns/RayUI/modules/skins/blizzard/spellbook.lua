@@ -3,18 +3,14 @@ local S = R:GetModule("Skins")
 
 local function LoadSkin()
 	S:SetBD(SpellBookFrame)
-	S:ReskinArrow(SpellBookPrevPageButton, 1)
-	S:ReskinArrow(SpellBookNextPageButton, 2)
+	S:ReskinArrow(SpellBookPrevPageButton, "left")
+	S:ReskinArrow(SpellBookNextPageButton, "right")
 	S:Reskin(SpellBookCompanionSummonButton)
 	S:ReskinClose(SpellBookFrameCloseButton)
 	SpellBookFrame:DisableDrawLayer("BACKGROUND")
 	SpellBookFrame:DisableDrawLayer("BORDER")
 	SpellBookFrame:DisableDrawLayer("OVERLAY")
 	SpellBookFrameInset:DisableDrawLayer("BORDER")
-	SpellBookCompanionModelFrameShadowOverlay:Hide()
-	SpellBookCompanionModelFrameRotateLeftButton:Hide()
-	SpellBookCompanionModelFrameRotateRightButton:Hide()
-	SpellBookCompanionsModelFrame:Hide()
 	SpellBookPageText:SetTextColor(.8, .8, .8)
 
 	hooksecurefunc("UpdateProfessionButton", function(self)
@@ -23,7 +19,6 @@ local function LoadSkin()
 	end)
 
 	local lightbds = {
-		"SpellBookCompanionModelFrame",
 		"SecondaryProfession1",
 		"SecondaryProfession2",
 		"SecondaryProfession3",
@@ -174,25 +169,6 @@ local function LoadSkin()
 		bg:Point("BOTTOMRIGHT", 0, -4)
 		bg:SetFrameLevel(0)
 		S:CreateBD(bg, .25)
-	end
-
-	for i = 1, NUM_COMPANIONS_PER_PAGE do
-		_G["SpellBookCompanionButton"..i.."Background"]:Hide()
-		_G["SpellBookCompanionButton"..i.."TextBackground"]:Hide()
-		_G["SpellBookCompanionButton"..i.."ActiveTexture"]:Kill()
-
-		local bu = _G["SpellBookCompanionButton"..i]
-		local ic = _G["SpellBookCompanionButton"..i.."IconTexture"]
-
-		if ic then
-			ic:SetTexCoord(.08, .92, .08, .92)
-
-			bu.bd = CreateFrame("Frame", nil, bu)
-			bu.bd:Point("TOPLEFT", ic, -1, 1)
-			bu.bd:Point("BOTTOMRIGHT", ic, 1, -1)
-			S:CreateBD(bu.bd, 0)
-			bu:StyleButton(true)
-		end
 	end
 end
 

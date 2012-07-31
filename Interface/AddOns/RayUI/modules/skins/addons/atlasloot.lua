@@ -192,11 +192,11 @@ local function SkinAtlasLoot()
 			S:ReskinClose( AtlasLootCompareFrame_CloseButton_Wishlist)
 
 		-- Skin Next Previous Buttons
-			S:ReskinArrow(AtlasLootQuickLooksButton, 2)
-			S:ReskinArrow(AtlasLootItemsFrame_NEXT, 2)
-			S:ReskinArrow(AtlasLootItemsFrame_PREV, 1)
-			S:ReskinArrow(AtlasLootPanelSearch_SelectModuel, 2)
-			S:ReskinArrow(AtlasLootCompareFrameSearch_SelectModuel, 2)
+			S:ReskinArrow(AtlasLootQuickLooksButton, "right")
+			S:ReskinArrow(AtlasLootItemsFrame_NEXT, "right")
+			S:ReskinArrow(AtlasLootItemsFrame_PREV, "left")
+			S:ReskinArrow(AtlasLootPanelSearch_SelectModuel, "right")
+			S:ReskinArrow(AtlasLootCompareFrameSearch_SelectModuel, "right")
 
 		-- Skin Dropdown Boxes
 			S:ReskinDropDown(AtlasLootDefaultFrame_ModuleSelect, 225)

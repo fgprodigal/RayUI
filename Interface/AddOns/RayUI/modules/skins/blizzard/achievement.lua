@@ -74,16 +74,13 @@ local function LoadSkin()
 		local bu = _G["AchievementFrameAchievementsContainerButton"..i]
 		bu:DisableDrawLayer("BORDER")
 
-		local bd = _G["AchievementFrameAchievementsContainerButton"..i.."Background"]
+		bu.background:SetTexture(S["media"].backdrop)
+		bu.background:SetVertexColor(0, 0, 0, .25)
 
-		bd:SetTexture(S["media"].backdrop)
-		bd:SetVertexColor(0, 0, 0, .25)
-
-		local text = _G["AchievementFrameAchievementsContainerButton"..i.."Description"]
-		text:SetTextColor(.9, .9, .9)
-		text.SetTextColor = R.dummy
-		text:SetShadowOffset(1, -1)
-		text.SetShadowOffset = R.dummy
+		bu.description:SetTextColor(.9, .9, .9)
+		bu.description.SetTextColor = R.dummy
+		bu.description:SetShadowOffset(1, -1)
+		bu.description.SetShadowOffset = R.dummy
 
 		_G["AchievementFrameAchievementsContainerButton"..i.."TitleBackground"]:Hide()
 		_G["AchievementFrameAchievementsContainerButton"..i.."Glow"]:Hide()
@@ -99,20 +96,34 @@ local function LoadSkin()
 		bg:Point("BOTTOMRIGHT", -2, 2)
 		S:CreateBD(bg, 0)
 
-		local ic = _G["AchievementFrameAchievementsContainerButton"..i.."IconTexture"]
-		ic:SetTexCoord(.08, .92, .08, .92)
-		S:CreateBG(ic)
+		bu.icon.texture:SetTexCoord(.08, .92, .08, .92)
+		S:CreateBG(bu.icon.texture)
 	end
 
-	hooksecurefunc("AchievementObjectives_DisplayCriteria", function()
-		for i = 1, 18 do
+	hooksecurefunc("AchievementButton_DisplayAchievement", function(button, category, achievement)
+		local _, _, _, completed = GetAchievementInfo(category, achievement)
+		if completed then
+			if button.accountWide then
+				button.label:SetTextColor(0, .6, 1)
+			else
+				button.label:SetTextColor(.9, .9, .9)
+			end
+		else
+			if button.accountWide then
+				button.label:SetTextColor(0, .3, .5)
+			else
+				button.label:SetTextColor(.65, .65, .65)
+			end
+		end
+	end)
+
+	hooksecurefunc("AchievementObjectives_DisplayCriteria", function(objectivesFrame, id)
+		for i = 1, GetAchievementNumCriteria(id) do
 			local name = _G["AchievementFrameCriteria"..i.."Name"]
 			if name and select(2, name:GetTextColor()) == 0 then
 				name:SetTextColor(1, 1, 1)
 			end
-		end
 
-		for i = 1, 25 do
 			local bu = _G["AchievementFrameMeta"..i]
 			if bu and select(2, bu.label:GetTextColor()) == 0 then
 				bu.label:SetTextColor(1, 1, 1)
@@ -187,7 +198,7 @@ local function LoadSkin()
 		end
 	end)
 
-	for i = 1, 8 do
+	for i = 1, 10 do
 		local bu = _G["AchievementFrameSummaryCategoriesCategory"..i]
 		local bar = bu:GetStatusBarTexture()
 		local label = _G["AchievementFrameSummaryCategoriesCategory"..i.."Label"]

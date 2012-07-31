@@ -49,7 +49,7 @@ local function LoadSkin()
 	S:ReskinScroll(PaperDollEquipmentManagerPaneScrollBar)
 	S:ReskinScroll(ReputationListScrollFrameScrollBar)
 	S:ReskinScroll(GearManagerDialogPopupScrollFrameScrollBar)
-	S:ReskinArrow(CharacterFrameExpandButton, 1)
+	S:ReskinArrow(CharacterFrameExpandButton, "left")
 	S:Reskin(PaperDollEquipmentManagerPaneEquipSet)
 	S:Reskin(PaperDollEquipmentManagerPaneSaveSet)
 	S:Reskin(GearManagerDialogPopupOkay)
@@ -157,7 +157,7 @@ local function LoadSkin()
 	end
 
 	select(8, CharacterMainHandSlot:GetRegions()):Kill()
-	select(8, CharacterRangedSlot:GetRegions()):Kill()
+	select(8, CharacterSecondaryHandSlot:GetRegions()):Kill()
 
 	local function SkinItemFlyouts()
 		for i = 1, 10 do
@@ -315,6 +315,11 @@ local function LoadSkin()
 		ic:SetTexCoord(.08, .92, .08, .92)
 
 		S:CreateBD(bu, .25)
+		local hover = bu:CreateTexture(nil, "OVERLAY")
+		hover:SetTexture(1, 1, 1, 0.3)
+		hover:Point("TOPLEFT", 1, -1)
+		hover:Point("BOTTOMRIGHT", -1, 1)
+		bu:SetHighlightTexture(hover)
 	end
 
 	local sets = false
@@ -398,8 +403,8 @@ local function LoadSkin()
 			S:CreateBD(bd, .25)
 
 			S:ReskinClose(PetStableFrameCloseButton)
-			S:ReskinArrow(PetStablePrevPageButton, 1)
-			S:ReskinArrow(PetStableNextPageButton, 2)
+			S:ReskinArrow(PetStablePrevPageButton, "left")
+			S:ReskinArrow(PetStableNextPageButton, "right")
 
 			for i = 1, 10 do
 				local bu = _G["PetStableStabledPet"..i]

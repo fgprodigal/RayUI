@@ -2,11 +2,24 @@ local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
-	S:SetBD(MerchantFrame, 10, -10, -34, 61)
+	S:CreateBD(MerchantFrame)
+	S:CreateSD(MerchantFrame)
+
+	MerchantFrameInset:DisableDrawLayer("BORDER")
+	MerchantMoneyInset:DisableDrawLayer("BORDER")
+	MerchantFrameBg:Hide()
+	MerchantFrameTitleBg:Hide()
+	MerchantFrameInsetBg:Hide()
+	BuybackBG:SetAlpha(0)
+	MerchantMoneyBg:Hide()
+	MerchantMoneyInsetBg:Hide()
+
+	S:ReskinClose(MerchantFrameCloseButton)
+	S:ReskinDropDown(MerchantFrameLootFilter)
+
 	MerchantFramePortrait:Hide()
-	MerchantFrameExtraCurrencyTex:Hide()
-	S:ReskinArrow(MerchantPrevPageButton, 1)
-	S:ReskinArrow(MerchantNextPageButton, 2)
+	S:ReskinArrow(MerchantPrevPageButton, "left")
+	S:ReskinArrow(MerchantNextPageButton, "right")
 	MerchantPrevPageButton:GetRegions():Hide()
 	MerchantNextPageButton:GetRegions():Hide()
 	select(2, MerchantPrevPageButton:GetRegions()):Hide()
@@ -17,7 +30,6 @@ local function LoadSkin()
 	MerchantFrameTab2:SetPoint("LEFT", MerchantFrameTab1, "RIGHT", -15, 0)
 	S:CreateTab(MerchantFrameTab1)
 	S:CreateTab(MerchantFrameTab2)
-	S:ReskinClose(MerchantFrameCloseButton, "TOPRIGHT", MerchantFrame, "TOPRIGHT", -38, -14)
 
 	for i = 1, 12 do
 		local button = _G["MerchantItem"..i]
@@ -63,10 +75,6 @@ local function LoadSkin()
 	MerchantBuyBackItemItemButton:GetHighlightTexture():Point("BOTTOMRIGHT", -1, 1)
 	MerchantBuyBackItemItemButton:GetPushedTexture():Point("TOPLEFT", 1, -1)
 	MerchantBuyBackItemItemButton:GetPushedTexture():Point("BOTTOMRIGHT", -1, 1)
-	BuybackFrameTopLeft:SetAlpha(0)
-	BuybackFrameTopRight:SetAlpha(0)
-	BuybackFrameBotLeft:SetAlpha(0)
-	BuybackFrameBotRight:SetAlpha(0)
 
 	S:CreateBD(MerchantBuyBackItemItemButton, 0)
 	S:CreateBD(MerchantBuyBackItem, .25)

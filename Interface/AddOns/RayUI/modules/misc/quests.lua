@@ -221,7 +221,7 @@ local function LoadFunc()
      function idQuestAutomation:QUEST_COMPLETE(event)
          if not self:canAutomate() then return end
          if GetNumQuestChoices() <= 1 then
-             GetQuestReward(QuestFrameRewardPanel.itemChoice)
+             GetQuestReward(QuestFrameRewardPanel.itemChoice or 1)
          end
      end
 
