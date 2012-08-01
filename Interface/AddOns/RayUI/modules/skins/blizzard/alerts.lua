@@ -22,7 +22,7 @@ local function LoadSkin()
                     frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
 
 					if not _G["AchievementAlertFrame"..i.."IconTexture"].b then
-						_G["CriteriaAlertFrame"..i.."IconTexture"].b = S:CreateBG(_G["AchievementAlertFrame"..i.."IconTexture"])
+						_G["AchievementAlertFrame"..i.."IconTexture"].b = S:CreateBG(_G["AchievementAlertFrame"..i.."IconTexture"])
 					end
 
                     frame:HookScript("OnEnter", function()
