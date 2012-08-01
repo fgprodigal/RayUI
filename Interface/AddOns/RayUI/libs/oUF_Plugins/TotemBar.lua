@@ -1,6 +1,6 @@
 --[[
 	Documentation:
-	
+
 		Element handled:
 			.TotemBar (must be a table with statusbar inside)
 		
@@ -22,7 +22,7 @@
 local R, C, L, DB = unpack(select(2, ...))
 
 local _, ns = ...
-local oUF = ns.oUF or oUF or RayUF
+local oUF = RayUF or oUF
 if not oUF then return end
 
 if select(2, UnitClass('player')) ~= "SHAMAN" then return end
@@ -69,7 +69,6 @@ local function InitDestroy(self)
 end
 local function UpdateSlot(self, slot)
 	local totem = self.TotemBar
-
 
 	haveTotem, name, startTime, duration, totemIcon = GetTotemInfo(slot)
 	
