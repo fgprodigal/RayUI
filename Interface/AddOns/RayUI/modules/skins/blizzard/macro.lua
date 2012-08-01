@@ -3,18 +3,18 @@ local S = R:GetModule("Skins")
 
 local function LoadSkin()
 	MacroFrameText:SetFont(R["media"].font, 14)
-	S:SetBD(MacroFrame, 12, -10, -33, 68)
+	S:ReskinPortraitFrame(MacroFrame, true)
 	S:CreateBD(MacroFrameScrollFrame, .25)
 	S:CreateBD(MacroPopupFrame)
 	S:CreateBD(MacroPopupEditBox, .25)
+	select(18, MacroFrame:GetRegions()):Hide()
+	MacroHorizontalBarLeft:Hide()
+	select(21, MacroFrame:GetRegions()):Hide()
 	for i = 1, 6 do
 		select(i, MacroFrameTab1:GetRegions()):Hide()
 		select(i, MacroFrameTab2:GetRegions()):Hide()
 		select(i, MacroFrameTab1:GetRegions()).Show = R.dummy
 		select(i, MacroFrameTab2:GetRegions()).Show = R.dummy
-	end
-	for i = 1, 8 do
-		if i ~= 6 then select(i, MacroFrame:GetRegions()):Hide() end
 	end
 	for i = 1, 5 do
 		select(i, MacroPopupFrame:GetRegions()):Hide()

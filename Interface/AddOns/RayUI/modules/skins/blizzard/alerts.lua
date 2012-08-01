@@ -22,11 +22,7 @@ local function LoadSkin()
                     frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
 
 					if not _G["AchievementAlertFrame"..i.."IconTexture"].b then
-						_G["AchievementAlertFrame"..i.."IconTexture"].b = CreateFrame("Frame", nil, frame)
-						_G["AchievementAlertFrame"..i.."IconTexture"].b:Point("TOPLEFT", _G["AchievementAlertFrame"..i.."IconTexture"], "TOPLEFT", -1, 1)
-						_G["AchievementAlertFrame"..i.."IconTexture"].b:Point("BOTTOMRIGHT", _G["AchievementAlertFrame"..i.."IconTexture"], "BOTTOMRIGHT", 1, -1)
-						_G["AchievementAlertFrame"..i.."IconTexture"]:SetParent(_G["AchievementAlertFrame"..i.."IconTexture"].b)
-						S:CreateBD(_G["AchievementAlertFrame"..i.."IconTexture"].b, 0)
+						_G["CriteriaAlertFrame"..i.."IconTexture"].b = S:CreateBG(_G["AchievementAlertFrame"..i.."IconTexture"])
 					end
 
                     frame:HookScript("OnEnter", function()
@@ -76,11 +72,7 @@ local function LoadSkin()
 					frame.dungeonTexture:Point("LEFT", frame, 7, 0)
 
 					if not frame.dungeonTexture.b then
-						frame.dungeonTexture.b = CreateFrame("Frame", nil, frame)
-						frame.dungeonTexture.b:Point("TOPLEFT", frame.dungeonTexture, "TOPLEFT", -1, 1)
-						frame.dungeonTexture.b:Point("BOTTOMRIGHT", frame.dungeonTexture, "BOTTOMRIGHT", 1, -1)
-						frame.dungeonTexture:SetParent(frame.dungeonTexture.b)
-						S:CreateBD(frame.dungeonTexture.b, 0)
+						frame.dungeonTexture.b = S:CreateBG(frame.dungeonTexture)
 					end
 
                     frame:HookScript("OnEnter", function()
@@ -108,14 +100,8 @@ local function LoadSkin()
 				frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", -2, -6)
 				frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 6)
 				frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
-				
+
 				-- Background
-				-- local region = select(2, frame:GetRegions())
-				-- if region:GetObjectType() == "Texture" then
-					-- if region:GetTexture() == "Interface\\GuildFrame\\GuildChallenges" then
-						-- region:Kill()
-					-- end
-				-- end
 				for i=1, GuildChallengeAlertFrame:GetNumRegions() do
 					local region = select(i, GuildChallengeAlertFrame:GetRegions()) 
 					if region and region:GetObjectType() == "Texture" and not region:GetName() then
@@ -127,11 +113,7 @@ local function LoadSkin()
 
 				-- Icon border
 				if not GuildChallengeAlertFrameEmblemIcon.b then
-					GuildChallengeAlertFrameEmblemIcon.b = CreateFrame("Frame", nil, frame)
-					GuildChallengeAlertFrameEmblemIcon.b:Point("TOPLEFT", GuildChallengeAlertFrameEmblemIcon, "TOPLEFT", -2, 1)
-					GuildChallengeAlertFrameEmblemIcon.b:Point("BOTTOMRIGHT", GuildChallengeAlertFrameEmblemIcon, "BOTTOMRIGHT", 2, -1)
-					GuildChallengeAlertFrameEmblemIcon:SetParent(GuildChallengeAlertFrameEmblemIcon.b)
-					S:CreateBD(GuildChallengeAlertFrameEmblemIcon.b, 0)
+					GuildChallengeAlertFrameEmblemIcon.b = S:CreateBG(GuildChallengeAlertFrameEmblemIcon)
 				end
 
 				frame:HookScript("OnEnter", function()
@@ -177,11 +159,7 @@ local function LoadSkin()
 
 				-- Icon border
 				if not ChallengeModeAlertFrame1DungeonTexture.b then
-					ChallengeModeAlertFrame1DungeonTexture.b = CreateFrame("Frame", nil, frame)
-					ChallengeModeAlertFrame1DungeonTexture.b:Point("TOPLEFT", ChallengeModeAlertFrame1DungeonTexture, "TOPLEFT", -1, 1)
-					ChallengeModeAlertFrame1DungeonTexture.b:Point("BOTTOMRIGHT", ChallengeModeAlertFrame1DungeonTexture, "BOTTOMRIGHT", 1, -1)
-					ChallengeModeAlertFrame1DungeonTexture:SetParent(ChallengeModeAlertFrame1DungeonTexture.b)
-					S:CreateBD(ChallengeModeAlertFrame1DungeonTexture.b, 0)
+					ChallengeModeAlertFrame1DungeonTexture.b = S:CreateBG(ChallengeModeAlertFrame1DungeonTexture)
 				end
 
 				frame:HookScript("OnEnter", function()
@@ -224,11 +202,7 @@ local function LoadSkin()
 
 				-- Icon border
 				if not ScenarioAlertFrame1DungeonTexture.b then
-					ScenarioAlertFrame1DungeonTexture.b = CreateFrame("Frame", nil, frame)
-					ScenarioAlertFrame1DungeonTexture.b:Point("TOPLEFT", ScenarioAlertFrame1DungeonTexture, "TOPLEFT", -1, 1)
-					ScenarioAlertFrame1DungeonTexture.b:Point("BOTTOMRIGHT", ScenarioAlertFrame1DungeonTexture, "BOTTOMRIGHT", 1, -1)
-					ScenarioAlertFrame1DungeonTexture:SetParent(ScenarioAlertFrame1DungeonTexture.b)
-					S:CreateBD(ScenarioAlertFrame1DungeonTexture.b, 0)
+					ScenarioAlertFrame1DungeonTexture.b = S:CreateBG(ScenarioAlertFrame1DungeonTexture)
 				end
 
 				frame:HookScript("OnEnter", function()
@@ -252,7 +226,7 @@ local function LoadSkin()
 
 				if not frame.bg then
 					frame.bg = CreateFrame("Frame", nil, frame)
-					frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 40, -6)
+					frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 39, -6)
 					frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 6)
 					frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
 
@@ -264,11 +238,7 @@ local function LoadSkin()
 
 					-- Icon border
 					if not _G["CriteriaAlertFrame"..i.."IconTexture"].b then
-						_G["CriteriaAlertFrame"..i.."IconTexture"].b = CreateFrame("Frame", nil, frame)
-						_G["CriteriaAlertFrame"..i.."IconTexture"].b:Point("TOPLEFT", _G["CriteriaAlertFrame"..i.."IconTexture"], "TOPLEFT", -2, 1)
-						_G["CriteriaAlertFrame"..i.."IconTexture"].b:Point("BOTTOMRIGHT", _G["CriteriaAlertFrame"..i.."IconTexture"], "BOTTOMRIGHT", 2, -1)
-						_G["CriteriaAlertFrame"..i.."IconTexture"]:SetParent(_G["CriteriaAlertFrame"..i.."IconTexture"].b)
-						S:CreateBD(_G["CriteriaAlertFrame"..i.."IconTexture"].b, 0)
+						_G["CriteriaAlertFrame"..i.."IconTexture"].b = S:CreateBG(_G["CriteriaAlertFrame"..i.."IconTexture"])
 					end
 					_G["CriteriaAlertFrame"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
 
@@ -304,11 +274,7 @@ local function LoadSkin()
 
 					-- Icon border
 					if not frame.Icon.b then
-						frame.Icon.b = CreateFrame("Frame", nil, frame)
-						frame.Icon.b:Point("TOPLEFT", frame.Icon, "TOPLEFT", -1, 1)
-						frame.Icon.b:Point("BOTTOMRIGHT", frame.Icon, "BOTTOMRIGHT", 1, -1)
-						frame.Icon:SetParent(frame.Icon.b)
-						S:CreateBD(frame.Icon.b, 0)
+						frame.Icon.b = S:CreateBG(frame.Icon)
 					end
 
 					frame:HookScript("OnEnter", function()
@@ -342,11 +308,7 @@ local function LoadSkin()
 
 					-- Icon border
 					if not frame.Icon.b then
-						frame.Icon.b = CreateFrame("Frame", nil, frame)
-						frame.Icon.b:Point("TOPLEFT", frame.Icon, "TOPLEFT", -1, 1)
-						frame.Icon.b:Point("BOTTOMRIGHT", frame.Icon, "BOTTOMRIGHT", 1, -1)
-						frame.Icon:SetParent(frame.Icon.b)
-						S:CreateBD(frame.Icon.b, 0)
+						frame.Icon.b = S:CreateBG(frame.Icon)
 					end
 
 					frame:HookScript("OnEnter", function()
