@@ -60,7 +60,7 @@ function UF:DPSLayout(frame, unit)
 	frame.textframe:SetFrameLevel(frame:GetFrameLevel()+5)
 
 	-- Health
-	local health = self:ContructHealthBar(frame, true, true)
+	local health = self:ConstructHealthBar(frame, true, true)
 	health:SetPoint("LEFT")
 	health:SetPoint("RIGHT")
 	health:SetPoint("TOP")
@@ -222,165 +222,21 @@ function UF:DPSLayout(frame, unit)
 		Fader(frame)
 
 		-- ClassBar
-		 if R.myclass == "DEATHKNIGHT" or R.myclass == "WARLOCK" or R.myclass == "PALADIN" or R.myclass == "PRIEST" or R.myclass == "MONK" then
-            local count
-            if R.myclass == "DEATHKNIGHT" then 
-                count = 6 
-            elseif R.myclass == "MONK" then
-				count = 5
-				frame.maxChi = 5
-			elseif R.myclass == "WARLOCK" then
-                count = 4
-            else
-                count = 3 
-            end
-
-            local bars = CreateFrame("Frame", nil, frame)
-			bars:SetSize(200, 5)
-			bars:SetFrameLevel(5)
-			bars:Point("BOTTOM", frame, "TOP", 0, 1)
-
-            local i = count
-            for i = 1, count do
-                bars[i] = CreateFrame("StatusBar", nil, bars)
-				bars[i]:SetStatusBarTexture(R["media"].normal)
-				bars[i]:SetWidth((200 - (count - 1)*5)/count)
-				bars[i]:SetHeight(5)
-				bars[i]:GetStatusBarTexture():SetHorizTile(false)
-
-                if R.myclass == "PALADIN" then
-                    local color = oUF.colors.power["HOLY_POWER"]
-                    bars[i]:SetStatusBarColor(color[1], color[2], color[3])
-				else
-					local color = RAID_CLASS_COLORS[R.myclass]
-					bars[i]:SetStatusBarColor(color.r, color.g, color.b)
-                end 
-
-                if i == 1 then
-                    bars[i]:SetPoint("LEFT", bars, "LEFT")
-                else
-                    bars[i]:Point("LEFT", bars[i-1], "RIGHT", 5, 0)
-                end
-
-                --if i == count then
-                    --bars[i]:SetPoint("RIGHT", bars, "RIGHT")
-                --else
-                    --bars[i]:Point("RIGHT", bars[i+1], "LEFT", -5, 0)
-                --end
-
-                bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
-                bars[i].bg:SetAllPoints(bars[i])
-                bars[i].bg:SetTexture(R["media"].normal)
-                bars[i].bg.multiplier = .2
-
-				bars[i]:CreateShadow("Background")
-				bars[i].shadow:SetFrameStrata("BACKGROUND")
-				bars[i].shadow:SetFrameLevel(0)
-                --i=i-1
-            end
-
-            if R.myclass == "DEATHKNIGHT" then
-                frame.Runes = bars
-            elseif R.myclass == "WARLOCK" then
-                frame.WarlockSpecBars = bars
-            elseif R.myclass == "PALADIN" then
-                frame.HolyPower = bars
-            elseif R.myclass == "PRIEST" then
-                frame.ShadowOrbs = bars
-            elseif R.myclass == "MONK" then
-                frame.Harmony = bars
-				frame.Harmony.PreUpdate = function()
-					local maxChi = UnitPowerMax("player", SPELL_POWER_LIGHT_FORCE)
-					if maxChi < frame.maxChi then
-						for i = 1, 4 do
-							frame.Harmony[i]:SetWidth(185/4)
-						end
-						frame.Harmony[5]:Hide()
-						frame.maxChi = maxChi
-					elseif maxChi > frame.maxChi then
-						for i = 1, 4 do
-							frame.Harmony[i]:SetWidth(180/5)
-						end
-						frame.Harmony[5]:Show()
-						frame.maxChi = maxChi
-					end
-				end
-            end
-        end
-
-		if R.myclass == "DRUID" then
-            local ebar = CreateFrame("Frame", nil, frame)
-            ebar:Point("BOTTOM", frame, "TOP", 0, 1)
-            ebar:SetSize(200, 5)
-            ebar:CreateShadow("Background")
-			ebar:SetFrameLevel(5)
-			ebar.shadow:SetFrameStrata("BACKGROUND")
-			ebar.shadow:SetFrameLevel(0)
-
-			local lbar = CreateFrame("StatusBar", nil, ebar)
-			lbar:SetStatusBarTexture(R["media"].normal)
-			lbar:SetStatusBarColor(0, .4, 1)
-			lbar:SetWidth(200)
-			lbar:SetHeight(5)
-			lbar:SetFrameLevel(5)
-			lbar:GetStatusBarTexture():SetHorizTile(false)
-            lbar:SetPoint("LEFT", ebar, "LEFT")
-            ebar.LunarBar = lbar
-
-			local sbar = CreateFrame("StatusBar", nil, ebar)
-			sbar:SetStatusBarTexture(R["media"].normal)
-			sbar:SetStatusBarColor(1, .6, 0)
-			sbar:SetWidth(200)
-			sbar:SetHeight(5)
-			sbar:SetFrameLevel(5)
-			sbar:GetStatusBarTexture():SetHorizTile(false)
-            sbar:SetPoint("LEFT", lbar:GetStatusBarTexture(), "RIGHT")
-            ebar.SolarBar = sbar
-
-            ebar.Spark = sbar:CreateTexture(nil, "OVERLAY")
-            ebar.Spark:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
-            ebar.Spark:SetBlendMode("ADD")
-            ebar.Spark:SetAlpha(0.5)
-            ebar.Spark:SetHeight(20)
-            ebar.Spark:Point("LEFT", sbar:GetStatusBarTexture(), "LEFT", -15, 0)
-
-            ebar.Arrow = sbar:CreateTexture(nil, "OVERLAY")
-            ebar.Arrow:SetSize(8,8)
-            ebar.Arrow:Point("CENTER", sbar:GetStatusBarTexture(), "LEFT", 0, 0)
-
-            frame.EclipseBar = ebar
-            frame.EclipseBar.PostUnitAura = self.UpdateEclipse
-        end
-
-        if  R.myclass == "SHAMAN" then
-            frame.TotemBar = {}
-            frame.TotemBar.Destroy = true
-            for i = 1, 4 do
-				frame.TotemBar[i] = CreateFrame("StatusBar", nil, frame)
-				frame.TotemBar[i]:SetStatusBarTexture(R["media"].normal)
-				frame.TotemBar[i]:SetWidth(200/4-5)
-				frame.TotemBar[i]:SetHeight(5)
-				frame.TotemBar[i]:GetStatusBarTexture():SetHorizTile(false)
-				frame.TotemBar[i]:SetFrameLevel(5)
-
-                frame.TotemBar[i]:SetBackdrop({bgFile = R["media"].blank})
-                frame.TotemBar[i]:SetBackdropColor(0.5, 0.5, 0.5)
-                frame.TotemBar[i]:SetMinMaxValues(0, 1)
-
-                frame.TotemBar[i].bg = frame.TotemBar[i]:CreateTexture(nil, "BORDER")
-                frame.TotemBar[i].bg:SetAllPoints(frame.TotemBar[i])
-                frame.TotemBar[i].bg:SetTexture(R["media"].normal)
-                frame.TotemBar[i].bg.multiplier = 0.3
-
-                frame.TotemBar[i]:CreateShadow("Background")
-				frame.TotemBar[i].shadow:SetFrameStrata("BACKGROUND")
-				frame.TotemBar[i].shadow:SetFrameLevel(0)
-            end
-			frame.TotemBar[2]:SetPoint("BOTTOM", frame, "TOP", -75,1)
-			frame.TotemBar[1]:SetPoint("LEFT", frame.TotemBar[2], "RIGHT", 5, 0)
-			frame.TotemBar[3]:SetPoint("LEFT", frame.TotemBar[1], "RIGHT", 5, 0)
-			frame.TotemBar[4]:SetPoint("LEFT", frame.TotemBar[3], "RIGHT", 5, 0)
-        end
+		if R.myclass == "MONK" then
+			frame.Harmony = self:ConstructMonkResourceBar(frame)
+		elseif R.myclass == "DEATHKNIGHT" then
+			frame.Runes = self:ConstructDeathKnightResourceBar(frame)
+		elseif R.myclass == "PALADIN" then
+			frame.HolyPower = self:ConstructPaladinResourceBar(frame)
+		elseif R.myclass == "WARLOCK" then
+			frame.ShardBar = self:ConstructWarlockResourceBar(frame)
+		elseif R.myclass == "PRIEST" then
+			frame.ShadowOrbs = self:ConstructPriestResourceBar(frame)
+		elseif R.myclass == "SHAMAN" then
+			frame.TotemBar = self:ConstructShamanResourceBar(frame)
+		elseif R.myclass == "DRUID" then
+			frame.EclipseBar = self:ConstructDruidResourceBar(frame)
+		end
 
 		self:ConstructThreatBar()
 		-- Experienc & Reputation

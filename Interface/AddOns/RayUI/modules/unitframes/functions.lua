@@ -58,7 +58,7 @@ function UF:SpawnMenu()
 	end
 end
 
-function UF:ContructHealthBar(frame, bg, text)
+function UF:ConstructHealthBar(frame, bg, text)
 	local health = CreateFrame('StatusBar', nil, frame)
 	health:SetStatusBarTexture(R["media"].normal)
 	health:SetFrameStrata("LOW")
@@ -635,30 +635,6 @@ function UF:PostAltUpdate(min, cur, max)
     end 
 end
 
-function UF:UpdateEclipse(unit)
-    if self.hasSolarEclipse then
-        self.border:SetBackdropBorderColor(1, .6, 0)
-        self.shadow:SetBackdropBorderColor(1, .6, 0)
-    elseif self.hasLunarEclipse then
-        self.border:SetBackdropBorderColor(0, .4, 1)
-        self.shadow:SetBackdropBorderColor(0, .4, 1)
-    else
-        self.border:SetBackdropBorderColor(0, 0, 0)
-        self.shadow:SetBackdropBorderColor(0, 0, 0)
-    end
-	local direction = GetEclipseDirection()
-	if direction == "sun" then
-		self.Arrow:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-right-active")
-		self.Spark:Hide()
-	elseif direction == "moon" then
-		self.Arrow:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-left-active")
-		self.Spark:Hide()
-	else
-		self.Arrow:SetTexture(nil)
-		self.Spark:Show()
-	end
-end
-
 function UF:ComboDisplay(event, unit)
 	if(unit == 'pet') then return end
 
@@ -882,6 +858,319 @@ function UF:ClearFocusText(frame)
 
 	clearfocus:SetScript("OnLeave", function(frame) clearfocustext:SetVertexColor(1,0.2,0.1,0) end)
 	clearfocus:SetScript("OnEnter", function(frame) clearfocustext:SetTextColor(.6,.6,.6) end)
+end
+
+function UF:ConstructMonkResourceBar(frame)
+	local bars = CreateFrame("Frame", nil, frame)
+	bars:SetSize(200, 5)
+	bars:SetFrameLevel(5)
+	bars:Point("BOTTOM", frame, "TOP", 0, 1)
+	local count = 5
+	bars.number = count
+
+	for i = 1, count do					
+		bars[i] = CreateFrame("StatusBar", nil, bars)
+		bars[i]:SetStatusBarTexture(R["media"].normal)
+		bars[i]:SetWidth((200 - (count - 1)*5)/count)
+		bars[i]:SetHeight(5)
+		bars[i]:GetStatusBarTexture():SetHorizTile(false)
+		
+		local color = RayUF.colors.class[R.myclass]
+		bars[i]:SetStatusBarColor(unpack(color))
+
+		if i == 1 then
+			bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
+		else
+			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
+		end
+
+		bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
+		bars[i].bg:SetAllPoints(bars[i])
+		bars[i].bg:SetTexture(R["media"].normal)
+		bars[i].bg.multiplier = .2
+
+		bars[i]:CreateShadow("Background")
+		bars[i].shadow:SetFrameStrata("BACKGROUND")
+		bars[i].shadow:SetFrameLevel(0)
+	end
+	
+	bars.PostUpdate = UF.UpdateHarmony
+	
+	return bars
+end
+
+function UF:ConstructDeathKnightResourceBar(frame)
+	local bars = CreateFrame("Frame", nil, frame)
+	bars:SetSize(200, 5)
+	bars:SetFrameLevel(5)
+	bars:Point("BOTTOM", frame, "TOP", 0, 1)
+	local count = 6
+
+	for i = 1, count do					
+		bars[i] = CreateFrame("StatusBar", nil, bars)
+		bars[i]:SetStatusBarTexture(R["media"].normal)
+		bars[i]:SetWidth((200 - (count - 1)*5)/count)
+		bars[i]:SetHeight(5)
+		bars[i]:GetStatusBarTexture():SetHorizTile(false)
+
+		if i == 1 then
+			bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
+		else
+			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
+		end
+
+		bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
+		bars[i].bg:SetAllPoints(bars[i])
+		bars[i].bg:SetTexture(R["media"].normal)
+		bars[i].bg.multiplier = .2
+
+		bars[i]:CreateShadow("Background")
+		bars[i].shadow:SetFrameStrata("BACKGROUND")
+		bars[i].shadow:SetFrameLevel(0)
+	end
+	
+	return bars
+end
+
+function UF:ConstructPaladinResourceBar(frame)
+	local bars = CreateFrame("Frame", nil, frame)
+	bars:SetSize(200, 5)
+	bars:SetFrameLevel(5)
+	bars:Point("BOTTOM", frame, "TOP", 0, 1)
+	local count = 5
+
+	for i = 1, count do					
+		bars[i] = CreateFrame("StatusBar", nil, bars)
+		bars[i]:SetStatusBarTexture(R["media"].normal)
+		bars[i]:SetWidth((200 - (count - 1)*5)/count)
+		bars[i]:SetHeight(5)
+		bars[i]:GetStatusBarTexture():SetHorizTile(false)
+
+		local color = RayUF.colors.class[R.myclass]
+		bars[i]:SetStatusBarColor(unpack(color))
+
+		if i == 1 then
+			bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
+		else
+			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
+		end
+
+		bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
+		bars[i].bg:SetAllPoints(bars[i])
+		bars[i].bg:SetTexture(R["media"].normal)
+		bars[i].bg.multiplier = .2
+
+		bars[i]:CreateShadow("Background")
+		bars[i].shadow:SetFrameStrata("BACKGROUND")
+		bars[i].shadow:SetFrameLevel(0)
+	end
+	
+	return bars
+end
+
+function UF:ConstructWarlockResourceBar(frame)
+	local bars = CreateFrame("Frame", nil, frame)
+	bars:SetSize(200, 5)
+	bars:SetFrameLevel(5)
+	bars:Point("BOTTOM", frame, "TOP", 0, 1)
+	local count = 4
+
+	for i = 1, count do					
+		bars[i] = CreateFrame("StatusBar", nil, bars)
+		bars[i]:SetStatusBarTexture(R["media"].normal)
+		bars[i]:SetWidth((200 - (count - 1)*5)/count)
+		bars[i]:SetHeight(5)
+		bars[i]:GetStatusBarTexture():SetHorizTile(false)
+		
+		local color = RayUF.colors.class[R.myclass]
+		bars[i]:SetStatusBarColor(unpack(color))
+
+		if i == 1 then
+			bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
+		else
+			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
+		end
+
+		bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
+		bars[i].bg:SetAllPoints(bars[i])
+		bars[i].bg:SetTexture(R["media"].normal)
+		bars[i].bg.multiplier = .2
+
+		bars[i]:CreateShadow("Background")
+		bars[i].shadow:SetFrameStrata("BACKGROUND")
+		bars[i].shadow:SetFrameLevel(0)
+	end
+
+	bars.PostUpdate = UF.UpdateShardBar
+	
+	return bars
+end
+
+function UF:ConstructPriestResourceBar(frame)
+	local bars = CreateFrame("Frame", nil, frame)
+	bars:SetSize(200, 5)
+	bars:SetFrameLevel(5)
+	bars:Point("BOTTOM", frame, "TOP", 0, 1)
+	local count = 3
+
+	for i = 1, count do					
+		bars[i] = CreateFrame("StatusBar", nil, bars)
+		bars[i]:SetStatusBarTexture(R["media"].normal)
+		bars[i]:SetWidth((200 - (count - 1)*5)/count)
+		bars[i]:SetHeight(5)
+		bars[i]:GetStatusBarTexture():SetHorizTile(false)
+
+		local color = RayUF.colors.class[R.myclass]
+		bars[i]:SetStatusBarColor(unpack(color))
+
+		if i == 1 then
+			bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
+		else
+			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
+		end
+
+		bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
+		bars[i].bg:SetAllPoints(bars[i])
+		bars[i].bg:SetTexture(R["media"].normal)
+		bars[i].bg.multiplier = .2
+
+		bars[i]:CreateShadow("Background")
+		bars[i].shadow:SetFrameStrata("BACKGROUND")
+		bars[i].shadow:SetFrameLevel(0)
+	end
+	
+	return bars
+end
+
+function UF:ConstructShamanResourceBar(frame)
+	local bars = {}
+	bars.Destroy = true
+	for i = 1, 4 do
+		bars[i] = CreateFrame("StatusBar", nil, frame)
+		bars[i]:SetStatusBarTexture(R["media"].normal)
+		bars[i]:SetWidth(200/4-5)
+		bars[i]:SetHeight(5)
+		bars[i]:GetStatusBarTexture():SetHorizTile(false)
+		bars[i]:SetFrameLevel(5)
+
+		bars[i]:SetBackdrop({bgFile = R["media"].blank})
+		bars[i]:SetBackdropColor(0.5, 0.5, 0.5)
+		bars[i]:SetMinMaxValues(0, 1)
+
+		bars[i].bg = bars[i]:CreateTexture(nil, "BORDER")
+		bars[i].bg:SetAllPoints(bars[i])
+		bars[i].bg:SetTexture(R["media"].normal)
+		bars[i].bg.multiplier = 0.3
+
+		bars[i]:CreateShadow("Background")
+		bars[i].shadow:SetFrameStrata("BACKGROUND")
+		bars[i].shadow:SetFrameLevel(0)
+	end
+	bars[2]:SetPoint("BOTTOM", frame, "TOP", -75,1)
+	bars[1]:SetPoint("LEFT", bars[2], "RIGHT", 5, 0)
+	bars[3]:SetPoint("LEFT", bars[1], "RIGHT", 5, 0)
+	bars[4]:SetPoint("LEFT", bars[3], "RIGHT", 5, 0)
+
+	return bars
+end
+
+function UF:ConstructDruidResourceBar(frame)
+	local ebar = CreateFrame("Frame", nil, frame)
+	ebar:Point("BOTTOM", frame, "TOP", 0, 1)
+	ebar:SetSize(200, 5)
+	ebar:CreateShadow("Background")
+	ebar:SetFrameLevel(5)
+	ebar.shadow:SetFrameStrata("BACKGROUND")
+	ebar.shadow:SetFrameLevel(0)
+
+	local lbar = CreateFrame("StatusBar", nil, ebar)
+	lbar:SetStatusBarTexture(R["media"].normal)
+	lbar:SetStatusBarColor(0, .4, 1)
+	lbar:SetWidth(200)
+	lbar:SetHeight(5)
+	lbar:SetFrameLevel(5)
+	lbar:GetStatusBarTexture():SetHorizTile(false)
+	lbar:SetPoint("LEFT", ebar, "LEFT")
+	ebar.LunarBar = lbar
+
+	local sbar = CreateFrame("StatusBar", nil, ebar)
+	sbar:SetStatusBarTexture(R["media"].normal)
+	sbar:SetStatusBarColor(1, .6, 0)
+	sbar:SetWidth(200)
+	sbar:SetHeight(5)
+	sbar:SetFrameLevel(5)
+	sbar:GetStatusBarTexture():SetHorizTile(false)
+	sbar:SetPoint("LEFT", lbar:GetStatusBarTexture(), "RIGHT")
+	ebar.SolarBar = sbar
+
+	ebar.Spark = sbar:CreateTexture(nil, "OVERLAY")
+	ebar.Spark:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
+	ebar.Spark:SetBlendMode("ADD")
+	ebar.Spark:SetAlpha(0.5)
+	ebar.Spark:SetHeight(20)
+	ebar.Spark:Point("LEFT", sbar:GetStatusBarTexture(), "LEFT", -15, 0)
+
+	ebar.Arrow = sbar:CreateTexture(nil, "OVERLAY")
+	ebar.Arrow:SetSize(8,8)
+	ebar.Arrow:Point("CENTER", sbar:GetStatusBarTexture(), "LEFT", 0, 0)
+
+	ebar.PostUnitAura = self.UpdateEclipse
+
+	return ebar
+end
+
+function UF:UpdateEclipse(unit)
+    if self.hasSolarEclipse then
+        self.border:SetBackdropBorderColor(1, .6, 0)
+        self.shadow:SetBackdropBorderColor(1, .6, 0)
+    elseif self.hasLunarEclipse then
+        self.border:SetBackdropBorderColor(0, .4, 1)
+        self.shadow:SetBackdropBorderColor(0, .4, 1)
+    else
+        self.border:SetBackdropBorderColor(0, 0, 0)
+        self.shadow:SetBackdropBorderColor(0, 0, 0)
+    end
+	local direction = GetEclipseDirection()
+	if direction == "sun" then
+		self.Arrow:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-right-active")
+		self.Spark:Hide()
+	elseif direction == "moon" then
+		self.Arrow:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-left-active")
+		self.Spark:Hide()
+	else
+		self.Arrow:SetTexture(nil)
+		self.Spark:Show()
+	end
+end
+
+function UF:UpdateHarmony()
+	local maxChi = UnitPowerMax("player", SPELL_POWER_LIGHT_FORCE)
+	if maxChi < self.number then
+		for i = 1, 4 do
+			self[i]:SetWidth(185/4)
+		end
+		self[5]:Hide()
+		self.number = maxChi
+	elseif maxChi > self.number then
+		for i = 1, 4 do
+			self[i]:SetWidth(180/5)
+		end
+		self[5]:Show()
+		self.number = maxChi
+	end
+end
+
+function UF:UpdateShardBar(spec)
+	local maxBars = self.number
+	local frame = self:GetParent()
+	
+	for i = 1, 4 do
+		if i > maxBars then
+			self[i]:Hide()
+		else
+			self[i]:SetWidth((200 - (maxBars - 1)*5)/maxBars)
+		end
+	end
 end
 
 local testuf = TestUF or function() end
