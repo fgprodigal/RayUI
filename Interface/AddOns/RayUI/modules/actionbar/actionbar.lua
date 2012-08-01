@@ -481,7 +481,7 @@ function AB:Style(button)
 	local Border  = _G[name.."Border"]
 	local Btname = _G[name.."Name"]
 	local Normal  = _G[name.."NormalTexture"]
-	-- local Normal2 = button:GetNormalTexture()
+	local Normal2 = button:GetNormalTexture()
 	local Cooldown = _G[name .. "Cooldown"]
 	local FloatingBG = _G[name.."FloatingBG"]
 
@@ -492,7 +492,7 @@ function AB:Style(button)
 
 	if Flash then Flash:SetTexture(nil) end
 	if Normal then Normal:SetTexture(nil) Normal:Hide() Normal:SetAlpha(0) end
-	-- if Normal2 then Normal2:SetTexture(nil) Normal2:Hide() Normal2:SetAlpha(0) end
+	if Normal2 then Normal2:SetTexture(nil) Normal2:Hide() Normal2:SetAlpha(0) end
 	if Border then Border:SetTexture(nil) end
 
 	if Count then

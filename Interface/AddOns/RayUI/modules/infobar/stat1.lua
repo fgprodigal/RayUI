@@ -93,14 +93,14 @@ local function LoadStat()
 			if GetCombatRating(CR_MASTERY) ~= 0 and GetSpecialization() then
 				if R.myclass == "DRUID" then
 					if R.Role == "Melee" then
-						masteryspell = select(2, GetTalentTreeMasterySpells(GetSpecialization()))
+						masteryspell = select(2, GetSpecializationMasterySpells(GetSpecialization()))
 					elseif R.Role == "Tank" then
-						masteryspell = select(1, GetTalentTreeMasterySpells(GetSpecialization()))
+						masteryspell = select(1, GetSpecializationMasterySpells(GetSpecialization()))
 					else
-						masteryspell = GetTalentTreeMasterySpells(GetSpecialization())
+						masteryspell = GetSpecializationMasterySpells(GetSpecialization())
 					end
 				else
-					masteryspell = GetTalentTreeMasterySpells(GetSpecialization())
+					masteryspell = GetSpecializationMasterySpells(GetSpecialization())
 				end
 
 
