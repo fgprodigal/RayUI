@@ -86,7 +86,7 @@ function AddOn:OnInitialize()
 	self:UpdateMedia()
 
 	for k, v in self:IterateModules() do
-		if self.db[k] and (( self.db[k].enable~=nil and self.db[k].enable == true) or self.db[k].enable == nil) and v.GetOptions then
+		if self.db[k] and (( self.DF["profile"][k].enable~=nil and self.DF["profile"][k].enable == true) or self.DF["profile"][k].enable == nil) and v.GetOptions then
 			AddOn.Options.args[k:gsub(" ", "_")] = {
 				type = "group",
 				name = (v.modName or k),
