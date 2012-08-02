@@ -77,18 +77,18 @@ local function LoadFriend()
 
 		-- Battle.net Friends
 		for t = 1, BNGetNumFriends() do
-			local BNid, BNRealName, BattleTag, unknown, toonname, toonid, client, online, lastonline, isafk, isdnd, broadcast, note = BNGetFriendInfo(t)
+			local presenceID, presenceName, BattleTag, isBattleTagPresence, toonName, toonID, client, isOnline, lastOnline, isAFK, isDND, broadcast, note = BNGetFriendInfo(t)
 
 			-- WoW friends
-			if online then
+			if isOnline then
 				if ( not FriendsTabletData or FriendsTabletData == nil ) then FriendsTabletData = {} end
 				if ( not FriendsTabletDataNames or FriendsTabletDataNames == nil ) then FriendsTabletDataNames = {} end
 
-				local _,name, _, realmName, _, faction, race, class, guild, area, lvl = BNGetToonInfo(toonid)
+				local _,name, _, realmName, _, faction, race, class, guild, area, lvl = BNGetToonInfo(toonID)
 				curFriendsOnline = curFriendsOnline + 1
 
 				if (realmName == R.myrealm) then
-					FriendsTabletDataNames[toonname] = true
+					FriendsTabletDataNames[toonName] = true
 				end
 
 				local r, g, b = FRIENDS_BNET_NAME_COLOR.r, FRIENDS_BNET_NAME_COLOR.g, FRIENDS_BNET_NAME_COLOR.b
@@ -102,7 +102,7 @@ local function LoadFriend()
 					cname = string.format(
 						"|cff%02x%02x%02x%s|r |cffcccccc(|r|cff%02x%02x%02x%s|r|cffcccccc)|r",
 						FRIENDS_BNET_NAME_COLOR.r * 255, FRIENDS_BNET_NAME_COLOR.g * 255, FRIENDS_BNET_NAME_COLOR.b * 255,
-						BNRealName,
+						presenceName,
 						r * 255, g * 255, b * 255,
 						name
 					)
@@ -112,7 +112,7 @@ local function LoadFriend()
                         cname = string.format(
                             "|cff%02x%02x%02x%s|r |cffcccccc(|r|cff%02x%02x%02x%s|r|cffcccccc-%s)|r",
                             FRIENDS_BNET_NAME_COLOR.r * 255, FRIENDS_BNET_NAME_COLOR.g * 255, FRIENDS_BNET_NAME_COLOR.b * 255,
-                            BNRealName,
+                            presenceName,
                             r * 255, g * 255, b * 255,
                             name,
                             realmName
@@ -121,7 +121,7 @@ local function LoadFriend()
                         cname = string.format(
                             "|cff%02x%02x%02x%s|r |cffcccccc(|r|cff%02x%02x%02x%s|r|cffcccccc)|r",
                             FRIENDS_BNET_NAME_COLOR.r * 255, FRIENDS_BNET_NAME_COLOR.g * 255, FRIENDS_BNET_NAME_COLOR.b * 255,
-                            BNRealName,
+                            presenceName,
                             r * 255, g * 255, b * 255,
                             name
                         )
@@ -130,9 +130,9 @@ local function LoadFriend()
 
 				-- Class
 				class = string.format("|cff%02x%02x%02x%s|r", r * 255, g * 255, b * 255, class)
-				if (isafk and name ) then
+				if (isAFK and name ) then
 					cname = string.format("%s %s", CHAT_FLAG_AFK, cname)
-				elseif(isdnd and name) then
+				elseif(isDND and name) then
 					cname = string.format("%s %s", CHAT_FLAG_DND, cname)
 				end
 
@@ -146,7 +146,7 @@ local function LoadFriend()
                 end
 
 				-- Add Friend to list
-				tinsert(FriendsTabletData, { cname, lvl, area, faction, client, realname, note, name, ["toonid"] = toonid })
+				tinsert(FriendsTabletData, { cname, lvl, area, faction, client, realname, note, name, ["toonid"] = toonID })
 			end
 		end
 
