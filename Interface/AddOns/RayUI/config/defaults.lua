@@ -179,3 +179,6 @@ P["Skins"]={
 	bigwigs = true,
 	gladius = true,
 }
+
+P["Tutorial"]={
+}

@@ -77,7 +77,7 @@ local function LoadFriend()
 
 		-- Battle.net Friends
 		for t = 1, BNGetNumFriends() do
-			local BNid, BNfirstname, BNlastname, toonname, toonid, client, online, lastonline, isafk, isdnd, broadcast, note = BNGetFriendInfo(t)
+			local BNid, BNRealName, BattleTag, unknown, toonname, toonid, client, online, lastonline, isafk, isdnd, broadcast, note = BNGetFriendInfo(t)
 
 			-- WoW friends
 			if online then
@@ -97,16 +97,12 @@ local function LoadFriend()
                 end
 				-- Name
 				local cname
-				local realname = string.format("%s %s", BNfirstname, BNlastname)
-                if GetLocale() == "zhCN" then
-                    realname = string.format("%s %s", BNlastname, BNfirstname)
-                end
 				if ( realmName == GetRealmName() ) then
 					-- On My Realm
 					cname = string.format(
 						"|cff%02x%02x%02x%s|r |cffcccccc(|r|cff%02x%02x%02x%s|r|cffcccccc)|r",
 						FRIENDS_BNET_NAME_COLOR.r * 255, FRIENDS_BNET_NAME_COLOR.g * 255, FRIENDS_BNET_NAME_COLOR.b * 255,
-						realname,
+						BNRealName,
 						r * 255, g * 255, b * 255,
 						name
 					)
@@ -116,7 +112,7 @@ local function LoadFriend()
                         cname = string.format(
                             "|cff%02x%02x%02x%s|r |cffcccccc(|r|cff%02x%02x%02x%s|r|cffcccccc-%s)|r",
                             FRIENDS_BNET_NAME_COLOR.r * 255, FRIENDS_BNET_NAME_COLOR.g * 255, FRIENDS_BNET_NAME_COLOR.b * 255,
-                            realname,
+                            BNRealName,
                             r * 255, g * 255, b * 255,
                             name,
                             realmName
@@ -125,7 +121,7 @@ local function LoadFriend()
                         cname = string.format(
                             "|cff%02x%02x%02x%s|r |cffcccccc(|r|cff%02x%02x%02x%s|r|cffcccccc)|r",
                             FRIENDS_BNET_NAME_COLOR.r * 255, FRIENDS_BNET_NAME_COLOR.g * 255, FRIENDS_BNET_NAME_COLOR.b * 255,
-                            realname,
+                            BNRealName,
                             r * 255, g * 255, b * 255,
                             name
                         )

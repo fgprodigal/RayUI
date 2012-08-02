@@ -115,6 +115,8 @@ L["命令怒吼"] = true
 L["战斗怒吼"] = true
 L["寒冬号角"] = true
 L["鲜血灵气"] = true
+L["伤害性毒药"] = true
+L["非伤害性毒药"] = true
 
 L["URL Ctrl+C复制"] = true
 
@@ -362,4 +364,11 @@ L["自动放弃了"] = true
 L["你放弃了："] = true
 L["所有人都放弃了："] = true
 L["获胜者"] = true
+end
+do
+L["RayUI提示"] = true
+L["不再提示"] = true
+L["访问 http://rayui.org 反馈问题"] = true
+L["MoP测试客户端经常崩溃, 这是正常现象"] = true
+L["找不到微型菜单? 中键点击小地图试试"] = true
 end

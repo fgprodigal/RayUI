@@ -11,21 +11,19 @@ P["Reminder"]["filters"] = {
 			},
 			["instance"] = true,
 			["pvp"] = true,
-			["enable"] = true;
+			["enable"] = true,
 		},
 	},
 	HUNTER = {
 		["守护"] = { --aspects group
 			["spellGroup"] = {
-				[5118] = true, -- cheetah
-				[20043] = true, -- wild
 				[82661] = true, -- fox
 				[13165] = true, -- hawk
 			},
 			["combat"] = true,
 			["instance"] = true,
 			["personal"] = true,
-			["enable"] = true;
+			["enable"] = true,
 		},
 	},
 	MAGE = {
@@ -37,7 +35,7 @@ P["Reminder"]["filters"] = {
 			},
 			["instance"] = true,
 			["pvp"] = true,
-			["enable"] = true;
+			["enable"] = true,
 		},
 	},
 	WARLOCK = {
@@ -48,7 +46,7 @@ P["Reminder"]["filters"] = {
 			},
 			["instance"] = true,
 			["pvp"] = true,
-			["enable"] = true;
+			["enable"] = true,
 		},
 	},
 	PALADIN = {
@@ -61,7 +59,7 @@ P["Reminder"]["filters"] = {
 			},
 			["instance"] = true,
 			["pvp"] = true,
-			["enable"] = true;
+			["enable"] = true,
 		},
 		["正义之怒"] = { -- righteous fury group
 			["spellGroup"] = {
@@ -71,7 +69,7 @@ P["Reminder"]["filters"] = {
 			["instance"] = true,
 			["reverseCheck"] = true,
 			["talentTreeException"] = 1, --Holy paladins use RF sometimes
-			["enable"] = true;
+			["enable"] = true,
 		},
 		["光环"] = { -- auras
 			["spellGroup"] = {
@@ -82,7 +80,7 @@ P["Reminder"]["filters"] = {
 			},
 			["instance"] = true,
 			["personal"] = true,
-			["enable"] = true;
+			["enable"] = true,
 		},
 	},
 	SHAMAN = {
@@ -93,14 +91,14 @@ P["Reminder"]["filters"] = {
 			},
 			["instance"] = true,
 			["pvp"] = true,
-			["enable"] = true;
+			["enable"] = true,
 		},
 		["武器附魔"] = { --check weapons for enchants
 			["weaponCheck"] = true,
 			["instance"] = true,
 			["pvp"] = true,
 			["minLevel"] = 10,
-			["enable"] = true;
+			["enable"] = true,
 		},
 	},
 	WARRIOR = {
@@ -117,7 +115,7 @@ P["Reminder"]["filters"] = {
 			["role"] = "Tank",
 			["instance"] = true,
 			["pvp"] = true,
-			["enable"] = true;
+			["enable"] = true,
 		},
 		["战斗怒吼"] = { -- battle Shout group
 			["spellGroup"] = {
@@ -131,7 +129,7 @@ P["Reminder"]["filters"] = {
 			["instance"] = true,
 			["pvp"] = true,
 			["role"] = "Melee",
-			["enable"] = true;
+			["enable"] = true,
 		},
 	},
 	DEATHKNIGHT = {
@@ -146,7 +144,7 @@ P["Reminder"]["filters"] = {
 			},
 			["instance"] = true,
 			["pvp"] = true,
-			["enable"] = true;
+			["enable"] = true,
 		},
 		["鲜血灵气"] = { -- blood presence group
 			["spellGroup"] = {
@@ -155,16 +153,29 @@ P["Reminder"]["filters"] = {
 			["role"] = "Tank",
 			["instance"] = true,
 			["reverseCheck"] = true,
-			["enable"] = true;
+			["enable"] = true,
 		},
 	},
 	ROGUE = { 
-		["武器附魔"] = { --weapons enchant group
-			["weaponCheck"] = true,
-			["instance"] = true,
-			["pvp"] = true,
-			["minLevel"] = 10,
-			["enable"] = true;
+		["伤害性毒药"] = {
+			["spellGroup"] = {
+				[2823] = true, -- 致命毒藥
+				[8679] = true, -- 致傷毒藥
+			},
+			["instance"] = false,
+			["pvp"] = false,
+			["enable"] = true,
+		},
+		["非伤害性毒药"] = {
+			["spellGroup"] = {
+				[108211] = true, -- 吸血毒藥
+				[3408] = true, -- 致殘毒藥
+				[5761] = true, -- 麻痹毒藥
+				[108215] = true, -- 癱瘓毒藥
+			},
+			["instance"] = false,
+			["pvp"] = false,
+			["enable"] = true,
 		},
 	},
 	DRUID = {

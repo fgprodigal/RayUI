@@ -23,11 +23,9 @@ function RM:PlayerHasFilteredBuff(db, checkPersonal)
 end
 
 function RM:UpdateReminderIcon(event, unit)
-	if (event == "UNIT_AURA" and unit ~= "player") then return end
-
 	local db = P["Reminder"].filters[R.myclass][self.groupName]
 
-	self:Hide()
+	-- self:Hide()
 	self.icon:SetTexture(nil)
 
 	if not db or not db.enable or (not db.spellGroup and not db.weaponCheck) then return end
@@ -162,6 +160,8 @@ function RM:UpdateReminderIcon(event, unit)
 		elseif combatCheck and (instanceCheck or PVPCheck) and db.reverseCheck and (not roleCheck or not treeCheck) and RM:PlayerHasFilteredBuff(db.spellGroup, db.personal) and GetSpecialization() and not (db.talentTreeException == GetSpecialization()) then
 			self.hint = L["请取消"]..L[self.groupName]
 			self:Show()
+		else
+			self:Hide()
 		end
 	elseif db.weaponCheck then
 		if roleCheck and treeCheck and combatCheck and (instanceCheck or PVPCheck) then
@@ -177,6 +177,8 @@ function RM:UpdateReminderIcon(event, unit)
 				end
 				self.hint = L["缺少"]..L[self.groupName]
 				self:Show()
+			else
+				self:Hide()
 			end
 		end
 	end
@@ -214,9 +216,9 @@ function RM:CreateReminder(name, index)
 		GameTooltip:Show()
 	end)
 	frame:SetScript("OnLeave", GameTooltip_Hide)
-	frame:Hide()
+	-- frame:Hide()
 
-	frame:RegisterEvent("UNIT_AURA")
+	frame:RegisterUnitEvent("UNIT_AURA", "player")
 	frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 	frame:RegisterEvent("UNIT_INVENTORY_CHANGED")
 	frame:RegisterEvent("PLAYER_REGEN_ENABLED")

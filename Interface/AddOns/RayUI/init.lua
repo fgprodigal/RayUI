@@ -206,7 +206,7 @@ function AddOn:Initialize()
 	configButton:SetScript("OnClick", function()
 		if RayUIConfigTutorial then
 			RayUIConfigTutorial:Hide()
-			AddOn.db.RayUIConfigTutorial = true
+			AddOn.db.Tutorial.configbutton = true
 		end
 		HideUIPanel(GameMenuFrame)
 		self:OpenConfig()
