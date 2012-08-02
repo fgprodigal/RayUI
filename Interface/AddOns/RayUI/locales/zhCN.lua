@@ -149,6 +149,7 @@ L["启用"] = true
 L["登陆Logo"] = true
 	L["开关登陆时的Logo"] = true
 L["解锁锚点"] = true
+L["显示小提示"] = true
 L["解锁并移动头像和动作条"] = true
 L["一般"] = true
 	L["UI缩放"] = true

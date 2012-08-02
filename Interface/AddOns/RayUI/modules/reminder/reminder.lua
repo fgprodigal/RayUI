@@ -25,7 +25,7 @@ end
 function RM:UpdateReminderIcon(event, unit)
 	local db = P["Reminder"].filters[R.myclass][self.groupName]
 
-	-- self:Hide()
+	self:Hide()
 	self.icon:SetTexture(nil)
 
 	if not db or not db.enable or (not db.spellGroup and not db.weaponCheck) then return end
@@ -50,7 +50,7 @@ function RM:UpdateReminderIcon(event, unit)
 			end
 		end
 
-		if (not self.icon:GetTexture() and event == "PLAYER_ENTERING_WORLD") then
+--[[ 		if (not self.icon:GetTexture() and event == "PLAYER_ENTERING_WORLD") then
 			self:UnregisterAllEvents()
 			self:RegisterEvent("LEARNED_SPELL_IN_TAB")
 			return
@@ -69,7 +69,7 @@ function RM:UpdateReminderIcon(event, unit)
 			if db.role then
 				self:RegisterEvent("UNIT_INVENTORY_CHANGED")
 			end
-		end
+		end ]]
 	elseif db.weaponCheck then
 		self:UnregisterAllEvents()
 		self:RegisterEvent("UNIT_INVENTORY_CHANGED")
@@ -151,7 +151,7 @@ function RM:UpdateReminderIcon(event, unit)
 	end
 
 	if db.reverseCheck and not (db.role or db.tree) then db.reverseCheck = nil end
-	if not self.icon:GetTexture() or UnitInVehicle("player") then self:Hide() return end
+	if --[[ not self.icon:GetTexture() or ]] UnitInVehicle("player") then self:Hide() return end
 
 	if db.spellGroup then
 		if roleCheck and treeCheck and combatCheck and (instanceCheck or PVPCheck) and not RM:PlayerHasFilteredBuff(db.spellGroup, db.personal) then
@@ -160,8 +160,6 @@ function RM:UpdateReminderIcon(event, unit)
 		elseif combatCheck and (instanceCheck or PVPCheck) and db.reverseCheck and (not roleCheck or not treeCheck) and RM:PlayerHasFilteredBuff(db.spellGroup, db.personal) and GetSpecialization() and not (db.talentTreeException == GetSpecialization()) then
 			self.hint = L["请取消"]..L[self.groupName]
 			self:Show()
-		else
-			self:Hide()
 		end
 	elseif db.weaponCheck then
 		if roleCheck and treeCheck and combatCheck and (instanceCheck or PVPCheck) then
@@ -177,8 +175,6 @@ function RM:UpdateReminderIcon(event, unit)
 				end
 				self.hint = L["缺少"]..L[self.groupName]
 				self:Show()
-			else
-				self:Hide()
 			end
 		end
 	end

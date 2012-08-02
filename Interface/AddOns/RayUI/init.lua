@@ -47,6 +47,15 @@ AddOn.Options = {
 				ToggleAnchors = {
 					order = 4,
 					type = "execute",
+					name = Locale["显示小提示"],
+					func = function()
+						AceConfigDialog["Close"](AceConfigDialog,"RayUI")
+						AddOn:GetModule("Tutorial"):Tutorials(true)
+					end,
+				},
+				ToggleTutorial = {
+					order = 4,
+					type = "execute",
 					name = Locale["解锁锚点"],
 					desc = Locale["解锁并移动头像和动作条"],
 					func = function()

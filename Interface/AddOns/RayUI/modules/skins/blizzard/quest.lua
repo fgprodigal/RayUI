@@ -3,33 +3,25 @@ local S = R:GetModule("Skins")
 
 local function LoadSkin()
 	local r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b
-	S:SetBD(QuestLogFrame)
-	S:SetBD(QuestFrame)
-	S:SetBD(QuestLogDetailFrame)
+	S:ReskinPortraitFrame(QuestLogFrame, true)
+	S:ReskinPortraitFrame(QuestLogDetailFrame, true)
+	S:ReskinPortraitFrame(QuestFrame, true)
 
 	S:CreateBD(QuestLogCount, .25)
 
-	QuestLogFrame:DisableDrawLayer("BORDER")
-	QuestLogFrameInset:DisableDrawLayer("BORDER")
-	QuestLogDetailFrameInset:DisableDrawLayer("BORDER")
-	QuestFrame:DisableDrawLayer("BORDER")
-	QuestFrameInset:DisableDrawLayer("BORDER")
+	QuestFrameDetailPanel:DisableDrawLayer("BACKGROUND")
+	QuestFrameProgressPanel:DisableDrawLayer("BACKGROUND")
+	QuestFrameRewardPanel:DisableDrawLayer("BACKGROUND")
+	QuestFrameGreetingPanel:DisableDrawLayer("BACKGROUND")
+	EmptyQuestLogFrame:DisableDrawLayer("BACKGROUND")
 	QuestFrameDetailPanel:DisableDrawLayer("BORDER")
 	QuestFrameRewardPanel:DisableDrawLayer("BORDER")
 
-	for i = 1, 7 do
-		select(i, QuestLogFrame:GetRegions()):Hide()
-		select(i, QuestLogDetailFrame:GetRegions()):Hide()
-		select(i, QuestFrame:GetRegions()):Hide()
-	end
 	select(18, QuestLogFrame:GetRegions()):Hide()
 	select(18, QuestLogDetailFrame:GetRegions()):Hide()
 
-	QuestLogDetailFrame:GetRegions():Hide()
 	QuestLogFramePageBg:Hide()
 	QuestLogFrameBookBg:Hide()
-	QuestLogFrameInsetBg:Hide()
-	QuestLogDetailFrameInsetBg:Hide()
 	QuestLogDetailFramePageBg:Hide()
 	QuestLogScrollFrameTop:Hide()
 	QuestLogScrollFrameBottom:Hide()
@@ -49,8 +41,9 @@ local function LoadSkin()
 	QuestDetailLeftBorder:Hide()
 	QuestDetailBotLeftCorner:Hide()
 	QuestDetailTopLeftCorner:Hide()
-	QuestFrameBg:Hide()
-	QuestFrameInsetBg:Hide()
+	QuestGreetingScrollFrameTop:Hide()
+	QuestGreetingScrollFrameMiddle:Hide()
+	QuestGreetingScrollFrameBottom:Hide()
 
 	QuestNPCModelShadowOverlay:Hide()
 	QuestNPCModelBg:Hide()
@@ -146,23 +139,6 @@ local function LoadSkin()
 
 	QuestInfoSkillPointFrameIconTexture:SetSize(40, 40)
 	QuestInfoSkillPointFrameIconTexture:SetTexCoord(.08, .92, .08, .92)
-
-	local scrollbars = {
-	}
-	for i = 1, #scrollbars do
-		bar = _G[scrollbars[i]]
-		S:ReskinScroll(bar)
-	end
-
-	local layers = {
-		"QuestFrameDetailPanel",
-		"QuestFrameProgressPanel",
-		"QuestFrameRewardPanel",
-		"EmptyQuestLogFrame"
-	}
-	for i = 1, #layers do
-		_G[layers[i]]:DisableDrawLayer("BACKGROUND")
-	end
 	QuestLogDetailFrame:DisableDrawLayer("BORDER")
 	QuestLogDetailFrame:DisableDrawLayer("ARTWORK")
 
