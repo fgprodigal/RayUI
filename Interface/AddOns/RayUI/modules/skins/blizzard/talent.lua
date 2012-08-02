@@ -26,7 +26,7 @@ local function LoadSkin()
 	PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.Seperator:SetTexture(1, 1, 1)
 	PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.Seperator:SetAlpha(.2)
 	
-	if class == "HUNTER" then
+	if R.myclass == "HUNTER" then
 		for i = 1, 6 do
 			select(i, PlayerTalentFramePetSpecialization:GetRegions()):Hide()
 		end
@@ -37,10 +37,12 @@ local function LoadSkin()
 		
 		PlayerTalentFramePetSpecializationSpellScrollFrameScrollChild.Seperator:SetTexture(1, 1, 1)
 		PlayerTalentFramePetSpecializationSpellScrollFrameScrollChild.Seperator:SetAlpha(.2)
+		PlayerTalentFramePetSpecializationTutorialButton.Ring:Hide()
 		
 		for i = 1, GetNumSpecializations(false, true) do
 			local _, _, _, icon = GetSpecializationInfo(i, false, true)
 			PlayerTalentFramePetSpecialization["specButton"..i].specIcon:SetTexture(icon)
+			PlayerTalentFramePetSpecialization["specButton"..i]:DisableDrawLayer("BACKGROUND")
 		end
 	end
 
@@ -98,6 +100,7 @@ local function LoadSkin()
 	for i = 1, GetNumSpecializations(false, nil) do
 		local _, _, _, icon = GetSpecializationInfo(i, false, nil)
 		PlayerTalentFrameSpecialization["specButton"..i].specIcon:SetTexture(icon)
+		PlayerTalentFrameSpecialization["specButton"..i]:DisableDrawLayer("BACKGROUND")
 	end
 	
 	local buttons = {"PlayerTalentFrameSpecializationSpecButton", "PlayerTalentFramePetSpecializationSpecButton"}

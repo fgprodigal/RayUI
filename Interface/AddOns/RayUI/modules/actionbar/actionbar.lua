@@ -307,7 +307,7 @@ function AB:Initialize()
 	InterfaceOptionsActionBarsPanelAlwaysShowActionBars:Kill()
 	if self.db.showgrid == true then
 		ActionButton_HideGrid = R.dummy
-		for i = 1, 12 do
+		for i = 1, NUM_ACTIONBAR_BUTTONS do
 			local button = _G[format("ActionButton%d", i)]
 			button:SetAttribute("showgrid", 1)
 			ActionButton_ShowGrid(button)
@@ -334,13 +334,18 @@ function AB:Initialize()
 				ActionButton_ShowGrid(button)
 			end
 		end
+		for i = 1, NUM_OVERRIDE_BUTTONS do
+			local button = _G[format("OverrideActionBarButton%d", i)]
+			button:SetAttribute("showgrid", 1)
+			button:SetAttribute("statehidden", false)
+			ActionButton_ShowGrid(button)
+		end
 	end
 	for i = 1, 5 do
 		AB["CreateBar"..i]()
 	end
 	self:CreateBarPet()
 	self:CreateStanceBar()
-	self:CreateBarTotem()
 	self:CreateVehicleExit()
 	self:CreateExtraButton()
 	self:CreateOverrideBar()
@@ -358,6 +363,14 @@ function AB:Initialize()
 	self:SecureHook("PetActionBar_Update", "StylePet")
 	self:SecureHook("SetActionBarToggles", "UpdatePosition")
 	self:HookScript(SpellFlyout, "OnShow", "SetupFlyoutButton")
+
+	for i = 1, NUM_ACTIONBAR_BUTTONS do
+		self:Style(_G["ActionButton"..i])
+		self:Style(_G["MultiBarBottomLeftButton"..i])
+		self:Style(_G["MultiBarBottomRightButton"..i])
+		self:Style(_G["MultiBarRightButton"..i])
+		self:Style(_G["MultiBarLeftButton"..i])
+	end
 end
 
 function AB:UpdatePosition(bar2,bar3)

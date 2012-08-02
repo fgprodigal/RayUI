@@ -39,7 +39,6 @@ local function LoadSkin()
 		_G["SpellButton"..i.."TextBackground"]:Hide()
 		_G["SpellButton"..i.."SlotFrame"]:SetAlpha(0)
 		_G["SpellButton"..i.."UnlearnedSlotFrame"]:SetAlpha(0)
-		_G["SpellButton"..i.."Highlight"]:SetAlpha(0)
 
 		bu:SetCheckedTexture("")
 		bu:SetPushedTexture("")
@@ -50,8 +49,8 @@ local function LoadSkin()
 	end
 
 	hooksecurefunc("SpellButton_UpdateButton", function(self)
-		local slot, slotType = SpellBook_GetSpellBookSlot(self);
-		local name = self:GetName();
+		local slot, slotType = SpellBook_GetSpellBookSlot(self)
+		local name = self:GetName()
 		local subSpellString = _G[name.."SubSpellName"]
 
 		subSpellString:SetTextColor(1, 1, 1)
@@ -77,6 +76,22 @@ local function LoadSkin()
 		if _G[name.."AutoCastable"] then
 			_G[name.."AutoCastable"]:SetSize(75, 75)
 		end
+		for i = 1, SPELLS_PER_PAGE do
+			local bu = _G["SpellButton"..i]
+			local ic = _G["SpellButton"..i.."IconTexture"]
+
+			if _G["SpellButton"..i.."Highlight"] then
+				_G["SpellButton"..i.."Highlight"]:SetTexture(1, 1, 1, 0.3)
+				_G["SpellButton"..i.."Highlight"]:ClearAllPoints()
+				_G["SpellButton"..i.."Highlight"]:SetAllPoints(ic)
+			end
+
+			if ic:GetTexture() then
+				_G["SpellButton"..i.."TextBackground2"]:Show()
+			else
+				_G["SpellButton"..i.."TextBackground2"]:Hide()
+			end
+		end		
 	end)
 
 	for i = 1, 5 do

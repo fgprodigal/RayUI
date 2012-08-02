@@ -15,15 +15,8 @@ function AB:CreateOverrideBar()
 
 	local leaveButtonPlaced = false
   
-	for i=1, num+1 do
+	for i=1, num do
 		local button = _G["OverrideActionBarButton"..i]
-		if not button and not leaveButtonPlaced then
-			button = OverrideActionBar.LeaveButton
-			leaveButtonPlaced = true
-		end
-		if not button then
-			break
-		end
 		button:SetSize(AB.db.buttonsize, AB.db.buttonsize)
 		button:ClearAllPoints()
 		if i == 1 then
@@ -33,6 +26,14 @@ function AB:CreateOverrideBar()
 			button:SetPoint("LEFT", previous, "RIGHT", AB.db.buttonspacing, 0)
 		end
 	end
+	
+	OverrideActionBar.LeaveButton:SetSize(AB.db.buttonsize, AB.db.buttonsize)
+	OverrideActionBar.LeaveButton:ClearAllPoints()
+	OverrideActionBar.LeaveButton:SetPoint("LEFT", _G["OverrideActionBarButton"..num] , "RIGHT", AB.db.buttonspacing, 0)
+	OverrideActionBar.LeaveButton:CreateShadow()
+	OverrideActionBar.LeaveButton:GetNormalTexture():SetTexCoord(0.09, 0.16, 0.37, 0.43)
+	OverrideActionBar.LeaveButton:StyleButton(true)
+	OverrideActionBar.LeaveButton:SetPushedTexture(nil)
 
 	RegisterStateDriver(bar, "visibility", "[vehicleui] show;hide")
 	RegisterStateDriver(OverrideActionBar, "visibility", "[vehicleui] show;hide")

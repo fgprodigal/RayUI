@@ -149,6 +149,7 @@ function BF:Initialize()
 	BF:SecureHook("DebuffButton_UpdateAnchors", "UpdateDebuff")
 	BF:SecureHook("AuraButton_UpdateDuration", "UpdateTime")
 	SetCVar("consolidateBuffs", 0)
+	TempEnchant3:Kill()
 end
 
 R:RegisterModule(BF:GetName())

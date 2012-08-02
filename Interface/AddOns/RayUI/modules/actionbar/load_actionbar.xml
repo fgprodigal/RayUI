@@ -8,7 +8,6 @@
 	
 	<Script file="stancebar.lua"/>
 	<Script file="petbar.lua"/>
-	<Script file="totembar.lua"/>
 	<Script file="vehicleexit.lua"/>
 	<Script file="extra.lua"/>
 	<Script file="overridebar.lua"/>
