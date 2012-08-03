@@ -11,7 +11,7 @@ local function addLine(self,id,isItem)
 		local line = _G["GameTooltipTextLeft"..i]
 		if not line then break end
 		local text = line:GetText()
-		if text:match("FFCA3C3C技能ID") or text:match("FFCA3C3C堆疊數") or text:match("FFCA3C3C已擁有") or text:match("FFCA3C3C物品ID") then
+		if text and (text:match("FFCA3C3C技能ID") or text:match("FFCA3C3C堆疊數") or text:match("FFCA3C3C已擁有") or text:match("FFCA3C3C物品ID")) then
 			return
 		end
 	end
