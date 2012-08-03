@@ -291,6 +291,7 @@ local function LoadSkin()
 		["WARLOCK"]     = {0.7621875, 0.96828125, 0.27, 0.48},
 		["PALADIN"]     = {0.02, 0.23, 0.52, 0.73},
 		["DEATHKNIGHT"] = {0.27, .48, 0.52, .73},
+		["MONK"]		= {0.52, 0.71828125, 0.52, .73},
 	}
 
 	local UpdateIcons = function()
