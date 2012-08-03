@@ -837,6 +837,8 @@ R["Watcher"] = {
 				{ spellID = 31665, unitId = "player", caster = "player", filter = "BUFF" },
 				--毀滅者之怒
 				{ spellID = 109949, unitId = "player", caster = "player", filter = "BUFF" },
+				--洞悉要害
+				{ spellID = 121153, unitId = "player", caster = "player", filter = "BUFF" },
 
 			},
 			{
