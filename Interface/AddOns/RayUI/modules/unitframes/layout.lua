@@ -168,24 +168,24 @@ function UF:DPSLayout(frame, unit)
 		end
 
 		-- Alternative Power Bar
-		-- local altpp = CreateFrame("StatusBar", nil, frame)
-		-- altpp:SetStatusBarTexture(R["media"].normal)
-		-- altpp:GetStatusBarTexture():SetHorizTile(false)
-		-- altpp:SetFrameStrata("LOW")
-		-- altpp:SetHeight(4)
-		-- altpp:Point("TOPLEFT", frame, "BOTTOMLEFT", 0, -2)
-		-- altpp:Point("TOPRIGHT", frame, "BOTTOMRIGHT", 0, -2)
-		-- altpp.bg = altpp:CreateTexture(nil, "BORDER")
-		-- altpp.bg:SetAllPoints(altpp)
-		-- altpp.bg:SetTexture(R["media"].normal)
-		-- altpp.bg:SetVertexColor( 0,  0.76, 1)
-		-- altpp.bd = self:CreateBackdrop(altpp, altpp)
-		-- altpp.Text = altpp:CreateFontString(nil, "OVERLAY")
-		-- altpp.Text:SetFont(R["media"].font, 12, R["media"].fontflag)
-		-- altpp.Text:SetPoint("CENTER")
-		-- frame:Tag(altpp.Text, "[RayUF:altpower]")
-		-- altpp.PostUpdate = self.PostAltUpdate
-		-- frame.AltPowerBar = altpp
+		local altpp = CreateFrame("StatusBar", nil, frame)
+		altpp:SetStatusBarTexture(R["media"].normal)
+		altpp:GetStatusBarTexture():SetHorizTile(false)
+		altpp:SetFrameStrata("LOW")
+		altpp:SetHeight(4)
+		altpp:Point("TOPLEFT", frame, "BOTTOMLEFT", 0, -2)
+		altpp:Point("TOPRIGHT", frame, "BOTTOMRIGHT", 0, -2)
+		altpp.bg = altpp:CreateTexture(nil, "BORDER")
+		altpp.bg:SetAllPoints(altpp)
+		altpp.bg:SetTexture(R["media"].normal)
+		altpp.bg:SetVertexColor( 0,  0.76, 1)
+		altpp.bd = self:CreateBackdrop(altpp, altpp)
+		altpp.Text = altpp:CreateFontString(nil, "OVERLAY")
+		altpp.Text:SetFont(R["media"].font, 12, R["media"].fontflag)
+		altpp.Text:SetPoint("CENTER")
+		frame:Tag(altpp.Text, "[RayUF:altpower]")
+		altpp.PostUpdate = self.PostAltUpdate
+		frame.AltPowerBar = altpp
 
 		-- CastBar
 		local castbar = self:ConstructCastBar(frame)

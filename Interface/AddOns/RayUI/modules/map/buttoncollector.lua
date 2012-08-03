@@ -16,6 +16,7 @@ function MM:ButtonCollector()
 		["TimeManagerClockButton"] = true,
 		["FeedbackUIButton"] = true,
 		["HelpOpenTicketButton"] = true,
+		["MiniMapBattlefieldFrame"] = true,
 	}
 
 	local buttons = {}
@@ -60,12 +61,16 @@ function MM:ButtonCollector()
 	MinimapButtonCollect:RegisterEvent("PLAYER_ENTERING_WORLD")
 	MinimapButtonCollect:SetScript("OnEvent", function(self)
 		for i, child in ipairs({Minimap:GetChildren()}) do
-			if not BlackList[child:GetName()] then
-				if child:GetObjectType() == 'Button' and child:GetNumRegions() >= 3 then
+			if child:GetName() and not BlackList[child:GetName()] then
+				if child:GetObjectType() == "Button" and child:GetNumRegions() >= 3 then
 					child:SetParent("MinimapButtonCollectFrame")
 					for j = 1, child:GetNumRegions() do
-						if select(j, child:GetRegions()):GetTexture():find("Highlight") then
-							select(j, child:GetRegions()):Kill()
+						local region = select(j, child:GetRegions())
+						if region:GetObjectType() == "Texture" then
+							local texture = region:GetTexture()
+							if texture == "Interface\\Minimap\\MiniMap-TrackingBorder" or texture == "Interface\\Minimap\\UI-Minimap-Background" or texture == "Interface\\Minimap\\UI-Minimap-ZoomButton-Highlight" then
+								region:Kill()
+							end
 						end
 					end
 					tinsert(buttons, child)

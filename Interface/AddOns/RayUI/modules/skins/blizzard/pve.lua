@@ -145,6 +145,11 @@ local function LoadSkin()
 		select(i, QueueStatusFrame:GetRegions()):Hide()
 	end
 
+	QueueStatusMinimapButtonBorder:Kill()
+	QueueStatusMinimapButton:ClearAllPoints()
+	QueueStatusMinimapButton:Point("TOP", Minimap, "TOP")
+	QueueStatusFrame:ClearAllPoints()
+	QueueStatusFrame:Point("TOPLEFT", Minimap, "TOPRIGHT", 5, 2)
 	S:Reskin(LFRQueueFrameFindGroupButton)
 	S:Reskin(LFRQueueFrameAcceptCommentButton)
 	S:Reskin(LFRBrowseFrameSendMessageButton)

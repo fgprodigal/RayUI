@@ -39,6 +39,16 @@ local function LoadSkin()
 	bg:SetFrameLevel(FrameStackTooltip:GetFrameLevel()-1)
 	S:CreateBD(bg, .6)
 
+	EventTraceTooltip:SetParent(UIParent)
+	EventTraceTooltip:SetFrameStrata("TOOLTIP")
+	EventTraceTooltip:SetBackdrop(nil)
+
+	local bg = CreateFrame("Frame", nil, EventTraceTooltip)
+	bg:SetPoint("TOPLEFT")
+	bg:SetPoint("BOTTOMRIGHT")
+	bg:SetFrameLevel(EventTraceTooltip:GetFrameLevel()-1)
+	S:CreateBD(bg, .6)
+
 	S:ReskinClose(ScriptErrorsFrameClose)
 	S:ReskinScroll(ScriptErrorsFrameScrollFrameScrollBar)
 	S:Reskin(select(4, ScriptErrorsFrame:GetChildren()))
