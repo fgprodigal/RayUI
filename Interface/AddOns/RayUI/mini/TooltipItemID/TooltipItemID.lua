@@ -7,15 +7,23 @@ f:SetScript("OnEvent", function(_, _, name)
 end)
 
 local function addLine(self,id,isItem)
+	for i = 1, self:NumLines() do
+		local line = _G["GameTooltipTextLeft"..i]
+		if not line then break end
+		local text = line:GetText()
+		if text:match("FFCA3C3C技能ID") or text:match("FFCA3C3C堆疊數") or text:match("FFCA3C3C已擁有") or text:match("FFCA3C3C物品ID") then
+			return
+		end
+	end
 	self:AddLine(" ")
 	if isItem then
 		if select(8, GetItemInfo(id)) and select(8, GetItemInfo(id)) >1 then
-			self:AddDoubleLine("|cFFCA3C3C堆叠数:|r","|cffffffff"..select(8, GetItemInfo(id)))
+			self:AddDoubleLine("|cFFCA3C3C堆疊數:|r","|cffffffff"..select(8, GetItemInfo(id)))
 		end
 		if GetItemCount(id, true) and GetItemCount(id, true) - GetItemCount(id) > 0 then
-			self:AddDoubleLine("|cFFCA3C3C已拥有(|r"..R:RGBToHex(50/255, 217/255, 1).."银行|r".."|cFFCA3C3C):|r","|cffffffff"..GetItemCount(id, true).."(|r"..R:RGBToHex(50/255, 217/255, 1)..GetItemCount(id, true) - GetItemCount(id).."|r|cffffffff)|r")
+			self:AddDoubleLine("|cFFCA3C3C已擁有(|r"..R:RGBToHex(50/255, 217/255, 1).."銀行|r".."|cFFCA3C3C):|r","|cffffffff"..GetItemCount(id, true).."(|r"..R:RGBToHex(50/255, 217/255, 1)..GetItemCount(id, true) - GetItemCount(id).."|r|cffffffff)|r")
 		elseif GetItemCount(id) > 0 then
-			self:AddDoubleLine("|cFFCA3C3C已拥有:|r","|cffffffff"..GetItemCount(id))
+			self:AddDoubleLine("|cFFCA3C3C已擁有:|r","|cffffffff"..GetItemCount(id))
 		end
 		self:AddDoubleLine("|cFFCA3C3C物品ID:|r","|cffffffff"..id)
 	else
@@ -24,27 +32,6 @@ local function addLine(self,id,isItem)
 	self:Show()
 end
 
---------------------------------------------------------------------
--- SpellID's by Silverwind
--- http://wow.curseforge.com/addons/spellid/
---------------------------------------------------------------------
---[[
-hooksecurefunc(GameTooltip, "SetUnitBuff", function(self,...)
-	local id = select(11, UnitBuff(...))
-	if id then
-		self:AddLine("|cFFCA3C3C"..ID.."|r".." "..id)
-		self:Show()
-	end
-end)
-
-hooksecurefunc(GameTooltip, "SetUnitDebuff", function(self,...)
-	local id = select(11, UnitDebuff(...))
-	if id then
-		self:AddLine("|cFFCA3C3C"..ID.."|r".." "..id)
-		self:Show()
-	end
-end)
---]]
 hooksecurefunc(GameTooltip, "SetUnitAura", function(self,...)
 	local id = select(11, UnitAura(...))
 	local caster = select (8, UnitAura(...))
@@ -57,11 +44,6 @@ hooksecurefunc(GameTooltip, "SetUnitAura", function(self,...)
 		self:Show()
 	end
 end)
-
---[[hooksecurefunc("SetItemRef", function(link, text, button, chatFrame)
-	local id = tonumber(link:match("spell:(%d+)"))
-	if id then addLine(ItemRefTooltip,id) end
-end)]]
 
 GameTooltip:HookScript("OnTooltipSetSpell", function(self)
 	local id = select(3,self:GetSpell())

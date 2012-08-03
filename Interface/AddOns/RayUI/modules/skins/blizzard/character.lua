@@ -131,7 +131,6 @@ local function LoadSkin()
 		"Back",
 		"MainHand",
 		"SecondaryHand",
-		"Ranged",
 		"Tabard"
 	}
 

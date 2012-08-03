@@ -4,7 +4,7 @@ local M = R:GetModule("Misc")
 
 local function LoadFunc()
 	local SLOTIDS = {}
-	for _, slot in pairs({"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "MainHand", "SecondaryHand", "Ranged"}) do SLOTIDS[slot] = GetInventorySlotInfo(slot .. "Slot") end
+	for _, slot in pairs({"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "MainHand", "SecondaryHand"}) do SLOTIDS[slot] = GetInventorySlotInfo(slot .. "Slot") end
 	local frame = CreateFrame("Frame", nil, CharacterFrame)
 
 	local function RYGColorGradient(perc)

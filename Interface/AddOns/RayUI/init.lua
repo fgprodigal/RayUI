@@ -51,6 +51,7 @@ AddOn.Options = {
 					func = function()
 						AceConfigDialog["Close"](AceConfigDialog,"RayUI")
 						AddOn:GetModule("Tutorial"):Tutorials(true)
+						GameTooltip_Hide()
 					end,
 				},
 				ToggleTutorial = {

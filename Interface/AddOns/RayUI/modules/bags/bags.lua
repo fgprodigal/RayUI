@@ -899,7 +899,7 @@ function B:BAG_CLOSED(event, id)
 end
 
 function B:CloseBags()
-	self:HighlightItemSets(nil, true)
+	-- self:HighlightItemSets(nil, true)
 	bagFrame:Hide()
 
 	if bankFrame then
@@ -912,9 +912,9 @@ function B:OpenBags()
 end
 
 function B:ToggleBags()
-	if bagFrame:IsShown() then
-		self:HighlightItemSets(nil, true)
-	end
+	-- if bagFrame:IsShown() then
+		-- self:HighlightItemSets(nil, true)
+	-- end
 	ToggleFrame(bagFrame)
 end
 

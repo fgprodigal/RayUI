@@ -819,13 +819,18 @@ function CH:ApplyStyle()
 			self:GetParent():ScrollToBottom();
 		end
 		local bb = _G["ChatFrame"..i.."ButtonFrameBottomButton"]
+		local flash = _G["ChatFrame"..i.."ButtonFrameBottomButtonFlash"]
+		R:GetModule("Skins"):ReskinArrow(ChatFrame1ButtonFrameBottomButton, "down")
 		bb:SetParent(_G["ChatFrame"..i])
 		bb:SetHeight(18)
 		bb:SetWidth(18)
 		bb:ClearAllPoints()
 		bb:SetPoint("TOPRIGHT", cf, "TOPRIGHT", 0, -20)
 		bb:SetAlpha(0.4)
-		bb.SetPoint = function() end
+		bb.SetPoint = R.dummy
+		flash:ClearAllPoints()
+		flash:Point("TOPLEFT", -3, 3)
+		flash:Point("BOTTOMRIGHT", 3, -3)
 		bb:SetScript("OnClick", BottomButtonClick)
 		local font, path = cf:GetFont()
 		cf:SetFont(font, path, R["media"].fontflag)

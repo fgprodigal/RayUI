@@ -34,18 +34,21 @@ TalentSpecSpam.patternFragments = {}
 TalentSpecSpam.unlearned = {}
 TalentSpecSpam.learned = {}
 TalentSpecSpam.learnedspell = {}
+TalentSpecSpam.learnedpassivespell = {}
 TalentSpecSpam.alreadyseen = {}
 
 TalentSpecSpam.globalPatterns = {
-	[1] = _G["ERR_SPELL_UNLEARNED_S"], -- You have unlearned %s.
-	[2] = _G["ERR_LEARN_ABILITY_S"], -- You have learned a new ability : %s.
-	[3] = _G["ERR_LEARN_SPELL_S"], -- You have learned a new spell : %s.
+	[1] = _G["ERR_SPELL_UNLEARNED_S"],
+	[2] = _G["ERR_LEARN_ABILITY_S"],
+	[3] = _G["ERR_LEARN_SPELL_S"],
+	[4] = _G["ERR_LEARN_PASSIVE_S"],
 }
 
 TalentSpecSpam.link = {
 	[1] = TalentSpecSpam.unlearned,
 	[2] = TalentSpecSpam.learned,
 	[3] = TalentSpecSpam.learnedspell,
+	[4] = TalentSpecSpam.learnedpassivespell,
 }
 
 function TalentSpecSpam.addBetterStuff(in_string)
@@ -162,6 +165,10 @@ function TalentSpecSpam.summarize()
 
 		if ((#(TalentSpecSpam.learned) > 0) or (#(TalentSpecSpam.learnedspell) > 0)) then
 			DEFAULT_CHAT_FRAME:AddMessage(string.gsub(TalentSpecSpam.globalPatterns[2], "%%s", TalentSpecSpam.removeLastComma(TalentSpecSpam.print(TalentSpecSpam.learned) .. TalentSpecSpam.print(TalentSpecSpam.learnedspell))), 1, 1, 0)
+		end		
+
+		if #(TalentSpecSpam.learnedpassivespell) > 0 then
+			DEFAULT_CHAT_FRAME:AddMessage(string.gsub(TalentSpecSpam.globalPatterns[4], "%%s", TalentSpecSpam.removeLastComma(TalentSpecSpam.print(TalentSpecSpam.learnedpassivespell))), 1, 1, 0)
 		end
 
 		for k, tbl in ipairs (TalentSpecSpam.link) do wipe(tbl); end

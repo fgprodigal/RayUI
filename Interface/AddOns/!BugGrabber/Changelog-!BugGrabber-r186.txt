@@ -1,0 +1,13 @@
+------------------------------------------------------------------------
+r186 | cybeloras | 2012-07-09 04:30:00 +0000 (Mon, 09 Jul 2012) | 1 line
+Changed paths:
+   M /trunk/BugGrabber.lua
+
+Implemented a workaround to GetAddonMetadata not working in the MoP beta. Feel free to revert once it becomes functional again.
+------------------------------------------------------------------------
+r185 | rabbit | 2012-03-04 18:07:52 +0000 (Sun, 04 Mar 2012) | 1 line
+Changed paths:
+   M /trunk/locales.lua
+
+Add ptBR from the wowace localization system.
+------------------------------------------------------------------------

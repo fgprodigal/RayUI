@@ -94,14 +94,6 @@ L["你必须先购买一个银行栏位!"] = true
 L["全部"] = true
 L["当前仇恨"] = true
 
-L["合剂"] = true
-L["食物Buff"] = true
-L["全属性Buff"] = true
-L["血量上限Buff"] = true
-L["法力上限Buff"] = true
-L["法力恢复Buff"] = true
-L["攻击强度Buff"] = true
-L["力量与敏捷Buff"] = true
 L["缺少"] = true
 L["请取消"] = true
 L["守护"] = true
