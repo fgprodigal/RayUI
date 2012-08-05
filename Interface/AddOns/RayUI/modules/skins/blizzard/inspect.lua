@@ -8,6 +8,8 @@ local function LoadSkin()
 	InspectFrameInset:DisableDrawLayer("BACKGROUND")
 	InspectFrameInset:DisableDrawLayer("BORDER")
 	InspectModelFrame:DisableDrawLayer("OVERLAY")
+	InspectTalentFrame:DisableDrawLayer("BACKGROUND")
+	InspectTalentFrame:DisableDrawLayer("BORDER")
 
 	InspectPVPTeam1:DisableDrawLayer("BACKGROUND")
 	InspectPVPTeam2:DisableDrawLayer("BACKGROUND")
@@ -17,28 +19,37 @@ local function LoadSkin()
 	for i = 1, 5 do
 		select(i, InspectModelFrame:GetRegions()):Hide()
 	end
+	InspectFramePortraitFrame:Hide()
+	InspectFrameTopBorder:Hide()
+	InspectFrameTopRightCorner:Hide()
+	InspectPVPFrameBG:SetAlpha(0)
+	InspectPVPFrameBottom:SetAlpha(0)
 	for i = 1, 4 do
-		select(i, InspectTalentFrame:GetRegions()):Hide()
 		local tab = _G["InspectFrameTab"..i]
 		S:CreateTab(tab)
 		if i ~= 1 then
 			tab:SetPoint("LEFT", _G["InspectFrameTab"..i-1], "RIGHT", -15, 0)
 		end
 	end
-	for i = 1, 3 do
-		for j = 1, 6 do
-			select(j, _G["InspectTalentFrameTab"..i]:GetRegions()):Hide()
-			select(j, _G["InspectTalentFrameTab"..i]:GetRegions()).Show = R.dummy
+
+	for i = 1, MAX_NUM_TALENT_TIERS do
+			local row = _G["TalentsTalentRow"..i]
+			row:DisableDrawLayer("BORDER")
+
+			for j = 1, NUM_TALENT_COLUMNS do
+				local bu = _G["TalentsTalentRow"..i.."Talent"..j]
+				local border = _G["TalentsTalentRow"..i.."Talent"..j.."Border"]
+				local ic = _G["TalentsTalentRow"..i.."Talent"..j.."IconTexture"]
+
+				border:Kill()
+				bu:SetHighlightTexture("")
+				bu.Slot:SetAlpha(0)
+
+				ic:SetDrawLayer("ARTWORK")
+				ic:SetTexCoord(.08, .92, .08, .92)
+				S:CreateBG(ic)
+			end
 		end
-	end
-	InspectFramePortraitFrame:Hide()
-	InspectFrameTopBorder:Hide()
-	InspectFrameTopRightCorner:Hide()
-	InspectPVPFrameBG:SetAlpha(0)
-	InspectPVPFrameBottom:SetAlpha(0)
-	InspectTalentFramePointsBarBorderLeft:Hide()
-	InspectTalentFramePointsBarBorderMiddle:Hide()
-	InspectTalentFramePointsBarBorderRight:Hide()
 
 	local slots = {
 		"Head",

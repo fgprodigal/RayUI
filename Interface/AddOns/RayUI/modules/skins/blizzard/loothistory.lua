@@ -18,6 +18,24 @@ local function LoadSkin()
 
 	S:ReskinClose(LootHistoryFrame.CloseButton)
 	S:ReskinScroll(LootHistoryFrameScrollFrameScrollBar)
+
+	hooksecurefunc("LootHistoryFrame_FullUpdate", function()
+		for i = 1, C_LootHistory.GetNumItems() do
+			local frame = LootHistoryFrame.itemFrames[i]
+
+			if not frame.reskinned then
+				frame.NameBorderLeft:Hide()
+				frame.NameBorderRight:Hide()
+				frame.NameBorderMid:Hide()
+				frame.IconBorder:Hide()
+
+				frame.Icon:SetTexCoord(.08, .92, .08, .92)
+				frame.Icon:SetDrawLayer("ARTWORK")
+				S:CreateBG(frame.Icon)
+				frame.reskinned = true
+			end
+		end
+	end)
 end
 
 S:RegisterSkin("RayUI", LoadSkin)

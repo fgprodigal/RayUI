@@ -265,6 +265,18 @@ RegisterMount(88749, "ground") -- Tan Riding Camel
 RegisterMount(92155, "ground") -- Ultramarine Qiraji Battle Tank
 RegisterMount(98204, "ground") -- 祖阿曼熊
 RegisterMount(103081, "ground") -- 跳舞熊
+RegisterMount(127308, "ground")
+RegisterMount(127286, "ground")
+RegisterMount(127287, "ground")
+RegisterMount(127288, "ground")
+RegisterMount(127289, "ground")
+RegisterMount(127290, "ground")
+RegisterMount(127293, "ground")
+RegisterMount(127295, "ground")
+RegisterMount(127302, "ground")
+RegisterMount(127310, "ground")
+RegisterMount(120822, "ground")
+RegisterMount(120395, "ground")
 
 RegisterMount(71810, "fly")
 RegisterMount(72807, "fly")

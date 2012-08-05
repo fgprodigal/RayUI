@@ -2,8 +2,8 @@ local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
-	S:CreateBD(MailFrame)
-	S:CreateSD(MailFrame)
+	S:ReskinPortraitFrame(MailFrame, true)
+	S:ReskinPortraitFrame(OpenMailFrame, true)
 
 	MailFrameInset:DisableDrawLayer("BORDER")
 	SendMailMoneyInset:DisableDrawLayer("BORDER")
@@ -23,10 +23,9 @@ local function LoadSkin()
 	end
 
 	select(18, MailFrame:GetRegions()):Hide()
+	select(26, OpenMailFrame:GetRegions()):Hide()
 
 	S:ReskinClose(MailFrameCloseButton)
-
-	S:SetBD(OpenMailFrame, 10, -12, -34, 74)
 
 	MailTextFontNormal:SetTextColor(1, 1, 1)
 
@@ -151,6 +150,21 @@ local function LoadSkin()
 		bg:SetFrameLevel(0)
 		S:CreateBD(bg, .25)
 	end
+
+	for i = 1, ATTACHMENTS_MAX_RECEIVE do
+			local bu = _G["OpenMailAttachmentButton"..i]
+			local ic = _G["OpenMailAttachmentButton"..i.."IconTexture"]
+
+			bu:SetNormalTexture("")
+			bu:SetPushedTexture("")
+			ic:SetTexCoord(.08, .92, .08, .92)
+
+			local bg = CreateFrame("Frame", nil, bu)
+			bg:Point("TOPLEFT", -1, 1)
+			bg:Point("BOTTOMRIGHT", 1, -1)
+			bg:SetFrameLevel(0)
+			S:CreateBD(bg, .25)
+		end
 
 	hooksecurefunc("SendMailFrame_Update", function()
 		for i = 1, ATTACHMENTS_MAX_SEND do

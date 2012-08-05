@@ -177,8 +177,6 @@ function WM:SkinWorldMap()
 	WorldMapLevelUpButton.SetFrameStrata = R.dummy
 	WorldMapLevelDownButton:SetFrameStrata("HIGH")
 	WorldMapLevelDownButton.SetFrameStrata = R.dummy
-
-	S:CreateSD(WorldMapFrame.backdrop)
 end
 
 function WM:SmallSkin()

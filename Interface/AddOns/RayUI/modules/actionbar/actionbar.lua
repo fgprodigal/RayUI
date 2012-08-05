@@ -334,12 +334,6 @@ function AB:Initialize()
 				ActionButton_ShowGrid(button)
 			end
 		end
-		for i = 1, NUM_OVERRIDE_BUTTONS do
-			local button = _G[format("OverrideActionBarButton%d", i)]
-			button:SetAttribute("showgrid", 1)
-			button:SetAttribute("statehidden", false)
-			ActionButton_ShowGrid(button)
-		end
 	end
 	for i = 1, 5 do
 		AB["CreateBar"..i]()

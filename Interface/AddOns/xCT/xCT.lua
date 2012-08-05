@@ -191,8 +191,10 @@ elseif ct.myclass=="ROGUE"then
 		ct.aoespam[51723]=true		-- Fan of Knives
 		ct.aoespam[2818]=true		-- Deadly Poison
 		ct.aoespam[8680]=true		-- Instant Poison
+		ct.aoespam[122233]=true
+		ct.aoespam[121411]=true
+		ct.aoespam[112974]=true
 	end
-
 end
 ---------------------------------------------------------------------------------
 -- character config, overrides general and class

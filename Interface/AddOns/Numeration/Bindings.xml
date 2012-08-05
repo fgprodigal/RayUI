@@ -1,0 +1,8 @@
+<Bindings>
+	<Binding name="NUMERATION_VISIBILITY" description="BINDING_NAME_NUMERATION_VISIBILITY" header="NUMERATION">
+		Numeration:ToggleVisibility()
+	</Binding>
+	<Binding name="NUMERATION_RESET" description="BINDING_NAME_NUMERATION_RESET">
+		Numeration.window:ShowResetWindow()
+	</Binding>
+</Bindings>

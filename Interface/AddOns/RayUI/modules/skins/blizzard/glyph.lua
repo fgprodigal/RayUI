@@ -33,8 +33,8 @@ local function LoadSkin()
 		select(4, bu:GetRegions()):SetAlpha(0)
 
 		local check = select(2, bu:GetRegions())
-		check:SetPoint("TOPLEFT", 39, -3)
-		check:SetPoint("BOTTOMRIGHT", -1, 3)
+		check:Point("TOPLEFT", 39, -3)
+		check:Point("BOTTOMRIGHT", -1, 3)
 		check:SetTexture(S["media"].backdrop)
 		check:SetVertexColor(r, g, b, .2)
 

@@ -200,8 +200,8 @@ local function LoadSkin()
 		S:CreateBG(ic)
 
 		bu.bg = CreateFrame("Frame", nil, bu)
-		bu.bg:SetPoint("TOPLEFT", na, 14, -24)
-		bu.bg:SetPoint("BOTTOMRIGHT", na, -60, 24)
+		bu.bg:SetPoint("TOPLEFT", 0, -1)
+		bu.bg:SetPoint("BOTTOMRIGHT", 0, 2)
 		bu.bg:SetFrameLevel(0)
 		S:CreateBD(bu.bg, .25)
 	end
