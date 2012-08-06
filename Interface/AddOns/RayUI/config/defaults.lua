@@ -25,7 +25,7 @@ P["WorldMap"]={
 	enable = true,
 	lock = false,
 	scale = 0.8,
-	ejbuttonscale = 0.6,
+	ejbuttonscale = 0.8,
 	partymembersize = 25,
 }
 

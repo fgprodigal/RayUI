@@ -4,6 +4,8 @@ WM.modName = L["世界地图"]
 
 local mpos = {"CENTER",UIParent,"CENTER",0,65}
 local player, cursor
+local EJbuttonWidth, EJbuttonHeight = 30, 30
+local EJbuttonImageWidth, EJbuttonImageHeigth = 21.6, 21.6
 
 function WM:GetOptions()
 	local options = {
@@ -37,13 +39,6 @@ function WM:GetOptions()
 end
 
 function WM:ResizeEJBossButton()
-	local EJbuttonWidth, EJbuttonHeight, EJbuttonImageWidth, EJbuttonImageHeigth
-	if EJMapButton1 and not EJbuttonWidth then
-		EJbuttonWidth = EJbuttonWidth or EJMapButton1:GetWidth()
-		EJbuttonHeight = EJbuttonHeight or EJMapButton1:GetHeight()
-		EJbuttonImageWidth = EJbuttonImageWidth or EJMapButton1.bgImage:GetWidth()
-		EJbuttonImageHeigth = EJbuttonImageHeigth or EJMapButton1.bgImage:GetHeight()
-	end
 	if WORLDMAP_SETTINGS.size == WORLDMAP_WINDOWED_SIZE then
 		local index = 1
 		while _G["EJMapButton"..index] do

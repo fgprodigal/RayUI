@@ -3,7 +3,6 @@ local S = R:GetModule("Skins")
 
 local function LoadSkin()
 	S:SetBD(ReforgingFrame)
-	select(12,ReforgingFrameItemButton:GetRegions()):Hide()
 	ReforgingFrame:DisableDrawLayer("BACKGROUND")
 	ReforgingFrame:DisableDrawLayer("BORDER")
 	ReforgingFramePortrait:Hide()
