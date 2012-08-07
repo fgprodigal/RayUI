@@ -39,6 +39,7 @@ local function LoadSkin()
 		end
 		local bu = _G["StaticPopup"..i.."ItemFrame"]
 		_G["StaticPopup"..i.."ItemFrameNameFrame"]:Hide()
+		_G["StaticPopup"..i.."ItemFrameNormalTexture"]:Hide()
 		_G["StaticPopup"..i.."ItemFrameIconTexture"]:SetTexCoord(.08, .92, .08, .92)
 
 		bu:StyleButton(true)

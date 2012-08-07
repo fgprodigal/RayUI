@@ -101,37 +101,31 @@ local function LoadSkin()
 	LFDQueueFrameRandomScrollFrameScrollBarScrollDownButton:SetPoint("TOP", LFDQueueFrameRandomScrollFrameScrollBar, "BOTTOM", 0, 2)
 	LFDQueueFrameRandomScrollFrame:SetWidth(304)
 
-	local function ReskinRewards()
-		for i = 1, LFD_MAX_REWARDS do
-			local button = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i]
-			local icon = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i.."IconTexture"]
+	hooksecurefunc("LFGRewardsFrame_SetItemButton", function(parentFrame, dungeonID, index)
+		local parentName = parentFrame:GetName()
+		local button = _G[parentName.."Item"..index]
+		local icon = _G[parentName.."Item"..index.."IconTexture"]
+		icon:SetTexCoord(.08, .92, .08, .92)
+		if not button.reskinned then
+			local cta = _G[parentName.."Item"..index.."ShortageBorder"]
+			local count = _G[parentName.."Item"..index.."Count"]
+			local na = _G[parentName.."Item"..index.."NameFrame"]
 
-			if button then
-				icon:SetTexCoord(.08, .92, .08, .92)
-				if not button.reskinned then
-					local cta = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i.."ShortageBorder"]
-					local count = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i.."Count"]
-					local na = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i.."NameFrame"]
+			S:CreateBG(icon)
+			icon:SetDrawLayer("OVERLAY")
+			count:SetDrawLayer("OVERLAY")
+			na:SetTexture(0, 0, 0, .25)
+			na:SetSize(118, 39)
+			cta:SetAlpha(0)
 
-					S:CreateBG(icon)
-					icon:SetDrawLayer("OVERLAY")
-					count:SetDrawLayer("OVERLAY")
-					na:SetTexture(0, 0, 0, .25)
-					na:SetSize(118, 39)
-					cta:SetAlpha(0)
+			button.bg2 = CreateFrame("Frame", nil, button)
+			button.bg2:SetPoint("TOPLEFT", na, "TOPLEFT", 10, 0)
+			button.bg2:SetPoint("BOTTOMRIGHT", na, "BOTTOMRIGHT")
+			S:CreateBD(button.bg2, 0)
 
-					button.bg2 = CreateFrame("Frame", nil, button)
-					button.bg2:SetPoint("TOPLEFT", na, "TOPLEFT", 10, 0)
-					button.bg2:SetPoint("BOTTOMRIGHT", na, "BOTTOMRIGHT")
-					S:CreateBD(button.bg2, 0)
-
-					button.reskinned = true
-				end
-			end
+			button.reskinned = true
 		end
-	end
-
-	hooksecurefunc("LFDQueueFrameRandom_UpdateFrame", ReskinRewards)
+	end)
 
 	LFGDungeonReadyDialog.SetBackdrop = R.dummy
 	LFGDungeonReadyDialogBackground:Hide()
@@ -187,37 +181,6 @@ local function LoadSkin()
 	RaidFinderFrameBottomInsetBg:Hide()
 	RaidFinderFrameBtnCornerRight:Hide()
 	RaidFinderFrameButtonBottomBorder:Hide()
-
-	local function ReskinRewards()
-		for i = 1, LFD_MAX_REWARDS do
-			local button = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i]
-			local icon = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i.."IconTexture"]
-
-			if button then
-				icon:SetTexCoord(.08, .92, .08, .92)
-				if not button.reskinned then
-					local cta = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i.."ShortageBorder"]
-					local count = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i.."Count"]
-					local na = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i.."NameFrame"]
-
-					S:CreateBG(icon)
-					icon:SetDrawLayer("OVERLAY")
-					count:SetDrawLayer("OVERLAY")
-					na:SetTexture(0, 0, 0, .25)
-					na:SetSize(118, 39)
-					cta:SetAlpha(0)
-
-					button.bg2 = CreateFrame("Frame", nil, button)
-					button.bg2:SetPoint("TOPLEFT", na, "TOPLEFT", 10, 0)
-					button.bg2:SetPoint("BOTTOMRIGHT", na, "BOTTOMRIGHT")
-					S:CreateBD(button.bg2, 0)
-
-					button.reskinned = true
-				end
-			end
-		end
-	end
-	hooksecurefunc("LFDQueueFrameRandom_UpdateFrame", ReskinRewards)
 
 	S:Reskin(RaidFinderFrameFindRaidButton)
 	S:Reskin(RaidFinderFrameCancelButton)
