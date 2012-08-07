@@ -14,7 +14,6 @@ local BAGS_BACKPACK = {0, 1, 2, 3, 4}
 local BAGS_BANK = {-1, 5, 6, 7, 8, 9, 10, 11}
 local trashParent = CreateFrame("Frame", nil, UIParent)
 local trashButton, trashBag = {}, {}
-local _highlight = false
 
 B.buttons = {}
 B.bags = {}
@@ -95,6 +94,20 @@ function B:BagFrameSlotNew(frame, slot)
 	t:Point("BOTTOMRIGHT", ret.frame, -2, 2)
 
 	return ret
+end
+
+function B:isFiltered(frame, b)
+	local searchText = frame.editBox:GetText()
+	local _, setName = GetContainerItemEquipmentSetInfo(b.bag, b.slot)
+	setName = setName or ""
+	local ilink = GetContainerItemLink(b.bag, b.slot)
+	local class, subclass, _, equipSlot = select(6, GetItemInfo(ilink))
+	equipSlot = _G[equipSlot] or ""
+	if (not string.find (string.lower(b.name), searchText) and not string.find (string.lower(setName), searchText) and not string.find (string.lower(class), searchText) and not string.find (string.lower(subclass), searchText) and not string.find (string.lower(equipSlot), searchText)) and b.frame:GetParent():GetParent() == frame then
+		return false
+	else
+		return true
+	end
 end
 
 local BAGTYPE_PROFESSION = 0x0008 + 0x0010 + 0x0020 + 0x0040 + 0x0080 + 0x0200 + 0x0400
@@ -277,6 +290,10 @@ function B:SlotNew(bag, slot)
 		count:ClearAllPoints()
 		count:Point("BOTTOMRIGHT", ret.frame, "BOTTOMRIGHT", 1, 0)
 		count:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
+		
+		ret.frame.searchOverlay:ClearAllPoints()
+		ret.frame.searchOverlay:Point("TOPLEFT", -2, 2)
+		ret.frame.searchOverlay:Point("BOTTOMRIGHT", 2, -2)
 	end
 
 	if not ret.frame.quest then
@@ -487,21 +504,12 @@ local UpdateSearch = function(self, t)
 end
 
 function B:SearchUpdate(str, frameMatch)
-	str = string.lower(str)
-	_highlight = false
 	for _, b in ipairs(self.buttons) do
 		if b.name then
-			local _, setName = GetContainerItemEquipmentSetInfo(b.bag, b.slot)
-			setName = setName or ""
-			local ilink = GetContainerItemLink(b.bag, b.slot)
-			local class, subclass, _, equipSlot = select(6, GetItemInfo(ilink))
-			equipSlot = _G[equipSlot] or ""
-			if (not string.find (string.lower(b.name), str) and not string.find (string.lower(setName), str) and not string.find (string.lower(class), str) and not string.find (string.lower(subclass), str) and not string.find (string.lower(equipSlot), str)) and b.frame:GetParent():GetParent() == frameMatch then
-				-- SetItemButtonDesaturated(b.frame, 1, 1, 1, 1)
-				b.frame:SetAlpha(0.4)
+			if B:isFiltered(frameMatch, b) then
+				b.frame.searchOverlay:Hide()
 			else
-				-- SetItemButtonDesaturated(b.frame, 0, 1, 1, 1)
-				b.frame:SetAlpha(1)
+				b.frame.searchOverlay:Show()
 			end
 		end
 	end
@@ -509,8 +517,7 @@ end
 
 function B:SearchReset()
 	for _, b in ipairs(self.buttons) do
-		-- SetItemButtonDesaturated(b.frame, 0, 1, 1, 1)
-		b.frame:SetAlpha(1)
+		b.frame.searchOverlay:Hide()
 	end
 end
 
@@ -688,23 +695,9 @@ function B:InitBags()
 	end)
 	S:Reskin(f.sortButton)
 
-	--ItemSets Button
-	f.itemSetsButton = CreateFrame("Button", nil, f)
-	f.itemSetsButton:Point("LEFT", f.sortButton, "RIGHT", 3, 0)
-	f.itemSetsButton:Size(55, 10)
-	f.itemSetsButton.ttText = L["高亮套装"]
-	f.itemSetsButton.ttText2 = L["按住shift:"]
-	f.itemSetsButton.ttText2desc = L["反向显示"]
-	f.itemSetsButton:SetScript("OnEnter", Tooltip_Show)
-	f.itemSetsButton:SetScript("OnLeave", Tooltip_Hide)
-	f.itemSetsButton:SetScript("OnClick", function()
-		B:HighlightItemSets(IsShiftKeyDown())
-	end)
-	S:Reskin(f.itemSetsButton)
-
 	--Bags Button
 	f.bagsButton = CreateFrame("Button", nil, f)
-	f.bagsButton:Point("LEFT", f.itemSetsButton, "RIGHT", 3, 0)
+	f.bagsButton:Point("LEFT", f.sortButton, "RIGHT", 3, 0)
 	f.bagsButton:Size(55, 10)
 	f.bagsButton.ttText = L["显示背包"]
 	f.bagsButton:SetScript("OnEnter", Tooltip_Show)
@@ -766,23 +759,9 @@ function B:InitBank()
 	end)
 	S:Reskin(f.sortButton)
 
-	--ItemSets Button
-	f.itemSetsButton = CreateFrame("Button", nil, f)
-	f.itemSetsButton:Point("LEFT", f.sortButton, "RIGHT", 3, 0)
-	f.itemSetsButton:Size(55, 10)
-	f.itemSetsButton.ttText = L["高亮套装"]
-	f.itemSetsButton.ttText2 = L["按住shift:"]
-	f.itemSetsButton.ttText2desc = L["反向显示"]
-	f.itemSetsButton:SetScript("OnEnter", Tooltip_Show)
-	f.itemSetsButton:SetScript("OnLeave", Tooltip_Hide)
-	f.itemSetsButton:SetScript("OnClick", function() 
-		B:HighlightItemSets(IsShiftKeyDown())
-	end)
-	S:Reskin(f.itemSetsButton)
-
 	--Bags Button
 	f.bagsButton = CreateFrame("Button", nil, f)
-	f.bagsButton:Point("LEFT", f.itemSetsButton, "RIGHT", 3, 0)
+	f.bagsButton:Point("LEFT", f.sortButton, "RIGHT", 3, 0)
 	f.bagsButton:Size(55, 10)
 	f.bagsButton.ttText = L["显示背包"]
 	f.bagsButton:SetScript("OnEnter", Tooltip_Show)
@@ -899,7 +878,6 @@ function B:BAG_CLOSED(event, id)
 end
 
 function B:CloseBags()
-	-- self:HighlightItemSets(nil, true)
 	bagFrame:Hide()
 
 	if bankFrame then
@@ -912,9 +890,6 @@ function B:OpenBags()
 end
 
 function B:ToggleBags()
-	-- if bagFrame:IsShown() then
-		-- self:HighlightItemSets(nil, true)
-	-- end
 	ToggleFrame(bagFrame)
 end
 
@@ -1247,60 +1222,9 @@ function B:Sort(frame, args, bank)
 		args = ""
 	end
 
-	if _highlight then
-		self:HighlightItemSets(nil, true)
-	end
-
 	self.itmax = 0
 	self:SetBagsForSorting(args, bank)
-	-- self:SortBags(frame)
 	self:RestackAndSort(frame)
-end
-
-function B:HighlightItemSets(reverse, reset)
-	if reset then
-		for _, b in ipairs(self.buttons) do
-			if b.name then
-				-- SetItemButtonDesaturated(b.frame, 0, 1, 1, 1)
-				b.frame:SetAlpha(1)
-			end
-		end
-		_highlight = false
-		return
-	end
-	if not _highlight then
-		for _, b in ipairs(self.buttons) do
-			if b.name then
-				local _, setName = GetContainerItemEquipmentSetInfo(b.bag, b.slot)
-				if setName then
-					if reverse then
-						-- SetItemButtonDesaturated(b.frame, 1, 1, 1, 1)
-						b.frame:SetAlpha(0.4)
-					else
-						-- SetItemButtonDesaturated(b.frame, 0, 1, 1, 1)
-						b.frame:SetAlpha(1)
-					end
-				else
-					if reverse then
-						-- SetItemButtonDesaturated(b.frame, 0, 1, 1, 1)
-						b.frame:SetAlpha(1)
-					else
-						-- SetItemButtonDesaturated(b.frame, 1, 1, 1, 1)
-						b.frame:SetAlpha(0.4)
-					end
-				end
-			end
-		end
-		_highlight = true
-	else
-		for _, b in ipairs(self.buttons) do
-			if b.name then
-				-- SetItemButtonDesaturated(b.frame, 0, 1, 1, 1)
-				b.frame:SetAlpha(1)
-			end
-		end
-		_highlight = false
-	end
 end
 
 function B:Initialize()
