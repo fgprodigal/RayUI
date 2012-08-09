@@ -52,7 +52,7 @@ local function LoadSkin()
 
 	PetJournalHealPetButtonBorder:Hide()
 	PetJournalHealPetButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
-	PetJournal.HealPetButton:SetPushedTexture("")
+	PetJournal.HealPetButton:StyleButton(true)
 	S:CreateBG(PetJournal.HealPetButton)
 
 	local scrollFrames = {MountJournal.ListScrollFrame.buttons, PetJournal.listScroll.buttons}
@@ -180,6 +180,7 @@ local function LoadSkin()
 
 		bu.setButton:GetRegions():Point("TOPLEFT", bu.icon, -5, 5)
 		bu.setButton:GetRegions():Point("BOTTOMRIGHT", bu.icon, 5, -5)
+		bu.dragButton:StyleButton()
 
 		S:CreateBD(bu, .25)
 
@@ -201,8 +202,9 @@ local function LoadSkin()
 		for j = 1, 3 do
 			local spell = bu["spell"..j]
 
-			spell.selected:SetTexture(S["media"].checked)
+			spell:StyleButton(true)
 
+			spell.selected:SetTexture(nil)
 			spell:GetRegions():Hide()
 
 			spell.FlyoutArrow:SetTexture(S["media"].arrowDown)
@@ -228,7 +230,7 @@ local function LoadSkin()
 	for i = 1, 2 do
 		local bu = PetJournal.SpellSelect["Spell"..i]
 
-		bu:SetCheckedTexture(S["media"].checked)
+		bu:StyleButton(true)
 
 		bu.icon:SetDrawLayer("ARTWORK")
 		bu.icon:SetTexCoord(.08, .92, .08, .92)
