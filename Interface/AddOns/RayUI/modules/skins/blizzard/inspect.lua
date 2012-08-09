@@ -69,7 +69,6 @@ local function LoadSkin()
 		"Back",
 		"MainHand",
 		"SecondaryHand",
-		"Ranged",
 		"Tabard"
 	}
 
@@ -90,7 +89,7 @@ local function LoadSkin()
 		slot.glow:CreateBorder()
 	end
 	select(7, InspectMainHandSlot:GetRegions()):Kill()
-	select(7, InspectRangedSlot:GetRegions()):Kill()
+	-- select(7, InspectRangedSlot:GetRegions()):Kill()
 
 	S:ReskinClose(InspectFrameCloseButton)
 
