@@ -1,0 +1,8 @@
+﻿## Interface: 50001
+## Title: ncShadow
+## Author: Nightcracker (Maintained by Ferous)
+## Version: 1.0.1
+## Notes: Creates a shadow overlay
+## SavedVariables: ncShadowLevel
+
+ncShadow.lua
