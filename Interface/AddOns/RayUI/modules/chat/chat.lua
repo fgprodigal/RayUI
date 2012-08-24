@@ -201,7 +201,7 @@ function CH:Info()
 end
 
 function CH:EditBox_MouseOn()
-	for i =1, 10 do
+	for i =1, #CHAT_FRAMES do
 		local eb = _G["ChatFrame"..i.."EditBox"]
 		local tab = _G["ChatFrame"..i.."Tab"]
 		eb:EnableMouse(true)
@@ -210,7 +210,7 @@ function CH:EditBox_MouseOn()
 end
 
 function  CH:EditBox_MouseOff()
-	for i =1, 10 do
+	for i =1, #CHAT_FRAMES do
 		local eb = _G["ChatFrame"..i.."EditBox"]
 		local tab = _G["ChatFrame"..i.."Tab"]
 		eb:EnableMouse(false)
@@ -608,7 +608,7 @@ function CH:OnMouseScroll(frame, dir)
 end
 
 function CH:LinkHoverOnLoad()
-	for i = 1, NUM_CHAT_WINDOWS do
+	for i = 1, #CHAT_FRAMES do
 		local cf = _G["ChatFrame"..i]
 		self:HookScript(cf, "OnHyperlinkEnter", "OnHyperlinkEnter")
 		self:HookScript(cf, "OnHyperlinkLeave", "OnHyperlinkLeave")
@@ -651,7 +651,7 @@ function CH:AddMessage(text, ...)
 end
 
 function CH:SetChatPosition()
-	for i = 1, NUM_CHAT_WINDOWS do
+	for i = 1, #CHAT_FRAMES do
 		if _G["ChatFrame"..i] == COMBATLOG then
 			_G["ChatFrame"..i]:ClearAllPoints()
 			_G["ChatFrame"..i]:SetPoint("TOPLEFT", _G["ChatBG"], "TOPLEFT", 2,  -CombatLogQuickButtonFrame_Custom:GetHeight())
@@ -725,7 +725,7 @@ function CH:ApplyStyle()
 		GeneralDockManager:SetParent(ChatBG)
 	end
 
-	for i = 1, NUM_CHAT_WINDOWS do
+	for i = 1, #CHAT_FRAMES do
 		local cf = _G["ChatFrame"..i]
 		local tab = _G["ChatFrame"..i.."Tab"]
 		local eb = _G["ChatFrame"..i.."EditBox"]
@@ -840,7 +840,7 @@ end
 
 function CH:SetChat()
 	local whisperFound
-	for i = 1, NUM_CHAT_WINDOWS do
+	for i = 1, #CHAT_FRAMES do
 		local chatName, _, _, _, _, _, shown = FCF_GetChatWindowInfo(_G["ChatFrame"..i]:GetID())
 		if chatName == WHISPER then
 			if shown then
@@ -854,7 +854,7 @@ function CH:SetChat()
 	if not whisperFound then
 		FCF_OpenNewWindow(WHISPER)
 	end
-	for i = 1, NUM_CHAT_WINDOWS do
+	for i = 1, #CHAT_FRAMES do
 		local frame = _G["ChatFrame"..i]
 		FCF_SetChatWindowFontSize(nil, frame, 15)
 		FCF_SetWindowAlpha(frame , 0)

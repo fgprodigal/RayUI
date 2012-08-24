@@ -75,26 +75,44 @@ end
 local function parsespellbook(spellbook)
 	if spellbook == BOOKTYPE_SPELL then
 		wipe(spells)
-	end
-	if spellbook == BOOKTYPE_SPELL then
-		wipe(pets)
-	end
-	i = 1
-	while true do
-		skilltype, id = GetSpellBookItemInfo(i, spellbook)
-		if not id then break end
+		for i = 1, GetNumSpellTabs() do
+			local _, _, offset, numSpells, _ = GetSpellTabInfo(i)
+			offset = offset + 1
+			local tabEnd = offset + numSpells
+			for j = offset, tabEnd - 1 do
+				local skilltype, id = GetSpellBookItemInfo(j, spellbook)
+			-- end
+			-- for i = 1, MAX_SPELLS do
+				-- skilltype, id = GetSpellBookItemInfo(i, spellbook)
+				if not id then break end
 
-		name = GetSpellBookItemName(i, spellbook)
-		if name and skilltype == "SPELL" and spellbook == BOOKTYPE_SPELL and not IsPassiveSpell(i, spellbook) then
-			spells[id] = true
-		elseif name and skilltype == "PETACTION" and spellbook == BOOKTYPE_PET and not IsPassiveSpell(i, spellbook) then
-			pets[id] = true
+				name = GetSpellBookItemName(i, spellbook)
+				if name and skilltype == "SPELL" and spellbook == BOOKTYPE_SPELL and not IsPassiveSpell(i, spellbook) then
+					spells[id] = true
+				elseif name and skilltype == "PETACTION" and spellbook == BOOKTYPE_PET and not IsPassiveSpell(i, spellbook) then
+					pets[id] = true
+				end
+				i = i + 1
+				if (id == 88625 or id == 88625 or id == 88625) and (skilltype == "SPELL" and spellbook == BOOKTYPE_SPELL) then
+				   spells[88625] = true
+				   spells[88684] = true
+				   spells[88685] = true
+				end
+			end
 		end
-		i = i + 1
-		if (id == 88625 or id == 88625 or id == 88625) and (skilltype == "SPELL" and spellbook == BOOKTYPE_SPELL) then
-		   spells[88625] = true
-		   spells[88684] = true
-		   spells[88685] = true
+	end
+	if spellbook == BOOKTYPE_PET then
+		wipe(pets)
+		i = 1
+		while true do
+			skilltype, id = GetSpellBookItemInfo(i, spellbook)
+			if not id then break end
+
+			name = GetSpellBookItemName(i, spellbook)
+			if name and skilltype == "SPELL" and spellbook == BOOKTYPE_PET and not IsPassiveSpell(i, spellbook) then
+				pets[id] = true
+			end
+			i = i + 1
 		end
 	end
 end
