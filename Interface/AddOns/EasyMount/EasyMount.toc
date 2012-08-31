@@ -2,7 +2,7 @@
 ## Title: EasyMount
 ## Version: 1.0
 ## Author: Abin
-## SavedVariables: EasyMountDB
+## SavedVariablesPerCharacter: EasyMountDB
 
 Includes\InterfaceOptionPage-1.0.lua
 Includes\TabFrame-1.0.lua

@@ -1,3 +1,36 @@
+--[[ Element: Holy Power Indicator
+
+ Toggles the visibility of the player's holy power indicator.
+
+ Widget
+
+ HolyPower - An array consisting of three UI widgets.
+
+ Examples
+
+   local HolyPower = {}
+   local maxHolyPower = UnitPowerMax('player', SPELL_POWER_HOLY_POWER)
+   for index = 1, maxHolyPower do
+      local Texture = self:CreateTexture(nil, 'BACKGROUND')
+   
+      -- Position and size
+      Texture:SetSize(16, 16)
+      Texture:SetTexture(1, 1, 0)
+      Texture:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', index * Texture:GetWidth(), 0)
+   
+      HolyPower[index] = Texture
+   end
+   
+   -- Register with oUF
+   self.HolyPower = HolyPower
+
+ Hooks
+
+ Override(self) - Used to completely override the internal update function.
+                  Removing the table key entry will make the element fall-back
+                  to its internal function again.
+]]
+
 if(select(2, UnitClass('player')) ~= 'PALADIN') then return end
 
 local parent, ns = ...

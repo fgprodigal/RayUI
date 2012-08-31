@@ -1,8 +1,5 @@
-local WoW5 = select(4, GetBuildInfo()) == 50001
-
 local parent, ns = ...
--- GetAddOnMetadata() is currently broken on beta.
-local global = GetAddOnMetadata(parent, 'X-oUF') or WoW5 and parent == 'oUF' and parent
+local global = GetAddOnMetadata(parent, 'X-oUF')
 local _VERSION = GetAddOnMetadata(parent, 'version')
 
 local oUF = ns.oUF
@@ -245,7 +242,7 @@ local initObject = function(unit, style, styleFunc, header, ...)
 			end
 		else
 			-- Used to update frames when they change position in a group.
-			object:RegisterEvent('PARTY_MEMBERS_CHANGED', object.UpdateAllElements)
+			object:RegisterEvent('GROUP_ROSTER_UPDATE', object.UpdateAllElements)
 
 			if(num > 1) then
 				if(object:GetParent() == header) then

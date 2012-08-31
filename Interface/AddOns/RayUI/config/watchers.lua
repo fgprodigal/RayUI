@@ -210,7 +210,7 @@ R["Watcher"] = {
 				--沉默射擊
 				{ spellID = 34490, unitId = "target", caster = "all", filter = "DEBUFF" },
 				--毒蛇釘刺
-				{ spellID = 1978, unitId = "target", caster = "player", filter = "DEBUFF" },
+				{ spellID = 118253, unitId = "target", caster = "player", filter = "DEBUFF" },
 				--寡婦毒液
 				{ spellID = 82654, unitId = "target", caster = "all", filter = "DEBUFF" },
 				--黑蝕箭

@@ -91,16 +91,6 @@ local Toggler = function(self, event, unit)
 
 		altpowerbar:Hide()
 	end
-	
-	if unit == "vehicle" then
-		PlayerPowerBarAlt:RegisterEvent'UNIT_POWER_BAR_SHOW'
-		PlayerPowerBarAlt:RegisterEvent'UNIT_POWER_BAR_HIDE'
-		PlayerPowerBarAlt:RegisterEvent'PLAYER_ENTERING_WORLD'
-	else
-		PlayerPowerBarAlt:UnregisterEvent'UNIT_POWER_BAR_SHOW'
-		PlayerPowerBarAlt:UnregisterEvent'UNIT_POWER_BAR_HIDE'
-		PlayerPowerBarAlt:UnregisterEvent'PLAYER_ENTERING_WORLD'
-	end
 end
 
 local Enable = function(self, unit)
