@@ -3,7 +3,22 @@ local RA = R:GetModule("Raid")
 
 local oUF = RayUF or oUF
 
-local spellcache = setmetatable({}, {__index=function(t,v) local a = {GetSpellInfo(v)} if GetSpellInfo(v) then t[v] = a end return a end})
+local foo = {""}
+local spellcache = setmetatable({}, 
+{__index=function(t,id) 
+	local a = {GetSpellInfo(id)} 
+
+	if GetSpellInfo(id) then
+	    t[id] = a
+	    return a
+	end
+
+	--print("Invalid spell ID: ", id)
+        t[id] = foo
+	return foo
+end
+})
+
 local function GetSpellInfo(a)
     return unpack(spellcache[a])
 end
@@ -137,10 +152,7 @@ oUF.Tags.Events["RayUIRaid:ws"] = "UNIT_AURA"
 oUF.Tags.Methods["RayUIRaid:fw"] = function(u) if UnitAura(u, GetSpellInfo(6346)) then return "|cff8B4513"..x.."|r" end end
 oUF.Tags.Events["RayUIRaid:fw"] = "UNIT_AURA"
 
-oUF.Tags.Methods["RayUIRaid:sp"] = function(u) if not UnitAura(u, GetSpellInfo(79107)) then return "|cff9900FF"..x.."|r" end end
-oUF.Tags.Events["RayUIRaid:sp"] = "UNIT_AURA"
-
-oUF.Tags.Methods["RayUIRaid:fort"] = function(u) if not(UnitAura(u, GetSpellInfo(79105)) or UnitAura(u, GetSpellInfo(6307)) or UnitAura(u, GetSpellInfo(469))) then return "|cff00A1DE"..x.."|r" end end
+oUF.Tags.Methods["RayUIRaid:fort"] = function(u) if not(UnitAura(u, GetSpellInfo(21562)) or UnitAura(u, GetSpellInfo(6307)) or UnitAura(u, GetSpellInfo(469))) then return "|cff00A1DE"..x.."|r" end end
 oUF.Tags.Events["RayUIRaid:fort"] = "UNIT_AURA"
 
 oUF.Tags.Methods["RayUIRaid:pwb"] = function(u) if UnitAura(u, GetSpellInfo(81782)) then return "|cffEEEE00"..x.."|r" end end
@@ -220,19 +232,14 @@ end
 oUF.Tags.Events["RayUIRaid:earth"] = "UNIT_AURA"
 
 -- Paladin
-oUF.Tags.Methods["RayUIRaid:might"] = function(u) if not(UnitAura(u, GetSpellInfo(53138)) or UnitAura(u, GetSpellInfo(79102))) then return "|cffFF0000"..x.."|r" end end
+oUF.Tags.Methods["RayUIRaid:might"] = function(u) if not(UnitAura(u, GetSpellInfo(109773))) then return "|cffFF0000"..x.."|r" end end
 oUF.Tags.Events["RayUIRaid:might"] = "UNIT_AURA"
 
 oUF.Tags.Methods["RayUIRaid:beacon"] = function(u)
-    local name, _,_,_,_,_, expirationTime, fromwho = UnitAura(u, GetSpellInfo(53563))
+    local name, _,_,_,_,_,_, fromwho = UnitAura(u, GetSpellInfo(53563))
     if not name then return end
     if(fromwho == "player") then
-        local spellTimer = GetTime()-expirationTime
-        if spellTimer > -30 then
-            return "|cffFF00004|r"
-        else
-            return "|cffFFCC003|r"
-        end
+        return "|cffFFCC003|r"
     else
         return "|cff996600Y|r" -- other pally's beacon
     end
@@ -244,7 +251,7 @@ oUF.Tags.Events["RayUIRaid:forbearance"] = "UNIT_AURA"
 
 -- Warlock
 oUF.Tags.Methods["RayUIRaid:di"] = function(u) 
-    local name, _,_,_,_,_,_, fromwho = UnitAura(u, GetSpellInfo(85767)) 
+    local name, _,_,_,_,_,_, fromwho = UnitAura(u, GetSpellInfo(109773)) 
     if fromwho == "player" then
         return "|cff6600FF"..x.."|r"
     elseif name then
@@ -280,7 +287,7 @@ RA.classIndicators={
     },
     ["PRIEST"] = {
         ["TL"] = "[RayUIRaid:pws][RayUIRaid:ws]",
-        ["TR"] = "[RayUIRaid:fw][RayUIRaid:sp][RayUIRaid:fort]",
+        ["TR"] = "[RayUIRaid:fw][RayUIRaid:fort]",
         ["BL"] = "[RayUIRaid:rnw][RayUIRaid:pwb]",
         ["BR"] = "[RayUIRaid:pom]",
         ["Cen"] = "[RayUIRaid:rnwTime]",
