@@ -39,15 +39,6 @@ P["Reminder"]["filters"] = {
 		},
 	},
 	WARLOCK = {
-		["护甲"] = { --armors group
-			["spellGroup"] = {
-				[28176] = true, -- fel armor
-				[687] = true, -- demon armor
-			},
-			["instance"] = true,
-			["pvp"] = true,
-			["enable"] = true,
-		},
 	},
 	PALADIN = {
 		["圣印"] = { --Seals group
@@ -69,17 +60,6 @@ P["Reminder"]["filters"] = {
 			["instance"] = true,
 			["reverseCheck"] = true,
 			["talentTreeException"] = 1, --Holy paladins use RF sometimes
-			["enable"] = true,
-		},
-		["光环"] = { -- auras
-			["spellGroup"] = {
-				[465] = true, --devo
-				[7294] = true, --retr
-				[19746] = true, -- conc
-				[19891] = true, -- resist
-			},
-			["instance"] = true,
-			["personal"] = true,
 			["enable"] = true,
 		},
 	},
@@ -122,7 +102,6 @@ P["Reminder"]["filters"] = {
 				[6673] = true, 
 			},
 			["negateGroup"] = {
-				[8076] = true, -- strength of earth
 				[57330] = true, -- horn of Winter
 				[93435] = true, -- roar of courage (hunter pet)
 			},
@@ -138,7 +117,6 @@ P["Reminder"]["filters"] = {
 				[57330] = true, 
 			},
 			["negateGroup"] = {
-				[8076] = true, -- strength of earth totem
 				[6673] = true, -- battle Shout
 				[93435] = true, -- roar of courage (hunter pet)
 			},
