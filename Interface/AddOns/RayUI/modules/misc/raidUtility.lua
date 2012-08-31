@@ -63,27 +63,13 @@ local function LoadFunc()
 		end
 	end
 
-	--Change border when mouse is inside the button
-	local function ButtonEnter(self)
-		local color = RAID_CLASS_COLORS[R.myclass]
-		self:SetBackdropBorderColor(color.r, color.g, color.b)
-	end
-
-	--Change border back to normal when mouse leaves button
-	local function ButtonLeave(self)
-		self:SetBackdropBorderColor(unpack(R["media"].bordercolor))
-	end
-
 	-- Function to create buttons in this module
 	local function CreateButton(name, parent, template, width, height, point, relativeto, point2, xOfs, yOfs, text, texture)
 		local b = CreateFrame("Button", name, parent, template)
 		b:SetWidth(width)
 		b:SetHeight(height)
 		b:SetPoint(point, relativeto, point2, xOfs, yOfs)
-		b:HookScript("OnEnter", ButtonEnter)
-		b:HookScript("OnLeave", ButtonLeave)
 		b:EnableMouse(true)
-		b:CreateBorder()
 		if text then
 			local t = b:CreateFontString(nil,"OVERLAY",b)
 			t:SetFont(R["media"].font,12)
@@ -187,6 +173,9 @@ local function LoadFunc()
 		CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton.SetPushedTexture = function() end
 		for i, button in pairs(buttons) do
 			local f = _G[button]
+			for i = 1, 3 do
+				select(i, f:GetRegions()):SetAlpha(0)
+			end
 			S:Reskin(f)
 		end
 	end

@@ -53,9 +53,9 @@ function TradeTabs:Initialize()
 		self:UnregisterAllEvents()
 	end
 
-	for i=1,MAX_SPELLS do
-	--	local n = GetSpellName(i,"spell")
-		local n = GetSpellBookItemName(i, "spell")
+	local professions = {GetProfessions()}
+	for _, i in pairs(professions) do
+		local n = GetProfessionInfo(i)
 		if tradeSpells[n] then
 			tradeSpells[n] = i
 		end
@@ -63,13 +63,13 @@ function TradeTabs:Initialize()
 
 	local prev
 	for i,spell in ipairs(tradeSpells) do
-		local spellid = tradeSpells[spell]
-		if type(spellid) == "number" and spellid > 0 then
-		local tab = self:CreateTab(spell,spellid,parent)
-		local point,relPoint,x,y = "TOPLEFT","BOTTOMLEFT",0,-17
-		if not prev then
-				prev,relPoint,x,y = parent,"TOPRIGHT",13,-44
-			if (parent == SkilletFrame) or Skinner then x = 0 end -- Special case. ew
+		local tradeid = tradeSpells[spell]
+		if type(tradeid) == "number" and tradeid > 0 then
+			local tab = self:CreateTab(spell,tradeid,parent)
+			local point,relPoint,x,y = "TOPLEFT","BOTTOMLEFT",0,-17
+			if not prev then
+					prev,relPoint,x,y = parent,"TOPRIGHT",13,-44
+				if (parent == SkilletFrame) or Skinner then x = 0 end -- Special case. ew
 			end
 			tab:SetPoint(point,prev,relPoint,x,y)
 			prev = tab
@@ -90,7 +90,7 @@ local function onLeave(self)
 end   
 
 local function updateSelection(self)
-	if IsCurrentSpell(self.spellID,"spell") then
+	if IsCurrentSpell(self.tooltip) then
 		self:SetChecked(true)
 		self.clickStopper:Show()
 	else
@@ -110,19 +110,19 @@ local function createClickStopper(button)
     f:Hide()
 end
 
-function TradeTabs:CreateTab(spell,spellID,parent)
+function TradeTabs:CreateTab(spell,tradeID,parent)
 	local S = R:GetModule("Skins")
     local button = CreateFrame("CheckButton",nil,parent,"SpellBookSkillLineTabTemplate,SecureActionButtonTemplate")
     button.tooltip = spell
 	button:Show()
     button:SetAttribute("type","spell")
     button:SetAttribute("spell",spell)
-    button.spellID = spellID
+    button.tradeID = tradeID
     button:GetRegions():Hide()
 	button:SetCheckedTexture(S["media"].checked)
 	S:CreateBG(button)
 	S:CreateSD(button, 5, 0, 0, 0, 1, 1)
-	button:SetNormalTexture(GetSpellTexture(spellID, "spell"))
+	button:SetNormalTexture(select(2, GetProfessionInfo(tradeID)))
 	button:StyleButton(true)
 	button:SetPushedTexture(nil)
 	select(4, button:GetRegions()):SetTexCoord(.08, .92, .08, .92)

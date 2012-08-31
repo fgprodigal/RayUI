@@ -378,6 +378,7 @@ RegisterMount(26054, "taq") -- Red Qiraji Battle Tank
 RegisterMount(64731, "swim") -- Sea Turtle
 
 RegisterMount(75207, "seahorse") -- Abyssal Seahorse
+RegisterMount(98718, "seahorse") -- Abyssal Seahorse
 
 -- Class special spells
 RegisterMount(1066, "swim") -- Autatic Form
