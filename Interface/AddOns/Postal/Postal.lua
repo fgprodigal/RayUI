@@ -14,6 +14,7 @@ local defaults = {
 		Select = {
 			SpamChat = true,
 			KeepFreeSpace = 1,
+			UseMrPlow = true,
 		},
 		OpenAll = {
 			AHCancelled = true,
@@ -29,10 +30,12 @@ local defaults = {
 			Attachments = true,
 			SpamChat = true,
 			KeepFreeSpace = 1,
+			UseMrPlow = true,
 		},
 		Express = {
 			EnableAltClick = true,
 			AutoSend = true,
+			BulkSend = true,
 			MouseWheel = true,
 			MultiItemTooltip = true,
 		},
@@ -120,7 +123,7 @@ function Postal:OnInitialize()
 	local Postal_ModuleMenuButton = CreateFrame("Button", "Postal_ModuleMenuButton", MailFrame)
 	Postal_ModuleMenuButton:SetWidth(25)
 	Postal_ModuleMenuButton:SetHeight(25)
-	Postal_ModuleMenuButton:SetPoint("TOPRIGHT", -53, -12)
+	Postal_ModuleMenuButton:SetPoint("TOPRIGHT", -22, 2)
 	Postal_ModuleMenuButton:SetNormalTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Up")
 	Postal_ModuleMenuButton:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Round")
 	Postal_ModuleMenuButton:SetDisabledTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Disabled")

@@ -16,7 +16,7 @@ local ignoresortlocale = {
 local enableAltsMenu = true
 local Postal_BlackBook_Autocomplete_Flags = {
 	include = AUTOCOMPLETE_FLAG_ALL,
-	exclude = AUTOCOMPLETE_FLAG_NONE,
+	exclude = AUTOCOMPLETE_FLAG_BNET,
 }
 
 function Postal_BlackBook:OnEnable()
@@ -25,7 +25,7 @@ function Postal_BlackBook:OnEnable()
 		Postal_BlackBookButton = CreateFrame("Button", "Postal_BlackBookButton", SendMailFrame)
 		Postal_BlackBookButton:SetWidth(25)
 		Postal_BlackBookButton:SetHeight(25)
-		Postal_BlackBookButton:SetPoint("LEFT", SendMailNameEditBox, "RIGHT", -2, 0)
+		Postal_BlackBookButton:SetPoint("LEFT", SendMailNameEditBox, "RIGHT", -2, 2)
 		Postal_BlackBookButton:SetNormalTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Up")
 		Postal_BlackBookButton:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Round")
 		Postal_BlackBookButton:SetDisabledTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Disabled")
@@ -265,12 +265,24 @@ function Postal_BlackBook:OnChar(editbox, ...)
 	if not newname and db.AutoCompleteFriends then
 		local numBNetTotal, numBNetOnline = BNGetNumFriends()
 		for i = 1, numBNetOnline do
-			local presenceID, givenName, surname, toonName, toonID, client = BNGetFriendInfo(i)
-			if (toonName and client == BNET_CLIENT_WOW and CanCooperateWithToon(toonID)) then
+			local presenceID, presenceName, battleTag, isBattleTagPresence, toonName, toonID, client, isOnline, lastOnline, isAFK, isDND, messageText, noteText, isRIDFriend, messageTime, canSoR = BNGetFriendInfo(i)
+			if (toonName and client == BNET_CLIENT_WOW and CanCooperateWithToon(toonID, false)) then
 				if strfind(strupper(toonName), text, 1, 1) == 1 then
 					newname = toonName
 					break
 				end
+			end
+		end
+	end
+
+	-- The Blizzard autocomplete is borked for guild. So we implement our own for guild autocomplete
+	if not newname and db.AutoCompleteGuild and IsInGuild() then
+		local numMembers, numOnline = GetNumGuildMembers(true)
+		for i = 1, numMembers do
+			local name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName, achievementPoints, achievementRank, isMobile, canSoR = GetGuildRosterInfo(i)
+			if strfind(strupper(name), text, 1, 1) == 1 then
+				newname = name
+				break
 			end
 		end
 	end
@@ -323,9 +335,8 @@ function Postal_BlackBook:SortAndCountNumFriends()
 	if BNGetNumFriends then -- For pre 3.3.5 backwards compat
 		local numBNetTotal, numBNetOnline = BNGetNumFriends()
 		for i= 1, numBNetOnline do
-			local presenceID, givenName, surname, toonName, toonID, client = BNGetFriendInfo(i)
-			--local hasFocus, toonName, client = BNGetToonInfo(toonID)
-			if (toonName and client == BNET_CLIENT_WOW and CanCooperateWithToon(toonID)) then
+			local presenceID, presenceName, battleTag, isBattleTagPresence, toonName, toonID, client, isOnline, lastOnline, isAFK, isDND, messageText, noteText, isRIDFriend, messageTime, canSoR = BNGetFriendInfo(i)
+			if (toonName and client == BNET_CLIENT_WOW and CanCooperateWithToon(toonID, false)) then
 				-- Check if already on friends list
 				local alreadyOnList = false
 				for j = 1, numFriends do
@@ -522,7 +533,7 @@ function Postal_BlackBook.BlackBookMenu(self, level)
 			if not IsInGuild() then return end
 			local numFriends = GetNumGuildMembers(true)
 			for i = 1, numFriends do
-				local name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName = GetGuildRosterInfo(i)
+				local name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName, achievementPoints, achievementRank, isMobile, canSoR = GetGuildRosterInfo(i)
 				local c = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[classFileName] or RAID_CLASS_COLORS[classFileName]
 				sorttable[i] = format("%s |cffffd200(%s)|r |cff%.2x%.2x%.2x(%d %s)|r", name, rank, c.r*255, c.g*255, c.b*255, level, class)
 			end

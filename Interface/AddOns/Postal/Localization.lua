@@ -12,18 +12,40 @@ debug = true
 local L = AL3:NewLocale("Postal", "enUS", true, debug)
 if L then
 L["A button that collects all attachments and coins from mail."] = true
-L["AH-related mail"] = true
-L["Add Contact"] = true
 L["Add check boxes to the inbox for multiple mail operations."] = true
+L["Add Contact"] = true
 L["Add multiple item mail tooltips"] = true
 L["Adds a contact list next to the To: field."] = true
+L["AH-related mail"] = true
 L["Allows you to copy the contents of a mail."] = true
 L["Alts"] = true
-L["Auto-Send on Alt-Click"] = true
+L["Auto-Attach similar items on Control-Click"] = true
 L["Autofill last person mailed"] = true
+L["Auto-Send on Alt-Click"] = true
 L["BlackBook"] = true
 L["Block incoming trade requests while in a mail session."] = true
 L["CarbonCopy"] = true
+L["|cffeda55fAlt-Click|r to send this item to %s."] = true
+L["|cffeda55fControl-Click|r to attach similar items."] = true
+L["|cffeda55fCtrl-Click|r to return it to sender."] = true
+L["|cffeda55fShift-Click|r to take the contents."] = true
+L[ [=[|cFFFFCC00*|r Selected mail will be batch opened or returned to sender by clicking Open or Return.
+|cFFFFCC00*|r You can Shift-Click 2 checkboxes to mass select every mail between the 2 checkboxes.
+|cFFFFCC00*|r You can Ctrl-Click a checkbox to mass select or unselect every mail from that sender.
+|cFFFFCC00*|r Select will never delete any mail (mail without text is auto-deleted by the game when all attached items and gold are taken).
+|cFFFFCC00*|r Select will skip CoD mails and mails from Blizzard.
+|cFFFFCC00*|r Disable the Verbose option to stop the chat spam while opening mail.]=] ] = true
+L[ [=[|cFFFFCC00*|r Shift-Click to take item/money from mail.
+|cFFFFCC00*|r Ctrl-Click to return mail.
+|cFFFFCC00*|r Alt-Click to move an item from your inventory to the current outgoing mail (same as right click in default UI).
+|cFFFFCC00*|r Mousewheel to scroll the inbox.]=] ] = true
+L[ [=[|cFFFFCC00*|r Simple filters are available for various mail types.
+|cFFFFCC00*|r Shift-Click the Open All button to override the filters and take ALL mail.
+|cFFFFCC00*|r OpenAll will never delete any mail (mail without text is auto-deleted by the game when all attached items and gold are taken).
+|cFFFFCC00*|r OpenAll will skip CoD mails and mails from Blizzard.
+|cFFFFCC00*|r Disable the Verbose option to stop the chat spam while opening mail.]=] ] = true
+L[ [=[|cFFFFCC00*|r This module will list your contacts, friends, guild mates, alts and track the last 10 people you mailed.
+|cFFFFCC00*|r It will also autocomplete all names in your BlackBook.]=] ] = true
 L["Chat Output"] = true
 L["Choose"] = true
 L["Clear list"] = true
@@ -51,14 +73,14 @@ L["Non-AH related mail"] = true
 L["Not all messages are shown, refreshing mailbox soon to continue Open All..."] = true
 L["Not taking more items as there are now only %d regular bagslots free."] = true
 L["Open"] = true
+L["OpenAll"] = true
 L["Open All"] = true
 L["Open all Auction cancelled mail"] = true
 L["Open all Auction expired mail"] = true
 L["Open all Auction successful mail"] = true
 L["Open all Auction won mail"] = true
-L["Open all Outbid on mail"] = true
 L["Open all mail with attachments"] = true
-L["OpenAll"] = true
+L["Open all Outbid on mail"] = true
 L["Opening Speed"] = true
 L["Other options"] = true
 L["Part %d"] = true
@@ -80,29 +102,10 @@ L["Some Messages May Have Been Skipped."] = true
 L["There are %i more messages not currently shown."] = true
 L["There are %i more messages not currently shown. More should become available in %i seconds."] = true
 L["TradeBlock"] = true
+L["Use Mr.Plow after opening"] = true
 L["Use Postal's auto-complete"] = true
 L["Verbose mode"] = true
 L["Wire"] = true
-L[ [=[|cFFFFCC00*|r Selected mail will be batch opened or returned to sender by clicking Open or Return.
-|cFFFFCC00*|r You can Shift-Click 2 checkboxes to mass select every mail between the 2 checkboxes.
-|cFFFFCC00*|r You can Ctrl-Click a checkbox to mass select or unselect every mail from that sender.
-|cFFFFCC00*|r Select will never delete any mail (mail without text is auto-deleted by the game when all attached items and gold are taken).
-|cFFFFCC00*|r Select will skip CoD mails and mails from Blizzard.
-|cFFFFCC00*|r Disable the Verbose option to stop the chat spam while opening mail.]=] ] = true
-L[ [=[|cFFFFCC00*|r Shift-Click to take item/money from mail.
-|cFFFFCC00*|r Ctrl-Click to return mail.
-|cFFFFCC00*|r Alt-Click to move an item from your inventory to the current outgoing mail (same as right click in default UI).
-|cFFFFCC00*|r Mousewheel to scroll the inbox.]=] ] = true
-L[ [=[|cFFFFCC00*|r Simple filters are available for various mail types.
-|cFFFFCC00*|r Shift-Click the Open All button to override the filters and take ALL mail.
-|cFFFFCC00*|r OpenAll will never delete any mail (mail without text is auto-deleted by the game when all attached items and gold are taken).
-|cFFFFCC00*|r OpenAll will skip CoD mails and mails from Blizzard.
-|cFFFFCC00*|r Disable the Verbose option to stop the chat spam while opening mail.]=] ] = true
-L[ [=[|cFFFFCC00*|r This module will list your contacts, friends, guild mates, alts and track the last 10 people you mailed.
-|cFFFFCC00*|r It will also autocomplete all names in your BlackBook.]=] ] = true
-L["|cffeda55fAlt-Click|r to send this item to %s."] = true
-L["|cffeda55fCtrl-Click|r to return it to sender."] = true
-L["|cffeda55fShift-Click|r to take the contents."] = true
 
 if GetLocale() == "enUS" or GetLocale() == "enGB" then return end
 end
@@ -110,77 +113,23 @@ end
 local L = AL3:NewLocale("Postal", "deDE")
 if L then
 L["A button that collects all attachments and coins from mail."] = "Eine Taste, die alle Anhänge und Geld von Nachrichten entnimmt."
-L["AH-related mail"] = "Auktionshaus Nachrichten"
-L["Add Contact"] = "Kontakt hinzufügen"
 L["Add check boxes to the inbox for multiple mail operations."] = "Fügt dem Posteingang Kontrollkästchen für zusätzliche Bearbeitungsmöglichkeiten von Nachrichten hinzu."
+L["Add Contact"] = "Kontakt hinzufügen"
 L["Add multiple item mail tooltips"] = "Füge mehrere Gegenstandstooltips den Mails hinzu."
 L["Adds a contact list next to the To: field."] = "Setzt eine Kontaktliste neben das Empfängerfeld."
+L["AH-related mail"] = "Auktionshaus Nachrichten"
 L["Allows you to copy the contents of a mail."] = "Erlaubt Dir die Inhalte einer Nachricht zu kopieren."
 L["Alts"] = "Twinks"
-L["Auto-Send on Alt-Click"] = "Auto-Senden bei Alt-Klick"
+-- L["Auto-Attach similar items on Control-Click"] = "Auto-Attach similar items on Control-Click"
 L["Autofill last person mailed"] = "Autoeinfügen des Namens der zuletzt angeschriebenen Person."
+L["Auto-Send on Alt-Click"] = "Auto-Senden bei Alt-Klick"
 L["BlackBook"] = "Schwarzes Buch"
 L["Block incoming trade requests while in a mail session."] = "Blockt eingehende Handelsversuche von Spielern solange der Briefkasten geöffnet ist."
 L["CarbonCopy"] = "Kopie"
-L["Chat Output"] = "Chat Ausgabe"
-L["Choose"] = "Auswählen"
-L["Clear list"] = "Liste leeren"
-L["Collected"] = "Gesammelt"
-L["Contacts"] = "Kontakte"
-L["Copy From"] = "Kopieren von"
-L["Copy this mail"] = "Diese Nachricht kopieren"
-L["Delete"] = "Löschen"
-L["Disable Blizzard's auto-completion popup menu"] = "Deaktiviere Blizzard's Auto-Vervollständigungs-Popup-Menü"
-L["DoNotWant"] = "Post Status"
-L["Enable Alt-Click to send mail"] = "Aktiviere Alt-Klick zum Senden von Nachrichten."
-L["Exclude randoms you interacted with"] = "Schließe Zufallsspieler aus mit denen Du Kontakt hattest"
-L["Express"] = "Express"
-L["Friends"] = "Freunde"
-L["Guild"] = "Gilde"
-L["Help"] = "Hilfe"
-L["In Progress"] = "In Bearbeitung"
-L["Keep free space"] = "Platz freihalten"
-L["Mouse click short cuts for mail."] = "Mauskürzel für Nachrichten."
-L["Mousewheel to scroll Inbox"] = "Mausrad zum Durchblättern des Posteingangs"
-L["Name auto-completion options"] = "Optionen für automatisch Namen vervollständigen"
-L["New Profile"] = "Neues Profil"
-L["New Profile Name:"] = "Neuer Profilname:"
-L["Non-AH related mail"] = "Nicht-AH betreffende Nachricht"
-L["Not all messages are shown, refreshing mailbox soon to continue Open All..."] = "Es werden nicht alle Nachrichten angezeigt, aktualisiere den Posteingang umgehend um mit \"Öffne Alle\" fortzufahren."
-L["Not taking more items as there are now only %d regular bagslots free."] = "Es werden keine weiteren Gegenstände angenommen, weil nur mehr %s reguläre Taschenplätze frei sind."
-L["Open"] = "Öffnen"
-L["Open All"] = "Alle öffnen"
-L["Open all Auction cancelled mail"] = "Öffne alle 'Auktion abgebrochen'-Nachrichten"
-L["Open all Auction expired mail"] = "Öffne alle 'Auktion abgelaufen'-Nachrichten"
-L["Open all Auction successful mail"] = "Öffne alle 'Auktion erfolgreich'-Nachrichten"
-L["Open all Auction won mail"] = "Öffne alle 'Auktion gewonnen'-Nachrichten"
-L["Open all Outbid on mail"] = "Öffne alle 'Überboten'-Nachrichten"
-L["Open all mail with attachments"] = "Öffne alle Nachrichten mit Anhängen"
-L["OpenAll"] = "Öffne alles"
-L["Opening Speed"] = "Öffnungsgeschwindigkeit"
-L["Other options"] = "Weitere Optionen"
-L["Part %d"] = "Teil %d"
-L["Please post bugs or suggestions at the wowace forums thread at |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. When posting bugs, indicate your locale and Postal's version number v%s."] = "Bitte melde Fehler oder Anregungen im Wowace-Forumsthread unter |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. Wenn du Fehler meldest, gebe bitte deine Sprache und Postals Versionsnummer v%s an."
-L["Prints the amount of money collected during a mail session."] = "Gibt im Chat aus wieviel Gold bei einer Nachrichten-Sitzung am Briefkasten entnommen wurde."
-L["Processing Message"] = "Bearbeite Nachricht"
-L["Profile"] = "Profil"
-L["Rake"] = "Scheffeln"
-L["Recently Mailed"] = "Kürzlich versendet"
-L["Refreshing mailbox..."] = "Aktualisiere Posteingang..."
-L["Remove Contact"] = "Kontakt entfernen"
-L["Reset Profile"] = "Profil zurücksetzen"
-L["Return"] = "Zurück"
-L["Select"] = "Auswählen"
-L["Set subject field to value of coins sent if subject is blank."] = "Setzt den Betreff auf die Menge des verschickten Goldes falls dieser leer ist."
-L["Shows a clickable visual icon as to whether a mail will be returned or deleted on expiry."] = "Zeigt ein anklickbares visuelles Symbol, ob eine Mail zurückgeschickt oder nach ihrem Ablauf gelöscht werden wird"
-L["Skipping"] = "Überspringe"
-L["Some Messages May Have Been Skipped."] = "Einige Nachrichten können ausgelassen worden sein."
-L["There are %i more messages not currently shown."] = "Es gibt %i weitere Nachrichten die im Moment nicht angezeigt werden."
-L["There are %i more messages not currently shown. More should become available in %i seconds."] = "Es gibt %i weitere Nachrichten die im Moment nicht angezeigt werden. Weitere sollten in %i Sekunden verfügbar sein."
-L["TradeBlock"] = "Handelsblock"
-L["Use Postal's auto-complete"] = "Postal's autom. Vervollständigung verwenden"
-L["Verbose mode"] = "Ausführlicher Modus"
-L["Wire"] = "AutoGold"
+L["|cffeda55fAlt-Click|r to send this item to %s."] = "|cffeda55fAlt+Klick|r um diesen Gegenstand an %s zu senden."
+L["|cffeda55fControl-Click|r to attach similar items."] = "|cffeda55fStrg-Klick|r um ähnliche Gegenstände anzuhängen."
+L["|cffeda55fCtrl-Click|r to return it to sender."] = "|cffeda55fStrg+Klick|r um diesen Gegenstand zurückzusenden."
+L["|cffeda55fShift-Click|r to take the contents."] = "|cffeda55fShift+Klick|r um Gegenstand zu entnehmen."
 L[ [=[|cFFFFCC00*|r Selected mail will be batch opened or returned to sender by clicking Open or Return.
 |cFFFFCC00*|r You can Shift-Click 2 checkboxes to mass select every mail between the 2 checkboxes.
 |cFFFFCC00*|r You can Ctrl-Click a checkbox to mass select or unselect every mail from that sender.
@@ -211,9 +160,66 @@ L[ [=[|cFFFFCC00*|r Simple filters are available for various mail types.
 L[ [=[|cFFFFCC00*|r This module will list your contacts, friends, guild mates, alts and track the last 10 people you mailed.
 |cFFFFCC00*|r It will also autocomplete all names in your BlackBook.]=] ] = [=[|cFFFFCC00*|r Dieses Modul zeigt eine Liste deiner Kontakte, Freunde, Gildenmitglieder und Alts und merkt sich die letzten 10 Empfänger gesendeter Nachrichten.
 |cFFFFCC00*|r Außerdem vervollständigt es automatisch alle Namen in deinem schwarzen Buch.]=]
-L["|cffeda55fAlt-Click|r to send this item to %s."] = "|cffeda55fAlt+Klick|r um diesen Gegenstand an %s zu senden."
-L["|cffeda55fCtrl-Click|r to return it to sender."] = "|cffeda55fStrg+Klick|r um diesen Gegenstand zurückzusenden."
-L["|cffeda55fShift-Click|r to take the contents."] = "|cffeda55fShift+Klick|r um Gegenstand zu entnehmen."
+L["Chat Output"] = "Chat Ausgabe"
+L["Choose"] = "Auswählen"
+L["Clear list"] = "Liste leeren"
+L["Collected"] = "Gesammelt"
+L["Contacts"] = "Kontakte"
+L["Copy From"] = "Kopieren von"
+L["Copy this mail"] = "Diese Nachricht kopieren"
+L["Delete"] = "Löschen"
+L["Disable Blizzard's auto-completion popup menu"] = "Deaktiviere Blizzard's Auto-Vervollständigungs-Popup-Menü"
+L["DoNotWant"] = "Post Status"
+L["Enable Alt-Click to send mail"] = "Aktiviere Alt-Klick zum Senden von Nachrichten."
+L["Exclude randoms you interacted with"] = "Schließe Zufallsspieler aus mit denen Du Kontakt hattest"
+L["Express"] = "Express"
+L["Friends"] = "Freunde"
+L["Guild"] = "Gilde"
+L["Help"] = "Hilfe"
+L["In Progress"] = "In Bearbeitung"
+L["Keep free space"] = "Platz freihalten"
+L["Mouse click short cuts for mail."] = "Mauskürzel für Nachrichten."
+L["Mousewheel to scroll Inbox"] = "Mausrad zum Durchblättern des Posteingangs"
+L["Name auto-completion options"] = "Optionen für automatisch Namen vervollständigen"
+L["New Profile"] = "Neues Profil"
+L["New Profile Name:"] = "Neuer Profilname:"
+L["Non-AH related mail"] = "Nicht-AH betreffende Nachricht"
+L["Not all messages are shown, refreshing mailbox soon to continue Open All..."] = "Es werden nicht alle Nachrichten angezeigt, aktualisiere den Posteingang umgehend um mit \"Öffne Alle\" fortzufahren."
+L["Not taking more items as there are now only %d regular bagslots free."] = "Es werden keine weiteren Gegenstände angenommen, weil nur mehr %s reguläre Taschenplätze frei sind."
+L["Open"] = "Öffnen"
+L["OpenAll"] = "Öffne alles"
+L["Open All"] = "Alle öffnen"
+L["Open all Auction cancelled mail"] = "Öffne alle 'Auktion abgebrochen'-Nachrichten"
+L["Open all Auction expired mail"] = "Öffne alle 'Auktion abgelaufen'-Nachrichten"
+L["Open all Auction successful mail"] = "Öffne alle 'Auktion erfolgreich'-Nachrichten"
+L["Open all Auction won mail"] = "Öffne alle 'Auktion gewonnen'-Nachrichten"
+L["Open all mail with attachments"] = "Öffne alle Nachrichten mit Anhängen"
+L["Open all Outbid on mail"] = "Öffne alle 'Überboten'-Nachrichten"
+L["Opening Speed"] = "Öffnungsgeschwindigkeit"
+L["Other options"] = "Weitere Optionen"
+L["Part %d"] = "Teil %d"
+L["Please post bugs or suggestions at the wowace forums thread at |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. When posting bugs, indicate your locale and Postal's version number v%s."] = "Bitte melde Fehler oder Anregungen im Wowace-Forumsthread unter |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. Wenn du Fehler meldest, gebe bitte deine Sprache und Postals Versionsnummer v%s an."
+L["Prints the amount of money collected during a mail session."] = "Gibt im Chat aus wieviel Gold bei einer Nachrichten-Sitzung am Briefkasten entnommen wurde."
+L["Processing Message"] = "Bearbeite Nachricht"
+L["Profile"] = "Profil"
+L["Rake"] = "Scheffeln"
+L["Recently Mailed"] = "Kürzlich versendet"
+L["Refreshing mailbox..."] = "Aktualisiere Posteingang..."
+L["Remove Contact"] = "Kontakt entfernen"
+L["Reset Profile"] = "Profil zurücksetzen"
+L["Return"] = "Zurück"
+L["Select"] = "Auswählen"
+L["Set subject field to value of coins sent if subject is blank."] = "Setzt den Betreff auf die Menge des verschickten Goldes falls dieser leer ist."
+L["Shows a clickable visual icon as to whether a mail will be returned or deleted on expiry."] = "Zeigt ein anklickbares visuelles Symbol, ob eine Mail zurückgeschickt oder nach ihrem Ablauf gelöscht werden wird"
+L["Skipping"] = "Überspringe"
+L["Some Messages May Have Been Skipped."] = "Einige Nachrichten können ausgelassen worden sein."
+L["There are %i more messages not currently shown."] = "Es gibt %i weitere Nachrichten die im Moment nicht angezeigt werden."
+L["There are %i more messages not currently shown. More should become available in %i seconds."] = "Es gibt %i weitere Nachrichten die im Moment nicht angezeigt werden. Weitere sollten in %i Sekunden verfügbar sein."
+L["TradeBlock"] = "Handelsblock"
+L["Use Mr.Plow after opening"] = "Benutze Mr.Plow (zusatz Addon) nach dem öffnen"
+L["Use Postal's auto-complete"] = "Postal's autom. Vervollständigung verwenden"
+L["Verbose mode"] = "Ausführlicher Modus"
+L["Wire"] = "AutoGold"
 
 return
 end
@@ -221,77 +227,23 @@ end
 local L = AL3:NewLocale("Postal", "esES") or AL3:NewLocale("Postal", "esMX")
 if L then
 L["A button that collects all attachments and coins from mail."] = "Un botón que recoge todos los adjuntos y el dinero del correo."
-L["AH-related mail"] = "Correo relacionado con la Casa de Subastas"
-L["Add Contact"] = "Añadir Contacto"
 L["Add check boxes to the inbox for multiple mail operations."] = "Añade casillas de verificación a la bandeja de entrada para múltiples operaciones de correo."
+L["Add Contact"] = "Añadir Contacto"
 L["Add multiple item mail tooltips"] = "Añadir tooltips en correos con múltiples objetos"
 L["Adds a contact list next to the To: field."] = "Añade una lista de contactos al lado del campo Para:"
+L["AH-related mail"] = "Correo relacionado con la Casa de Subastas"
 L["Allows you to copy the contents of a mail."] = "Te permite copiar el contenido de un correo."
 L["Alts"] = "Alts"
-L["Auto-Send on Alt-Click"] = "Auto-Enviar con Alt-click"
+-- L["Auto-Attach similar items on Control-Click"] = "Auto-Attach similar items on Control-Click"
 L["Autofill last person mailed"] = "AutoRellenar última persona enviada por correo"
+L["Auto-Send on Alt-Click"] = "Auto-Enviar con Alt-click"
 L["BlackBook"] = "Libro Negro"
 L["Block incoming trade requests while in a mail session."] = "Bloquea las solicitudes entrantes de comercio mientras se está en una sesión de correo."
 L["CarbonCopy"] = "CopiaCarboncillo"
--- L["Chat Output"] = "Chat Output"
-L["Choose"] = "Escoger"
-L["Clear list"] = "Limpiar lista"
-L["Collected"] = "Recogido"
-L["Contacts"] = "Contactos"
-L["Copy From"] = "Copiar Desde"
-L["Copy this mail"] = "Copiar este correo"
-L["Delete"] = "Borrar"
-L["Disable Blizzard's auto-completion popup menu"] = "Desactivar la ventana emergente de auto completado de Blizzard"
-L["DoNotWant"] = "No quieres"
-L["Enable Alt-Click to send mail"] = "Habilitar Alt-Click para enviar correo"
-L["Exclude randoms you interacted with"] = "Excluir aleatorios que interactuaron con"
-L["Express"] = "Rápido"
-L["Friends"] = "Amigos"
-L["Guild"] = "Hermandad"
-L["Help"] = "Ayuda"
-L["In Progress"] = "En Progreso"
-L["Keep free space"] = "Guardar espacio libre"
-L["Mouse click short cuts for mail."] = "Atajos de click del ratón para el correo."
-L["Mousewheel to scroll Inbox"] = "Rueda del ratón para desplazarse en la Bandeja de entrada"
-L["Name auto-completion options"] = "Opciones de auto completado de nombre"
-L["New Profile"] = "Perfil Nuevo"
-L["New Profile Name:"] = "Nombre del Perfil Nuevo:"
-L["Non-AH related mail"] = "Correo no relacionado con la Casa de Subastas"
-L["Not all messages are shown, refreshing mailbox soon to continue Open All..."] = "Not all messages are shown, refreshing mailbox soon to continue Open All..." -- Needs review
-L["Not taking more items as there are now only %d regular bagslots free."] = "No cogeré mas objetos ya que ahora solo quedan %d espacios libres en las bolsas."
-L["Open"] = "Abrir"
-L["Open All"] = "Abrir Todo"
-L["Open all Auction cancelled mail"] = "Abrir todo el correo de cancelaciones de Subasta"
-L["Open all Auction expired mail"] = "Abrir todo el correo de expiraciones de Subasta"
-L["Open all Auction successful mail"] = "Abrir todo el correo de Subastas con éxito"
-L["Open all Auction won mail"] = "Abrir todo el correo de Subastas ganadas"
-L["Open all Outbid on mail"] = "Abrir todo el correo en Sobrepujas"
-L["Open all mail with attachments"] = "Abrir todo el correo con adjuntos"
-L["OpenAll"] = "Abrir Todo"
-L["Opening Speed"] = "Velocidad de Apertura"
-L["Other options"] = "Otras opciones"
-L["Part %d"] = "Parte %d"
-L["Please post bugs or suggestions at the wowace forums thread at |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. When posting bugs, indicate your locale and Postal's version number v%s."] = "Por favor, informe de fallos o sugerencias en el hilo del foro de wowace en |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. Al publicar errores, indique su localización y el número de versión de Postal v %s."
-L["Prints the amount of money collected during a mail session."] = "Imprime la cantidad de dinero reunida durante una sesión de correo."
-L["Processing Message"] = "Procesando Mensaje"
-L["Profile"] = "Perfil"
-L["Rake"] = "Rastrillo"
-L["Recently Mailed"] = "Enviado Recientemente "
-L["Refreshing mailbox..."] = "Refreshing mailbox..." -- Needs review
-L["Remove Contact"] = "Eliminar Contacto"
-L["Reset Profile"] = "Restablecer Perfil"
-L["Return"] = "Devolver"
-L["Select"] = "Seleccionar"
-L["Set subject field to value of coins sent if subject is blank."] = "Establecer el campo asunto con el valor de monedas enviado si el asunto está en blanco."
-L["Shows a clickable visual icon as to whether a mail will be returned or deleted on expiry."] = "Muestra un icono visual clickable donde podrás devolver o borrar un correo."
-L["Skipping"] = "Omitir"
-L["Some Messages May Have Been Skipped."] = "Algunos mensajes pueden haberse omitido."
-L["There are %i more messages not currently shown."] = "Hay %i mensajes mas por mostrar."
-L["There are %i more messages not currently shown. More should become available in %i seconds."] = "Hay %i mensajes mas por mostrar. Estarán disponibles en %i segundos."
-L["TradeBlock"] = "Bloquear Comercio"
-L["Use Postal's auto-complete"] = "Usar el auto completar de Postal"
-L["Verbose mode"] = "Modo \"Info Extra\""
-L["Wire"] = "Cable"
+L["|cffeda55fAlt-Click|r to send this item to %s."] = "|cffeda55fAlt-Clic|r para enviar este objeto a %s"
+-- L["|cffeda55fControl-Click|r to attach similar items."] = "|cffeda55fControl-Click|r to attach similar items."
+L["|cffeda55fCtrl-Click|r to return it to sender."] = "|cffeda55fCtrl-Clic|r para devolverlo al que te lo ha enviado"
+L["|cffeda55fShift-Click|r to take the contents."] = "|cffeda55fMayúsculas-Clic|r para coger el contenido"
 L[ [=[|cFFFFCC00*|r Selected mail will be batch opened or returned to sender by clicking Open or Return.
 |cFFFFCC00*|r You can Shift-Click 2 checkboxes to mass select every mail between the 2 checkboxes.
 |cFFFFCC00*|r You can Ctrl-Click a checkbox to mass select or unselect every mail from that sender.
@@ -322,9 +274,66 @@ L[ [=[|cFFFFCC00*|r Simple filters are available for various mail types.
 L[ [=[|cFFFFCC00*|r This module will list your contacts, friends, guild mates, alts and track the last 10 people you mailed.
 |cFFFFCC00*|r It will also autocomplete all names in your BlackBook.]=] ] = [=[|cFFFFCC00*|r Este modulo te mostrara tus contactos, amigos, compañeros de hermandad, alters y listara los ultimas 10 personas a las que tu mandaste un correo.
 |cFFFFCC00*|r Ademas auto completara todos los nombres en tu Libro Negro.]=]
-L["|cffeda55fAlt-Click|r to send this item to %s."] = "|cffeda55fAlt-Clic|r para enviar este objeto a %s"
-L["|cffeda55fCtrl-Click|r to return it to sender."] = "|cffeda55fCtrl-Clic|r para devolverlo al que te lo ha enviado"
-L["|cffeda55fShift-Click|r to take the contents."] = "|cffeda55fMayúsculas-Clic|r para coger el contenido"
+-- L["Chat Output"] = "Chat Output"
+L["Choose"] = "Escoger"
+L["Clear list"] = "Limpiar lista"
+L["Collected"] = "Recogido"
+L["Contacts"] = "Contactos"
+L["Copy From"] = "Copiar Desde"
+L["Copy this mail"] = "Copiar este correo"
+L["Delete"] = "Borrar"
+L["Disable Blizzard's auto-completion popup menu"] = "Desactivar la ventana emergente de auto completado de Blizzard"
+L["DoNotWant"] = "No quieres"
+L["Enable Alt-Click to send mail"] = "Habilitar Alt-Click para enviar correo"
+L["Exclude randoms you interacted with"] = "Excluir aleatorios que interactuaron con"
+L["Express"] = "Rápido"
+L["Friends"] = "Amigos"
+L["Guild"] = "Hermandad"
+L["Help"] = "Ayuda"
+L["In Progress"] = "En Progreso"
+L["Keep free space"] = "Guardar espacio libre"
+L["Mouse click short cuts for mail."] = "Atajos de click del ratón para el correo."
+L["Mousewheel to scroll Inbox"] = "Rueda del ratón para desplazarse en la Bandeja de entrada"
+L["Name auto-completion options"] = "Opciones de auto completado de nombre"
+L["New Profile"] = "Perfil Nuevo"
+L["New Profile Name:"] = "Nombre del Perfil Nuevo:"
+L["Non-AH related mail"] = "Correo no relacionado con la Casa de Subastas"
+L["Not all messages are shown, refreshing mailbox soon to continue Open All..."] = "Not all messages are shown, refreshing mailbox soon to continue Open All..." -- Needs review
+L["Not taking more items as there are now only %d regular bagslots free."] = "No cogeré mas objetos ya que ahora solo quedan %d espacios libres en las bolsas."
+L["Open"] = "Abrir"
+L["OpenAll"] = "Abrir Todo"
+L["Open All"] = "Abrir Todo"
+L["Open all Auction cancelled mail"] = "Abrir todo el correo de cancelaciones de Subasta"
+L["Open all Auction expired mail"] = "Abrir todo el correo de expiraciones de Subasta"
+L["Open all Auction successful mail"] = "Abrir todo el correo de Subastas con éxito"
+L["Open all Auction won mail"] = "Abrir todo el correo de Subastas ganadas"
+L["Open all mail with attachments"] = "Abrir todo el correo con adjuntos"
+L["Open all Outbid on mail"] = "Abrir todo el correo en Sobrepujas"
+L["Opening Speed"] = "Velocidad de Apertura"
+L["Other options"] = "Otras opciones"
+L["Part %d"] = "Parte %d"
+L["Please post bugs or suggestions at the wowace forums thread at |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. When posting bugs, indicate your locale and Postal's version number v%s."] = "Por favor, informe de fallos o sugerencias en el hilo del foro de wowace en |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. Al publicar errores, indique su localización y el número de versión de Postal v %s."
+L["Prints the amount of money collected during a mail session."] = "Imprime la cantidad de dinero reunida durante una sesión de correo."
+L["Processing Message"] = "Procesando Mensaje"
+L["Profile"] = "Perfil"
+L["Rake"] = "Rastrillo"
+L["Recently Mailed"] = "Enviado Recientemente "
+L["Refreshing mailbox..."] = "Refreshing mailbox..." -- Needs review
+L["Remove Contact"] = "Eliminar Contacto"
+L["Reset Profile"] = "Restablecer Perfil"
+L["Return"] = "Devolver"
+L["Select"] = "Seleccionar"
+L["Set subject field to value of coins sent if subject is blank."] = "Establecer el campo asunto con el valor de monedas enviado si el asunto está en blanco."
+L["Shows a clickable visual icon as to whether a mail will be returned or deleted on expiry."] = "Muestra un icono visual clickable donde podrás devolver o borrar un correo."
+L["Skipping"] = "Omitir"
+L["Some Messages May Have Been Skipped."] = "Algunos mensajes pueden haberse omitido."
+L["There are %i more messages not currently shown."] = "Hay %i mensajes mas por mostrar."
+L["There are %i more messages not currently shown. More should become available in %i seconds."] = "Hay %i mensajes mas por mostrar. Estarán disponibles en %i segundos."
+L["TradeBlock"] = "Bloquear Comercio"
+-- L["Use Mr.Plow after opening"] = "Use Mr.Plow after opening"
+L["Use Postal's auto-complete"] = "Usar el auto completar de Postal"
+L["Verbose mode"] = "Modo \"Info Extra\""
+L["Wire"] = "Cable"
 
 return
 end
@@ -332,77 +341,23 @@ end
 local L = AL3:NewLocale("Postal", "frFR")
 if L then
 L["A button that collects all attachments and coins from mail."] = "Un bouton qui récolte toutes les pièces jointes ainsi que l'argent du courrier."
-L["AH-related mail"] = "Courriers relatifs à l'HV"
-L["Add Contact"] = "Ajouter un contact"
 L["Add check boxes to the inbox for multiple mail operations."] = "Ajoute des cases à cocher à la boîte de réception afin d'opérer sur plusieurs courriers en même temps."
+L["Add Contact"] = "Ajouter un contact"
 L["Add multiple item mail tooltips"] = "Ajouter plusieurs article à l'info bulles du courrier"
 L["Adds a contact list next to the To: field."] = "Ajoute une liste des contacts à côté du champ \"À :\"."
+L["AH-related mail"] = "Courriers relatifs à l'HV"
 L["Allows you to copy the contents of a mail."] = "T'autorises de copier le contenu d'un courrier."
 L["Alts"] = "Rerolls"
-L["Auto-Send on Alt-Click"] = "Envoi auto. au Alt-clic gauche"
+-- L["Auto-Attach similar items on Control-Click"] = "Auto-Attach similar items on Control-Click"
 L["Autofill last person mailed"] = "Resaisir la dernière personne contactée"
+L["Auto-Send on Alt-Click"] = "Envoi auto. au Alt-clic gauche"
 L["BlackBook"] = "BlackBook"
 L["Block incoming trade requests while in a mail session."] = "Bloque les demandes d'échange lors de la consultation du courrier."
 L["CarbonCopy"] = "Copie identique"
--- L["Chat Output"] = "Chat Output"
-L["Choose"] = "Choisir"
-L["Clear list"] = "Effacer la liste"
-L["Collected"] = "Récupéré"
-L["Contacts"] = "Contacts"
-L["Copy From"] = "Copier à partir de"
-L["Copy this mail"] = "Copier ce mail"
-L["Delete"] = "Supprimer"
-L["Disable Blizzard's auto-completion popup menu"] = "Désactiver le pop-up d'auto-complétion de Blizzard"
-L["DoNotWant"] = "VeuxPas"
-L["Enable Alt-Click to send mail"] = "Activer Alt-clic gauche pour envoyer le courrier"
-L["Exclude randoms you interacted with"] = "Exclure les interactions aléatoires "
-L["Express"] = "Express"
-L["Friends"] = "Amis"
-L["Guild"] = "Guilde"
-L["Help"] = "Aide"
-L["In Progress"] = "En cours"
-L["Keep free space"] = "Garder l'espace libre"
-L["Mouse click short cuts for mail."] = "Raccourcis souris pour le courrier."
-L["Mousewheel to scroll Inbox"] = "Molette pour faire défiler la boîte de réception"
-L["Name auto-completion options"] = "Options d'auto-complétion de nom"
-L["New Profile"] = "Nouveau profil"
-L["New Profile Name:"] = "Nom du nouveau profil :"
-L["Non-AH related mail"] = "Courriers non relatifs à l'HV"
-L["Not all messages are shown, refreshing mailbox soon to continue Open All..."] = "Tous les courriers ne sont pas affichés, réouvrir la boîte aux lettres dans quelques secondes pour pouvoir tous les ouvrir..."
-L["Not taking more items as there are now only %d regular bagslots free."] = "N'accepte pas plus d'items puisqu'il n'y a que %d espaces libres dans les sacs réguliers"
-L["Open"] = "Ouvrir"
-L["Open All"] = "Tout ouvrir"
-L["Open all Auction cancelled mail"] = "Ouvrir tous les courriers des enchères annulées"
-L["Open all Auction expired mail"] = "Ouvrir tous les courriers des enchères expirées"
-L["Open all Auction successful mail"] = "Ouvrir tous les courriers des enchères réussies"
-L["Open all Auction won mail"] = "Ouvrir tous les courriers des enchères gagnées"
-L["Open all Outbid on mail"] = "Ouvrir tous les courriers des enchères surenchéries"
-L["Open all mail with attachments"] = "Ouvrir tous les courriers avec pièces jointes"
-L["OpenAll"] = "OpenAll"
-L["Opening Speed"] = "Vitesse d'ouverture"
-L["Other options"] = "Autres options"
-L["Part %d"] = "Partie %d"
-L["Please post bugs or suggestions at the wowace forums thread at |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. When posting bugs, indicate your locale and Postal's version number v%s."] = "Merci de signaler les bogues ou de faire part de vos suggestions sur le sujet du forum WoWAce dédié à Postal : |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. Lors du signalement d'un bogue, indiquez la langue de votre jeu ainsi que le numéro de version de Postal v%s."
-L["Prints the amount of money collected during a mail session."] = "Indique la quantité d'argent récolté pendant la consultation du courrier."
-L["Processing Message"] = "En cours"
-L["Profile"] = "Profil"
-L["Rake"] = "Rake"
-L["Recently Mailed"] = "Récents"
-L["Refreshing mailbox..."] = "Rafraichir la boîte aux lettres..."
-L["Remove Contact"] = "Supprimer un contact"
-L["Reset Profile"] = "Réinitialiser le profil"
-L["Return"] = "Renvoi"
-L["Select"] = "Select"
-L["Set subject field to value of coins sent if subject is blank."] = "Indique dans le sujet le montant d'argent envoyé si le sujet est blanc."
-L["Shows a clickable visual icon as to whether a mail will be returned or deleted on expiry."] = "Affiche une icône visuelle cliquable pour savoir si un mail vous sera retournée ou supprimés à l'expiration."
-L["Skipping"] = "Passe"
-L["Some Messages May Have Been Skipped."] = "Certains messages n'ont peut-être pas été ouverts."
-L["There are %i more messages not currently shown."] = "Il y a %i messages supplémentaires non-affichés"
-L["There are %i more messages not currently shown. More should become available in %i seconds."] = "Il ya des messages %i de plus ne sont pas actuellement affichés."
-L["TradeBlock"] = "TradeBlock"
-L["Use Postal's auto-complete"] = "Utiliser l'auto-complétion de Postal"
-L["Verbose mode"] = "Mode verbose"
-L["Wire"] = "Wire"
+L["|cffeda55fAlt-Click|r to send this item to %s."] = "|cffeda55fAlt-clic gauche|r pour envoyer cet objet à %s."
+L["|cffeda55fControl-Click|r to attach similar items."] = "|cffeda55fContrôle+Clic|r pour attacher les objets similaires."
+L["|cffeda55fCtrl-Click|r to return it to sender."] = "|cffeda55fCtrl-clic gauche|r pour renvoyer à l'expéditeur."
+L["|cffeda55fShift-Click|r to take the contents."] = "|cffeda55fMaj-clic gauche|r pour prendre le contenu."
 L[ [=[|cFFFFCC00*|r Selected mail will be batch opened or returned to sender by clicking Open or Return.
 |cFFFFCC00*|r You can Shift-Click 2 checkboxes to mass select every mail between the 2 checkboxes.
 |cFFFFCC00*|r You can Ctrl-Click a checkbox to mass select or unselect every mail from that sender.
@@ -433,9 +388,66 @@ L[ [=[|cFFFFCC00*|r Simple filters are available for various mail types.
 L[ [=[|cFFFFCC00*|r This module will list your contacts, friends, guild mates, alts and track the last 10 people you mailed.
 |cFFFFCC00*|r It will also autocomplete all names in your BlackBook.]=] ] = [=[|cFFFFCC00*|r Ce module affichera vos contacts, vos amis, vos guild mates, vos rerolls ainsi que les 10 dernières personnes contactées.
 |cFFFFCC00*|r Il remplira également automatiquement tous les noms présents dans votre BlackBook.]=]
-L["|cffeda55fAlt-Click|r to send this item to %s."] = "|cffeda55fAlt-clic gauche|r pour envoyer cet objet à %s."
-L["|cffeda55fCtrl-Click|r to return it to sender."] = "|cffeda55fCtrl-clic gauche|r pour renvoyer à l'expéditeur."
-L["|cffeda55fShift-Click|r to take the contents."] = "|cffeda55fMaj-clic gauche|r pour prendre le contenu."
+L["Chat Output"] = "Sortie de chat"
+L["Choose"] = "Choisir"
+L["Clear list"] = "Effacer la liste"
+L["Collected"] = "Récupéré"
+L["Contacts"] = "Contacts"
+L["Copy From"] = "Copier à partir de"
+L["Copy this mail"] = "Copier ce mail"
+L["Delete"] = "Supprimer"
+L["Disable Blizzard's auto-completion popup menu"] = "Désactiver le pop-up d'auto-complétion de Blizzard"
+L["DoNotWant"] = "VeuxPas"
+L["Enable Alt-Click to send mail"] = "Activer Alt-clic gauche pour envoyer le courrier"
+L["Exclude randoms you interacted with"] = "Exclure les interactions aléatoires "
+L["Express"] = "Express"
+L["Friends"] = "Amis"
+L["Guild"] = "Guilde"
+L["Help"] = "Aide"
+L["In Progress"] = "En cours"
+L["Keep free space"] = "Garder l'espace libre"
+L["Mouse click short cuts for mail."] = "Raccourcis souris pour le courrier."
+L["Mousewheel to scroll Inbox"] = "Molette pour faire défiler la boîte de réception"
+L["Name auto-completion options"] = "Options d'auto-complétion de nom"
+L["New Profile"] = "Nouveau profil"
+L["New Profile Name:"] = "Nom du nouveau profil :"
+L["Non-AH related mail"] = "Courriers non relatifs à l'HV"
+L["Not all messages are shown, refreshing mailbox soon to continue Open All..."] = "Tous les courriers ne sont pas affichés, réouvrir la boîte aux lettres dans quelques secondes pour pouvoir tous les ouvrir..."
+L["Not taking more items as there are now only %d regular bagslots free."] = "N'accepte pas plus d'items puisqu'il n'y a que %d espaces libres dans les sacs réguliers"
+L["Open"] = "Ouvrir"
+L["OpenAll"] = "OpenAll"
+L["Open All"] = "Tout ouvrir"
+L["Open all Auction cancelled mail"] = "Ouvrir tous les courriers des enchères annulées"
+L["Open all Auction expired mail"] = "Ouvrir tous les courriers des enchères expirées"
+L["Open all Auction successful mail"] = "Ouvrir tous les courriers des enchères réussies"
+L["Open all Auction won mail"] = "Ouvrir tous les courriers des enchères gagnées"
+L["Open all mail with attachments"] = "Ouvrir tous les courriers avec pièces jointes"
+L["Open all Outbid on mail"] = "Ouvrir tous les courriers des enchères surenchéries"
+L["Opening Speed"] = "Vitesse d'ouverture"
+L["Other options"] = "Autres options"
+L["Part %d"] = "Partie %d"
+L["Please post bugs or suggestions at the wowace forums thread at |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. When posting bugs, indicate your locale and Postal's version number v%s."] = "Merci de signaler les bogues ou de faire part de vos suggestions sur le sujet du forum WoWAce dédié à Postal : |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. Lors du signalement d'un bogue, indiquez la langue de votre jeu ainsi que le numéro de version de Postal v%s."
+L["Prints the amount of money collected during a mail session."] = "Indique la quantité d'argent récolté pendant la consultation du courrier."
+L["Processing Message"] = "En cours"
+L["Profile"] = "Profil"
+L["Rake"] = "Rake"
+L["Recently Mailed"] = "Récents"
+L["Refreshing mailbox..."] = "Rafraichir la boîte aux lettres..."
+L["Remove Contact"] = "Supprimer un contact"
+L["Reset Profile"] = "Réinitialiser le profil"
+L["Return"] = "Renvoi"
+L["Select"] = "Select"
+L["Set subject field to value of coins sent if subject is blank."] = "Indique dans le sujet le montant d'argent envoyé si le sujet est blanc."
+L["Shows a clickable visual icon as to whether a mail will be returned or deleted on expiry."] = "Affiche une icône visuelle cliquable pour savoir si un mail vous sera retournée ou supprimés à l'expiration."
+L["Skipping"] = "Passe"
+L["Some Messages May Have Been Skipped."] = "Certains messages n'ont peut-être pas été ouverts."
+L["There are %i more messages not currently shown."] = "Il y a %i messages supplémentaires non-affichés"
+L["There are %i more messages not currently shown. More should become available in %i seconds."] = "Il ya des messages %i de plus ne sont pas actuellement affichés."
+L["TradeBlock"] = "TradeBlock"
+L["Use Mr.Plow after opening"] = "Utilisez Mr.Plow après l'ouverture"
+L["Use Postal's auto-complete"] = "Utiliser l'auto-complétion de Postal"
+L["Verbose mode"] = "Mode verbose"
+L["Wire"] = "Wire"
 
 return
 end
@@ -443,77 +455,23 @@ end
 local L = AL3:NewLocale("Postal", "koKR")
 if L then
 L["A button that collects all attachments and coins from mail."] = "받은 우편함에 첨부된 모든 물품과 골드를 수집합니다."
-L["AH-related mail"] = "경매장 우편"
-L["Add Contact"] = "접속 목록에 추가"
 L["Add check boxes to the inbox for multiple mail operations."] = "여러 개의 우편을 동시에 받을 수 있도록 우편함에 체크 박스를 추가합니다."
+L["Add Contact"] = "접속 목록에 추가"
 L["Add multiple item mail tooltips"] = "다중 우편물에 툴팁 추가"
 L["Adds a contact list next to the To: field."] = "다음 접속 목록에 추가하려면 To: field"
+L["AH-related mail"] = "경매장 우편"
 L["Allows you to copy the contents of a mail."] = "편지의 내용을 복사합니다."
 L["Alts"] = "다른 캐릭터"
-L["Auto-Send on Alt-Click"] = "Alt-클릭으로 자동 보냄"
+-- L["Auto-Attach similar items on Control-Click"] = "Auto-Attach similar items on Control-Click"
 L["Autofill last person mailed"] = "마지막 수신자 자동 완성"
+L["Auto-Send on Alt-Click"] = "Alt-클릭으로 자동 보냄"
 L["BlackBook"] = "주소록"
 L["Block incoming trade requests while in a mail session."] = "우편함을 열고 있는 동안 거래 요청을 차단합니다."
 L["CarbonCopy"] = "복사본"
-L["Chat Output"] = "대화창 출력" -- Needs review
-L["Choose"] = "선택"
-L["Clear list"] = "목록 삭제"
-L["Collected"] = "수집되었습니다: "
-L["Contacts"] = "접속 목록"
-L["Copy From"] = "복사"
-L["Copy this mail"] = "현재 우편을 복사합니다."
-L["Delete"] = "삭제"
-L["Disable Blizzard's auto-completion popup menu"] = "블리자드 이름 완성 기능 비활성화"
-L["DoNotWant"] = "원하지 않음"
-L["Enable Alt-Click to send mail"] = "Alt-클릭으로 우편 보냄"
-L["Exclude randoms you interacted with"] = "불규칙적인 거래자 제외"
-L["Express"] = "빠른 우편"
-L["Friends"] = "친구"
-L["Guild"] = "길드"
-L["Help"] = "도움말"
-L["In Progress"] = "처리 중"
-L["Keep free space"] = "빈 공간 유지"
-L["Mouse click short cuts for mail."] = "마우스 클릭으로 빠르게 우편을 보냅니다."
-L["Mousewheel to scroll Inbox"] = "우편함 마우스 스크롤"
-L["Name auto-completion options"] = "이름 자동 완성 설정"
-L["New Profile"] = "새 프로필"
-L["New Profile Name:"] = "새 프로필 이름:"
-L["Non-AH related mail"] = "나머지 우편"
-L["Not all messages are shown, refreshing mailbox soon to continue Open All..."] = "모든 메시지가 표시되지 않습니다. 모두 열기를 시작하면 우편함이 갱신됩니다."
-L["Not taking more items as there are now only %d regular bagslots free."] = "현재 가방의 여유 공간이 %d칸으로 더이상 아이템 가질 수 없습니다."
-L["Open"] = "열기"
-L["Open All"] = "모두 열기"
-L["Open all Auction cancelled mail"] = "경매 취소된 우편 모두 열기"
-L["Open all Auction expired mail"] = "경매 기한 만료된 우편 모두 열기"
-L["Open all Auction successful mail"] = "경매 판매된 우편 모두 열기"
-L["Open all Auction won mail"] = "경매 낙찰된 우편 모두 열기"
-L["Open all Outbid on mail"] = "경매 상위 입찰된 우편 모두 열기"
-L["Open all mail with attachments"] = "우편에 첨부된 모든 물품 열기"
-L["OpenAll"] = "모두 열기"
-L["Opening Speed"] = "열기 속도"
-L["Other options"] = "기타 설정"
-L["Part %d"] = "부분 %d"
-L["Please post bugs or suggestions at the wowace forums thread at |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. When posting bugs, indicate your locale and Postal's version number v%s."] = "|cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r의 wowace 포럼에서 버그 제보나 제안을 할 수 있습니다. 버그 제보 시, 귀하의 지역 언어와 버전 번호(v%s)를 알려주세요."
-L["Prints the amount of money collected during a mail session."] = "우편함을 열고 있는 동안 수집되는 총 금액을 대화창에 출력합니다."
-L["Processing Message"] = "메시지를 처리 중입니다:"
-L["Profile"] = "프로필"
-L["Rake"] = "우편 금액"
-L["Recently Mailed"] = "최근 우편"
-L["Refreshing mailbox..."] = "우편함을 갱신 중입니다..."
-L["Remove Contact"] = "접속 목록에서 제거"
-L["Reset Profile"] = "프로필 초기화"
-L["Return"] = "반송"
-L["Select"] = "선택"
-L["Set subject field to value of coins sent if subject is blank."] = "우편으로 골드를 보낼 때 제목이 비어있는 경우 제목을 금액으로 채웁니다."
-L["Shows a clickable visual icon as to whether a mail will be returned or deleted on expiry."] = "만료되어 반송되었거나 삭제된 메일에 대해 클릭 가능한 시각적 아이콘을 표시합니다."
-L["Skipping"] = "무시"
-L["Some Messages May Have Been Skipped."] = "몇몇의 메시지는 무시될 수 있습니다." -- Needs review
-L["There are %i more messages not currently shown."] = "현재 %i개 이상의 메시지를 표시할 수 없습니다."
-L["There are %i more messages not currently shown. More should become available in %i seconds."] = "현재 %i개 이상의 메시지를 표시할 수 없습니다. %i초 후에 이용이 가능합니다."
-L["TradeBlock"] = "거래 불가"
-L["Use Postal's auto-complete"] = "Postal의 자동 완성 사용"
-L["Verbose mode"] = "대화창 메시지 표시"
-L["Wire"] = "금액 표시"
+L["|cffeda55fAlt-Click|r to send this item to %s."] = "|cffeda55fAlt-클릭|r %s님에게 아이템 보냄"
+-- L["|cffeda55fControl-Click|r to attach similar items."] = "|cffeda55fControl-Click|r to attach similar items."
+L["|cffeda55fCtrl-Click|r to return it to sender."] = "|cffeda55fCtrl-클릭|r 아이템 반송"
+L["|cffeda55fShift-Click|r to take the contents."] = "|cffeda55fShift-클릭|r 아이템 수취"
 L[ [=[|cFFFFCC00*|r Selected mail will be batch opened or returned to sender by clicking Open or Return.
 |cFFFFCC00*|r You can Shift-Click 2 checkboxes to mass select every mail between the 2 checkboxes.
 |cFFFFCC00*|r You can Ctrl-Click a checkbox to mass select or unselect every mail from that sender.
@@ -544,9 +502,66 @@ L[ [=[|cFFFFCC00*|r Simple filters are available for various mail types.
 L[ [=[|cFFFFCC00*|r This module will list your contacts, friends, guild mates, alts and track the last 10 people you mailed.
 |cFFFFCC00*|r It will also autocomplete all names in your BlackBook.]=] ] = [=[|cFFFFCC00*|r 이 모듈은 당신의 접속 목록, 친구, 길드, 내 캐릭터 등 마지막 10명의 인원만 기억합니다.
 |cFFFFCC00*|r 또한 주소록에 있는 이름들도 자동으로 완성됩니다.]=]
-L["|cffeda55fAlt-Click|r to send this item to %s."] = "|cffeda55fAlt-클릭|r %s님에게 아이템 보냄"
-L["|cffeda55fCtrl-Click|r to return it to sender."] = "|cffeda55fCtrl-클릭|r 아이템 반송"
-L["|cffeda55fShift-Click|r to take the contents."] = "|cffeda55fShift-클릭|r 아이템 수취"
+L["Chat Output"] = "대화창 출력"
+L["Choose"] = "선택"
+L["Clear list"] = "목록 삭제"
+L["Collected"] = "수집되었습니다: "
+L["Contacts"] = "접속 목록"
+L["Copy From"] = "복사"
+L["Copy this mail"] = "현재 우편을 복사합니다."
+L["Delete"] = "삭제"
+L["Disable Blizzard's auto-completion popup menu"] = "블리자드 이름 완성 기능 비활성화"
+L["DoNotWant"] = "원하지 않음"
+L["Enable Alt-Click to send mail"] = "Alt-클릭으로 우편 보냄"
+L["Exclude randoms you interacted with"] = "불규칙적인 거래자 제외"
+L["Express"] = "빠른 우편"
+L["Friends"] = "친구"
+L["Guild"] = "길드"
+L["Help"] = "도움말"
+L["In Progress"] = "처리 중"
+L["Keep free space"] = "빈 공간 유지"
+L["Mouse click short cuts for mail."] = "마우스 클릭으로 빠르게 우편을 보냅니다."
+L["Mousewheel to scroll Inbox"] = "우편함 마우스 스크롤"
+L["Name auto-completion options"] = "이름 자동 완성 설정"
+L["New Profile"] = "새 프로필"
+L["New Profile Name:"] = "새 프로필 이름:"
+L["Non-AH related mail"] = "나머지 우편"
+L["Not all messages are shown, refreshing mailbox soon to continue Open All..."] = "모든 메시지가 표시되지 않습니다. 모두 열기를 시작하면 우편함이 갱신됩니다."
+L["Not taking more items as there are now only %d regular bagslots free."] = "현재 가방의 여유 공간이 %d칸으로 더이상 아이템 가질 수 없습니다."
+L["Open"] = "열기"
+L["OpenAll"] = "모두 열기"
+L["Open All"] = "모두 열기"
+L["Open all Auction cancelled mail"] = "경매 취소된 우편 모두 열기"
+L["Open all Auction expired mail"] = "경매 기한 만료된 우편 모두 열기"
+L["Open all Auction successful mail"] = "경매 판매된 우편 모두 열기"
+L["Open all Auction won mail"] = "경매 낙찰된 우편 모두 열기"
+L["Open all mail with attachments"] = "우편에 첨부된 모든 물품 열기"
+L["Open all Outbid on mail"] = "경매 상위 입찰된 우편 모두 열기"
+L["Opening Speed"] = "열기 속도"
+L["Other options"] = "기타 설정"
+L["Part %d"] = "부분 %d"
+L["Please post bugs or suggestions at the wowace forums thread at |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. When posting bugs, indicate your locale and Postal's version number v%s."] = "|cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r의 wowace 포럼에서 버그 제보나 제안을 할 수 있습니다. 버그 제보 시, 귀하의 지역 언어와 버전 번호(v%s)를 알려주세요."
+L["Prints the amount of money collected during a mail session."] = "우편함을 열고 있는 동안 수집되는 총 금액을 대화창에 출력합니다."
+L["Processing Message"] = "메시지를 처리 중입니다:"
+L["Profile"] = "프로필"
+L["Rake"] = "우편 금액"
+L["Recently Mailed"] = "최근 우편"
+L["Refreshing mailbox..."] = "우편함을 갱신 중입니다..."
+L["Remove Contact"] = "접속 목록에서 제거"
+L["Reset Profile"] = "프로필 초기화"
+L["Return"] = "반송"
+L["Select"] = "선택"
+L["Set subject field to value of coins sent if subject is blank."] = "우편으로 골드를 보낼 때 제목이 비어있는 경우 제목을 금액으로 채웁니다."
+L["Shows a clickable visual icon as to whether a mail will be returned or deleted on expiry."] = "만료되어 반송되었거나 삭제된 메일에 대해 클릭 가능한 시각적 아이콘을 표시합니다."
+L["Skipping"] = "무시"
+L["Some Messages May Have Been Skipped."] = "몇몇의 메시지는 무시될 수 있습니다."
+L["There are %i more messages not currently shown."] = "현재 %i개 이상의 메시지를 표시할 수 없습니다."
+L["There are %i more messages not currently shown. More should become available in %i seconds."] = "현재 %i개 이상의 메시지를 표시할 수 없습니다. %i초 후에 이용이 가능합니다."
+L["TradeBlock"] = "거래 불가"
+L["Use Mr.Plow after opening"] = "개봉 뒤 Mr.Plow 사용"
+L["Use Postal's auto-complete"] = "Postal의 자동 완성 사용"
+L["Verbose mode"] = "대화창 메시지 표시"
+L["Wire"] = "금액 표시"
 
 return
 end
@@ -554,77 +569,23 @@ end
 local L = AL3:NewLocale("Postal", "ruRU")
 if L then
 L["A button that collects all attachments and coins from mail."] = "Кнопка, которая собирает все монеты и вложения с почты."
-L["AH-related mail"] = "Аукционные письма"
-L["Add Contact"] = "Добавить контакт"
 L["Add check boxes to the inbox for multiple mail operations."] = "Добавляет окно для пометки во входящей почте, для многочисленных операций."
+L["Add Contact"] = "Добавить контакт"
 L["Add multiple item mail tooltips"] = "Добавить подсказку для почты с множеством вещей."
 L["Adds a contact list next to the To: field."] = "Добавляет список контактов в поле адресата."
+L["AH-related mail"] = "Аукционные письма"
 L["Allows you to copy the contents of a mail."] = "Позволяет скопировать содержимое письма."
 L["Alts"] = "Альты"
-L["Auto-Send on Alt-Click"] = "Автопосылка по Alt+Щелчок мыши"
+-- L["Auto-Attach similar items on Control-Click"] = "Auto-Attach similar items on Control-Click"
 L["Autofill last person mailed"] = "Ввести в строку адреса ник последнего, кому было отправлено письмо"
+L["Auto-Send on Alt-Click"] = "Автопосылка по Alt+Щелчок мыши"
 L["BlackBook"] = "Черный список"
 L["Block incoming trade requests while in a mail session."] = "Блокировать все запросы на торговлю во время отправки массовой почты"
 L["CarbonCopy"] = "Скрытая копия"
-L["Chat Output"] = "Показать чат" -- Needs review
-L["Choose"] = "Выбор"
-L["Clear list"] = "Очистить список"
-L["Collected"] = "Собрано"
-L["Contacts"] = "Контакты"
-L["Copy From"] = "Копировать из"
-L["Copy this mail"] = "Скопировать письмо"
-L["Delete"] = "Удалить"
-L["Disable Blizzard's auto-completion popup menu"] = "Выключить всплывающее меню \"Метелицы\" об авто-заполнении"
-L["DoNotWant"] = "НеХоЧу!"
-L["Enable Alt-Click to send mail"] = "Включить посылку почты по Alt+Щелчок мыши"
-L["Exclude randoms you interacted with"] = "Исключать ПУГов, с которыми вы встречались."
-L["Express"] = "Доставка"
-L["Friends"] = "Друзья"
-L["Guild"] = "Гильдия"
-L["Help"] = "Справка"
-L["In Progress"] = "Обрабатывается!"
-L["Keep free space"] = "Оставлять свободное место"
-L["Mouse click short cuts for mail."] = "Щелчки мыши при открытой почте применяются как ссылки"
-L["Mousewheel to scroll Inbox"] = "Листать почту колёсиком мыши"
-L["Name auto-completion options"] = "Опции авто-заполнения имён"
-L["New Profile"] = "Новый профиль"
-L["New Profile Name:"] = "Имя нового профиля:"
-L["Non-AH related mail"] = "Почта не с аукциона"
-L["Not all messages are shown, refreshing mailbox soon to continue Open All..."] = "Не все письма показаны, почтовый ящик вскоре будет обновлен. Для продолжения нажмите \"Открыть всё\"."
-L["Not taking more items as there are now only %d regular bagslots free."] = "Не брать больше вещей если в сумках осталось только %d свободных мест."
-L["Open"] = "Открыть"
-L["Open All"] = "Открыть всё"
-L["Open all Auction cancelled mail"] = "Открывать все письма о прерванных аукционах"
-L["Open all Auction expired mail"] = "Открывать все письма с несостоявшегося аукциона"
-L["Open all Auction successful mail"] = "Открыть все письма с успешных аукционов"
-L["Open all Auction won mail"] = "Открыть все письма с выигранным товаром"
-L["Open all Outbid on mail"] = "Открыть все письма с перебитыми ставками"
-L["Open all mail with attachments"] = "Окрыть все письма с вложениями"
-L["OpenAll"] = "Открыть Всё"
-L["Opening Speed"] = "Скорость открытия"
-L["Other options"] = "Прочие опции"
-L["Part %d"] = "Часть %d"
-L["Please post bugs or suggestions at the wowace forums thread at |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. When posting bugs, indicate your locale and Postal's version number v%s."] = "Пожалуйста, сообщите об ошибках или предложениях на форуме wowace |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. Во время отправки ошибки, сообщите язык вашего клиента и номер версии Postalа v%s."
-L["Prints the amount of money collected during a mail session."] = "Сообщить сумму денег, собранных за сеанс работы с почтой"
-L["Processing Message"] = "Обработка сообщения"
-L["Profile"] = "Профиль"
-L["Rake"] = "Сбор"
-L["Recently Mailed"] = "Недавние корреспонденты"
-L["Refreshing mailbox..."] = "Обновление списка писем"
-L["Remove Contact"] = "Удалить контакт"
-L["Reset Profile"] = "Сброс профиля"
-L["Return"] = "Вернуть"
-L["Select"] = "Выбор"
-L["Set subject field to value of coins sent if subject is blank."] = "Писать в теме письма количество монет, если тема не задана"
-L["Shows a clickable visual icon as to whether a mail will be returned or deleted on expiry."] = "Показывать кликабельную визуальную иконку, не важно была ли почта возвращена или удалена."
-L["Skipping"] = "Пропускаем"
-L["Some Messages May Have Been Skipped."] = "Некоторые сообщения могли быть пропущены."
-L["There are %i more messages not currently shown."] = "Ещё %i сообщений не показано в данный момент"
-L["There are %i more messages not currently shown. More should become available in %i seconds."] = "Ещё %i сообщений не показано в данный момент. Они будут доставлены через %i секунд."
-L["TradeBlock"] = "Блокировать торговлю"
-L["Use Postal's auto-complete"] = "Авто-завершение использования Postal'а."
-L["Verbose mode"] = "Детальный режим"
-L["Wire"] = "Оценка"
+L["|cffeda55fAlt-Click|r to send this item to %s."] = "|cffeda55fAlt+Щелчок|r выслать предмет в адрес %s."
+-- L["|cffeda55fControl-Click|r to attach similar items."] = "|cffeda55fControl-Click|r to attach similar items."
+L["|cffeda55fCtrl-Click|r to return it to sender."] = "|cffeda55fCtrl+Щелчок|r вернуть отправителю."
+L["|cffeda55fShift-Click|r to take the contents."] = "|cffeda55fShift+Щелчок|r взять содержимое."
 L[ [=[|cFFFFCC00*|r Selected mail will be batch opened or returned to sender by clicking Open or Return.
 |cFFFFCC00*|r You can Shift-Click 2 checkboxes to mass select every mail between the 2 checkboxes.
 |cFFFFCC00*|r You can Ctrl-Click a checkbox to mass select or unselect every mail from that sender.
@@ -655,9 +616,66 @@ L[ [=[|cFFFFCC00*|r Simple filters are available for various mail types.
 L[ [=[|cFFFFCC00*|r This module will list your contacts, friends, guild mates, alts and track the last 10 people you mailed.
 |cFFFFCC00*|r It will also autocomplete all names in your BlackBook.]=] ] = [=[|cFFFFCC00*|r Этот модуль будет выводить список ваших контактов, друзей, товарищей гильдии, альтов и отслеживать последних 10 людей, которым вы отправили почту.
 |cFFFFCC00*|r Будут также автозаполнены все имена в вашем Черном Списке.]=]
-L["|cffeda55fAlt-Click|r to send this item to %s."] = "|cffeda55fAlt+Щелчок|r выслать предмет в адрес %s."
-L["|cffeda55fCtrl-Click|r to return it to sender."] = "|cffeda55fCtrl+Щелчок|r вернуть отправителю."
-L["|cffeda55fShift-Click|r to take the contents."] = "|cffeda55fShift+Щелчок|r взять содержимое."
+L["Chat Output"] = "Показать чат" -- Needs review
+L["Choose"] = "Выбор"
+L["Clear list"] = "Очистить список"
+L["Collected"] = "Собрано"
+L["Contacts"] = "Контакты"
+L["Copy From"] = "Копировать из"
+L["Copy this mail"] = "Скопировать письмо"
+L["Delete"] = "Удалить"
+L["Disable Blizzard's auto-completion popup menu"] = "Выключить всплывающее меню \"Метелицы\" об авто-заполнении"
+L["DoNotWant"] = "НеХоЧу!"
+L["Enable Alt-Click to send mail"] = "Включить посылку почты по Alt+Щелчок мыши"
+L["Exclude randoms you interacted with"] = "Исключать ПУГов, с которыми вы встречались."
+L["Express"] = "Доставка"
+L["Friends"] = "Друзья"
+L["Guild"] = "Гильдия"
+L["Help"] = "Справка"
+L["In Progress"] = "Обрабатывается!"
+L["Keep free space"] = "Оставлять свободное место"
+L["Mouse click short cuts for mail."] = "Щелчки мыши при открытой почте применяются как ссылки"
+L["Mousewheel to scroll Inbox"] = "Листать почту колёсиком мыши"
+L["Name auto-completion options"] = "Опции авто-заполнения имён"
+L["New Profile"] = "Новый профиль"
+L["New Profile Name:"] = "Имя нового профиля:"
+L["Non-AH related mail"] = "Почта не с аукциона"
+L["Not all messages are shown, refreshing mailbox soon to continue Open All..."] = "Не все письма показаны, почтовый ящик вскоре будет обновлен. Для продолжения нажмите \"Открыть всё\"."
+L["Not taking more items as there are now only %d regular bagslots free."] = "Не брать больше вещей если в сумках осталось только %d свободных мест."
+L["Open"] = "Открыть"
+L["OpenAll"] = "Открыть Всё"
+L["Open All"] = "Открыть всё"
+L["Open all Auction cancelled mail"] = "Открывать все письма о прерванных аукционах"
+L["Open all Auction expired mail"] = "Открывать все письма с несостоявшегося аукциона"
+L["Open all Auction successful mail"] = "Открыть все письма с успешных аукционов"
+L["Open all Auction won mail"] = "Открыть все письма с выигранным товаром"
+L["Open all mail with attachments"] = "Окрыть все письма с вложениями"
+L["Open all Outbid on mail"] = "Открыть все письма с перебитыми ставками"
+L["Opening Speed"] = "Скорость открытия"
+L["Other options"] = "Прочие опции"
+L["Part %d"] = "Часть %d"
+L["Please post bugs or suggestions at the wowace forums thread at |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. When posting bugs, indicate your locale and Postal's version number v%s."] = "Пожалуйста, сообщите об ошибках или предложениях на форуме wowace |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. Во время отправки ошибки, сообщите язык вашего клиента и номер версии Postalа v%s."
+L["Prints the amount of money collected during a mail session."] = "Сообщить сумму денег, собранных за сеанс работы с почтой"
+L["Processing Message"] = "Обработка сообщения"
+L["Profile"] = "Профиль"
+L["Rake"] = "Сбор"
+L["Recently Mailed"] = "Недавние корреспонденты"
+L["Refreshing mailbox..."] = "Обновление списка писем"
+L["Remove Contact"] = "Удалить контакт"
+L["Reset Profile"] = "Сброс профиля"
+L["Return"] = "Вернуть"
+L["Select"] = "Выбор"
+L["Set subject field to value of coins sent if subject is blank."] = "Писать в теме письма количество монет, если тема не задана"
+L["Shows a clickable visual icon as to whether a mail will be returned or deleted on expiry."] = "Показывать кликабельную визуальную иконку, не важно была ли почта возвращена или удалена."
+L["Skipping"] = "Пропускаем"
+L["Some Messages May Have Been Skipped."] = "Некоторые сообщения могли быть пропущены."
+L["There are %i more messages not currently shown."] = "Ещё %i сообщений не показано в данный момент"
+L["There are %i more messages not currently shown. More should become available in %i seconds."] = "Ещё %i сообщений не показано в данный момент. Они будут доставлены через %i секунд."
+L["TradeBlock"] = "Блокировать торговлю"
+-- L["Use Mr.Plow after opening"] = "Use Mr.Plow after opening"
+L["Use Postal's auto-complete"] = "Авто-завершение использования Postal'а."
+L["Verbose mode"] = "Детальный режим"
+L["Wire"] = "Оценка"
 
 return
 end
@@ -665,77 +683,23 @@ end
 local L = AL3:NewLocale("Postal", "zhCN")
 if L then
 L["A button that collects all attachments and coins from mail."] = "收取所有邮件的附件和金币。"
-L["AH-related mail"] = "拍卖相关邮件"
-L["Add Contact"] = "添加联系人"
 L["Add check boxes to the inbox for multiple mail operations."] = "增加可选框以便于对多个邮件进行操作。"
+L["Add Contact"] = "添加联系人"
 L["Add multiple item mail tooltips"] = "添加多个物品的邮件提示"
 L["Adds a contact list next to the To: field."] = "添加联系人列表到收件人栏。"
+L["AH-related mail"] = "拍卖相关邮件"
 L["Allows you to copy the contents of a mail."] = "允许你复制信的内容物。"
 L["Alts"] = "小号"
-L["Auto-Send on Alt-Click"] = "Alt-点击 自动发送"
+-- L["Auto-Attach similar items on Control-Click"] = "Auto-Attach similar items on Control-Click"
 L["Autofill last person mailed"] = "自动填写最后的收件人"
+L["Auto-Send on Alt-Click"] = "Alt-点击自动发送"
 L["BlackBook"] = "黑名单"
 L["Block incoming trade requests while in a mail session."] = "在进行邮件操作中阻止交易请求。"
 L["CarbonCopy"] = "复本"
--- L["Chat Output"] = "Chat Output"
-L["Choose"] = "选择"
-L["Clear list"] = "清空列表"
-L["Collected"] = "已收取"
-L["Contacts"] = "联系人"
-L["Copy From"] = "从...复制"
-L["Copy this mail"] = "复制这封信"
-L["Delete"] = "删除"
-L["Disable Blizzard's auto-completion popup menu"] = "关闭Blizzard的自动完成弹出菜单"
-L["DoNotWant"] = "不想要"
-L["Enable Alt-Click to send mail"] = "允许 Alt-点击 发送邮件"
-L["Exclude randoms you interacted with"] = "防止你随意地受到影响"
-L["Express"] = "快件"
-L["Friends"] = "好友"
-L["Guild"] = "公会"
-L["Help"] = "帮助"
-L["In Progress"] = "处理中"
-L["Keep free space"] = "保留背包空间"
-L["Mouse click short cuts for mail."] = "鼠标快捷方式。"
-L["Mousewheel to scroll Inbox"] = "鼠标滚动收件箱"
-L["Name auto-completion options"] = "姓名自动完成选项"
-L["New Profile"] = "新配置"
-L["New Profile Name:"] = "新配置名称："
-L["Non-AH related mail"] = "非拍卖相关邮件"
-L["Not all messages are shown, refreshing mailbox soon to continue Open All..."] = "尚有邮件未能显示，请重整收件匣后继续开启..."
-L["Not taking more items as there are now only %d regular bagslots free."] = "无法拿取更多物品, 目前仅有 %d 个背包位置."
-L["Open"] = "打开"
-L["Open All"] = "打开所有"
-L["Open all Auction cancelled mail"] = "打开所有取消拍卖的邮件"
-L["Open all Auction expired mail"] = "打开所有拍卖过期的邮件"
-L["Open all Auction successful mail"] = "打开所有拍卖成功的邮件"
-L["Open all Auction won mail"] = "打开所有赢得拍卖的邮件"
-L["Open all Outbid on mail"] = "打开所有超过出价的邮件"
-L["Open all mail with attachments"] = "打开所有带有附件的邮件"
-L["OpenAll"] = "打开所有"
-L["Opening Speed"] = "收信速度"
-L["Other options"] = "其他选项"
-L["Part %d"] = "第 %d 组"
-L["Please post bugs or suggestions at the wowace forums thread at |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. When posting bugs, indicate your locale and Postal's version number v%s."] = "请到Wowace的论坛|cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r报告Bug或者提交建议。报告Bug时请说明Postal的版本 v%s。"
-L["Prints the amount of money collected during a mail session."] = "显示在一次邮件操作中所收到的金币。"
-L["Processing Message"] = "正在处理邮件"
-L["Profile"] = "配置"
-L["Rake"] = "收款显示"
-L["Recently Mailed"] = "最近邮寄"
-L["Refreshing mailbox..."] = "重新整理收件匣..."
-L["Remove Contact"] = "删除联系人"
-L["Reset Profile"] = "重置配置"
-L["Return"] = "退信"
-L["Select"] = "选择"
-L["Set subject field to value of coins sent if subject is blank."] = "在主题为空时将主题自动填充为金币数量。"
-L["Shows a clickable visual icon as to whether a mail will be returned or deleted on expiry."] = "显示一个可点击的图标以确定邮件将被退回或是到期删除。"
-L["Skipping"] = "忽略"
-L["Some Messages May Have Been Skipped."] = "部分邮件可能被忽略。"
-L["There are %i more messages not currently shown."] = "还有 %i 或更多的邮件没有显示。"
-L["There are %i more messages not currently shown. More should become available in %i seconds."] = "当前还有 %i  条信息没有显示. 将在 %i 内显示."
-L["TradeBlock"] = "阻止交易"
-L["Use Postal's auto-complete"] = "使用 Postal 的自动完成"
-L["Verbose mode"] = "消息模式"
-L["Wire"] = "填充标题"
+L["|cffeda55fAlt-Click|r to send this item to %s."] = "|cffeda55fAlt-点击|r将该物品发送给%s。"
+L["|cffeda55fControl-Click|r to attach similar items."] = "|cffeda55fCtrl-点击|r附加类似物品。"
+L["|cffeda55fCtrl-Click|r to return it to sender."] = "|cffeda55fCtrl-点击|r将信退给发件人。"
+L["|cffeda55fShift-Click|r to take the contents."] = "|cffeda55fShift-点击|r获得该邮件的内容副本。"
 L[ [=[|cFFFFCC00*|r Selected mail will be batch opened or returned to sender by clicking Open or Return.
 |cFFFFCC00*|r You can Shift-Click 2 checkboxes to mass select every mail between the 2 checkboxes.
 |cFFFFCC00*|r You can Ctrl-Click a checkbox to mass select or unselect every mail from that sender.
@@ -766,9 +730,66 @@ L[ [=[|cFFFFCC00*|r Simple filters are available for various mail types.
 L[ [=[|cFFFFCC00*|r This module will list your contacts, friends, guild mates, alts and track the last 10 people you mailed.
 |cFFFFCC00*|r It will also autocomplete all names in your BlackBook.]=] ] = [=[|cFFFFCC00*|r该模块将列出你所有的联系人、好友、公会成员、小号和你最近发送邮件的10个人。
 |cFFFFCC00*|r同时还将自动完成通讯簿中的所有名字。]=]
-L["|cffeda55fAlt-Click|r to send this item to %s."] = "|cffeda55fAlt-点击|r 将该物品发送给%s。"
-L["|cffeda55fCtrl-Click|r to return it to sender."] = "|cffeda55fCtrl-点击|r 将信退给发件人。"
-L["|cffeda55fShift-Click|r to take the contents."] = "|cffeda55fShift-点击|r 获得该邮件的内容副本。"
+L["Chat Output"] = "聊天输出"
+L["Choose"] = "选择"
+L["Clear list"] = "清空列表"
+L["Collected"] = "已收取"
+L["Contacts"] = "联系人"
+L["Copy From"] = "从…复制"
+L["Copy this mail"] = "复制这封信"
+L["Delete"] = "删除"
+L["Disable Blizzard's auto-completion popup menu"] = "关闭暴雪的自动完成弹出菜单"
+L["DoNotWant"] = "不想要"
+L["Enable Alt-Click to send mail"] = "允许 Alt-点击发送邮件"
+L["Exclude randoms you interacted with"] = "防止你随意地受到影响"
+L["Express"] = "快件"
+L["Friends"] = "好友"
+L["Guild"] = "公会"
+L["Help"] = "帮助"
+L["In Progress"] = "处理中"
+L["Keep free space"] = "保留背包空间"
+L["Mouse click short cuts for mail."] = "鼠标快捷方式。"
+L["Mousewheel to scroll Inbox"] = "鼠标滚动收件箱"
+L["Name auto-completion options"] = "姓名自动完成选项"
+L["New Profile"] = "新配置"
+L["New Profile Name:"] = "新配置名称："
+L["Non-AH related mail"] = "非拍卖相关邮件"
+L["Not all messages are shown, refreshing mailbox soon to continue Open All..."] = "尚有邮件未能显示，请重整收件匣后继续开启…"
+L["Not taking more items as there are now only %d regular bagslots free."] = "无法拿取更多物品，目前仅有 %d 个背包位置。"
+L["Open"] = "打开"
+L["OpenAll"] = "打开所有"
+L["Open All"] = "打开所有"
+L["Open all Auction cancelled mail"] = "打开所有取消拍卖的邮件"
+L["Open all Auction expired mail"] = "打开所有拍卖过期的邮件"
+L["Open all Auction successful mail"] = "打开所有拍卖成功的邮件"
+L["Open all Auction won mail"] = "打开所有赢得拍卖的邮件"
+L["Open all mail with attachments"] = "打开所有带有附件的邮件"
+L["Open all Outbid on mail"] = "打开所有超过出价的邮件"
+L["Opening Speed"] = "收信速度"
+L["Other options"] = "其他选项"
+L["Part %d"] = "第 %d 组"
+L["Please post bugs or suggestions at the wowace forums thread at |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. When posting bugs, indicate your locale and Postal's version number v%s."] = "请到 WowAce 的论坛|cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r 报告 Bug 或者提交建议。报告 Bug 时请说明 Postal 的版本 v%s。"
+L["Prints the amount of money collected during a mail session."] = "显示在一次邮件操作中所收到的金币。"
+L["Processing Message"] = "正在处理邮件"
+L["Profile"] = "配置"
+L["Rake"] = "收款显示"
+L["Recently Mailed"] = "最近邮寄"
+L["Refreshing mailbox..."] = "重新整理收件匣…"
+L["Remove Contact"] = "删除联系人"
+L["Reset Profile"] = "重置配置"
+L["Return"] = "退信"
+L["Select"] = "选择"
+L["Set subject field to value of coins sent if subject is blank."] = "在主题为空时将主题自动填充为金币数量。"
+L["Shows a clickable visual icon as to whether a mail will be returned or deleted on expiry."] = "显示一个可点击的图标以确定邮件将被退回或是到期删除。"
+L["Skipping"] = "忽略"
+L["Some Messages May Have Been Skipped."] = "部分邮件可能被忽略。"
+L["There are %i more messages not currently shown."] = "还有 %i 或更多的邮件没有显示。"
+L["There are %i more messages not currently shown. More should become available in %i seconds."] = "当前还有 %i  条信息没有显示。将在 %i 内显示。"
+L["TradeBlock"] = "阻止交易"
+L["Use Mr.Plow after opening"] = "打开邮件后使用 Mr.Plow 插件进行背包整理"
+L["Use Postal's auto-complete"] = "使用 Postal 的自动完成"
+L["Verbose mode"] = "消息模式"
+L["Wire"] = "填充标题"
 
 return
 end
@@ -776,77 +797,23 @@ end
 local L = AL3:NewLocale("Postal", "zhTW")
 if L then
 L["A button that collects all attachments and coins from mail."] = "一個收取全部附件及金錢的按鈕。"
-L["AH-related mail"] = "拍賣相關信件"
-L["Add Contact"] = "新增聯絡人"
 L["Add check boxes to the inbox for multiple mail operations."] = "增加勾選框以供多重信件指令使用。"
+L["Add Contact"] = "新增聯絡人"
 L["Add multiple item mail tooltips"] = "新增多個物品的郵件提示框"
 L["Adds a contact list next to the To: field."] = "在收件人輸入框旁邊添加一個聯絡列表。"
+L["AH-related mail"] = "拍賣相關信件"
 L["Allows you to copy the contents of a mail."] = "允許你複製信的內容物。"
 L["Alts"] = "分身"
-L["Auto-Send on Alt-Click"] = "Alt-點擊 自動發送"
+-- L["Auto-Attach similar items on Control-Click"] = "Auto-Attach similar items on Control-Click"
 L["Autofill last person mailed"] = "自動填寫最後曾郵寄的人名"
+L["Auto-Send on Alt-Click"] = "Alt-點擊 自動發送"
 L["BlackBook"] = "聯絡人名冊"
 L["Block incoming trade requests while in a mail session."] = "在處理信件期間拒絕交易要求。"
 L["CarbonCopy"] = "複本"
-L["Chat Output"] = "聊天內容 輸出"
-L["Choose"] = "選取"
-L["Clear list"] = "清空列表"
-L["Collected"] = "已領取"
-L["Contacts"] = "聯絡人"
-L["Copy From"] = "複製自"
-L["Copy this mail"] = "複製這封信"
-L["Delete"] = "刪除"
-L["Disable Blizzard's auto-completion popup menu"] = "停用內建彈出自動完成的選單"
-L["DoNotWant"] = "不想要"
-L["Enable Alt-Click to send mail"] = "開啟Alt-點擊 發送信件"
-L["Exclude randoms you interacted with"] = "防止你隨意地受到影響"
-L["Express"] = "快速收發"
-L["Friends"] = "好友"
-L["Guild"] = "公會"
-L["Help"] = "幫助"
-L["In Progress"] = "正在處理"
-L["Keep free space"] = "保持背包空位"
-L["Mouse click short cuts for mail."] = "點擊快速收發信件。"
-L["Mousewheel to scroll Inbox"] = "滑鼠滾動收件欄"
-L["Name auto-completion options"] = "名字自動完成選項"
-L["New Profile"] = "新設定檔"
-L["New Profile Name:"] = "新設定檔名稱:"
-L["Non-AH related mail"] = "非拍賣相關信件"
-L["Not all messages are shown, refreshing mailbox soon to continue Open All..."] = "尚有郵件未能顯示，請重整收件匣後繼續開啟..."
-L["Not taking more items as there are now only %d regular bagslots free."] = "無法拾取更多物品，因目前只有%d個背包空位。"
-L["Open"] = "開啟"
-L["Open All"] = "收取全部"
-L["Open all Auction cancelled mail"] = "打開所有取消拍賣的信件"
-L["Open all Auction expired mail"] = "打開所有拍賣過期的信件"
-L["Open all Auction successful mail"] = "打開所有拍賣成功的信件"
-L["Open all Auction won mail"] = "打開所有赢得拍賣的信件"
-L["Open all Outbid on mail"] = "打開所有超過出價的信件"
-L["Open all mail with attachments"] = "打開所有帶有附件的信件"
-L["OpenAll"] = "收取全部"
-L["Opening Speed"] = "收取速度"
-L["Other options"] = "其他選項"
-L["Part %d"] = "分組%d"
-L["Please post bugs or suggestions at the wowace forums thread at |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. When posting bugs, indicate your locale and Postal's version number v%s."] = "如要回報錯誤或建議請往wowace論壇|cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. 發帖時，說明你的語系和Postal的版本編號 v%s."
-L["Prints the amount of money collected during a mail session."] = "顯示這次收取的金錢。"
-L["Processing Message"] = "正在處理訊息"
-L["Profile"] = "設定檔"
-L["Rake"] = "報告"
-L["Recently Mailed"] = "最近寄出的郵件"
-L["Refreshing mailbox..."] = "重新整理收件匣..."
-L["Remove Contact"] = "移除聯絡人"
-L["Reset Profile"] = "重置設定檔"
-L["Return"] = "返回"
-L["Select"] = "選擇"
-L["Set subject field to value of coins sent if subject is blank."] = "在「主題:」欄位自動填寫寄件金額。"
-L["Shows a clickable visual icon as to whether a mail will be returned or deleted on expiry."] = "視覺顯示點擊圖示是否郵件將被退回或刪除期滿。"
-L["Skipping"] = "略過"
-L["Some Messages May Have Been Skipped."] = "部份訊息可能會被略過。"
-L["There are %i more messages not currently shown."] = "有%i更多訊息沒有在目前顯示。"
-L["There are %i more messages not currently shown. More should become available in %i seconds."] = "有%i更多訊息沒有在目前顯示。在%i秒內將會顯示更多。"
-L["TradeBlock"] = "拒絕交易"
-L["Use Postal's auto-complete"] = "使用Postal的自動完成"
-L["Verbose mode"] = "消息模式"
-L["Wire"] = "自動填寫金額"
+L["|cffeda55fAlt-Click|r to send this item to %s."] = "|cffeda55fAlt-點擊: |r將物品寄給%s。"
+L["|cffeda55fControl-Click|r to attach similar items."] = "|cffeda55fCtrl-點擊|r附加類似物品。"
+L["|cffeda55fCtrl-Click|r to return it to sender."] = "|cffeda55fCtrl-點擊: |r返回信件。"
+L["|cffeda55fShift-Click|r to take the contents."] = "|cffeda55fShift-點擊: |r收取信件。"
 L[ [=[|cFFFFCC00*|r Selected mail will be batch opened or returned to sender by clicking Open or Return.
 |cFFFFCC00*|r You can Shift-Click 2 checkboxes to mass select every mail between the 2 checkboxes.
 |cFFFFCC00*|r You can Ctrl-Click a checkbox to mass select or unselect every mail from that sender.
@@ -877,9 +844,294 @@ L[ [=[|cFFFFCC00*|r Simple filters are available for various mail types.
 L[ [=[|cFFFFCC00*|r This module will list your contacts, friends, guild mates, alts and track the last 10 people you mailed.
 |cFFFFCC00*|r It will also autocomplete all names in your BlackBook.]=] ] = [=[|cFFFFCC00*|r 此模組將您的聯絡人名單，朋友，公會隊友，分身，並追踪過去您曾郵寄的10人。
 |cFFFFCC00*|r 它也將自動填寫已在您的黑名單內所有的名字。]=]
-L["|cffeda55fAlt-Click|r to send this item to %s."] = "|cffeda55fAlt-點擊: |r將物品寄給%s。"
-L["|cffeda55fCtrl-Click|r to return it to sender."] = "|cffeda55fCtrl-點擊: |r返回信件。"
-L["|cffeda55fShift-Click|r to take the contents."] = "|cffeda55fShift-點擊: |r收取信件。"
+L["Chat Output"] = "聊天內容 輸出"
+L["Choose"] = "選取"
+L["Clear list"] = "清空列表"
+L["Collected"] = "已領取"
+L["Contacts"] = "聯絡人"
+L["Copy From"] = "複製自"
+L["Copy this mail"] = "複製這封信"
+L["Delete"] = "刪除"
+L["Disable Blizzard's auto-completion popup menu"] = "停用內建彈出自動完成的選單"
+L["DoNotWant"] = "不想要"
+L["Enable Alt-Click to send mail"] = "開啟Alt-點擊 發送信件"
+L["Exclude randoms you interacted with"] = "防止你隨意地受到影響"
+L["Express"] = "快速收發"
+L["Friends"] = "好友"
+L["Guild"] = "公會"
+L["Help"] = "幫助"
+L["In Progress"] = "正在處理"
+L["Keep free space"] = "保持背包空位"
+L["Mouse click short cuts for mail."] = "點擊快速收發信件。"
+L["Mousewheel to scroll Inbox"] = "滑鼠滾動收件欄"
+L["Name auto-completion options"] = "名字自動完成選項"
+L["New Profile"] = "新設定檔"
+L["New Profile Name:"] = "新設定檔名稱:"
+L["Non-AH related mail"] = "非拍賣相關信件"
+L["Not all messages are shown, refreshing mailbox soon to continue Open All..."] = "尚有郵件未能顯示，請重整收件匣後繼續開啟..."
+L["Not taking more items as there are now only %d regular bagslots free."] = "無法拾取更多物品，因目前只有%d個背包空位。"
+L["Open"] = "開啟"
+L["OpenAll"] = "收取全部"
+L["Open All"] = "收取全部"
+L["Open all Auction cancelled mail"] = "打開所有取消拍賣的信件"
+L["Open all Auction expired mail"] = "打開所有拍賣過期的信件"
+L["Open all Auction successful mail"] = "打開所有拍賣成功的信件"
+L["Open all Auction won mail"] = "打開所有赢得拍賣的信件"
+L["Open all mail with attachments"] = "打開所有帶有附件的信件"
+L["Open all Outbid on mail"] = "打開所有超過出價的信件"
+L["Opening Speed"] = "收取速度"
+L["Other options"] = "其他選項"
+L["Part %d"] = "分組%d"
+L["Please post bugs or suggestions at the wowace forums thread at |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. When posting bugs, indicate your locale and Postal's version number v%s."] = "如要回報錯誤或建議請往wowace論壇|cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. 發帖時，說明你的語系和Postal的版本編號 v%s."
+L["Prints the amount of money collected during a mail session."] = "顯示這次收取的金錢。"
+L["Processing Message"] = "正在處理訊息"
+L["Profile"] = "設定檔"
+L["Rake"] = "報告"
+L["Recently Mailed"] = "最近寄出的郵件"
+L["Refreshing mailbox..."] = "重新整理收件匣..."
+L["Remove Contact"] = "移除聯絡人"
+L["Reset Profile"] = "重置設定檔"
+L["Return"] = "返回"
+L["Select"] = "選擇"
+L["Set subject field to value of coins sent if subject is blank."] = "在「主題:」欄位自動填寫寄件金額。"
+L["Shows a clickable visual icon as to whether a mail will be returned or deleted on expiry."] = "視覺顯示點擊圖示是否郵件將被退回或刪除期滿。"
+L["Skipping"] = "略過"
+L["Some Messages May Have Been Skipped."] = "部份訊息可能會被略過。"
+L["There are %i more messages not currently shown."] = "有%i更多訊息沒有在目前顯示。"
+L["There are %i more messages not currently shown. More should become available in %i seconds."] = "有%i更多訊息沒有在目前顯示。在%i秒內將會顯示更多。"
+L["TradeBlock"] = "拒絕交易"
+L["Use Mr.Plow after opening"] = "在開啟郵件之後使用Mr.Plow 整理背包"
+L["Use Postal's auto-complete"] = "使用Postal的自動完成"
+L["Verbose mode"] = "消息模式"
+L["Wire"] = "自動填寫金額"
+
+return
+end
+
+local L = AL3:NewLocale("Postal", "ptBR")
+if L then
+L["A button that collects all attachments and coins from mail."] = "Um botão que coleta todos os anexos e moedas da carta."
+L["Add check boxes to the inbox for multiple mail operations."] = "Adicionar caixas de seleção na caixa de entrada para operações de múltiplas cartas."
+L["Add Contact"] = "Adicionar Contato"
+L["Add multiple item mail tooltips"] = "Adicionar múltiplas dicas de interface de itens de correio"
+L["Adds a contact list next to the To: field."] = "Adiciona uma lista de contato próximo ao campo de A:"
+L["AH-related mail"] = "Carta relacionada à CL"
+L["Allows you to copy the contents of a mail."] = "Permite a você copiar o conteúdo de uma carta."
+L["Alts"] = "Alts"
+-- L["Auto-Attach similar items on Control-Click"] = "Auto-Attach similar items on Control-Click"
+L["Autofill last person mailed"] = "Auto-preencher última pessoa enviada"
+L["Auto-Send on Alt-Click"] = "Auto-enviar com Alt-Clique"
+L["BlackBook"] = "LivroNegro"
+L["Block incoming trade requests while in a mail session."] = "Bloquear pedidos de negociar quando estiver numa sessão de correio."
+L["CarbonCopy"] = "CópiaCarbono"
+L["|cffeda55fAlt-Click|r to send this item to %s."] = "|cffeda55fAlt-Click|r para enviar este item para %s."
+-- L["|cffeda55fControl-Click|r to attach similar items."] = "|cffeda55fControl-Click|r to attach similar items."
+L["|cffeda55fCtrl-Click|r to return it to sender."] = "|cffeda55fCtrl-Click|r para retorná-lo ao remetente."
+L["|cffeda55fShift-Click|r to take the contents."] = "|cffeda55fShift-Click|r para pegar o conteúdo."
+L[ [=[|cFFFFCC00*|r Selected mail will be batch opened or returned to sender by clicking Open or Return.
+|cFFFFCC00*|r You can Shift-Click 2 checkboxes to mass select every mail between the 2 checkboxes.
+|cFFFFCC00*|r You can Ctrl-Click a checkbox to mass select or unselect every mail from that sender.
+|cFFFFCC00*|r Select will never delete any mail (mail without text is auto-deleted by the game when all attached items and gold are taken).
+|cFFFFCC00*|r Select will skip CoD mails and mails from Blizzard.
+|cFFFFCC00*|r Disable the Verbose option to stop the chat spam while opening mail.]=] ] = [=[|cFFFFCC00*|r Cartas selecionadas serão abertas ou retornadas ao remetente em lote clicando em Abrir ou Retornar.
+|cFFFFCC00*|r Você pode usar Shift-Clique em duas caixas de seleção para marcar em massa cada carta entre as duas caixas de seleção.
+|cFFFFCC00*|r Você pode usar Ctrl-Clique numa caixa de seleção para marcar ou desmarcar em massa todos as cartas daquele remetente.
+|cFFFFCC00*|r Selecionar nunca irá excluir nenhuma carta (cartas sem texto são auto-excluídas pelo jogo quando todos os anexos e moedas são obtidos).
+|cFFFFCC00*|r Selecionar irá pular cartas a cobrar e cartas da Blizzard.
+|cFFFFCC00*|r Desative a opção Verbal para parar o spam no chat enquanto estiver abrindo cartas.]=]
+L[ [=[|cFFFFCC00*|r Shift-Click to take item/money from mail.
+|cFFFFCC00*|r Ctrl-Click to return mail.
+|cFFFFCC00*|r Alt-Click to move an item from your inventory to the current outgoing mail (same as right click in default UI).
+|cFFFFCC00*|r Mousewheel to scroll the inbox.]=] ] = [=[|cFFFFCC00*|r Shift-Clique para pegar o item/dinheiro da carta.
+|cFFFFCC00*|r Ctrl-Clique para retornar a carta.
+|cFFFFCC00*|r Alt-Clique para mover um item do seu inventário para a carta atual (mesma coisa de clique direito na IU padrão).
+|cFFFFCC00*|r Mousewheel para rolar a caixa de entrada.]=]
+L[ [=[|cFFFFCC00*|r Simple filters are available for various mail types.
+|cFFFFCC00*|r Shift-Click the Open All button to override the filters and take ALL mail.
+|cFFFFCC00*|r OpenAll will never delete any mail (mail without text is auto-deleted by the game when all attached items and gold are taken).
+|cFFFFCC00*|r OpenAll will skip CoD mails and mails from Blizzard.
+|cFFFFCC00*|r Disable the Verbose option to stop the chat spam while opening mail.]=] ] = [=[|cFFFFCC00*|r Filtros simples estão disponíveis para vários tipos de cartas.
+|cFFFFCC00*|r Shift-Clique no botão Abrir Tudo para ignorar os filtros e pegar TODAS as cartas.
+|cFFFFCC00*|r AbrirTudo nunca irá excluir nenhuma carta (cartas sem texto são auto-excluídas pelo jogo quando todos os anexos e moedas são obtidos).
+|cFFFFCC00*|r AbrirTudo irá pular cartas a cobrar e cartas da Blizzard.
+|cFFFFCC00*|r Desative a opção Verbal para parar o spam no chat enquanto estiver abrindo cartas.]=]
+L[ [=[|cFFFFCC00*|r This module will list your contacts, friends, guild mates, alts and track the last 10 people you mailed.
+|cFFFFCC00*|r It will also autocomplete all names in your BlackBook.]=] ] = [=[|cFFFFCC00*|r Esse módulo irá listar seus contatos, amigos, companheiros de guilda, alts e registrar as ultimas 10 pessoas que você mandou cartas.
+|cFFFFCC00*|r Também irá auto-completar todos os nomes no seu LivroNegro.]=]
+L["Chat Output"] = "Mensagens no Chat"
+L["Choose"] = "Escolher"
+L["Clear list"] = "Limpar lista"
+L["Collected"] = "Coletado(s)"
+L["Contacts"] = "Contatos"
+L["Copy From"] = "Copiar de"
+L["Copy this mail"] = "Copiar essa carta"
+L["Delete"] = "Excluir"
+L["Disable Blizzard's auto-completion popup menu"] = "Desativar menu popup de auto-completar da Blizzard."
+L["DoNotWant"] = "NãoQuerer"
+L["Enable Alt-Click to send mail"] = "Ativar Alt-Clique para enviar carta"
+L["Exclude randoms you interacted with"] = "Excluir aleatórios com quem você interagiu"
+L["Express"] = "Expresso"
+L["Friends"] = "Amigos"
+L["Guild"] = "Guilda"
+L["Help"] = "Ajuda"
+L["In Progress"] = "Em Progresso"
+L["Keep free space"] = "Manter espaço livre"
+L["Mouse click short cuts for mail."] = "Atalhos de clique do mouse para cartas."
+L["Mousewheel to scroll Inbox"] = "Mousewheel para rolar a caixa de entrada"
+L["Name auto-completion options"] = "Nomear opções de auto-completar"
+L["New Profile"] = "Novo Perfil"
+L["New Profile Name:"] = "Nome do Novo Perfil:"
+L["Non-AH related mail"] = "Carta não relacionada à CL"
+L["Not all messages are shown, refreshing mailbox soon to continue Open All..."] = "Nem todas as mensagens estão sendo exibidas, atualizando caixa de correio em breve para continuar a Abrir Tudo..."
+L["Not taking more items as there are now only %d regular bagslots free."] = "Não pegando mais itens pois há agora apenas %d espaços regulares da mochila livres."
+L["Open"] = "Abrir"
+L["OpenAll"] = "AbrirTudo"
+L["Open All"] = "Abrir Todos"
+L["Open all Auction cancelled mail"] = "Abrir todas as cartas de Leilões cancelados"
+L["Open all Auction expired mail"] = "Abrir todas as cartas de Leilões expirados"
+L["Open all Auction successful mail"] = "Abrir todas as cartas de Leilões bem-sucedidos"
+L["Open all Auction won mail"] = "Abrir todas as cartas de Leilões ganhos"
+L["Open all mail with attachments"] = "Abrir todas as cartas com anexos"
+L["Open all Outbid on mail"] = "Abrir todas as cartas de Lances ultrapassados"
+L["Opening Speed"] = "Velocidade de Abertura"
+L["Other options"] = "Outras opções"
+L["Part %d"] = "Parte %d"
+L["Please post bugs or suggestions at the wowace forums thread at |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. When posting bugs, indicate your locale and Postal's version number v%s."] = "Por favor poste bugs ou sugestões nos fórums do wowace em |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. Quando estiver postando bugs, indique seu locale e a versão do Postal v%s."
+L["Prints the amount of money collected during a mail session."] = "Mostra a quantidade de dinheiro coletado durante uma sessão de cartas."
+L["Processing Message"] = "Processando Mensagem"
+L["Profile"] = "Perfil"
+L["Rake"] = "Resumo"
+L["Recently Mailed"] = "Enviado Recentemente"
+L["Refreshing mailbox..."] = "atualizando caixa de correio..."
+L["Remove Contact"] = "Remover Contato"
+L["Reset Profile"] = "Resetar Perfil"
+L["Return"] = "Retornar"
+L["Select"] = "Selecionar"
+L["Set subject field to value of coins sent if subject is blank."] = "Definir campo de assunto para o valor de moedas enviado se o assunto for branco."
+L["Shows a clickable visual icon as to whether a mail will be returned or deleted on expiry."] = "Mostra um ícone visual clicável para saber se uma carta será retornada ou excluída ao expirar."
+L["Skipping"] = "Pulando"
+L["Some Messages May Have Been Skipped."] = "Algumas Mensagens Podem Ter Sido Puladas."
+L["There are %i more messages not currently shown."] = "Ainda tem mais %i mensagens não mostradas atualmente."
+L["There are %i more messages not currently shown. More should become available in %i seconds."] = "Ainda tem mais %i mensagens não mostradas atualmente. Mais devem ficar disponíveis em %i segundos."
+L["TradeBlock"] = "BloquearNegociações"
+L["Use Mr.Plow after opening"] = "Usar Mr.Plow depois de abrir"
+L["Use Postal's auto-complete"] = "Usar o auto-completar do Postal"
+L["Verbose mode"] = "Modo verbal"
+L["Wire"] = "Telegrama"
+
+return
+end
+
+local L = AL3:NewLocale("Postal", "itIT")
+if L then
+L["A button that collects all attachments and coins from mail."] = "Un pulsante per raccogliere tutti gli allegati e le monete dalle lettere." -- Needs review
+L["Add check boxes to the inbox for multiple mail operations."] = "Aggiungere caselle di controllo per la posta in arrivo per le operazioni di posta multipla." -- Needs review
+L["Add Contact"] = "Aggiungi contatto" -- Needs review
+L["Add multiple item mail tooltips"] = "Aggiunge più voci ai tooltip della lettera" -- Needs review
+L["Adds a contact list next to the To: field."] = "Aggiunge una lista dei contatti vicino al campo To:" -- Needs review
+L["AH-related mail"] = "Lettera dalla casa d'aste" -- Needs review
+L["Allows you to copy the contents of a mail."] = "Ti permette di copiare il contenuto di una lettera" -- Needs review
+L["Alts"] = "Alts" -- Needs review
+-- L["Auto-Attach similar items on Control-Click"] = "Auto-Attach similar items on Control-Click"
+L["Autofill last person mailed"] = "Completa automaticamente l'ultima persona a cui hai scritto" -- Needs review
+L["Auto-Send on Alt-Click"] = "Auto invio con Alt-Click" -- Needs review
+L["BlackBook"] = "Lista" -- Needs review
+L["Block incoming trade requests while in a mail session."] = "Blocca le richieste di commercio mentre si stanno leggendo le lettere." -- Needs review
+L["CarbonCopy"] = "CopiaCarbone" -- Needs review
+L["|cffeda55fAlt-Click|r to send this item to %s."] = "|cffeda55fAlt-Click|r per spedire questo oggetto a %s." -- Needs review
+L["|cffeda55fControl-Click|r to attach similar items."] = "Control-Click per allegare oggetti simili" -- Needs review
+L["|cffeda55fCtrl-Click|r to return it to sender."] = "|cffeda55fCtrl-Click|r per rimandarla al mittente." -- Needs review
+L["|cffeda55fShift-Click|r to take the contents."] = "|cffeda55fShift-Click|r per prendere il contenuto." -- Needs review
+L[ [=[|cFFFFCC00*|r Selected mail will be batch opened or returned to sender by clicking Open or Return.
+|cFFFFCC00*|r You can Shift-Click 2 checkboxes to mass select every mail between the 2 checkboxes.
+|cFFFFCC00*|r You can Ctrl-Click a checkbox to mass select or unselect every mail from that sender.
+|cFFFFCC00*|r Select will never delete any mail (mail without text is auto-deleted by the game when all attached items and gold are taken).
+|cFFFFCC00*|r Select will skip CoD mails and mails from Blizzard.
+|cFFFFCC00*|r Disable the Verbose option to stop the chat spam while opening mail.]=] ] = [=[|cFFFFCC00*|r Le lettere selezionate saranno aperte o rimandate al mittente cliccando su Apri o Rimanda
+|cFFFFCC00*|r Con Shift-Click puoi selezionare due caselle di controllo per selezionare tutte le lettere tra le due caselle.
+|cFFFFCC00*|r Con Ctrl-Click su una casella ci controllo puoi selezionare o deselezionare tutte le lettere di quel mittente.
+|cFFFFCC00*|r Seleziona non cancellerà mai nessuna lettera (le lettere senza testo saranno cancellate automaticamente dal gioco quando sono stati presi tutti gli allegati e le monete).
+|cFFFFCC00*|r Seleziona salterà tutte le lettere CoD e le lettere da Blizzard.
+|cFFFFCC00*|r Disabilita l'opzione Parole per fermare lo spam durante l'apertura delle lettere]=] -- Needs review
+L[ [=[|cFFFFCC00*|r Shift-Click to take item/money from mail.
+|cFFFFCC00*|r Ctrl-Click to return mail.
+|cFFFFCC00*|r Alt-Click to move an item from your inventory to the current outgoing mail (same as right click in default UI).
+|cFFFFCC00*|r Mousewheel to scroll the inbox.]=] ] = [=[|cFFFFCC00*|r Shift-Click per prendere gli oggetti/le monete dalle lettere.
+|cFFFFCC00*|r Ctrl-Click per rimandare le lettere.
+|cFFFFCC00*|r Alt-Click per muovere un oggetto dall'inventario alla corrente lettera in uscita (come il tasto destro del mouse nell' UI di default).
+|cFFFFCC00*|r Rotellina del mouse per scorrere la casella di posta.]=] -- Needs review
+L[ [=[|cFFFFCC00*|r Simple filters are available for various mail types.
+|cFFFFCC00*|r Shift-Click the Open All button to override the filters and take ALL mail.
+|cFFFFCC00*|r OpenAll will never delete any mail (mail without text is auto-deleted by the game when all attached items and gold are taken).
+|cFFFFCC00*|r OpenAll will skip CoD mails and mails from Blizzard.
+|cFFFFCC00*|r Disable the Verbose option to stop the chat spam while opening mail.]=] ] = [=[|cFFFFCC00*|r Semplici filtri sono disponibili per vari tipi di lettere.
+|cFFFFCC00*|r Shift-Click sul bottone Apri Tutto per non tener conto dei filtri e raccogliere TUTTE le lettere.
+|cFFFFCC00*|r Apri Tutto non cancellerà mai nessuna lettera (le lettere senza testo saranno cancellate automaticamente dal gioco quando sono stati presi tutti gli allegati e le monete).
+|cFFFFCC00*|r Apri Tutto salterà tutte le lettere CoD e le lettere da Blizzard.
+|cFFFFCC00*|r Disabilita l'opzione Parole per bloccare lo spam in chat durante l'apertura delle lettere]=] -- Needs review
+L[ [=[|cFFFFCC00*|r This module will list your contacts, friends, guild mates, alts and track the last 10 people you mailed.
+|cFFFFCC00*|r It will also autocomplete all names in your BlackBook.]=] ] = [=[|cFFFFCC00*|r Questo modulo elencherà i tuoi contatti, gli amici, i compagni di gilda, gli alts e le ultime 10 persone a cui avrai scritto.
+|cFFFFCC00*|r Completerà anche automaticamente tutti i nomi presenti nella Lista.]=] -- Needs review
+L["Chat Output"] = "Uotput chat" -- Needs review
+L["Choose"] = "Scegli" -- Needs review
+L["Clear list"] = "Pulisci lista" -- Needs review
+L["Collected"] = "Raccolti" -- Needs review
+L["Contacts"] = "Contatti" -- Needs review
+L["Copy From"] = "Copia da" -- Needs review
+L["Copy this mail"] = "Copia questa lettera" -- Needs review
+L["Delete"] = "Cancella" -- Needs review
+L["Disable Blizzard's auto-completion popup menu"] = "Disabilita il menù popup di auto-completamento della Blizzard" -- Needs review
+L["DoNotWant"] = "NonLoVoglio" -- Needs review
+L["Enable Alt-Click to send mail"] = "Abilita Alt-Click per mandare le lettere" -- Needs review
+L["Exclude randoms you interacted with"] = "Esculdi random con cui hai interagito" -- Needs review
+L["Express"] = "Veloce" -- Needs review
+L["Friends"] = "Amici" -- Needs review
+L["Guild"] = "Gilda" -- Needs review
+L["Help"] = "Aiuto" -- Needs review
+L["In Progress"] = "In lavorazione" -- Needs review
+L["Keep free space"] = "Mantieni uno spazio libero" -- Needs review
+L["Mouse click short cuts for mail."] = "tasti di scelta rapida per le lettere." -- Needs review
+L["Mousewheel to scroll Inbox"] = "Rotellina del mouse per scorrere la posta in arrivo" -- Needs review
+L["Name auto-completion options"] = "Opzioni di auto-completamento del nome" -- Needs review
+L["New Profile"] = "Nuovo Profilo" -- Needs review
+L["New Profile Name:"] = "Nome del Nuovo Profilo:" -- Needs review
+L["Non-AH related mail"] = "Lettera non della casa d'aste" -- Needs review
+L["Not all messages are shown, refreshing mailbox soon to continue Open All..."] = "Non tutti i messaggi sono stati mostrati, ricaricama casella postale per continuare Apri Tutto" -- Needs review
+L["Not taking more items as there are now only %d regular bagslots free."] = "Non prende altri oggetti se ci sono solo %d posti in borsa liberi" -- Needs review
+L["Open"] = "Apri" -- Needs review
+L["OpenAll"] = "Apri tutto" -- Needs review
+L["Open All"] = "ApriTutto" -- Needs review
+L["Open all Auction cancelled mail"] = "Apri tutte le lettere annullate della casa d'aste" -- Needs review
+L["Open all Auction expired mail"] = "Apri tutte le lettere scadute della casa d'aste" -- Needs review
+L["Open all Auction successful mail"] = "Apri tutte le lettere di successo della casa d'aste" -- Needs review
+L["Open all Auction won mail"] = "Apri tutte le lettere di vincita della casa d'aste" -- Needs review
+L["Open all mail with attachments"] = "Apri tutte le lettere con allegati" -- Needs review
+L["Open all Outbid on mail"] = "Apri tutte le lettere di offerta sperata (outbid)" -- Needs review
+L["Opening Speed"] = "Velocità d'apertura" -- Needs review
+L["Other options"] = "Altre opzioni" -- Needs review
+L["Part %d"] = "parte %d" -- Needs review
+L["Please post bugs or suggestions at the wowace forums thread at |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. When posting bugs, indicate your locale and Postal's version number v%s."] = "Per favore riporta bug o suggerimenti al thread del forum wowace |cFF00FFFFhttp://forums.wowace.com/showthread.php?t=3909|r. Quando riporti un bug, indica la localizzazione e la versione v%s di Postal." -- Needs review
+L["Prints the amount of money collected during a mail session."] = "Scrivi l'ammontare di monete raccolte durante una sessione di posta" -- Needs review
+L["Processing Message"] = "Messaggio in lavorazione" -- Needs review
+L["Profile"] = "Profilo" -- Needs review
+L["Rake"] = "Somma" -- Needs review
+L["Recently Mailed"] = "Spedite Recentemente" -- Needs review
+L["Refreshing mailbox..."] = "Ricaricamento casella postale" -- Needs review
+L["Remove Contact"] = "Rimuovi Contatto" -- Needs review
+L["Reset Profile"] = "Resetta il profilo" -- Needs review
+L["Return"] = "Rimanda" -- Needs review
+L["Select"] = "Seleziona" -- Needs review
+L["Set subject field to value of coins sent if subject is blank."] = "Indica l'ammontare di monete mandate nel campo del soggetto se è lasciato bianco" -- Needs review
+L["Shows a clickable visual icon as to whether a mail will be returned or deleted on expiry."] = "Mostra un'icona visiva cliccabile se una lettera verrà restituita o scancellata alla scadanza." -- Needs review
+L["Skipping"] = "saltare" -- Needs review
+L["Some Messages May Have Been Skipped."] = "Qualche messaggio potrebbe essere stato saltato." -- Needs review
+L["There are %i more messages not currently shown."] = "Ci sono più di %i messaggi non correntemente mostrati." -- Needs review
+L["There are %i more messages not currently shown. More should become available in %i seconds."] = "Ci sono più di %i messaggi non correntemente mostrati. Altri saranno visibili in %i secondi." -- Needs review
+L["TradeBlock"] = "BloccaCommercio" -- Needs review
+L["Use Mr.Plow after opening"] = "Usa Mr.Plow appena aperto" -- Needs review
+L["Use Postal's auto-complete"] = "Usa l'auto-completamento di Postal" -- Needs review
+L["Verbose mode"] = "Modalità Verbose" -- Needs review
+L["Wire"] = "telegramma" -- Needs review
 
 return
 end

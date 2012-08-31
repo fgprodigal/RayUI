@@ -1,0 +1,55 @@
+------------------------------------------------------------------------
+r368 | xinhuan | 2012-08-31 00:58:14 +0000 (Fri, 31 Aug 2012) | 1 line
+Changed paths:
+   A /tags/v3.5.0 (from /trunk:367)
+
+Tag release v3.5.0.
+------------------------------------------------------------------------
+r367 | xinhuan | 2012-08-31 00:57:34 +0000 (Fri, 31 Aug 2012) | 1 line
+Changed paths:
+   M /trunk/Postal.toc
+
+Update TOC to 50001, version to 3.5.0.
+------------------------------------------------------------------------
+r366 | xinhuan | 2012-08-31 00:50:35 +0000 (Fri, 31 Aug 2012) | 1 line
+Changed paths:
+   M /trunk/Localization.lua
+
+Add Italian localization.
+------------------------------------------------------------------------
+r365 | xinhuan | 2012-08-31 00:21:46 +0000 (Fri, 31 Aug 2012) | 1 line
+Changed paths:
+   M /trunk/Modules/Express.lua
+
+Indent code with tabs instead of half tabs and half spaces.
+------------------------------------------------------------------------
+r364 | xinhuan | 2012-08-30 23:50:14 +0000 (Thu, 30 Aug 2012) | 1 line
+Changed paths:
+   M /trunk/Modules/BlackBook.lua
+
+Blizzard's guild autocomplete is broken, so we implement our own in the name editbox. Also fix autocomplete for BattleTag/RealID friends.
+------------------------------------------------------------------------
+r363 | xinhuan | 2012-08-30 22:32:17 +0000 (Thu, 30 Aug 2012) | 1 line
+Changed paths:
+   M /trunk/Modules/OpenAll.lua
+   M /trunk/Modules/Select.lua
+
+Add displaying in chat the buyer/seller of AH mails to the Select module as well when opening mails.
+------------------------------------------------------------------------
+r362 | xinhuan | 2012-08-30 22:13:16 +0000 (Thu, 30 Aug 2012) | 1 line
+Changed paths:
+   M /trunk/Modules/BlackBook.lua
+   M /trunk/Modules/OpenAll.lua
+   M /trunk/Modules/Select.lua
+   M /trunk/Postal.lua
+
+Realign the addon buttons properly in MoP.
+------------------------------------------------------------------------
+r361 | oscarucb | 2012-06-18 20:40:11 +0000 (Mon, 18 Jun 2012) | 3 lines
+Changed paths:
+   M /trunk/Modules/OpenAll.lua
+
+add the other player's name to AH opening output
+idea by jmbarlow
+
+------------------------------------------------------------------------

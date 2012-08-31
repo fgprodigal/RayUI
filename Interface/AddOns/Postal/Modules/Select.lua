@@ -43,23 +43,31 @@ updateFrame:SetScript("OnUpdate", function(self, elapsed)
 	end
 end)
 
-local lastUnseen,lastTime = 0,0
-local function noop() end
-local function printTooMuchMail()
+
+local lastSeen,lastRefill = 0,0
+
+local function updateMailCounts()
 	local cur,tot = GetInboxNumItems()
-	if tot-cur ~= lastUnseen or GetTime()-lastTime>=61 then
-		-- This is a low-effort guess at how long is remaining until we can fetch new mail.
-		lastUnseen = tot-cur
-		lastTime = GetTime()
+	if cur>lastSeen then
+		lastRefill = GetTime()
 	end
-	if cur>=50 then
-		Postal:Print(format(L["There are %i more messages not currently shown."], lastUnseen))
-	else
-		Postal:Print(format(L["There are %i more messages not currently shown. More should become available in %i seconds."], lastUnseen, lastTime+61-GetTime()))
-	end
+	lastSeen = cur
+end
+
+local function printTooMuchMail()
+	InboxTooMuchMail.Show = updateMailCounts	-- only print once, rest of the time: update
+	updateMailCounts()
 	
-	-- Just print once
-	InboxTooMuchMail.Show = noop
+	local cur,tot = GetInboxNumItems()
+	
+	local timeLeft = lastRefill+60-GetTime()
+	if cur>=50 or -- if inbox is full, no more will arrive
+	   timeLeft<0 then	-- if someone waited more than 60 seconds to take a mail out....
+		Postal:Print(format(L["There are %i more messages not currently shown."], tot-cur))
+	else
+		Postal:Print(format(L["There are %i more messages not currently shown. More should become available in %i seconds."], tot-cur, timeLeft))
+	end
+
 end
 
 function Postal_Select:OnEnable()
@@ -68,7 +76,7 @@ function Postal_Select:OnEnable()
 		openButton = CreateFrame("Button", "PostalSelectOpenButton", InboxFrame, "UIPanelButtonTemplate")
 		openButton:SetWidth(120)
 		openButton:SetHeight(25)
-		openButton:SetPoint("RIGHT", InboxFrame, "TOP", 5, -53)
+		openButton:SetPoint("RIGHT", InboxFrame, "TOP", 0, -42)
 		openButton:SetText(L["Open"])
 		openButton:SetScript("OnClick", function() Postal_Select:HandleSelect(1) end)
 		openButton:SetFrameLevel(openButton:GetFrameLevel() + 1)
@@ -79,14 +87,14 @@ function Postal_Select:OnEnable()
 		returnButton = CreateFrame("Button", "PostalSelectReturnButton", InboxFrame, "UIPanelButtonTemplate")
 		returnButton:SetWidth(120)
 		returnButton:SetHeight(25)
-		returnButton:SetPoint("LEFT", InboxFrame, "TOP", 10, -53)
+		returnButton:SetPoint("LEFT", InboxFrame, "TOP", 5, -42)
 		returnButton:SetText(L["Return"])
 		returnButton:SetScript("OnClick", function() Postal_Select:HandleSelect(2) end)
 		returnButton:SetFrameLevel(returnButton:GetFrameLevel() + 1)
 	end
 
 	--indent to make room for the checkboxes
-	MailItem1:SetPoint("TOPLEFT", "InboxFrame", "TOPLEFT", 48, -80)
+	MailItem1:SetPoint("TOPLEFT", "InboxFrame", "TOPLEFT", 29, -68)
 	for i = 1, 7 do
 		_G["MailItem"..i.."ExpireTime"]:SetPoint("TOPRIGHT", "MailItem"..i, "TOPRIGHT", 10, -4)
 		_G["MailItem"..i]:SetWidth(280)
@@ -192,7 +200,7 @@ function Postal_Select:GetUniqueID(index)
 	textCreated = textCreated or 0
 	canReply = canReply or 0
 	isGM = isGM or 0
-	return format("%s%s%s%s%d%d%d%d%d%d%d", packageIcon, stationeryIcon, sender, subject, money, CODAmount, hasItem, wasReturned, textCreated, canReply, isGM)
+	return format("%s%s%s%s%s%s%d%d%d%d%d", packageIcon, stationeryIcon, sender, subject, money, CODAmount, hasItem, wasReturned, textCreated, canReply, isGM)
 end
 
 function Postal_Select:BuildUniqueIDs()
@@ -289,7 +297,13 @@ function Postal_Select:ProcessNext()
 			if Postal.db.profile.Select.SpamChat and attachIndex == ATTACHMENTS_MAX_RECEIVE then
 				if not invFull or msgMoney > 0 then
 					local moneyString = msgMoney > 0 and " ["..Postal:GetMoneyString(msgMoney).."]" or ""
-					Postal:Print(format("%s %d: %s%s", L["Open"], mailIndex, msgSubject or "", moneyString))
+					local playerName
+					local mailType = Postal:GetMailType(msgSubject)
+					if (mailType == "AHSuccess" or mailType == "AHWon") then
+						playerName = select(3,GetInboxInvoiceInfo(mailIndex))
+						playerName = playerName and (" ("..playerName..")")
+					end
+					Postal:Print(format("%s %d: %s%s%s", L["Open"], mailIndex, msgSubject or "", moneyString, (playerName or "")))
 				end
 			end
 
@@ -403,7 +417,7 @@ function Postal_Select:ProcessNext()
 
 	else
 		-- Reached the end of opening all selected mail
-		if IsAddOnLoaded("MrPlow") then
+		if IsAddOnLoaded("MrPlow") and Postal.db.profile.Select.UseMrPlow then
 			if MrPlow.DoStuff then
 				MrPlow:DoStuff("stack")
 			elseif MrPlow.ParseInventory then -- Backwards compat
@@ -545,6 +559,18 @@ function Postal_Select.ModuleMenu(self, level)
 		info.checked = Postal.db.profile.Select.SpamChat
 		info.isNotRadio = 1
 		UIDropDownMenu_AddButton(info, level)
+		
+		if IsAddOnLoaded("MrPlow") then
+			info.text = L["Use Mr.Plow after opening"]
+			info.hasArrow = nil
+			info.value = nil
+			info.func = Postal.SaveOption
+			info.arg1 = "Select"
+			info.arg2 = "UseMrPlow"
+			info.checked = Postal.db.profile.Select.UseMrPlow
+			info.isNotRadio = 1
+			UIDropDownMenu_AddButton(info, level)
+		end
 
 	elseif level == 2 + self.levelAdjust then
 		if UIDROPDOWNMENU_MENU_VALUE == "KeepFreeSpace" then
