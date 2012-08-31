@@ -871,6 +871,8 @@ R["Watcher"] = {
 				{ spellID = 16511, unitId = "target", caster = "player", filter = "DEBUFF" },
 				--揭底之擊
 				{ spellID = 84617, unitId = "target", caster = "player", filter = "DEBUFF" },
+				--宿怨
+				{ spellID = 79140, unitId = "target", caster = "player", filter = "DEBUFF" },
 				--破甲
 				{ spellID = 113746, unitId = "target", caster = "all", filter = "DEBUFF" },
 			},
