@@ -1,0 +1,22 @@
+## Interface: 40300
+
+## Title: Bimbo
+## Notes: Check for unenchanted and ungemmed items
+## Author: Tekkub Stoutwrithe
+## Version: 4.1.0.10
+## X-Website: http://www.tekkub.net/
+## X-Email: tekkub-wow@googlegroups.com
+## X-Category: Inventory
+## RequiredDeps: RayUI
+
+## LoadManagers: AddonLoader
+## X-LoadOn-Execute: CreateFrame("Frame", nil, CharacterFrame):SetScript("OnShow", function(self) LoadAddOn('Bimbo'); self:SetScript("OnShow", nil) end)
+## LoadWith: Blizzard_InspectUI
+
+LibStub.lua
+tinyGratuity.lua
+tekIDmemo.lua
+tekShiner.lua
+tekKonfigButton.lua
+
+Bimbo.lua
