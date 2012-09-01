@@ -4,6 +4,5 @@
 	<Script file="damagemeterfilter.lua"/>
 	<Script file="dumptool.lua"/>
 	<Script file="easyChannel.lua"/>
-	<Script file="rollfilter.lua"/>
 	<Script file="spam.lua"/>
 </Ui>
