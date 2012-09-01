@@ -140,8 +140,8 @@ P["Reminder"]["filters"] = {
 				[2823] = true, -- 致命毒藥
 				[8679] = true, -- 致傷毒藥
 			},
-			["instance"] = false,
-			["pvp"] = false,
+			["instance"] = true,
+			["pvp"] = true,
 			["enable"] = true,
 		},
 		["非伤害性毒药"] = {
@@ -151,8 +151,8 @@ P["Reminder"]["filters"] = {
 				[5761] = true, -- 麻痹毒藥
 				[108215] = true, -- 癱瘓毒藥
 			},
-			["instance"] = false,
-			["pvp"] = false,
+			["instance"] = true,
+			["pvp"] = true,
 			["enable"] = true,
 		},
 	},

@@ -197,7 +197,10 @@ HarmIDs = ( {
 	DEATHKNIGHT = { 47541 }; -- Death Coil (30yd) - Starter
 	DRUID = { 5176 }; -- Wrath (40yd) - Starter
 	HUNTER = { 75 }; -- Auto Shot (5-40yd) - Starter
-	MAGE = { 133 }; -- Fireball (40yd) - Starter
+	MAGE = {
+		133, -- Fireball (40yd) - Starter
+		116,
+	}; 
 	PALADIN = {
 		62124, -- Hand of Reckoning (30yd) - Lvl 14
 		879, -- Exorcism (30yd) - Lvl 18
