@@ -2,15 +2,30 @@ local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
-	S:SetBD(TradeFrame, 10, -12, -30, 52)
+    TradePlayerEnchantInset:DisableDrawLayer("BORDER")
+    TradePlayerItemsInset:DisableDrawLayer("BORDER")
+    TradeRecipientEnchantInset:DisableDrawLayer("BORDER")
+    TradeRecipientItemsInset:DisableDrawLayer("BORDER")
+    TradePlayerInputMoneyInset:DisableDrawLayer("BORDER")
+    TradeRecipientMoneyInset:DisableDrawLayer("BORDER")
+    TradeRecipientBG:Hide()
+    TradePlayerEnchantInsetBg:Hide()
+    TradePlayerItemsInsetBg:Hide()
+    TradePlayerInputMoneyInsetBg:Hide()
+    TradeRecipientEnchantInsetBg:Hide()
+    TradeRecipientItemsInsetBg:Hide()
+    TradeRecipientMoneyBg:Hide()
+    TradeRecipientPortraitFrame:Hide()
+    TradeRecipientBotLeftCorner:Hide()
+    TradeRecipientLeftBorder:Hide()
 	TradeFrameRecipientPortrait:Hide()
 	TradeFramePlayerPortrait:Hide()
+    S:ReskinPortraitFrame(TradeFrame, true)
 	for i = 3, 6 do
 		select(i, TradeFrame:GetRegions()):Hide()
 	end
 	S:Reskin(TradeFrameTradeButton)
 	S:Reskin(TradeFrameCancelButton)
-	S:ReskinClose(TradeFrameCloseButton, "TOPRIGHT", TradeFrame, "TOPRIGHT", -34, -16)
 
 	-- Trade Button
 	for i = 1,MAX_TRADE_ITEMS do

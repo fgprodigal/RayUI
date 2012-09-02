@@ -172,7 +172,7 @@ function AddOn:PLAYER_ENTERING_WORLD()
 	Advanced_UseUIScale:Kill()
 	SetCVar("useUiScale", 1)
 	SetCVar("uiScale", AddOn.db.general.uiscale)
-	DEFAULT_CHAT_FRAME:AddMessage("欢迎使用|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r(v"..AddOn.version..")，插件发布网址: |cff8A9DDE[|Hurl:http://fgprodigal.com|hhttp://fgprodigal.com|h]|r")
+	DEFAULT_CHAT_FRAME:AddMessage("欢迎使用|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r(v"..AddOn.version..")，插件发布网址: |cff8A9DDE[|Hurl:http://rayui.org|hhttp://rayui.org|h]|r")
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD" )
 
 	local eventcount = 0

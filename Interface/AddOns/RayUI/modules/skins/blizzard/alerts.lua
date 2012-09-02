@@ -58,18 +58,6 @@ local function LoadSkin()
                     frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 6)
                     frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
 					
-					frame.raidArt:Kill()
-					frame.dungeonArt1:Kill()
-					frame.dungeonArt2:Kill()
-					frame.dungeonArt3:Kill()
-					frame.dungeonArt4:Kill()
-					frame.heroicIcon:Kill()
-					
-					-- Icon
-					frame.dungeonTexture:SetTexCoord(.08, .92, .08, .92)
-					frame.dungeonTexture:SetDrawLayer("OVERLAY")
-					frame.dungeonTexture:ClearAllPoints()
-					frame.dungeonTexture:Point("LEFT", frame, 7, 0)
 
 					if not frame.dungeonTexture.b then
 						frame.dungeonTexture.b = S:CreateBG(frame.dungeonTexture)
@@ -83,6 +71,18 @@ local function LoadSkin()
                         S:CreateBD(frame.bg)
                     end)
                 end
+                frame.raidArt:Kill()
+                frame.dungeonArt1:Kill()
+                frame.dungeonArt2:Kill()
+                frame.dungeonArt3:Kill()
+                frame.dungeonArt4:Kill()
+                frame.heroicIcon:Kill()
+
+                -- Icon
+                frame.dungeonTexture:SetTexCoord(.08, .92, .08, .92)
+                frame.dungeonTexture:SetDrawLayer("OVERLAY")
+                frame.dungeonTexture:ClearAllPoints()
+                frame.dungeonTexture:Point("LEFT", frame, 7, 0)
                 S:CreateBD(frame.bg)
 			end
 		end		
@@ -101,16 +101,6 @@ local function LoadSkin()
 				frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 6)
 				frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
 
-				-- Background
-				for i=1, GuildChallengeAlertFrame:GetNumRegions() do
-					local region = select(i, GuildChallengeAlertFrame:GetRegions()) 
-					if region and region:GetObjectType() == "Texture" and not region:GetName() then
-						region:Kill()
-					end
-				end
-
-				GuildChallengeAlertFrameEmblemBorder:Kill()
-
 				-- Icon border
 				if not GuildChallengeAlertFrameEmblemIcon.b then
 					GuildChallengeAlertFrameEmblemIcon.b = S:CreateBG(GuildChallengeAlertFrameEmblemIcon)
@@ -124,6 +114,16 @@ local function LoadSkin()
 					S:CreateBD(frame.bg)
 				end)
 			end
+            -- Background
+            for i=1, GuildChallengeAlertFrame:GetNumRegions() do
+                local region = select(i, GuildChallengeAlertFrame:GetRegions()) 
+                if region:GetObjectType() == "Texture" then
+                    if region:GetTexture() == "Interface\\GuildFrame\\GuildChallenges" then
+                        region:Kill()
+                    end
+                end
+            end
+            GuildChallengeAlertFrameEmblemBorder:Kill()
 			S:CreateBD(frame.bg)
 			SetLargeGuildTabardTextures("player", GuildChallengeAlertFrameEmblemIcon, nil, nil)
 		end	
@@ -141,16 +141,6 @@ local function LoadSkin()
 				frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 19, -6)
 				frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -22, 6)
 				frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
-
-				-- Background
-				for i = 1, frame:GetNumRegions() do
-					local region = select(i, frame:GetRegions())
-					if region and region:GetObjectType() == "Texture" and not region:GetName() then
-						region:Kill()
-					end
-				end
-
-				ChallengeModeAlertFrame1Border:Kill()
 
 				-- Icon
 				ChallengeModeAlertFrame1DungeonTexture:SetTexCoord(0.1, 0.9, 0.1, 0.9)
@@ -170,6 +160,16 @@ local function LoadSkin()
                         S:CreateBD(frame.bg)
                     end)
 			end
+            -- Background
+            for i = 1, frame:GetNumRegions() do
+                local region = select(i, frame:GetRegions())
+                if region:GetObjectType() == "Texture" then
+                    if region:GetTexture() == "Interface\\Challenges\\challenges-main" then
+                        region:Kill()
+                    end
+                end
+            end
+            ChallengeModeAlertFrame1Border:Kill()
 			S:CreateBD(frame.bg)
 		end	
 	end)
@@ -187,19 +187,6 @@ local function LoadSkin()
 				frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -7, 6)
 				frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
 
-				-- Background
-				for i = 1, frame:GetNumRegions() do
-					local region = select(i, frame:GetRegions())
-					if region and region:GetObjectType() == "Texture" and not region:GetName() then
-						region:Kill()
-					end
-				end
-
-				-- Icon
-				ScenarioAlertFrame1DungeonTexture:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-				ScenarioAlertFrame1DungeonTexture:ClearAllPoints()
-				ScenarioAlertFrame1DungeonTexture:Point("LEFT", frame.bg, 9, 0)
-
 				-- Icon border
 				if not ScenarioAlertFrame1DungeonTexture.b then
 					ScenarioAlertFrame1DungeonTexture.b = S:CreateBG(ScenarioAlertFrame1DungeonTexture)
@@ -213,6 +200,20 @@ local function LoadSkin()
                         S:CreateBD(frame.bg)
                     end)
 			end
+            -- Background
+            for i = 1, frame:GetNumRegions() do
+                local region = select(i, frame:GetRegions())
+                if region:GetObjectType() == "Texture" then
+                    if region:GetTexture() == "Interface\\Scenarios\\ScenariosParts" then
+                        region:Kill()
+                    end
+                end
+            end
+
+            -- Icon
+            ScenarioAlertFrame1DungeonTexture:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+            ScenarioAlertFrame1DungeonTexture:ClearAllPoints()
+            ScenarioAlertFrame1DungeonTexture:Point("LEFT", frame.bg, 9, 0)
 			S:CreateBD(frame.bg)
 		end
 	end)
@@ -230,12 +231,6 @@ local function LoadSkin()
 					frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 6)
 					frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
 
-					_G["CriteriaAlertFrame"..i.."Unlocked"]:SetTextColor(1, 1, 1)
-					_G["CriteriaAlertFrame"..i.."Name"]:SetTextColor(1, 1, 0)
-					_G["CriteriaAlertFrame"..i.."Background"]:Kill()
-					_G["CriteriaAlertFrame"..i.."IconBling"]:Kill()
-					_G["CriteriaAlertFrame"..i.."IconOverlay"]:Kill()
-
 					-- Icon border
 					if not _G["CriteriaAlertFrame"..i.."IconTexture"].b then
 						_G["CriteriaAlertFrame"..i.."IconTexture"].b = S:CreateBG(_G["CriteriaAlertFrame"..i.."IconTexture"])
@@ -250,6 +245,11 @@ local function LoadSkin()
                         S:CreateBD(frame.bg)
                     end)
 				end
+                _G["CriteriaAlertFrame"..i.."Unlocked"]:SetTextColor(1, 1, 1)
+                _G["CriteriaAlertFrame"..i.."Name"]:SetTextColor(1, 1, 0)
+                _G["CriteriaAlertFrame"..i.."Background"]:Kill()
+                _G["CriteriaAlertFrame"..i.."IconBling"]:Kill()
+                _G["CriteriaAlertFrame"..i.."IconOverlay"]:Kill()
 				S:CreateBD(frame.bg)
 			end	
 		end
@@ -268,10 +268,6 @@ local function LoadSkin()
 					frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -6, 8)
 					frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
 
-					frame.Background:Kill()
-					frame.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-					frame.IconBorder:Kill()
-
 					-- Icon border
 					if not frame.Icon.b then
 						frame.Icon.b = S:CreateBG(frame.Icon)
@@ -284,7 +280,10 @@ local function LoadSkin()
                     frame.animIn:HookScript("OnFinished", function()
                         S:CreateBD(frame.bg)
                     end)
-				end				
+                end
+                frame.Background:Kill()
+                frame.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+                frame.IconBorder:Kill()
 			end
 		end	
 	end)
@@ -302,10 +301,6 @@ local function LoadSkin()
 					frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -6, 8)
 					frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
 
-					frame.Background:Kill()
-					frame.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-					frame.IconBorder:Kill()
-
 					-- Icon border
 					if not frame.Icon.b then
 						frame.Icon.b = S:CreateBG(frame.Icon)
@@ -318,7 +313,10 @@ local function LoadSkin()
                     frame.animIn:HookScript("OnFinished", function()
                         S:CreateBD(frame.bg)
                     end)
-				end				
+				end
+                frame.Background:Kill()
+                frame.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+                frame.IconBorder:Kill()
 			end
 		end
 	end)	
