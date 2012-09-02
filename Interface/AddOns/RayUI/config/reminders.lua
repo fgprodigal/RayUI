@@ -19,6 +19,7 @@ P["Reminder"]["filters"] = {
 			["spellGroup"] = {
 				[82661] = true, -- fox
 				[13165] = true, -- hawk
+                [109260] = true,
 			},
 			["combat"] = true,
 			["instance"] = true,

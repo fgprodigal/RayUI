@@ -379,11 +379,11 @@ function addon:RefreshDisplay(update)
 	if not update then
 		ldb.text = self.views["Units"]:GetXps(current, UnitName("player"), "dd", NumerationCharOptions.petsmerged)
 	end
-	if NumerationCharOptions.hideonsolo and GetRealNumRaidMembers()==0 and GetRealNumPartyMembers()==0 then
+	if NumerationCharOptions.hideonsolo and GetNumGroupMembers()==0 then
 		NumerationCharOptions.forcehide = true
 		self.window:Hide()
 	end
-	if not NumerationCharOptions.hideonsolo or (NumerationCharOptions.hideonsolo and (GetRealNumRaidMembers()>0 or GetRealNumPartyMembers()>0)) then
+	if not NumerationCharOptions.hideonsolo or (NumerationCharOptions.hideonsolo and GetNumGroupMembers()>0) then
 		NumerationCharOptions.forcehide = false
 		self.window:Show()
 	end
