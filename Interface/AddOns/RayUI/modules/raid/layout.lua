@@ -468,9 +468,9 @@ local function style(self)
 
     -- Add events
     self:RegisterEvent("PLAYER_FOCUS_CHANGED", FocusTarget)
-    self:RegisterEvent("RAID_ROSTER_UPDATE", FocusTarget)
+    self:RegisterEvent("GROUP_ROSTER_UPDATE", FocusTarget)
     self:RegisterEvent("PLAYER_TARGET_CHANGED", ChangedTarget)
-    self:RegisterEvent("RAID_ROSTER_UPDATE", ChangedTarget)
+    self:RegisterEvent("GROUP_ROSTER_UPDATE", ChangedTarget)
 
     table.insert(RA._Objects, self)
 end

@@ -207,9 +207,8 @@ local function LoadFunc()
 
 	--Automatically show/hide the frame if we have RaidLeader or RaidOfficer
 	local LeadershipCheck = CreateFrame("Frame")
-	LeadershipCheck:RegisterEvent("RAID_ROSTER_UPDATE")
+	LeadershipCheck:RegisterEvent("GROUP_ROSTER_UPDATE")
 	LeadershipCheck:RegisterEvent("PLAYER_ENTERING_WORLD")
-	LeadershipCheck:RegisterEvent("PARTY_MEMBERS_CHANGED")
 	LeadershipCheck:SetScript("OnEvent", ToggleRaidUtil)
 end
 
