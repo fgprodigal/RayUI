@@ -36,6 +36,7 @@ local function LoadSkin()
                 S:CreateBD(frame.bg)
 
                 _G["AchievementAlertFrame"..i.."Background"]:SetTexture(nil)
+				_G["AchievementAlertFrame"..i.."OldAchievement"]:Kill()
 
                 _G["AchievementAlertFrame"..i.."Unlocked"]:SetTextColor(1, 1, 1)
                 _G["AchievementAlertFrame"..i.."Unlocked"]:SetShadowOffset(1, -1)
@@ -85,7 +86,7 @@ local function LoadSkin()
                 frame.dungeonTexture:Point("LEFT", frame, 7, 0)
                 S:CreateBD(frame.bg)
 			end
-		end		
+		end
 	end)
 
 	hooksecurefunc("AlertFrame_SetGuildChallengeAnchors", function(anchorFrame)

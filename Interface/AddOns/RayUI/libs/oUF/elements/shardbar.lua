@@ -81,9 +81,10 @@ local Update = function(self, event, unit, powerType)
 			end
 			
 			for i = 1, maxShards do
-				-- wsb[i]:SetMinMaxValues(0, 1)
+				wsb[i]:SetMinMaxValues(0, 1)
 				if i <= numShards then
 					wsb[i]:Show()
+					wsb[i]:SetValue(1)
 				else
 					wsb[i]:Hide()
 				end

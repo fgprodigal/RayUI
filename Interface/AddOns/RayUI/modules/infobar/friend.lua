@@ -35,7 +35,11 @@ local function LoadFriend()
 				InviteUnit(iname)
 			end
 		else
-			SetItemRef("player:"..name, "|Hplayer:"..name.."|h["..name.."|h", "LeftButton")
+			if toonid then
+				ChatFrame_SendSmartTell(name, DEFAULT_CHAT_FRAME)
+			else
+				ChatFrame_SendTell(name, DEFAULT_CHAT_FRAME)
+			end
 		end
 	end
 
@@ -146,7 +150,7 @@ local function LoadFriend()
                 end
 
 				-- Add Friend to list
-				tinsert(FriendsTabletData, { cname, lvl, area, faction, client, realname, note, name, ["toonid"] = toonID })
+				tinsert(FriendsTabletData, { cname, lvl, area, faction, client, presenceName, note, name, ["toonid"] = toonID })
 			end
 		end
 

@@ -317,7 +317,8 @@ local function LoadSkin()
 		"AudioOptionsSoundPanelUseHardware",
 		"AudioOptionsVoicePanelEnableVoice",
 		"AudioOptionsVoicePanelEnableMicrophone",
-		"AudioOptionsVoicePanelPushToTalkSound"
+		"AudioOptionsVoicePanelPushToTalkSound",
+		"AudioOptionsSoundPanelPetBattleMusic"
 	}
 	for i = 1, #checkboxes do
 		S:ReskinCheck(_G[checkboxes[i]])
@@ -359,6 +360,7 @@ local function LoadSkin()
 		"InterfaceOptionsDisplayPanelemphasizeMySpellEffects",
 		"InterfaceOptionsDisplayPanelShowFreeBagSpace",
 		"InterfaceOptionsDisplayPanelCinematicSubtitles",
+		"InterfaceOptionsDisplayPanelShowAccountAchievments",
 		"InterfaceOptionsDisplayPanelRotateMinimap",
 		"InterfaceOptionsDisplayPanelScreenEdgeFlash",
 		"InterfaceOptionsObjectivesPanelAutoQuestTracking",

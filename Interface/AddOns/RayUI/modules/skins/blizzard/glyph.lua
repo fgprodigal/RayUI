@@ -21,7 +21,7 @@ local function LoadSkin()
 		local ic = _G["GlyphFrameScrollFrameButton"..i.."Icon"]
 
 		local bg = CreateFrame("Frame", nil, bu)
-		bg:Point("TOPLEFT", 38, -2)
+		bg:Point("TOPLEFT", 39, -2)
 		bg:Point("BOTTOMRIGHT", -1, 2)
 		bg:SetFrameLevel(bu:GetFrameLevel()-1)
 		S:CreateBD(bg, .25)

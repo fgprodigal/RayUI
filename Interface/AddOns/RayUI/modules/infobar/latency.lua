@@ -129,7 +129,9 @@ local function LoadLatency()
 	end
 
 	local function SysInfo_Update(self)
-		_, _, SysStats.lagHome.cur, SysStats.lagWorld.cur = GetNetStats()
+		local _, _, homecur, worldcur = GetNetStats()
+		SysStats.lagHome.cur = homecur
+		SysStats.lagWorld.cur = worldcur
 
 		-- Get last 60 net updates
 		local netCount = 60
