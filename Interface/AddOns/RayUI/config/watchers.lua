@@ -44,6 +44,7 @@ R["Watcher"] = {
 				{ spellID = 93400, unitId = "player", caster = "player", filter = "BUFF" },
 				--兇蠻咆哮
 				{ spellID = 52610, unitId = "player", caster = "player", filter = "BUFF" },
+				{ spellID = 127538, unitId = "player", caster = "player", filter = "BUFF" },
 				--求生本能
 				{ spellID = 61336, unitId = "player", caster = "player", filter = "BUFF" },
 				--生命之樹

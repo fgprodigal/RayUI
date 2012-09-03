@@ -52,6 +52,7 @@ local function LoadSkin()
 	S:Reskin(GuildBankPopupOkayButton)
 	S:Reskin(GuildBankPopupCancelButton)
 	S:Reskin(GuildBankInfoSaveButton)
+	S:ReskinClose(GuildBankFrame.CloseButton)
 	S:ReskinInput(GuildItemSearchBox)
 
 	GuildBankFrameWithdrawButton:ClearAllPoints()
