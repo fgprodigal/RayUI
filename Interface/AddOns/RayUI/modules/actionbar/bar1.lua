@@ -27,5 +27,5 @@ function AB:CreateBar1()
 		end
 	end
 
-	RegisterStateDriver(bar, "visibility", "[vehicleui] hide;show")
+	RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui] hide; show")
 end

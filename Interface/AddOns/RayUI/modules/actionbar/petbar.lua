@@ -16,7 +16,7 @@ function AB:CreateBarPet()
 
 	PetActionBarFrame:SetParent(bar)
 	PetActionBarFrame:EnableMouse(false)
-	RegisterStateDriver(bar, "visibility", "[vehicleui] hide; [@pet,exists,nodead] show; hide")
+	RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui] hide; [@pet,exists,nodead] show; hide")
 
 	local function PetBarUpdate(self, event)
 		local petActionButton, petActionIcon, petAutoCastableTexture, petAutoCastShine

@@ -62,14 +62,5 @@ function AB:CreateStanceBar()
 		end    
 	end
 
-	local States = {
-		["DRUID"] = "show",
-		["WARRIOR"] = "show",
-		["PALADIN"] = "show",
-		["DEATHKNIGHT"] = "show",
-		["ROGUE"] = "show,",
-		["PRIEST"] = "show,",
-		["HUNTER"] = "show,",
-		["WARLOCK"] = "show,",
-	}
+	RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui] hide; show")
 end
