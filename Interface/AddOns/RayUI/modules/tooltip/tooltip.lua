@@ -97,7 +97,7 @@ function TT:TalentSetUnit()
 		current.guid = UnitGUID(unit)
 		if (UnitIsUnit(unit,"player")) then
 			GatherTalents()
-			return;
+			return
 		end
 
 		local cacheLoaded = false

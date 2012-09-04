@@ -59,7 +59,7 @@ function UF:SpawnMenu()
 end
 
 function UF:ConstructHealthBar(frame, bg, text)
-	local health = CreateFrame('StatusBar', nil, frame)
+	local health = CreateFrame("StatusBar", nil, frame)
 	health:SetStatusBarTexture(R["media"].normal)
 	health:SetFrameStrata("LOW")
 	health.frequentUpdates = true
@@ -70,7 +70,7 @@ function UF:ConstructHealthBar(frame, bg, text)
 	end
 
 	if bg then
-		health.bg = health:CreateTexture(nil, 'BORDER')
+		health.bg = health:CreateTexture(nil, "BORDER")
 		health.bg:SetAllPoints()
 		health.bg:SetTexture(R["media"].normal)
 		if self.db.smoothColor then
@@ -101,7 +101,7 @@ function UF:ConstructHealthBar(frame, bg, text)
 end
 
 function UF:ConstructPowerBar(frame, bg, text)
-	local power = CreateFrame('StatusBar', nil, frame)
+	local power = CreateFrame("StatusBar", nil, frame)
 	power:SetStatusBarTexture(R["media"].normal)
 	power.frequentUpdates = true
 	power:SetFrameStrata("LOW")
@@ -112,7 +112,7 @@ function UF:ConstructPowerBar(frame, bg, text)
 	end
 
 	if bg then
-		power.bg = power:CreateTexture(nil, 'BORDER')
+		power.bg = power:CreateTexture(nil, "BORDER")
 		power.bg:SetAllPoints()
 		power.bg:SetTexture(R["media"].blank)
 		power.bg.multiplier = 0.2
@@ -162,8 +162,8 @@ function UF:ConstructPortrait(frame)
 	portrait.overlay:SetFrameLevel(frame:GetFrameLevel() - 5)
 
 	frame.Health.bg:ClearAllPoints()
-	frame.Health.bg:Point('BOTTOMLEFT', frame.Health:GetStatusBarTexture(), 'BOTTOMRIGHT')
-	frame.Health.bg:Point('TOPRIGHT', frame.Health)
+	frame.Health.bg:Point("BOTTOMLEFT", frame.Health:GetStatusBarTexture(), "BOTTOMRIGHT")
+	frame.Health.bg:Point("TOPRIGHT", frame.Health)
 	frame.Health.bg:SetParent(portrait.overlay)
 
 	return portrait
@@ -243,7 +243,7 @@ function UF:ConstructThreatBar()
 	RayUIThreatBar:SetMinMaxValues(0, 100)
 
 	RayUIThreatBar.text = RayUIThreatBar:CreateFontString(nil, "OVERLAY")
-	RayUIThreatBar.text:SetFont(R["media"].font, R["media"].fontsize, 'THINOUTLINE')
+	RayUIThreatBar.text:SetFont(R["media"].font, R["media"].fontsize, "THINOUTLINE")
 	RayUIThreatBar.text:SetPoint("CENTER", 0, -4)
 	RayUIThreatBar.text:SetShadowOffset(R.mult, -R.mult)
 	RayUIThreatBar.text:SetShadowColor(0, 0, 0)
@@ -636,14 +636,14 @@ function UF:PostAltUpdate(min, cur, max)
 end
 
 function UF:ComboDisplay(event, unit)
-	if(unit == 'pet') then return end
+	if(unit == "pet") then return end
 
 	local cpoints = self.CPoints
 	local cp
 	if (UnitHasVehicleUI("player") or UnitHasVehicleUI("vehicle")) then
-		cp = GetComboPoints('vehicle', 'target')
+		cp = GetComboPoints("vehicle", "target")
 	else
-		cp = GetComboPoints('player', 'target')
+		cp = GetComboPoints("player", "target")
 	end
 
 	for i=1, MAX_COMBO_POINTS do
@@ -702,7 +702,7 @@ function UF:PostUpdateIcon(unit, icon, index, offset)
 
 	local texture = icon.icon
 	if icon.isDebuff then
-		if icon.owner == "player" or icon.owner == "pet" or icon.owner == "vehicle" or UnitIsFriend('player', unit) then
+		if icon.owner == "player" or icon.owner == "pet" or icon.owner == "vehicle" or UnitIsFriend("player", unit) then
 			local color = DebuffTypeColor[dtype] or DebuffTypeColor.none
 			icon.border:SetBackdropBorderColor(color.r * 0.6, color.g * 0.6, color.b * 0.6)
 			icon:StyleButton(1)
@@ -768,7 +768,7 @@ end
 function UF:CustomFilter(unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster)
 	local isPlayer
 
-	if(caster == 'player' or caster == 'vehicle') then
+	if(caster == "player" or caster == "vehicle") then
 		isPlayer = true
 	end
 
@@ -1195,7 +1195,7 @@ local function TestUF(msg)
 		if RayUF_targettarget.Buffs then RayUF_targettarget.Buffs.CustomFilter = nil end
 		testuf()
 		UnitAura = function()
-			return 'penancelol', 'Rank 2', 'Interface\\Icons\\Spell_Holy_Penance', random(5), 'Magic', 0, 0, "player"
+			return "penancelol", "Rank 2", "Interface\\Icons\\Spell_Holy_Penance", random(5), "Magic", 0, 0, "player"
 		end
 		if(oUF) then
 			for i, v in pairs(oUF.objects) do
