@@ -5,18 +5,22 @@ TalentFrame:Hide()
 
 TT.modName = L["鼠标提示"]
 
-local TALENTS_PREFIX = TALENT_SPEC_PRIMARY..":|cffffffff "
-local TALENTS_PREFIX2 = TALENT_SPEC_SECONDARY..":|cffffffff "
+local TALENTS_PREFIX = TALENTS..":|cffffffff "
+local NO_TALENTS = NONE..TALENTS
 local CACHE_SIZE = 25
 local INSPECT_DELAY = 0.2
 local INSPECT_FREQ = 2
 
 local cache = {}
-local seccache = {}
+local ilvcache = {}
 local current = {}
-local sec = {}
+local ilvcurrent = {}
 
 local lastInspectRequest = 0
+
+local function IsInspectFrameOpen()
+	return (InspectFrame and InspectFrame:IsShown()) or (Examiner and Examiner:IsShown())
+end
 
 function TT:GetOptions()
 	local options = {
@@ -30,99 +34,46 @@ function TT:GetOptions()
 end
 
 local function GatherTalents(isInspect)
-	local group = GetActiveSpecGroup(isInspect)
-	local primaryTree = 1
-	local secTree = 1
-	for i = 1, 3 do
-		local _, _, _, _, pointsSpent = GetSpecializationInfo(i,isInspect,nil,1)
-		current[i] = pointsSpent
-		if (current[i] > current[primaryTree]) then
-			primaryTree = i
-		end
-	end
-	local _, tabName = GetSpecializationInfo(primaryTree,isInspect,nil,1)
-	current.tree = tabName
-	for i = 1, 3 do
-		local _, _, _, _, secpointsSpent = GetSpecializationInfo(i,isInspect,nil,2)
-		sec[i] = secpointsSpent
-		if (sec[i] > sec[secTree]) then
-			secTree = i
-		end
-	end
-	local _, sectabName = GetSpecializationInfo(secTree,isInspect,nil,2)
-	sec.tree = sectabName
-
-	if (isInspect) then
-		ClearInspectPlayer()
-	end
-	local talentFormat = 1
-	if (current[primaryTree] == 0) then
-		current.format = NONE..TALENTS
-	elseif (talentFormat == 1) then
-		current.format = current.tree.." ("..current[1].."/"..current[2].."/"..current[3]..")"
-	end
-	if (sec[secTree] == 0) then
-		sec.format = NONE..TALENTS
-	elseif (talentFormat == 1) then
-		sec.format = sec.tree.." ("..sec[1].."/"..sec[2].."/"..sec[3]..")"
-	end
-	if (not isInspect) then
-		if (group == 1) then
-			GameTooltip:AddLine(TALENTS_PREFIX.."|c000EEE00 "..current.format.."|r")
-			GameTooltip:AddLine(TALENTS_PREFIX2.."|c88888888 "..sec.format.."|r")
+	local spec = isInspect and GetInspectSpecialization(current.unit) or GetSpecialization()
+	if (spec) and (spec > 0) then
+		if isInspect then
+			local _, specName = GetSpecializationInfoByID(spec)
+			current.format = specName or "n/a"
 		else
-			GameTooltip:AddLine(TALENTS_PREFIX.."|c88888888 "..current.format.."|r")
-			GameTooltip:AddLine(TALENTS_PREFIX2.."|c000EEE00 "..sec.format.."|r")
+			local _, specName = GetSpecializationInfo(spec)
+			current.format = specName or "n/a"
 		end
+	else
+		current.format = NO_TALENTS
+	end
+
+	if (not isInspect) then
+		GameTooltip:AddLine(TALENTS_PREFIX..current.format)
 	elseif (GameTooltip:GetUnit()) then
 		for i = 2, GameTooltip:NumLines() do
 			if ((_G["GameTooltipTextLeft"..i]:GetText() or ""):match("^"..TALENTS_PREFIX)) then
-				if (group == 1) then
-					_G["GameTooltipTextLeft"..i]:SetFormattedText("%s%s",TALENTS_PREFIX,"|c000EEE00 "..current.format.."|r")
-				else
-					_G["GameTooltipTextLeft"..i]:SetFormattedText("%s%s",TALENTS_PREFIX,"|c88888888 "..current.format.."|r")
-				end
+				_G["GameTooltipTextLeft"..i]:SetFormattedText("%s%s",TALENTS_PREFIX,current.format)
+
 				if (not GameTooltip.fadeOut) then
 					GameTooltip:Show()
 				end
-			end
-			if ((_G["GameTooltipTextLeft"..i]:GetText() or ""):match("^"..TALENTS_PREFIX2)) then
-				if (group == 1) then
-					_G["GameTooltipTextLeft"..i]:SetFormattedText("%s%s",TALENTS_PREFIX2,"|c88888888 "..sec.format.."|r")
-				else
-					_G["GameTooltipTextLeft"..i]:SetFormattedText("%s%s",TALENTS_PREFIX2,"|c000EEE00 "..sec.format.."|r")
-				end
-				if (not GameTooltip.fadeOut) then
-					GameTooltip:Show()
-				end
+				break
 			end
 		end
 	end
-	local cacheSize = CACHE_SIZE
+
 	for i = #cache, 1, -1 do
 		if (current.name == cache[i].name) then
 			tremove(cache,i)
 			break
 		end
 	end
-	if (#cache > cacheSize) then
+	if (#cache > CACHE_SIZE) then
 		tremove(cache,1)
 	end
-	if (cacheSize > 0) then
-		cache[#cache + 1] = CopyTable(current)
-	end
 
-	for i = #seccache, 1, -1 do
-		if (sec.name == seccache[i].name) then
-			tremove(seccache,i)
-			break
-		end
-	end
-	if (#seccache > cacheSize) then
-		tremove(seccache,1)
-	end
-	if (cacheSize > 0) then
-		seccache[#seccache + 1] = CopyTable(sec)
+	if (CACHE_SIZE > 0) then
+		cache[#cache + 1] = CopyTable(current)
 	end
 end
 
@@ -144,53 +95,27 @@ function TT:TalentSetUnit()
 		current.unit = unit
 		current.name = UnitName(unit)
 		current.guid = UnitGUID(unit)
-		wipe(sec)
-		sec.unit = unit
-		sec.name = UnitName(unit)
-		sec.guid = UnitGUID(unit)
-
 		if (UnitIsUnit(unit,"player")) then
 			GatherTalents()
-			return
+			return;
 		end
-		group = GetActiveSpecGroup(1)
+
 		local cacheLoaded = false
 		for _, entry in ipairs(cache) do
 			if (current.name == entry.name) then
-				if (group == 1) then
-					GameTooltip:AddLine(TALENTS_PREFIX.."|c000EEE00 "..entry.format.."|r")
-				else
-					GameTooltip:AddLine(TALENTS_PREFIX.."|c88888888 "..entry.format.."|r")
-				end
-				current.tree = entry.tree
+				GameTooltip:AddLine(TALENTS_PREFIX..entry.format)
 				current.format = entry.format
-				current[1], current[2], current[3] = entry[1], entry[2], entry[3]
 				cacheLoaded = true
 				break
 			end
 		end
-		for _, secentry in ipairs(seccache) do
-			if (sec.name == secentry.name) then
-				if (group == 2) then
-					GameTooltip:AddLine(TALENTS_PREFIX2.."|c000EEE00 "..secentry.format.."|r")
-				else
-					GameTooltip:AddLine(TALENTS_PREFIX2.."|c88888888 "..secentry.format.."|r")
-				end
-				sec.tree = secentry.tree
-				sec.format = secentry.format
-				sec[1], sec[2], sec[3] = secentry[1], secentry[2], secentry[3]
-				cacheLoaded = true
-				break
-			end
-		end
-		local isInspectOpen = (InspectFrame and InspectFrame:IsShown()) or (Examiner and Examiner:IsShown())
-		if (CanInspect(unit)) and (not isInspectOpen) then
+
+		if (CanInspect(unit)) and (not IsInspectFrameOpen()) then
 			local lastInspectTime = (GetTime() - lastInspectRequest)
 			TalentFrame.nextUpdate = (lastInspectTime > INSPECT_FREQ) and INSPECT_DELAY or (INSPECT_FREQ - lastInspectTime + INSPECT_DELAY)
 			TalentFrame:Show()
 			if (not cacheLoaded) then
 				GameTooltip:AddLine(TALENTS_PREFIX.."Loading...")
-				GameTooltip:AddLine(TALENTS_PREFIX2.."Loading...")
 			end
 		end
 	end
@@ -282,10 +207,97 @@ function TT:GameTooltip_OnUpdate(tooltip)
 	end
 end
 
+local function GetPlayerScore(unit)
+	local unitilvl = 0
+	local ilvl, ilvlAdd, equipped = 0, 0, 0
+	if (UnitIsPlayer(unit)) then
+		for i = 1, 18 do
+			if (i ~= 4) then
+				local iLink = GetInventoryItemLink(unit, i)
+				if (iLink) then
+					ilvlAdd = TT:GetItemScore(iLink)
+					ilvl = ilvl + ilvlAdd
+					equipped = equipped + 1
+				end
+			end
+		end
+	end
+	-- ClearInspectPlayer()
+	return floor(ilvl / equipped)
+end
+
+function TT:SetiLV()
+	local _, unit = GameTooltip:GetUnit()
+	if not (unit) or not (UnitIsPlayer(unit)) or not (CanInspect(unit)) then
+		return
+	end
+
+	local unitilvl = GetPlayerScore(unit)
+	if (unitilvl > 1) then
+		local Red, Blue, Green = TT:GetQuality(unitilvl)
+		ilvcurrent.format = R:RGBToHex(Red, Green, Blue)..unitilvl
+		for i = 2, GameTooltip:NumLines() do
+			if ((_G["GameTooltipTextLeft"..i]:GetText() or ""):match("^"..STAT_AVERAGE_ITEM_LEVEL)) then
+				_G["GameTooltipTextLeft"..i]:SetText(STAT_AVERAGE_ITEM_LEVEL..": "..R:RGBToHex(Red, Green, Blue)..unitilvl)
+
+				break
+			end
+		end
+	end
+	
+	for i = #ilvcache, 1, -1 do
+		if (ilvcurrent.name == ilvcache[i].name) then
+			tremove(ilvcache,i)
+			break
+		end
+	end
+	if (#ilvcache > CACHE_SIZE) then
+		tremove(ilvcache,1)
+	end
+
+	if (CACHE_SIZE > 0) then
+		ilvcache[#ilvcache + 1] = CopyTable(ilvcurrent)
+	end
+end
+
+function TT:GetQuality(ItemScore)
+	return R:ColorGradient(ItemScore/450, 0.5, 0.5, 0.5, 1, 0.1, 0.1)
+end
+
+function TT:iLVSetUnit()
+	local _, unit = GameTooltip:GetUnit()
+	local cacheLoaded = false
+	if not (unit) or not (UnitIsPlayer(unit)) or not (CanInspect(unit)) then
+		return
+	end
+
+	wipe(ilvcurrent)
+	ilvcurrent.unit = unit
+	ilvcurrent.name = UnitName(unit)
+	ilvcurrent.guid = UnitGUID(unit)
+
+	for _, entry in ipairs(ilvcache) do
+		if (ilvcurrent.name == entry.name) then
+			GameTooltip:AddLine(STAT_AVERAGE_ITEM_LEVEL..": "..entry.format)
+			ilvcurrent.format = entry.format
+			cacheLoaded = true
+			break
+		end
+	end
+	if UnitIsUnit(unit, "player") then
+		local unitilvl = GetPlayerScore("player")
+		local Red, Blue, Green = TT:GetQuality(unitilvl)
+		GameTooltip:AddLine(STAT_AVERAGE_ITEM_LEVEL..": "..R:RGBToHex(Red, Green, Blue)..unitilvl)
+	elseif not cacheLoaded then
+		GameTooltip:AddLine(STAT_AVERAGE_ITEM_LEVEL..": |cffffffffLoading...|r")
+	end
+end
+
 function TT:INSPECT_READY(event, guid)
 	self:UnregisterEvent(event)
-	if (guid == current.guid or guid == sec.guid) then
+	if (guid == current.guid) then
 		GatherTalents(1)
+		self:SetiLV()
 	end
 end
 
@@ -421,47 +433,6 @@ function TT:GetItemScore(iLink)
    return itemLevel
 end
 
-function TT:GetPlayerScore(unit)
-	local ilvl, ilvlAdd, equipped = 0, 0, 0
-	if (UnitIsPlayer(unit)) then
-		local _, targetClass = UnitClass(unit)
-		for i = 1, 18 do
-			if (i ~= 4) then
-				local iLink = GetInventoryItemLink(unit, i)
-				if (iLink) then
-					ilvlAdd = self:GetItemScore(iLink)
-					ilvl = ilvl + ilvlAdd
-					equipped = equipped + 1
-				end
-			end
-		end
-	end
-	ClearInspectPlayer()
-	return floor(ilvl / equipped)
-end
-
-function TT:GetQuality(ItemScore)
-	return R:ColorGradient(ItemScore/450, 0.5, 0.5, 0.5, 1, 0.1, 0.1)
-end
-
-function TT:AchieveSetUnit()
-	local _, unit = GameTooltip:GetUnit()
-	local unitilvl = 0
-	if not (unit) or not (UnitIsPlayer(unit)) or not (CanInspect(unit)) then
-		return
-	elseif (UnitIsUnit(unit,"player")) then
-		unitilvl = TT:GetPlayerScore("player")
-	elseif not (InspectFrame and InspectFrame:IsShown()) then
-		NotifyInspect(unit)
-		unitilvl = TT:GetPlayerScore(unit)
-	end
-
-	if (unitilvl > 1) then
-		local Red, Blue, Green = TT:GetQuality(unitilvl)
-		GameTooltip:AddLine(STAT_AVERAGE_ITEM_LEVEL..": "..unitilvl,Red, Green, Blue)
-	end
-end
-
 function TT:SetStyle(tooltip)
 	tooltip:SetBackdropColor(0, 0, 0, 0.65)
 	local item
@@ -576,8 +547,8 @@ function TT:Initialize()
 			end
 		end
 
-		-- TT:AchieveSetUnit()
-		-- TT:TalentSetUnit()
+		TT:iLVSetUnit()
+		TT:TalentSetUnit()
 	end)
 
 	GameTooltipStatusBar.bg = CreateFrame("Frame", nil, GameTooltipStatusBar)
