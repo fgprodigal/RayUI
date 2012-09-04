@@ -87,10 +87,8 @@ local function parsespellbook(spellbook)
 				if not id then break end
 
 				name = GetSpellBookItemName(j, spellbook)
-				if name and skilltype == "SPELL" and spellbook == BOOKTYPE_SPELL and not IsPassiveSpell(j, spellbook) then
+				if name and IsSpellKnown(id) and skilltype == "SPELL" and spellbook == BOOKTYPE_SPELL and not IsPassiveSpell(j, spellbook) then
 					spells[id] = true
-				elseif name and skilltype == "PETACTION" and spellbook == BOOKTYPE_PET and not IsPassiveSpell(j, spellbook) then
-					pets[id] = true
 				end
 				i = i + 1
 				if (id == 88625 or id == 88625 or id == 88625) and (skilltype == "SPELL" and spellbook == BOOKTYPE_SPELL) then

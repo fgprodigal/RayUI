@@ -97,16 +97,15 @@ local function LoadSkin()
 		local classDisplayName, class = UnitClass("player")
 		local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or S["media"].classcolours[class]
 		local classColorString = format("ff%.2x%.2x%.2x", classColor.r * 255, classColor.g * 255, classColor.b * 255)
-		local specName
 
 		if (primaryTalentTree) then
-			_, specName = GetSpecializationInfo(primaryTalentTree);
-		end
+			local _, specName = GetSpecializationInfo(primaryTalentTree)
 
-		if (specName and specName ~= "") then
-			CharacterLevelText:SetFormattedText(PLAYER_LEVEL, UnitLevel("player"), classColorString, specName, classDisplayName);
-		else
-			CharacterLevelText:SetFormattedText(PLAYER_LEVEL_NO_SPEC, UnitLevel("player"), classColorString, classDisplayName);
+            if (specName and specName ~= "") then
+                CharacterLevelText:SetFormattedText(PLAYER_LEVEL, UnitLevel("player"), classColorString, specName, classDisplayName);
+            else
+                CharacterLevelText:SetFormattedText(PLAYER_LEVEL_NO_SPEC, UnitLevel("player"), classColorString, classDisplayName);
+            end
 		end
 	end
 
