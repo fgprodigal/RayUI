@@ -148,9 +148,6 @@ local function LoadFunc()
          if not self:canAutomate() then return end
          local start_entry = GetQuestLogSelection()
          local num_entries = GetNumQuestLogEntries()
-         local title
-         local is_complete
-         local no_objectives
 
          self.completed_quests = {}
          self.incomplete_quests = {}
@@ -158,8 +155,8 @@ local function LoadFunc()
          if num_entries > 0 then
              for i = 1, num_entries do
                  SelectQuestLogEntry(i)
-                 title, _, _, _, _, _, is_complete = GetQuestLogTitle(i)
-                 no_objectives = GetNumQuestLeaderBoards(i) == 0
+                 local title, _, _, _, _, _, is_complete = GetQuestLogTitle(i)
+                 local no_objectives = GetNumQuestLeaderBoards(i) == 0
                  if title then
                      if is_complete or no_objectives then
                          self.completed_quests[title] = true

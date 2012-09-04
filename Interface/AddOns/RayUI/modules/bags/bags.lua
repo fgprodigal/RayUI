@@ -174,8 +174,9 @@ function B:SlotUpdate(b)
 	end
 
 	if(clink) then
-		local iType
-		b.name, _, b.rarity, _, _, iType = GetItemInfo(clink)
+		local name, _, rarity, _, _, iType = GetItemInfo(clink)
+		b.name = name
+		b.rarity = rarity
 
 		if R:IsItemUnusable(clink) then
 			_G[b.frame:GetName().."IconTexture"]:SetVertexColor(RED_FONT_COLOR.r, RED_FONT_COLOR.g, RED_FONT_COLOR.b)

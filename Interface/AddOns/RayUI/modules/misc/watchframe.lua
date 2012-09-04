@@ -33,12 +33,8 @@ local function LoadFunc()
 		WatchFrame:SetPoint("BOTTOMRIGHT", 4,0)
 		WatchFrame.SetPoint = R.dummy
 
-		-- WatchFrameTitle:SetParent(RayUIWatchFrame)
 		WatchFrameCollapseExpandButton:SetParent(RayUIWatchFrame)
 		WatchFrameCollapseExpandButton.Disable = R.dummy
-
-		-- WatchFrameTitle:Hide()
-		-- WatchFrameTitle.Show = R.dummy
 	end
 
 	local f = CreateFrame("Frame")
@@ -89,7 +85,7 @@ local function LoadFunc()
 	hooksecurefunc("WatchFrameItem_OnUpdate", function(self)
 		local hotkey = _G[self:GetName().."HotKey"]
 		local icon = _G[self:GetName().."IconTexture"]
-		local valid = IsQuestLogSpecialItemInRange(self:GetID());
+		local valid = IsQuestLogSpecialItemInRange(self:GetID())
 		if ( valid == 0 ) then
 			icon:SetVertexColor(1.0, 0.1, 0.1)
 		else
