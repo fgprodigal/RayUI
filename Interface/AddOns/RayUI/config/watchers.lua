@@ -700,12 +700,12 @@ R["Watcher"] = {
 			},
 			{
 				name = "CD",
-				direction = "DOWN",
 				iconSide = "LEFT",
-				mode = "BAR",
 				size = 28,
 				barWidth = 170,
-				setpoint = { "TOPLEFT", "RayUIActionBar2", "BOTTOMRIGHT", -27, -6 },
+				direction = function() return R:IsDeveloper() and "RIGHT" or "DOWN" end,
+				mode = function() return R:IsDeveloper() and "ICON" or "BAR" end,
+				setpoint = function() return R:IsDeveloper() and { "TOPLEFT", "RayUIActionBar1", "BOTTOMLEFT", 0, -6 } or { "TOPLEFT", "RayUIActionBar2", "BOTTOMRIGHT", -27, -6 } end,
 
 				--暗影魔
 				{ spellID = 34433, unitId = "player", caster = "player", filter = "CD" },

@@ -566,8 +566,7 @@ do
 	end
 end
 addon.PLAYER_ENTERING_WORLD = addon.UpdateGUIDS
-addon.PARTY_MEMBERS_CHANGED = addon.UpdateGUIDS
-addon.RAID_ROSTER_UPDATE = addon.UpdateGUIDS
+addon.GROUP_ROSTER_UPDATE = addon.UpdateGUIDS
 addon.UNIT_PET = addon.UpdateGUIDS
 addon.UNIT_NAME_UPDATE = addon.UpdateGUIDS
 function addon:ZONE_CHANGED_NEW_AREA(force)
@@ -587,8 +586,7 @@ function addon:ZONE_CHANGED_NEW_AREA(force)
 			self:UpdateGUIDS()
 			
 			self.events:RegisterEvent("PLAYER_ENTERING_WORLD")
-			self.events:RegisterEvent("PARTY_MEMBERS_CHANGED")
-			self.events:RegisterEvent("RAID_ROSTER_UPDATE")
+			self.events:RegisterEvent("GROUP_ROSTER_UPDATE")
 			self.events:RegisterEvent("UNIT_PET")
 			self.events:RegisterEvent("UNIT_NAME_UPDATE")
 			
@@ -605,8 +603,7 @@ function addon:ZONE_CHANGED_NEW_AREA(force)
 			end
 		else
 			self.events:UnregisterEvent("PLAYER_ENTERING_WORLD")
-			self.events:UnregisterEvent("PARTY_MEMBERS_CHANGED")
-			self.events:UnregisterEvent("RAID_ROSTER_UPDATE")
+			self.events:UnregisterEvent("GROUP_ROSTER_UPDATE")
 			self.events:UnregisterEvent("UNIT_PET")
 			self.events:UnregisterEvent("UNIT_NAME_UPDATE")
 			
@@ -737,8 +734,7 @@ function addon:COMBAT_LOG_EVENT_UNFILTERED(e, timestamp, eventtype, hideCaster, 
 end
 
 local HideOnSolo = CreateFrame("Frame")
-HideOnSolo:RegisterEvent("RAID_ROSTER_UPDATE")
-HideOnSolo:RegisterEvent("PARTY_MEMBERS_CHANGED")
+HideOnSolo:RegisterEvent("GROUP_ROSTER_UPDATE")
 HideOnSolo:RegisterEvent("PLAYER_ENTERING_WORLD")
 HideOnSolo:SetScript("OnEvent", function(self, event)
 	addon:RefreshDisplay(true)
