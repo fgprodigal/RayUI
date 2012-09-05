@@ -303,7 +303,7 @@ end
 
 function AB:Initialize()
 	self:HideBlizz()
-	SetCVar("alwaysShowActionBars", 0)
+	SetCVar("alwaysShowActionBars", 1)
 	InterfaceOptionsActionBarsPanelAlwaysShowActionBars:Kill()
 	if self.db.showgrid == true then
 		ActionButton_HideGrid = R.dummy
