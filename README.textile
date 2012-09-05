@@ -1,6 +1,6 @@
 h2(#readme). 
 
-!https://github.com/downloads/fangorRay/UIProject/logo.png!
+!https://github.com/downloads/fgprodigal/RayUI/logo.png!
 
 h2. RayUI
 
@@ -8,7 +8,7 @@ h3. 下载
 
 h4. World of Warcraft (4.3)
 
-p. "最新版本":https://github.com/fangorRay/UIProject/zipball/master
+p. "最新版本":https://github.com/fgprodigal/RayUI-for-MoP-Beta/zipball/master
 
 h3. 说明
 
