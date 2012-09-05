@@ -713,128 +713,122 @@ function CH:FCF_StopAlertFlash(frame)
 	_G["ChatFrame" .. frame:GetID() .. "Tab"].ffl = nil
 end
 
-function CH:ApplyStyle()
-	ChatFrameMenuButton:Kill()
-	ChatFrameMenuButton:SetScript("OnShow", kill)
-	FriendsMicroButton:Hide()
-	FriendsMicroButton:Kill()
+function CH:ApplyStyle(event, ...)
+	for _, frameName in pairs(CHAT_FRAMES) do
+		local cf = _G[frameName]
+        if not cf.styled then
+            local tab = _G[frameName.."Tab"]
+            local eb = _G[frameName.."EditBox"]
+            local i = cf:GetID()
 
-	if not _G["ChatBG"] then
-		local ChatBG = CreateFrame("Frame", "ChatBG", UIParent)
-		ChatBG:CreatePanel("Default", self.db.width, self.db.height, "BOTTOMLEFT",UIParent,"BOTTOMLEFT",15,30)
-		GeneralDockManager:SetParent(ChatBG)
-	end
+            cf:SetParent(ChatBG)
+            local ebParts = {"Left", "Mid", "Right", "Middle"}
+            for j = 1, #CHAT_FRAME_TEXTURES do 
+                _G[frameName..CHAT_FRAME_TEXTURES[j]]:SetTexture(nil) 
+            end
+            for _, ebPart in ipairs(ebParts) do
+                if _G[frameName.."EditBoxFocus"..ebPart] then
+                    _G[frameName.."EditBoxFocus"..ebPart]:SetHeight(18)
+                    _G[frameName.."EditBoxFocus"..ebPart]:SetTexture(nil)
+                    _G[frameName.."EditBoxFocus"..ebPart].SetTexture = function() return end
+                end
+                if _G[frameName.."EditBox"..ebPart] then
+                    _G[frameName.."EditBox"..ebPart]:SetTexture(nil)
+                    _G[frameName.."EditBox"..ebPart].SetTexture = function() return end
+                end
+                if _G[frameName.."TabHighlight"..ebPart] then
+                    _G[frameName.."TabHighlight"..ebPart]:SetTexture(nil)
+                    _G[frameName.."TabHighlight"..ebPart].SetTexture = function() return end
+                end
+                if _G[frameName.."TabSelected"..ebPart] then
+                    _G[frameName.."TabSelected"..ebPart]:SetTexture(nil)
+                    _G[frameName.."TabSelected"..ebPart].SetTexture = function() return end
+                end
+                if _G[frameName.."Tab"..ebPart] then
+                    _G[frameName.."Tab"..ebPart]:SetTexture(nil)
+                    _G[frameName.."Tab"..ebPart].SetTexture = function() return end
+                end
+            end
+            if not _G[frameName.."EditBoxBG"] then
+                local chatebbg = CreateFrame("Frame", frameName.."EditBoxBG" , _G[frameName.."EditBox"])
+                chatebbg:SetPoint("TOPLEFT", -2, -5)
+                chatebbg:SetPoint("BOTTOMRIGHT", 2, 4)
+                _G[frameName.."EditBoxLanguage"]:Kill()
+            end
+            ChatCopyButtons(i)
+            if i ~= 2 then
+                cf.OldAddMessage = cf.AddMessage
+                cf.AddMessage = CH.AddMessage
+            end
 
-	for i = 1, #CHAT_FRAMES do
-		local cf = _G["ChatFrame"..i]
-		local tab = _G["ChatFrame"..i.."Tab"]
-		local eb = _G["ChatFrame"..i.."EditBox"]
+            _G[frameName.."ButtonFrame"]:Kill()
+            tab:SetAlpha(0)
+            tab.noMouseAlpha = 0
+            cf:SetFading(false)
+            cf:SetMinResize(0,0)
+            cf:SetMaxResize(0,0)
+            cf:SetClampedToScreen(false)
+            cf:SetClampRectInsets(0,0,0,0)
+            _G[frameName.."TabText"]:SetFont(R["media"].font, 13)
+            local editbox = CreateFrame("Frame", nil, UIParent)
+            editbox:Height(22)
+            editbox:SetWidth(ChatBG:GetWidth())
+            editbox:SetPoint("BOTTOMLEFT", cf, "TOPLEFT",  -2, 6)
+            editbox:CreateShadow("Background")
+            editbox:Hide()
+            eb:SetAltArrowKeyMode(false)
+            eb:ClearAllPoints()
+            eb:Point("TOPLEFT", editbox, 2, 6)
+            eb:Point("BOTTOMRIGHT", editbox, -2, -3)
+            eb:SetParent(UIParent)
+            eb:Hide()
+            eb:HookScript("OnShow", function(self)
+                editbox.wpos = 100
+                editbox.wspeed = 600
+                editbox.wlimit = ChatBG:GetWidth()
+                editbox.wmod = 1
+                editbox:SetScript("OnUpdate", R.simple_width)
+                UIFrameFadeIn(editbox, .3, 0, 1)
+            end)
+            eb:HookScript("OnHide", function(self)
+                editbox:Hide()
+            end)
+            hooksecurefunc("ChatEdit_UpdateHeader", function()
+                local type = eb:GetAttribute("chatType")
+                if ( type == "CHANNEL" ) then
+                    local id = eb:GetAttribute("channelTarget")
+                    if id == 0 then
+                        editbox.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))
+                    else
+                        editbox.border:SetBackdropBorderColor(ChatTypeInfo[type..id].r,ChatTypeInfo[type..id].g,ChatTypeInfo[type..id].b)
+                    end
+                else
+                    editbox.border:SetBackdropBorderColor(ChatTypeInfo[type].r,ChatTypeInfo[type].g,ChatTypeInfo[type].b)
+                end
+            end)
+            local function BottomButtonClick(self)
+                self:GetParent():ScrollToBottom();
+            end
+            local bb = _G[frameName.."ButtonFrameBottomButton"]
+            local flash = _G[frameName.."ButtonFrameBottomButtonFlash"]
+            R:GetModule("Skins"):ReskinArrow(ChatFrame1ButtonFrameBottomButton, "down")
+            bb:SetParent(cf)
+            bb:SetHeight(18)
+            bb:SetWidth(18)
+            bb:ClearAllPoints()
+            bb:SetPoint("TOPRIGHT", cf, "TOPRIGHT", 0, -20)
+            bb:SetAlpha(0.4)
+            bb.SetPoint = R.dummy
+            flash:ClearAllPoints()
+            flash:Point("TOPLEFT", -3, 3)
+            flash:Point("BOTTOMRIGHT", 3, -3)
+            bb:SetScript("OnClick", BottomButtonClick)
+            local font, path = cf:GetFont()
+            cf:SetFont(font, path, R["media"].fontflag)
+            cf:SetShadowColor(0, 0, 0, 0)
 
-		cf:SetParent(ChatBG)
-		local ebParts = {"Left", "Mid", "Right", "Middle"}
-		for j = 1, #CHAT_FRAME_TEXTURES do 
-			_G[format("ChatFrame%s", i)..CHAT_FRAME_TEXTURES[j]]:SetTexture(nil) 
-		end
-		for _, ebPart in ipairs(ebParts) do
-			if _G["ChatFrame"..i.."EditBoxFocus"..ebPart] then
-				_G["ChatFrame"..i.."EditBoxFocus"..ebPart]:SetHeight(18)
-				_G["ChatFrame"..i.."EditBoxFocus"..ebPart]:SetTexture(nil)
-				_G["ChatFrame"..i.."EditBoxFocus"..ebPart].SetTexture = function() return end
-			end
-			if _G["ChatFrame"..i.."EditBox"..ebPart] then
-				_G["ChatFrame"..i.."EditBox"..ebPart]:SetTexture(nil)
-				_G["ChatFrame"..i.."EditBox"..ebPart].SetTexture = function() return end
-			end
-			if _G["ChatFrame"..i.."TabHighlight"..ebPart] then
-				_G["ChatFrame"..i.."TabHighlight"..ebPart]:SetTexture(nil)
-				_G["ChatFrame"..i.."TabHighlight"..ebPart].SetTexture = function() return end
-			end
-			if _G["ChatFrame"..i.."TabSelected"..ebPart] then
-				_G["ChatFrame"..i.."TabSelected"..ebPart]:SetTexture(nil)
-				_G["ChatFrame"..i.."TabSelected"..ebPart].SetTexture = function() return end
-			end
-			if _G["ChatFrame"..i.."Tab"..ebPart] then
-				_G["ChatFrame"..i.."Tab"..ebPart]:SetTexture(nil)
-				_G["ChatFrame"..i.."Tab"..ebPart].SetTexture = function() return end
-			end
-		end
-		if not _G["ChatFrame"..i.."EditBoxBG"] then
-			local chatebbg = CreateFrame("Frame", "ChatFrame"..i.."EditBoxBG" , _G["ChatFrame"..i.."EditBox"])
-			chatebbg:SetPoint("TOPLEFT", -2, -5)
-			chatebbg:SetPoint("BOTTOMRIGHT", 2, 4)
-			_G["ChatFrame"..i.."EditBoxLanguage"]:Kill()
-		end
-		ChatCopyButtons(i)
-		if i ~= 2 then
-			cf.OldAddMessage = cf.AddMessage
-			cf.AddMessage = CH.AddMessage
-		end
-
-		_G["ChatFrame"..i.."ButtonFrame"]:Kill()
-		tab:SetAlpha(0)
-		tab.noMouseAlpha = 0
-		cf:SetFading(false)
-		cf:SetMinResize(0,0)
-		cf:SetMaxResize(0,0)
-		cf:SetClampedToScreen(false)
-		cf:SetClampRectInsets(0,0,0,0)
-		_G["ChatFrame"..i.."TabText"]:SetFont(R["media"].font, 13)
-		local editbox = CreateFrame("Frame", nil, UIParent)
-		editbox:Height(22)
-		editbox:SetWidth(ChatBG:GetWidth())
-		editbox:SetPoint("BOTTOMLEFT", cf, "TOPLEFT",  -2, 6)
-		editbox:CreateShadow("Background")
-		editbox:Hide()
-		eb:SetAltArrowKeyMode(false)
-		eb:ClearAllPoints()
-		eb:Point("TOPLEFT", editbox, 2, 6)
-		eb:Point("BOTTOMRIGHT", editbox, -2, -3)
-		eb:SetParent(UIParent)
-		eb:Hide()
-		eb:HookScript("OnShow", function(self)
-			editbox.wpos = 100
-			editbox.wspeed = 600
-			editbox.wlimit = ChatBG:GetWidth()
-			editbox.wmod = 1
-			editbox:SetScript("OnUpdate", R.simple_width)
-			UIFrameFadeIn(editbox, .3, 0, 1)
-		end)
-		eb:HookScript("OnHide", function(self)
-			editbox:Hide()
-		end)
-		hooksecurefunc("ChatEdit_UpdateHeader", function()
-				local type = _G["ChatFrame"..i.."EditBox"]:GetAttribute("chatType")
-				if ( type == "CHANNEL" ) then
-				local id = GetChannelName(_G["ChatFrame"..i.."EditBox"]:GetAttribute("channelTarget"))
-					if id == 0 then
-						editbox.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))
-					else
-						editbox.border:SetBackdropBorderColor(ChatTypeInfo[type..id].r,ChatTypeInfo[type..id].g,ChatTypeInfo[type..id].b)
-					end
-				else
-					editbox.border:SetBackdropBorderColor(ChatTypeInfo[type].r,ChatTypeInfo[type].g,ChatTypeInfo[type].b)
-				end
-			end)
-		local function BottomButtonClick(self)
-			self:GetParent():ScrollToBottom();
-		end
-		local bb = _G["ChatFrame"..i.."ButtonFrameBottomButton"]
-		local flash = _G["ChatFrame"..i.."ButtonFrameBottomButtonFlash"]
-		R:GetModule("Skins"):ReskinArrow(ChatFrame1ButtonFrameBottomButton, "down")
-		bb:SetParent(_G["ChatFrame"..i])
-		bb:SetHeight(18)
-		bb:SetWidth(18)
-		bb:ClearAllPoints()
-		bb:SetPoint("TOPRIGHT", cf, "TOPRIGHT", 0, -20)
-		bb:SetAlpha(0.4)
-		bb.SetPoint = R.dummy
-		flash:ClearAllPoints()
-		flash:Point("TOPLEFT", -3, 3)
-		flash:Point("BOTTOMRIGHT", 3, -3)
-		bb:SetScript("OnClick", BottomButtonClick)
-		local font, path = cf:GetFont()
-		cf:SetFont(font, path, R["media"].fontflag)
-		cf:SetShadowColor(0, 0, 0, 0)
+            cf.styled = true
+        end
 	end
 end
 
@@ -941,41 +935,32 @@ function CH:SetItemRef(link, text, button, chatFrame)
 			end
 		end
 		ItemRefTooltip:Show()
-	elseif linkType == "RayUILootCollector" then
-		ShowUIPanel(ItemRefTooltip)
-		if not ItemRefTooltip:IsShown() then ItemRefTooltip:SetOwner(UIParent, "ANCHOR_PRESERVE") end
-
-		local roll = CH.rolls[tonumber(id)]
-		local rolltype = roll[roll._winner][1]
-		ItemRefTooltip:ClearLines()
-		ItemRefTooltip:AddLine(rolltype.."|r - "..roll._link)
-		local r, g, b = 1, 1, 1
-		if roll[roll._winner][3] then
-			r, g, b = RAID_CLASS_COLORS[roll[roll._winner][3]].r, RAID_CLASS_COLORS[roll[roll._winner][3]].g, RAID_CLASS_COLORS[roll[roll._winner][3]].b
-		end
-		ItemRefTooltip:AddDoubleLine(L["获胜者"]..": ", R:RGBToHex(r, g, b)..roll._winner.."|r")
-		for i,v in pairs(roll) do
-			if string.sub(i, 1, 1) ~= "_" and v[2] then
-				local r, g, b = 1, 1, 1
-				if v[3] then
-					r, g, b = RAID_CLASS_COLORS[v[3]].r, RAID_CLASS_COLORS[v[3]].g, RAID_CLASS_COLORS[v[3]].b
-				end
-				if i == UnitName("player") then
-					ItemRefTooltip:AddDoubleLine(R:RGBToHex(r, g, b)..i.."|r (|cffff0000"..YOU.."|r)", v[2])
-				elseif i == roll._winner then
-					ItemRefTooltip:AddDoubleLine(R:RGBToHex(r, g, b)..i.."|r (|cffff0000"..L["获胜者"].."|r)", v[2])
-				else
-					ItemRefTooltip:AddDoubleLine(R:RGBToHex(r, g, b)..i.."|r", v[2])
-				end
-			end
-		end
-		ItemRefTooltip:Show()
 	else
 		return self.hooks.SetItemRef(link, text, button)
 	end
 end
 
+function CH:PET_BATTLE_CLOSE()
+	for _, frameName in pairs(CHAT_FRAMES) do
+		local frame = _G[frameName]
+		if frame and _G[frameName.."Tab"]:GetText():match(PET_BATTLE_COMBAT_LOG) then
+			FCF_Close(frame)
+		end
+	end
+end
+
 function CH:Initialize()
+	ChatFrameMenuButton:Kill()
+	ChatFrameMenuButton:SetScript("OnShow", kill)
+	FriendsMicroButton:Hide()
+	FriendsMicroButton:Kill()
+
+	if not _G["ChatBG"] then
+		local ChatBG = CreateFrame("Frame", "ChatBG", UIParent)
+		ChatBG:CreatePanel("Default", self.db.width, self.db.height, "BOTTOMLEFT",UIParent,"BOTTOMLEFT",15,30)
+		GeneralDockManager:SetParent(ChatBG)
+	end
+
 	CHAT_BATTLEGROUND_GET = "|Hchannel:Battleground|h".."[BG]".."|h %s:\32"
 	CHAT_BATTLEGROUND_LEADER_GET = "|Hchannel:Battleground|h".."[BG]".."|h %s:\32"
 	CHAT_BN_WHISPER_GET = "%s:\32"
@@ -1037,8 +1022,13 @@ function CH:Initialize()
 		ChatFrame_AddMessageEventFilter(event, filterFunc)
 	end
 
-	self:LinkHoverOnLoad()
+	self:RegisterEvent("UPDATE_CHAT_WINDOWS", "ApplyStyle")
+	self:RegisterEvent("UPDATE_FLOATING_CHAT_WINDOWS", "ApplyStyle")
+    self:SecureHook("FCF_OpenTemporaryWindow", "ApplyStyle")
+	self:RegisterEvent("PET_BATTLE_CLOSE")
 	self:ApplyStyle()
+
+	self:LinkHoverOnLoad()
 	self:AutoHide()
 	self:SpamFilter()
 	self:DamageMeterFilter()
