@@ -277,7 +277,7 @@ function TT:iLVSetUnit()
 	ilvcurrent.guid = UnitGUID(unit)
 
 	for _, entry in ipairs(ilvcache) do
-		if (ilvcurrent.name == entry.name) then
+		if (ilvcurrent.name == entry.name and entry.format) then
 			GameTooltip:AddLine(STAT_AVERAGE_ITEM_LEVEL..": "..entry.format)
 			ilvcurrent.format = entry.format
 			cacheLoaded = true
