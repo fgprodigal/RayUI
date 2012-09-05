@@ -46,13 +46,6 @@ local getTime = function(expirationTime)
     end
 end
 
--- Name
-oUF.Tags.Methods["RayUFRaid:name"] = function(u, r)
-    local name = UnitName(r or u)
-    return name
-end
-oUF.Tags.Events["RayUFRaid:name"] = "UNIT_NAME_UPDATE"
-
 -- Magic
 oUF.Tags.Methods["RayUIRaid:magic"] = function(u)
     local index = 1
