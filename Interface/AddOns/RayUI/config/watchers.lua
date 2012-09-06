@@ -635,7 +635,8 @@ R["Watcher"] = {
 				{ spellID = 139, unitId = "target", caster = "player", filter = "BUFF" },
 				--恩典
 				{ spellID = 77613, unitId = "target", caster = "player", filter = "BUFF" },
-
+				--恩典
+				{ spellID = 6788, unitId = "target", caster = "all", filter = "DEBUFF" },
 			},
 			{
 				name = "玩家重要buff",
@@ -655,7 +656,6 @@ R["Watcher"] = {
 				{ spellID = 81782 , unitId = "player", caster = "all", filter = "BUFF" },
 				--2T12效果
 				{ spellID = 99132,  unitId = "player", caster = "player", filter = "BUFF" },
-
 			},
 			{
 				name = "目标debuff",
@@ -681,7 +681,6 @@ R["Watcher"] = {
 				{ spellID = 605, unitId = "player", caster = "all", filter = "DEBUFF" },
 				--沉默
 				{ spellID = 15487, unitId = "player", caster = "all", filter = "DEBUFF" },
-
 			},
 			{
 				name = "焦点debuff",
@@ -696,7 +695,6 @@ R["Watcher"] = {
 				{ spellID = 9484, unitId = "focus", caster = "all", filter = "DEBUFF" },
 				--心靈尖嘯
 				{ spellID = 8122, unitId = "focus", caster = "all", filter = "DEBUFF" },
-
 			},
 			{
 				name = "CD",
@@ -719,6 +717,15 @@ R["Watcher"] = {
 		},
 		["WARLOCK"]={
 			{
+				name = "目标buff",
+				direction = "RIGHT",
+				setpoint = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 80 },
+				size = 28,
+
+				--元素詛咒
+				{ spellID = 1490, unitId = "target", caster = "player", filter = "DEBUFF" },
+			},
+			{
 				name = "目标debuff",
 				setpoint = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 33 },
 				direction = "RIGHT",
@@ -729,8 +736,6 @@ R["Watcher"] = {
 				{ spellID = 5782, unitId = "target", caster = "player", filter = "DEBUFF" },
 				--放逐術
 				{ spellID = 710, unitId = "target", caster = "player", filter = "DEBUFF" },
-				--元素詛咒
-				{ spellID = 1490, unitId = "target", caster = "player", filter = "DEBUFF" },
 				--疲勞詛咒
 				{ spellID = 18223, unitId = "target", caster = "player", filter = "DEBUFF" },
 				--腐蝕術
@@ -783,7 +788,6 @@ R["Watcher"] = {
 				{ spellID = 84746, unitId = "player", caster = "player", filter = "BUFF" },
 				--深度洞察
 				{ spellID = 84747, unitId = "player", caster = "player", filter = "BUFF" },
-
 			},
 			{
 				name = "目标buff",
@@ -840,7 +844,6 @@ R["Watcher"] = {
 				{ spellID = 109949, unitId = "player", caster = "player", filter = "BUFF" },
 				--洞悉要害
 				{ spellID = 121153, unitId = "player", caster = "player", filter = "BUFF" },
-
 			},
 			{
 				name = "目标debuff",
@@ -890,7 +893,6 @@ R["Watcher"] = {
 				{ spellID = 2094, unitId = "focus", caster = "all", filter = "DEBUFF" },
 				--悶棍
 				{ spellID = 6770, unitId = "focus", caster = "all", filter = "DEBUFF" },
-
 			},
 			{
 				name = "CD",
