@@ -1,0 +1,150 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\..\FrameXML\UI.xsd">
+
+<!-- Copyright 2011,2012 Mike Battersby -->
+
+<Button name="LiteMountItemButtonTemplate" virtual="true" inherits="ItemButtonTemplate">
+    <Scripts>
+        <OnEnter>
+            if self.tooltipText then
+                GameTooltip:SetOwner(self)
+                GameTooltip:SetText(self.tooltipText)
+                GameTooltip:Show()
+            end
+        </OnEnter>
+        <OnLeave>
+                GameTooltip:Hide()
+        </OnLeave>
+    </Scripts>
+</Button>
+
+<Frame name="LiteMountOptionsMacro" hidden="true">
+
+    <Frames>
+        <Frame name="LiteMountOptionsMacroEditBoxContainer">
+        
+            <Size x="400" y="200" />
+
+
+            <Anchors>
+                <Anchor point="CENTER" />
+            </Anchors>
+
+            <Backdrop edgefile="Interface\Tooltips\UI-Tooltip-Border" bgfile="Interface\Tooltips\UI-Tooltip-Background" tile="true">
+                <EdgeSize val="16" />
+                <TileSize val="16" />
+                <BackgroundInsets>
+                    <AbsInset left="5" right="5" top="5" bottom="5" />
+                </BackgroundInsets>
+            </Backdrop>
+
+            <Scripts>
+                <OnLoad>
+                    self:SetBackdropBorderColor(0.6, 0.6, 0.6, 0.8)
+                    self:SetBackdropColor(0, 0, 0, 0.5)
+                </OnLoad>
+            </Scripts>
+
+            <Frames>
+                <EditBox name="LiteMountOptionsMacroEditBox" multiLine="true" letters="255" autoFocus="false" countInvisibleLetters="true">
+                    
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="8" y="-8" />
+                        <Anchor point="BOTTOMRIGHT" x="-8" y="8" />
+                    </Anchors>
+
+                    <Scripts>
+                        <OnTextChanged function="LiteMountOptionsMacro_OnTextChanged" />
+                        <OnEscapePressed function="EditBox_ClearFocus" />
+                    </Scripts>
+                    <FontString inherits="GameFontHighlight" />
+                </EditBox>
+                <Button inherits="UIPanelButtonTemplate" text="DELETE">
+                    <Size x="96" y="22" />
+                    <Anchors>
+                        <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" x="-8" y="-3" />
+                    </Anchors>
+                    <Scripts>
+                        <OnClick>
+                            LiteMountOptionsMacroEditBox:SetText("")
+                        </OnClick>
+                    </Scripts>
+                </Button>
+            </Frames>
+        </Frame>
+        <Button name="LiteMountOptionsMacroSuggest1" inherits="LiteMountItemButtonTemplate" hidden="true">
+            <Size x="37" y="37" />
+            <Anchors>
+                <Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="LiteMountOptionsMacroEditBoxContainer" x="8" y="-8" />
+            </Anchors>
+            <Scripts>
+                <OnClick function="LiteMountOptionsMacroSuggest_OnClick" />
+            </Scripts>
+        </Button>
+        <Button name="LiteMountOptionsMacroSuggest2" inherits="LiteMountItemButtonTemplate" hidden="true">
+            <Size x="37" y="37" />
+            <Anchors>
+                <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="LiteMountOptionsMacroSuggest1" y="-8" />
+            </Anchors>
+            <Scripts>
+                <OnClick function="LiteMountOptionsMacroSuggest_OnClick" />
+            </Scripts>
+        </Button>
+        <Button name="LiteMountOptionsMacroSuggest3" inherits="LiteMountItemButtonTemplate" hidden="true">
+            <Size x="37" y="37" />
+            <Anchors>
+                <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="LiteMountOptionsMacroSuggest2" y="-8" />
+            </Anchors>
+            <Scripts>
+                <OnClick function="LiteMountOptionsMacroSuggest_OnClick" />
+            </Scripts>
+        </Button>
+        <Button name="LiteMountOptionsMacroSuggest4" inherits="LiteMountItemButtonTemplate" hidden="true">
+            <Size x="37" y="37" />
+            <Anchors>
+                <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="LiteMountOptionsMacroSuggest3" y="-8" />
+            </Anchors>
+            <Scripts>
+                <OnClick function="LiteMountOptionsMacroSuggest_OnClick" />
+            </Scripts>
+        </Button>
+    </Frames>
+
+    <Layers>
+        <Layer level="ARTWORK">
+            <FontString inherits="GameFontNormalLarge" parentKey="title">
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="16" y="-16" />
+                </Anchors>
+            </FontString>
+
+            <FontString inherits="GameFontNormal" justifyV="TOP" justifyH="LEFT" text="LM_MACRO_EXP">
+                <Anchors>
+                    <Anchor point="TOP" y="-48" />
+                    <Anchor point="LEFT" relativePoint="LEFT" relativeTo="LiteMountOptionsMacroEditBoxContainer" x="-50" />
+                    <Anchor point="RIGHT" relativePoint="RIGHT" relativeTo="LiteMountOptionsMacroEditBoxContainer" x="50" />
+                    <Anchor point="BOTTOM" relativePoint="RIGHT" relativeTo="LiteMountOptionsMacroEditBoxContainer" />
+                </Anchors>
+            </FontString>
+
+            <FontString inherits="GameFontHighlightSmall" text="ENTER_MACRO_LABEL">
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" relativeTo="LiteMountOptionsMacroEditBoxContainer" x="8" y="3" />
+                </Anchors>
+            </FontString>
+
+            <FontString name="LiteMountOptionsMacroCount" inherits="GameFontHighlightSmall">
+                <Anchors>
+                    <Anchor point="TOP" relativePoint="BOTTOM" relativeTo="LiteMountOptionsMacroEditBoxContainer" y="-3" />
+                </Anchors>
+            </FontString>
+
+        </Layer>
+    </Layers>
+
+    <Scripts>
+        <OnLoad function="LiteMountOptionsMacro_OnLoad" />
+        <OnShow function="LiteMountOptionsMacro_OnShow" />
+    </Scripts>
+</Frame>
+
+</Ui>

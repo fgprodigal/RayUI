@@ -1,0 +1,19 @@
+<!--
+
+  LiteMount/KeyBindings.xml
+
+  Copyright 2011,2012 Mike Battersby
+
+ -->
+
+<Bindings>
+
+    <Binding name="CLICK LiteMount:LeftButton" header="LITEMOUNT_TITLE">
+        -- Magic name causes it to click the LiteMount button with left mouse
+    </Binding>
+
+    <Binding name="CLICK LiteMount:RightButton">
+        -- Magic name causes it to click the LiteMount button with right mouse
+    </Binding>
+
+</Bindings> 

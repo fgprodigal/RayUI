@@ -1,0 +1,133 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\..\FrameXML\UI.xsd">
+
+<!-- Copyright 2011,2012 Mike Battersby -->
+
+<Frame name="LiteMountOptionsCombatMacro" hidden="true">
+
+    <Frames>
+        <Frame name="LiteMountOptionsCombatMacroEditBoxContainer">
+        
+            <Size x="400" y="200" />
+
+
+            <Anchors>
+                <Anchor point="CENTER" />
+            </Anchors>
+
+            <Backdrop edgefile="Interface\Tooltips\UI-Tooltip-Border" bgfile="Interface\Tooltips\UI-Tooltip-Background" tile="true">
+                <EdgeSize val="16" />
+                <TileSize val="16" />
+                <BackgroundInsets>
+                    <AbsInset left="5" right="5" top="5" bottom="5" />
+                </BackgroundInsets>
+            </Backdrop>
+
+            <Scripts>
+                <OnLoad>
+                    self:SetBackdropBorderColor(0.6, 0.6, 0.6, 0.8)
+                    self:SetBackdropColor(0, 0, 0, 0.5)
+                </OnLoad>
+            </Scripts>
+
+            <Frames>
+                <EditBox name="LiteMountOptionsCombatMacroEditBox" multiLine="true" letters="255" autoFocus="false" countInvisibleLetters="true">
+                    
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="8" y="-8" />
+                        <Anchor point="BOTTOMRIGHT" x="-8" y="8" />
+                    </Anchors>
+
+                    <Scripts>
+                        <OnTextChanged function="LiteMountOptionsCombatMacro_OnTextChanged" />
+                        <OnEscapePressed function="EditBox_ClearFocus" />
+                    </Scripts>
+                    <FontString inherits="GameFontHighlight" />
+                </EditBox>
+                <Button inherits="UIPanelButtonTemplate" name="LiteMountOptionsCombatMacroDelete" text="DELETE">
+                    <Size x="96" y="22" />
+                    <Anchors>
+                        <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" x="-8" y="-3" />
+                    </Anchors>
+                    <Scripts>
+                        <OnClick>
+                            LiteMountOptionsCombatMacroEditBox:SetText("")
+                        </OnClick>
+                    </Scripts>
+                </Button>
+                <Button name="LiteMountOptionsCombatMacroDefault" inherits="UIPanelButtonTemplate" text="DEFAULT">
+                    <Size x="96" y="22" />
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT" relativePoint="TOPRIGHT" x="-8" y="3" />
+                    </Anchors>
+                    <Scripts>
+                        <OnClick>
+                            LiteMountOptionsCombatMacroEditBox:SetText(LiteMount:BuildCombatMacro())
+                        </OnClick>
+                    </Scripts>
+                </Button>
+            </Frames>
+        </Frame>
+        <CheckButton name="LiteMountOptionsCombatMacroEnable" inherits="OptionsBaseCheckButtonTemplate">
+            <Anchors>
+                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" relativeTo="LiteMountOptionsCombatMacroEditBoxContainer" y="32" />
+            </Anchors>
+            <Scripts>
+                <OnShow>
+                    self:SetChecked(LM_Options:UseCombatMacro())
+                </OnShow>
+                <OnClick>
+                    if self:GetChecked() then
+                        LM_Options:EnableCombatMacro()
+                    else
+                        LM_Options:DisableCombatMacro()
+                    end
+                </OnClick>
+            </Scripts>
+        </CheckButton>
+    </Frames>
+
+    <Layers>
+        <Layer level="ARTWORK">
+            <FontString inherits="GameFontNormalLarge" parentKey="title">
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="16" y="-16" />
+                </Anchors>
+            </FontString>
+
+            <FontString inherits="GameFontNormal" justifyV="TOP" justifyH="LEFT" text="LM_COMBAT_MACRO_EXP">
+                <Anchors>
+                    <Anchor point="TOP" y="-48" />
+                    <Anchor point="LEFT" relativePoint="LEFT" relativeTo="LiteMountOptionsMacroEditBoxContainer" x="-50" />
+                    <Anchor point="RIGHT" relativePoint="RIGHT" relativeTo="LiteMountOptionsMacroEditBoxContainer" x="50" />
+                    <Anchor point="BOTTOM" relativePoint="RIGHT" relativeTo="LiteMountOptionsMacroEditBoxContainer" />
+                </Anchors>
+            </FontString>
+
+            <FontString inherits="GameFontNormalLarge" parentKey="enable" text="ENABLE">
+                <Anchors>
+                    <Anchor point="LEFT" relativePoint="RIGHT" relativeTo="LiteMountOptionsCombatMacroEnable" x="4" />
+                </Anchors>
+            </FontString>
+            <FontString inherits="GameFontHighlightSmall" text="ENTER_MACRO_LABEL">
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" relativeTo="LiteMountOptionsCombatMacroEditBoxContainer" x="8" y="3" />
+                </Anchors>
+            </FontString>
+
+            <FontString name="LiteMountOptionsCombatMacroCount" inherits="GameFontHighlightSmall">
+                <Anchors>
+                    <Anchor point="TOP" relativePoint="BOTTOM" relativeTo="LiteMountOptionsCombatMacroEditBoxContainer" y="-3" />
+                </Anchors>
+            </FontString>
+
+        </Layer>
+    </Layers>
+
+    <Scripts>
+        <OnHide function="LiteMountOptionsCombatMacro_OnHide" />
+        <OnLoad function="LiteMountOptionsCombatMacro_OnLoad" />
+        <OnShow function="LiteMountOptionsCombatMacro_OnShow" />
+    </Scripts>
+</Frame>
+
+</Ui>

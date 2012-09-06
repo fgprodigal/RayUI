@@ -1,0 +1,204 @@
+Notes To Myself
+---------------
+
+
+------------------------------------------------------------------------------
+* Diff since tag
+
+    svn diff svn://svn.curseforge.net/wow/litemount/mainline/tags/4.2.0 \
+             svn://svn.curseforge.net/wow/litemount/mainline/trunk
+
+
+------------------------------------------------------------------------------
+* XML syntax check
+
+    xmllint --noout UIOptionsFrame.xml
+
+
+------------------------------------------------------------------------------
+* Better "undo".
+
+    Conclusion: seems unncessary.
+
+    Might be able to set up the macro better for undoing in combat what we
+    last did (mount -> dismount, form -> cancelform, aura -> cancelaura, etc.)
+    by passing params between the PreClick handler and the PostClick handler
+    as button attributes.
+
+
+------------------------------------------------------------------------------
+* Suggestions
+
+    The suggestions stuff in the "last resort" macro is a bit clunky and
+    is probably going to be a pain to maintain.  Consider ripping it out
+    completely.
+
+    Also since we are now testing IsUsableSpell we don't need to separate
+    out the spells by class they way they are set up now.
+
+
+------------------------------------------------------------------------------
+* Flying mounts that can walk.
+
+    Since IsUsableSpell() correctly tells you whether you can use a flying
+    mount in a non-flying area, we don't actually need to unflag the ground
+    setting on flying mounts.  They'll get tested and excluded anyway.
+
+    Then again, I don't really like using flying mounts on the ground, since
+    there's already plenty of chance to see them and not much chance to see
+    your ground-only mounts.  And it makes the flags in the UI look weird.
+    The whole UI flag stuff was born out of trying to fix this stupidity.
+
+
+------------------------------------------------------------------------------
+* Possible UI Improvements
+
+    Have an enable/disable all button. Have it apply only to the current match.
+    Localize the Fly/Run/Swim texts.
+
+
+------------------------------------------------------------------------------
+* "Dragonwrath, Tarecgosa's Rest" (71086)
+
+    Item ID 71086.  Spell ID is 101641 (Tarecgosa's Visage)
+
+    You can only use it by "/use slot", you can't cast the spell.
+
+
+------------------------------------------------------------------------------
+* Might be better to look for Sea Legs aura for Vashj'ir.
+
+    Sea legs is present even on the surface and flying so don't do it.
+
+
+------------------------------------------------------------------------------
+* You can use flying mounts when you are floating in flyable areas.
+
+    IsUsableSpell() returns correctly for mount spells for swimming
+    vs floating.
+
+
+------------------------------------------------------------------------------
+* Flying in areas you don't know how to.
+
+    Testing shows IsFlyableArea() works properly for you.
+
+
+------------------------------------------------------------------------------
+* Does GetUnitSpeed return negative if you go backwards?
+
+    No it doesn't.
+
+
+------------------------------------------------------------------------------
+* You can know tradeskill-only mounts for tradeskills you unlearned.
+
+    You can but IsUsableSpell seems to return false for them.
+
+
+------------------------------------------------------------------------------
+* Check when/if IsSpellKnown() is a better idea.
+
+    So far it seems identical to looping over the spellbook tab. It
+    never returns true for mount spells.
+
+
+------------------------------------------------------------------------------
+* Code documentation.
+
+    Utility stuff:
+        * Print.lua
+            LM_Print(msg) -- prints into current active chat frame
+            LM_SetDebug(onoff) -- turn debugging on/off
+            LM_Debug(msg) -- prints a debug message if debugging is on
+            LM_Warning(msg) -- print a msg into the UIErrorsFrame
+        * AutoEventFrame.lua
+            LM_CreateAutoEventFrame(frameType, ...)
+                * takes the same args as CreateFrame
+                * Adds an OnEvent handler that calls a function named
+                  for the event. E.g., MyFrame:PLAYER_LOGIN().
+
+    Macro stuff:
+        * Macro.lua
+            Standalone code that just creates a macro to click our button.
+
+    Keybinding stuff:
+        * KeyBindingStrings.lua
+            Globals for the menu entries in the blizz key menu.
+
+    Querying stuff:
+        * Location.lua
+            LM_Location:CanFly()
+            LM_Location:CanSwim()
+            LM_Location:IsAQ()
+            LM_Location:IsVashjir()
+        * MountItem.lua
+            LM_MountItem:HasItem(itemId)
+            LM_MountItem:IsUsable(itemId)
+        * MountSpell.lua
+            LM_MountSpell:IsKnown(spellId)
+
+    Options stuff:
+        * Options.lua
+            LM_Options:Initialize()
+
+            LM_Options:AddExcludedSpell(spellId)
+            LM_Options:RemoveExcludedSpell(spellId)
+            LM_Options:SetExcludedSpells(spellIdList)
+            LM_Options:IsExcludedSpell(spellId)
+
+            LM_Options:SetSpellFlagBit(spellId, flagbit)
+            LM_Options:ClearSpellFlagBit(spellId, flagbit)
+            LM_Options:ResetSpellFlags(spellId)
+            LM_Options:ApplySpellFlags(spellId, default_flags)
+
+            LM_Options:GetMacro()
+            LM_Options:SetMacro(macrotext)
+
+        * UIOptions*.xml / UIOptions*.lua
+            Here be dragons. UI to twiddle settings in LM_Options.
+
+    Main stuff:
+        * Mount.lua
+            Class representing one mount.
+
+            m = LM_Mount:GetMountByItemId(itemId, itemSpellId)
+            m = LM_Mount:GetMountBySpell(spellId)
+            m = LM_Mount:GetMountByIndex(mountCompanionIndex)
+
+            m:SpellId() / m:Icon() / m:Name()
+            m:CanFly() / m:CanWalk() / m:CanSwim()
+            m:Usable()
+            m:Flags() / m:DefaultFlags()
+                Flags call does LM_Options:ApplySpellFlags for you.
+            m:SetupActionButton(button)
+                Sets attributes on a SecureActionButton to summon this mount.
+        * MountList.lua
+            Class for a list of mounts, used by LM_PlayerMounts.
+
+            LM_MountList:New()
+            LM_MountList:Iterate()
+            LM_MountList:Shuffle()
+            LM_MountList:Random()
+            LM_MountList:Sort()
+            LM_MountList:Search(matchfunc)
+        * PlayerMounts
+            All mounts the player knows.
+
+            LM_PlayerMounts:Initialize()
+            LM_PlayerMounts:ScanMounts()
+
+            mountlist = LM_PlayerMounts:GetAllMounts()
+
+            m = LM_PlayerMounts:GetRandomMount(flags)
+                LM_PlayerMounts:GetFlyingMount()
+                LM_PlayerMounts:GetRunningMount()
+                LM_PlayerMounts:GetWalkingMount()
+                LM_PlayerMounts:GetSwimmingMount()
+                LM_PlayerMounts:GetAQMount()
+                LM_PlayerMounts:GetVashjirMount()
+            All the above calls don't return mounts for which
+            LM_Options:IsExcludedSpell() is true.
+        * Core.lua
+            All the core logic for initialization and then actually
+            picking a mount and summoning it.

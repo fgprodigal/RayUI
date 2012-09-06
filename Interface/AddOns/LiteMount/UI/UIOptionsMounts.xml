@@ -1,0 +1,276 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\..\FrameXML\UI.xsd">
+
+<!-- Copyright 2011,2012 Mike Battersby -->
+
+<!--
+    See OptionsBaseCheckButtonTemplate in FrameXML/OptionsPanelTemplates.xml
+    We don't use it directly because of the hitrect crap we don't want.
+ -->
+<CheckButton name="LiteMountOptionsBitTemplate" virtual="true">
+    <Size x="26" y="26" />
+    <Scripts>
+        <OnClick>
+            LiteMountOptionsBit_OnClick(self)
+        </OnClick>
+    </Scripts>
+    <NormalTexture urgency="5" file="Interface\Buttons\UI-CheckBox-Up"/>
+    <PushedTexture urgency="5" file="Interface\Buttons\UI-CheckBox-Down"/>
+    <HighlightTexture urgency="5" file="Interface\Buttons\UI-CheckBox-Highlight" alphaMode="ADD"/>
+    <CheckedTexture urgency="5" file="Interface\Buttons\UI-CheckBox-Check"/>
+    <DisabledCheckedTexture urgency="5" file="Interface\Buttons\UI-CheckBox-Check-Disabled"/>
+    <Layers>
+        <Layer level="BACKGROUND">
+            <Texture name="$parentModified" alphaMode="ADD" hidden="true" parentKey="modified">
+                <Color r="0.5" g="0.0" b="0.0" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="5" y="-5" />
+                    <Anchor point="BOTTOMRIGHT" x="-6" y="6" />
+                </Anchors>
+            </Texture>
+        </Layer>
+    </Layers>
+</CheckButton>
+
+<Button name="LiteMountOptionsButtonTemplate" virtual="true">
+
+    <Size x="180" y="45" />
+
+    <Backdrop edgefile="Interface\Tooltips\UI-Tooltip-Border" bgfile="Interface\Tooltips\UI-Tooltip-Background" tile="true">
+        <EdgeSize val="8" />
+        <TileSize val="8" />
+        <BackgroundInsets>
+            <AbsInset left="1" right="1" top="1" bottom="1" />
+        </BackgroundInsets>
+    </Backdrop>
+
+    <Scripts>
+        <OnLoad>
+            self:SetBackdropBorderColor(0.3, 0.3, 0.3, 0.3)
+            self:SetBackdropColor(0.3, 0.3, 0.3, 0.3)
+        </OnLoad>
+    </Scripts>
+
+    <Frames>
+        <CheckButton name="$parentEnabled" parentKey="enabled">
+            <Size x="32" y="32" />
+            <Anchors>
+                <Anchor point="LEFT" x="2" />
+            </Anchors>
+            <Scripts>
+                <OnClick function="BlizzardOptionsPanel_CheckButton_OnClick" />
+                <OnEnter>
+                    GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+                    if self:GetChecked() then
+                        GameTooltip:SetText(DISABLE, 1, 0, 0)
+                    else
+                        GameTooltip:SetText(ENABLE, 0, 1, 0)
+                    end
+                </OnEnter>
+                <OnLeave>
+                    GameTooltip:Hide()
+                </OnLeave>
+            </Scripts>
+            <NormalTexture file="Interface\Buttons\UI-CheckBox-Up"/>
+            <PushedTexture file="Interface\Buttons\UI-CheckBox-Down"/>
+            <HighlightTexture file="Interface\Buttons\UI-CheckBox-Highlight" alphaMode="ADD"/>
+            <CheckedTexture file="Interface\Buttons\UI-CheckBox-Check"/>
+            <DisabledCheckedTexture file="Interface\Buttons\UI-CheckBox-Check-Disabled"/>           
+        </CheckButton>
+
+        <Button name="$parentIcon" parentKey="icon" inherits="SecureActionButtonTemplate" frameStrata="HIGH" motionScriptsWhileDisabled="true">
+            <Size x="36" y="36" />
+            <Anchors>
+                <Anchor point="LEFT" relativeKey="$parent.enabled" relativePoint="RIGHT" x="2" />
+            </Anchors>
+            <HighlightTexture name="$parentHighlight" file="Interface\Buttons\ButtonHilight-Square" alphaMode="ADD" />
+
+            <Scripts>
+                <OnEnter>
+                    GameTooltip:SetOwner(self, "ANCHOR_RIGHT", 8)
+                    GameTooltip:SetSpellByID(self:GetParent().spellid)
+                    GameTooltip:AddLine("|cffff00ff" .. HELPFRAME_REPORT_PLAYER_RIGHT_CLICK .. ": " .. MOUNT .. "|r")
+                    GameTooltip:Show()
+
+                    local m = self:GetParent().mountid
+                    if m then
+                        LiteMountOptionsPreview.model:SetCreature(GetCompanionInfo("MOUNT", m))
+                        LiteMountOptionsPreview:Show()
+                    end
+                </OnEnter>
+                <OnLeave>
+                    LiteMountOptionsPreview:Hide()
+                    GameTooltip:Hide()
+                </OnLeave>
+                <OnLoad>
+                    self:SetAttribute("unit", "player")
+                    self:RegisterForClicks("RightButtonUp")
+                </OnLoad>
+            </Scripts>
+        </Button>
+
+        <CheckButton name="$parentBit1" inherits="LiteMountOptionsBitTemplate" parentKey="bit1">
+            <Anchors> <Anchor point="RIGHT" x="-2" /> </Anchors>
+        </CheckButton>
+        <CheckButton name="$parentBit2" inherits="LiteMountOptionsBitTemplate" parentKey="bit2">
+            <Anchors> <Anchor point="RIGHT" relativeTo="$parentBit1" relativePoint="LEFT" x="-4" /> </Anchors>
+        </CheckButton>
+        <CheckButton name="$parentBit3" inherits="LiteMountOptionsBitTemplate" parentKey="bit3">
+            <Anchors> <Anchor point="RIGHT" relativeTo="$parentBit2" relativePoint="LEFT" x="-4" /> </Anchors>
+        </CheckButton>
+        <CheckButton name="$parentBit4" inherits="LiteMountOptionsBitTemplate" parentKey="bit4">
+            <Anchors> <Anchor point="RIGHT" relativeTo="$parentBit3" relativePoint="LEFT" x="-4" /> </Anchors>
+        </CheckButton>
+        <CheckButton name="$parentBit5" inherits="LiteMountOptionsBitTemplate" parentKey="bit5">
+            <Anchors> <Anchor point="RIGHT" relativeTo="$parentBit4" relativePoint="LEFT" x="-4" /> </Anchors>
+        </CheckButton>
+    </Frames>
+
+    <Layers>
+        <Layer level="OVERLAY">
+            <FontString name="$parentName" inherits="GameFontNormal" justifyH="LEFT" parentKey="name">
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.icon" relativePoint="RIGHT" x="4" />
+                    <Anchor point="TOP" y="-2" />
+                    <Anchor point="BOTTOMRIGHT" x="-2" y="2" />
+                </Anchors>
+            </FontString>
+        </Layer>
+    </Layers>
+
+    <Frames>
+    </Frames>
+
+</Button>
+
+
+<Frame name="LiteMountOptionsPreview" parent="UIParent" hidden="true" frameStrata="TOOLTIP">
+    <Size x="250" y="250" />
+    <Anchors>
+        <Anchor point="TOPLEFT" relativeTo="GameTooltip" relativePoint="BOTTOMLEFT" y="-4" />
+    </Anchors>
+    <Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+        <EdgeSize val="16" />
+        <TileSize val="16" />
+        <BackgroundInsets>
+            <AbsInset left="5" right="5" top="5" bottom="5"/>
+        </BackgroundInsets>
+    </Backdrop>
+    <Frames>
+       <PlayerModel name="$parentModel" parentKey="model">
+            <Anchors>
+                <Anchor point="TOPLEFT" x="8" y="-8" />
+                <Anchor point="BOTTOMRIGHT" x="-8" y="8" />
+            </Anchors>
+            <Scripts>
+                <OnLoad>
+                    self:SetRotation(-MODELFRAME_DEFAULT_ROTATION)
+                </OnLoad>
+            </Scripts>
+        </PlayerModel>
+    </Frames>
+    <Scripts>
+        <OnLoad>
+            self:SetBackdropBorderColor(TOOLTIP_DEFAULT_COLOR.r, TOOLTIP_DEFAULT_COLOR.g, TOOLTIP_DEFAULT_COLOR.b);
+            self:SetBackdropColor(TOOLTIP_DEFAULT_BACKGROUND_COLOR.r, TOOLTIP_DEFAULT_BACKGROUND_COLOR.g, TOOLTIP_DEFAULT_BACKGROUND_COLOR.b);
+        </OnLoad>
+        <OnShow>
+            local d = GameTooltip:GetWidth()
+            self:SetSize(d, d)
+        </OnShow>
+    </Scripts>
+</Frame>
+
+<Frame name="LiteMountOptionsMounts" hidden="true">
+
+    <Frames>
+        <ScrollFrame name="$parentScrollFrame" inherits="MinimalHybridScrollFrameTemplate" parentKey="scrollFrame">
+            <Anchors>
+                <Anchor point="TOPLEFT" x="16" y="-72" />
+                <Anchor point="BOTTOMRIGHT" x="-32" y="36" />
+            </Anchors>
+            <Scripts>
+                <OnLoad>
+                    local track = _G[self.ScrollBar:GetName().."Track"]
+                    track:Hide()
+                </OnLoad>
+                <OnSizeChanged function="LiteMountOptionsScrollFrame_OnSizeChanged" />
+            </Scripts>
+        </ScrollFrame>
+
+        <EditBox name="$parentFilter" autofocus="false" inherits="SearchBoxTemplate" parentKey="filter">
+            <Size x="180" y="26" />
+            <Anchors>
+                <Anchor point="BOTTOMLEFT" relativeTo="$parentScrollFrame" relativePoint="TOPLEFT" x="96" y="2" />
+            </Anchors>
+            <Scripts>
+                <OnEnterPressed function="EditBox_ClearFocus" />
+                <OnTextChanged function="LiteMountOptions_UpdateMountList" />
+            </Scripts>
+        </EditBox>
+
+<!--
+        <PlayerModel name="LiteMountOptionsModel">
+            <Anchors>
+                <Anchor point="TOP" y="-16" />
+            </Anchors>
+            <Size x="320" y="240" />
+            <Scripts>
+                <OnLoad function="Model_OnLoad" />
+                <OnEvent function="Model_OnEvent" />
+                <OnUpdate function="Model_OnUpdate" />
+                <OnMouseDown function="Model_OnMouseDown" />
+                <OnMouseUp function="Model_OnMouseUp" />
+                <OnMouseWheel function="Model_OnMouseWheel" />
+            </Scripts>
+        </PlayerModel>
+-->
+    </Frames>
+
+    <Layers>
+        <Layer level="ARTWORK">
+            <FontString inherits="GameFontNormalLarge" parentKey="title">
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="16" y="-16" />
+                </Anchors>
+            </FontString>
+            <FontString name="$parentBit1Text" inherits="GameFontWhiteTiny" justifyH="CENTER" text="Run">
+                <Size x="26" y="26" />
+                <Anchors>
+                    <Anchor point="BOTTOMRIGHT" relativeTo="$parentScrollFrame" relativePoint="TOPRIGHT" x="-2" />
+                </Anchors>
+            </FontString>
+            <FontString name="$parentBit2Text" inherits="GameFontWhiteTiny" justifyH="CENTER" text="Fly">
+                <Size x="26" y="26" />
+                <Anchors>
+                    <Anchor point="RIGHT" relativeTo="$parentBit1Text" relativePoint="LEFT" x="-4" />
+                </Anchors>
+            </FontString>
+            <FontString name="$parentBit3Text" inherits="GameFontWhiteTiny" justifyH="CENTER" text="Swim">
+                <Size x="26" y="26" />
+                <Anchors>
+                    <Anchor point="RIGHT" relativeTo="$parentBit2Text" relativePoint="LEFT" x="-4" />
+                </Anchors>
+            </FontString>
+            <FontString name="$parentBit4Text" inherits="GameFontWhiteTiny" justifyH="CENTER" text="AQ">
+                <Size x="26" y="26" />
+                <Anchors>
+                    <Anchor point="RIGHT" relativeTo="$parentBit3Text" relativePoint="LEFT" x="-4" />
+                </Anchors>
+            </FontString>
+            <FontString name="$parentBit5Text" inherits="GameFontWhiteTiny" justifyH="CENTER" text="Vash">
+                <Size x="26" y="26" />
+                <Anchors>
+                    <Anchor point="RIGHT" relativeTo="$parentBit4Text" relativePoint="LEFT" x="-4" />
+                </Anchors>
+            </FontString>
+        </Layer>
+    </Layers>
+
+    <Scripts>
+        <OnLoad function="LiteMountOptionsMounts_OnLoad" />
+        <OnShow function="LiteMountOptionsMounts_OnShow" />
+    </Scripts>
+
+</Frame>
+
+</Ui>

@@ -1,0 +1,53 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\..\FrameXML\UI.xsd">
+
+<!-- Copyright 2011,2012 Mike Battersby -->
+
+<Frame name="LiteMountOptions" hidden="true">
+    <Layers>
+        <Layer level="ARTWORK">
+            <FontString name="$parentTitle" inherits="GameFontNormalLarge" parentKey="title">
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="16" y="-16" />
+                </Anchors>
+            </FontString>
+
+            <FontString inherits="GameFontHighlight" justifyH="LEFT" text="Simple and reliable random mount summoning.">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parentTitle" y="-16" />
+                    <Anchor point="RIGHT" />
+                </Anchors>
+            </FontString>
+
+            <FontString name="$parentVersionText" inherits="GameFontNormal" justifyH="RIGHT" text="GAME_VERSION_LABEL">
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="36" y="-96" />
+                </Anchors>
+            </FontString>
+
+            <FontString inherits="GameFontHighlight" justifyH="LEFT" parentKey="version">
+                <Anchors>
+                    <Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parentVersionText" x="4" />
+                </Anchors>
+            </FontString>
+
+            <FontString name="$parentAuthorText" inherits="GameFontNormal" justifyH="RIGHT" text="Author">
+                <Anchors>
+                    <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" relativeTo="$parentVersionText" y="-8" />
+                </Anchors>
+            </FontString>
+
+            <FontString inherits="GameFontHighlight" justifyH="LEFT" parentKey="author">
+                <Anchors>
+                    <Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parentAuthorText" x="4" />
+                </Anchors>
+            </FontString>
+
+        </Layer>
+    </Layers>
+    <Scripts>
+        <OnLoad function="LiteMountOptions_OnLoad" />
+        <OnShow function="LiteMountOptions_OnShow" />
+    </Scripts>
+</Frame>
+
+</Ui>
