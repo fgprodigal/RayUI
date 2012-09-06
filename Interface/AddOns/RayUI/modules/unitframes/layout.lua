@@ -1,6 +1,7 @@
 local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
 local UF = R:GetModule("UnitFrames")
 local oUF = RayUF or oUF
+local USING_DX11 = (GetCVar("gxapi") == "D3D11" or IsMacClient())
 
 local PLAYER_WIDTH = 220
 local PLAYER_HEIGHT = 32
@@ -146,7 +147,9 @@ function UF:DPSLayout(frame, unit)
 			frame.Power = power
 		end
 
-		frame.Portrait = self:ConstructPortrait(frame)
+		if USING_DX11 then
+			frame.Portrait = self:ConstructPortrait(frame)
+		end
 
 		-- Vengeance Bar
 		if self.db.vengeance then
@@ -368,7 +371,9 @@ function UF:DPSLayout(frame, unit)
 		power:CreateShadow("Background")
 		frame.Power = power
 
-		frame.Portrait = self:ConstructPortrait(frame)
+		if USING_DX11 then
+			frame.Portrait = self:ConstructPortrait(frame)
+		end
 
 		local castbar = self:ConstructCastBar(frame)
 		castbar:ClearAllPoints()
@@ -511,7 +516,9 @@ function UF:DPSLayout(frame, unit)
 		power:CreateShadow("Background")
 		frame.Power = power
 
-		frame.Portrait = self:ConstructPortrait(frame)
+		if USING_DX11 then
+			frame.Portrait = self:ConstructPortrait(frame)
+		end
 	end
 
 	if unit == "party" then
@@ -661,7 +668,9 @@ function UF:DPSLayout(frame, unit)
 		power:CreateShadow("Background")
 		frame.Power = power
 
-		frame.Portrait = self:ConstructPortrait(frame)
+		if USING_DX11 then
+			frame.Portrait = self:ConstructPortrait(frame)
+		end
 
 		local debuffs = CreateFrame("Frame", nil, frame)
 		debuffs:SetHeight(BOSS_HEIGHT)

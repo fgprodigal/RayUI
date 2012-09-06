@@ -4,7 +4,7 @@ local ADDON_NAME = ...
 
 T.TutorialList = {
 	L["访问 http://rayui.org 反馈问题"],
-	L["MoP测试客户端经常崩溃, 这是正常现象"],
+	L["DX9模式下3D头像会出现bug，这是暴雪的问题，所以DX9模式下的3D头像已被禁用"],
 	L["找不到微型菜单? 中键点击小地图试试"],
 }
 

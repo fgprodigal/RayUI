@@ -363,5 +363,5 @@ L["RayUI提示"] = true
 L["不再提示"] = true
 L["访问 http://rayui.org 反馈问题"] = true
 L["MoP测试客户端经常崩溃, 这是正常现象"] = true
-L["找不到微型菜单? 中键点击小地图试试"] = true
+L["DX9模式下3D头像会出现bug，这是暴雪的问题，所以DX9模式下的3D头像已被禁用"] = true
 end
