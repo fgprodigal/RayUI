@@ -3,22 +3,16 @@ local M = R:GetModule("Misc")
 
 local function LoadFunc()
 	local pos = "TOP"
-	local backdrop = {
-		bgFile = R["media"].blank, tile = true, tileSize = 0,
-		edgeFile = R["media"].blank, edgeSize = R.mult,
-		insets = {left = -R.mult, right = -R.mult, top = -R.mult, bottom = -R.mult},
-	}
 
 	local function ClickRoll(frame)
 		RollOnLoot(frame.parent.rollid, frame.rolltype)
 	end
 
-
 	local function HideTip() GameTooltip:Hide() end
 	local function HideTip2() GameTooltip:Hide(); ResetCursor() end
 
+	local rolltypes = {[1] = "need", [2] = "greed", [3] = "disenchant", [0] = "pass"}
 
-	local rolltypes = {"need", "greed", "disenchant", [0] = "pass"}
 	local function SetTip(frame)
 		GameTooltip:SetOwner(frame, "ANCHOR_RIGHT")
 		GameTooltip:SetText(frame.tiptext)
@@ -29,19 +23,11 @@ local function LoadFunc()
 			frame:SetAlpha(1)
 		end
 		for name,roll in pairs(frame.parent.rolls) do
-			if roll == rolltypes[frame.rolltype] then
+			if roll == frame.rolltype then
 				GameTooltip:AddLine(name, 1, 1, 1)
 			end
 		end
 		GameTooltip:Show()
-	end
-
-	local function SetButtonAlpha(frame)
-		if frame:IsEnabled() then
-			frame:SetAlpha(1)
-		else
-			frame:SetAlpha(0.4)
-		end
 	end
 
 	local function SetItemTip(frame)
@@ -52,20 +38,18 @@ local function LoadFunc()
 		if IsModifiedClick("DRESSUP") then ShowInspectCursor() else ResetCursor() end
 	end
 
-
 	local function ItemOnUpdate(self)
 		if IsShiftKeyDown() then GameTooltip_ShowCompareItem() end
 		CursorOnUpdate(self)
 	end
-
 
 	local function LootClick(frame)
 		if IsControlKeyDown() then DressUpItemLink(frame.link)
 		elseif IsShiftKeyDown() then ChatEdit_InsertLink(frame.link) end
 	end
 
-
 	local cancelled_rolls = {}
+
 	local function OnEvent(frame, event, rollid)
 		cancelled_rolls[rollid] = true
 		if frame.rollid ~= rollid then return end
@@ -75,15 +59,17 @@ local function LoadFunc()
 		frame:Hide()
 	end
 
-
 	local function StatusUpdate(frame)
 		if not frame.parent.rollid then return end
 		local t = GetLootRollTimeLeft(frame.parent.rollid)
 		local perc = t / frame.parent.time
 		frame.spark:Point("CENTER", frame, "LEFT", perc * frame:GetWidth(), 0)
 		frame:SetValue(t)
+		
+		if t > 1000000000 then
+			frame:GetParent():Hide()
+		end
 	end
-
 
 	local function CreateRollButton(parent, ntex, ptex, htex, rolltype, tiptext, ...)
 		local f = CreateFrame("Button", nil, parent)
@@ -96,7 +82,6 @@ local function LoadFunc()
 		f.rolltype = rolltype
 		f.parent = parent
 		f.tiptext = tiptext
-		f:SetScript ("OnUpdate", SetButtonAlpha)
 		f:SetScript("OnEnter", SetTip)
 		f:SetScript("OnLeave", HideTip)
 		f:SetScript("OnClick", ClickRoll)
@@ -111,7 +96,6 @@ local function LoadFunc()
 		txt:Point("CENTER", 0, rolltype == 2 and 1 or rolltype == 0 and -1.2 or 0)
 		return f, txt
 	end
-
 
 	local function CreateRollFrame()
 		local frame = CreateFrame("Frame", nil, UIParent)
@@ -206,7 +190,6 @@ local function LoadFunc()
 		return frame
 	end
 
-
 	local anchor = CreateFrame("Button", nil, UIParent)
 	anchor:Width(300) 
 	anchor:Height(22)
@@ -228,28 +211,26 @@ local function LoadFunc()
 	anchor:RegisterForClicks("RightButtonUp")
 	anchor:Hide()
 
-	local frames = {}
+	local rollbars = {}
 
 	local f = CreateRollFrame() -- Create one for good measure
-	f:SetPoint("TOPLEFT", next(frames) and frames[#frames] or anchor, "BOTTOMLEFT", 0, R:Scale(-4))
-	table.insert(frames, f)
-
+	f:SetPoint("TOPLEFT", next(rollbars) and rollbars[#rollbars] or anchor, "BOTTOMLEFT", 0, R:Scale(-4))
+	table.insert(rollbars, f)
 
 	local function GetFrame()
-		for i,f in ipairs(frames) do
+		for i,f in ipairs(rollbars) do
 			if not f.rollid then return f end
 		end
 
 		local f = CreateRollFrame()
 		if pos == "TOP" then
-			f:SetPoint("TOPLEFT", next(frames) and frames[#frames] or anchor, "BOTTOMLEFT", 0, R:Scale(-4))
+			f:SetPoint("TOPLEFT", next(rollbars) and rollbars[#rollbars] or anchor, "BOTTOMLEFT", 0, R:Scale(-4))
 		else
-			f:SetPoint("BOTTOMLEFT", next(frames) and frames[#frames] or anchor, "TOPLEFT", 0, R:Scale(4))
+			f:SetPoint("BOTTOMLEFT", next(rollbars) and rollbars[#rollbars] or anchor, "TOPLEFT", 0, R:Scale(4))
 		end
-		table.insert(frames, f)
+		table.insert(rollbars, f)
 		return f
 	end
-
 
 	local function START_LOOT_ROLL(rollid, time)
 		if cancelled_rolls[rollid] then return end
@@ -274,7 +255,9 @@ local function LoadFunc()
 		SetDesaturation(f.needbutt:GetNormalTexture(), not canNeed)
 		SetDesaturation(f.greedbutt:GetNormalTexture(), not canGreed)
 		SetDesaturation(f.disenchantbutt:GetNormalTexture(), not canDisenchant)
-
+		if canNeed then f.needbutt:SetAlpha(1) else f.needbutt:SetAlpha(0.2) end
+		if canGreed then f.greedbutt:SetAlpha(1) else f.greedbutt:SetAlpha(0.2) end
+		if canDisenchant then f.disenchantbutt:SetAlpha(1) else f.disenchantbutt:SetAlpha(0.2) end
 
 		f.fsbind:SetText(bop and "BoP" or "BoE")
 		f.fsbind:SetVertexColor(bop and 1 or .3, bop and .3 or 1, bop and .1 or .3)
@@ -293,49 +276,16 @@ local function LoadFunc()
 		f:SetPoint("CENTER", WorldFrame, "CENTER")
 		f:Show()
 	end
+	
+	local function LOOT_HISTORY_ROLL_CHANGED(itemIdx, playerIdx)
+		local rollID, itemLink, numPlayers, isDone, winnerIdx, isMasterLoot = C_LootHistory.GetItem(itemIdx);
+		local name, class, rollType, roll, isWinner = C_LootHistory.GetPlayerInfo(itemIdx, playerIdx);
 
-
-	local locale = GetLocale()
-	local rollpairs = locale == "zhCN" and {
-		["(.*)自动放弃了(.+)，因为他无法拾取该物品。$"]  = "pass",
-		["(.*)自动放弃了(.+)，因为她无法拾取该物品。$"]  = "pass",
-		["(.*)放弃了：(.+)"] = "pass",
-		["(.*)选择了贪婪取向：(.+)"] = "greed",
-		["(.*)选择了需求取向：(.+)"] = "need",
-		["(.*)选择了分解取向：(.+)"] = "disenchant",
-	} or locale == "zhTW" and {
-		["(.*)自動放棄:(.+)，因為"]  = "pass",
-		["(.*)放棄了:(.+)"] = "pass",
-		["(.*)選擇了貪婪:(.+)"] = "greed",
-		["(.*)選擇了需求:(.+)"] = "need",
-		["(.*)選擇分解:(.+)"] = "disenchant",
-	}or {
-		["^(.*) automatically passed on: (.+) because s?he cannot loot that item.$"] = "pass",
-		["^(.*) passed on: (.+|r)$"]  = "pass",
-		["(.*) has selected Greed for: (.+)"] = "greed",
-		["(.*) has selected Need for: (.+)"]  = "need",
-		["(.*) has selected Disenchant for: (.+)"]  = "disenchant",
-	}
-
-	local function ParseRollChoice(msg)
-		for i,v in pairs(rollpairs) do
-			local _, _, playername, itemname = string.find(msg, i)
-			if locale == "ruRU" and (v == "greed" or v == "need" or v == "disenchant")  then 
-				local temp = playername
-				playername = itemname
-				itemname = temp
-			end 
-			if playername and itemname and playername ~= "Everyone" then return playername, itemname, v end
-		end
-	end
-
-	local function CHAT_MSG_LOOT(msg)
-		local playername, itemname, rolltype = ParseRollChoice(msg)
-		if playername and itemname and rolltype then
-			for _,f in ipairs(frames) do
-				if f.rollid and f.button.link == itemname and not f.rolls[playername] then
-					f.rolls[playername] = rolltype
-					f[rolltype]:SetText(tonumber(f[rolltype]:GetText()) + 1)
+		if name and rollType then
+			for _,f in ipairs(rollbars) do
+				if f.rollid == rollID then
+					f.rolls[name] = rollType
+					f[rolltypes[rollType]]:SetText(tonumber(f[rolltypes[rollType]]:GetText()) + 1)
 					return
 				end
 			end
@@ -346,10 +296,16 @@ local function LoadFunc()
 	anchor:SetScript("OnEvent", function(frame, event)
 		anchor:UnregisterEvent("PLAYER_ENTERING_WORLD")
 		anchor:RegisterEvent("START_LOOT_ROLL")
-		anchor:RegisterEvent("CHAT_MSG_LOOT")
+		anchor:RegisterEvent("LOOT_HISTORY_ROLL_CHANGED")
 		UIParent:UnregisterEvent("START_LOOT_ROLL")
 		UIParent:UnregisterEvent("CANCEL_LOOT_ROLL")
-		anchor:SetScript("OnEvent", function(frame, event, ...) if event == "CHAT_MSG_LOOT" then return CHAT_MSG_LOOT(...) else return START_LOOT_ROLL(...) end end)
+		anchor:SetScript("OnEvent", function(frame, event, ...)
+			if event == "LOOT_HISTORY_ROLL_CHANGED" then
+				LOOT_HISTORY_ROLL_CHANGED(...)
+			else
+				START_LOOT_ROLL(...)
+			end
+		end)
 
 		local anchorholder = CreateFrame("Frame", "AnchorHolder", UIParent)
 		anchorholder:SetPoint("TOP", UIParent, "TOP", 0, -200)
