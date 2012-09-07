@@ -305,7 +305,6 @@ R["Watcher"] = {
 				{ spellID = 11426, unitId = "player", caster = "player", filter = "BUFF" },
 				--2T13效果
 				{ spellID = 105785, unitId = "player", caster = "player", filter = "BUFF" },
-
 			},
 			{
 				name = "目标debuff",
@@ -331,7 +330,6 @@ R["Watcher"] = {
 				{ spellID = 11366, unitId = "target", caster = "player", filter = "DEBUFF" },
 				--極度冰凍
 				{ spellID = 44572, unitId = "target", caster = "player", filter = "DEBUFF"},
-
 			},
 			{
 				name = "焦点debuff",
@@ -357,23 +355,25 @@ R["Watcher"] = {
 				setpoint = { "TOPLEFT", "RayUIActionBar2", "BOTTOMRIGHT", -27, -6 },
 
 				--镜像术
-				{ spellID = 55342, unitId = "player", caster = "player", filter = "CD" },
+				{ spellID = 55342, filter = "CD" },
 				--隐形术
-				{ spellID = 66, unitId = "player", caster = "player", filter = "CD" },
+				{ spellID = 66, filter = "CD" },
 				--燃火
-				{ spellID = 11129, unitId = "player", caster = "player", filter = "CD" },
+				{ spellID = 11129, filter = "CD" },
 				--唤醒
-				{ spellID = 12051, unitId = "player", caster = "player", filter = "CD" },
+				{ spellID = 12051, filter = "CD" },
 				--秘法強化
-				{ spellID = 12042, unitId = "player", caster = "player", filter = "CD" },
+				{ spellID = 12042, filter = "CD" },
 				--急速冷卻
-				{ spellID = 11958, unitId = "player", caster = "player", filter = "CD" },
+				{ spellID = 11958, filter = "CD" },
 				--極度冰凍
-				{ spellID = 44572, unitId = "player", caster = "player", filter = "CD" },
+				{ spellID = 44572, filter = "CD" },
 				--冰寒脈動
-				{ spellID = 12472, unitId = "player", caster = "player", filter = "CD" },
+				{ spellID = 12472, filter = "CD" },
 				--寒冰屏障
-				{ spellID = 45438, unitId = "player", caster = "player", filter = "CD" },
+				{ spellID = 45438, filter = "CD" },
+				--冰霜之球
+				{ spellID = 84714, filter = "CD" },
 			},
 		},
 		["WARRIOR"] = {
