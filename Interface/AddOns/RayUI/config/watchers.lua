@@ -149,7 +149,6 @@ R["Watcher"] = {
 				{ spellID = 64420, unitId = "player", caster = "player", filter = "BUFF" },
 				--射擊!
 				{ spellID = 82926, unitId = "player", caster = "player", filter = "BUFF" },
-
 			},
 			{
 				name = "目标buff",
@@ -779,6 +778,8 @@ R["Watcher"] = {
 				{ spellID = 17941, unitId = "player", caster = "player", filter = "BUFF" },
 				--靈魂炙燃
 				{ spellID = 74434, unitId = "player", caster = "player", filter = "BUFF" },
+				--熔火之心
+				{ spellID = 122351, unitId = "player", caster = "player", filter = "BUFF" },
 			},
 		},
 		["ROGUE"] = {
