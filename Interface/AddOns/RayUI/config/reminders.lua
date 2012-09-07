@@ -42,17 +42,6 @@ P["Reminder"]["filters"] = {
 	WARLOCK = {
 	},
 	PALADIN = {
-		["圣印"] = { --Seals group
-			["spellGroup"] = {
-				[20154] = true, -- seal of righteousness
-				[20164] = true, -- seal of justice
-				[20165] = true, -- seal of insight
-				[31801] = true, -- seal of truth
-			},
-			["instance"] = true,
-			["pvp"] = true,
-			["enable"] = true,
-		},
 		["正义之怒"] = { -- righteous fury group
 			["spellGroup"] = {
 				[25780] = true, 
