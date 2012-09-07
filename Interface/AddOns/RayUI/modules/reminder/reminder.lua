@@ -26,7 +26,7 @@ function RM:UpdateReminderIcon(event, unit)
 	local db = P["Reminder"].filters[R.myclass][self.groupName]
 
 	self:Hide()
-	self.icon:SetTexture(nil)
+	--self.icon:SetTexture(nil)
 
 	if not db or not db.enable or (not db.spellGroup and not db.weaponCheck) then return end
 
@@ -215,7 +215,8 @@ function RM:CreateReminder(name, index)
 	-- frame:Hide()
 
 	frame:RegisterUnitEvent("UNIT_AURA", "player")
-	frame:RegisterEvent("PLAYER_ENTERING_WORLD")
+	--frame:RegisterEvent("PLAYER_ENTERING_WORLD")
+	frame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	frame:RegisterEvent("UNIT_INVENTORY_CHANGED")
 	frame:RegisterEvent("PLAYER_REGEN_ENABLED")
 	frame:RegisterEvent("PLAYER_REGEN_DISABLED")
