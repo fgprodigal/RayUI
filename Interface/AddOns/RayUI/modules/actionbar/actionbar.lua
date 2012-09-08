@@ -222,7 +222,7 @@ function AB:GetOptions()
 end
 
 function AB:HideBlizz()
-	local blizzHider = CreateFrame("Frame","rABS_BizzardHider")
+	local blizzHider = CreateFrame("Frame", nil)
 	blizzHider:Hide()
 	MainMenuBar:SetParent(blizzHider)
 	MainMenuBarPageNumber:SetParent(blizzHider)
@@ -232,6 +232,29 @@ function AB:HideBlizz()
 	OverrideActionBarHealthBar:SetParent(blizzHider)
 	OverrideActionBarPowerBar:SetParent(blizzHider)
 	OverrideActionBarPitchFrame:SetParent(blizzHider)
+
+    local buttonList = {
+        CharacterMicroButton,
+        SpellbookMicroButton,
+        TalentMicroButton,
+        AchievementMicroButton,
+        QuestLogMicroButton,
+        GuildMicroButton,
+        PVPMicroButton,
+        LFDMicroButton,
+        CompanionsMicroButton,
+        EJMicroButton,
+        MainMenuMicroButton,
+        HelpMicroButton,
+        MainMenuBarBackpackButton,
+        CharacterBag0Slot,
+        CharacterBag1Slot,
+        CharacterBag2Slot,
+        CharacterBag3Slot,
+    }
+    for _, button in pairs(buttonList) do
+        button:SetParent(blizzHider)
+    end
 	-----------------------------
 	-- HIDE TEXTURES
 	-----------------------------
