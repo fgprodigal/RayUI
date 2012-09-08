@@ -37,11 +37,6 @@ function R:TableIsEmpty(t)
 	end
 end
 
--- fucking bug
-function AchievementMicroButton_Update()
-    return
-end
-
 local function CreateWarningFrame()
 	for index in pairs(AddonNotSupported) do
 		R:Print(GetAddOnInfo(index))
