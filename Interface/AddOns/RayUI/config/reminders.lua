@@ -52,6 +52,13 @@ P["Reminder"]["filters"] = {
 			["talentTreeException"] = 1, --Holy paladins use RF sometimes
 			["enable"] = true,
 		},
+		["圣印"] = { --check weapons for enchants
+			["stanceCheck"] = true,
+			["instance"] = true,
+			["pvp"] = true,
+			["minLevel"] = 3,
+			["enable"] = true,
+		},
 	},
 	SHAMAN = {
 		["护盾"] = { --shields group
