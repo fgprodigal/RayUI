@@ -543,7 +543,7 @@ function UF:PostUpdateHealth(unit, cur, max)
 			end
 		end
 	end
-	local color = oUF.colors.reaction[5]
+	local color = {1,1,1}
 	if UnitIsPlayer(unit) then
 		local _, class = UnitClass(unit)
 		color = oUF.colors.class[class]

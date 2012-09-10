@@ -65,14 +65,11 @@ end
 
 local Visibility = function(self, event, unit)
 	local element = self.ShadowOrbs
-	if(GetSpecialization() == SPEC_PRIEST_SHADOW) then
-		for index = 1, PRIEST_BAR_NUM_ORBS do
-			element[index]:Show()
-		end
-	else
+	if(GetSpecialization() ~= SPEC_PRIEST_SHADOW) then
 		for index = 1, PRIEST_BAR_NUM_ORBS do
 			element[index]:Hide()
 		end
+	else
 	end
 end
 

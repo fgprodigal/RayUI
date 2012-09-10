@@ -31,24 +31,10 @@ local Update = function(self, event, unit, powerType)
 			wsb:Show()
 		end
 		
-		if (spec == SPEC_WARLOCK_DESTRUCTION) then
-			for i = 1, 4 do
-				wsb[i]:Show()
-				-- wsb[i]:SetStatusBarColor(unpack(DESTRO_COLORS))
-				-- if wsb[i].bg then
-					-- wsb[i].bg:SetTexture(unpack(DESTRO_COLORS))
-				-- end
-			end
-		else
-			for i = 1, 4 do
-				wsb[i]:Show()
-				-- wsb[i]:SetStatusBarColor(unpack(SHARD_COLORS))
-				-- if wsb[i].bg then
-					-- wsb[i].bg:SetTexture(unpack(SHARD_COLORS))
-				-- end
-			end		
-		end
-		
+        for i = 1, 4 do
+            wsb[i]:Hide()
+        end
+
 		if (spec == SPEC_WARLOCK_DESTRUCTION) then	
 			local maxPower = UnitPowerMax("player", SPELL_POWER_BURNING_EMBERS, true)
 			local power = UnitPower("player", SPELL_POWER_BURNING_EMBERS, true)
@@ -56,29 +42,19 @@ local Update = function(self, event, unit, powerType)
 			local numBars = floor(maxPower / MAX_POWER_PER_EMBER)
 			wsb.number = numBars
 			
-			-- bar unavailable
-			if numBars == 3 then
-				wsb[4]:Hide()
-			else
-				wsb[4]:Show()
-			end
-
 			for i = 1, numBars do
 				wsb[i]:SetMinMaxValues((MAX_POWER_PER_EMBER * i) - MAX_POWER_PER_EMBER, MAX_POWER_PER_EMBER * i)
-				wsb[i]:Show()
-				wsb[i]:SetValue(power)
+                if i > numEmbers + 1 then
+                    wsb[i]:Hide()
+                else
+                    wsb[i]:Show()
+                    wsb[i]:SetValue(power)
+                end
 			end
 		elseif ( spec == SPEC_WARLOCK_AFFLICTION ) then
 			local numShards = UnitPower("player", SPELL_POWER_SOUL_SHARDS)
 			local maxShards = UnitPowerMax("player", SPELL_POWER_SOUL_SHARDS)
 			wsb.number = maxShards
-			
-			-- bar unavailable
-			if maxShards == 3 then
-				wsb[4]:Hide()
-			else
-				wsb[4]:Show()
-			end
 			
 			for i = 1, maxShards do
 				wsb[i]:SetMinMaxValues(0, 1)
@@ -100,6 +76,7 @@ local Update = function(self, event, unit, powerType)
 			
 			wsb[1]:SetMinMaxValues(0, maxPower)
 			wsb[1]:SetValue(power)
+			wsb[1]:Show()
 		end
 	else
 		if wsb:IsShown() then 

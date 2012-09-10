@@ -1228,6 +1228,11 @@ function B:Sort(frame, args, bank)
 	self:RestackAndSort(frame)
 end
 
+function B:PLAYER_ENTERING_WORLD()
+	ToggleBackpack()
+	ToggleBackpack()
+end
+
 function B:Initialize()
 	self:InitBags()
 
@@ -1242,6 +1247,7 @@ function B:Initialize()
 	self:RegisterEvent("BAG_CLOSED")
 	self:RegisterEvent("BAG_UPDATE_COOLDOWN")
 	self:RegisterEvent("GUILDBANKBAGSLOTS_CHANGED")
+	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 	--Hook onto Blizzard Functions
 	self:RawHook("ToggleBackpack", "ToggleBags", true)
@@ -1260,9 +1266,6 @@ function B:Initialize()
 
 	StackSplitFrame:SetFrameStrata("DIALOG")
 	LootFrame:SetFrameStrata("DIALOG")
-
-	ToggleBackpack()
-	ToggleBackpack()
 end
 
 StaticPopupDialogs["BUY_BANK_SLOT"] = {

@@ -43,7 +43,7 @@ function RM:UpdateReminderIcon(event, unit)
 			if value == true then
 				local name = GetSpellInfo(buff)
 				local usable, nomana = IsUsableSpell(name)
-				if (usable or nomana) then
+				if (usable or nomana) and IsSpellKnown(buff) then
 					self.icon:SetTexture(select(3, GetSpellInfo(buff)))
 					break
 				end
