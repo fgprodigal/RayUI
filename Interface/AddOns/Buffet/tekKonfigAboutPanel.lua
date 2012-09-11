@@ -1,9 +1,10 @@
 
-local lib, oldminor = LibStub:NewLibrary("tekKonfig-AboutPanel", 5)
+local lib, oldminor = LibStub:NewLibrary("tekKonfig-AboutPanel", 6)
 if not lib then return end
 
 
 function lib.new(parent, addonname)
+	if not parent and AddonLoader and AddonLoader.RemoveInterfaceOptions then AddonLoader:RemoveInterfaceOptions(addonname) end
 	local frame = CreateFrame("Frame", nil, InterfaceOptionsFramePanelContainer)
 	frame.name, frame.parent, frame.addonname = parent and "About" or addonname, parent, addonname
 	frame:Hide()

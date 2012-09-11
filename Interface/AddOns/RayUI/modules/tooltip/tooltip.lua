@@ -436,6 +436,12 @@ function TT:GetItemScore(iLink)
 end
 
 function TT:SetStyle(tooltip)
+	tooltip:SetBackdrop( { 
+		edgeFile = R["media"].glow,
+		bgFile = R["media"].blank,
+		edgeSize = R:Scale(4),
+		insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
+	})
 	tooltip:SetBackdropColor(0, 0, 0, 0.65)
 	local item
 	if tooltip.GetItem then
@@ -463,12 +469,6 @@ end
 function TT:Initialize()
 	local gcol = {.35, 1, .6}										-- Guild Color
 	local pgcol = {1, .12, .8} 									-- Player's Guild Color
-
-	local backdrop = {
-		bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
-		edgeFile = [=[Interface\ChatFrame\ChatFrameBackground]=], edgeSize = R.mult,
-		insets = {top = 0, left = 0, bottom = 0, right = 0},
-	}
 
 	local types = {
 		rare = " R ",
@@ -563,18 +563,24 @@ function TT:Initialize()
 	end)
 
 	GameTooltipStatusBar.bg = CreateFrame("Frame", nil, GameTooltipStatusBar)
-	GameTooltipStatusBar.bg:Point("TOPLEFT", GameTooltipStatusBar, "TOPLEFT", -1, 1)
-	GameTooltipStatusBar.bg:Point("BOTTOMRIGHT", GameTooltipStatusBar, "BOTTOMRIGHT", 1, -1)
+	GameTooltipStatusBar.bg:Point("TOPLEFT", GameTooltipStatusBar, "TOPLEFT", -4, 4)
+	GameTooltipStatusBar.bg:Point("BOTTOMRIGHT", GameTooltipStatusBar, "BOTTOMRIGHT", 4, -4)
 	GameTooltipStatusBar.bg:SetFrameStrata(GameTooltipStatusBar:GetFrameStrata())
 	GameTooltipStatusBar.bg:SetFrameLevel(GameTooltipStatusBar:GetFrameLevel() - 1)
 	GameTooltipStatusBar.bg:SetBackdrop(backdrop)
+	GameTooltipStatusBar.bg:SetBackdrop( { 
+		edgeFile = R["media"].glow,
+		bgFile = R["media"].blank,
+		edgeSize = R:Scale(4),
+		insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
+	})
 	GameTooltipStatusBar.bg:SetBackdropColor(0, 0, 0, 0.5)
-	GameTooltipStatusBar.bg:SetBackdropBorderColor(0, 0, 0, 1)
+	GameTooltipStatusBar.bg:SetBackdropBorderColor(0, 0, 0, 0.8)
 	GameTooltipStatusBar:SetHeight(8)
 	GameTooltipStatusBar:SetStatusBarTexture(R["media"].normal)
 	GameTooltipStatusBar:ClearAllPoints()
-	GameTooltipStatusBar:SetPoint("TOPLEFT", GameTooltip, "BOTTOMLEFT", 1, -2)
-	GameTooltipStatusBar:SetPoint("TOPRIGHT", GameTooltip, "BOTTOMRIGHT", -1, -2)
+	GameTooltipStatusBar:SetPoint("TOPLEFT", GameTooltip, "BOTTOMLEFT", 3, -2)
+	GameTooltipStatusBar:SetPoint("TOPRIGHT", GameTooltip, "BOTTOMRIGHT", -3, -2)
 	GameTooltipStatusBar:HookScript("OnValueChanged", function(self, value)
 		if not value then
 			return

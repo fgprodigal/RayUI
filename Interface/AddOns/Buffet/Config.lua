@@ -5,11 +5,13 @@ local EDGEGAP, GAP = 16, 8
 local tekbutt = LibStub("tekKonfig-Button")
 
 
+if AddonLoader and AddonLoader.RemoveInterfaceOptions then AddonLoader:RemoveInterfaceOptions("Buffet") end
+
 local frame = CreateFrame("Frame", nil, InterfaceOptionsFramePanelContainer)
 frame.name = "Buffet"
 frame:Hide()
 frame:SetScript("OnShow", function()
-	local title, subtitle = LibStub("tekKonfig-Heading").new(frame, "Buffet", "這個面板允許妳快速創建Buffet的基礎巨集以供編輯.  由wowui.me漢化發布.")
+    local title, subtitle = LibStub("tekKonfig-Heading").new(frame, "Buffet", "這個面板允許妳快速創建Buffet的基礎巨集以供編輯.")
 
 	local function OnClick(self)
 		local id = GetMacroIndexByName(self.name)
@@ -23,15 +25,15 @@ frame:SetScript("OnShow", function()
 	end
 
 	local hpbutt = tekbutt.new(frame, "TOPLEFT", subtitle, "BOTTOMLEFT", -2, -GAP)
-	hpbutt:SetText("生命巨集")
-	hpbutt.tiptext = "生成壹個包含食物,繃帶,藥水和治療石的公共壹鍵巨集."
+    hpbutt:SetText("生命巨集")
+    hpbutt.tiptext = "生成壹個包含食物,繃帶,藥水和治療石的公共壹鍵巨集."
 	hpbutt.name = "AutoHP"
 	hpbutt:SetScript("OnClick", OnClick)
 	if InCombatLockdown() then hpbutt:Disable() end
 
 	local mpbutt = tekbutt.new(frame, "TOPLEFT", hpbutt, "TOPRIGHT", GAP, 0)
-	mpbutt:SetText("法力巨集")
-	mpbutt.tiptext = "生成壹個包含水, 法力藥水和法力石的壹鍵巨集"
+    mpbutt:SetText("法力巨集")
+    mpbutt.tiptext = "生成壹個包含水, 法力藥水和法力石的壹鍵巨集"
 	mpbutt.name = "AutoMP"
 	mpbutt:SetScript("OnClick", OnClick)
 	if InCombatLockdown() then mpbutt:Disable() end

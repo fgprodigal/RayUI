@@ -114,12 +114,14 @@ function Buffet:Edit(name, substring, food, pot, stone, shift)
 	if not macroid then return end
     local hasDaughter = GetItemCount(64488) == 1
 
-	local body = "/use [mod:alt]item:"..( hasDaughter and "64488" or "6948" )..";"
+    local body = "/use [mod:alt]item:"..( hasDaughter and "64488" or "6948" )..";"
 	if shift then body = body .. "[mod:shift,target=player] item:"..shift.."; " end
 	if (pot and not stone) or (stone and not pot) then body = body .. "[combat] item:"..(pot or stone).."; " end
-	body = body .. (pot and stone and "[nocombat] " or "").."item:"..(food or ( hasDaughter and "64488" or "6948" ))
+    body = body .. (pot and stone and "[nocombat] " or "").."item:"..(food or ( hasDaughter and "64488" or "6948" ))
 
 	if pot and stone then body = body .. "\n/castsequence [combat,nomod] reset="..(stone == 22044 and "120/" or "").."combat item:"..stone..", item:"..pot end
 
-	EditMacro(macroid, name, "INV_MISC_QUESTIONMARK", substring:gsub("%%MACRO%%", body), 1)
+	EditMacro(macroid, name, "INV_Misc_QuestionMark", substring:gsub("%%MACRO%%", body), 1)
 end
+
+

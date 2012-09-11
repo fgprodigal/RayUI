@@ -1,20 +1,18 @@
-﻿## Interface: 50001
-## X-Curse-Packaged-Version: 4.1.0.35-Beta
-## X-Curse-Project-Name: Buffet
-## X-Curse-Project-ID: buffet
-## X-Curse-Repository-ID: wow/buffet/mainline
+## Interface: 50001
 
 ## Title: Buffet
 ## Notes: Food/water macro generator
 ## Author: Tekkub Stoutwrithe
-## Version: 4.1.0.35
+## Version: 5.0.1.37
 ## X-Website: http://www.tekkub.net/
 ## X-Email: tekkub-wow@googlegroups.com
+## X-Icon: Interface\Icons\INV_Misc_Food_DimSum
 
 ## SavedVariablesPerCharacter: BuffetDB
 
 ## LoadManagers: AddonLoader
 ## X-LoadOn-Always: delayed
+## X-LoadOn-InterfaceOptions: Buffet
 
 LibStub.lua
 tekIDmemo.lua
