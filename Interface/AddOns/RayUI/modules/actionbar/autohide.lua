@@ -15,13 +15,7 @@ end
 local function FadeOutActionButton()
 	for _, v in ipairs(rabs) do 
 		if _G[v]:GetAlpha()>0 then
-			local fadeInfo = {}
-			fadeInfo.mode = "OUT"
-			fadeInfo.timeToFade = 0.5
-			fadeInfo.finishedFunc = function() _G[v]:Hide() end
-			fadeInfo.startAlpha = _G[v]:GetAlpha()
-			fadeInfo.endAlpha = 0
-			R:UIFrameFade(_G[v], fadeInfo)
+			R:UIFrameFadeOut(_G[v], 0.5, _G[v]:GetAlpha(), 0)
 		end 
 	end
 end
@@ -29,7 +23,6 @@ end
 local function FadeInActionButton()
 	for _, v in ipairs(rabs) do
 		if _G[v]:GetAlpha()<1 then
-			_G[v]:Show()
 			R:UIFrameFadeIn(_G[v], 0.5, _G[v]:GetAlpha(), 1)
 		end
 	end
