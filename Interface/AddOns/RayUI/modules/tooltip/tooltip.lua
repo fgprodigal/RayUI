@@ -37,11 +37,13 @@ local function GatherTalents(isInspect)
 	local spec = isInspect and GetInspectSpecialization(current.unit) or GetSpecialization()
 	if (spec) and (spec > 0) then
 		if isInspect then
-			local _, specName = GetSpecializationInfoByID(spec)
-			current.format = specName or "n/a"
+			local _, specName, _, icon = GetSpecializationInfoByID(spec)
+            icon = icon and " |T"..icon..":12:12:0:0:64:64:5:59:5:59|t " or ""
+			current.format = specName and icon..specName or "n/a"
 		else
-			local _, specName = GetSpecializationInfo(spec)
-			current.format = specName or "n/a"
+			local _, specName, _, icon = GetSpecializationInfo(spec)
+            icon = icon and " |T"..icon..":12:12:0:0:64:64:5:59:5:59|t " or ""
+			current.format = specName and icon..specName or "n/a"
 		end
 	else
 		current.format = NO_TALENTS
@@ -514,12 +516,38 @@ function TT:Initialize()
 						GameTooltipTextLeft2:SetTextColor(gcol[1], gcol[2], gcol[3])
 					end
 				end
+                if UnitIsPVP(unit) then
+                    for i = 2, GameTooltip:NumLines() do
+                        if _G["GameTooltipTextLeft"..i]:GetText():find(PVP) then
+                            _G["GameTooltipTextLeft"..i]:SetText(nil)
+                            break
+                        end
+                    end
+                end
+                if UnitExists(unit.."target") then
+                    local r, g, b = GameTooltip_UnitColor(unit.."target")
+                    if UnitName(unit.."target") == UnitName("player") then
+                        text = hex(1, 0, 0)..">>你<<|r"
+                    else
+                        text = hex(r, g, b)..UnitName(unit.."target").."|r"
+                    end
+                    self:AddLine(TARGET..": "..text)
+                end
 				for i=2, GameTooltip:NumLines() do
 					if _G["GameTooltipTextLeft" .. i]:GetText():find(PLAYER) then
 						_G["GameTooltipTextLeft" .. i]:SetText(string.format(hex(diffColor.r, diffColor.g, diffColor.b).."%s|r ", unitLevel) .. unitRace .. " ".. unitClass)
 						break
 					end
 				end
+                if UnitFactionGroup(unit) then
+                    GameTooltipTextLeft1:SetText('|TInterface\\TargetingFrame\\UI-PVP-'..select(1, UnitFactionGroup(unit))..'.blp:16:16:-2:0:64:64:0:40:0:40|t'..GameTooltipTextLeft1:GetText())
+                    for i = 2, GameTooltip:NumLines() do
+                        if _G["GameTooltipTextLeft"..i]:GetText():find(select(2, UnitFactionGroup(unit))) then
+                            _G["GameTooltipTextLeft"..i]:SetText('')
+                            break
+                        end
+                    end
+                end
 			else
 				for i=2, GameTooltip:NumLines() do
 					if _G["GameTooltipTextLeft" .. i]:GetText():find(LEVEL) or _G["GameTooltipTextLeft" .. i]:GetText():find(creatureType) then
@@ -527,23 +555,6 @@ function TT:Initialize()
 						break
 					end
 				end
-			end
-			if UnitIsPVP(unit) then
-				for i = 2, GameTooltip:NumLines() do
-					if _G["GameTooltipTextLeft"..i]:GetText():find(PVP) then
-						_G["GameTooltipTextLeft"..i]:SetText(nil)
-						break
-					end
-				end
-			end
-			if UnitExists(unit.."target") then
-				local r, g, b = GameTooltip_UnitColor(unit.."target")
-				if UnitName(unit.."target") == UnitName("player") then
-					text = hex(1, 0, 0)..">>你<<|r"
-				else
-					text = hex(r, g, b)..UnitName(unit.."target").."|r"
-				end
-				self:AddLine(TARGET..": "..text)
 			end
 		end
 

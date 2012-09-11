@@ -9,13 +9,6 @@ local glowBorder = {
     insets = {left = 3, right = 3, top = 3, bottom = 3}
 }
 
-local function multicheck(check, ...)
-    for i=1, select('#', ...) do
-        if check == select(i, ...) then return true end
-    end
-    return false
-end
-
 local GetTime = GetTime
 local floor, fmod = floor, math.fmod
 local day, hour, minute = 86400, 3600, 60
@@ -71,51 +64,15 @@ local CreateAuraIcon = function(auras)
     return button
 end
 
-local dispellist = {}
+local dispelClass = {
+    PRIEST = { Disease = true, Magic = true },
+    SHAMAN = { Curse = true, Magic = true },
+    PALADIN = { Poison = true, Disease = true, Magic = true },
+    MAGE = { Curse = true, },
+    DRUID = { Curse = true, Poison = true, Magic = true },
+}
 
-if multicheck(R.myclass, "SHAMAN", "PALADIN", "DRUID", "PRIEST") then
-	local dispelClass = {
-		PRIEST = { Disease = true, },
-		SHAMAN = { Curse = true, },
-		PALADIN = { Poison = true, Disease = true, },
-		MAGE = { Curse = true, },
-		DRUID = { Curse = true, Poison = true, },
-	}
-
-	local function CheckTalent()
-		if R.myclass == "SHAMAN" then
-			local name,_,_,_,rank = GetTalentInfo(3, 12)
-
-			dispelClass[R.myclass].Magic = rank == 1 and true
-
-		elseif R.myclass == "PALADIN" then
-			local name,_,_,_,rank = GetTalentInfo(1, 14)
-			dispelClass[R.myclass].Magic = rank == 1 and true
-		elseif R.myclass == "DRUID" then
-			local name,_,_,_,rank = GetTalentInfo(3, 17)
-
-			dispelClass[R.myclass].Magic = rank == 1 and true
-
-		elseif R.myclass == "PRIEST" then
-			local tree = GetSpecialization()
-
-			dispelClass[R.myclass].Magic = (tree == 1 or tree == 2) and true
-		end
-		dispellist = dispelClass[R.myclass] or {}
-	end
-
-	local checkTalents = CreateFrame("Frame")
-	checkTalents:RegisterEvent("PLAYER_ENTERING_WORLD")
-	checkTalents:RegisterEvent("PLAYER_TALENT_UPDATE")
-	checkTalents:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-	checkTalents:RegisterEvent("CHARACTER_POINTS_CHANGED")
-	checkTalents:SetScript("OnEvent", function(self, event)
-		CheckTalent()
-		if event == "PLAYER_ENTERING_WORLD" then
-			self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-		end
-	end)
-end
+local dispellist = dispelClass[R.myclass] or {}
 
 local dispelPriority = {
     Magic = 4,

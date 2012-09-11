@@ -14,7 +14,7 @@ local spellcache = setmetatable({},
 	end
 
 	--print("Invalid spell ID: ", id)
-        t[id] = foo
+    t[id] = foo
 	return foo
 end
 })
@@ -113,11 +113,13 @@ oUF.Tags.Events["RayUIRaid:poison"] = "UNIT_AURA"
 -- Priest
 local pomCount = {"i","h","g","f","Z","Y"}
 oUF.Tags.Methods["RayUIRaid:pom"] = function(u) 
-    local name, _,_, c, _,_,_, fromwho = UnitAura(u, GetSpellInfo(41635)) 
-    if fromwho == "player" then
-        if(c) then return "|cff66FFFF"..pomCount[c].."|r" end 
-    else
-        if(c) then return "|cffFFCF7F"..pomCount[c].."|r" end 
+    local name, _,_, c, _,_,_, fromwho = UnitAura(u, GetSpellInfo(33076))
+    if name and c then
+        if(fromwho == "player") then
+            return "|cff66FFFF"..pomCount[c].."|r"
+        else
+            return "|cffFFCF7F"..pomCount[c].."|r"
+        end
     end
 end
 oUF.Tags.Events["RayUIRaid:pom"] = "UNIT_AURA"
@@ -271,7 +273,7 @@ end
 oUF.Tags.Events["RayUIRaid:ss"] = "UNIT_AURA"
 
 -- Mage
-oUF.Tags.Methods["RayUIRaid:int"] = function(u) if not(UnitAura(u, GetSpellInfo(1459))) then return "|cff00A1DE"..x.."|r" end end
+oUF.Tags.Methods["RayUIRaid:int"] = function(u) if not(UnitAura(u, GetSpellInfo(1459)) or UnitAura(u, GetSpellInfo(61316))) then return "|cff00A1DE"..x.."|r" end end
 oUF.Tags.Events["RayUIRaid:int"] = "UNIT_AURA"
 
 oUF.Tags.Methods["RayUIRaid:fmagic"] = function(u) if UnitAura(u, GetSpellInfo(54648)) then return "|cffCC00FF"..x.."|r" end end

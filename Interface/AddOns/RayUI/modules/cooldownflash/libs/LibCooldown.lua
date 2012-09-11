@@ -81,9 +81,7 @@ local function parsespellbook(spellbook)
 			local tabEnd = offset + numSpells
 			for j = offset, tabEnd - 1 do
 				local skilltype, id = GetSpellBookItemInfo(j, spellbook)
-			-- end
-			-- for i = 1, MAX_SPELLS do
-				-- skilltype, id = GetSpellBookItemInfo(i, spellbook)
+
 				if not id then break end
 
 				name = GetSpellBookItemName(j, spellbook)

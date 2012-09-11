@@ -39,6 +39,7 @@ do
 	local UnitIsDead = UnitIsDead;
 	local UnitOnTaxi = UnitOnTaxi;
 	local UnitInRange = UnitInRange;
+	local IsInGroup = IsInGroup;
 	local IsSpellInRange = IsSpellInRange;
 	local CheckInteractDistance = CheckInteractDistance;
 	--- Uses an appropriate range check for the given unit.
@@ -46,17 +47,19 @@ do
 	-- @param UnitID  Unit to check range for.
 	-- @return True if in casting range.
 	function IsInRange ( UnitID )
-		if UnitGUID(UnitID) == UnitGUID("player") then
-			return true
-		elseif ( UnitIsConnected( UnitID ) ) then
+		if ( UnitIsConnected( UnitID ) ) then
 			if ( UnitCanAssist( "player", UnitID ) ) then
 				if ( HelpName and not UnitIsDead( UnitID ) ) then
 					return IsSpellInRange( HelpName, UnitID ) == 1;
-				elseif ( not UnitOnTaxi( "player" ) -- UnitInRange always returns nil while on flightpaths
-					and ( UnitIsUnit( UnitID, "player" ) or UnitIsUnit( UnitID, "pet" )
-						or UnitPlayerOrPetInParty( UnitID ) or UnitPlayerOrPetInRaid( UnitID ) )
-				) then
-					return UnitInRange( UnitID ); -- Fast checking for self and party members (38 yd range)
+				elseif ( not UnitOnTaxi( "player" ) ) then -- UnitInRange always returns nil while on flightpaths
+					-- Use UnitInRange if available (38 yd range)
+					if ( IsInGroup() ) then -- UnitInRange only works while in a group
+						if ( UnitIsUnit( UnitID, "player" ) or UnitIsUnit( UnitID, "pet" ) ) then
+							return UnitInRange( UnitID );
+						end
+					elseif ( UnitPlayerOrPetInParty( UnitID ) or UnitPlayerOrPetInRaid( UnitID ) ) then
+						return UnitInRange( UnitID );
+					end
 				end
 			elseif ( HarmName and not UnitIsDead( UnitID ) and UnitCanAttack( "player", UnitID ) ) then
 				return IsSpellInRange( HarmName, UnitID ) == 1;
@@ -187,7 +190,7 @@ HelpIDs = ( {
 	MAGE = { 475 }; -- Remove Curse (40yd) - Lvl 30
 	PALADIN = { 85673 }; -- Word of Glory (40yd) - Lvl 9
 	PRIEST = { 2061 }; -- Flash Heal (40yd) - Lvl 3
-	-- ROGUE = {57934}; --偷天換日
+    ROGUE = { 57934 };
 	SHAMAN = { 331 }; -- Healing Wave (40yd) - Lvl 7
 	WARLOCK = { 5697 }; -- Unending Breath (30yd) - Lvl 16
 	-- WARRIOR = {};
@@ -197,16 +200,13 @@ HarmIDs = ( {
 	DEATHKNIGHT = { 47541 }; -- Death Coil (30yd) - Starter
 	DRUID = { 5176 }; -- Wrath (40yd) - Starter
 	HUNTER = { 75 }; -- Auto Shot (5-40yd) - Starter
-	MAGE = {
-		133, -- Fireball (40yd) - Starter
-		116,
-	}; 
+	MAGE = { 133 }; -- Fireball (40yd) - Starter
 	PALADIN = {
 		62124, -- Hand of Reckoning (30yd) - Lvl 14
 		879, -- Exorcism (30yd) - Lvl 18
 	};
 	PRIEST = { 589 }; -- Shadow Word: Pain (40yd) - Lvl 4
-	ROGUE = {1752}; -- 邪惡攻擊
+    ROGUE = { 1752 };
 	SHAMAN = { 403 }; -- Lightning Bolt (30yd) - Starter
 	WARLOCK = { 686 }; -- Shadow Bolt (40yd) - Starter
 	WARRIOR = { 355 }; -- Taunt (30yd) - Lvl 12
