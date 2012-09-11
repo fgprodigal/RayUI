@@ -663,6 +663,8 @@ R["Watcher"] = {
                 { spellID = 81782 , unitId = "player", caster = "all", filter = "BUFF" },
                 --2T12效果
                 { spellID = 99132,  unitId = "player", caster = "player", filter = "BUFF" },
+                --神聖洞察
+                { spellID = 123266,  unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标debuff",
