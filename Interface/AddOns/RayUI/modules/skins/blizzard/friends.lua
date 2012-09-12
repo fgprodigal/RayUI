@@ -134,6 +134,7 @@ local function LoadSkin()
 		local bu = _G["FriendsFrameFriendsScrollFrameButton"..i]
 		local ic = _G["FriendsFrameFriendsScrollFrameButton"..i.."GameIcon"]
 		local inv = _G["FriendsFrameFriendsScrollFrameButton"..i.."TravelPassButton"]
+		local summon = _G["FriendsFrameFriendsScrollFrameButton"..i.."SummonButton"]
 		bu:SetHighlightTexture(S["media"].backdrop)
 		bu:GetHighlightTexture():SetVertexColor(.24, .56, 1, .2)
 
@@ -154,6 +155,10 @@ local function LoadSkin()
 		text:SetShadowOffset(R.mult, -R.mult)
 		text:SetPoint("CENTER")
 		text:SetText("+")
+
+        select(1, summon:GetRegions()):SetTexCoord( .08, .92, .08, .92)
+        select(10, summon:GetRegions()):Kill()
+        summon:StyleButton(true)
 	end
 
 	local function UpdateScroll()

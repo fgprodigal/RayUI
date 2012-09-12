@@ -174,9 +174,8 @@ function B:SlotUpdate(b)
 	end
 
 	if(clink) then
-		local name, _, rarity, _, _, iType = GetItemInfo(clink)
-		b.name = name
-		b.rarity = rarity
+        local _
+		b.name, _, b.rarity = GetItemInfo(clink)
 
 		if R:IsItemUnusable(clink) then
 			_G[b.frame:GetName().."IconTexture"]:SetVertexColor(RED_FONT_COLOR.r, RED_FONT_COLOR.g, RED_FONT_COLOR.b)
@@ -923,9 +922,12 @@ local function InBags(x)
 end
 
 function B:BAG_UPDATE_COOLDOWN()
-	for i, v in pairs(self.buttons) do
-		self:SlotUpdate(v)
-	end
+    if ( not self.LastUpdate ) or ( GetTime() - self.LastUpdate > 0 ) then
+        for i, v in pairs(self.buttons) do
+            self:SlotUpdate(v)
+        end
+    end
+    self.LastUpdate = GetTime()
 end
 
 function B:RestackAndSort(frame)
