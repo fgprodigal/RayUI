@@ -157,7 +157,7 @@ local function LoadSkin()
 		text:SetText("+")
 
         select(1, summon:GetRegions()):SetTexCoord( .08, .92, .08, .92)
-        select(10, summon:GetRegions()):Kill()
+        select(10, summon:GetRegions()):SetAlpha(0)
         summon:StyleButton(1)
         S:CreateBD(summon)
 	end
