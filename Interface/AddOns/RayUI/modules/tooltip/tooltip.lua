@@ -372,10 +372,11 @@ function TT:PLAYER_ENTERING_WORLD(event)
 	}
 
 	for _, tt in pairs(tooltips) do
-		tt:SetBackdrop({
-			bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
-			edgeFile = [=[Interface\ChatFrame\ChatFrameBackground]=], edgeSize = R.mult,
-			insets = {top = 0, left = 0, bottom = 0, right = 0},
+		tt:SetBackdrop( { 
+			edgeFile = R["media"].glow,
+			bgFile = R["media"].blank,
+			edgeSize = R:Scale(4),
+			insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
 		})
 		self:HookScript(tt, "OnShow", "SetStyle")
 	end

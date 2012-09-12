@@ -1225,9 +1225,9 @@ local function AcquireFrame(self, registration, data, detachedData)
 		tooltip:SetFrameStrata(registration.strata or "TOOLTIP")
 		tooltip:SetFrameLevel(10)
 		local backdrop = {
-			bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
-			edgeFile = [=[Interface\ChatFrame\ChatFrameBackground]=], edgeSize = R.mult,
-			insets = {top = 0, left = 0, bottom = 0, right = 0},
+			bgFile = R["media"].blank,
+			edgeFile = R["media"].glow, edgeSize = R:Scale(4),
+			insets = {top = R:Scale(4), left = R:Scale(4), bottom = R:Scale(4), right = R:Scale(4)},
 		}
 		tooltip:SetBackdrop(backdrop)
 		tooltip.numLines = 0
@@ -1865,7 +1865,7 @@ local function AcquireFrame(self, registration, data, detachedData)
 				data.b = b ~= 0 and b or nil
 			end
 			self:SetBackdropColor(r or 0, g or 0, b or 0, self.transparency)
-			self:SetBackdropBorderColor(0, 0, 0, self.transparency)
+			self:SetBackdropBorderColor(0, 0, 0, 1)
 		end
 		tooltip.SetColor = wrap(tooltip.SetColor, "tooltip:SetColor")
 
