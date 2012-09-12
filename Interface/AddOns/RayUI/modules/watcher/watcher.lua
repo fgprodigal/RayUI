@@ -6,72 +6,15 @@ RW.modName = L["法术监视"]
 
 local colors = RAID_CLASS_COLORS
 RW.modules = {}
-RW.GroupName = {}
-RW.testing = false
 
 local defaults = {}
 local watcherPrototype = {}
 local _G, UnitBuff, UnitDebuff, CooldownFrame_SetTimer = _G, UnitBuff, UnitDebuff, CooldownFrame_SetTimer
 
-local function CreatePopup()
-	local S = R:GetModule("Skins")
-	local f = CreateFrame("Frame", "WatcherMoverPopupWindow", UIParent)
-	f:SetFrameStrata("DIALOG")
-	f:SetToplevel(true)
-	f:EnableMouse(true)
-	f:SetClampedToScreen(true)
-	f:SetWidth(360)
-	f:SetHeight(110)
-	f:SetPoint("TOP", 0, -50)
-	f:Hide()
-	f:SetMovable(true)
-	f:RegisterForDrag("LeftButton")
-	f:SetScript("OnDragStart", function(self) self:StartMoving() self:SetUserPlaced(false) end)
-	f:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end)
-	f:SetScript("OnShow", function() PlaySound("igMainMenuOption") end)
-	f:SetScript("OnHide", function() PlaySound("gsTitleOptionExit") end)
-	S:SetBD(f)
-
-	local title = f:CreateFontString(nil, "OVERLAY")
-	title:SetFontObject(GameFontNormal)
-	title:SetShadowOffset(R.mult, -R.mult)
-	title:SetShadowColor(0, 0, 0)
-	title:SetPoint("TOP", f, "TOP", 0, -10)
-	title:SetJustifyH("CENTER")
-	title:SetText("RayUI")
-
-	local desc = f:CreateFontString(nil, "ARTWORK")
-	desc:SetFontObject("GameFontHighlight")
-	desc:SetJustifyV("TOP")
-	desc:SetJustifyH("LEFT")
-	desc:SetPoint("TOPLEFT", 18, -32)
-	desc:SetPoint("BOTTOMRIGHT", -18, 48)
-	desc:SetText(L["锚点已解锁，拖动锚点移动位置，完成后点击锁定按钮。"])
-
-	local lock = CreateFrame("Button", "RayUIWatcherLock", f, "OptionsButtonTemplate")
-	_G[lock:GetName() .. "Text"]:SetText(L["锁定"])
-
-	lock:SetScript("OnClick", function(self)
-		RW:TestMode()
-		AceConfigDialog["Open"](AceConfigDialog,"RayUI") 
-	end)
-
-	lock:SetPoint("BOTTOMRIGHT", -14, 14)
-	S:Reskin(lock)
-
-	f:RegisterEvent("PLAYER_REGEN_DISABLED")
-	f:SetScript("OnEvent", function(self)
-		if self:IsShown() then
-			self:Hide()
-		end
-	end)
-end
-
 function watcherPrototype:OnEnable()
 		if self.parent then
 			self.parent:Show()
 		end
-		self:TestMode(RW.testing)
 		self:Update()
 end
 
@@ -239,7 +182,7 @@ function watcherPrototype:CheckAura()
 	if self.BUFF then
 		for unitID in pairs(self.BUFF.unitIDs) do
 			local index = 1
-			while UnitBuff(unitID, index) and not ( index > 1024 ) do
+			while UnitBuff(unitID, index) and not ( index > 40 ) do
 				local spellName, _, icon, count, _, duration, expires, caster, _, _, spellID = UnitBuff(unitID,index)
 				if (self.BUFF[spellID] and self.BUFF[spellID].unitID == unitID and ( caster == self.BUFF[spellID].caster or self.BUFF[spellID].caster:lower() == "all" )) or
 					(self.BUFF[spellName] and self.BUFF[spellName].unitID == unitID and ( caster == self.BUFF[spellName].caster or self.BUFF[spellName].caster:lower() == "all" )) then
@@ -257,7 +200,7 @@ function watcherPrototype:CheckAura()
 				end
 				index = index + 1
 			end
-	end
+        end
 	end
 	if self.DEBUFF then
 		for unitID in pairs(self.DEBUFF.unitIDs) do
@@ -372,136 +315,8 @@ function watcherPrototype:SetPosition(num)
 	end
 end
 
-function watcherPrototype:ApplyStyle()
-	for i =1, #self.button do
-		local button = self.button[i]
-		if self.mode == "BAR" then
-			if not button.statusbar then
-				self.barwidth = self.barwidth or 150
-				if self.direction == "LEFT" or self.direction == "RIGHT" then
-					self.direction = "UP"
-				end
-				button.statusbar = CreateFrame("StatusBar", nil, button)
-				button.statusbar:SetFrameStrata("BACKGROUND")
-				local shadow = CreateFrame("Frame", nil, button.statusbar)
-				shadow:SetPoint("TOPLEFT", -2, 2)
-				shadow:SetPoint("BOTTOMRIGHT", 2, -2)
-				shadow:CreateShadow("Background")
-				button.statusbar:SetWidth(self.barwidth - 6)
-				button.statusbar:SetHeight(5)
-				button.statusbar:SetStatusBarTexture(R["media"].normal)
-				button.statusbar:SetStatusBarColor(colors[R.myclass].r, colors[R.myclass].g, colors[R.myclass].b, 1)
-				if ( self.iconside == "RIGHT" ) then
-					button.statusbar:SetPoint("BOTTOMRIGHT", button, "BOTTOMLEFT", -5, 2)
-				else
-					button.statusbar:SetPoint("BOTTOMLEFT", button, "BOTTOMRIGHT", 5, 2)
-				end
-				button.statusbar:SetMinMaxValues(0, 1)
-				button.statusbar:SetValue(1)
-				local spark = button.statusbar:CreateTexture(nil, "OVERLAY")
-				spark:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]
-				spark:SetBlendMode("ADD")
-				spark:SetAlpha(.8)
-				spark:SetPoint("TOPLEFT", button.statusbar:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
-				spark:SetPoint("BOTTOMRIGHT", button.statusbar:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
-				button.time = button:CreateFontString(nil, "OVERLAY")
-				button.time:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
-				button.time:SetPoint("BOTTOMRIGHT", button.statusbar, "TOPRIGHT", 0, 2)
-				button.time:SetText("60")
-				button.name = button:CreateFontString(nil, "OVERLAY")
-				button.name:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
-				button.name:SetPoint("BOTTOMLEFT", button.statusbar, "TOPLEFT", 0, 2)
-				button.name:SetText("技能名称")
-				button.mode = "BAR"
-				button.cooldown:Hide()
-				button.cooldown = nil
-				button:SetScript("OnUpdate", nil)
-			end
-		end
-		if self.mode == "ICON" then
-			if not button.cooldown then
-				button.cooldown = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
-				button.cooldown:SetAllPoints(button.icon)
-				button.cooldown:SetReverse()
-				button.mode = "ICON"
-				button.statusbar:Hide()
-				button.statusbar = nil
-				button.time:Hide()
-				button.time = nil
-				button.name:Hide()
-				button.name = nil
-				button:SetScript("OnUpdate", nil)
-			end
-		end
-		button:SetSize(self.size, self.size)
-		self.parent:SetSize(self.size, self.size)
-		if button.mode == "BAR" then
-			button.statusbar:SetWidth(self.barwidth)
-			button.statusbar:ClearAllPoints()
-			if ( self.iconside == "RIGHT" ) then
-				button.statusbar:SetPoint("BOTTOMRIGHT", button, "BOTTOMLEFT", -5, 2)
-			else
-				button.statusbar:SetPoint("BOTTOMLEFT", button, "BOTTOMRIGHT", 5, 2)
-			end
-		end
-		self:SetPosition(i)
-		button.mode = self.mode
-	end
-end
-
-function watcherPrototype:TestMode(arg)
-	if not self:IsEnabled() then return end
-	if arg == true then
-		local num = 1
-		self:UnregisterEvent("UNIT_AURA")
-		self:UnregisterEvent("PLAYER_TARGET_CHANGED")
-		self:UnregisterEvent("SPELL_UPDATE_COOLDOWN")
-		for _, subt in pairs({"BUFF", "DEBUFF", "CD", "itemCD"}) do
-			for i,v in pairs(self[subt] or {}) do
-				if i ~= "unitIDs" then
-					if type(i) == "string" then i = self[subt][i].spellID end
-					if not self.button[num] then
-						self.button[num] = self:CreateButton(self.mode)
-						self:SetPosition(num)
-					end
-					local icon
-					if subt == "itemCD" then
-						_, _, _, _, _, _, _, _, _, icon = GetItemInfo(i)
-					else
-						_, _, icon = GetSpellInfo(i)
-					end
-					if icon then
-						self:UpdateButton(self.button[num], 1, icon, 9, 0, 0, i, "player", subt:upper())
-					else
-						print("|cff7aa6d6Ray|r|cffff0000W|r|cff7aa6d6atcher|r: "..self.name.." "..subt.." ID: "..i.."不存在")
-					end
-					num = num + 1
-				end
-			end
-		end
-		self.moverFrame:Show()
-	else
-		self:RegisterEvent("UNIT_AURA", "OnEvent")
-		self:RegisterEvent("PLAYER_TARGET_CHANGED", "OnEvent")
-		self:RegisterEvent("SPELL_UPDATE_COOLDOWN", "OnEvent")
-		for _, v in pairs(RW.modules) do
-			v:Update()
-		end
-		self.moverFrame:Hide()
-	end
-end
-
 function watcherPrototype:OnEvent(event, unit)
 	local needUpdate
-	if event == "PLAYER_ENTERING_WORLD" then
-		self.holder:SetPoint(unpack(self.setpoint))
-		self.parent:SetAllPoints(self.holder)
-		R:CreateMover(self.holder, self.name.."Holder", self.name, true)
-		local _, parent = unpack(self.setpoint)
-		if parent then self.parent:SetParent(parent) end
-		if self.disabled then self:Disable() end
-		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-	end
 	if self.BUFF and unit and self.BUFF.unitIDs[unit] then
 		needUpdate = true
 	end
@@ -527,71 +342,6 @@ function RW:Initialize()
 		end
 	end
 	wipe(R["Watcher"]["filters"])
---[[ 	CreatePopup()
-
-	defaults.profile = {}
-	defaults.profile.Watcher = {}
-	for i,v in pairs(RW.modules) do
-		RW.GroupName[i] = i
-		defaults.profile.Watcher[i] = defaults.profile.Watcher[i] or {}
-		for ii,vv in pairs(v) do
-			if type(vv) ~= "table" then
-				defaults.profile.Watcher[i][ii] = vv
-			end
-		end
-	end
-	local db = LibStub("AceDB-3.0"):New("RayUIData", defaults)
-	self.db = db.profile.Watcher
-	self.db.GroupSelect = self.db.GroupSelect or next(self.GroupName)
-	self.db.idinput = nil
-	self.db.filterinput = nil
-	self.db.unitidinput = nil
-	self.db.casterinput = nil
-	self.db.fuzzy = nil
-	self:UpdateGroup()
-
-	for group, options in pairs(R.db.Watcher) do
-		if self.modules[group] then
-			for option, value in pairs(options) do
-				if type(value) ~= "table" then
-					self.modules[group][option] = value
-					self.db[group][option] = value
-				end
-			end
-			if type(options.BUFF) == "table" then
-				for id, value in pairs(options.BUFF) do
-					self.modules[group]["BUFF"] = self.modules[group]["BUFF"] or {}
-					self.modules[group]["BUFF"][id] = value
-					self.db[group]["BUFF"] = self.db[group]["BUFF"] or {}
-					self.db[group]["BUFF"][id] = value
-				end
-			end
-			if type(options.DEBUFF) == "table" then
-				for id, value in pairs(options.DEBUFF or {}) do
-					self.modules[group]["DEBUFF"] = self.modules[group]["DEBUFF"] or {}
-					self.modules[group]["DEBUFF"][id] = value
-					self.db[group]["DEBUFF"] = self.db[group]["DEBUFF"] or {}
-					self.db[group]["DEBUFF"][id] = value
-				end
-			end
-			if type(options.CD) == "table" then
-				for id, value in pairs(options.CD or {}) do
-					self.modules[group]["CD"] = self.modules[group]["CD"] or {}
-					self.modules[group]["CD"][id] = value
-					self.db[group]["CD"] = self.db[group]["CD"] or {}
-					self.db[group]["CD"][id] = value
-				end
-			end
-			if type(options.itemCD) == "table" then
-				for id, value in pairs(options.itemCD or {}) do
-					self.modules[group]["itemCD"] = self.modules[group]["itemCD"] or {}
-					self.modules[group]["itemCD"][id] = value
-					self.db[group]["itemCD"] = self.db[group]["itemCD"] or {}
-					self.db[group]["itemCD"][id] = value
-				end
-			end
-		end
-	end ]]
 end
 
 function RW:NewWatcher(data)
@@ -664,38 +414,9 @@ function RW:NewWatcher(data)
 		end
 	end
 
-	module.holder = CreateFrame("Frame", nil, UIParent)
-	module.holder:SetSize(module.size, module.size)
 	module.parent = CreateFrame("Frame", module.name, UIParent)
-	module.parent:SetAllPoints(holder)
-
-	local mover = CreateFrame("Frame", nil, module.parent)
-	module.moverFrame = mover
-	module.moverFrame.owner = module
-	mover:SetAllPoints(module.parent)
-	mover:SetFrameStrata("FULLSCREEN_DIALOG")
-	mover.mask = mover:CreateTexture(nil, "OVERLAY")
-	mover.mask:SetAllPoints(mover)
-	mover.mask:SetTexture(0, 1, 0, 0.5)
-	mover.text = mover:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-	mover.text:SetPoint("CENTER")
-	mover.text:SetText(module.name)
-
-	mover:RegisterForDrag("LeftButton")
-	mover:SetScript("OnDragStart", function(self) self:GetParent():StartMoving() end)
-	mover:SetScript("OnDragStop", function(self) self:GetParent():StopMovingOrSizing() end)
-
-	mover:SetScript("OnEnter", function(self)
-		GameTooltip:SetOwner(self, "ANCHOR_TOP")
-		GameTooltip:ClearLines()
-		GameTooltip:AddLine(self.owner.name)
-		GameTooltip:AddLine("拖拽左键移动", 1, 1, 1)
-		GameTooltip:Show()
-	end)
-
-	mover:SetScript("OnUpdate", nil)
-
-	mover:Hide()
+    module.parent:SetSize(module.size, module.size)
+    module.parent:SetPoint(unpack(module.setpoint))
 
 	if module.BUFF or module.DEBUFF then
 		module:RegisterEvent("UNIT_AURA", "OnEvent")
@@ -706,19 +427,6 @@ function RW:NewWatcher(data)
 		module:RegisterEvent("SPELL_UPDATE_COOLDOWN", "OnEvent")
 	end
 	RW.modules[module.name] = module
-	module:RegisterEvent("PLAYER_ENTERING_WORLD", "OnEvent")
-end
-
-function RW:TestMode()
-	if not RW.testing then
-		WatcherMoverPopupWindow:Show()
-	else
-		WatcherMoverPopupWindow:Hide()
-	end
-	RW.testing = not RW.testing
-	for _, v in pairs(RW.modules) do
-		v:TestMode(RW.testing)
-	end
 end
 
 R:RegisterModule(RW:GetName())

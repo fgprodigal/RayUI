@@ -115,6 +115,7 @@ local pomCount = {"i","h","g","f","Z","Y"}
 oUF.Tags.Methods["RayUIRaid:pom"] = function(u) 
     local name, _,_, c, _,_,_, fromwho = UnitAura(u, GetSpellInfo(33076))
     if name and c then
+        assert(pomCount[c], c)
         if(fromwho == "player") then
             return "|cff66FFFF"..pomCount[c].."|r"
         else

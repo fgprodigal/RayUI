@@ -14,7 +14,6 @@ local frames = {
   ["QuestLogDetailFrame"] = false,
   ["FriendsFrame"] = false,
   ["PVEFrame"] = false,
-  ["LFRBrowseFrame"] = true,
   ["KnowledgeBaseFrame"] = true,
   ["HelpFrame"] = false,
   ["GossipFrame"] = false,
@@ -61,6 +60,7 @@ local frames = {
   ["RaidParentFrame"] = false,
   ["TutorialFrame"] = false,
   ["TimeManagerFrame"] = false,
+  ["RaidBrowserFrame"] = false,
 
   -- AddOns
   ["LudwigFrame"] = false,

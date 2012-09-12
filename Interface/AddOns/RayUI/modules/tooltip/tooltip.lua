@@ -5,15 +5,15 @@ TalentFrame:Hide()
 
 TT.modName = L["鼠标提示"]
 
-local TALENTS_PREFIX = TALENTS..":|cffffffff "
+local TALENTS_PREFIX = TALENTS
 local NO_TALENTS = NONE..TALENTS
 local CACHE_SIZE = 25
 local INSPECT_DELAY = 0.2
 local INSPECT_FREQ = 2
 
-local cache = {}
+local talentcache = {}
 local ilvcache = {}
-local current = {}
+local talentcurrent = {}
 local ilvcurrent = {}
 
 local lastInspectRequest = 0
@@ -34,28 +34,27 @@ function TT:GetOptions()
 end
 
 local function GatherTalents(isInspect)
-	local spec = isInspect and GetInspectSpecialization(current.unit) or GetSpecialization()
+	local spec = isInspect and GetInspectSpecialization(talentcurrent.unit) or GetSpecialization()
 	if (spec) and (spec > 0) then
 		if isInspect then
 			local _, specName, _, icon = GetSpecializationInfoByID(spec)
-            icon = icon and " |T"..icon..":12:12:0:0:64:64:5:59:5:59|t " or ""
-			current.format = specName and icon..specName or "n/a"
+            icon = icon and "|T"..icon..":12:12:0:0:64:64:5:59:5:59|t " or ""
+			talentcurrent.format = specName and icon..specName or "n/a"
 		else
 			local _, specName, _, icon = GetSpecializationInfo(spec)
-            icon = icon and " |T"..icon..":12:12:0:0:64:64:5:59:5:59|t " or ""
-			current.format = specName and icon..specName or "n/a"
+            icon = icon and "|T"..icon..":12:12:0:0:64:64:5:59:5:59|t " or ""
+			talentcurrent.format = specName and icon..specName or "n/a"
 		end
 	else
-		current.format = NO_TALENTS
+		talentcurrent.format = NO_TALENTS
 	end
 
 	if (not isInspect) then
-		GameTooltip:AddLine(TALENTS_PREFIX..current.format)
+		GameTooltip:AddDoubleLine(TALENTS_PREFIX, talentcurrent.format, nil, nil, nil, 1, 1, 1)
 	elseif (GameTooltip:GetUnit()) then
 		for i = 2, GameTooltip:NumLines() do
 			if ((_G["GameTooltipTextLeft"..i]:GetText() or ""):match("^"..TALENTS_PREFIX)) then
-				_G["GameTooltipTextLeft"..i]:SetFormattedText("%s%s",TALENTS_PREFIX,current.format)
-
+				_G["GameTooltipTextRight"..i]:SetText(talentcurrent.format)
 				if (not GameTooltip.fadeOut) then
 					GameTooltip:Show()
 				end
@@ -64,18 +63,18 @@ local function GatherTalents(isInspect)
 		end
 	end
 
-	for i = #cache, 1, -1 do
-		if (current.name == cache[i].name) then
-			tremove(cache,i)
+	for i = #talentcache, 1, -1 do
+		if (talentcurrent.name == talentcache[i].name) then
+			tremove(talentcache,i)
 			break
 		end
 	end
-	if (#cache > CACHE_SIZE) then
-		tremove(cache,1)
+	if (#talentcache > CACHE_SIZE) then
+		tremove(talentcache,1)
 	end
 
 	if (CACHE_SIZE > 0) then
-		cache[#cache + 1] = CopyTable(current)
+		talentcache[#talentcache + 1] = CopyTable(talentcurrent)
 	end
 end
 
@@ -93,20 +92,20 @@ function TT:TalentSetUnit()
 	end
 	local level = UnitLevel(unit)
 	if (level > 9 or level == -1) then
-		wipe(current)
-		current.unit = unit
-		current.name = UnitName(unit)
-		current.guid = UnitGUID(unit)
+		wipe(talentcurrent)
+		talentcurrent.unit = unit
+		talentcurrent.name = UnitName(unit)
+		talentcurrent.guid = UnitGUID(unit)
 		if (UnitIsUnit(unit,"player")) then
 			GatherTalents()
 			return
 		end
 
 		local cacheLoaded = false
-		for _, entry in ipairs(cache) do
-			if (current.name == entry.name) then
-				GameTooltip:AddLine(TALENTS_PREFIX..entry.format)
-				current.format = entry.format
+		for _, entry in ipairs(talentcache) do
+			if (talentcurrent.name == entry.name) then
+				GameTooltip:AddDoubleLine(TALENTS_PREFIX, entry.format, nil, nil, nil, 1, 1, 1)
+				talentcurrent.format = entry.format
 				cacheLoaded = true
 				break
 			end
@@ -117,7 +116,7 @@ function TT:TalentSetUnit()
 			TalentFrame.nextUpdate = (lastInspectTime > INSPECT_FREQ) and INSPECT_DELAY or (INSPECT_FREQ - lastInspectTime + INSPECT_DELAY)
 			TalentFrame:Show()
 			if (not cacheLoaded) then
-				GameTooltip:AddLine(TALENTS_PREFIX.."Loading...")
+				GameTooltip:AddDoubleLine(TALENTS_PREFIX, "...", nil, nil, nil, 1, 1, 1)
 			end
 		end
 	end
@@ -127,13 +126,13 @@ TalentFrame:SetScript("OnUpdate", function(self, elapsed)
 	self.nextUpdate = (self.nextUpdate or 0 ) - elapsed
 	if (self.nextUpdate <= 0) then
 		self:Hide()
-		if (UnitGUID("mouseover") == current.guid) then
+		if (UnitGUID("mouseover") == talentcurrent.guid) then
 			lastInspectRequest = GetTime()
 			TT:RegisterEvent("INSPECT_READY")
 			if (InspectFrame) then
 				InspectFrame.unit = "player"
 			end
-			NotifyInspect(current.unit)
+			NotifyInspect(talentcurrent.unit)
 		end
 	end
 end)
@@ -236,12 +235,11 @@ function TT:SetiLV()
 
 	local unitilvl = GetPlayerScore(unit)
 	if (unitilvl > 1) then
-		local Red, Blue, Green = TT:GetQuality(unitilvl)
-		ilvcurrent.format = R:RGBToHex(Red, Green, Blue)..unitilvl
+		local r, g, b  = TT:GetQuality(unitilvl)
+		ilvcurrent.format = R:RGBToHex(r, g, b)..unitilvl
 		for i = 2, GameTooltip:NumLines() do
 			if ((_G["GameTooltipTextLeft"..i]:GetText() or ""):match("^"..STAT_AVERAGE_ITEM_LEVEL)) then
-				_G["GameTooltipTextLeft"..i]:SetText(STAT_AVERAGE_ITEM_LEVEL..": "..R:RGBToHex(Red, Green, Blue)..unitilvl)
-
+				_G["GameTooltipTextRight"..i]:SetText(R:RGBToHex(r, g, b)..unitilvl)
 				break
 			end
 		end
@@ -280,7 +278,7 @@ function TT:iLVSetUnit()
 
 	for _, entry in ipairs(ilvcache) do
 		if (ilvcurrent.name == entry.name and entry.format) then
-			GameTooltip:AddLine(STAT_AVERAGE_ITEM_LEVEL..": "..entry.format)
+			GameTooltip:AddDoubleLine(STAT_AVERAGE_ITEM_LEVEL, entry.format, nil, nil, nil, 1, 1, 1)
 			ilvcurrent.format = entry.format
 			cacheLoaded = true
 			break
@@ -288,16 +286,16 @@ function TT:iLVSetUnit()
 	end
 	if UnitIsUnit(unit, "player") then
 		local unitilvl = GetPlayerScore("player")
-		local Red, Blue, Green = TT:GetQuality(unitilvl)
-		GameTooltip:AddLine(STAT_AVERAGE_ITEM_LEVEL..": "..R:RGBToHex(Red, Green, Blue)..unitilvl)
+		local r, g, b = TT:GetQuality(unitilvl)
+		GameTooltip:AddDoubleLine(STAT_AVERAGE_ITEM_LEVEL, R:RGBToHex(r, g, b)..unitilvl, nil, nil, nil, 1, 1, 1)
 	elseif not cacheLoaded then
-		GameTooltip:AddLine(STAT_AVERAGE_ITEM_LEVEL..": |cffffffffLoading...|r")
+		GameTooltip:AddDoubleLine(STAT_AVERAGE_ITEM_LEVEL, "...", nil, nil, nil, 1, 1, 1)
 	end
 end
 
 function TT:INSPECT_READY(event, guid)
 	self:UnregisterEvent(event)
-	if (guid == current.guid) then
+	if (guid == talentcurrent.guid) then
 		GatherTalents(1)
 		self:SetiLV()
 	end
@@ -306,17 +304,15 @@ end
 function TT:INSPECT_ACHIEVEMENT_READY()
     self:UnregisterEvent("INSPECT_ACHIEVEMENT_READY")
     if not self.line then return end
-	self.line:SetFont(GameTooltipTextLeft3:GetFont())
     self.line:SetText()
 
     if GameTooltip:GetUnit() == self.unit then
         local stats, text = {}, ""
 
         stats.TotalAchievemen = tonumber(GetComparisonAchievementPoints()) or 0
-            text = text .. ACHIEVEMENT_POINTS..": |cFFFFFFFF" .. stats.TotalAchievemen
+            text = stats.TotalAchievemen
 
         if text ~= "" then
-			self.line:SetFont(GameTooltipTextLeft3:GetFont())
             self.line:SetText(text)
         end
     end
@@ -396,14 +392,13 @@ function TT:UPDATE_MOUSEOVER_UNIT(event, refresh)
 
     self.unit = UnitName("mouseover")
 
-    local text = ACHIEVEMENT_POINTS..": |cFFFFFFFFLoading..."
+    local text = "...."
 
     if refresh then
-		self.line:SetFont(GameTooltipTextLeft3:GetFont())
         self.line:SetText(text)
     else
-        GameTooltip:AddLine(text)
-        self.line = _G["GameTooltipTextLeft" .. GameTooltip:NumLines()]
+        GameTooltip:AddDoubleLine(ACHIEVEMENT_POINTS, text, nil, nil, nil, 1, 1, 1)
+        self.line = _G["GameTooltipTextRight" .. GameTooltip:NumLines()]
     end
 
     GameTooltip:Show()
@@ -528,11 +523,11 @@ function TT:Initialize()
                 if UnitExists(unit.."target") then
                     local r, g, b = GameTooltip_UnitColor(unit.."target")
                     if UnitName(unit.."target") == UnitName("player") then
-                        text = hex(1, 0, 0)..">>你<<|r"
+                        text = hex(1, 0, 0)..">>"..YOU.."<<|r"
                     else
                         text = hex(r, g, b)..UnitName(unit.."target").."|r"
                     end
-                    self:AddLine(TARGET..": "..text)
+                    self:AddDoubleLine(TARGET, text)
                 end
 				for i=2, GameTooltip:NumLines() do
 					if _G["GameTooltipTextLeft" .. i]:GetText():find(PLAYER) then
@@ -543,7 +538,7 @@ function TT:Initialize()
                 if UnitFactionGroup(unit) then
                     GameTooltipTextLeft1:SetText("|TInterface\\Addons\\RayUI\\media\\UI-PVP-"..select(1, UnitFactionGroup(unit))..".blp:16:16:0:0:64:64:10:53:10:53|t"..GameTooltipTextLeft1:GetText())
                     for i = 2, GameTooltip:NumLines() do
-                        if _G["GameTooltipTextLeft"..i]:GetText():find(select(2, UnitFactionGroup(unit))) then
+                        if _G["GameTooltipTextLeft"..i]:GetText():match("^"..select(2, UnitFactionGroup(unit))) then
                             _G["GameTooltipTextLeft"..i]:SetText('')
                             break
                         end
