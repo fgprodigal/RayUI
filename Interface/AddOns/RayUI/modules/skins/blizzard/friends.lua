@@ -158,7 +158,8 @@ local function LoadSkin()
 
         select(1, summon:GetRegions()):SetTexCoord( .08, .92, .08, .92)
         select(10, summon:GetRegions()):Kill()
-        summon:StyleButton(true)
+        summon:StyleButton(1)
+        S:CreateBD(summon)
 	end
 
 	local function UpdateScroll()
