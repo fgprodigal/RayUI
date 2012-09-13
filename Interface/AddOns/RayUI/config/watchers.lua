@@ -1,12 +1,24 @@
 ﻿local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
 
+local positions = {
+    player_buff_icon = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 80 },	-- "玩家buff&debuff"
+    target_buff_icon = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 80 },	-- "目标buff&debuff"
+    player_proc_icon = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 33 },	-- "玩家重要buff&debuff"
+    target_proc_icon = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 33 },	-- "目标重要buff&debuff"
+    focus_buff_icon = { "BOTTOMLEFT", "RayUF_focus", "TOPLEFT", 0, 10 },	-- "焦点buff&debuff"
+    cd_icon = function() return R:IsDeveloper() and { "TOPLEFT", "RayUIActionBar1", "BOTTOMLEFT", 0, -6 } or { "TOPLEFT", "RayUIActionBar2", "BOTTOMRIGHT", -27, -6 } end,	-- "cd"
+    player_special_icon = { "TOPRIGHT", "RayUF_player", "BOTTOMRIGHT", 0, -9 }, -- "玩家特殊buff&debuff"
+    pve_player_icon = { "BOTTOM", UIParent, "BOTTOM", -35, 350 }, -- "PVE/PVP玩家buff&debuff"
+    pve_target_icon = { "BOTTOM", UIParent, "BOTTOM", 35, 350 }, -- "PVE/PVP目标buff&debuff"
+}
+
 R["Watcher"] = {
     ["filters"] = {
         ["DRUID"] = {
             {
-                name = "玩家buff",
+                name = "玩家buff&debuff",
                 direction = "LEFT",
-                setpoint = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 80 },
+                setpoint = positions.player_buff_icon,
                 size = 28,
 
                 --生命之花
@@ -17,9 +29,9 @@ R["Watcher"] = {
                 { spellID = 8936, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
-                name = "目标buff",
+                name = "目标buff&debuff",
                 direction = "RIGHT",
-                setpoint = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 80 },
+                setpoint = positions.target_buff_icon,
                 size = 28,
 
                 --生命之花
@@ -28,12 +40,11 @@ R["Watcher"] = {
                 { spellID = 774, unitId = "target", caster = "player", filter = "BUFF" },
                 --癒合
                 { spellID = 8936, unitId = "target", caster = "player", filter = "BUFF" },
-
             },
             {
-                name = "玩家重要buff",
+                name = "玩家重要buff&debuff",
                 direction = "LEFT",
-                setpoint = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 33 },
+                setpoint = positions.player_proc_icon,
                 size = 38,
 
                 --蝕星蔽月(月蝕)
@@ -61,12 +72,11 @@ R["Watcher"] = {
                 { spellID = 22842, unitId = "player", caster = "player", filter = "BUFF" },
                 --共生
                 { spellID = 100977, unitId = "player", caster = "player", filter = "BUFF" },
-
             },
             {
-                name = "目标debuff",
+                name = "目标重要buff&debuff",
                 direction = "RIGHT",
-                setpoint = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 33 },
+                setpoint = positions.target_proc_icon,
                 size = 38,
 
                 --休眠
@@ -96,9 +106,9 @@ R["Watcher"] = {
                 { spellID = 770, unitId = "target", caster = "all", filter = "DEBUFF" },
             },
             {
-                name = "焦点debuff",
+                name = "焦点buff&debuff",
                 direction = "UP",
-                setpoint = { "BOTTOMLEFT", "RayUF_focus", "TOPLEFT", 0, 10 },
+                setpoint = positions.focus_buff_icon,
                 size = 24,
                 mode = "BAR",
                 iconSide = "LEFT",
@@ -113,12 +123,12 @@ R["Watcher"] = {
             },
             {
                 name = "CD",
-                direction = "DOWN",
                 iconSide = "LEFT",
-                mode = "BAR",
                 size = 28,
                 barWidth = 170,
-                setpoint = { "TOPLEFT", "RayUIActionBar2", "BOTTOMRIGHT", -27, -6 },
+                direction = function() return R:IsDeveloper() and "RIGHT" or "DOWN" end,
+                mode = function() return R:IsDeveloper() and "ICON" or "BAR" end,
+                setpoint = positions.cd_icon,
 
                 --狂暴
                 { spellID = 50334, filter = "CD" },
@@ -136,13 +146,24 @@ R["Watcher"] = {
                 { spellID = 740, filter = "CD" },
                 --生命之樹
                 { spellID = 33891, filter = "CD" },
+                
+                -- 物品
+				-- 手套
+				{slotID = 10, filter = "CD"},
+				-- 腰带
+				{slotID = 6, filter = "CD"},
+				-- 披风
+				{slotID = 15, filter = "CD"},
+				-- 饰品
+				{slotID = 13, filter = "CD"},
+				{slotID = 14, filter = "CD"},
             },
         },
         ["HUNTER"] = {
             {
-                name = "玩家buff",
+                name = "玩家buff&debuff",
                 direction = "LEFT",
-                setpoint = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 80 },
+                setpoint = positions.player_buff_icon,
                 size = 28,
 
                 --狙擊訓練
@@ -151,19 +172,18 @@ R["Watcher"] = {
                 { spellID = 82926, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
-                name = "目标buff",
+                name = "目标buff&debuff",
                 direction = "RIGHT",
-                setpoint = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 80 },
+                setpoint = positions.target_buff_icon,
                 size = 28,
 
                 --獵人印記
                 { spellID = 1130, unitId = "target", caster = "all", filter = "DEBUFF" },
-
             },
             {
-                name = "玩家重要buff",
+                name = "玩家重要buff&debuff",
                 direction = "LEFT",
-                setpoint = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 33 },
+                setpoint = positions.player_proc_icon,
                 size = 38,
 
                 --誤導
@@ -197,12 +217,11 @@ R["Watcher"] = {
                 { spellID = 34026, filter = "CD" },
                 --爆裂射擊
                 { spellID = 53301, filter = "CD" },
-
             },
             {
-                name = "目标debuff",
+                name = "目标重要buff&debuff",
                 direction = "RIGHT",
-                setpoint = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 33 },
+                setpoint = positions.target_proc_icon,
                 size = 38,
 
                 --翼龍釘刺
@@ -219,9 +238,9 @@ R["Watcher"] = {
                 { spellID = 53301, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
             {
-                name = "焦点debuff",
+                name = "焦点buff&debuff",
                 direction = "UP",
-                setpoint = { "BOTTOMLEFT", "RayUF_focus", "TOPLEFT", 0, 10 },
+                setpoint = positions.focus_buff_icon,
                 size = 24,
                 mode = "BAR",
                 iconSide = "LEFT",
@@ -239,7 +258,7 @@ R["Watcher"] = {
                 barWidth = 170,
                 direction = function() return R:IsDeveloper() and "RIGHT" or "DOWN" end,
                 mode = function() return R:IsDeveloper() and "ICON" or "BAR" end,
-                setpoint = function() return R:IsDeveloper() and { "TOPLEFT", "RayUIActionBar1", "BOTTOMLEFT", 0, -6 } or { "TOPLEFT", "RayUIActionBar2", "BOTTOMRIGHT", -27, -6 } end,
+                setpoint = positions.cd_icon,
 
                 --急速射擊
                 { spellID = 3045, filter = "CD" },
@@ -271,23 +290,24 @@ R["Watcher"] = {
                 { spellID = 131894, filter = "CD" },
                 --山貓衝刺
                 { spellID = 120697, filter = "CD" },
-                --腰带
-                { slotID = 6, filter = "itemCD" },
-                --披风
-                { slotID = 15, filter = "itemCD" },
-                --手套
-                { slotID = 10, filter = "itemCD" },
-                --饰品1
-                { slotID = 13, filter = "itemCD" },
-                --饰品2
-                { slotID = 14, filter = "itemCD" },
+                
+                -- 物品
+				-- 手套
+				{slotID = 10, filter = "CD"},
+				-- 腰带
+				{slotID = 6, filter = "CD"},
+				-- 披风
+				{slotID = 15, filter = "CD"},
+				-- 饰品
+				{slotID = 13, filter = "CD"},
+				{slotID = 14, filter = "CD"},
             },
         },
         ["MAGE"] = {
             {
                 name = "玩家重要buff&debuff",
                 direction = "LEFT",
-                setpoint = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 33 },
+                setpoint = positions.player_proc_icon,
                 size = 38,
 
                 --冰霜之指
@@ -306,9 +326,9 @@ R["Watcher"] = {
                 { spellID = 105785, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
-                name = "目标debuff",
+                name = "目标重要buff&debuff",
                 direction = "RIGHT",
-                setpoint = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 33 },
+                setpoint = positions.target_proc_icon,
                 size = 38,
 
                 --變形術
@@ -331,9 +351,9 @@ R["Watcher"] = {
                 { spellID = 44572, unitId = "target", caster = "player", filter = "DEBUFF"},
             },
             {
-                name = "焦点debuff",
+                name = "焦点buff&debuff",
                 direction = "UP",
-                setpoint = { "BOTTOMLEFT", "RayUF_focus", "TOPLEFT", 0, 10 },
+                setpoint = positions.focus_buff_icon,
                 size = 24,
                 mode = "BAR",
                 iconSide = "LEFT",
@@ -346,12 +366,12 @@ R["Watcher"] = {
             },
             {
                 name = "CD",
-                direction = "DOWN",
                 iconSide = "LEFT",
-                mode = "BAR",
                 size = 28,
                 barWidth = 170,
-                setpoint = { "TOPLEFT", "RayUIActionBar2", "BOTTOMRIGHT", -27, -6 },
+                direction = function() return R:IsDeveloper() and "RIGHT" or "DOWN" end,
+                mode = function() return R:IsDeveloper() and "ICON" or "BAR" end,
+                setpoint = positions.cd_icon,
 
                 --镜像术
                 { spellID = 55342, filter = "CD" },
@@ -373,13 +393,24 @@ R["Watcher"] = {
                 { spellID = 45438, filter = "CD" },
                 --冰霜之球
                 { spellID = 84714, filter = "CD" },
+                
+                -- 物品
+				-- 手套
+				{slotID = 10, filter = "CD"},
+				-- 腰带
+				{slotID = 6, filter = "CD"},
+				-- 披风
+				{slotID = 15, filter = "CD"},
+				-- 饰品
+				{slotID = 13, filter = "CD"},
+				{slotID = 14, filter = "CD"},
             },
         },
         ["WARRIOR"] = {
             {
-                name = "玩家重要buff",
+                name = "玩家重要buff&debuff",
                 direction = "LEFT",
-                setpoint = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 33 },
+                setpoint = positions.player_proc_icon,
                 size = 38,
 
                 --驟亡
@@ -410,9 +441,9 @@ R["Watcher"] = {
                 { spellID = 12328, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
-                name = "目标debuff",
+                name = "目标重要buff&debuff",
                 direction = "RIGHT",
-                setpoint = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 33 },
+                setpoint = positions.target_proc_icon,
                 size = 38,
 
                 --震盪波
@@ -435,9 +466,9 @@ R["Watcher"] = {
         },
         ["SHAMAN"] = {
             {
-                name = "玩家buff",
+                name = "玩家buff&debuff",
                 direction = "LEFT",
-                setpoint = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 80 },
+                setpoint = positions.player_buff_icon,
                 size = 28,
 
                 --Earth Shield / Erdschild
@@ -451,9 +482,9 @@ R["Watcher"] = {
 
             },
             {
-                name = "目标buff",
+                name = "目标buff&debuff",
                 direction = "RIGHT",
-                setpoint = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 80 },
+                setpoint = positions.target_buff_icon,
                 size = 28,
 
                 --Earth Shield / Erdschild
@@ -463,9 +494,9 @@ R["Watcher"] = {
 
             },
             {
-                name = "玩家重要buff",
+                name = "玩家重要buff&debuff",
                 direction = "LEFT",
-                setpoint = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 33 },
+                setpoint = positions.player_proc_icon,
                 size = 38,
 
                 --Maelstorm Weapon / Waffe des Mahlstroms
@@ -477,9 +508,9 @@ R["Watcher"] = {
 
             },
             {
-                name = "目标debuff",
+                name = "目标重要buff&debuff",
                 direction = "RIGHT",
-                setpoint = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 33 },
+                setpoint = positions.target_proc_icon,
                 size = 38,
 
                 --Hex / Verhexen
@@ -497,9 +528,9 @@ R["Watcher"] = {
 
             },
             {
-                name = "焦点debuff",
+                name = "焦点buff&debuff",
                 direction = "UP",
-                setpoint = { "BOTTOMLEFT", "RayUF_focus", "TOPLEFT", 0, 10 },
+                setpoint = positions.focus_buff_icon,
                 size = 24,
                 mode = "BAR",
                 iconSide = "LEFT",
@@ -514,9 +545,9 @@ R["Watcher"] = {
         },
         ["PALADIN"] = {
             {
-                name = "玩家buff",
+                name = "玩家buff&debuff",
                 direction = "LEFT",
-                setpoint = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 80 },
+                setpoint = positions.player_buff_icon,
                 size = 28,
 
                 --聖光信標
@@ -525,18 +556,18 @@ R["Watcher"] = {
                 { spellID = 53657, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
-                name = "目标buff",
+                name = "目标buff&debuff",
                 direction = "RIGHT",
-                setpoint = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 80 },
+                setpoint = positions.target_buff_icon,
                 size = 28,
 
                 --聖光信標
                 { spellID = 53563, unitId = "target", caster = "player", filter = "BUFF" },
             },
             {
-                name = "玩家重要buff",
+                name = "玩家重要buff&debuff",
                 direction = "LEFT",
-                setpoint = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 33 },
+                setpoint = positions.player_proc_icon,
                 size = 38,
 
                 --神聖之盾
@@ -561,18 +592,18 @@ R["Watcher"] = {
                 { spellID = 31821, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
-                name = "目标debuff",
+                name = "目标重要buff&debuff",
                 direction = "RIGHT",
-                setpoint = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 33 },
+                setpoint = positions.target_proc_icon,
                 size = 38,
 
                 --制裁之錘
                 { spellID = 853, unitId = "target", caster = "all", filter = "DEBUFF" },
             },
             {
-                name = "焦点debuff",
+                name = "焦点buff&debuff",
                 direction = "UP",
-                setpoint = { "BOTTOMLEFT", "RayUF_focus", "TOPLEFT", 0, 10 },
+                setpoint = positions.focus_buff_icon,
                 size = 24,
                 mode = "BAR",
                 iconSide = "LEFT",
@@ -584,12 +615,12 @@ R["Watcher"] = {
             },
             {
                 name = "CD",
-                direction = "DOWN",
                 iconSide = "LEFT",
-                mode = "BAR",
                 size = 28,
                 barWidth = 170,
-                setpoint = { "TOPLEFT", "RayUIActionBar2", "BOTTOMRIGHT", -27, -6 },
+                direction = function() return R:IsDeveloper() and "RIGHT" or "DOWN" end,
+                mode = function() return R:IsDeveloper() and "ICON" or "BAR" end,
+                setpoint = positions.cd_icon,
 
                 --精通光環
                 { spellID = 31821, filter = "CD" },
@@ -598,17 +629,31 @@ R["Watcher"] = {
                 --聖佑術
                 { spellID = 498, filter = "CD" },
 
+				-- 物品
+				-- 手套
+				{slotID = 10, filter = "CD"},
+				-- 腰带
+				{slotID = 6, filter = "CD"},
+				-- 披风
+				{slotID = 15, filter = "CD"},
+				-- 饰品
+				{slotID = 13, filter = "CD"},
+				{slotID = 14, filter = "CD"},
             },
         },
         ["PRIEST"] = {
             {
                 name = "玩家buff&debuff",
                 direction = "LEFT",
-                setpoint = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 80 },
+                setpoint = positions.player_buff_icon,
                 size = 28,
 
                 --真言術：盾
                 { spellID = 17, unitId = "player", caster = "all", filter = "BUFF" },
+                --虚弱靈魂
+                { spellID = 6788, unitId = "player", caster = "all", filter = "DEBUFF" },
+                --恢复
+                { spellID = 139, unitId = "player", caster = "player", filter = "BUFF" },
                 --漸隱術
                 { spellID = 586, unitId = "player", caster = "player", filter = "BUFF" },
                 --防護恐懼結界
@@ -619,36 +664,34 @@ R["Watcher"] = {
                 { spellID = 81700, unitId = "player", caster = "player", filter = "BUFF" },
                 --黑天使
                 { spellID = 87153, unitId = "player", caster = "player", filter = "BUFF" },
-                --虚弱靈魂
-                { spellID = 6788, unitId = "player", caster = "all", filter = "DEBUFF" },
                 --預支時間
                 { spellID = 59889, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
-                name = "目标buff",
+                name = "目标buff&debuff",
                 direction = "RIGHT",
-                setpoint = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 80 },
+                setpoint = positions.target_buff_icon,
                 size = 28,
 
+                --真言术：盾
+                { spellID = 17, unitId = "target", caster = "all", filter = "BUFF" },
+                --虚弱灵魂       
+                { spellID = 6788, unitId = "target", caster = "all", filter = "DEBUFF" },
+                --恢复
+                { spellID = 139, unitId = "target", caster = "player", filter = "BUFF" },
                 --愈合祷言
                 { spellID = 41635, unitId = "target", caster = "player", filter = "BUFF" },
                 --守护之魂
                 { spellID = 47788, unitId = "target", caster = "player", filter = "BUFF" },
                 --痛苦镇压
                 { spellID = 33206, unitId = "target", caster = "player", filter = "BUFF" },
-                --真言术：盾
-                { spellID = 17, unitId = "target", caster = "player", filter = "BUFF" },
-                --恢复
-                { spellID = 139, unitId = "target", caster = "player", filter = "BUFF" },
                 --恩典
                 { spellID = 77613, unitId = "target", caster = "player", filter = "BUFF" },
-                --恩典
-                { spellID = 6788, unitId = "target", caster = "all", filter = "DEBUFF" },
             },
             {
-                name = "玩家重要buff",
+                name = "玩家重要buff&debuff",
                 direction = "LEFT",
-                setpoint = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 33 },
+                setpoint = positions.player_proc_icon,
                 size = 38,
 
                 --機緣回復
@@ -667,9 +710,9 @@ R["Watcher"] = {
                 { spellID = 123266,  unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
-                name = "目标debuff",
+                name = "目标重要buff&debuff",
                 direction = "RIGHT",
-                setpoint = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 33 },
+                setpoint = positions.target_proc_icon,
                 size = 38,
 
                 --束縛不死生物
@@ -692,9 +735,9 @@ R["Watcher"] = {
                 { spellID = 15487, unitId = "player", caster = "all", filter = "DEBUFF" },
             },
             {
-                name = "焦点debuff",
+                name = "焦点buff&debuff",
                 direction = "UP",
-                setpoint = { "BOTTOMLEFT", "RayUF_focus", "TOPLEFT", 0, 10 },
+                setpoint = positions.focus_buff_icon,
                 size = 24,
                 mode = "BAR",
                 iconSide = "LEFT",
@@ -712,33 +755,44 @@ R["Watcher"] = {
                 barWidth = 170,
                 direction = function() return R:IsDeveloper() and "RIGHT" or "DOWN" end,
                 mode = function() return R:IsDeveloper() and "ICON" or "BAR" end,
-                setpoint = function() return R:IsDeveloper() and { "TOPLEFT", "RayUIActionBar1", "BOTTOMLEFT", 0, -6 } or { "TOPLEFT", "RayUIActionBar2", "BOTTOMRIGHT", -27, -6 } end,
+                setpoint = positions.cd_icon,
 
                 --暗影魔
-                { spellID = 34433, unitId = "player", caster = "player", filter = "CD" },
+                { spellID = 34433, filter = "CD" },
                 --真言術:壁
-                { spellID = 62618, unitId = "player", caster = "player", filter = "CD" },
+                { spellID = 62618, filter = "CD" },
                 --影散
-                { spellID = 47585, unitId = "player", caster = "player", filter = "CD" },
+                { spellID = 47585, filter = "CD" },
                 --絕望禱言
-                { spellID = 19236, unitId = "player", caster = "player", filter = "CD" },
+                { spellID = 19236, filter = "CD" },
                 --大天使
-                { spellID = 81700, unitId = "player", caster = "player", filter = "CD" },
+                { spellID = 81700, filter = "CD" },
+                
+                -- 物品
+				-- 手套
+				{slotID = 10, filter = "CD"},
+				-- 腰带
+				{slotID = 6, filter = "CD"},
+				-- 披风
+				{slotID = 15, filter = "CD"},
+				-- 饰品
+				{slotID = 13, filter = "CD"},
+				{slotID = 14, filter = "CD"},
             },
         },
         ["WARLOCK"]={
             {
-                name = "目标buff",
+                name = "目标buff&debuff",
                 direction = "RIGHT",
-                setpoint = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 80 },
+                setpoint = positions.target_buff_icon,
                 size = 28,
 
                 --元素詛咒
                 { spellID = 1490, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
             {
-                name = "目标debuff",
-                setpoint = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 33 },
+                name = "目标重要buff&debuff",
+                setpoint = positions.target_proc_icon,
                 direction = "RIGHT",
                 mode = "ICON",
                 size = 38,
@@ -773,8 +827,8 @@ R["Watcher"] = {
                 { spellID = 54785, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
             {
-                name = "玩家重要buff",
-                setpoint = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 33 },
+                name = "玩家重要buff&debuff",
+                setpoint = positions.player_proc_icon,
                 direction = "LEFT",
                 size = 38,
 
@@ -786,13 +840,15 @@ R["Watcher"] = {
                 { spellID = 74434, unitId = "player", caster = "player", filter = "BUFF" },
                 --熔火之心
                 { spellID = 122351, unitId = "player", caster = "player", filter = "BUFF" },
+                --爆燃
+                { spellID = 117828, unitId = "player", caster = "player", filter = "BUFF" },
             },
         },
         ["ROGUE"] = {
             {
-                name = "玩家buff",
+                name = "玩家buff&debuff",
                 direction = "LEFT",
-                setpoint = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 80 },
+                setpoint = positions.player_buff_icon,
                 size = 28,
 
                 --淺察
@@ -803,9 +859,9 @@ R["Watcher"] = {
                 { spellID = 84747, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
-                name = "目标buff",
+                name = "目标buff&debuff",
                 direction = "RIGHT",
-                setpoint = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 80 },
+                setpoint = positions.target_buff_icon,
                 size = 28,
 
                 --致命毒藥
@@ -820,9 +876,9 @@ R["Watcher"] = {
                 { spellID = 8680, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
             {
-                name = "玩家重要buff",
+                name = "玩家重要buff&debuff",
                 direction = "LEFT",
-                setpoint = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 33 },
+                setpoint = positions.player_proc_icon,
                 size = 38,
 
                 --疾跑
@@ -859,9 +915,9 @@ R["Watcher"] = {
                 { spellID = 121153, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
-                name = "目标debuff",
+                name = "目标重要buff&debuff",
                 direction = "RIGHT",
-                setpoint = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 33 },
+                setpoint = positions.target_proc_icon,
                 size = 38,
 
                 --偷襲
@@ -894,9 +950,9 @@ R["Watcher"] = {
                 { spellID = 113746, unitId = "target", caster = "all", filter = "DEBUFF" },
             },
             {
-                name = "焦点debuff",
+                name = "焦点buff&debuff",
                 direction = "UP",
-                setpoint = { "BOTTOMLEFT", "RayUF_focus", "TOPLEFT", 0, 10 },
+                setpoint = positions.focus_buff_icon,
                 size = 24,
                 mode = "BAR",
                 iconSide = "LEFT",
@@ -914,7 +970,7 @@ R["Watcher"] = {
                 barWidth = 170,
                 direction = function() return R:IsDeveloper() and "RIGHT" or "DOWN" end,
                 mode = function() return R:IsDeveloper() and "ICON" or "BAR" end,
-                setpoint = function() return R:IsDeveloper() and { "TOPLEFT", "RayUIActionBar1", "BOTTOMLEFT", 0, -6 } or { "TOPLEFT", "RayUIActionBar2", "BOTTOMRIGHT", -27, -6 } end,
+                setpoint = positions.cd_icon,
 
                 --暗影步
                 { spellID = 36554, filter = "CD" },
@@ -952,13 +1008,24 @@ R["Watcher"] = {
                 { spellID = 13750, filter = "CD" },
                 --奧術之流
                 { spellID = 25046, filter = "CD" },
+                
+                -- 物品
+				-- 手套
+				{slotID = 10, filter = "CD"},
+				-- 腰带
+				{slotID = 6, filter = "CD"},
+				-- 披风
+				{slotID = 15, filter = "CD"},
+				-- 饰品
+				{slotID = 13, filter = "CD"},
+				{slotID = 14, filter = "CD"},
             },
         },
         ["DEATHKNIGHT"] = {
             {
-                name = "玩家重要buff",
+                name = "玩家重要buff&debuff",
                 direction = "LEFT",
-                setpoint = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 33 },
+                setpoint = positions.player_proc_icon,
                 size = 38,
 
                 --血魄護盾
@@ -993,9 +1060,9 @@ R["Watcher"] = {
                 { spellID = 63560, unitId = "pet", caster = "player", filter = "BUFF" },
             },
             {
-                name = "目标debuff",
+                name = "目标重要buff&debuff",
                 direction = "RIGHT",
-                setpoint = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 33 },
+                setpoint = positions.target_proc_icon,
                 size = 38,
 
                 --絞殺
@@ -1007,7 +1074,6 @@ R["Watcher"] = {
                 --召喚石像鬼
                 { spellID = 49206, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --死亡凋零
-
                 { spellID = 43265, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
         },
@@ -1015,21 +1081,21 @@ R["Watcher"] = {
             {
                 name = "玩家buff",
                 direction = "LEFT",
-                setpoint = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 80 },
+                setpoint = positions.player_buff_icon,
                 size = 28,
 
             },
             {
-                name = "目标buff",
+                name = "目标buff&debuff",
                 direction = "RIGHT",
-                setpoint = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 80 },
+                setpoint = positions.target_buff_icon,
                 size = 28,
 
             },
             {
-                name = "玩家重要buff",
+                name = "玩家重要buff&debuff",
                 direction = "LEFT",
-                setpoint = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 33 },
+                setpoint = positions.player_proc_icon,
                 size = 38,
 
                 --虎掌
@@ -1037,16 +1103,16 @@ R["Watcher"] = {
 
             },
             {
-                name = "目标debuff",
+                name = "目标重要buff&debuff",
                 direction = "RIGHT",
-                setpoint = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 33 },
+                setpoint = positions.target_proc_icon,
                 size = 38,
 
             },
             {
-                name = "焦点debuff",
+                name = "焦点buff&debuff",
                 direction = "UP",
-                setpoint = { "BOTTOMLEFT", "RayUF_focus", "TOPLEFT", 0, 10 },
+                setpoint = positions.focus_buff_icon,
                 size = 24,
                 mode = "BAR",
                 iconSide = "LEFT",
@@ -1060,15 +1126,25 @@ R["Watcher"] = {
                 barWidth = 170,
                 direction = function() return R:IsDeveloper() and "RIGHT" or "DOWN" end,
                 mode = function() return R:IsDeveloper() and "ICON" or "BAR" end,
-                setpoint = function() return R:IsDeveloper() and { "TOPLEFT", "RayUIActionBar1", "BOTTOMLEFT", 0, -6 } or { "TOPLEFT", "RayUIActionBar2", "BOTTOMRIGHT", -27, -6 } end,
-
+                setpoint = positions.cd_icon,
+                
+                -- 物品
+				-- 手套
+				{slotID = 10, filter = "CD"},
+				-- 腰带
+				{slotID = 6, filter = "CD"},
+				-- 披风
+				{slotID = 15, filter = "CD"},
+				-- 饰品
+				{slotID = 13, filter = "CD"},
+				{slotID = 14, filter = "CD"},
             },
         },
         ["ALL"]={
             {
-                name = "玩家特殊buff",
+                name = "玩家特殊buff&debuff",
                 direction = "LEFT",
-                setpoint = { "TOPRIGHT", "RayUF_player", "BOTTOMRIGHT", 0, -9 },
+                setpoint = positions.player_special_icon,
                 size = 41,
 
                 --飾品
@@ -1192,9 +1268,9 @@ R["Watcher"] = {
                 { spellID = 105647, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
-                name = "PVE/PVP玩家debuff",
+                name = "PVE/PVP玩家buff&debuff",
                 direction = "UP",
-                setpoint = { "BOTTOM", UIParent, "BOTTOM", -35, 350 },
+                setpoint = positions.pve_player_icon,
                 size = 51,
 
                 --Death Knight
@@ -1478,9 +1554,9 @@ R["Watcher"] = {
                 { spellID = 94794, unitId = "player", caster = "all", filter = "DEBUFF" },
             },
             {
-                name = "PVP目标buff",
+                name = "PVE/PVP目标buff&debuff",
                 direction = "UP",
-                setpoint = { "BOTTOM", UIParent, "BOTTOM", 35, 350 },
+                setpoint = positions.pve_target_icon,
                 size = 51,
 
                 --啟動
