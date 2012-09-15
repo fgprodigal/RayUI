@@ -317,6 +317,12 @@ function watcherPrototype:SetPosition(num)
 end
 
 function watcherPrototype:OnEvent(event, unit)
+	if event == "PLAYER_ENTERING_WORLD" then
+		self.holder:SetPoint(unpack(self.setpoint))
+		self.parent:SetAllPoints(self.holder)
+		R:CreateMover(self.holder, self.name.."Holder", self.name, true)
+		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+	end
 	local needUpdate
 	if self.BUFF and unit and self.BUFF.unitIDs[unit] then
 		needUpdate = true
@@ -415,10 +421,12 @@ function RW:NewWatcher(data)
 		end
 	end
 
+	module.holder = CreateFrame("Frame", nil, UIParent)
+	module.holder:SetSize(module.size, module.size)
 	module.parent = CreateFrame("Frame", module.name, UIParent)
-    module.parent:SetSize(module.size, module.size)
-    module.parent:SetPoint(unpack(module.setpoint))
+	module.parent:SetAllPoints(holder)
 
+	module:RegisterEvent("PLAYER_ENTERING_WORLD", "OnEvent")
 	if module.BUFF or module.DEBUFF then
 		module:RegisterEvent("UNIT_AURA", "OnEvent")
 		module:RegisterEvent("PLAYER_TARGET_CHANGED", "OnEvent")

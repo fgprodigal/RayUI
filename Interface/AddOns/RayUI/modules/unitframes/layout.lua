@@ -812,7 +812,7 @@ function UF:LoadDPSLayout()
 		for i = 1, 5 do
 			arena[i] = oUF:Spawn("arena"..i, "RayUFArena"..i)
 			if i == 1 then
-				arena[i]:Point("RIGHT", -80, 130)
+				arena[i]:Point("RIGHT", -80, 180)
 			else
 				arena[i]:Point("TOP", arena[i-1], "BOTTOM", 0, -25)
 			end
@@ -825,7 +825,7 @@ function UF:LoadDPSLayout()
 		for i = 1, MAX_BOSS_FRAMES do
 			boss[i] = oUF:Spawn("boss"..i, "RayUFBoss"..i)
 			if i == 1 then
-				boss[i]:Point("RIGHT", -80, 130)
+				boss[i]:Point("RIGHT", -80, 180)
 			else
 				boss[i]:Point("TOP", boss[i-1], "BOTTOM", 0, -25)             
 			end
