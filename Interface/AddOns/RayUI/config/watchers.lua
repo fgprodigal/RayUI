@@ -211,6 +211,8 @@ R["Watcher"] = {
                 { spellID = 19615, unitId = "pet", caster = "pet", filter = "BUFF" },
                 --獸心
                 { spellID = 34471, unitId = "player", caster = "player", filter = "BUFF" },
+                --獵殺快感
+                { spellID = 34720, unitId = "player", caster = "player", filter = "BUFF" },
                 --4T13
                 { spellID = 105919, unitId = "player", caster = "player", filter = "BUFF" },
                 --擊殺命令
@@ -456,8 +458,8 @@ R["Watcher"] = {
                 { spellID = 1160, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --破膽怒吼
                 { spellID = 5246, unitId = "target", caster = "player", filter = "DEBUFF" },
-                --破甲（盜賊）
-                { spellID = 8647, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --破甲
+                { spellID = 8647, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --感染之傷（德魯伊）
                 { spellID = 48484, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --挫志咆哮（德魯伊）
@@ -708,6 +710,8 @@ R["Watcher"] = {
                 { spellID = 99132,  unitId = "player", caster = "player", filter = "BUFF" },
                 --神聖洞察
                 { spellID = 123266,  unitId = "player", caster = "player", filter = "BUFF" },
+                --心靈鑚刺雕文
+                { spellID = 81292,  unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",

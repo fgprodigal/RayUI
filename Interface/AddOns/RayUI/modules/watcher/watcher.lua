@@ -400,7 +400,8 @@ function RW:NewWatcher(data)
 			if (v.spellID or v.itemID or v.slotID) and v.filter then
 				local spellName
 				if v.fuzzy and (v.filter == "BUFF" or v.filter == "DEBUFF") then spellName = GetSpellInfo(v.spellID) end
-				if v.filter == "itemCD" and v.slotID then v.filter = "slotCD" end
+				if v.filter == "CD" and v.slotID then v.filter = "slotCD" end
+				if v.filter == "CD" and v.itemID then v.filter = "itemCD" end
 				module[v.filter] = module[v.filter] or {}
 				module[v.filter][spellName or v.spellID or v.itemID or v.slotID] = module[v.filter][spellName or v.spellID or v.itemID or v.slotID] or {}
 				for ii,vv in pairs(v) do
