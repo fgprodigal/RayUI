@@ -1,7 +1,7 @@
 local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
 local AB = R:GetModule("ActionBar")
 
-local rabs = {}
+local hider = CreateFrame("Frame", "RayUIActionBarHider", UIParent)
 
 local function pending()
 	if UnitAffectingCombat("player") then return true end
@@ -13,26 +13,18 @@ local function pending()
 end
 
 local function FadeOutActionButton()
-	for _, v in ipairs(rabs) do 
-		if _G[v]:GetAlpha()>0 then
-			local fadeInfo = {}
-			fadeInfo.mode = "OUT"
-			fadeInfo.timeToFade = 0.5
-			fadeInfo.finishedFunc = function() RayUIActionBarHider:Hide() end
-			fadeInfo.startAlpha = _G[v]:GetAlpha()
-			fadeInfo.endAlpha = 0
-			R:UIFrameFade(_G[v], fadeInfo)
-		end 
-	end
+	local fadeInfo = {}
+	fadeInfo.mode = "OUT"
+	fadeInfo.timeToFade = 0.5
+	fadeInfo.finishedFunc = function() RayUIActionBarHider:Hide() end
+	fadeInfo.startAlpha = RayUIActionBarHider:GetAlpha()
+	fadeInfo.endAlpha = 0
+	R:UIFrameFade(RayUIActionBarHider, fadeInfo)
 end
 
 local function FadeInActionButton()
-	for _, v in ipairs(rabs) do
-		if _G[v]:GetAlpha()<1 then
-			RayUIActionBarHider:Show()
-			R:UIFrameFadeIn(_G[v], 0.5, _G[v]:GetAlpha(), 1)
-		end
-	end
+	RayUIActionBarHider:Show()
+	R:UIFrameFadeIn(RayUIActionBarHider, 0.5, RayUIActionBarHider:GetAlpha(), 1)
 end
 
 function AB:OnAutoHideEvent(event, addon)
@@ -62,13 +54,13 @@ function AB:OnAutoHideEvent(event, addon)
 end
 
 function AB:EnableAutoHide()
-	if RayUIStanceBar and AB.db.stancebarfade then table.insert(rabs, "RayUIStanceBar") RayUIStanceBar:SetParent(RayUIActionBarHider) end
-	if RayUIPetBar and AB.db.petbarfade then table.insert(rabs, "RayUIPetBar") RayUIPetBar:SetParent(RayUIActionBarHider) end
-	if RayUIActionBar1 and AB.db.bar1fade then table.insert(rabs, "RayUIActionBar1") RayUIActionBar1:SetParent(RayUIActionBarHider) end
-	if RayUIActionBar2 and AB.db.bar2fade then table.insert(rabs, "RayUIActionBar2") RayUIActionBar2:SetParent(RayUIActionBarHider) end
-	if RayUIActionBar3 and AB.db.bar3fade then table.insert(rabs, "RayUIActionBar3") RayUIActionBar3:SetParent(RayUIActionBarHider) end
-	if RayUIActionBar4 and AB.db.bar4fade then table.insert(rabs, "RayUIActionBar4") RayUIActionBar4:SetParent(RayUIActionBarHider) end
-	if RayUIActionBar5 and AB.db.bar5fade then table.insert(rabs, "RayUIActionBar5") RayUIActionBar5:SetParent(RayUIActionBarHider) end
+	if RayUIStanceBar and AB.db.stancebarfade then RayUIStanceBar:SetParent(RayUIActionBarHider) end
+	if RayUIPetBar and AB.db.petbarfade then RayUIPetBar:SetParent(RayUIActionBarHider) end
+	if RayUIActionBar1 and AB.db.bar1fade then RayUIActionBar1:SetParent(RayUIActionBarHider) end
+	if RayUIActionBar2 and AB.db.bar2fade then RayUIActionBar2:SetParent(RayUIActionBarHider) end
+	if RayUIActionBar3 and AB.db.bar3fade then RayUIActionBar3:SetParent(RayUIActionBarHider) end
+	if RayUIActionBar4 and AB.db.bar4fade then RayUIActionBar4:SetParent(RayUIActionBarHider) end
+	if RayUIActionBar5 and AB.db.bar5fade then RayUIActionBar5:SetParent(RayUIActionBarHider) end
 
 	AB:RegisterEvent("PLAYER_REGEN_ENABLED", "OnAutoHideEvent")
 	AB:RegisterEvent("PLAYER_REGEN_DISABLED", "OnAutoHideEvent")
@@ -126,14 +118,4 @@ function AB:EnableAutoHide()
 			FadeOutActionButton()
 		end
 	end)
-
-	-- function AB:Test()
-		-- if StaticPopup1:IsShown() then
-			-- FadeInActionButton()
-		-- else
-			-- FadeOutActionButton()
-		-- end
-	-- end
-
-	-- AB:SecureHook(self, "ActivateBindMode", "Test")
 end

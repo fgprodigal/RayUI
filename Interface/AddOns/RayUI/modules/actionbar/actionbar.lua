@@ -1,6 +1,5 @@
 ﻿local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
 local AB = R:NewModule("ActionBar", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
-local hider = CreateFrame("Frame", "RayUIActionBarHider", UIParent)
 
 AB.modName = L["动作条"]
 
