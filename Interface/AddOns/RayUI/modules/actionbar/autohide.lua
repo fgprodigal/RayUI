@@ -15,7 +15,13 @@ end
 local function FadeOutActionButton()
 	for _, v in ipairs(rabs) do 
 		if _G[v]:GetAlpha()>0 then
-			R:UIFrameFadeOut(_G[v], 0.5, _G[v]:GetAlpha(), 0)
+			local fadeInfo = {}
+			fadeInfo.mode = "OUT"
+			fadeInfo.timeToFade = 0.5
+			fadeInfo.finishedFunc = function() RayUIActionBarHider:Hide() end
+			fadeInfo.startAlpha = _G[v]:GetAlpha()
+			fadeInfo.endAlpha = 0
+			R:UIFrameFade(_G[v], fadeInfo)
 		end 
 	end
 end
@@ -23,6 +29,7 @@ end
 local function FadeInActionButton()
 	for _, v in ipairs(rabs) do
 		if _G[v]:GetAlpha()<1 then
+			RayUIActionBarHider:Show()
 			R:UIFrameFadeIn(_G[v], 0.5, _G[v]:GetAlpha(), 1)
 		end
 	end
@@ -55,13 +62,13 @@ function AB:OnAutoHideEvent(event, addon)
 end
 
 function AB:EnableAutoHide()
-	if RayUIStanceBar and AB.db.stancebarfade then table.insert(rabs, "RayUIStanceBar") end
-	if RayUIPetBar and AB.db.petbarfade then table.insert(rabs, "RayUIPetBar") end
-	if RayUIActionBar1 and AB.db.bar1fade then table.insert(rabs, "RayUIActionBar1") end
-	if RayUIActionBar2 and AB.db.bar2fade then table.insert(rabs, "RayUIActionBar2") end
-	if RayUIActionBar3 and AB.db.bar3fade then table.insert(rabs, "RayUIActionBar3") end
-	if RayUIActionBar4 and AB.db.bar4fade then table.insert(rabs, "RayUIActionBar4") end
-	if RayUIActionBar5 and AB.db.bar5fade then table.insert(rabs, "RayUIActionBar5") end
+	if RayUIStanceBar and AB.db.stancebarfade then table.insert(rabs, "RayUIStanceBar") RayUIStanceBar:SetParent(RayUIActionBarHider) end
+	if RayUIPetBar and AB.db.petbarfade then table.insert(rabs, "RayUIPetBar") RayUIPetBar:SetParent(RayUIActionBarHider) end
+	if RayUIActionBar1 and AB.db.bar1fade then table.insert(rabs, "RayUIActionBar1") RayUIActionBar1:SetParent(RayUIActionBarHider) end
+	if RayUIActionBar2 and AB.db.bar2fade then table.insert(rabs, "RayUIActionBar2") RayUIActionBar2:SetParent(RayUIActionBarHider) end
+	if RayUIActionBar3 and AB.db.bar3fade then table.insert(rabs, "RayUIActionBar3") RayUIActionBar3:SetParent(RayUIActionBarHider) end
+	if RayUIActionBar4 and AB.db.bar4fade then table.insert(rabs, "RayUIActionBar4") RayUIActionBar4:SetParent(RayUIActionBarHider) end
+	if RayUIActionBar5 and AB.db.bar5fade then table.insert(rabs, "RayUIActionBar5") RayUIActionBar5:SetParent(RayUIActionBarHider) end
 
 	AB:RegisterEvent("PLAYER_REGEN_ENABLED", "OnAutoHideEvent")
 	AB:RegisterEvent("PLAYER_REGEN_DISABLED", "OnAutoHideEvent")
