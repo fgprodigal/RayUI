@@ -99,17 +99,78 @@ local function LoadTalent()
 
 	local SpecSection = {}
 
+	local function SpecAddTalentGroupLineToCat(self, cat, talentGroup)
+		resSizeExtra = 2
+
+		local ActiveColor = {0, 0.9, 0}
+		local InactiveColor = {0.3, 0.3, 0.3}
+
+		local IsPrimary = GetActiveSpecGroup()
+
+		local line = {}
+		for i = 1, 2 do
+			local SpecColor = (IsPrimary == talentGroup) and ActiveColor or InactiveColor
+			if i == 1 then
+				line["text"] = string.format("|T%s:%d:%d:0:0:64:64:5:59:5:59|t %s", select(4, GetSpecializationInfo(GetSpecialization(nil, nil, talentGroup))), 10 + resSizeExtra, 10 + resSizeExtra, select(2, GetSpecializationInfo(GetSpecialization(nil, nil, talentGroup))))
+				line["justify"] = "LEFT"
+				line["size"] = 10 + resSizeExtra
+				line["textR"] = 0.9
+				line["textG"] = 0.9
+				line["textB"] = 0.9
+				line["hasCheck"] = true
+				line["checked"] = IsPrimary == talentGroup
+				line["isRadio"] = true
+				line["func"] = function() SpecChangeClickFunc(self, talentGroup) end
+				line["customwidth"] = 130
+			else
+				line["text"..i] = IsPrimary == talentGroup and ACTIVE_PETS or FACTION_INACTIVE
+				line["justify"..i] = "RIGHT"
+				line["size"..i] = 10 + resSizeExtra
+				line["text"..i.."R"] = SpecColor[1]
+				line["text"..i.."G"] = SpecColor[2]
+				line["text"..i.."B"] = SpecColor[3]
+				line["customwidth"..i] = 20
+			end
+		end
+		cat:AddLine(line)
+	end
+
 	local function Spec_UpdateTablet(self)
 		resSizeExtra = 2
 		local Cols, lineHeader
 
-		local numTalentGroups = GetNumSpecGroups()
+		local numTalentGroups = GetNumSpecializations()
 
+		if numTalentGroups > 0 then
+			wipe(SpecSection)
+
+			-- Spec Category
+			SpecSection["specs"] = {}
+			SpecSection["specs"].cat = spec:AddCategory()
+			SpecSection["specs"].cat:AddLine("text", R:RGBToHex(NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)..TALENTS.."|r", "size", 10 + resSizeExtra, "textR", 1, "textG", 1, "textB", 1)
+
+			-- Talent Cat
+			SpecSection["specs"].talentCat = spec:AddCategory("columns", 2)
+			R:AddBlankTabLine(SpecSection["specs"].talentCat, 2)
+
+			-- Primary Talent line
+			SpecAddTalentGroupLineToCat(self, SpecSection["specs"].talentCat, 1)
+
+			-- Secondary Talent line
+			if numTalentGroups > 1 then
+				SpecAddTalentGroupLineToCat(self, SpecSection["specs"].talentCat, 2)
+			end
+		end
+		
 		local numEquipSets = GetNumEquipmentSets()
 		if numEquipSets > 0 then
+
 			-- Equipment Category
 			SpecSection["equipment"] = {}
 			SpecSection["equipment"].cat = spec:AddCategory()
+			if numTalentGroups > 0 then
+				R:AddBlankTabLine(SpecSection["equipment"].cat, 2)
+			end
 			SpecSection["equipment"].cat:AddLine("text", R:RGBToHex(NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)..EQUIPMENT_MANAGER.."|r", "size", 10 + resSizeExtra, "textR", 1, "textG", 1, "textB", 1)
 			R:AddBlankTabLine(SpecSection["equipment"].cat, 2)
 
