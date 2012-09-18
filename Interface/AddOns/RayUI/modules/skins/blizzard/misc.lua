@@ -114,6 +114,7 @@ local function LoadSkin()
 
 	S:ReskinClose(RolePollPopupCloseButton)
 	S:ReskinClose(ItemRefCloseButton)
+	S:ReskinClose(FloatingBattlePetTooltip.CloseButton)
 
 	local FrameBDs = {
 			"StaticPopup1",

@@ -365,7 +365,10 @@ function TT:PLAYER_ENTERING_WORLD(event)
 		WorldMapCompareTooltip3,
 		DropDownList1MenuBackdrop,
 		DropDownList2MenuBackdrop,
+		FloatingBattlePetTooltip,
 	}
+
+	FloatingBattlePetTooltip:StripTextures()
 
 	for _, tt in pairs(tooltips) do
 		tt:SetBackdrop( { 
