@@ -178,7 +178,6 @@ local function LoadSkin()
 		"TokenFramePopup",
 		"ReputationDetailFrame",
 		"RaidInfoFrame",
-		"MissingLootFrame",
 		"ScrollOfResurrectionSelectionFrame",
 		"ScrollOfResurrectionFrame",
 		"VoiceChatTalkers",
