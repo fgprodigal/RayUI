@@ -7,6 +7,7 @@ local DEFAULT_WIDTH = 850
 local DEFAULT_HEIGHT = 650
 AddOn.DF = {}
 AddOn.DF["profile"] = {}
+AddOn.DF["global"] = {}
 
 AddOn.Options = {
 	type = "group",
@@ -73,6 +74,7 @@ AddOn.Options = {
 Engine[1] = AddOn
 Engine[2] = Locale
 Engine[3] = AddOn.DF["profile"]
+Engine[4] = AddOn.DF["global"]
 
 _G[AddOnName] = Engine
 
@@ -81,11 +83,16 @@ function AddOn:OnProfileChanged(event, database, newProfileKey)
 end
 
 function AddOn:OnInitialize()
+	if not RayUICharacterData then
+		RayUICharacterData = {}
+	end
+
 	self.data = LibStub("AceDB-3.0"):New("RayUIData", self.DF)
 	self.data.RegisterCallback(self, "OnProfileChanged", "OnProfileChanged")
 	self.data.RegisterCallback(self, "OnProfileCopied", "OnProfileChanged")
 	self.data.RegisterCallback(self, "OnProfileReset", "OnProfileChanged")
 	self.db = self.data.profile
+	self.global = self.data.global
 
 	AceConfig:RegisterOptionsTable("RayUI", AddOn.Options)
 	self.Options.args.profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.data)
@@ -96,7 +103,7 @@ function AddOn:OnInitialize()
 	self:UpdateMedia()
 
 	for k, v in self:IterateModules() do
-		if self.db[k] and (( self.DF["profile"][k].enable~=nil and self.DF["profile"][k].enable == true) or self.DF["profile"][k].enable == nil) and v.GetOptions then
+		if self.db[k] and self.DF["profile"][k] and (( self.DF["profile"][k].enable~=nil and self.DF["profile"][k].enable == true) or self.DF["profile"][k].enable == nil) and v.GetOptions then
 			AddOn.Options.args[k:gsub(" ", "_")] = {
 				type = "group",
 				name = (v.modName or k),
@@ -216,7 +223,7 @@ function AddOn:Initialize()
 	configButton:SetScript("OnClick", function()
 		if RayUIConfigTutorial then
 			RayUIConfigTutorial:Hide()
-			AddOn.db.Tutorial.configbutton = true
+			AddOn.global.Tutorial.configbutton = true
 		end
 		HideUIPanel(GameMenuFrame)
 		self:OpenConfig()

@@ -26,6 +26,11 @@ CH.LinkHoverShow = {
 	["unit"]        = true,
 }
 
+local function GetTimeForSavedMessage()
+	local randomTime = select(2, ("."):split(GetTime() or "0."..math.random(1, 999), 2)) or 0
+	return time().."."..randomTime
+end
+
 local function CreatCopyFrame()
 	local S = R:GetModule("Skins")
 	frame = CreateFrame("Frame", "CopyFrame", UIParent)
@@ -642,11 +647,21 @@ function CH:AddMessage(text, ...)
 	if text and type(text) == "string" then
 		text = text:gsub("(|Hplayer:([^:]+)([:%d+]*)([:%w+]*)|h%[(.-)%]|h)(.-)$", changeName)
 	end
-	if CHAT_TIMESTAMP_FORMAT and not text:find("|r") then
-		text = BetterDate(CHAT_TIMESTAMP_FORMAT, time())..text
+	if CHAT_TIMESTAMP_FORMAT then
+		local timeStamp = BetterDate(CHAT_TIMESTAMP_FORMAT, time()):gsub("%[([^]]*)%]","%%[%1%%]")
+		text = text:gsub(timeStamp, "")
+	end
+	if CH.timeOverride then
+		if CHAT_TIMESTAMP_FORMAT then
+			text = ("|cffffffff|HTimeCopy|h|r%s|h%s"):format(BetterDate(CHAT_TIMESTAMP_FORMAT:gsub("|cff64C2F5", "|cff7F7F7F"), CH.timeOverride), text)
+		else
+			text = ("|cffffffff|HTimeCopy|h|r%s|h%s"):format(BetterDate("|cff7F7F7F[%H:%M]|r ", CH.timeOverride), text)
+		end
+	else
+		text = ("|cffffffff|HTimeCopy|h|r%s|h%s"):format(BetterDate(CHAT_TIMESTAMP_FORMAT or "|cff64C2F5[%H:%M]|r ", time()), text)
 	end
 	text = string.gsub(text, "%[(%d+)%. .-%]", "[%1]")
-	text = ("|cffffffff|HTimeCopy|h|r%s|h %s"):format("|cff64C2F5"..date("[%H:%M]").."|r", text)
+	CH.timeOverride = nil
 	return self.OldAddMessage(self, text, ...)
 end
 
@@ -711,6 +726,64 @@ end
 
 function CH:FCF_StopAlertFlash(frame)
 	_G["ChatFrame" .. frame:GetID() .. "Tab"].ffl = nil
+end
+
+function CH:ChatEdit_AddHistory(editBox, line)
+	if line:find("/rl") then return; end
+
+	if ( strlen(line) > 0 ) then
+		for i, text in pairs(RayUICharacterData.ChatEditHistory) do
+			if text == line then
+				return
+			end
+		end
+
+		table.insert(RayUICharacterData.ChatEditHistory, #RayUICharacterData.ChatEditHistory + 1, line)
+		if #RayUICharacterData.ChatEditHistory > 15 then
+			table.remove(RayUICharacterData.ChatEditHistory, 1)
+		end
+	end
+end
+
+function CH:SaveChatHistory(event, ...)
+	local temp = {...}
+	if #temp > 0 then
+		temp[20] = event
+		local timeForMessage = GetTimeForSavedMessage()
+		RayUICharacterData.ChatHistory[timeForMessage] = temp
+
+		local c, k = 0
+		for id, data in pairs(RayUICharacterData.ChatHistory) do
+			c = c + 1
+			if (not k) or k > id then
+				k = id
+			end
+		end
+
+		if c > 128 then
+			RayUICharacterData.ChatHistory[k] = nil
+		end	  
+	end
+end
+
+function CH:DisplayChatHistory()	
+	local temp, data = {}
+	for id, _ in pairs(RayUICharacterData.ChatHistory) do
+		table.insert(temp, tonumber(id))
+	end
+	
+	table.sort(temp, function(a, b)
+		return a < b
+	end)
+	
+	for i = 1, #temp do
+		data = RayUICharacterData.ChatHistory[tostring(temp[i])]
+
+		if type(data) == "table" then
+			CH.timeOverride = temp[i]
+			ChatFrame_MessageEventHandler(DEFAULT_CHAT_FRAME, data[20], unpack(data))
+		end
+	end
 end
 
 function CH:ApplyStyle(event, ...)
@@ -826,6 +899,11 @@ function CH:ApplyStyle(event, ...)
             local font, path = cf:GetFont()
             cf:SetFont(font, path, R["media"].fontflag)
             cf:SetShadowColor(0, 0, 0, 0)
+
+			self:SecureHook(eb, "AddHistoryLine", "ChatEdit_AddHistory")
+			for i, text in pairs(RayUICharacterData.ChatEditHistory) do
+				eb:AddHistoryLine(text)
+			end	
 
             cf.styled = true
         end
@@ -950,6 +1028,16 @@ function CH:PET_BATTLE_CLOSE()
 end
 
 function CH:Initialize()
+	local ChatHistoryEvent = CreateFrame("Frame")
+
+	if not RayUICharacterData.ChatEditHistory then
+		RayUICharacterData.ChatEditHistory = {}
+	end
+
+	if not RayUICharacterData.ChatHistory then
+		RayUICharacterData.ChatHistory = {}
+	end
+
 	ChatFrameMenuButton:Kill()
 	ChatFrameMenuButton:SetScript("OnShow", kill)
 	FriendsMicroButton:Hide()
@@ -1009,6 +1097,34 @@ function CH:Initialize()
 	self:SecureHook("FCF_StartAlertFlash")
 	self:SecureHook("FCF_StopAlertFlash")
 
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_BATTLEGROUND")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_BATTLEGROUND_LEADER")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_BN_WHISPER")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_BN_WHISPER_INFORM")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_CHANNEL")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_EMOTE")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_GUILD")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_GUILD_ACHIEVEMENT")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_OFFICER")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_PARTY")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_PARTY_LEADER")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_RAID")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_RAID_LEADER")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_RAID_WARNING")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_SAY")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_WHISPER")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_WHISPER_INFORM")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_YELL")
+	ChatHistoryEvent:RegisterEvent("PLAYER_LOGIN")
+	ChatHistoryEvent:SetScript("OnEvent", function(self, event, ...)
+		if event == "PLAYER_LOGIN" then
+			self:UnregisterEvent("PLAYER_LOGIN")
+			CH:DisplayChatHistory()
+		else
+			CH:SaveChatHistory(event, ...)
+		end
+	end)
+
 	local events = {
 		"CHAT_MSG_BATTLEGROUND", "CHAT_MSG_BATTLEGROUND_LEADER",
 		"CHAT_MSG_CHANNEL", "CHAT_MSG_EMOTE",
@@ -1037,7 +1153,6 @@ function CH:Initialize()
 	self:ScheduleRepeatingTimer("SetChatPosition", 1)
 	self:RawHook("SetItemRef", true)
 
-	SetCVar("showTimestamps", "none")
 	SetCVar("profanityFilter", 0)
 	SetCVar("chatStyle", "classic")
 

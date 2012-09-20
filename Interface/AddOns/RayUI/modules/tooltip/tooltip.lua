@@ -371,12 +371,7 @@ function TT:PLAYER_ENTERING_WORLD(event)
 	FloatingBattlePetTooltip:StripTextures()
 
 	for _, tt in pairs(tooltips) do
-		tt:SetBackdrop( { 
-			edgeFile = R["media"].glow,
-			bgFile = R["media"].blank,
-			edgeSize = R:Scale(4),
-			insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
-		})
+		self:SetStyle(tt)
 		self:HookScript(tt, "OnShow", "SetStyle")
 	end
 
@@ -435,12 +430,15 @@ function TT:GetItemScore(iLink)
 end
 
 function TT:SetStyle(tooltip)
-	tooltip:SetBackdrop( { 
-		edgeFile = R["media"].glow,
-		bgFile = R["media"].blank,
-		edgeSize = R:Scale(4),
-		insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
-	})
+	if not tooltip.styled then
+		tooltip:SetBackdrop( { 
+			edgeFile = R["media"].glow,
+			bgFile = R["media"].blank,
+			edgeSize = R:Scale(4),
+			insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
+		})
+		tooltip.styled=true
+	end
 	tooltip:SetBackdropColor(0, 0, 0, 0.65)
 	local item
 	if tooltip.GetItem then

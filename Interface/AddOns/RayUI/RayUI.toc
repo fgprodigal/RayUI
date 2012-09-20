@@ -6,6 +6,7 @@
 ## RequiredDeps: Blizzard_CombatText
 ## X-oUF: RayUF
 ## SavedVariables: RayUIData
+## SavedVariablesPerCharacter:RayUICharacterData
 
 libs\load_libs.xml
 locales\load_locales.xml

@@ -146,7 +146,8 @@ function T:PLAYER_ENTERING_WORLD()
 end
 
 function T:OnInitialize()
-	self.db = R.db.Tutorial
+	R.global.Tutorial = R.global.Tutorial or {}
+	self.db = R.global.Tutorial
 end
 
 function T:Initialize()

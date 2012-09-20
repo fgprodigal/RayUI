@@ -1,4 +1,4 @@
-﻿local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
+﻿local R, L, P, G = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
 
 P["media"]={
 	blank = "RayUI Blank",
@@ -180,5 +180,5 @@ P["Skins"]={
 	gladius = true,
 }
 
-P["Tutorial"]={
+G["Tutorial"]={
 }
