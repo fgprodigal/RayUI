@@ -110,8 +110,13 @@ local function LoadTalent()
 		local line = {}
 		for i = 1, 2 do
 			local SpecColor = (IsPrimary == talentGroup) and ActiveColor or InactiveColor
+            local specid = GetSpecialization(nil, nil, talentGroup)
 			if i == 1 then
-				line["text"] = string.format("|T%s:%d:%d:0:0:64:64:5:59:5:59|t %s", select(4, GetSpecializationInfo(GetSpecialization(nil, nil, talentGroup))), 10 + resSizeExtra, 10 + resSizeExtra, select(2, GetSpecializationInfo(GetSpecialization(nil, nil, talentGroup))))
+                if specid then
+                    line["text"] = string.format("|T%s:%d:%d:0:0:64:64:5:59:5:59|t %s", select(4, GetSpecializationInfo(specid)), 10 + resSizeExtra, 10 + resSizeExtra, select(2, GetSpecializationInfo(specid)))
+                else
+                    line["text"] = NONE..TALENTS 
+                end
 				line["justify"] = "LEFT"
 				line["size"] = 10 + resSizeExtra
 				line["textR"] = 0.9
