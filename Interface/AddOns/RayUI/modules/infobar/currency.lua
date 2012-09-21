@@ -11,7 +11,6 @@ local function LoadCurrency()
 	if not db.Class then
 		if RayUIData.Class and type(RayUIData.Class) == "table" then
 			db.Class = RayUIData.Class
-			wipe(RayUIData.Class)
 			RayUIData.Class = nil
 		else
 			db.Class = {}
@@ -24,7 +23,6 @@ local function LoadCurrency()
 	if not db.Gold then
 		if RayUIData.Gold and type(RayUIData.Gold) == "table" then
 			db.Gold = RayUIData.Gold
-			wipe(RayUIData.Gold)
 			RayUIData.Gold = nil
 		else
 			db.Gold = {}
