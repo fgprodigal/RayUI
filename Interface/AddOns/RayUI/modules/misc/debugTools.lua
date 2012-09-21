@@ -137,6 +137,16 @@ local function LoadFunc()
 	end
 
 	function D:TaintError(event, addonName, addonFunc)
+		if PlayerTalentFrame and PlayerTalentFrame:IsShown() then
+			for i = 1, 4, 1 do
+				if _G["StaticPopup"..i] then
+					_G["StaticPopup"..i]:Hide()
+				end
+			end
+			
+			StaticPopup_Show("TALENT_TAINT")
+		end
+
 		if GetCVarBool("scriptErrors") ~= 1 or not R:IsDeveloper() or addonName ~= "RayUI" then return end
 		ScriptErrorsFrame_OnError(L["%s: %s 尝试调用保护函数 '%s'."]:format(event, addonName or "<name>", addonFunc or "<func>"), false)
 	end
@@ -167,6 +177,16 @@ local function LoadFunc()
 	D:RegisterChatCommand("error", "ShowScriptErrorsFrame")
 
 	SetCVar("scriptErrors", 1)
+	
+	StaticPopupDialogs["TALENT_TAINT"] = {
+		text = L["由于之前观察过别人的原因，导致现在无法切换天赋点， 你必须重载插件以继续。"],
+		button1 = ACCEPT,
+		button2 = CANCEL,
+		OnAccept = function() ReloadUI()end,
+		timeout = 0,
+		whileDead = 1,	
+		hideOnEscape = false,
+	}
 end
 
 M:RegisterMiscModule("DebugTools", LoadFunc)

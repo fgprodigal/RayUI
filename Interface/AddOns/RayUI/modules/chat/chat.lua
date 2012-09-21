@@ -2,6 +2,7 @@
 local CH = R:NewModule("Chat", "AceEvent-3.0", "AceHook-3.0", "AceTimer-3.0", "AceConsole-3.0")
 CH.modName = L["聊天栏"]
 
+local ChatHistoryEvent = CreateFrame("Frame")
 local tokennum, matchTable = 1, {}
 local currentLink
 local lines = {}
@@ -657,11 +658,11 @@ function CH:AddMessage(text, ...)
 		else
 			text = ("|cffffffff|HTimeCopy|h|r%s|h%s"):format(BetterDate("|cff7F7F7F[%H:%M]|r ", CH.timeOverride), text)
 		end
+		CH.timeOverride = nil
 	else
 		text = ("|cffffffff|HTimeCopy|h|r%s|h%s"):format(BetterDate(CHAT_TIMESTAMP_FORMAT or "|cff64C2F5[%H:%M]|r ", time()), text)
 	end
 	text = string.gsub(text, "%[(%d+)%. .-%]", "[%1]")
-	CH.timeOverride = nil
 	return self.OldAddMessage(self, text, ...)
 end
 
@@ -778,10 +779,14 @@ function CH:DisplayChatHistory()
 	
 	for i = 1, #temp do
 		data = RayUICharacterData.ChatHistory[tostring(temp[i])]
-
-		if type(data) == "table" then
-			CH.timeOverride = temp[i]
-			ChatFrame_MessageEventHandler(DEFAULT_CHAT_FRAME, data[20], unpack(data))
+		if (time() - temp[1]) > 21600 then
+			print(time(),temp[1],time() - temp[1])
+			RayUICharacterData.ChatHistory[tostring(temp[i])] = nil
+		else
+			if type(data) == "table" then
+				CH.timeOverride = temp[i]
+				ChatFrame_MessageEventHandler(DEFAULT_CHAT_FRAME, data[20], unpack(data))
+			end
 		end
 	end
 end
@@ -1028,7 +1033,7 @@ function CH:PET_BATTLE_CLOSE()
 end
 
 function CH:Initialize()
-	local ChatHistoryEvent = CreateFrame("Frame")
+	
 
 	if not RayUICharacterData.ChatEditHistory then
 		RayUICharacterData.ChatEditHistory = {}
@@ -1097,34 +1102,6 @@ function CH:Initialize()
 	self:SecureHook("FCF_StartAlertFlash")
 	self:SecureHook("FCF_StopAlertFlash")
 
-	ChatHistoryEvent:RegisterEvent("CHAT_MSG_BATTLEGROUND")
-	ChatHistoryEvent:RegisterEvent("CHAT_MSG_BATTLEGROUND_LEADER")
-	ChatHistoryEvent:RegisterEvent("CHAT_MSG_BN_WHISPER")
-	ChatHistoryEvent:RegisterEvent("CHAT_MSG_BN_WHISPER_INFORM")
-	ChatHistoryEvent:RegisterEvent("CHAT_MSG_CHANNEL")
-	ChatHistoryEvent:RegisterEvent("CHAT_MSG_EMOTE")
-	ChatHistoryEvent:RegisterEvent("CHAT_MSG_GUILD")
-	ChatHistoryEvent:RegisterEvent("CHAT_MSG_GUILD_ACHIEVEMENT")
-	ChatHistoryEvent:RegisterEvent("CHAT_MSG_OFFICER")
-	ChatHistoryEvent:RegisterEvent("CHAT_MSG_PARTY")
-	ChatHistoryEvent:RegisterEvent("CHAT_MSG_PARTY_LEADER")
-	ChatHistoryEvent:RegisterEvent("CHAT_MSG_RAID")
-	ChatHistoryEvent:RegisterEvent("CHAT_MSG_RAID_LEADER")
-	ChatHistoryEvent:RegisterEvent("CHAT_MSG_RAID_WARNING")
-	ChatHistoryEvent:RegisterEvent("CHAT_MSG_SAY")
-	ChatHistoryEvent:RegisterEvent("CHAT_MSG_WHISPER")
-	ChatHistoryEvent:RegisterEvent("CHAT_MSG_WHISPER_INFORM")
-	ChatHistoryEvent:RegisterEvent("CHAT_MSG_YELL")
-	ChatHistoryEvent:RegisterEvent("PLAYER_LOGIN")
-	ChatHistoryEvent:SetScript("OnEvent", function(self, event, ...)
-		if event == "PLAYER_LOGIN" then
-			self:UnregisterEvent("PLAYER_LOGIN")
-			CH:DisplayChatHistory()
-		else
-			CH:SaveChatHistory(event, ...)
-		end
-	end)
-
 	local events = {
 		"CHAT_MSG_BATTLEGROUND", "CHAT_MSG_BATTLEGROUND_LEADER",
 		"CHAT_MSG_CHANNEL", "CHAT_MSG_EMOTE",
@@ -1152,6 +1129,35 @@ function CH:Initialize()
     self:EnableDumpTool()
 	self:ScheduleRepeatingTimer("SetChatPosition", 1)
 	self:RawHook("SetItemRef", true)
+
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_BATTLEGROUND")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_BATTLEGROUND_LEADER")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_BN_WHISPER")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_BN_WHISPER_INFORM")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_CHANNEL")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_EMOTE")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_GUILD")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_GUILD_ACHIEVEMENT")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_OFFICER")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_PARTY")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_PARTY_LEADER")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_RAID")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_RAID_LEADER")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_RAID_WARNING")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_SAY")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_WHISPER")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_WHISPER_INFORM")
+	ChatHistoryEvent:RegisterEvent("CHAT_MSG_YELL")
+	ChatHistoryEvent:RegisterEvent("PLAYER_LOGIN")
+	ChatHistoryEvent:RegisterEvent("ADDON_LOADED")
+	ChatHistoryEvent:SetScript("OnEvent", function(self, event, ...)
+		if event =="PLAYER_LOGIN" then
+			ChatHistoryEvent:UnregisterEvent("PLAYER_LOGIN")
+			CH:DisplayChatHistory()
+		else
+			CH:SaveChatHistory(event, ...)
+		end
+	end)
 
 	SetCVar("profanityFilter", 0)
 	SetCVar("chatStyle", "classic")
