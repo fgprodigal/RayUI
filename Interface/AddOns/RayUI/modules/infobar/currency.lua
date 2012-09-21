@@ -4,14 +4,34 @@ local IF = R:GetModule("InfoBar")
 local function LoadCurrency()
 	local infobar = _G["RayUITopInfoBar7"]
 	local Status = infobar.Status
+	local db = R.global
 	infobar.Text:SetText(CURRENCY)
 	Status:SetValue(0)
 
-	RayUIData.Class = RayUIData.Class or {}
-	RayUIData.Class[R.myrealm] = RayUIData.Class[R.myrealm] or {}
-	RayUIData.Class[R.myrealm][R.myname] = R.myclass
-	RayUIData.Gold = RayUIData.Gold or {}
-	RayUIData.Gold[R.myrealm] = RayUIData.Gold[R.myrealm] or {}
+	if not db.Class then
+		if RayUIData.Class and type(RayUIData.Class) == "table" then
+			db.Class = RayUIData.Class
+			wipe(RayUIData.Class)
+			RayUIData.Class = nil
+		else
+			db.Class = {}
+		end
+	end
+
+	db.Class[R.myrealm] = db.Class[R.myrealm] or {}
+	db.Class[R.myrealm][R.myname] = R.myclass
+
+	if not db.Gold then
+		if RayUIData.Gold and type(RayUIData.Gold) == "table" then
+			db.Gold = RayUIData.Gold
+			wipe(RayUIData.Gold)
+			RayUIData.Gold = nil
+		else
+			db.Gold = {}
+		end
+	end
+
+	db.Gold[R.myrealm] = db.Gold[R.myrealm] or {}
 
 	-- CURRENCY DATA BARS
 	local CurrencyData = {}
@@ -91,7 +111,7 @@ local function LoadCurrency()
 	local function ShowCurrency(self)
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 		local total = 0
-		local realmlist = RayUIData.Gold[R.myrealm]
+		local realmlist = db.Gold[R.myrealm]
 		for k, v in pairs(realmlist) do
 			total = total + v
 		end
@@ -99,7 +119,7 @@ local function LoadCurrency()
 		GameTooltip:AddDoubleLine(R.myrealm, formatMoney(total, true), nil, nil, nil, 1, 1, 1)
 		GameTooltip:AddLine(" ")
 		for k, v in pairs(realmlist) do
-			local class = RayUIData.Class[R.myrealm][k]
+			local class = db.Class[R.myrealm][k]
 			if v >= 10000 then
 				GameTooltip:AddDoubleLine(k, formatMoney(v, true), RAID_CLASS_COLORS[class].r, RAID_CLASS_COLORS[class].g, RAID_CLASS_COLORS[class].b, 1, 1, 1)
 			end
@@ -119,10 +139,10 @@ local function LoadCurrency()
 			local money	= GetMoney()
 			infobar.Text:SetText(formatMoney(money))
 			self:SetAllPoints(infobar)
-			RayUIData.Gold[R.myrealm][R.myname] = money
+			db.Gold[R.myrealm][R.myname] = money
 
 			local total = 0
-			local realmlist = RayUIData.Gold[R.myrealm]
+			local realmlist = db.Gold[R.myrealm]
 			for k, v in pairs(realmlist) do
 				total = total + v
 			end

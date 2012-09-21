@@ -179,6 +179,3 @@ P["Skins"]={
 	bigwigs = true,
 	gladius = true,
 }
-
-G["Tutorial"]={
-}
