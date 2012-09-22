@@ -546,7 +546,9 @@ function UF:PostUpdateHealth(unit, cur, max)
 	local color = {1,1,1}
 	if UnitIsPlayer(unit) then
 		local _, class = UnitClass(unit)
-		color = oUF.colors.class[class]
+        if class then
+            color = oUF.colors.class[class]
+        end
 	elseif UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) then
 		color = oUF.colors.tapped
 	elseif UnitIsEnemy(unit, "player") then

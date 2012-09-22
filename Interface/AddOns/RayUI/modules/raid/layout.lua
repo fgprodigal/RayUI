@@ -126,7 +126,7 @@ oUF.Tags.Methods["RayUFRaid:name"] = function(u, r)
         return RA.nameCache[name]
     end
 end
-oUF.Tags.Events["RayUFRaid:name"] = "UNIT_NAME_UPDATE"
+oUF.Tags.Events["RayUFRaid:name"] = "UNIT_NAME_UPDATE GROUP_ROSTER_UPDATE"
 
 RA.nameCache = {}
 RA.colorCache = {}
