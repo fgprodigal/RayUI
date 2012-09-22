@@ -184,9 +184,9 @@ function MM:CreateMenu()
 		end},
 	}
 	Minimap:SetScript("OnMouseUp", function(_, btn)
-		if(btn=="RightButton") then
+		if(btn=="RightButton" and not IsShiftKeyDown()) then
 			ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, "cursor", 0, 0)
-		elseif(btn=="MiddleButton") then
+		elseif(btn=="MiddleButton" or (btn=="RightButton" and IsShiftKeyDown())) then
 			EasyMenu(menuList, menuFrame, "cursor", 0, 0, "MENU", 1)
 		else
 			local x, y = GetCursorPosition()
