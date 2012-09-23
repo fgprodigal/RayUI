@@ -29,6 +29,11 @@ function TT:GetOptions()
 			name = L["跟随鼠标"],
 			type = "toggle",
 		},
+		hideincombat = {
+			order = 6,
+			name = L["战斗中隐藏"],
+			type = "toggle",
+		},
 	}
 	return options
 end
@@ -430,6 +435,9 @@ function TT:GetItemScore(iLink)
 end
 
 function TT:SetStyle(tooltip)
+    if self.db.hideincombat and InCombatLockdown() then
+        return tooltip:Hide()
+    end
 	if not tooltip.styled then
 		tooltip:SetBackdrop( { 
 			edgeFile = R["media"].glow,
@@ -493,6 +501,9 @@ function TT:Initialize()
 	GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 		local unit = select(2, self:GetUnit())
 		if unit then
+            if TT.db.hideincombat and InCombatLockdown() then
+                return self:Hide()
+            end
 			local unitClassification = types[UnitClassification(unit)] or " "
 			local creatureType = UnitCreatureType(unit) or ""
 			local unitName = UnitName(unit)

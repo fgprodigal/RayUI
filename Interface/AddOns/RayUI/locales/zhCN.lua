@@ -187,6 +187,7 @@ L["模块"] = true
 	L["鼠标提示"] = true
 	L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r鼠标提示模块."] = true
 		L["跟随鼠标"] = true
+		L["战斗中隐藏"] = true
 	L["BUFF"] = true
 	L["冷却提示"] = true
 L["头像"] = true
@@ -345,18 +346,6 @@ L["添加/编辑"] = true
 	L["添加到当前分组或编辑当前列表中已有法术"] = true
 L["删除"] = true
 	L["从当前分组删除"] = true
-end
-do
-L["(.*)赢得了：(.+)"] = true
-L["%s|HRayUILootCollector:%d|h[%s]|h|r %s 赢得了 %s "] = true
-L["(.+)选择了(.+)取向：(.+)"] = true
-L["（(.+)）(%d+)点：(.+)（(.+)）"] = true
-L["（(.+)%+职责加成）(%d+)点：(.+)（(.+)）"] = true
-L["放弃了："] = true
-L["自动放弃了"] = true
-L["你放弃了："] = true
-L["所有人都放弃了："] = true
-L["获胜者"] = true
 end
 do
 L["RayUI提示"] = true

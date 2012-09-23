@@ -93,20 +93,17 @@ local function LoadSkin()
 	end
 
 	function PaperDollFrame_SetLevel()
-		local primaryTalentTree = GetSpecialization()
-		local classDisplayName, class = UnitClass("player")
-		local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or S["media"].classcolours[class]
-		local classColorString = format("ff%.2x%.2x%.2x", classColor.r * 255, classColor.g * 255, classColor.b * 255)
+        local primaryTalentTree = GetSpecialization()
+        local classDisplayName, class = UnitClass("player")
+        local classColor = RAID_CLASS_COLORS[class]
+        local classColorString = format("ff%.2x%.2x%.2x", classColor.r * 255, classColor.g * 255, classColor.b * 255)
 
-		if (primaryTalentTree) then
-			local _, specName = GetSpecializationInfo(primaryTalentTree)
-
-            if (specName and specName ~= "") then
-                CharacterLevelText:SetFormattedText(PLAYER_LEVEL, UnitLevel("player"), classColorString, specName, classDisplayName);
-            else
-                CharacterLevelText:SetFormattedText(PLAYER_LEVEL_NO_SPEC, UnitLevel("player"), classColorString, classDisplayName);
-            end
-		end
+        if (primaryTalentTree) then
+            local _, specName = GetSpecializationInfo(primaryTalentTree)
+            CharacterLevelText:SetFormattedText(PLAYER_LEVEL, UnitLevel("player"), classColorString, specName, classDisplayName);
+        else
+            CharacterLevelText:SetFormattedText(PLAYER_LEVEL_NO_SPEC, UnitLevel("player"), classColorString, classDisplayName);
+        end
 	end
 
 	EquipmentFlyoutFrameButtons:DisableDrawLayer("BACKGROUND")
