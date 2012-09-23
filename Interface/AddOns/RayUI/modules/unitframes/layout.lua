@@ -731,8 +731,8 @@ function UF:DPSLayout(frame, unit)
 	frame.LFDRole:SetTexture("Interface\\AddOns\\RayUI\\media\\lfd_role")
 
     local PvP = frame:CreateTexture(nil, "OVERLAY")
-    PvP:SetSize(25, 25)
-    PvP:Point("TOPRIGHT", frame, 12, 8)
+    PvP:SetSize(35, 35)
+    PvP:Point("TOPRIGHT", frame, 22, 8)
     frame.PvP = PvP
 	frame.PvP.Override = function(frame, event, unit)
 		if(unit ~= frame.unit) then return end

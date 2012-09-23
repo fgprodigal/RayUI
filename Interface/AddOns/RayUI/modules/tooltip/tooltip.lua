@@ -548,7 +548,7 @@ function TT:Initialize()
 					end
 				end
                 if UnitFactionGroup(unit) then
-                    GameTooltipTextLeft1:SetText("|TInterface\\Addons\\RayUI\\media\\UI-PVP-"..select(1, UnitFactionGroup(unit))..".blp:16:16:0:0:64:64:10:53:10:53|t"..GameTooltipTextLeft1:GetText())
+                    GameTooltipTextLeft1:SetText("|TInterface\\Addons\\RayUI\\media\\UI-PVP-"..select(1, UnitFactionGroup(unit))..".blp:16:16:0:0:64:64:5:40:0:35|t"..GameTooltipTextLeft1:GetText())
                     for i = 2, GameTooltip:NumLines() do
                         if _G["GameTooltipTextLeft"..i]:GetText():match("^"..select(2, UnitFactionGroup(unit))) then
                             _G["GameTooltipTextLeft"..i]:SetText('')

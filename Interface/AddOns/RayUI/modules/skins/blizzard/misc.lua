@@ -402,6 +402,7 @@ local function LoadSkin()
 		"InterfaceOptionsNamesPanelUnitNameplatesEnemyPets",
 		"InterfaceOptionsNamesPanelUnitNameplatesEnemyGuardians",
 		"InterfaceOptionsNamesPanelUnitNameplatesEnemyTotems",
+        "InterfaceOptionsNamesPanelUnitNameplatesNameplateClassColors",
 		"InterfaceOptionsCombatTextPanelTargetDamage",
 		"InterfaceOptionsCombatTextPanelPeriodicDamage",
 		"InterfaceOptionsCombatTextPanelPetDamage",
