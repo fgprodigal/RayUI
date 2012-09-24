@@ -9,68 +9,6 @@ AddOn.DF = {}
 AddOn.DF["profile"] = {}
 AddOn.DF["global"] = {}
 
-AddOn.Options = {
-	type = "group",
-	name = AddOnName,
-	args = {
-		general = {
-			order = 1,
-			type = "group",
-			name = Locale["一般"],
-			get = function(info)
-				return AddOn.db.general[ info[#info] ]
-			end,
-			set = function(info, value)
-				AddOn.db.general[ info[#info] ] = value
-				StaticPopup_Show("CFG_RELOAD")
-			end,
-			args = {
-				uiscale = {
-					order = 1,
-					name = Locale["UI缩放"],
-					desc = Locale["UI界面缩放"],
-					type = "range",
-					min = 0.64, max = 1, step = 0.01,
-					isPercent = true,
-				},
-				logo = {
-					order = 2,
-					type = "toggle",
-					name = Locale["登陆Logo"],
-					desc = Locale["开关登陆时的Logo"],
-				},
-				spacer = {
-					order = 3,
-					name = " ",
-					desc = " ",
-					type = "description",
-				},
-				ToggleAnchors = {
-					order = 4,
-					type = "execute",
-					name = Locale["显示小提示"],
-					func = function()
-						AceConfigDialog["Close"](AceConfigDialog,"RayUI")
-						AddOn:GetModule("Tutorial"):Tutorials(true)
-						GameTooltip_Hide()
-					end,
-				},
-				ToggleTutorial = {
-					order = 4,
-					type = "execute",
-					name = Locale["解锁锚点"],
-					desc = Locale["解锁并移动头像和动作条"],
-					func = function()
-						AceConfigDialog["Close"](AceConfigDialog,"RayUI")
-						AddOn:ToggleMovers()
-						GameTooltip_Hide()
-					end,
-				},
-			},
-		},
-	},
-}
-
 Engine[1] = AddOn
 Engine[2] = Locale
 Engine[3] = AddOn.DF["profile"]
@@ -232,12 +170,3 @@ function AddOn:Initialize()
 	local S = self:GetModule("Skins")
 	S:Reskin(configButton)
 end
-
-StaticPopupDialogs["CFG_RELOAD"] = {
-	text = Locale["改变参数需重载应用设置"],
-	button1 = ACCEPT,
-	button2 = CANCEL,
-	OnAccept = function() ReloadUI() end,
-	timeout = 0,
-	whileDead = 1,
-}

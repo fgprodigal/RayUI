@@ -2,4 +2,5 @@
 	<Script file="defaults.lua"/>
 	<Script file="watchers.lua"/>
 	<Script file="reminders.lua"/>
+	<Script file="options.lua"/>
 </Ui>
