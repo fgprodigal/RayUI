@@ -654,7 +654,7 @@ function CH:AddMessage(text, ...)
 	end
 	if CH.timeOverride then
 		if CHAT_TIMESTAMP_FORMAT then
-			text = ("|cffffffff|HTimeCopy|h|r%s|h%s"):format(BetterDate(CHAT_TIMESTAMP_FORMAT:gsub("|cff64C2F5", "|cff7F7F7F"), CH.timeOverride), text)
+			text = ("|cffffffff|HTimeCopy|h|r%s|h%s"):format(BetterDate(CHAT_TIMESTAMP_FORMAT:gsub("64C2F5", "7F7F7F"), CH.timeOverride), text)
 		else
 			text = ("|cffffffff|HTimeCopy|h|r%s|h%s"):format(BetterDate("|cff7F7F7F[%H:%M]|r ", CH.timeOverride), text)
 		end

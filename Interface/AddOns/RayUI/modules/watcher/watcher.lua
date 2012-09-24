@@ -24,6 +24,44 @@ function watcherPrototype:OnDisable()
 	end
 end
 
+local StartFlash = function(self, duration)
+	if not self.anim then
+		self.anim = self:CreateAnimationGroup("Flash")
+
+		self.anim.fadein = self.anim:CreateAnimation("ALPHA", "FadeIn")
+		self.anim.fadein:SetChange(0.8)
+		self.anim.fadein:SetOrder(2)
+
+		self.anim.fadeout = self.anim:CreateAnimation("ALPHA", "FadeOut")
+		self.anim.fadeout:SetChange(-0.8)
+		self.anim.fadeout:SetOrder(1)
+	end
+
+	self.anim.fadein:SetDuration(duration)
+	self.anim.fadeout:SetDuration(duration)
+	self.anim:Play()
+end
+
+local StopFlash = function(self)
+	if self.anim then
+		self.anim:Stop()
+	end
+end
+
+local function Flash(self)
+	local time = self.start + self.duration - GetTime()
+
+	if time < 0 then
+		StopFlash(self)
+	end
+
+	if time < 5 then
+		StartFlash(self, .75)
+	else
+		StopFlash(self)
+	end
+end
+
 function watcherPrototype:CreateButton(mode)
 	local button=CreateFrame("Button", nil, self.parent)
 	button:CreateShadow("Background")
@@ -106,9 +144,13 @@ function watcherPrototype:UpdateButton(button, index, icon, count, duration, exp
 		if filter == "CD" or filter == "itemCD" or filter == "slotCD" then
 			button.cooldown:SetReverse(false)
 			CooldownFrame_SetTimer(button.cooldown, expires, duration, 1)
+			button.start = expires
+			button.duration = duration
 		else
 			button.cooldown:SetReverse(true)
 			CooldownFrame_SetTimer(button.cooldown, expires - duration, duration, 1)
+			button.start = expires - duration
+			button.duration = duration
 		end
 	end
 	button.index = index
@@ -176,6 +218,7 @@ local function OnUpdate(self, elapsed)
 				self.owner:Update()
 			end
 		end
+		Flash(self)
 	end
 end
 
@@ -195,7 +238,7 @@ function watcherPrototype:CheckAura()
 					if self.mode == "BAR" then
 						self.button[self.current]:SetScript("OnUpdate", OnUpdate)
 					else
-						self.button[self.current]:SetScript("OnUpdate", nil)
+						self.button[self.current]:SetScript("OnUpdate", Flash)
 					end
 					self.current = self.current + 1
 				end
@@ -218,7 +261,7 @@ function watcherPrototype:CheckAura()
 					if self.mode == "BAR" then
 						self.button[self.current]:SetScript("OnUpdate", OnUpdate)
 					else
-						self.button[self.current]:SetScript("OnUpdate", nil)
+						self.button[self.current]:SetScript("OnUpdate", Flash)
 					end
 					self.current = self.current + 1
 				end
