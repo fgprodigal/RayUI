@@ -1,4 +1,5 @@
 ﻿local R, L, P, G = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
+local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 
 R.Options = {
 	type = "group",
