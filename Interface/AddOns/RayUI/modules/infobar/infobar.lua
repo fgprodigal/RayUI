@@ -42,7 +42,6 @@ function IF:Initialize()
 			UIFrameFadeIn(bars[i], 1, 0, 1)
 		end)
 	end
-	SetCVar("scriptProfile", 1)
 	self:LoadInfoText()
 end
 

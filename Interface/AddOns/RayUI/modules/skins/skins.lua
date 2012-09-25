@@ -6,7 +6,7 @@ S.modName = L["插件美化"]
 S.SkinFuncs = {}
 S.SkinFuncs["RayUI"] = {}
 
-local alpha = .65 -- controls the backdrop opacity (0 = invisible, 1 = solid)
+local alpha = .5 -- controls the backdrop opacity (0 = invisible, 1 = solid)
 
 S["media"] = {
 	["checked"] = "Interface\\AddOns\\RayUI\\media\\CheckButtonHilight",
@@ -29,7 +29,7 @@ S["media"] = {
 	},
 }
 
-S["media"].DefGradient = {"VERTICAL", 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2}
+S["media"].DefGradient = {"VERTICAL", .35, .35, .35, .35, .35, .35, .35, .35}
 
 local r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b
 

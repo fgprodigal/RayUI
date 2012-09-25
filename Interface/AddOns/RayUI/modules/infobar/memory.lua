@@ -4,6 +4,7 @@ local IF = R:GetModule("InfoBar")
 local function LoadMemory()
 	local infobar = _G["RayUITopInfoBar3"]
 	local Status = infobar.Status
+	local scriptProfile = GetCVar("scriptProfile") == "1"
 	infobar.Text:SetText("0 MB")
 
 	local int, int2 = 6, 5
@@ -92,7 +93,7 @@ local function LoadMemory()
 			GameTooltip:AddDoubleLine(L["下载"]..": " , string.format(percentageString, GetDownloadedPercentage() *100),0.69, 0.31, 0.31, 0.84, 0.75, 0.65)
 			GameTooltip:AddLine(" ")
 		end
-		if IsAltKeyDown() then
+		if IsAltKeyDown() and scriptProfile then
 			local totalCPU = UpdateCPU()
 			GameTooltip:AddDoubleLine(L["总CPU使用"]..": ",  format("%dms", totalCPU), 0.69, 0.31, 0.31,0.84, 0.75, 0.65)
 			GameTooltip:AddLine(" ")
