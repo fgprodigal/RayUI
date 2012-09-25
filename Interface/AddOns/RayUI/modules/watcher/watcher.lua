@@ -141,17 +141,20 @@ function watcherPrototype:UpdateButton(button, index, icon, count, duration, exp
 	button.icon:SetTexCoord(.1, .9, .1, .9)
 	button.count:SetText(count > 1 and count or "")
 	if button.cooldown then
-		if filter == "CD" or filter == "itemCD" or filter == "slotCD" then
+		if filter:find("CD") then
 			button.cooldown:SetReverse(false)
 			CooldownFrame_SetTimer(button.cooldown, expires, duration, 1)
-			button.start = expires
-			button.duration = duration
 		else
 			button.cooldown:SetReverse(true)
 			CooldownFrame_SetTimer(button.cooldown, expires - duration, duration, 1)
-			button.start = expires - duration
-			button.duration = duration
 		end
+	end
+	if filter:find("CD") then
+		button.start = expires
+		button.duration = duration
+	else
+		button.start = expires - duration
+		button.duration = duration
 	end
 	button.index = index
 	button.filter = filter
