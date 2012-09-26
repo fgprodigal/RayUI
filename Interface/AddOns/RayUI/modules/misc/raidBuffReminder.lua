@@ -82,6 +82,20 @@ local function LoadFunc()
 		[6] = Mastery,
 	}
 
+	local function FormatTime(s)
+		local day, hour, minute = 86400, 3600, 60
+		if s >= day then
+			return format("%dd", ceil(s / day))
+		elseif s >= hour then
+			return format("%dh", ceil(s / hour))
+		elseif s >= minute then
+			return format("%dm", ceil(s / minute))
+		elseif s >= minute then
+			return format("%d", s)
+		end
+		return format("%d", s)
+	end
+
 	local function CheckFilterForActiveBuff(filter)
 		local spellName, texture
 		for spell in pairs(filter) do
@@ -101,9 +115,33 @@ local function LoadFunc()
 		return false, texture
 	end
 
+	local function UpdateRaidBuffReminderTime(self, elapsed)
+		if(self.expiration) then
+			self.expiration = math.max(self.expiration - elapsed, 0)
+			if(self.expiration <= 0) then
+				self.timer:SetText("")
+			else
+				local time = FormatTime(self.expiration)
+				if self.expiration <= 86400.5 and self.expiration > 600.5 then
+					self.timer:SetText("|cffcccccc"..time.."|r")
+				elseif self.expiration <= 600.5 and self.expiration > 60.5 then
+					self.timer:SetText("|cffffff00"..time.."|r")
+				elseif self.expiration <= 60.5 then
+					self.timer:SetText("|cffff0000"..time.."|r")
+				end
+			end
+		end
+	end
+
 	local function UpdateReminder(event, unit)
 		if (event == "UNIT_AURA" and unit ~= "player") then return end
 		local frame = RaidBuffReminder
+
+		if M.db.raidbuffreminderparty and GetNumGroupMembers() == 0 then
+			return frame:Hide()
+		elseif M.db.raidbuffreminderparty and GetNumGroupMembers() > 0 then
+			frame:Show()
+		end
 		
 		if event ~= "UNIT_AURA" and not InCombatLockdown() then
 			if R.Role == "Caster" then
@@ -118,7 +156,7 @@ local function LoadFunc()
 				ConsolidatedBuffsTooltipBuff6:Hide()		
 			end
 		end
-		
+
 		if R.Role == "Caster" then
 			IndexTable[3] = SpellPower
 			IndexTable[4] = SpellHaste
@@ -140,17 +178,25 @@ local function LoadFunc()
 					end
 				end
 
+				frame["spell"..i].expiration = expirationTime - GetTime()
+				frame["spell"..i].duration = duration
+
 				if duration == 0 and expirationTime == 0 then
 					frame["spell"..i].t:SetAlpha(0.3)
+					frame["spell"..i]:SetScript("OnUpdate", nil)
 				else
 					CooldownFrame_SetTimer(frame["spell"..i].cd, expirationTime - duration, duration, 1)
 					frame["spell"..i].t:SetAlpha(0.3)
+					if M.db.raidbuffreminderduration == true then
+						frame["spell"..i]:SetScript("OnUpdate", UpdateRaidBuffReminderTime)
+					end
 				end
 				frame["spell"..i].hasBuff = hasBuff
 			else
 				CooldownFrame_SetTimer(frame["spell"..i].cd, 0, 0, 0)
 				frame["spell"..i].t:SetAlpha(1)
 				frame["spell"..i].hasBuff = nil
+				frame["spell"..i]:SetScript("OnUpdate", nil)
 			end
 		end
 	end
@@ -221,6 +267,10 @@ local function LoadFunc()
 		button.cd = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
 		button.cd:SetAllPoints()
 		button.cd.noOCC = true
+
+		button.timer = button.cd:CreateFontString(nil, "OVERLAY")
+		button.timer:Point("CENTER", 1, 0)
+		button.timer:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
 		
 		return button
 	end
@@ -266,6 +316,9 @@ local function LoadFunc()
 	frame:RegisterEvent("UPDATE_BONUS_ACTIONBAR")
 	frame:RegisterEvent("CHARACTER_POINTS_CHANGED")
 	frame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+	if M.db.raidbuffreminderparty then
+		frame:RegisterEvent("GROUP_ROSTER_UPDATE")
+	end
 	frame:SetScript("OnEvent", UpdateReminder)
 	UpdateReminder()
 end

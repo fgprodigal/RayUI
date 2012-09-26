@@ -165,6 +165,7 @@ P["Misc"]={
 	reminder = true,
 	raidbuffreminder = true,
 		raidbuffreminderparty = false,
+		raidbuffreminderduration = true,
 }
 
 P["Skins"]={

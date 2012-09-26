@@ -37,6 +37,8 @@ local function SkinAce3()
 			else
 				widget.check:SetParent(widget.skinnedCheckBG)
 			end
+			widget.check:SetDesaturated(true)
+			widget.check:SetVertexColor(r, g, b)
 		elseif TYPE == "Dropdown" then
 			local frame = widget.dropdown
 			local button = widget.button

@@ -453,6 +453,10 @@ function S:ReskinCheck(f)
 	bd:Point("BOTTOMRIGHT", tex, 1, -1)
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
 	S:CreateBD(bd, 0)
+
+	local ch = f:GetCheckedTexture()
+	ch:SetDesaturated(true)
+	ch:SetVertexColor(r, g, b)
 end
 
 function S:ReskinSlider(f)

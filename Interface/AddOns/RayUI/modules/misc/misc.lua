@@ -135,6 +135,13 @@ function M:GetOptions()
 					type = "toggle",
 					disabled = function() return not M.db.raidbuffreminder end,
 				},
+				raidbuffreminderduration = {
+					order = 3,
+					name = L["持续时间"],
+					desc = L["图标上显示持续时间"],
+					type = "toggle",
+					disabled = function() return not M.db.raidbuffreminder end,
+				},
 			},
 		},
 	}
