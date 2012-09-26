@@ -13,7 +13,8 @@ RA.auras = {
     -- Add spells to this list to have the aura time count up from 0
     -- NOTE: This does not show the aura, it needs to be in one of the other list too.
     ascending = {
-        -- [GetSpellInfo(92956)] = true, -- Wrack
+		[GetSpellInfo(89435)] = true,
+		[GetSpellInfo(89421)] = true,
     },
 
     -- Any Zone
