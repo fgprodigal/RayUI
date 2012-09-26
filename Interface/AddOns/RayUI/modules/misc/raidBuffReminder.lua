@@ -7,53 +7,70 @@ local function LoadFunc()
 	local bsize = ((Minimap:GetWidth() - 6) / 6) - 4
 
 	local Stats = {
-		117667, --Legacy of The Emperor
-		1126, -- Mark of The Wild
-		20217, -- Blessing Of Kings
+		[90363] = "HUNTER", -- Embrace of the Shale Spider
+		[117667] = "MONK", --Legacy of The Emperor
+		[1126] = "DRUID", -- Mark of The Wild
+		[20217] = "PALADIN", -- Blessing Of Kings
+		["DEFAULT"] = 20217
 	}
 
 	local Stamina = {
-		469, -- Commanding Shout
-		6307, -- Imp. Blood Pact
-		21562, -- Power Word: Fortitude
+		[90364] = "HUNTER", -- Qiraji Fortitude
+		[469] = "WARRIOR", -- Commanding Shout
+		[6307] = "WARLOCK", -- Imp. Blood Pact
+		[21562] = "PRIEST", -- Power Word: Fortitude
+		["DEFAULT"] = 21562
 	}
 
 	local AttackPower = {
-		19506, -- Trueshot Aura
-		6673, -- Battle Shout
-		57330, -- Horn of Winter
+		[19506] = "HUNTER", -- Trueshot Aura
+		[6673] = "WARRIOR", -- Battle Shout
+		[57330] = "DEATHKNIGHT", -- Horn of Winter
+		["DEFAULT"] = 57330
 	}
 
 	local SpellPower = {
-		77747, -- Burning Wrath
-		109773, -- Dark Intent
-		61316, -- Dalaran Brilliance
-		1459, -- Arcane Brilliance
+		[126309] = "HUNTER", -- Still Water
+		[77747] = "SHAMAN", -- Burning Wrath
+		[109773] = "WARLOCK", -- Dark Intent
+		[61316] = "MAGE", -- Dalaran Brilliance
+		[1459] = "MAGE", -- Arcane Brilliance
+		["DEFAULT"] = 1459
 	}
 
 	local AttackSpeed = {
-		30809, -- Unleashed Rage
-		113742, -- Swiftblade"s Cunning
-		55610, -- Improved Icy Talons
+		[128432] = "HUNTER", -- Cackling Howl
+		[128433] = "HUNTER", -- Serpent"s Swiftness
+		[30809] = "SHAMAN", -- Unleashed Rage
+		[113742] = "ROGUE", -- Swiftblade"s Cunning
+		[55610] = "DEATHKNIGHT", -- Improved Icy Talons
+		["DEFAULT"] = 55610
 	}
 
 	local SpellHaste = {
-		24907, -- Moonkin Aura
-		51470, -- Elemental Oath
-		49868, -- Mind Quickening
+		[24907] = "DRUID", -- Moonkin Aura
+		[51470] = "SHAMAN", -- Elemental Oath
+		[49868] = "PRIEST", -- Mind Quickening
+		["DEFAULT"] = 49868
 	}
 
 	local CriticalStrike = {
-		-- 19506, -- Trueshot Aura
-		1459, -- Arcane Brilliance
-		61316, -- Dalaran Brilliance
-		24932, -- Leader of The Pact
-		116781, -- Legacy of the White Tiger
+		[126309] = "HUNTER", -- Still Water
+		[24604] = "HUNTER", -- Furious Howl
+		[90309] = "HUNTER", -- Terrifying Roar
+		[1459] = "MAGE", -- Arcane Brilliance
+		[61316] = "MAGE", -- Dalaran Brilliance
+		[24932] = "DRUID", -- Leader of The Pact
+		[116781] = "MONK", -- Legacy of the White Tiger
+		["DEFAULT"] = 116781
 	}
 
 	local Mastery = {
-		116956, --Grace of Air
-		19740, -- Blessing of Might
+		[93435] = "HUNTER", --Roar of Courage
+		[128997] = "HUNTER", --Spirit Beast Blessing
+		[116956] = "SHAMAN", --Grace of Air
+		[19740] = "PALADIN", -- Blessing of Might
+		["DEFAULT"] = 19740
 	}
 
 	local IndexTable = {
@@ -67,14 +84,18 @@ local function LoadFunc()
 
 	local function CheckFilterForActiveBuff(filter)
 		local spellName, texture
-		for _, spell in pairs(filter) do
-			spellName, _, texture = GetSpellInfo(spell)
-			
-			assert(spellName, spell..": ID is not correct.")
-			
-			if UnitAura("player", spellName) then
-				return spellName, texture
+		for spell in pairs(filter) do
+			if spell ~= 'DEFAULT' then
+				spellName, _, texture = GetSpellInfo(spell)
+
+				assert(spellName, spell..": ID is not correct.")
+
+				if UnitAura("player", spellName) then
+					return spellName, texture
+				end
 			end
+
+			texture =  select(3, GetSpellInfo(filter["DEFAULT"]))
 		end
 
 		return false, texture
@@ -111,10 +132,24 @@ local function LoadFunc()
 			local hasBuff, texture = CheckFilterForActiveBuff(IndexTable[i])
 			frame["spell"..i].t:SetTexture(texture)
 			if hasBuff then
-				frame["spell"..i]:SetAlpha(0.2)
+				local spellName, duration, expirationTime, _
+				for i=1, 32 do
+					spellName, _, _, _, _, duration, expirationTime = UnitBuff("player", i)
+					if spellName == hasBuff then
+						break;
+					end
+				end
+
+				if duration == 0 and expirationTime == 0 then
+					frame["spell"..i].t:SetAlpha(0.3)
+				else
+					CooldownFrame_SetTimer(frame["spell"..i].cd, expirationTime - duration, duration, 1)
+					frame["spell"..i].t:SetAlpha(0.3)
+				end
 				frame["spell"..i].hasBuff = hasBuff
 			else
-				frame["spell"..i]:SetAlpha(1)
+				CooldownFrame_SetTimer(frame["spell"..i].cd, 0, 0, 0)
+				frame["spell"..i].t:SetAlpha(1)
 				frame["spell"..i].hasBuff = nil
 			end
 		end
@@ -144,13 +179,17 @@ local function LoadFunc()
 		end
 
 		GameTooltip:AddLine(" ")
-		for _, spellID in pairs(IndexTable[id]) do
+		for spellID, buffProvider in pairs(IndexTable[id]) do
+			if spellID ~= "DEFAULT" then
 			local spellName = GetSpellInfo(spellID)
+			local color = RAID_CLASS_COLORS[buffProvider]
+
 			if self:GetParent().hasBuff == spellName then
-				GameTooltip:AddLine(spellName, 0, 1, 0)
+				GameTooltip:AddLine(spellName.." - "..ACTIVE_PETS, color.r, color.g, color.b)
 			else
-				GameTooltip:AddLine(spellName, .5, .5, .5)
+				GameTooltip:AddLine(spellName, color.r, color.g, color.b)
 			end
+		end
 		end
 
 		GameTooltip:Show()
@@ -178,6 +217,10 @@ local function LoadFunc()
 		button.t:SetTexCoord(.08, .92, .08, .92)
 		button.t:SetAllPoints()
 		button.t:SetTexture("Interface\\Icons\\INV_Misc_QuestionMark")
+
+		button.cd = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
+		button.cd:SetAllPoints()
+		button.cd.noOCC = true
 		
 		return button
 	end
