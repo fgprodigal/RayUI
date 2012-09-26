@@ -1082,13 +1082,17 @@ R["Watcher"] = {
             },
         },
         ["MONK"] = {
-            {
-                name = "玩家buff",
-                direction = "LEFT",
-                setpoint = positions.player_buff_icon,
-                size = 28,
+			{
+				name = "玩家buff&debuff",
+				direction = "LEFT",
+				setpoint = positions.player_buff_icon,
+				size = 28,
 
-            },
+				--飄渺絕釀
+				{ spellID = 128939, unitId = "player", caster = "player", filter = "BUFF" },
+				--虎眼絕釀
+				{ spellID = 125195, unitId = "player", caster = "player", filter = "BUFF" },
+			},
             {
                 name = "目标buff&debuff",
                 direction = "RIGHT",
@@ -1102,9 +1106,34 @@ R["Watcher"] = {
                 setpoint = positions.player_proc_icon,
                 size = 38,
 
-                --虎掌
-                { spellID = 125359, unitId = "player", caster = "player", filter = "BUFF" },
-
+				--虎掌
+				{ spellID = 125359, unitId = "player", caster = "player", filter = "BUFF" },
+				--禪心玉
+				{ spellID = 124081, unitId = "player", caster = "player", filter = "BUFF" },
+				--護身氣勁
+				{ spellID = 118636, unitId = "player", caster = "player", filter = "BUFF" },
+				--石形絕釀
+				{ spellID = 120954, unitId = "player", caster = "player", filter = "BUFF" },
+				--醉拳
+				{ spellID = 115307, unitId = "player", caster = "player", filter = "BUFF" },
+				--酒仙小緩勁
+				{ spellID = 124275, unitId = "player", caster = "all", filter = "DEBUFF" },
+				--酒仙中緩勁
+				{ spellID = 124274, unitId = "player", caster = "all", filter = "DEBUFF" },
+				--酒仙大緩勁
+				{ spellID = 124273, unitId = "player", caster = "all", filter = "DEBUFF" },
+				--飄渺絕釀
+				{ spellID = 115308, unitId = "player", caster = "player", filter = "BUFF" },
+				--繳械傷害提升5%
+				{ spellID = 123231, unitId = "player", caster = "player", filter = "BUFF" },
+				--繳械坦克提升5%
+				{ spellID = 123232, unitId = "player", caster = "player", filter = "BUFF" },
+				--繳械治療提升5%
+				{ spellID = 123234, unitId = "player", caster = "player", filter = "BUFF" },
+				--虎眼絕釀
+				{ spellID = 116740, unitId = "player", caster = "player", filter = "BUFF" },
+				--乾坤挪移
+				{ spellID = 125174, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -1112,6 +1141,16 @@ R["Watcher"] = {
                 setpoint = positions.target_proc_icon,
                 size = 38,
 
+				--弱化攻擊
+				{ spellID = 115798, unitId = "target", caster = "player", filter = "DEBUFF" },
+				--掃葉腿
+				{ spellID = 119381, unitId = "target", caster = "player", filter = "DEBUFF" },
+				--天矛鎖喉手
+				{ spellID = 116709, unitId = "target", caster = "player", filter = "DEBUFF" },
+				--微醺醉氣
+				{ spellID = 123727, unitId = "target", caster = "player", filter = "DEBUFF" },
+				--奪刃繩矛
+				{ spellID = 117368, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "焦点buff&debuff",
@@ -1131,7 +1170,22 @@ R["Watcher"] = {
                 direction = function() return R:IsDeveloper() and "RIGHT" or "DOWN" end,
                 mode = function() return R:IsDeveloper() and "ICON" or "BAR" end,
                 setpoint = positions.cd_icon,
-                
+
+				--冥思禪功
+				{ spellID = 115176, filter = "CD" },
+				-- 乾坤挪移
+				{ spellID = 122470, filter = "CD" },
+				-- 召喚白虎雪怒
+				{ spellID = 123904, filter = "CD" },
+				-- 凝神絕釀
+				{ spellID = 115288, filter = "CD" },
+				-- 石形絕釀
+				{ spellID = 115203, filter = "CD" },
+				-- 召喚玄牛雕像
+				{ spellID = 115315, filter = "CD" },
+				-- 移傷氣勁
+				{ spellID = 115213, filter = "CD" },
+
                 -- 物品
 				-- 手套
 				{slotID = 10, filter = "CD"},
