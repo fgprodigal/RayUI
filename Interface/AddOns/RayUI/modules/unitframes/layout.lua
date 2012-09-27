@@ -739,16 +739,21 @@ function UF:DPSLayout(frame, unit)
 
 		if(frame.PvP) then
 			local factionGroup = UnitFactionGroup(unit)
-			if(UnitIsPVPFreeForAll(unit)) then
-				frame.PvP:SetTexture[[Interface\TargetingFrame\UI-PVP-FFA]]
-				frame.PvP:Show()
-			elseif(factionGroup and UnitIsPVP(unit)) then
-				frame.PvP:SetTexture([[Interface\AddOns\RayUI\media\UI-PVP-]]..factionGroup)
-				frame.PvP:Show()
-			else
-				frame.PvP:Hide()
-			end
-		end
+            if factionGroup == "Neutral" then
+                frame.PvP:SetTexture(nil)
+                frame.PvP:Hide()
+            else
+                if(UnitIsPVPFreeForAll(unit)) then
+                    frame.PvP:SetTexture[[Interface\TargetingFrame\UI-PVP-FFA]]
+                    frame.PvP:Show()
+                elseif(factionGroup and UnitIsPVP(unit)) then
+                    frame.PvP:SetTexture([[Interface\AddOns\RayUI\media\UI-PVP-]]..factionGroup)
+                    frame.PvP:Show()
+                else
+                    frame.PvP:Hide()
+                end
+            end
+        end
 	end
 
     local QuestIcon = frame:CreateTexture(nil, "OVERLAY")
