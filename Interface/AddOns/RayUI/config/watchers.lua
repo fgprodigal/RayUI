@@ -917,6 +917,8 @@ R["Watcher"] = {
                 { spellID = 109949, unitId = "player", caster = "player", filter = "BUFF" },
                 --洞悉要害
                 { spellID = 121153, unitId = "player", caster = "player", filter = "BUFF" },
+                --暗影之刃
+                { spellID = 121471, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -1010,6 +1012,8 @@ R["Watcher"] = {
                 { spellID = 51690, filter = "CD" },
                 --能量刺激
                 { spellID = 13750, filter = "CD" },
+                --暗影之刃
+                { spellID = 121471, filter = "CD" },
                 --奧術之流
                 { spellID = 25046, filter = "CD" },
                 

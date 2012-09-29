@@ -25,7 +25,7 @@ local function LoadSkin()
 		local bu = ChallengesFrame["button"..i]
 		S:CreateBD(bu, .25)
 		bu:SetHighlightTexture("")
-		bu.selectedTex:SetTexture(C.media.backdrop)
+		bu.selectedTex:SetTexture(S["media"].backdrop)
 		bu.selectedTex:SetAlpha(.2)
 		bu.selectedTex:SetPoint("TOPLEFT", 1, -1)
 		bu.selectedTex:SetPoint("BOTTOMRIGHT", -1, 1)

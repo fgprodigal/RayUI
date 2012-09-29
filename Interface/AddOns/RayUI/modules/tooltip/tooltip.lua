@@ -266,7 +266,11 @@ function TT:SetiLV()
 end
 
 function TT:GetQuality(ItemScore)
-	return R:ColorGradient(ItemScore/450, 0.5, 0.5, 0.5, 1, 0.1, 0.1)
+    if ItemScore < 440 then
+        return 1, 1, 0.1
+    else
+        return R:ColorGradient((ItemScore - 440)/100, 1, 1, 0.1, 1, 0.1, 0.1)
+    end
 end
 
 function TT:iLVSetUnit()
