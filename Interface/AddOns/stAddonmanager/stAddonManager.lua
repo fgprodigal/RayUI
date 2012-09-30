@@ -2,10 +2,38 @@ local addonName = select(1, ...)
 ------------------------------------------------------
 -- MEDIA & CONFIG ------------------------------------
 ------------------------------------------------------
-local R, L, P = unpack(RayUI)
-local S = R:GetModule("Skins")
-local LSM = LibStub("LibSharedMedia-3.0")
-local font = { LSM:Fetch("font", P["media"].font), 13, "THINOUTLINE" }
+local R, L, P, S
+local backdropcolor = { 0.3, 0.3, 0.3 }
+local font = { GameFontNormal:GetFont(), 13, "THINOUTLINE" }
+if RayUI then
+	R, L, P = unpack(RayUI)
+	S = R:GetModule("Skins")
+	local LSM = LibStub("LibSharedMedia-3.0")
+	backdropcolor = R["media"].backdropcolor
+	font = { LSM:Fetch("font", P["media"].font), 13, "THINOUTLINE" }
+else
+	S = {}
+
+	function S:Reskin()
+	end
+
+	function S:ReskinScroll()
+	end
+
+	function S:CreateBD(f)
+			if not f then return end
+			f:SetBackdrop({
+				bgFile = [[Interface\ChatFrame\ChatFrameBackground.blp]], 
+				edgeFile = [[Interface\ChatFrame\ChatFrameBackground.blp]], 
+				edgeSize = 1, 
+			})
+			f:SetBackdropColor(0, 0, 0, 0.6)
+			f:SetBackdropBorderColor(0, 0, 0)
+	end
+
+	function S:CreateSD()
+	end
+end
 ------------------------------------------------------
 -- INITIAL FRAME CREATION ----------------------------
 ------------------------------------------------------
@@ -429,7 +457,7 @@ local function LoadWindow()
 		
 		button:SetScript("OnMouseDown", function(self)
 			if addon.enabled then
-				self:SetBackdropColor(unpack(R["media"].backdropcolor))
+				self:SetBackdropColor(unpack(backdropcolor))
 				DisableAddOn(addon.name)
 				addon.enabled = false
 			else
@@ -453,12 +481,12 @@ local function LoadWindow()
 			if addon.enabled then
 				button:SetBackdropColor(0/255, 170/255, 255/255)
 			else
-				button:SetBackdropColor(unpack(R["media"].backdropcolor))
+				button:SetBackdropColor(unpack(backdropcolor))
 			end
 			
 			button:SetScript("OnMouseDown", function(self)
 				if addon.enabled then
-					self:SetBackdropColor(unpack(R["media"].backdropcolor))
+					self:SetBackdropColor(unpack(backdropcolor))
 					DisableAddOn(addon.name)
 					addon.enabled = false
 				else
