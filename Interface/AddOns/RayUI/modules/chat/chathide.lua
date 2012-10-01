@@ -96,8 +96,10 @@ function CH:OnEvent(event, ...)
 end
 
 function CH:OnUpdate()
+	local x, y = GetCursorPosition()
+	local cursor = ( x > ChatBG:GetLeft() and x < ChatBG:GetLeft() + ChatBG:GetWidth() ) and ( y > ChatBG:GetBottom() and y < ChatBG:GetBottom() + ChatBG:GetHeight() )
 	timeout = timeout + 1
-	if timeout>CH.db.autohidetime and CH.ChatIn == true and not ChatFrame1EditBox:IsShown() and not InCombatLockdown() then
+	if timeout>CH.db.autohidetime and CH.ChatIn == true and not ChatFrame1EditBox:IsShown() and not InCombatLockdown() and not cursor then
 		CH:MoveOut()
 	end
 end

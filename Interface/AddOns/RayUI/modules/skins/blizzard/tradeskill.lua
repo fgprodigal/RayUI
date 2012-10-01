@@ -108,6 +108,39 @@ local function LoadSkin()
 	end
 	hooksecurefunc("TradeSkillFrame_SetSelection", SkinSkillIcon)
 
+	hooksecurefunc("TradeSkillFrame_Update", function()
+		local numTradeSkills = GetNumTradeSkills()
+		local diplayedSkills = TRADE_SKILLS_DISPLAYED
+		local hasFilterBar = TradeSkillFilterBar:IsShown()
+		if  hasFilterBar then
+			diplayedSkills = TRADE_SKILLS_DISPLAYED - 1
+		end
+		local buttonIndex = 0
+
+		for i = 1, diplayedSkills do
+			if hasFilterBar then
+				buttonIndex = i + 1
+			else
+				buttonIndex = i
+			end
+
+			local skillButton = _G["TradeSkillSkill"..buttonIndex]
+
+			if not skillButton.reskinned then
+				skillButton.reskinned = true
+
+				skillButton.SubSkillRankBar.BorderLeft:Hide()
+				skillButton.SubSkillRankBar.BorderRight:Hide()
+				skillButton.SubSkillRankBar.BorderMid:Hide()
+
+				skillButton.SubSkillRankBar:SetHeight(12)
+				skillButton.SubSkillRankBar:SetStatusBarTexture(S["media"].backdrop)
+				skillButton.SubSkillRankBar:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
+				S:CreateBDFrame(skillButton.SubSkillRankBar, .25)
+			end
+		end
+	end)
+
 	TradeSkillIncrementButton:SetPoint("RIGHT", TradeSkillCreateButton, "LEFT", -9, 0)
 
 	S:ReskinClose(TradeSkillFrameCloseButton)

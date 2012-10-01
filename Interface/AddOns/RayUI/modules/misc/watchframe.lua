@@ -70,21 +70,16 @@ local function LoadFunc()
 	   end
 	end)
 
-	hooksecurefunc("WatchFrameItem_OnLoad", function(self)
-		local icon = _G[self:GetName().."IconTexture"]
-		local hotkey = _G[self:GetName().."HotKey"]
-		_G[self:GetName().."NormalTexture"]:SetTexture(nil)
-		icon:SetTexCoord(.08, .92, .08, .92)
-		self:CreateShadow("Background")
-		self:StyleButton(true)
-		if hotkey:GetText() == _G['RANGE_INDICATOR'] then
-			hotkey:SetText('')
-		end
-	end)
-
 	hooksecurefunc("WatchFrameItem_OnUpdate", function(self)
 		local hotkey = _G[self:GetName().."HotKey"]
 		local icon = _G[self:GetName().."IconTexture"]
+		if not self.reskinned then
+			_G[self:GetName().."NormalTexture"]:SetTexture(nil)
+			icon:SetTexCoord(.08, .92, .08, .92)
+			self:CreateShadow("Background")
+			self:StyleButton(true)
+			self.reskinned = true
+		end
 		local valid = IsQuestLogSpecialItemInRange(self:GetID())
 		if ( valid == 0 ) then
 			icon:SetVertexColor(1.0, 0.1, 0.1)

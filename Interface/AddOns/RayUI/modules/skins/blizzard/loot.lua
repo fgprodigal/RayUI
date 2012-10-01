@@ -177,7 +177,6 @@ local function LoadSkin()
 			end
 		end
 
-
 		local loot = CreateFrame("Frame", nil, UIParent)
 		loot:SetScript("OnEvent", OnEvent)
 		loot:RegisterEvent("LOOT_OPENED")
@@ -228,7 +227,7 @@ local function LoadSkin()
 			end
 			for i = 1, GetNumLootItems() do
 				local link
-				if(LootSlotIsItem(i)) then     --判断，只发送物品
+				if(LootSlotHasItem(i)) then     --判断，只发送物品
 					link = GetLootSlotLink(i)
 				else
 					_, link = GetLootSlotInfo(i)

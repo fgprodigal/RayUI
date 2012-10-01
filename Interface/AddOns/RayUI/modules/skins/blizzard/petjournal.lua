@@ -89,7 +89,7 @@ local function LoadSkin()
 				bu.dragButton:StyleButton(1)
 				bu.dragButton.ActiveTexture:SetTexture(S["media"].checked)
 				bu.dragButton.levelBG:SetAlpha(0)
-				bu.dragButton.level:SetFontObject(GameFontNormal)
+				bu.dragButton.level:SetFont(R["media"].font, 12, "OUTLINE")
 				bu.dragButton.level:SetTextColor(1, 1, 1)
 			end
 		end
@@ -129,7 +129,7 @@ local function LoadSkin()
 	card.AbilitiesBG:SetAlpha(0)
 	card.PetInfo.levelBG:SetAlpha(0)
 
-	card.PetInfo.level:SetFontObject(GameFontNormal)
+	card.PetInfo.level:SetFont(R["media"].font, 12, "OUTLINE")
 	card.PetInfo.level:SetTextColor(1, 1, 1)
 
 	card.PetInfo.icon:SetTexCoord(.08, .92, .08, .92)
@@ -168,7 +168,7 @@ local function LoadSkin()
 		bu.levelBG:SetAlpha(0)
 		bu.helpFrame:GetRegions():Hide()
 
-		bu.level:SetFontObject(GameFontNormal)
+		bu.level:SetFont(R["media"].font, 12, "OUTLINE")
 		bu.level:SetTextColor(1, 1, 1)
 
 		bu.icon:SetTexCoord(.08, .92, .08, .92)
@@ -180,7 +180,7 @@ local function LoadSkin()
 
 		bu.setButton:GetRegions():Point("TOPLEFT", bu.icon, -5, 5)
 		bu.setButton:GetRegions():Point("BOTTOMRIGHT", bu.icon, 5, -5)
-		bu.dragButton:StyleButton()
+		bu.dragButton:StyleButton(true)
 
 		S:CreateBD(bu, .25)
 

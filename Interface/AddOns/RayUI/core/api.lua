@@ -157,7 +157,7 @@ local function StyleButton(button, offset)
 		end
 		button.hover = hover
 		button:SetHighlightTexture(hover)
-	elseif button.SetHighlightTexture and button:GetHighlightTexture() and button.hover then
+	elseif button.SetHighlightTexture and button:GetHighlightTexture() and button.hover ~= true then
 		local hover = button.hover
 		hover:ClearAllPoints()
 		if offset == true then
@@ -179,7 +179,7 @@ local function StyleButton(button, offset)
 		end
 		button.pushed = pushed
 		button:SetPushedTexture(pushed)
-	elseif button.SetPushedTexture and button:GetPushedTexture() and button.pushed then
+	elseif button.SetPushedTexture and button:GetPushedTexture() and button.pushed ~= true then
 		local pushed = button.pushed
 		pushed:ClearAllPoints()
 		if offset == true then
@@ -201,7 +201,7 @@ local function StyleButton(button, offset)
 		end
 		button.checked = checked
 		button:SetCheckedTexture(checked)
-	elseif button.SetCheckedTexture and button:GetCheckedTexture() and button.checked then
+	elseif button.SetCheckedTexture and button:GetCheckedTexture() and button.checked ~= true then
 		local checked = button.checked
 		checked:ClearAllPoints()
 		if offset == true then

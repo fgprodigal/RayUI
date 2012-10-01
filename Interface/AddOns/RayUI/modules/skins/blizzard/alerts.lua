@@ -190,7 +190,10 @@ local function LoadSkin()
 
 				-- Icon border
 				if not ScenarioAlertFrame1DungeonTexture.b then
-					ScenarioAlertFrame1DungeonTexture.b = S:CreateBG(ScenarioAlertFrame1DungeonTexture)
+					ScenarioAlertFrame1DungeonTexture.b = CreateFrame("Frame", nil, frame)
+					ScenarioAlertFrame1DungeonTexture.b:Point("TOPLEFT", ScenarioAlertFrame1DungeonTexture, "TOPLEFT", -1, 1)
+					ScenarioAlertFrame1DungeonTexture.b:Point("BOTTOMRIGHT", ScenarioAlertFrame1DungeonTexture, "BOTTOMRIGHT", 1, -1)
+					S:CreateBD(ScenarioAlertFrame1DungeonTexture.b, 0)
 				end
 
 				frame:HookScript("OnEnter", function()
