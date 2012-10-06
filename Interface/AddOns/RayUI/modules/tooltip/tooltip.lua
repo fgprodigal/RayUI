@@ -155,8 +155,8 @@ function TT:GameTooltip_SetDefaultAnchor(tooltip, parent)
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, RayUFRaid40_8:GetBottom() + RayUFRaid40_8:GetHeight() + 30)
 		elseif BagsFrame and BagsFrame:IsShown() and (GetScreenWidth() - BagsFrame:GetRight()) < 250 then
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, BagsFrame:GetBottom() + BagsFrame:GetHeight() + 30)
-		elseif RayUFRaid10_1UnitButton1 and RayUFRaid10_1UnitButton1:IsShown() and (GetScreenWidth() - RayUFRaid10_3:GetRight()) < 250 then
-			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, RayUFRaid10_3:GetBottom() + RayUFRaid10_3:GetHeight() + 30)
+		elseif RayUFRaid15_1UnitButton1 and RayUFRaid15_1UnitButton1:IsShown() and (GetScreenWidth() - RayUFRaid15_3:GetRight()) < 250 then
+			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, RayUFRaid15_3:GetBottom() + RayUFRaid15_3:GetHeight() + 30)
 		elseif RayUFRaid25_1UnitButton1 and RayUFRaid25_1UnitButton1:IsShown() and (GetScreenWidth() - RayUFRaid25_5:GetRight()) < 250 then
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, RayUFRaid25_5:GetBottom() + RayUFRaid25_5:GetHeight() + 30)
 		elseif NumerationFrame and NumerationFrame:IsShown() and (GetScreenWidth() - NumerationFrame:GetRight()) < 250 then

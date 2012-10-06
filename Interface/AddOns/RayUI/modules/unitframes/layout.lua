@@ -168,26 +168,6 @@ function UF:DPSLayout(frame, unit)
 			frame.Vengeance = VengeanceBar
 		end
 
-		-- Alternative Power Bar
-		local altpp = CreateFrame("StatusBar", nil, frame)
-		altpp:SetStatusBarTexture(R["media"].normal)
-		altpp:GetStatusBarTexture():SetHorizTile(false)
-		altpp:SetFrameStrata("LOW")
-		altpp:SetHeight(4)
-		altpp:Point("TOPLEFT", frame, "BOTTOMLEFT", 0, -2)
-		altpp:Point("TOPRIGHT", frame, "BOTTOMRIGHT", 0, -2)
-		altpp.bg = altpp:CreateTexture(nil, "BORDER")
-		altpp.bg:SetAllPoints(altpp)
-		altpp.bg:SetTexture(R["media"].normal)
-		altpp.bg:SetVertexColor( 0,  0.76, 1)
-		altpp.bd = self:CreateBackdrop(altpp, altpp)
-		altpp.Text = altpp:CreateFontString(nil, "OVERLAY")
-		altpp.Text:SetFont(R["media"].font, 12, R["media"].fontflag)
-		altpp.Text:SetPoint("CENTER")
-		frame:Tag(altpp.Text, "[RayUF:altpower]")
-		altpp.PostUpdate = self.PostAltUpdate
-		frame.AltPowerBar = altpp
-
 		-- CastBar
 		local castbar = self:ConstructCastBar(frame)
 		castbar:ClearAllPoints()
@@ -694,6 +674,28 @@ function UF:DPSLayout(frame, unit)
 		frame.Castbar = castbar
 	end
 
+	if (unit and unit:find("boss%d") and self.db.showBossFrames == true) then
+		-- Alternative Power Bar
+		local altpp = CreateFrame("StatusBar", nil, frame)
+		altpp:SetStatusBarTexture(R["media"].normal)
+		altpp:GetStatusBarTexture():SetHorizTile(false)
+		altpp:SetFrameStrata("LOW")
+		altpp:SetHeight(4)
+		altpp:Point("TOPLEFT", frame, "BOTTOMLEFT", 0, -2)
+		altpp:Point("TOPRIGHT", frame, "BOTTOMRIGHT", 0, -2)
+		altpp.bg = altpp:CreateTexture(nil, "BORDER")
+		altpp.bg:SetAllPoints(altpp)
+		altpp.bg:SetTexture(R["media"].normal)
+		altpp.bg:SetVertexColor( 0,  0.76, 1)
+		altpp.bd = self:CreateBackdrop(altpp, altpp)
+		altpp.Text = altpp:CreateFontString(nil, "OVERLAY")
+		altpp.Text:SetFont(R["media"].font, 12, R["media"].fontflag)
+		altpp.Text:SetPoint("CENTER")
+		frame:Tag(altpp.Text, "[RayUF:altpower]")
+		altpp.PostUpdate = self.PostAltUpdate
+		frame.AltPowerBar = altpp
+	end
+
 	if (unit and unit:find("arena%d") and self.db.showArenaFrames == true) then
 		local trinkets = CreateFrame("Frame", nil, frame)
 		trinkets:SetHeight(BOSS_HEIGHT)
@@ -783,46 +785,58 @@ function UF:LoadDPSLayout()
 		UF:DPSLayout(frame, unit)
 	end)
 	oUF:SetActiveStyle("RayUF")
+
+	local RayUF_Parent = CreateFrame("Frame", "RayUF_Parent", UIParent, "SecureHandlerStateTemplate");
+	RayUF_Parent:SetAllPoints(UIParent)
+	RegisterStateDriver(RayUF_Parent, "visibility", "[petbattle] hide;show")
+
 	-- Player
 	local player = oUF:Spawn("player", "RayUF_player")
-	player:Point("BOTTOMRIGHT", UIParent, "BOTTOM", -80, 390)
+	player:Point("BOTTOMRIGHT", RayUF_Parent, "BOTTOM", -80, 390)
 	player:Size(PLAYER_WIDTH, PLAYER_HEIGHT)
+	player:SetParent(RayUF_Parent)
 
 	-- Target
 	local target = oUF:Spawn("target", "RayUF_target")
-	target:Point("BOTTOMLEFT", UIParent, "BOTTOM", 80, 390)
+	target:Point("BOTTOMLEFT", RayUF_Parent, "BOTTOM", 80, 390)
 	target:Size(TARGET_WIDTH, TARGET_HEIGHT)
+	target:SetParent(RayUF_Parent)
 
 	-- Focus
 	local focus = oUF:Spawn("focus", "RayUF_focus")
 	focus:Point("BOTTOMRIGHT", RayUF_player, "TOPLEFT", -20, 20)
 	focus:Size(PARTY_WIDTH, PARTY_HEIGHT)
+	focus:SetParent(RayUF_Parent)
 
 	-- Target's Target
 	local tot = oUF:Spawn("targettarget", "RayUF_targettarget")
 	tot:Point("BOTTOMLEFT", RayUF_target, "TOPRIGHT", 5, 30)
 	tot:Size(SMALL_WIDTH, SMALL_HEIGHT)
+	tot:SetParent(RayUF_Parent)
 
 	-- Player's Pet
 	local pet = oUF:Spawn("pet", "RayUF_pet")
 	pet:Point("BOTTOM", RayUIPetBar, "TOP", 0, 3)
 	pet:Size(SMALL_WIDTH, PET_HEIGHT)
+	pet:SetParent(RayUF_Parent)
 
 	-- Focus's target
 	local focustarget = oUF:Spawn("focustarget", "RayUF_focustarget")
 	focustarget:Point("BOTTOMRIGHT", RayUF_focus, "BOTTOMLEFT", -10, 1)
 	focustarget:Size(SMALL_WIDTH, SMALL_HEIGHT)
+	focustarget:SetParent(RayUF_Parent)
 
 	if self.db.showArenaFrames and not IsAddOnLoaded("Gladius") then
 		local arena = {}
 		for i = 1, 5 do
 			arena[i] = oUF:Spawn("arena"..i, "RayUFArena"..i)
 			if i == 1 then
-				arena[i]:Point("RIGHT", -80, 180)
+				arena[i]:Point("RIGHT", RayUF_Parent, "RIGHT", -80, 180)
 			else
 				arena[i]:Point("TOP", arena[i-1], "BOTTOM", 0, -25)
 			end
 			arena[i]:Size(BOSS_WIDTH, BOSS_HEIGHT)
+			arena[i]:SetParent(RayUF_Parent)
 		end
 	end
 
@@ -831,11 +845,12 @@ function UF:LoadDPSLayout()
 		for i = 1, MAX_BOSS_FRAMES do
 			boss[i] = oUF:Spawn("boss"..i, "RayUFBoss"..i)
 			if i == 1 then
-				boss[i]:Point("RIGHT", -80, 180)
+				boss[i]:Point("RIGHT", RayUF_Parent, "RIGHT", -80, 180)
 			else
 				boss[i]:Point("TOP", boss[i-1], "BOTTOM", 0, -25)             
 			end
 			boss[i]:Size(BOSS_WIDTH, BOSS_HEIGHT)
+			boss[i]:SetParent(RayUF_Parent)
 		end
 	end
 
@@ -860,7 +875,7 @@ function UF:LoadDPSLayout()
 		"groupingOrder", "WARRIOR,PALADIN,DEATHKNIGHT,DRUID,SHAMAN,PRIEST,MAGE,WARLOCK,ROGUE,HUNTER"	-- Trying to put classes that can tank first
 		)
 		party:Point("TOPRIGHT", RayUF_player, "TOPLEFT", -20, 0)
-		party:SetScale(1)
+		party:SetParent(RayUF_Parent)
 	end
 end
 

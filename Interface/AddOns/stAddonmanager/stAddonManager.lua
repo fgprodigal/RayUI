@@ -3,7 +3,7 @@ local addonName = select(1, ...)
 -- MEDIA & CONFIG ------------------------------------
 ------------------------------------------------------
 local R, L, P, S
-local backdropcolor = { 0.3, 0.3, 0.3 }
+local backdropcolor = { 0, 0, 0, 0.6 }
 local font = { GameFontNormal:GetFont(), 13, "THINOUTLINE" }
 if RayUI then
 	R, L, P = unpack(RayUI)

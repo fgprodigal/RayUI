@@ -406,6 +406,17 @@ function R:MakeTabletHeader(col, size, indentation, justifyTable)
 end
 
 R["media"] = {}
+R["texts"] = {}
+
+function R:UpdateFontTemplates()
+	for text, _ in pairs(self["texts"]) do
+		if text then
+			text:FontTemplate(text.font, text.fontSize, text.fontStyle);
+		else
+			self["texts"][text] = nil;
+		end
+	end
+end
 
 function R:UpdateMedia()
 	--Fonts

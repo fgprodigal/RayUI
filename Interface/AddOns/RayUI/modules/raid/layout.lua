@@ -170,8 +170,15 @@ function RA:UpdateName(name, unit)
 end
 
 local function PostHealth(hp, unit)
+	local curhealth, maxhealth
     local self = hp.__owner
     local name = UnitName(unit)
+
+	if self.isForced then
+		maxhealth = UnitHealthMax(unit)
+		curhealth = math.random(1, maxhealth)
+		hp:SetValue(curhealth)
+	end
 
     if not RA.nameCache[name] then
         RA:UpdateName(self.Name, unit)
@@ -189,7 +196,9 @@ local function PostHealth(hp, unit)
 		hp.colorClass=true
 		hp.bg.multiplier = .2
 	else
-		local curhealth, maxhealth = UnitHealth(unit), UnitHealthMax(unit)
+		if not curhealth then
+			curhealth, maxhealth = UnitHealth(unit), UnitHealthMax(unit)
+		end
 		local r, g, b
 		if UF.db.smoothColor then
 			r,g,b = ColorGradient(curhealth/maxhealth)
@@ -252,6 +261,15 @@ local function PostPower(power, unit)
 
     local perc = oUF.Tags.Methods["perpp"](unit)
     -- This kinda conflicts with the threat module, but I don't really care
+
+	if self.isForced then
+		local max = UnitPowerMax(unit)
+		local min = math.random(1, max)
+		local type = math.random(0, 4)
+		power:SetValue(min)
+		perc = math.floor(min/max*100+.5)
+	end
+
     if (perc < 10 and UnitIsConnected(unit) and ptype == "MANA" and not UnitIsDeadOrGhost(unit)) then
         self.Threat:SetBackdropBorderColor(0, 0, 1, 1)
         self.border:SetBackdropColor(0, 0, 1, 1)
@@ -490,6 +508,7 @@ function RA:Raid15SmartVisibility(event)
 	local _, _, _, _, maxPlayers, _, _ = GetInstanceInfo()
 	if event == "PLAYER_REGEN_ENABLED" then self:UnregisterEvent("PLAYER_REGEN_ENABLED") end
 	if not InCombatLockdown() then
+		self:SetAttribute("showPlayer", RA.db.showplayerinparty)
 		if inInstance and instanceType == "raid" and maxPlayers > 15 then
 			RegisterAttributeDriver(self, "state-visibility", "hide")
 			self:SetAttribute("showRaid", false)
@@ -514,6 +533,7 @@ function RA:Raid25SmartVisibility(event)
 	local _, _, _, _, maxPlayers, _, _ = GetInstanceInfo()
 	if event == "PLAYER_REGEN_ENABLED" then self:UnregisterEvent("PLAYER_REGEN_ENABLED") end
 	if not InCombatLockdown() then
+		self:SetAttribute("showPlayer", RA.db.showplayerinparty)
 		if inInstance and instanceType == "raid" and maxPlayers <= 15 then
 			RegisterAttributeDriver(self, "state-visibility", "hide")
 			self:SetAttribute("showRaid", false)
@@ -538,6 +558,7 @@ function RA:Raid40SmartVisibility(event)
 	local _, _, _, _, maxPlayers, _, _ = GetInstanceInfo()
 	if event == "PLAYER_REGEN_ENABLED" then self:UnregisterEvent("PLAYER_REGEN_ENABLED") end
 	if not InCombatLockdown() then
+		self:SetAttribute("showPlayer", RA.db.showplayerinparty)
 		if inInstance and instanceType == "pvp" and maxPlayers == 40 then
 			RegisterAttributeDriver(self, "state-visibility", "[group:party,nogroup:raid][group:raid] show;hide")
 			self:SetAttribute("showRaid", true)
@@ -660,25 +681,27 @@ function RA:SpawnRaid()
 	CompactRaidFrameManager:Kill()
 	local raid10 = {}
 	for i=1, 3 do
-		local group = self:SpawnHeader("RayUFRaid10_"..i, i, 15)
+		local group = self:SpawnHeader("RayUFRaid15_"..i, i, 15)
 		if i == 1 then
-			group:Point("TOPLEFT", UIParent, "BOTTOMRIGHT", - RA.db.width*1.3*3 -  RA.db.spacing*2 - 50, 461)
+			group:Point("TOPLEFT", RayUF_Parent, "BOTTOMRIGHT", - RA.db.width*1.3*3 -  RA.db.spacing*2 - 50, 461)
 		else
 			group:Point(pos, raid10[i-1], posRel, colX or 0, colY or 0)
 		end
 		raid10[i] = group
 		RA._Headers[group:GetName()] = group
+		group:SetParent(RayUF_Parent)
 	end
 	local raid25 = {}
 	for i=1, 5 do
 		local group = self:SpawnHeader("RayUFRaid25_"..i, i, 25)
 		if i == 1 then
-			group:Point("TOPLEFT", UIParent, "BOTTOMRIGHT", - RA.db.width*5 -  RA.db.spacing*4 - 50, 422)
+			group:Point("TOPLEFT", RayUF_Parent, "BOTTOMRIGHT", - RA.db.width*5 -  RA.db.spacing*4 - 50, 422)
 		else
 			group:Point(pos, raid25[i-1], posRel, colX or 0, colY or 0)
 		end
 		raid25[i] = group
 		RA._Headers[group:GetName()] = group
+		group:SetParent(RayUF_Parent)
 	end
 	if RA.db.raid40 then
 		local raid40 = {}
@@ -691,6 +714,7 @@ function RA:SpawnRaid()
 			end
 			raid40[i] = group
 			RA._Headers[group:GetName()] = group
+			group:SetParent(RayUF_Parent)
 		end
 	end
 end

@@ -29,7 +29,7 @@ S["media"] = {
 	},
 }
 
-S["media"].DefGradient = {"VERTICAL", .35, .35, .35, .35, .35, .35, .35, .35}
+S["media"].DefGradient = {"VERTICAL", 0.1, 0.1, 0.1, .6, 0.1, 0.1, 0.1, .6}
 
 local r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b
 

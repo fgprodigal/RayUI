@@ -122,6 +122,7 @@ local function LoadCurrency()
 				GameTooltip:AddDoubleLine(k, formatMoney(v, true), RAID_CLASS_COLORS[class].r, RAID_CLASS_COLORS[class].g, RAID_CLASS_COLORS[class].b, 1, 1, 1)
 			end
 		end
+		GameTooltip:AddLine(" ")
 		GameTooltip:AddLine(CURRENCY, 0.69, 0.31, 0.31)
 		for name, amount in pairs(CurrencyData) do
             GameTooltip:AddLine(" ")

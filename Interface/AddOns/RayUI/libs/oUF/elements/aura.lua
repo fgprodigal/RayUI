@@ -140,6 +140,13 @@ end
 
 local updateIcon = function(unit, icons, index, offset, filter, isDebuff, visible)
 	local name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossDebuff = UnitAura(unit, index, filter)
+
+	if icons.forceShow then
+		spellID = 47540
+		name, rank, texture = GetSpellInfo(spellID)
+		count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, canApplyAura, isBossDebuff = 5, 'Magic', 0, 60, 'player', nil, nil, nil, nil
+	end
+
 	if(name) then
 		local n = visible + offset + 1
 		local icon = icons[n]

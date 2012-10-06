@@ -248,6 +248,25 @@ local function CreatePanel(f, t, w, h, a1, p, a2, x, y)
 	end
 end
 
+local function FontTemplate(fs, font, fontSize, fontStyle)
+	fs.font = font
+	fs.fontSize = fontSize
+	fs.fontStyle = fontStyle
+	
+	if not font then font = LSM:Fetch("font", R.db.media.font) end
+	if not fontSize then fontSize = R.db.media.fontsize end
+	
+	fs:SetFont(font, fontSize, fontStyle)
+	if fontStyle then
+		fs:SetShadowColor(0, 0, 0, 0.2)
+	else
+		fs:SetShadowColor(0, 0, 0, 1)
+	end
+	fs:SetShadowOffset((R.mult or 1), -(R.mult or 1))
+	
+	R["texts"][fs] = true
+end
+
 R.HiddenFrame = CreateFrame("Frame")
 R.HiddenFrame:Hide()
 
@@ -329,6 +348,7 @@ local function addapi(object)
 	if not object.Point then mt.Point = Point end
 	if not object.SetTemplate then mt.SetTemplate = SetTemplate end
 	if not object.CreatePanel then mt.CreatePanel = CreatePanel end
+	if not object.FontTemplate then mt.FontTemplate = FontTemplate end
 	if not object.CreateShadow then mt.CreateShadow = CreateShadow end
 	if not object.Kill then mt.Kill = Kill end
 	if not object.StyleButton then mt.StyleButton = StyleButton end
@@ -364,6 +384,7 @@ local developer = {
 	["父王"] = true,
 	["夏翎"] = true,
 }
+
 function R:IsDeveloper()
 	return developer[R.myname]
 end

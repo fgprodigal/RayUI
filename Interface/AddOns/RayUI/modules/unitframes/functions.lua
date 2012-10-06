@@ -505,6 +505,10 @@ end
 function UF:PostUpdateHealth(unit, cur, max)
 	local curhealth, maxhealth = UnitHealth(unit), UnitHealthMax(unit)
 	local r, g, b = self:GetStatusBarColor()
+	if self:GetParent().isForced then
+		curhealth = math.random(1, maxhealth)
+		self:SetValue(curhealth)
+	end
 	if UF.db.smoothColor then
 		r,g,b = ColorGradient(curhealth/maxhealth)
 	else
@@ -595,6 +599,11 @@ function UF:PostUpdatePower(unit, cur, max)
 	if not self.value then return end
 	local _, type = UnitPowerType(unit)
 	local color = oUF.colors.power[type] or oUF.colors.power.FUEL
+	if self:GetParent().isForced then
+		local min = math.random(1, max)
+		local type = math.random(0, 4)
+		self:SetValue(min)
+	end
 	if cur < max then
 		if self.__owner.isMouseOver then
 			self.value:SetFormattedText("%s - |cff%02x%02x%02x%s|r", R:ShortValue(UnitPower(unit)), color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(UnitPowerMax(unit)))
@@ -691,12 +700,14 @@ local function CreateAuraTimer(frame,elapsed)
     if frame.elapsed < .2 then return end
     frame.elapsed = 0
 
-    local timeLeft = frame.expires - GetTime()
-    if timeLeft <= 0 then
-        return
-    else
-        frame.remaining:SetText(formatTime(timeLeft))
-    end
+	if frame.expires then
+		local timeLeft = frame.expires - GetTime()
+		if timeLeft <= 0 then
+			return
+		else
+			frame.remaining:SetText(formatTime(timeLeft))
+		end
+	end
 end
 
 function UF:PostUpdateIcon(unit, icon, index, offset)
@@ -1175,38 +1186,158 @@ function UF:UpdateShardBar(spec)
 	end
 end
 
+function UF:ForceShow(frame)
+	if InCombatLockdown() then return end
+	if not frame.isForced then		
+		frame.oldUnit = frame.unit
+		frame.unit = "player"
+		frame.isForced = true
+		if frame.Buffs then
+			frame.Buffs.forceShow = true
+		end
+		if frame.Auras then
+			frame.Auras.forceShow = true
+		end
+		if frame.Debuffs then
+			frame.Debuffs.forceShow = true
+		end
+	end
+	UnregisterUnitWatch(frame)
+	RegisterUnitWatch(frame, true)	
+	
+	frame:Show()
+end
+
+function UF:UnforceShow(frame)
+	if InCombatLockdown() then return end
+	if not frame.isForced then
+		return
+	end
+	frame.isForced = nil
+	if frame.Buffs then
+		frame.Buffs.forceShow = nil
+	end
+	if frame.Auras then
+		frame.Auras.forceShow = nil
+	end
+	if frame.Debuffs then
+		frame.Debuffs.forceShow = nil
+	end
+
+	UnregisterUnitWatch(frame)
+	RegisterUnitWatch(frame)
+	
+	frame.unit = frame.oldUnit or frame.unit
+end
+
+function UF:ShowChildUnits(header, ...)
+	header.isForced = true
+	for i=1, select("#", ...) do
+		local frame = select(i, ...)
+		frame:RegisterForClicks(nil)
+		frame:SetID(i)
+		frame.TargetBorder:SetAlpha(0)
+		frame.FocusHighlight:SetAlpha(0)
+		self:ForceShow(frame)
+	end
+end
+
+function UF:UnshowChildUnits(header, ...)
+	header.isForced = nil
+	for i=1, select("#", ...) do
+		local frame = select(i, ...)
+		frame:RegisterForClicks("AnyUp")
+		frame.TargetBorder:SetAlpha(1)
+		frame.FocusHighlight:SetAlpha(1)
+		self:UnforceShow(frame)
+	end
+end
+
+local function OnAttributeChanged(self, name)
+	if not self.forceShow then return end
+
+	local startingIndex = -4
+	if self:GetAttribute("startingIndex") ~= startingIndex then
+		self:SetAttribute("startingIndex", startingIndex)
+		UF:ShowChildUnits(self, self:GetChildren())	
+	end
+end
+
+local attributeBlacklist = {["showplayer"] = true, ["showraid"] = true, ["showparty"] = true, ["showsolo"] = true}
+function UF:HeaderConfig(header, configMode)
+	if InCombatLockdown() then return end
+	
+	header.forceShow = configMode
+	header:HookScript("OnAttributeChanged", OnAttributeChanged)
+	if configMode then
+		for key in pairs(attributeBlacklist) do
+			header:SetAttribute(key, nil)
+		end
+		
+		RegisterAttributeDriver(header, "state-visibility", "show")
+		OnAttributeChanged(header)
+
+		UF:ShowChildUnits(header, header:GetChildren())
+	else
+		UF:UnshowChildUnits(header, header:GetChildren())
+		header:SetAttribute("startingIndex", 1)
+
+		local RA = R:GetModule("Raid")
+		if header:GetName():find("RayUFRaid15") then
+			RA.Raid15SmartVisibility(header)
+		end
+		if header:GetName():find("RayUFRaid25") then
+			RA.Raid25SmartVisibility(header)
+		end
+		if header:GetName():find("RayUFRaid40") then
+			RA.Raid40SmartVisibility(header)
+		end
+	end
+end
+
 local testuf = TestUF or function() end
 local function TestUF(msg)
 	if msg == "a" or msg == "arena" then
-		RayUFArena1:Show(); RayUFArena1.Hide = function() end; RayUFArena1.unit = "player"
-		RayUFArena2:Show(); RayUFArena2.Hide = function() end; RayUFArena2.unit = "target"
-		RayUFArena3:Show(); RayUFArena3.Hide = function() end; RayUFArena3.unit = "player"
-		RayUFArena4:Show(); RayUFArena4.Hide = function() end; RayUFArena4.unit = "target"
-		RayUFArena5:Show(); RayUFArena5.Hide = function() end; RayUFArena5.unit = "player"
-	elseif msg == "boss" or msg == "b" then
-		RayUFBoss1:Show(); RayUFBoss1.Hide = function() end; RayUFBoss1.unit = "player"
-		RayUFBoss2:Show(); RayUFBoss2.Hide = function() end; RayUFBoss2.unit = "target"
-		RayUFBoss3:Show(); RayUFBoss3.Hide = function() end; RayUFBoss3.unit = "target"
-		RayUFBoss4:Show(); RayUFBoss4.Hide = function() end; RayUFBoss4.unit = "player"
-	elseif msg == "buffs" then
-		if RayUF_player.Buffs then RayUF_player.Buffs.CustomFilter = nil end
-		if RayUF_player.Debuffs then RayUF_player.Debuffs.CustomFilter = nil end
-		if RayUF_target.Buffs then RayUF_target.Buffs.CustomFilter = nil end
-		if RayUF_target.Debuffs then RayUF_target.Debuffs.CustomFilter = nil end
-		if RayUF_targettarget.Debuffs then RayUF_targettarget.Debuffs.CustomFilter = nil end
-		if RayUF_targettarget.Buffs then RayUF_targettarget.Buffs.CustomFilter = nil end
-		testuf()
-		UnitAura = function()
-			return "penancelol", "Rank 2", "Interface\\Icons\\Spell_Holy_Penance", random(5), "Magic", 0, 0, "player"
+		for i = 1, 5 do
+			local frame = _G["RayUFArena"..i]
+			if frame and not frame.isForced then
+				UF:ForceShow(frame)
+			elseif frame then
+				UF:UnforceShow(frame)
+			end
 		end
-		if(oUF) then
-			for i, v in pairs(oUF.objects) do
-				if(v.UNIT_AURA) then
-					v:UNIT_AURA("UNIT_AURA", v.unit)
-				end
+	elseif msg == "boss" or msg == "b" then
+		for i = 1, 4 do
+			local frame = _G["RayUFBoss"..i]
+			if frame and not frame.isForced then
+				UF:ForceShow(frame)
+			elseif frame then
+				UF:UnforceShow(frame)
+			end
+		end
+	elseif msg == "raid15" or msg == "r15" then
+		for i = 1, 3 do
+			local header = _G["RayUFRaid15_"..i]
+			if header then
+				UF:HeaderConfig(header, header.forceShow ~= true or nil)
+			end
+		end
+	elseif msg == "raid25" or msg == "r25" then
+		for i = 1, 5 do
+			local header = _G["RayUFRaid25_"..i]
+			if header then
+				UF:HeaderConfig(header, header.forceShow ~= true or nil)
+			end
+		end
+	elseif msg == "raid40" or msg == "r40" then
+		for i = 1, 8 do
+			local header = _G["RayUFRaid40_"..i]
+			if header then
+				UF:HeaderConfig(header, header.forceShow ~= true or nil)
 			end
 		end
 	end
 end
+
 SlashCmdList.TestUF = TestUF
 SLASH_TestUF1 = "/testuf"

@@ -69,7 +69,7 @@ R.Options = {
 			end,
 			set = function(info, value)
 				R.db.media[ info[#info] ] = value
-				StaticPopup_Show("CFG_RELOAD")
+				-- StaticPopup_Show("CFG_RELOAD")
 			end,
 			args = {
 				fontGroup = {
@@ -82,32 +82,47 @@ R.Options = {
 							type = "select", dialogControl = "LSM30_Font",
 							order = 1,
 							name = L["一般字体"],
-							values = AceGUIWidgetLSMlists.font,	
+							values = AceGUIWidgetLSMlists.font,
+							set = function(info, value)
+								R.db.media[ info[#info] ] = value
+								R:UpdateMedia()
+								R:UpdateFontTemplates()
+							end,
 						},
 						fontsize = {
 							type = "range",
 							order = 2,
 							name = L["字体大小"],
 							type = "range",
-							min = 9, max = 15, step = 1,
+							min = 9, max = 22, step = 1,
+							set = function(info, value)
+								R.db.media[ info[#info] ] = value
+								R:UpdateMedia()
+								R:UpdateFontTemplates()
+							end,
 						},
 						dmgfont = {
 							type = "select", dialogControl = "LSM30_Font",
 							order = 3,
 							name = L["伤害字体"],
-							values = AceGUIWidgetLSMlists.font,	
+							values = AceGUIWidgetLSMlists.font,
+							set = function(info, value)
+								R.db.media[ info[#info] ] = value
+								R:UpdateMedia()
+								R:UpdateFontTemplates()
+							end,
 						},
 						pxfont = {
 							type = "select", dialogControl = "LSM30_Font",
 							order = 4,
 							name = L["像素字体"],
-							values = AceGUIWidgetLSMlists.font,	
+							values = AceGUIWidgetLSMlists.font,
 						},
 						cdfont = {
 							type = "select", dialogControl = "LSM30_Font",
 							order = 5,
 							name = L["冷却字体"],
-							values = AceGUIWidgetLSMlists.font,	
+							values = AceGUIWidgetLSMlists.font,
 						},
 					},
 				},

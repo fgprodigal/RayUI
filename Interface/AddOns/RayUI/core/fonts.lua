@@ -1,6 +1,6 @@
 ﻿local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
 
-SetFont = function(obj, font, size, style, r, g, b, sr, sg, sb, sox, soy)
+local function SetFont(obj, font, size, style, r, g, b, sr, sg, sb, sox, soy)
 	obj:SetFont(font, size, style)
 	if sr and sg and sb then obj:SetShadowColor(sr, sg, sb) end
 	if sox and soy then obj:SetShadowOffset(sox, soy) end
@@ -24,14 +24,15 @@ function R:UpdateBlizzardFonts()
 	STANDARD_TEXT_FONT = NORMAL
 
 	-- Base fonts
-	SetFont(GameTooltipHeader,                  NORMAL, self["media"].fontsize)
-	SetFont(NumberFont_OutlineThick_Mono_Small, NUMBER, self["media"].fontsize, "OUTLINE")
+	SetFont(GameFontNormal,                  NORMAL, self.db.media.fontsize)
+	SetFont(GameTooltipHeader,                  NORMAL, self.db.media.fontsize)
+	SetFont(NumberFont_OutlineThick_Mono_Small, NUMBER, self.db.media.fontsize, "OUTLINE")
 	SetFont(NumberFont_Outline_Huge,            NUMBER, 28, "THICKOUTLINE")
 	SetFont(NumberFont_Outline_Large,           NUMBER, 15, "OUTLINE")
-	SetFont(NumberFont_Outline_Med,             NUMBER, self["media"].fontsize*1.1, "OUTLINE")
-	SetFont(NumberFont_Shadow_Med,              NORMAL, self["media"].fontsize) --chat editbox uses this
-	SetFont(NumberFont_Shadow_Small,            NORMAL, self["media"].fontsize)
-	SetFont(QuestFont,                          NORMAL, self["media"].fontsize)
+	SetFont(NumberFont_Outline_Med,             NUMBER, self.db.media.fontsize*1.1, "OUTLINE")
+	SetFont(NumberFont_Shadow_Med,              NORMAL, self.db.media.fontsize) --chat editbox uses this
+	SetFont(NumberFont_Shadow_Small,            NORMAL, self.db.media.fontsize)
+	SetFont(QuestFont,                          NORMAL, self.db.media.fontsize)
 	SetFont(ErrorFont,                          NORMAL, 15, "THINOUTLINE") -- Quest Progress & Errors
 	SetFont(SubZoneTextFont,                          NORMAL, 26, "THINOUTLINE", nil, nil, nil, 0, 0, 0, R.mult, -R.mult)
 	SetFont(ZoneTextFont,                          NORMAL, 112, "THINOUTLINE", nil, nil, nil, 0, 0, 0, R.mult, -R.mult)
@@ -39,24 +40,22 @@ function R:UpdateBlizzardFonts()
 	SetFont(QuestFont_Large,                    NORMAL, 14)
 	SetFont(SystemFont_Large,                   NORMAL, 15)
 	SetFont(SystemFont_Shadow_Huge1,			NORMAL, 20, "THINOUTLINE") -- Raid Warning, Boss emote frame too
-	SetFont(SystemFont_Med1,                    NORMAL, self["media"].fontsize)
-	SetFont(SystemFont_Med3,                    NORMAL, self["media"].fontsize*1.1)
+	SetFont(SystemFont_Med1,                    NORMAL, self.db.media.fontsize)
+	SetFont(SystemFont_Med3,                    NORMAL, self.db.media.fontsize*1.1)
 	SetFont(SystemFont_OutlineThick_Huge2,      NORMAL, 20, "THICKOUTLINE")
-	SetFont(SystemFont_Outline_Small,           NUMBER, self["media"].fontsize, "OUTLINE")
+	SetFont(SystemFont_Outline_Small,           NUMBER, self.db.media.fontsize, "OUTLINE")
 	SetFont(SystemFont_Shadow_Large,            NORMAL, 15)
-	SetFont(SystemFont_Shadow_Med1,             NORMAL, self["media"].fontsize)
-	SetFont(SystemFont_Shadow_Med3,             NORMAL, self["media"].fontsize*1.1)
+	SetFont(SystemFont_Shadow_Med1,             NORMAL, self.db.media.fontsize)
+	SetFont(SystemFont_Shadow_Med3,             NORMAL, self.db.media.fontsize*1.1)
 	SetFont(SystemFont_Shadow_Outline_Huge2,    NORMAL, 20, "OUTLINE")
-	SetFont(SystemFont_Shadow_Small,            NORMAL, self["media"].fontsize*0.95)
-	SetFont(SystemFont_Small,                   NORMAL, self["media"].fontsize)
-	SetFont(SystemFont_Tiny,                    NORMAL, self["media"].fontsize)
-	SetFont(Tooltip_Med,                        NORMAL, self["media"].fontsize)
-	SetFont(Tooltip_Small,                      NORMAL, self["media"].fontsize)
+	SetFont(SystemFont_Shadow_Small,            NORMAL, self.db.media.fontsize*0.95)
+	SetFont(SystemFont_Small,                   NORMAL, self.db.media.fontsize)
+	SetFont(SystemFont_Tiny,                    NORMAL, self.db.media.fontsize)
+	SetFont(Tooltip_Med,                        NORMAL, self.db.media.fontsize)
+	SetFont(Tooltip_Small,                      NORMAL, self.db.media.fontsize)
 	SetFont(ZoneTextString,						NORMAL, 32, "OUTLINE")
 	SetFont(SubZoneTextString,					NORMAL, 25, "OUTLINE")
 	SetFont(PVPInfoTextString,					NORMAL, 22, "THINOUTLINE")
 	SetFont(PVPArenaTextString,					NORMAL, 22, "THINOUTLINE")
 	SetFont(CombatTextFont,                     COMBAT, 100, "THINOUTLINE") -- number here just increase the font quality.
-
-	SetFont = nil
 end

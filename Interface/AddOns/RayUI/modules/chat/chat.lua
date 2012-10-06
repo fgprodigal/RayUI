@@ -35,6 +35,7 @@ end
 local function CreatCopyFrame()
 	local S = R:GetModule("Skins")
 	frame = CreateFrame("Frame", "CopyFrame", UIParent)
+	table.insert(UISpecialFrames, frame:GetName())
 	S:SetBD(frame)
 	frame:SetScale(1)
 	frame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
