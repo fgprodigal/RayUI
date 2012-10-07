@@ -12,6 +12,7 @@ local whitelist = {
 	[165] = true, -- Leatherworking
 	[186] = true, -- Mining
 	[197] = true, -- Tailoring
+	[202] = true, -- Engineering
 }
 
 local onlyPrimary = {
