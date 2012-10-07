@@ -119,19 +119,6 @@ local function updateThreat(self, event, unit)
     self.Threat:Show()
 end
 
-oUF.Tags.Methods["RayUFRaid:name"] = function(u, r)
-    local name = (u == "vehicle" and UnitName(r or u)) or UnitName(u)
-
-    if RA.nameCache[name] then
-        return RA.nameCache[name]
-    end
-end
-oUF.Tags.Events["RayUFRaid:name"] = "UNIT_NAME_UPDATE GROUP_ROSTER_UPDATE"
-
-RA.nameCache = {}
-RA.colorCache = {}
-RA.debuffColor = {} -- hex debuff colors for tags
-
 local function utf8sub(str, start, numChars) 
     local currentIndex = start 
     while numChars > 0 and currentIndex <= #str do 
@@ -150,24 +137,29 @@ local function utf8sub(str, start, numChars)
     return str:sub(start, currentIndex - 1) 
 end 
 
-function RA:UpdateName(name, unit) 
-    if(unit) then
-        local _NAME = UnitName(unit)
-        local _, class = UnitClass(unit)
-        if not _NAME or not class then return end
+oUF.Tags.Methods["RayUFRaid:name"] = function(u, r)
+    local name = (u == "vehicle" and UnitName(r or u)) or UnitName(u)
+	local _, class = UnitClass(u)
+	local unitReaction = UnitReaction(u, "player")
+	local colorString
 
-        local substring
-        for length=#_NAME, 1, -1 do
-            substring = utf8sub(_NAME, 1, length)
-            name:SetText(substring)
-            if name:GetStringWidth() <= RA.db.width - 8 then name:SetText(nil); break end
-        end
+	if (UnitIsPlayer(u)) then
+		local class = RAID_CLASS_COLORS[class]
+		if not class then return "" end
+		colorString = R:RGBToHex(class.r, class.g, class.b)
+	elseif (unitReaction) then
+		local reaction = RayUF["colors"].reaction[unitReaction]
+		colorString = R:RGBToHex(reaction[1], reaction[2], reaction[3])
+	else
+		colorString = "|cFFC2C2C2"
+	end
 
-        local str = RA.colorCache[class]..substring
-        RA.nameCache[_NAME] = str
-        name:UpdateTag()
-    end
+	return colorString..R:ShortenString(name, 8)
 end
+oUF.Tags.Events["RayUFRaid:name"] = "UNIT_NAME_UPDATE"
+
+RA.colorCache = {}
+RA.debuffColor = {} -- hex debuff colors for tags
 
 local function PostHealth(hp, unit)
 	local curhealth, maxhealth
@@ -179,10 +171,6 @@ local function PostHealth(hp, unit)
 		curhealth = math.random(1, maxhealth)
 		hp:SetValue(curhealth)
 	end
-
-    if not RA.nameCache[name] then
-        RA:UpdateName(self.Name, unit)
-    end
 
     local suffix = self:GetAttribute"unitsuffix"
     if suffix == "pet" or unit == "vehicle" or unit == "pet" then
@@ -277,9 +265,6 @@ local function PostPower(power, unit)
         -- pass the coloring back to the threat func
         updateThreat(self, nil, unit)
     end
-
-    local r, g, b, t
-    t = UF.db.powerColorClass and colors.class[class] or colors.power[ptype]
 
 	if UF.db.powerColorClass then
 		power.colorClass=true
@@ -384,8 +369,6 @@ local function style(self)
     name.overrideUnit = true
     self.Name = name
     self:Tag(self.Name, "[RayUFRaid:name]")
-
-    RA:UpdateName(self.Name)
 
     -- Power
     self.Power = CreateFrame"StatusBar"
@@ -509,6 +492,7 @@ function RA:Raid15SmartVisibility(event)
 	if event == "PLAYER_REGEN_ENABLED" then self:UnregisterEvent("PLAYER_REGEN_ENABLED") end
 	if not InCombatLockdown() then
 		self:SetAttribute("showPlayer", RA.db.showplayerinparty)
+		self:SetAttribute("showSolo", RA.db.showwhensolo)
 		if inInstance and instanceType == "raid" and maxPlayers > 15 then
 			RegisterAttributeDriver(self, "state-visibility", "hide")
 			self:SetAttribute("showRaid", false)
@@ -534,6 +518,7 @@ function RA:Raid25SmartVisibility(event)
 	if event == "PLAYER_REGEN_ENABLED" then self:UnregisterEvent("PLAYER_REGEN_ENABLED") end
 	if not InCombatLockdown() then
 		self:SetAttribute("showPlayer", RA.db.showplayerinparty)
+		self:SetAttribute("showSolo", RA.db.showwhensolo)
 		if inInstance and instanceType == "raid" and maxPlayers <= 15 then
 			RegisterAttributeDriver(self, "state-visibility", "hide")
 			self:SetAttribute("showRaid", false)
@@ -559,6 +544,7 @@ function RA:Raid40SmartVisibility(event)
 	if event == "PLAYER_REGEN_ENABLED" then self:UnregisterEvent("PLAYER_REGEN_ENABLED") end
 	if not InCombatLockdown() then
 		self:SetAttribute("showPlayer", RA.db.showplayerinparty)
+		self:SetAttribute("showSolo", RA.db.showwhensolo)
 		if inInstance and instanceType == "pvp" and maxPlayers == 40 then
 			RegisterAttributeDriver(self, "state-visibility", "[group:party,nogroup:raid][group:raid] show;hide")
 			self:SetAttribute("showRaid", true)

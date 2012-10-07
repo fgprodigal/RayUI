@@ -377,14 +377,13 @@ while object do
 	object = EnumerateFrames(object)
 end
 
-local developer = {
-	["夏琉君"] = true,
-	["Theron"] = true,
-	["Divineseraph"] = true,
-	["父王"] = true,
-	["夏翎"] = true,
-}
+R.Developer = { "夏琉君", "Theron", "Divineseraph", "父王", "夏翎", }
 
 function R:IsDeveloper()
-	return developer[R.myname]
+	for _, name in pairs(R.Developer) do
+		if name == R.myname then
+			return true
+		end
+	end
+	return false
 end

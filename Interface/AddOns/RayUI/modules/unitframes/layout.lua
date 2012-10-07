@@ -637,8 +637,8 @@ function UF:DPSLayout(frame, unit)
 		power:SetPoint("RIGHT")
 		power:SetPoint("BOTTOM") 
 		power.value:Point("RIGHT", frame, "RIGHT", -5, 0)
-		power:SetWidth(PLAYER_WIDTH)
-		power:SetHeight(PLAYER_HEIGHT * self.db.powerheight)
+		power:SetWidth(BOSS_WIDTH)
+		power:SetHeight(BOSS_HEIGHT * self.db.powerheight)
 		power:CreateShadow("Background")
 		frame.Power = power
 
@@ -647,12 +647,12 @@ function UF:DPSLayout(frame, unit)
 		local debuffs = CreateFrame("Frame", nil, frame)
 		debuffs:SetHeight(BOSS_HEIGHT)
 		debuffs:SetWidth(BOSS_WIDTH)
-		debuffs:Point("TOPRIGHT", frame, "BOTTOMRIGHT", -1, -2)
+		debuffs:Point("BOTTOMLEFT", frame, "TOPLEFT", 1, 2)
 		debuffs.spacing = 6
-		debuffs["growth-x"] = "LEFT"
-		debuffs["growth-y"] = "DOWN"
+		debuffs["growth-x"] = "RIGHT"
+		debuffs["growth-y"] = "UP"
 		debuffs.size = PLAYER_HEIGHT - 12
-		debuffs.initialAnchor = "TOPRIGHT"
+		debuffs.initialAnchor = "BOTTOMLEFT"
 		debuffs.num = 7
 		debuffs.PostCreateIcon = self.PostCreateIcon
 		debuffs.PostUpdateIcon = self.PostUpdateIcon
@@ -688,10 +688,9 @@ function UF:DPSLayout(frame, unit)
 		altpp.bg:SetTexture(R["media"].normal)
 		altpp.bg:SetVertexColor( 0,  0.76, 1)
 		altpp.bd = self:CreateBackdrop(altpp, altpp)
-		altpp.Text = altpp:CreateFontString(nil, "OVERLAY")
-		altpp.Text:SetFont(R["media"].font, 12, R["media"].fontflag)
-		altpp.Text:SetPoint("CENTER")
-		frame:Tag(altpp.Text, "[RayUF:altpower]")
+		altpp.text = altpp:CreateFontString(nil, "OVERLAY")
+		altpp.text:SetFont(R["media"].font, 12, R["media"].fontflag)
+		altpp.text:SetPoint("CENTER")
 		altpp.PostUpdate = self.PostAltUpdate
 		frame.AltPowerBar = altpp
 	end
@@ -833,7 +832,7 @@ function UF:LoadDPSLayout()
 			if i == 1 then
 				arena[i]:Point("RIGHT", RayUF_Parent, "RIGHT", -80, 180)
 			else
-				arena[i]:Point("TOP", arena[i-1], "BOTTOM", 0, -25)
+				arena[i]:Point("TOP", arena[i-1], "BOTTOM", 0, -35)
 			end
 			arena[i]:Size(BOSS_WIDTH, BOSS_HEIGHT)
 			arena[i]:SetParent(RayUF_Parent)
@@ -847,7 +846,7 @@ function UF:LoadDPSLayout()
 			if i == 1 then
 				boss[i]:Point("RIGHT", RayUF_Parent, "RIGHT", -80, 180)
 			else
-				boss[i]:Point("TOP", boss[i-1], "BOTTOM", 0, -25)             
+				boss[i]:Point("TOP", boss[i-1], "BOTTOM", 0, -35)             
 			end
 			boss[i]:Size(BOSS_WIDTH, BOSS_HEIGHT)
 			boss[i]:SetParent(RayUF_Parent)

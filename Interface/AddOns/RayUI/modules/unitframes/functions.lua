@@ -635,15 +635,39 @@ function UF:UpdateThreatStatus(event, unit)
 end
 
 function UF:PostAltUpdate(min, cur, max)
-    local frame = self.__owner
-
-    local tPath, r, g, b = UnitAlternatePowerTextureInfo(frame.unit, 2)
-
-    if(r) then
-        self:SetStatusBarColor(r, g, b, 1)
-    else
-        self:SetStatusBarColor(1, 1, 1, .8)
-    end 
+	local perc = math.floor((cur/max)*100)
+	
+	if perc < 35 then
+		self:SetStatusBarColor(0, 1, 0)
+	elseif perc < 70 then
+		self:SetStatusBarColor(1, 1, 0)
+	else
+		self:SetStatusBarColor(1, 0, 0)
+	end
+	
+	local unit = self:GetParent().unit
+	
+	if unit == "player" and self.text then 
+		local type = select(10, UnitAlternatePowerInfo(unit))
+				
+		if perc > 0 then
+			self.text:SetText(type..": "..format("%d%%", perc))
+		else
+			self.text:SetText(type..": 0%")
+		end
+	elseif unit and unit:find("boss%d") and self.text then
+		self.text:SetTextColor(self:GetStatusBarColor())
+		-- if not self:GetParent().Power.value:GetText() or self:GetParent().Power.value:GetText() == "" then
+			-- self.text:Point("BOTTOMRIGHT", self:GetParent().Health, "BOTTOMRIGHT")
+		-- else
+			-- self.text:Point("RIGHT", self:GetParent().Power.value.value, "LEFT", 2, E.mult)	
+		-- end
+		if perc > 0 then
+			self.text:SetText("|cffD7BEA5[|r"..format("%d%%", perc).."|cffD7BEA5]|r")
+		else
+			self.text:SetText(nil)
+		end
+	end
 end
 
 function UF:ComboDisplay(event, unit)
@@ -1186,6 +1210,40 @@ function UF:UpdateShardBar(spec)
 	end
 end
 
+local attributeBlacklist = {["showplayer"] = true, ["showraid"] = true, ["showparty"] = true, ["showsolo"] = true}
+local configEnv
+local originalEnvs = {}
+local overrideFuncs = {}
+
+local function createConfigEnv()
+	if( configEnv ) then return end
+	configEnv = setmetatable({
+		UnitName = function(unit)
+			if unit:find("target") or unit:find("focus") then
+				return UnitName(unit)
+			end
+			if R.Developer then
+				local max = #R.Developer
+				return R.Developer[math.random(1, max)]
+			end
+			return "Test Name"
+		end,
+		UnitClass = function(unit)
+			if unit:find("target") or unit:find("focus") then
+				return UnitClass(unit)
+			end		
+		
+			local classToken = CLASS_SORT_ORDER[math.random(1, #(CLASS_SORT_ORDER))]
+			return LOCALIZED_CLASS_NAMES_MALE[classToken], classToken
+		end,
+	}, {
+		__index = _G,
+		__newindex = function(tbl, key, value) _G[key] = value end,
+	})
+	
+	overrideFuncs["RayUFRaid:name"] = RayUF.Tags.Methods["RayUFRaid:name"]
+end
+
 function UF:ForceShow(frame)
 	if InCombatLockdown() then return end
 	if not frame.isForced then		
@@ -1256,20 +1314,27 @@ end
 local function OnAttributeChanged(self, name)
 	if not self.forceShow then return end
 
-	local startingIndex = -4
+	local startingIndex = - 4
 	if self:GetAttribute("startingIndex") ~= startingIndex then
 		self:SetAttribute("startingIndex", startingIndex)
 		UF:ShowChildUnits(self, self:GetChildren())	
 	end
 end
 
-local attributeBlacklist = {["showplayer"] = true, ["showraid"] = true, ["showparty"] = true, ["showsolo"] = true}
 function UF:HeaderConfig(header, configMode)
 	if InCombatLockdown() then return end
-	
+
+	createConfigEnv()
 	header.forceShow = configMode
 	header:HookScript("OnAttributeChanged", OnAttributeChanged)
 	if configMode then
+		for _, func in pairs(overrideFuncs) do
+			if type(func) == "function" and not originalEnvs[func] then
+				originalEnvs[func] = getfenv(func)
+				setfenv(func, configEnv)
+			end
+		end
+
 		for key in pairs(attributeBlacklist) do
 			header:SetAttribute(key, nil)
 		end
@@ -1279,6 +1344,11 @@ function UF:HeaderConfig(header, configMode)
 
 		UF:ShowChildUnits(header, header:GetChildren())
 	else
+		for func, env in pairs(originalEnvs) do
+			setfenv(func, env)
+			originalEnvs[func] = nil
+		end
+
 		UF:UnshowChildUnits(header, header:GetChildren())
 		header:SetAttribute("startingIndex", 1)
 
@@ -1316,7 +1386,7 @@ local function TestUF(msg)
 			end
 		end
 	elseif msg == "raid15" or msg == "r15" then
-		for i = 1, 3 do
+		for i = 1, 30 do
 			local header = _G["RayUFRaid15_"..i]
 			if header then
 				UF:HeaderConfig(header, header.forceShow ~= true or nil)
@@ -1330,10 +1400,17 @@ local function TestUF(msg)
 			end
 		end
 	elseif msg == "raid40" or msg == "r40" then
-		for i = 1, 8 do
+		local forceShow = RayUFRaid40_6.forceShow
+		for i = 6, 8 do
 			local header = _G["RayUFRaid40_"..i]
 			if header then
-				UF:HeaderConfig(header, header.forceShow ~= true or nil)
+				UF:HeaderConfig(header, forceShow ~= true or nil)
+			end
+		end
+		for i = 1, 5 do
+			local header = _G["RayUFRaid25_"..i]
+			if header then
+				UF:HeaderConfig(header, forceShow ~= true or nil)
 			end
 		end
 	end

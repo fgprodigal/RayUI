@@ -48,6 +48,7 @@ local function LoadCurrency()
 		{515, 2000}, --Darkmoon Prize Ticket
 		{614, 2000}, --Mote of Darkness
 		{615, 2000}, --Essence of Corrupted Deathwing
+		{697, 10}, --Essence of Corrupted Deathwing
 	}
 
 	local function updateCurrency()
