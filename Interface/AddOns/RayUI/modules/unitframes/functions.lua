@@ -149,8 +149,8 @@ function UF:ConstructPortrait(frame)
 	portrait:SetFrameLevel(frame.Health:GetFrameLevel() + 1)
 	portrait:SetPoint("TOPLEFT", frame.Health, "TOPLEFT", 0, 0)
 	portrait:SetPoint("BOTTOMRIGHT", frame.Health, "BOTTOMRIGHT", 0, 0)
+    portrait:SetAlpha(.2)
 	portrait.PostUpdate = function(frame)
-		frame:SetAlpha(.2)
 		if frame:GetModel() and frame:GetModel().find and frame:GetModel():find("worgenmale") then
 			frame:SetCamera(1)
 		end
