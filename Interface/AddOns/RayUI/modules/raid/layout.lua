@@ -623,7 +623,7 @@ function RA:SpawnHeader(name, group, layout)
     "groupFilter", group,
     "groupingOrder", "1,2,3,4,5,6,7,8",
     "groupBy", "GROUP",
-    "maxColumns", 8,
+    "maxColumns", 1,
     "unitsPerColumn", 5,
     "columnSpacing", RA.db.spacing,
     "columnAnchorPoint", growth)

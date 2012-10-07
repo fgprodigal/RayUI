@@ -861,6 +861,8 @@ R["Watcher"] = {
                 { spellID = 84746, unitId = "player", caster = "player", filter = "BUFF" },
                 --深度洞察
                 { spellID = 84747, unitId = "player", caster = "player", filter = "BUFF" },
+                --預知
+                { spellID = 115189, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标buff&debuff",
@@ -1610,6 +1612,10 @@ R["Watcher"] = {
                 --死亡之翼的狂亂
                 --腐化寄生體
                 { spellID = 108649, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
+
+                --魔古山寶庫
+                --馮
+                { spellID = 116784, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
 
                 --其他
                 --漏油
