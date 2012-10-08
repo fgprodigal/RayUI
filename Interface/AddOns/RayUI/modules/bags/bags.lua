@@ -385,6 +385,7 @@ function B:Layout(isBank)
 					f.Bags[bagID][slotID]:SetCheckedTexture(nil)
 					f.Bags[bagID][slotID].count:ClearAllPoints()
 					f.Bags[bagID][slotID].count:Point("BOTTOMRIGHT", 0, 2)
+					f.Bags[bagID][slotID].count:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
 					f.Bags[bagID][slotID].questIcon = _G[f.Bags[bagID][slotID]:GetName().."IconQuestTexture"]
 					f.Bags[bagID][slotID].questIcon:SetTexture(TEXTURE_ITEM_QUEST_BANG)
 					f.Bags[bagID][slotID].questIcon:SetInside(f.Bags[bagID][slotID])
@@ -476,11 +477,7 @@ function B:UpdateTokens()
 		button:ClearAllPoints()
 		if name then
 			button.icon:SetTexture(icon)
-			-- if self.db.currencyFormat == "ICON_TEXT" then
-				button.text:SetText(name..": "..count)
-			-- elseif self.db.currencyFormat == "ICON" then
-				-- button.text:SetText(count)
-			-- end
+			button.text:SetText(name..": "..count)
 			button.currencyID = currencyID
 			button:Show()
 			numTokens = numTokens + 1
