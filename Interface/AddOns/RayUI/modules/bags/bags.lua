@@ -167,9 +167,12 @@ function B:UpdateSlot(bagID, slotID)
 		SetItemButtonTextureVertexColor(slot, 1, 1, 1)
 	end
 	if B.ProfessionColors[bagType] then
-		slot:SetBackdropColor(0, 0, 0)
-		slot.border:SetBackdropBorderColor(unpack(B.ProfessionColors[bagType]))
-	elseif (clink) then
+		slot.shadow:Show()
+		slot.shadow:SetBackdropBorderColor(unpack(B.ProfessionColors[bagType]))
+	else
+		slot.shadow:Hide()
+	end
+	if (clink) then
 		local iType
 		slot.name, _, slot.rarity, _, _, iType = GetItemInfo(clink)
 		if R:IsItemUnusable(clink) then
@@ -183,13 +186,13 @@ function B:UpdateSlot(bagID, slotID)
 			slot.iconTexture:SetInside()
 			slot:StyleButton()
 			slot:SetBackdropColor(0, 0, 0)
-			slot.border:SetBackdropBorderColor(1.0, 0.3, 0.3)
+			slot.border:SetBackdropBorderColor(1.0, 0.2, 0.2)
 			slot.questIcon:Show()
 		elseif questId or isQuestItem then
 			slot.iconTexture:SetInside()
 			slot:StyleButton()
 			slot:SetBackdropColor(0, 0, 0)
-			slot.border:SetBackdropBorderColor(1.0, 0.3, 0.3)
+			slot.border:SetBackdropBorderColor(1.0, 0.2, 0.2)
 		elseif slot.rarity and slot.rarity > 1 then
 			local r, g, b = GetItemQualityColor(slot.rarity)
 			slot.iconTexture:SetInside()
@@ -380,6 +383,19 @@ function B:Layout(isBank)
 						tex:SetTexture(S["media"].backdrop)
 						tex:SetGradientAlpha(unpack(S["media"].DefGradient))
 					end
+					if not f.Bags[bagID][slotID].shadow then
+						local shadow = CreateFrame("Frame", nil, f.Bags[bagID][slotID])
+						shadow:SetOutside(f.Bags[bagID][slotID], 3, 3)
+						shadow:SetFrameLevel(f.Bags[bagID][slotID]:GetFrameLevel()+1)
+						f.Bags[bagID][slotID].shadow = shadow
+						f.Bags[bagID][slotID].shadow:SetBackdrop( { 
+							edgeFile = R["media"].glow,
+							edgeSize = R:Scale(3),
+							insets = {left = R:Scale(3), right = R:Scale(3), top = R:Scale(3), bottom = R:Scale(3)},
+						})
+						f.Bags[bagID][slotID].shadow:SetBackdropColor(unpack(R["media"].bordercolor))
+						f.Bags[bagID][slotID].shadow:Hide()
+					end
 					f.Bags[bagID][slotID]:StyleButton()
 					f.Bags[bagID][slotID]:SetNormalTexture(nil)
 					f.Bags[bagID][slotID]:SetCheckedTexture(nil)
@@ -566,7 +582,7 @@ function B:ContructContainerFrame(name, isBank)
 		f.purchaseBagButton = CreateFrame("Button", nil, f)
 		f.purchaseBagButton:Height(20)
 		f.purchaseBagButton:Width(150)
-		f.purchaseBagButton:Point("BOTTOMLEFT", f.holderFrame, "TOPLEFT", 2, 4)
+		f.purchaseBagButton:Point("BOTTOMLEFT", f.holderFrame, "TOPLEFT", 0, 4)
 		f.purchaseBagButton:SetFrameLevel(f.purchaseBagButton:GetFrameLevel() + 2)
 		f.purchaseBagButton.text = f.purchaseBagButton:CreateFontString(nil, "OVERLAY")
 		f.purchaseBagButton.text:FontTemplate()
@@ -587,7 +603,7 @@ function B:ContructContainerFrame(name, isBank)
 
 		--Sort Button
 		f.sortButton = CreateFrame("Button", nil, f)
-		f.sortButton:Point("TOPRIGHT", f, "TOP", 0, -4)
+		f.sortButton:Point("TOPLEFT", f, "TOPLEFT", 14, -4)
 		f.sortButton:Size(55, 10)
 		f.sortButton.ttText = L["整理背包"]
 		f.sortButton:SetScript("OnEnter", self.Tooltip_Show)
@@ -617,7 +633,7 @@ function B:ContructContainerFrame(name, isBank)
 
 		--Toggle Bags Button
 		f.bagsButton = CreateFrame("Button", nil, f)
-		f.bagsButton:Point("RIGHT", f.sortButton, "LEFT", -3, 0)
+		f.bagsButton:Point("LEFT", f.transferButton, "RIGHT", 3, 0)
 		f.bagsButton:Size(55, 10)
 		f.bagsButton.ttText = L["显示背包"]
 		f.bagsButton:SetScript("OnEnter", self.Tooltip_Show)
@@ -643,7 +659,7 @@ function B:ContructContainerFrame(name, isBank)
 		f.editBox:SetFrameLevel(f.editBox:GetFrameLevel() + 2)
 		f.editBox:Height(15)
 		f.editBox:Hide()
-		f.editBox:Point("BOTTOMLEFT", f.holderFrame, "TOPLEFT", 2, 4)
+		f.editBox:Point("BOTTOMLEFT", f.holderFrame, "TOPLEFT", 3, 4)
 		f.editBox:Point("RIGHT", f.goldText, "LEFT", -5, 0)
 		f.editBox:SetAutoFocus(true)
 		f.editBox:SetScript("OnEscapePressed", self.ResetAndClear)
@@ -683,7 +699,7 @@ function B:ContructContainerFrame(name, isBank)
 		end)
 		--Sort Button
 		f.sortButton = CreateFrame("Button", nil, f)
-		f.sortButton:Point("TOPLEFT", f, "TOPLEFT", 10, -4)
+		f.sortButton:Point("TOPLEFT", f, "TOPLEFT", 14, -4)
 		f.sortButton:Size(55, 10)
 		f.sortButton.ttText = L["整理背包"]
 		f.sortButton:SetScript("OnEnter", self.Tooltip_Show)
@@ -845,6 +861,8 @@ function B:Initialize()
 	self:RegisterEvent("BANKFRAME_CLOSED", "CloseBank")
 	self:RegisterEvent("PLAYERBANKBAGSLOTS_CHANGED")
 	StackSplitFrame:SetFrameStrata("DIALOG")
+	self:HookScript(TradeFrame, "OnShow", "OpenBags")
+	self:HookScript(TradeFrame, "OnHide", "CloseBags")
 end
 
 function B:Info()

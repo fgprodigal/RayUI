@@ -553,7 +553,7 @@ function B:DoMove(move)
 		if moveTracker[source] then
 			return false, "move incomplete"
 		else
-			return B:StopStacking(L["Confused.. Try Again!"])
+			return B:StopStacking(L["出了点问题, 请重试!"])
 		end
 	end
 	
@@ -573,13 +573,13 @@ end
 
 function B:DoMoves()
 	if InCombatLockdown() then
-		return B:StopStacking(L["Confused.. Try Again!"])
+		return B:StopStacking(L["出了点问题, 请重试!"])
 	end
 	
 	if CursorHasItem() then
 		local itemID = ConvertLinkToID(select(3, GetCursorInfo()))
 		if lastItemID ~= itemID then
-			return B:StopStacking(L["Confused.. Try Again!"])
+			return B:StopStacking(L["出了点问题, 请重试!"])
 		end
 	end
 	
