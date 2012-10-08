@@ -18,7 +18,7 @@ local function LoadFunc()
 		for b=0,4 do
 			for s=1,GetContainerNumSlots(b) do
 				local l = GetContainerItemLink(b, s)
-				if l then
+				if l and select(11, GetItemInfo(l)) then
 					local p = select(11, GetItemInfo(l))*select(2, GetContainerItemInfo(b, s))
 					if select(3, GetItemInfo(l))==0 and p>0 then
 						UseContainerItem(b, s)
