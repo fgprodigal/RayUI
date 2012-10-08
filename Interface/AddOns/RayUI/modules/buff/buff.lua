@@ -149,6 +149,8 @@ function BF:Initialize()
 	BF:SecureHook("DebuffButton_UpdateAnchors", "UpdateDebuff")
 	BF:SecureHook("AuraButton_UpdateDuration", "UpdateTime")
 	SetCVar("consolidateBuffs", 0)
+	InterfaceOptionsFrameCategoriesButton12:Kill()
+	InterfaceOptionsFrameCategoriesButton13:SetPoint("TOPLEFT", InterfaceOptionsFrameCategoriesButton11, "BOTTOMLEFT", 0, 0)
 	TempEnchant3:Kill()
 end
 

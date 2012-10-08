@@ -248,6 +248,32 @@ local function CreatePanel(f, t, w, h, a1, p, a2, x, y)
 	end
 end
 
+local function SetOutside(obj, anchor, xOffset, yOffset)
+	xOffset = xOffset or 2
+	yOffset = yOffset or 2
+	anchor = anchor or obj:GetParent()
+
+	if obj:GetPoint() then
+		obj:ClearAllPoints()
+	end
+
+	obj:Point("TOPLEFT", anchor, "TOPLEFT", -xOffset, yOffset)
+	obj:Point("BOTTOMRIGHT", anchor, "BOTTOMRIGHT", xOffset, -yOffset)
+end
+
+local function SetInside(obj, anchor, xOffset, yOffset)
+	xOffset = xOffset or 2
+	yOffset = yOffset or 2
+	anchor = anchor or obj:GetParent()
+
+	if obj:GetPoint() then
+		obj:ClearAllPoints()
+	end
+
+	obj:Point("TOPLEFT", anchor, "TOPLEFT", xOffset, -yOffset)
+	obj:Point("BOTTOMRIGHT", anchor, "BOTTOMRIGHT", -xOffset, yOffset)
+end
+
 local function FontTemplate(fs, font, fontSize, fontStyle)
 	fs.font = font
 	fs.fontSize = fontSize
@@ -354,6 +380,8 @@ local function addapi(object)
 	if not object.StyleButton then mt.StyleButton = StyleButton end
 	if not object.Width then mt.Width = Width end
 	if not object.Height then mt.Height = Height end
+	if not object.SetOutside then mt.SetOutside = SetOutside end
+	if not object.SetInside then mt.SetInside = SetInside end
 	if not object.FadeIn then mt.FadeIn = FadeIn end
 	if not object.FadeOut then mt.FadeOut = FadeOut end
 	if not object.CreateBorder then mt.CreateBorder = CreateBorder end

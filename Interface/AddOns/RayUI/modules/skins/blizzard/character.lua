@@ -155,7 +155,7 @@ local function LoadSkin()
 	select(8, CharacterSecondaryHandSlot:GetRegions()):Kill()
 
 	local function SkinItemFlyouts()
-		for i = 1, 10 do
+		for i = 1, EQUIPMENTFLYOUT_MAXITEMS do
 			local bu = _G["EquipmentFlyoutFrameButton"..i]
 			local icon = _G["EquipmentFlyoutFrameButton"..i.."IconTexture"]
 			if bu and not bu.reskinned then

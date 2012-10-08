@@ -147,14 +147,17 @@ function TT:GameTooltip_SetDefaultAnchor(tooltip, parent)
 		tooltip:SetOwner(parent, "ANCHOR_CURSOR")
 	else
 		tooltip:ClearAllPoints()
-		local mousefocus = GetMouseFocus():GetName()
+		local mousefocus
+		if GetMouseFocus() then
+			mousefocus = GetMouseFocus():GetName()
+		end
 		if mousefocus and mousefocus:match("RayUFRaid") then
 			local parent = _G[mousefocus:match("RayUFRaid%d%d_%d")]
 			tooltip:Point("BOTTOMRIGHT", parent, "TOPRIGHT", 0, 23)
 		elseif RayUFRaid40_6UnitButton1 and RayUFRaid40_6UnitButton1:IsShown() and (GetScreenWidth() - RayUFRaid40_8:GetRight()) < 250 then
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, RayUFRaid40_8:GetBottom() + RayUFRaid40_8:GetHeight() + 30)
-		elseif BagsFrame and BagsFrame:IsShown() and (GetScreenWidth() - BagsFrame:GetRight()) < 250 then
-			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, BagsFrame:GetBottom() + BagsFrame:GetHeight() + 30)
+		elseif RayUI_ContainerFrame and RayUI_ContainerFrame:IsShown() and (GetScreenWidth() - RayUI_ContainerFrame:GetRight()) < 250 then
+			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, RayUI_ContainerFrame:GetBottom() + RayUI_ContainerFrame:GetHeight() + 30)
 		elseif RayUFRaid15_1UnitButton1 and RayUFRaid15_1UnitButton1:IsShown() and (GetScreenWidth() - RayUFRaid15_3:GetRight()) < 250 then
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, RayUFRaid15_3:GetBottom() + RayUFRaid15_3:GetHeight() + 30)
 		elseif RayUFRaid25_1UnitButton1 and RayUFRaid25_1UnitButton1:IsShown() and (GetScreenWidth() - RayUFRaid25_5:GetRight()) < 250 then

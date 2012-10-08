@@ -180,3 +180,11 @@ P["Skins"]={
 	bigwigs = true,
 	gladius = true,
 }
+
+P["Bags"]={
+	bagSize = 32,
+	bankSize = 32,
+	sortInverted = true,
+	bagWidth = 385,
+	bankWidth = 600,
+}

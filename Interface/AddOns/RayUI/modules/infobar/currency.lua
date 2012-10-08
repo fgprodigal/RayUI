@@ -154,6 +154,11 @@ local function LoadCurrency()
 		end
 	end
 
+	function Currency_OnMouseDown(self)
+		GameTooltip_Hide()
+		ToggleAllBags()
+	end
+
 	Status:RegisterEvent("PLAYER_MONEY")
 	Status:RegisterEvent("SEND_MAIL_MONEY_CHANGED")
 	Status:RegisterEvent("SEND_MAIL_COD_CHANGED")
@@ -162,6 +167,7 @@ local function LoadCurrency()
 	Status:RegisterEvent("PLAYER_ENTERING_WORLD")
 	Status:RegisterEvent("PLAYER_HONOR_GAIN")
 	Status:SetScript("OnEnter", ShowCurrency)
+	Status:SetScript("OnMouseDown", Currency_OnMouseDown)
 	Status:SetScript("OnLeave", GameTooltip_Hide)
 	Status:SetScript("OnEvent", OnEvent)
 

@@ -1535,6 +1535,10 @@ R["Watcher"] = {
                 --無效屏障
                 { spellID = 115856, unitId = "player", caster = "all", filter = "BUFF", fuzzy = true },
 
+				--卡拉賈
+                --靈魂經絡
+                { spellID = 117549, unitId = "player", caster = "all", filter = "BUFF", fuzzy = true },
+
                 --其他
                 --漏油
                 { spellID = 94794, unitId = "player", caster = "all", filter = "DEBUFF" },

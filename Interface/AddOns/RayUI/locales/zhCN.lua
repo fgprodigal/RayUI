@@ -83,11 +83,9 @@ L["焦点"] = true
 L["取消焦点"] = true
 
 L["整理背包"] = true
-L["按住shift:"] = true
-L["整理特殊背包"] = true
-L["高亮套装"] = true
-L["反向显示"] = true
 L["显示背包"] = true
+L["堆叠物品"] = true
+L["堆叠至银行"] = true
 L["不能购买更多的银行栏位了!"] = true
 L["你必须先购买一个银行栏位!"] = true
 
@@ -309,6 +307,14 @@ L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r插件美化模块."] = true
 L["法术监视"] = true
 L["中部冷却闪光"] = true
 L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r中部冷却闪光模块, 技能冷却结束时在屏幕中部显示闪烁技能图标."] = true
+
+L["背包"] = true
+	L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r背包模块."] = true
+	L["背包格大小"] = true
+	L["银行格大小"] = true
+	L["逆序整理"] = true
+	L["背包面板宽度"] = true
+	L["银行面板宽度"] = true
 end
 do
 L["选项"] = true
