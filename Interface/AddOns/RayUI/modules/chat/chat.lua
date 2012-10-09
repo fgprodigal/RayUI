@@ -780,7 +780,7 @@ function CH:DisplayChatHistory()
 	
 	for i = 1, #temp do
 		data = RayUICharacterData.ChatHistory[tostring(temp[i])]
-		if (time() - temp[1]) > 21600 then
+		if (time() - temp[i]) > 21600 then
 			RayUICharacterData.ChatHistory[tostring(temp[i])] = nil
 		else
 			if type(data) == "table" then

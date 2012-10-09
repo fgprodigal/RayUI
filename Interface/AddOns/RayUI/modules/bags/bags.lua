@@ -376,7 +376,7 @@ function B:Layout(isBank)
 					if not f.Bags[bagID][slotID].shadow then
 						local shadow = CreateFrame("Frame", nil, f.Bags[bagID][slotID])
 						shadow:SetOutside(f.Bags[bagID][slotID], 3, 3)
-						shadow:SetFrameLevel(f.Bags[bagID][slotID]:GetFrameLevel()+1)
+						shadow:SetFrameLevel(0)
 						f.Bags[bagID][slotID].shadow = shadow
 						f.Bags[bagID][slotID].shadow:SetBackdrop( { 
 							edgeFile = R["media"].glow,
