@@ -144,7 +144,9 @@ end)
 
 function TT:GameTooltip_SetDefaultAnchor(tooltip, parent)
 	if self.db.cursor then
-		tooltip:SetOwner(parent, "ANCHOR_CURSOR")
+		if parent then
+			tooltip:SetOwner(parent, "ANCHOR_CURSOR")
+		end
 	else
 		tooltip:ClearAllPoints()
 		local mousefocus
