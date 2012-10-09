@@ -26,7 +26,7 @@ function RM:UpdateReminderIcon(event, unit)
 	local db = P["Reminder"].filters[R.myclass][self.groupName]
 
 	self:Hide()
-	--self.icon:SetTexture(nil)
+	self.icon:SetTexture(nil)
 
 	if not db or not db.enable or (not db.spellGroup and not db.weaponCheck and not db.stanceCheck) then return end
 
@@ -50,7 +50,8 @@ function RM:UpdateReminderIcon(event, unit)
 			end
 		end
 
---[[ 		if (not self.icon:GetTexture() and event == "PLAYER_ENTERING_WORLD") then
+		self:Show()
+		if (not self.icon:GetTexture() and event == "PLAYER_ENTERING_WORLD") then
 			self:UnregisterAllEvents()
 			self:RegisterEvent("LEARNED_SPELL_IN_TAB")
 			return
@@ -69,7 +70,8 @@ function RM:UpdateReminderIcon(event, unit)
 			if db.role then
 				self:RegisterEvent("UNIT_INVENTORY_CHANGED")
 			end
-		end ]]
+		end
+		self:Hide()
 	elseif db.stanceCheck and GetNumShapeshiftForms() > 0 then
         local index = GetShapeshiftForm()
         if index < 1 or index > GetNumShapeshiftForms() then
@@ -165,7 +167,9 @@ function RM:UpdateReminderIcon(event, unit)
 	end
 
 	if db.reverseCheck and not (db.role or db.tree) then db.reverseCheck = nil end
-	if --[[ not self.icon:GetTexture() or ]] UnitInVehicle("player") then self:Hide() return end
+	self:Show()
+	if not self.icon:GetTexture() or UnitInVehicle("player") then self:Hide() return end
+	self:Hide()
 
 	if db.spellGroup then
 		if roleCheck and treeCheck and combatCheck and (instanceCheck or PVPCheck) and not RM:PlayerHasFilteredBuff(db.spellGroup, db.personal) then
@@ -235,10 +239,10 @@ function RM:CreateReminder(name, index)
 		GameTooltip:Show()
 	end)
 	frame:SetScript("OnLeave", GameTooltip_Hide)
-	-- frame:Hide()
+	frame:Hide()
 
 	frame:RegisterUnitEvent("UNIT_AURA", "player")
-	--frame:RegisterEvent("PLAYER_ENTERING_WORLD")
+	frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 	frame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	frame:RegisterEvent("UNIT_INVENTORY_CHANGED")
 	frame:RegisterEvent("PLAYER_REGEN_ENABLED")
