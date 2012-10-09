@@ -1539,6 +1539,8 @@ R["Watcher"] = {
                 --靈魂經絡
                 { spellID = 117549, unitId = "player", caster = "all", filter = "BUFF", fuzzy = true },
 
+				--艾拉岡
+
                 --其他
                 --漏油
                 { spellID = 94794, unitId = "player", caster = "all", filter = "DEBUFF" },

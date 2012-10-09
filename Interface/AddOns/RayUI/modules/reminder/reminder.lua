@@ -2,6 +2,13 @@ local R, L, P = unpack(select(2, ...))
 local RM = R:NewModule("Reminder", "AceTimer-3.0")
 RM.CreatedReminders = {}
 
+function RM:GetTexture(frame)
+	frame:Show()
+	local texture = frame.icon:GetTexture()
+	frame:Hide()
+	return texture
+end
+
 function RM:PlayerHasFilteredBuff(db, checkPersonal)
 	for buff, value in pairs(db) do
 		if value == true then
@@ -50,12 +57,11 @@ function RM:UpdateReminderIcon(event, unit)
 			end
 		end
 
-		self:Show()
-		if (not self.icon:GetTexture() and event == "PLAYER_ENTERING_WORLD") then
+		if (not RM:GetTexture(self) and event == "PLAYER_ENTERING_WORLD") then
 			self:UnregisterAllEvents()
 			self:RegisterEvent("LEARNED_SPELL_IN_TAB")
 			return
-		elseif (self.icon:GetTexture() and event == "LEARNED_SPELL_IN_TAB") then
+		elseif (RM:GetTexture(self) and event == "LEARNED_SPELL_IN_TAB") then
 			self:UnregisterAllEvents()
 			self:RegisterEvent("UNIT_AURA")
 			if db.combat then
@@ -167,9 +173,7 @@ function RM:UpdateReminderIcon(event, unit)
 	end
 
 	if db.reverseCheck and not (db.role or db.tree) then db.reverseCheck = nil end
-	self:Show()
-	if not self.icon:GetTexture() or UnitInVehicle("player") then self:Hide() return end
-	self:Hide()
+	if not RM:GetTexture(self) or UnitInVehicle("player") then self:Hide() return end
 
 	if db.spellGroup then
 		if roleCheck and treeCheck and combatCheck and (instanceCheck or PVPCheck) and not RM:PlayerHasFilteredBuff(db.spellGroup, db.personal) then

@@ -533,14 +533,6 @@ function TT:Initialize()
 						GameTooltipTextLeft2:SetTextColor(gcol[1], gcol[2], gcol[3])
 					end
 				end
-                if UnitIsPVP(unit) then
-                    for i = 2, GameTooltip:NumLines() do
-                        if _G["GameTooltipTextLeft"..i]:GetText():find(PVP) then
-                            _G["GameTooltipTextLeft"..i]:SetText(nil)
-                            break
-                        end
-                    end
-                end
                 if UnitExists(unit.."target") then
                     local r, g, b = GameTooltip_UnitColor(unit.."target")
                     if UnitName(unit.."target") == UnitName("player") then
@@ -556,16 +548,8 @@ function TT:Initialize()
 						break
 					end
 				end
-                if UnitFactionGroup(unit) then
-                    if UnitFactionGroup(unit) ~= "Neutral" then
-                        GameTooltipTextLeft1:SetText("|TInterface\\Addons\\RayUI\\media\\UI-PVP-"..select(1, UnitFactionGroup(unit))..".blp:16:16:0:0:64:64:5:40:0:35|t"..GameTooltipTextLeft1:GetText())
-                    end
-                    for i = 2, GameTooltip:NumLines() do
-                        if _G["GameTooltipTextLeft"..i]:GetText():match("^"..select(2, UnitFactionGroup(unit))) then
-                            _G["GameTooltipTextLeft"..i]:SetText('')
-                            break
-                        end
-                    end
+                if UnitFactionGroup(unit) and UnitFactionGroup(unit) ~= "Neutral" then
+					GameTooltipTextLeft1:SetText("|TInterface\\Addons\\RayUI\\media\\UI-PVP-"..select(1, UnitFactionGroup(unit))..".blp:16:16:0:0:64:64:5:40:0:35|t"..GameTooltipTextLeft1:GetText())
                 end
 			else
 				for i=2, GameTooltip:NumLines() do
@@ -573,6 +557,13 @@ function TT:Initialize()
 						_G["GameTooltipTextLeft" .. i]:SetText(string.format(hex(diffColor.r, diffColor.g, diffColor.b).."%s|r", unitLevel) .. unitClassification .. creatureType)
 						break
 					end
+				end
+			end
+			for i = 1, GameTooltip:NumLines() do
+				local line = _G["GameTooltipTextLeft"..i]
+				while line and line:GetText() and (line:GetText() == PVP_ENABLED or line:GetText() == FACTION_HORDE or line:GetText() == FACTION_ALLIANCE) do
+					line:SetText()
+					break
 				end
 			end
 		end

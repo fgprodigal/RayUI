@@ -481,6 +481,7 @@ function RW:NewWatcher(data)
 	end
 	if module.CD or module.itemCD then
 		module:RegisterEvent("SPELL_UPDATE_COOLDOWN", "OnEvent")
+		module:RegisterEvent("SPELL_UPDATE_USABLE", "OnEvent")
 	end
 	RW.modules[module.name] = module
 end
