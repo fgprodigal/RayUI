@@ -161,11 +161,6 @@ function B:UpdateSlot(bagID, slotID)
 	slot.name, slot.rarity = nil, nil
 	local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
 	CooldownFrame_SetTimer(slot.cooldown, start, duration, enable)
-	if ( duration > 0 and enable == 0 ) then
-		SetItemButtonTextureVertexColor(slot, 0.4, 0.4, 0.4)
-	else
-		SetItemButtonTextureVertexColor(slot, 1, 1, 1)
-	end
 	if B.ProfessionColors[bagType] then
 		slot.shadow:Show()
 		slot.shadow:SetBackdropBorderColor(unpack(B.ProfessionColors[bagType]))
@@ -176,9 +171,9 @@ function B:UpdateSlot(bagID, slotID)
 		local iType
 		slot.name, _, slot.rarity, _, _, iType = GetItemInfo(clink)
 		if R:IsItemUnusable(clink) then
-			_G[slot:GetName().."IconTexture"]:SetVertexColor(RED_FONT_COLOR.r, RED_FONT_COLOR.g, RED_FONT_COLOR.b)
+			SetItemButtonTextureVertexColor(slot, RED_FONT_COLOR.r, RED_FONT_COLOR.g, RED_FONT_COLOR.b)
 		else
-			_G[slot:GetName().."IconTexture"]:SetVertexColor(1, 1, 1)
+			SetItemButtonTextureVertexColor(slot, 1, 1, 1)
 		end
 		local isQuestItem, questId, isActiveQuest = GetContainerItemQuestInfo(bagID, slotID)
 		-- color slot according to item quality
@@ -231,11 +226,6 @@ function B:UpdateCooldowns()
 		for slotID = 1, GetContainerNumSlots(bagID) do
 			local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
 			CooldownFrame_SetTimer(self.Bags[bagID][slotID].cooldown, start, duration, enable)
-			if ( duration > 0 and enable == 0 ) then
-				SetItemButtonTextureVertexColor(self.Bags[bagID][slotID], 0.4, 0.4, 0.4)
-			else
-				SetItemButtonTextureVertexColor(self.Bags[bagID][slotID], 1, 1, 1)
-			end
 		end
 	end
 end
