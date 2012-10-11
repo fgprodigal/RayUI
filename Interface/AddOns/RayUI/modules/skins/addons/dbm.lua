@@ -251,6 +251,7 @@ local function SkinDBM()
             self.styled = true
         end
         if S.db.dbmposition then
+            self:ClearAllPoints()
             self:Point("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -70)
         end
 	end)

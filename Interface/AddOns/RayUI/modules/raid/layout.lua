@@ -550,7 +550,8 @@ function RA:Raid40SmartVisibility(event)
 			self:SetAttribute("showRaid", true)
 			self:SetAttribute("showParty", RA.db.showgridwhenparty)
 		else
-			RegisterAttributeDriver(self, "state-visibility", "hide")
+			-- RegisterAttributeDriver(self, "state-visibility", "hide")
+			RegisterAttributeDriver(self, "state-visibility", "[@raid26,exists] show;hide")
 			self:SetAttribute("showRaid", false)
 			self:SetAttribute("showParty", false)
 		end

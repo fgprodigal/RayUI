@@ -28,7 +28,11 @@ local classList = {
 
     ["DEATHKNIGHT"] = {
         combat = GetSpellInfo(61999), -- Raise Ally
-    }
+	},
+
+	["MONK"] = {
+        ooc = GetSpellInfo(115178), -- Resuscitate
+    },
 }
 
 local body = ""

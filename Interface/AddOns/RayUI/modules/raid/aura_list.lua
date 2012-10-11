@@ -24,7 +24,7 @@ RA.auras = {
 
     -- Any Zone
     debuffs = {
-        [SpellName(6788)] = 16, -- Weakened Soul
+        [SpellName(15007)] = 16, -- Resurrection Sickness
         [SpellName(39171)] = 9, -- Mortal Strike
         [SpellName(76622)] = 9, -- Sunder Armor
     },
@@ -55,23 +55,6 @@ RA.auras = {
 			[SpellName(121949)] = 5, -- Parasitic Growth
 			-- Grand Empress Shek'zeer
         },
-        [886] = {
-            -- Terrace of Endless Spring
-			-- Protectors of the Endless
-			[SpellName(117436)] = 5, -- Lightning Prison
-			[SpellName(118091)] = 5, -- Defiled Ground
-			[SpellName(117519)] = 5, -- Touch of Sha
-			-- Tsulong
-			[SpellName(122752)] = 5, -- Shadow Breath
-			[SpellName(123011)] = 5, -- Terrorize
-			[SpellName(116161)] = 5, -- Crossed Over
-			-- Lei Shi
-			[SpellName(123121)] = 5, -- Spray
-			-- Sha of Fear
-			[SpellName(119985)] = 5, -- Dread Spray
-			[SpellName(119086)] = 5, -- Penetrating Bolt
-			[SpellName(119775)] = 5, -- Reaching Attack
-        },
         [896] = {
             -- Mogu'shan Vaults
             -- The Stone Guard
@@ -95,6 +78,23 @@ RA.auras = {
 			[SpellName(116835)] = 5, -- Devastating Arc
 			[SpellName(116778)] = 6, -- Focused Defense
 			[SpellName(116525)] = 6, -- Focused Assault
+        },
+		[886] = {
+            -- Terrace of Endless Spring
+			-- Protectors of the Endless
+			[SpellName(117436)] = 5, -- Lightning Prison
+			[SpellName(118091)] = 5, -- Defiled Ground
+			[SpellName(117519)] = 5, -- Touch of Sha
+			-- Tsulong
+			[SpellName(122752)] = 5, -- Shadow Breath
+			[SpellName(123011)] = 5, -- Terrorize
+			[SpellName(116161)] = 5, -- Crossed Over
+			-- Lei Shi
+			[SpellName(123121)] = 5, -- Spray
+			-- Sha of Fear
+			[SpellName(119985)] = 5, -- Dread Spray
+			[SpellName(119086)] = 5, -- Penetrating Bolt
+			[SpellName(119775)] = 5, -- Reaching Attack
         },
         [824] = {
             -- Dragon Soul
