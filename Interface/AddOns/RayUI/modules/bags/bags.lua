@@ -223,9 +223,11 @@ end
 
 function B:UpdateCooldowns()
 	for _, bagID in ipairs(self.BagIDs) do
-		for slotID = 1, GetContainerNumSlots(bagID) do
-			local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
-			CooldownFrame_SetTimer(self.Bags[bagID][slotID].cooldown, start, duration, enable)
+		if self.Bags[bagID] then
+			for slotID = 1, GetContainerNumSlots(bagID) do
+				local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
+				CooldownFrame_SetTimer(self.Bags[bagID][slotID].cooldown, start, duration, enable)
+			end
 		end
 	end
 end
@@ -840,7 +842,6 @@ function B:Initialize()
 	self:SecureHook("BackpackTokenFrame_Update", "UpdateTokens")
 	self:PositionBagFrames()
 	self:Layout()
-	R.Bags = self
 	self:DisableBlizzard()
 	self:RegisterEvent("INVENTORY_SEARCH_UPDATE")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
