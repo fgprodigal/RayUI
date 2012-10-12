@@ -315,45 +315,6 @@ function TT:INSPECT_READY(event, guid)
 	end
 end
 
-function TT:INSPECT_ACHIEVEMENT_READY()
-    self:UnregisterEvent("INSPECT_ACHIEVEMENT_READY")
-    if not self.line then return end
-    self.line:SetText()
-
-    if GameTooltip:GetUnit() == self.unit then
-        local stats, text = {}, ""
-
-        stats.TotalAchievemen = tonumber(GetComparisonAchievementPoints()) or 0
-            text = stats.TotalAchievemen
-
-        if text ~= "" then
-            self.line:SetText(text)
-        end
-    end
-
-    GameTooltip:Show()
-
-    if not UnitName("mouseover") then
-        GameTooltip:FadeOut()
-    end
-
-    ClearAchievementComparisonUnit()
-
-    if _G.GearScore then
-        _G.GearScore:RegisterEvent("INSPECT_ACHIEVEMENT_READY")
-    end
-
-    if Elite then
-        Elite:RegisterEvent("INSPECT_ACHIEVEMENT_READY")
-    end
-
-    if AchievementFrameComparison then
-        AchievementFrameComparison:RegisterEvent("INSPECT_ACHIEVEMENT_READY")
-    end
-
-    self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
-end
-
 function TT:MODIFIER_STATE_CHANGED()
     if arg1 == "LCTRL" or arg1 == "RCTRL" then
         if self.line and UnitName("mouseover") == self.unit then
@@ -390,47 +351,6 @@ function TT:PLAYER_ENTERING_WORLD(event)
 	end
 
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-end
-
-function TT:UPDATE_MOUSEOVER_UNIT(event, refresh)
-    if not refresh then
-        self.unit, self.line = nil, nil
-    end
-
-    if (UnitAffectingCombat("player")) or UnitIsDead("player") or not UnitExists("mouseover")
-    or not UnitIsPlayer("mouseover") or not UnitIsConnected("mouseover") or UnitIsDead("mouseover") then
-        return
-    end
-
-    self.unit = UnitName("mouseover")
-
-    local text = "...."
-
-    if refresh then
-        self.line:SetText(text)
-    else
-        GameTooltip:AddDoubleLine(ACHIEVEMENT_POINTS, text, nil, nil, nil, 1, 1, 1)
-        self.line = _G["GameTooltipTextRight" .. GameTooltip:NumLines()]
-    end
-
-    GameTooltip:Show()
-
-    if _G.GearScore then
-        _G.GearScore:UnregisterEvent("INSPECT_ACHIEVEMENT_READY")
-    end
-
-    if Elite then
-        Elite:UnregisterEvent("INSPECT_ACHIEVEMENT_READY")
-    end
-
-    if AchievementFrameComparison then
-        AchievementFrameComparison:UnregisterEvent("INSPECT_ACHIEVEMENT_READY")
-    end
-
-    self:UnregisterEvent("UPDATE_MOUSEOVER_UNIT")
-    self:RegisterEvent("INSPECT_ACHIEVEMENT_READY")
-
-    SetAchievementComparisonUnit("mouseover")
 end
 
 function TT:GetItemScore(iLink)
@@ -634,8 +554,6 @@ function TT:Initialize()
 	end)
 
 	self:RegisterEvent("MODIFIER_STATE_CHANGED")
-	self:RegisterEvent("INSPECT_ACHIEVEMENT_READY")
-	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 	SetCVar("alwaysCompareItems", 1)
