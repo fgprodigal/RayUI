@@ -428,6 +428,12 @@ local function LoadSkin()
 		end
 	end)
 
+	hooksecurefunc(GroupLootContainer, "SetPoint", function(self, point, anchorTo, attachPoint, xOffset, yOffset)
+		if _G[anchorTo] == UIParent then
+			AlertFrame_FixAnchors()
+		end
+	end)
+
 	SlashCmdList.TEST_ACHIEVEMENT = function()
 		PlaySound("LFG_Rewards")
 		AchievementFrame_LoadUI()

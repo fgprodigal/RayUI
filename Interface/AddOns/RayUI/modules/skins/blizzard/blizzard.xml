@@ -11,6 +11,7 @@
 	<Script file='bgscore.lua'/>
 	<Script file='binding.lua'/>
 	<Script file='blackmarket.lua'/>
+	<Script file='bonusroll.lua'/>
 	<Script file='calendar.lua'/>
 	<Script file='challenges.lua'/>
 	<Script file='character.lua'/>
