@@ -37,11 +37,11 @@ local CreateAuraIcon = function(auras)
     local border = CreateFrame("Frame", nil, button)
     border:SetPoint("TOPLEFT", button, "TOPLEFT", -5, 5)
     border:SetPoint("TOPLEFT", button, "TOPLEFT", -5, 5)
-    border:SetOutside(button)
+    border:SetOutside(button, 3, 3)
     border:SetBackdrop({
 		edgeFile = R["media"].glow,
-		edgeSize = R:Scale(3),
-		insets = {left = R:Scale(3), right = R:Scale(3), top = R:Scale(3), bottom = R:Scale(3)},
+		edgeSize = R:Scale(4),
+		insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
 	})
     border:SetBackdropBorderColor(0,0,0,1)
     button.border = border

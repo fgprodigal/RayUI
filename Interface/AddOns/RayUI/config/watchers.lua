@@ -1214,62 +1214,9 @@ R["Watcher"] = {
                 size = 41,
 
                 --飾品
-                --伊格納修斯之心
-                { spellID = 91027, unitId = "player", caster = "player", filter = "BUFF" },
-                --伊格納修斯之心 (H)
-                { spellID = 91041, unitId = "player", caster = "player", filter = "BUFF" },
-                --暗月卡：火山
-                { spellID = 89091, unitId = "player", caster = "player", filter = "BUFF" },
-                --暗月卡：地震
-                { spellID = 89181, unitId = "player", caster = "player", filter = "BUFF" },
-                --狂怒共鸣之铃(H)
-                { spellID = 91007, unitId = "player", caster = "player", filter = "BUFF" },
-                --瑟拉里恩之鏡
-                { spellID = 91024, unitId = "player", caster = "player", filter = "BUFF" },
-                --绝境当头
-                { spellID = 96907, unitId = "player", caster = "player", filter = "BUFF" },
-                --恶魔领主之赐
-                { spellID = 102662, unitId = "player", caster = "player", filter = "BUFF" },
-                --腐败心灵徽记(普通模式)
-                { spellID = 107982, unitId = "player", caster = "player", filter = "BUFF" },
-                --腐敗心靈徽記(H)
-                { spellID = 109789, unitId = "player", caster = "player", filter = "BUFF" },
-                --死灵法术集核(H)
-                { spellID = 97131, unitId = "player", caster = "player", filter = "BUFF" },
-                --死灵法术集核
-                { spellID = 96962, unitId = "player", caster = "player", filter = "BUFF" },
-                --魂棺
-                { spellID = 91019, unitId = "player", caster = "player", filter = "BUFF" },
-                --秘银码表
-                { spellID = 101291, unitId = "player", caster = "player", filter = "BUFF" },
-                --瓦罗森的胸针
-                { spellID = 102664, unitId = "player", caster = "player", filter = "BUFF" },
-                --圣光念珠
-                { spellID = 102660, unitId = "player", caster = "player", filter = "BUFF" },
-                --時間之箭
-                { spellID = 102659, unitId = "player", caster = "player", filter = "BUFF" },
-                --七徵聖印
-                { spellID = 109802, unitId = "player", caster = "player", filter = "BUFF" },
-                --飢餓者
-                { spellID = 96911, unitId = "player", caster = "player", filter = "BUFF" },
-                --淨縛之意志(隨機團隊)
-                { spellID = 109793, unitId = "player", caster = "player", filter = "BUFF" },
-                --淨縛之意志(普通模式)
-                { spellID = 107970, unitId = "player", caster = "player", filter = "BUFF" },
-                --淨縛之意志(H模式)
-                { spellID = 109795, unitId = "player", caster = "player", filter = "BUFF" },
-                --加速之瓶(普通模式)
-                { spellID = 96980, unitId = "player", caster = "player", filter = "BUFF" },
-                --謊言面紗
-                { spellID = 102667, unitId = "player", caster = "player", filter = "BUFF" },
-                --永恆之火精華
-                { spellID = 97010, unitId = "player", caster = "player", filter = "BUFF" },
-                --擒星羅盤(隨機團隊)
-                { spellID = 109709, unitId = "player", caster = "player", filter = "BUFF" },
-                --壞滅之眼(普通模式)
-                { spellID = 107966, unitId = "player", caster = "player", filter = "BUFF" },
-                --矩陣(H)
-                { spellID = 97140, unitId = "player", caster = "player", filter = "BUFF" },
+                --天神賜福
+                { spellID = 128984, unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 128985, unitId = "player", caster = "player", filter = "BUFF" },
 
                 --工程
                 --神經突觸彈簧(敏捷)
