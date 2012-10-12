@@ -18,7 +18,7 @@ function B:GetOptions()
 			type = "range",
 			name = L["银行格大小"],
 			min = 15, max = 45, step = 1,
-			set = function(info, value) R.db.bags[ info[#info] ] = value B:Layout(true) end,
+			set = function(info, value) R.db.Bags[ info[#info] ] = value B:Layout(true) end,
 		},				
 		sortInverted = {
 			order = 7,
