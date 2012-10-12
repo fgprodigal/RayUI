@@ -448,7 +448,7 @@ function TT:SetStyle(tooltip)
         return tooltip:Hide()
     end
 	if not tooltip.styled then
-		tooltip:SetBackdrop( { 
+		tooltip:SetBackdrop({
 			edgeFile = R["media"].glow,
 			bgFile = R["media"].blank,
 			edgeSize = R:Scale(4),
@@ -577,7 +577,6 @@ function TT:Initialize()
 	GameTooltipStatusBar.bg:Point("BOTTOMRIGHT", GameTooltipStatusBar, "BOTTOMRIGHT", 4, -4)
 	GameTooltipStatusBar.bg:SetFrameStrata(GameTooltipStatusBar:GetFrameStrata())
 	GameTooltipStatusBar.bg:SetFrameLevel(GameTooltipStatusBar:GetFrameLevel() - 1)
-	GameTooltipStatusBar.bg:SetBackdrop(backdrop)
 	GameTooltipStatusBar.bg:SetBackdrop( { 
 		edgeFile = R["media"].glow,
 		bgFile = R["media"].blank,

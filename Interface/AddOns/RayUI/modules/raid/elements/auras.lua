@@ -3,12 +3,6 @@ local RA = R:GetModule("Raid")
 
 local oUF = RayUF or oUF
 
-local glowBorder = {
-    bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
-    edgeFile = [=[Interface\AddOns\RayUI\media\glowTex.tga]=], edgeSize = 5,
-    insets = {left = 3, right = 3, top = 3, bottom = 3}
-}
-
 local GetTime = GetTime
 local floor, fmod = floor, math.fmod
 local day, hour, minute = 86400, 3600, 60
@@ -42,10 +36,13 @@ local CreateAuraIcon = function(auras)
 
     local border = CreateFrame("Frame", nil, button)
     border:SetPoint("TOPLEFT", button, "TOPLEFT", -5, 5)
-    border:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 5, -5)
-    border:SetFrameLevel(4)
-    border:SetBackdrop(glowBorder)
-    border:SetBackdropColor(0,0,0,1)
+    border:SetPoint("TOPLEFT", button, "TOPLEFT", -5, 5)
+    border:SetOutside(button)
+    border:SetBackdrop({
+		edgeFile = R["media"].glow,
+		edgeSize = R:Scale(3),
+		insets = {left = R:Scale(3), right = R:Scale(3), top = R:Scale(3), bottom = R:Scale(3)},
+	})
     border:SetBackdropBorderColor(0,0,0,1)
     button.border = border
 
