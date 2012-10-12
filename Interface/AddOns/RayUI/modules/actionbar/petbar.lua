@@ -16,7 +16,6 @@ function AB:CreateBarPet()
 
 	PetActionBarFrame:SetParent(bar)
 	PetActionBarFrame:EnableMouse(false)
-	RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui] hide; [@pet,exists,nodead] show; hide")
 
 	local function PetBarUpdate(self, event)
 		local petActionButton, petActionIcon, petAutoCastableTexture, petAutoCastShine
@@ -102,7 +101,7 @@ function AB:CreateBarPet()
 			-- bug reported by Affli on t12 BETA
 			PetActionBarFrame.showgrid = 1 -- hack to never hide pet button. :X
 
-			RegisterStateDriver(self, "visibility", "[pet,novehicleui,nobonusbar:5] show; hide")
+			RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui] hide; [pet] show; hide")
 			hooksecurefunc("PetActionBar_Update", PetBarUpdate)
 		elseif event == "PET_BAR_UPDATE" or event == "UNIT_PET" and arg1 == "player" 
 		or event == "PLAYER_CONTROL_LOST" or event == "PLAYER_CONTROL_GAINED" or event == "PLAYER_FARSIGHT_FOCUS_CHANGED" or event == "UNIT_FLAGS"
