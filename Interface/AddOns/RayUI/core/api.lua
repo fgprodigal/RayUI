@@ -4,60 +4,6 @@
 local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
 local LSM = LibStub("LibSharedMedia-3.0")
 
-R.resolution = GetCVar("gxResolution")
-R.screenheight = tonumber(string.match(R.resolution, "%d+x(%d+)"))
-R.screenwidth = tonumber(string.match(R.resolution, "(%d+)x+%d"))
-
-R.mult = 1
-function R:UIScale()
-	R.lowversion = false
-
-	if R.screenwidth < 1600 then
-			R.lowversion = true
-	elseif R.screenwidth >= 3840 or (UIParent:GetWidth() + 1 > R.screenwidth) then
-		local width = R.screenwidth
-		local height = R.screenheight
-
-		-- because some user enable bezel compensation, we need to find the real width of a single monitor.
-		-- I don"t know how it really work, but i"m assuming they add pixel to width to compensate the bezel. :P
-
-		-- HQ resolution
-		if width >= 9840 then width = 3280 end                   	                -- WQSXGA
-		if width >= 7680 and width < 9840 then width = 2560 end                     -- WQXGA
-		if width >= 5760 and width < 7680 then width = 1920 end 	                -- WUXGA & HDTV
-		if width >= 5040 and width < 5760 then width = 1680 end 	                -- WSXGA+
-
-		-- adding height condition here to be sure it work with bezel compensation because WSXGA+ and UXGA/HD+ got approx same width
-		if width >= 4800 and width < 5760 and height == 900 then width = 1600 end   -- UXGA & HD+
-
-		-- low resolution screen
-		if width >= 4320 and width < 4800 then width = 1440 end 	                -- WSXGA
-		if width >= 4080 and width < 4320 then width = 1360 end 	                -- WXGA
-		if width >= 3840 and width < 4080 then width = 1224 end 	                -- SXGA & SXGA (UVGA) & WXGA & HDTV
-
-		if width < 1600 then
-			R.lowversion = true
-		end
-
-		-- register a constant, we will need it later for launch.lua
-		R.eyefinity = width
-	end
-
-	if R.lowversion == true then
-		R.ResScale = 0.9
-	else
-		R.ResScale = 1
-	end
-
-	self.mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/self.db.general.uiscale
-end
-
-function R:Scale(x)
-	return (self.mult*math.floor(x/self.mult+.5))
-end
-
-R.dummy= function() return end
-
 local function Size(frame, width, height)
 	frame:SetSize(R:Scale(width), R:Scale(height or width))
 end
@@ -293,9 +239,6 @@ local function FontTemplate(fs, font, fontSize, fontStyle)
 	R["texts"][fs] = true
 end
 
-R.HiddenFrame = CreateFrame("Frame")
-R.HiddenFrame:Hide()
-
 local function Kill(object)
 	if object.UnregisterAllEvents then
 		object:UnregisterAllEvents()
@@ -403,15 +346,4 @@ while object do
 	end
 
 	object = EnumerateFrames(object)
-end
-
-R.Developer = { "夏琉君", "Theron", "Divineseraph", "父王", "夏翎", }
-
-function R:IsDeveloper()
-	for _, name in pairs(R.Developer) do
-		if name == R.myname then
-			return true
-		end
-	end
-	return false
 end

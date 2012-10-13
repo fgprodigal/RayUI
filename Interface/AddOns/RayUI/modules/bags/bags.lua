@@ -175,7 +175,7 @@ function B:UpdateSlot(bagID, slotID)
 		else
 			SetItemButtonTextureVertexColor(slot, 1, 1, 1)
 		end
-		local isQuestItem, questId, isActiveQuest = GetContainerItemQuestInfo(bagID, slotID)
+		local isQuestItem, questId, isActive = GetContainerItemQuestInfo(bagID, slotID)
 		-- color slot according to item quality
 		if questId and not isActive then
 			slot.iconTexture:SetInside()
@@ -471,7 +471,7 @@ function B:OnEvent(event, ...)
 		self:UpdateBagSlots(...)
 	elseif event == "BAG_UPDATE_COOLDOWN" then
 		self:UpdateCooldowns()
-	elseif event == "PLAYERBANKSLOTS_CHANGED" then
+	elseif event == "PLAYERBANKSLOTS_CHANGED" or event == "QUEST_ACCEPTED" or event == "UNIT_QUEST_LOG_CHANGED" then
 		self:UpdateAllSlots()
 	end
 end
@@ -545,6 +545,8 @@ function B:ContructContainerFrame(name, isBank)
 	f:RegisterEvent("ITEM_UNLOCKED")
 	f:RegisterEvent("BAG_UPDATE_COOLDOWN")
 	f:RegisterEvent("BAG_UPDATE")
+	f:RegisterEvent("QUEST_ACCEPTED")
+	f:RegisterUnitEvent("UNIT_QUEST_LOG_CHANGED", "player")
 	f:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
 	f:SetMovable(true)
 	f:RegisterForDrag("LeftButton", "RightButton")

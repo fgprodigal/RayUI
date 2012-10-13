@@ -21,6 +21,7 @@ end
 
 local CreateAuraIcon = function(auras)
     local button = CreateFrame("Button", nil, auras)
+    button:SetFrameLevel(9)
     button:EnableMouse(false)
     button:SetPoint("BOTTOMLEFT", auras, "BOTTOMLEFT")
     button:SetSize(auras.size, auras.size)
@@ -35,14 +36,15 @@ local CreateAuraIcon = function(auras)
     count:SetPoint("LEFT", button, "BOTTOM", 3, 2)
 
     local border = CreateFrame("Frame", nil, button)
-    border:SetPoint("TOPLEFT", button, "TOPLEFT", -5, 5)
-    border:SetPoint("TOPLEFT", button, "TOPLEFT", -5, 5)
-    border:SetOutside(button, 3, 3)
+    border:SetFrameLevel(8)
+    border:SetOutside(button, 5, 5)
     border:SetBackdrop({
 		edgeFile = R["media"].glow,
+        bgFile = R["media"].normal,
 		edgeSize = R:Scale(4),
-		insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
+		insets = {left = R:Scale(3), right = R:Scale(3), top = R:Scale(3), bottom = R:Scale(3)},
 	})
+    border:SetBackdropColor(0,0,0,1)
     border:SetBackdropBorderColor(0,0,0,1)
     button.border = border
 

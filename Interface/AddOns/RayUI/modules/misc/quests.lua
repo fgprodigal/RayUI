@@ -270,6 +270,14 @@ local function LoadFunc()
         end
     end)
 
+    Monomyth:Register("MERCHANT_SHOW", function()
+        atMerchant = true
+    end)
+
+    Monomyth:Register("MERCHANT_CLOSED", function()
+        atMerchant = false
+    end)
+
     Monomyth:Register("BANKFRAME_OPENED", function()
         atBank = true
     end)
@@ -295,7 +303,7 @@ local function LoadFunc()
     end)
 
     Monomyth:Register("BAG_UPDATE", function(bag)
-        if(atBank or atMail) then return end
+        if(atBank or atMail or atMerchant) then return end
 
         for slot = 1, GetContainerNumSlots(bag) do
             local __, id, active = GetContainerItemQuestInfo(bag, slot)

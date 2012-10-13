@@ -2,6 +2,7 @@ local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
 local M = R:GetModule("Misc")
 
 local function LoadFunc()
+    local testMode = false
 	local pos = "TOP"
 
 	local function ClickRoll(frame)
@@ -191,7 +192,7 @@ local function LoadFunc()
 	end
 
 	local anchor = CreateFrame("Button", nil, UIParent)
-	anchor:Width(300) 
+	anchor:Width(328) 
 	anchor:Height(22)
 	anchor:SetBackdropColor(0.25, 0.25, 0.25, 1)
 	local label = anchor:CreateFontString(nil, "ARTWORK")
@@ -211,24 +212,24 @@ local function LoadFunc()
 	anchor:RegisterForClicks("RightButtonUp")
 	anchor:Hide()
 
-	local rollbars = {}
+	rollBars = {}
 
 	local f = CreateRollFrame() -- Create one for good measure
-	f:SetPoint("TOPLEFT", next(rollbars) and rollbars[#rollbars] or anchor, "BOTTOMLEFT", 0, R:Scale(-4))
-	table.insert(rollbars, f)
+	f:Point("TOPLEFT", next(rollBars) and rollBars[#rollBars] or anchor, "BOTTOMLEFT", 0, -4)
+	table.insert(rollBars, f)
 
 	local function GetFrame()
-		for i,f in ipairs(rollbars) do
+		for i,f in ipairs(rollBars) do
 			if not f.rollid then return f end
 		end
 
 		local f = CreateRollFrame()
 		if pos == "TOP" then
-			f:SetPoint("TOPLEFT", next(rollbars) and rollbars[#rollbars] or anchor, "BOTTOMLEFT", 0, R:Scale(-4))
+			f:SetPoint("TOPLEFT", next(rollBars) and rollBars[#rollBars] or anchor, "BOTTOMLEFT", 0, R:Scale(-4))
 		else
-			f:SetPoint("BOTTOMLEFT", next(rollbars) and rollbars[#rollbars] or anchor, "TOPLEFT", 0, R:Scale(4))
+			f:SetPoint("BOTTOMLEFT", next(rollBars) and rollBars[#rollBars] or anchor, "TOPLEFT", 0, R:Scale(4))
 		end
-		table.insert(rollbars, f)
+		table.insert(rollBars, f)
 		return f
 	end
 
@@ -282,7 +283,7 @@ local function LoadFunc()
 		local name, class, rollType, roll, isWinner = C_LootHistory.GetPlayerInfo(itemIdx, playerIdx);
 
 		if name and rollType then
-			for _,f in ipairs(rollbars) do
+			for _,f in ipairs(rollBars) do
 				if f.rollid == rollID then
 					f.rolls[name] = rollType
 					f[rolltypes[rollType]]:SetText(tonumber(f[rolltypes[rollType]]:GetText()) + 1)
@@ -316,16 +317,30 @@ local function LoadFunc()
 	end)
 
 	SlashCmdList["LFrames"] = function() 
-		local f = GetFrame()
-		local texture = select(10, GetItemInfo(32837))
-		f.button:SetNormalTexture(texture)
-		f.button:GetNormalTexture():SetTexCoord(.1, .9, .1, .9)
-		f.fsloot:SetVertexColor(ITEM_QUALITY_COLORS[5].r, ITEM_QUALITY_COLORS[5].g, ITEM_QUALITY_COLORS[5].b)
-		f.fsloot:SetText(GetItemInfo(32837))
-		f.status:SetMinMaxValues(0, 100)
-		f.status:SetValue(70)
-		f.status:SetStatusBarColor(ITEM_QUALITY_COLORS[5].r, ITEM_QUALITY_COLORS[5].g, ITEM_QUALITY_COLORS[5].b)
-		f:Show()
+        local items = { 32837, 19019, 77949, 34196 }
+        for _, f in pairs(rollBars) do
+            f.rollid = nil
+            f:Hide()
+        end
+        if testMode then
+            testMode = false
+        else
+            testMode = true
+            for i = 1, 3 do
+                local f = GetFrame()
+                local item = items[math.random(1,#items)]
+                local quality, _, _, _, _, _, _, texture = select(3, GetItemInfo(item))
+                local r, g, b = GetItemQualityColor(quality)
+                f.button:SetNormalTexture(texture)
+                f.button:GetNormalTexture():SetTexCoord(.1, .9, .1, .9)
+                f.fsloot:SetVertexColor(r, g, b)
+                f.fsloot:SetText(GetItemInfo(item))
+                f.status:SetStatusBarColor(r, g, b)
+                f.rollid = i
+                f.time = 100000000
+                f:Show()
+            end
+        end
 	end
 	SLASH_LFrames1 = "/lframes"
 end

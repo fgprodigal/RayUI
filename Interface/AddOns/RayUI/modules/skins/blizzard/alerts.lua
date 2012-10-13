@@ -61,14 +61,18 @@ local function LoadSkin()
 					
 
 					if not frame.dungeonTexture.b then
-						frame.dungeonTexture.b = S:CreateBG(frame.dungeonTexture)
+                        frame.dungeonTexture.b = CreateFrame("Frame", nil, frame)
+                        frame.dungeonTexture.b:SetOutside(frame.dungeonTexture, 1, 1)
+                        S:CreateBD(frame.dungeonTexture.b, 0)
 					end
 
                     frame:HookScript("OnEnter", function()
+                        S:CreateBD(frame.dungeonTexture.b, 0)
                         S:CreateBD(frame.bg)
                     end)
 
                     frame.animIn:HookScript("OnFinished", function()
+                        S:CreateBD(frame.dungeonTexture.b, 0)
                         S:CreateBD(frame.bg)
                     end)
                 end
@@ -101,11 +105,6 @@ local function LoadSkin()
 				frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", -2, -6)
 				frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 6)
 				frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
-
-				-- Icon border
-				if not GuildChallengeAlertFrameEmblemIcon.b then
-					GuildChallengeAlertFrameEmblemIcon.b = S:CreateBG(GuildChallengeAlertFrameEmblemIcon)
-				end
 
 				frame:HookScript("OnEnter", function()
 					S:CreateBD(frame.bg)
@@ -191,8 +190,7 @@ local function LoadSkin()
 				-- Icon border
 				if not ScenarioAlertFrame1DungeonTexture.b then
 					ScenarioAlertFrame1DungeonTexture.b = CreateFrame("Frame", nil, frame)
-					ScenarioAlertFrame1DungeonTexture.b:Point("TOPLEFT", ScenarioAlertFrame1DungeonTexture, "TOPLEFT", -1, 1)
-					ScenarioAlertFrame1DungeonTexture.b:Point("BOTTOMRIGHT", ScenarioAlertFrame1DungeonTexture, "BOTTOMRIGHT", 1, -1)
+					ScenarioAlertFrame1DungeonTexture.b:SetOutside(ScenarioAlertFrame1DungeonTexture, 1, 1)
 					S:CreateBD(ScenarioAlertFrame1DungeonTexture.b, 0)
 				end
 
@@ -237,15 +235,19 @@ local function LoadSkin()
 
 					-- Icon border
 					if not _G["CriteriaAlertFrame"..i.."IconTexture"].b then
-						_G["CriteriaAlertFrame"..i.."IconTexture"].b = S:CreateBG(_G["CriteriaAlertFrame"..i.."IconTexture"])
+                        _G["CriteriaAlertFrame"..i.."IconTexture"].b = CreateFrame("Frame", nil, frame)
+                        _G["CriteriaAlertFrame"..i.."IconTexture"].b:SetOutside(_G["CriteriaAlertFrame"..i.."IconTexture"], 1, 1)
+                        S:CreateBD(_G["CriteriaAlertFrame"..i.."IconTexture"].b, 0)
 					end
 					_G["CriteriaAlertFrame"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
 
 					 frame:HookScript("OnEnter", function()
+                        S:CreateBD(_G["CriteriaAlertFrame"..i.."IconTexture"].b, 0)
                         S:CreateBD(frame.bg)
                     end)
 
                     frame.animIn:HookScript("OnFinished", function()
+                        S:CreateBD(_G["CriteriaAlertFrame"..i.."IconTexture"].b, 0)
                         S:CreateBD(frame.bg)
                     end)
 				end
@@ -333,9 +335,40 @@ local function LoadSkin()
 			ANCHOR_POINT = "TOP"
 			YOFFSET = 10
 		end
+        if type(rollBars) == "table" then
+            local lastframe, lastShownFrame
+            for i, frame in pairs(rollBars) do
+                frame:ClearAllPoints()
+                if i ~= 1 then
+                    if POSITION == "TOP" then
+                        frame:Point("TOP", lastframe, "BOTTOM", 0, -4)
+                    else
+                        frame:Point("BOTTOM", lastframe, "TOP", 0, 4)
+                    end 
+                else
+                    if POSITION == "TOP" then
+                        frame:Point("TOP", AlertFrameHolder, "BOTTOM", 0, -4)
+                    else
+                        frame:Point("BOTTOM", AlertFrameHolder, "TOP", 0, 4)
+                    end
+                end
+                lastframe = frame
 
-		AlertFrame:ClearAllPoints()
-		AlertFrame:SetAllPoints(AlertFrameHolder)
+                if frame:IsShown() then
+                    lastShownFrame = frame
+                end
+            end
+
+            AlertFrame:ClearAllPoints()
+            if lastShownFrame then
+                AlertFrame:SetAllPoints(lastShownFrame)         
+            else
+                AlertFrame:SetAllPoints(AlertFrameHolder)                   
+            end
+        else
+            AlertFrame:ClearAllPoints()
+            AlertFrame:SetAllPoints(AlertFrameHolder)
+        end	
 
 		GroupLootContainer:ClearAllPoints()
 		GroupLootContainer:SetPoint(POSITION, AlertFrame, ANCHOR_POINT)

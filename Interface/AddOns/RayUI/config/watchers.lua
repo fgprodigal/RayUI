@@ -40,6 +40,8 @@ R["Watcher"] = {
                 { spellID = 774, unitId = "target", caster = "player", filter = "BUFF" },
                 --癒合
                 { spellID = 8936, unitId = "target", caster = "player", filter = "BUFF" },
+                --精靈群襲
+                { spellID = 102355, unitId = "target", caster = "all", filter = "DEBUFF" },
             },
             {
                 name = "玩家重要buff&debuff",
@@ -1100,6 +1102,13 @@ R["Watcher"] = {
 				{ spellID = 128939, unitId = "player", caster = "player", filter = "BUFF" },
 				--虎眼絕釀
 				{ spellID = 125195, unitId = "player", caster = "player", filter = "BUFF" },
+                --回生迷霧
+                { spellID = 119607, unitId = "player", caster = "player", filter = "BUFF" },  
+                { spellID = 119611, unitId = "player", caster = "player", filter = "BUFF" },
+                --迷霧繚繞
+                { spellID = 132120, unitId = "player", caster = "player", filter = "BUFF" },
+                --舒和之霧
+                { spellID = 115175, unitId = "player", caster = "player", filter = "BUFF" },
 			},
             {
                 name = "目标buff&debuff",
@@ -1229,16 +1238,12 @@ R["Watcher"] = {
                 { spellID = 82176, unitId = "player", caster = "player", filter = "BUFF" },
 
                 --武器附魔
-                --心之歌
-                { spellID = 74224, unitId = "player", caster = "player", filter = "BUFF" },
-                --颶風
-                { spellID = 74221, unitId = "player", caster = "player", filter = "BUFF" },
-                --能量洪流
-                { spellID = 74241, unitId = "player", caster = "player", filter = "BUFF" },
-                --轻盈步伐
-                { spellID = 74243, unitId = "player", caster = "player", filter = "BUFF" },
-                --泰坦克，時之步履(隨機團隊)
-                { spellID = 109842, unitId = "player", caster = "player", filter = "BUFF" },
+                --生命精華
+                { spellID = 127915, unitId = "player", caster = "player", filter = "BUFF" },
+                --風歌
+                { spellID = 104509, unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 104510, unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 104423, unitId = "player", caster = "player", filter = "BUFF" },
 
                 --藥水
                 --土靈護甲
@@ -1271,6 +1276,8 @@ R["Watcher"] = {
                 { spellID = 33206, unitId = "player", caster = "all", filter = "BUFF" },
                 --血族之裔
                 { spellID = 105588, unitId = "player", caster = "all", filter = "BUFF" },
+                --吸血鬼的拥抱
+                { spellID = 15286, unitId = "player", caster = "all", filter = "BUFF" },
 
                 --種族天賦
                 --血之烈怒

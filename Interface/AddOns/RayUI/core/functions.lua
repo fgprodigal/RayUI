@@ -4,10 +4,68 @@ local LSM = LibStub("LibSharedMedia-3.0")
 SlashCmdList["RELOAD"] = function() ReloadUI() end
 SLASH_RELOAD1 = "/rl"
 
+R["RegisteredModules"] = {}
+R.resolution = GetCVar("gxResolution")
+R.screenheight = tonumber(string.match(R.resolution, "%d+x(%d+)"))
+R.screenwidth = tonumber(string.match(R.resolution, "(%d+)x+%d"))
+R.mult = 1
+
+R.HiddenFrame = CreateFrame("Frame")
+R.HiddenFrame:Hide()
+
 local AddonNotSupported = {}
 local BlackList = {"bigfoot", "duowan", "163ui", "neavo", "sora"}
 
-R["RegisteredModules"] = {}
+function R.dummy()
+    return
+end
+
+function R:UIScale()
+	R.lowversion = false
+
+	if R.screenwidth < 1600 then
+			R.lowversion = true
+	elseif R.screenwidth >= 3840 or (UIParent:GetWidth() + 1 > R.screenwidth) then
+		local width = R.screenwidth
+		local height = R.screenheight
+
+		-- because some user enable bezel compensation, we need to find the real width of a single monitor.
+		-- I don"t know how it really work, but i"m assuming they add pixel to width to compensate the bezel. :P
+
+		-- HQ resolution
+		if width >= 9840 then width = 3280 end                   	                -- WQSXGA
+		if width >= 7680 and width < 9840 then width = 2560 end                     -- WQXGA
+		if width >= 5760 and width < 7680 then width = 1920 end 	                -- WUXGA & HDTV
+		if width >= 5040 and width < 5760 then width = 1680 end 	                -- WSXGA+
+
+		-- adding height condition here to be sure it work with bezel compensation because WSXGA+ and UXGA/HD+ got approx same width
+		if width >= 4800 and width < 5760 and height == 900 then width = 1600 end   -- UXGA & HD+
+
+		-- low resolution screen
+		if width >= 4320 and width < 4800 then width = 1440 end 	                -- WSXGA
+		if width >= 4080 and width < 4320 then width = 1360 end 	                -- WXGA
+		if width >= 3840 and width < 4080 then width = 1224 end 	                -- SXGA & SXGA (UVGA) & WXGA & HDTV
+
+		if width < 1600 then
+			R.lowversion = true
+		end
+
+		-- register a constant, we will need it later for launch.lua
+		R.eyefinity = width
+	end
+
+	if R.lowversion == true then
+		R.ResScale = 0.9
+	else
+		R.ResScale = 1
+	end
+
+	self.mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/self.db.general.uiscale
+end
+
+function R:Scale(x)
+	return (self.mult*math.floor(x/self.mult+.5))
+end
 
 function DoSkill(name)
 	for i=1,GetNumTradeSkills()do
@@ -177,6 +235,14 @@ local roles = {
 	},
 }
 
+local healingClasses = {
+    PALADIN = 1,
+    SHAMAN = 3,
+    DRUID = 4,
+    MONK = 2,
+    PRIEST = {1, 2}
+}
+
 function R:CheckRole()
 	local talentTree = GetSpecialization()
 	local IsInPvPGear = false;
@@ -187,10 +253,10 @@ function R:CheckRole()
 	
 	self.Role = nil;
 	
-	if type(roles[R.myclass]) == "string" then
-		self.Role = roles[R.myclass]
+	if type(roles[self.myclass]) == "string" then
+		self.Role = roles[self.myclass]
 	elseif talentTree then
-		self.Role = roles[R.myclass][talentTree]
+		self.Role = roles[self.myclass][talentTree]
 	end
 	
 	if self.Role == "Tank" and IsInPvPGear then
@@ -209,6 +275,24 @@ function R:CheckRole()
 			self.Role = "Caster";
 		end		
 	end
+
+    if healingClasses[self.myclass] then
+        local tree = healingClasses[self.myclass]
+        if type(tree) == "number" then
+            if talentTree == tree then
+                self.isHealer = true
+                return
+            end
+        elseif type(tree) == "table" then
+            for _, index in pairs(tree) do
+                if index == talentTree then
+                    self.isHealer = true
+                    return
+                end     
+            end
+        end
+    end
+    self.isHealer = false
 end
 
 local tmp={}
@@ -474,4 +558,15 @@ function R:UpdateMedia()
 	self["media"].errorsound = LSM:Fetch("sound", self.db["media"].errorsound)
 
 	self:UpdateBlizzardFonts()
+end
+
+R.Developer = { "夏琉君", "Theron", "Divineseraph", "水月君", "夏翎", }
+
+function R:IsDeveloper()
+	for _, name in pairs(R.Developer) do
+		if name == R.myname then
+			return true
+		end
+	end
+	return false
 end
