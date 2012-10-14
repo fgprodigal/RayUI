@@ -902,7 +902,7 @@ end
 function NP:Initialize()
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
-	if NP.db.combat then
+	if self.db.combat then
 		self:RegisterEvent("PLAYER_REGEN_ENABLED")
 		self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	end

@@ -169,19 +169,19 @@ function UF:DPSLayout(frame, unit)
 		end
 
 		-- CastBar
-		local castbar = self:ConstructCastBar(frame)
-		castbar:ClearAllPoints()
-		castbar:Point("BOTTOM",UIParent,"BOTTOM",0,305)
-		castbar:Width(350)
-		castbar:Height(5)
-		castbar.Text:ClearAllPoints()
-		castbar.Text:SetPoint("BOTTOMLEFT", castbar, "TOPLEFT", 5, -2)
-		castbar.Time:ClearAllPoints()
-		castbar.Time:SetPoint("BOTTOMRIGHT", castbar, "TOPRIGHT", -5, -2)
-		castbar.Icon:Hide()
-		castbar.Iconbg:Hide()
-		R:CreateMover(castbar, "PlayerCastBarMover", L["施法条锚点"], true)
-		frame.Castbar = castbar
+        local castbar = self:ConstructCastBar(frame)
+        castbar:ClearAllPoints()
+        castbar:Point("BOTTOM",UIParent,"BOTTOM",0,305)
+        castbar:Width(350)
+        castbar:Height(5)
+        castbar.Text:ClearAllPoints()
+        castbar.Text:SetPoint("BOTTOMLEFT", castbar, "TOPLEFT", 5, -2)
+        castbar.Time:ClearAllPoints()
+        castbar.Time:SetPoint("BOTTOMRIGHT", castbar, "TOPRIGHT", -5, -2)
+        castbar.Icon:Hide()
+        castbar.Iconbg:Hide()
+        R:CreateMover(castbar, "PlayerCastBarMover", L["施法条锚点"], true)
+        frame.Castbar = castbar
 
 		-- Debuffs
 		local debuffs = CreateFrame("Frame", nil, frame)

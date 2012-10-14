@@ -1237,13 +1237,10 @@ R["Watcher"] = {
                 --迅轉偏斜甲
                 { spellID = 82176, unitId = "player", caster = "player", filter = "BUFF" },
 
-                --武器附魔
                 --生命精華
                 { spellID = 127915, unitId = "player", caster = "player", filter = "BUFF" },
-                --風歌
-                { spellID = 104509, unitId = "player", caster = "player", filter = "BUFF" },
-                { spellID = 104510, unitId = "player", caster = "player", filter = "BUFF" },
-                { spellID = 104423, unitId = "player", caster = "player", filter = "BUFF" },
+
+                --武器附魔
 
                 --藥水
                 --土靈護甲

@@ -54,6 +54,23 @@ local function LoadSkin()
 
 	ItemTextPageText:SetTextColor(1, 1, 1)
 	ItemTextPageText.SetTextColor = R.dummy
+
+    NPCFriendshipStatusBar:GetRegions():Hide()
+    NPCFriendshipStatusBarNotch1:SetTexture(0, 0, 0)
+    NPCFriendshipStatusBarNotch1:Size(1, 16)
+    NPCFriendshipStatusBarNotch2:SetTexture(0, 0, 0)
+    NPCFriendshipStatusBarNotch2:Size(1, 16)
+    NPCFriendshipStatusBarNotch3:SetTexture(0, 0, 0)
+    NPCFriendshipStatusBarNotch3:Size(1, 16)
+    NPCFriendshipStatusBarNotch4:SetTexture(0, 0, 0)
+    NPCFriendshipStatusBarNotch4:Size(1, 16)
+    select(7, NPCFriendshipStatusBar:GetRegions()):Hide()
+
+    NPCFriendshipStatusBar.icon:SetPoint("TOPLEFT", -30, 7)
+    NPCFriendshipStatusBar.bd = CreateFrame("Frame", nil, NPCFriendshipStatusBar)
+    NPCFriendshipStatusBar.bd:SetOutside(nil, 1, 1)
+    NPCFriendshipStatusBar.bd:SetFrameLevel(NPCFriendshipStatusBar:GetFrameLevel() - 1)
+    S:CreateBD(NPCFriendshipStatusBar.bd, .25)
 end
 
 S:RegisterSkin("RayUI", LoadSkin)

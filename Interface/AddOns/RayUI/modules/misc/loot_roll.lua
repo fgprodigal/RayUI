@@ -276,6 +276,7 @@ local function LoadFunc()
 
 		f:SetPoint("CENTER", WorldFrame, "CENTER")
 		f:Show()
+        AlertFrame_FixAnchors()
 	end
 	
 	local function LOOT_HISTORY_ROLL_CHANGED(itemIdx, playerIdx)

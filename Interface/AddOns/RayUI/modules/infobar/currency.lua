@@ -43,7 +43,7 @@ local function LoadCurrency()
 		{392, 4000}, -- Honor Points
 		{395, 4000}, -- Justice Points
 		{396, 4000}, -- Valor Points
-		{402, 10},	 -- Chef's Award 
+		{402, 250},	 -- Chef's Award 
 		{416, 300}, -- Mark of the World Tree
 		{515, 2000}, --Darkmoon Prize Ticket
 		{614, 2000}, --Mote of Darkness

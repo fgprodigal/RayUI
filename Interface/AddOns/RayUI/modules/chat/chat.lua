@@ -199,10 +199,6 @@ function CH:GetOptions()
 	return options
 end
 
-function CH:OnInitialize()
-	self.db = R.db.Chat
-end
-
 function CH:Info()
 	return L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r聊天模块."] 
 end
@@ -1033,8 +1029,6 @@ function CH:PET_BATTLE_CLOSE()
 end
 
 function CH:Initialize()
-	
-
 	if not RayUICharacterData.ChatEditHistory then
 		RayUICharacterData.ChatEditHistory = {}
 	end
