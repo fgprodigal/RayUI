@@ -88,7 +88,7 @@ local function LoadSkin()
 		bu:SetFrameStrata("HIGH")
 	end
 
-	hooksecurefunc("VoidStorage_ItemsFilteredUpdate", function()
+	--[[hooksecurefunc("VoidStorage_ItemsFilteredUpdate", function()
 		local button, isFiltered, _
 		for i = 1, 80 do
 			_, _, _, _, isFiltered = GetVoidItemInfo(i)
@@ -100,7 +100,7 @@ local function LoadSkin()
 				button.glow:SetAlpha(1)
 			end
 		end
-	end)
+	end)]]
 
 	S:Reskin(VoidStoragePurchaseButton)
 	S:Reskin(VoidStorageHelpBoxButton)

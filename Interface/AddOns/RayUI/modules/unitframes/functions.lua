@@ -150,13 +150,16 @@ function UF:ConstructPortrait(frame)
 	portrait:SetPoint("TOPLEFT", frame.Health, "TOPLEFT", 0, 0)
 	portrait:SetPoint("BOTTOMRIGHT", frame.Health, "BOTTOMRIGHT", 0, 0)
     portrait:SetAlpha(.2)
-	portrait.PostUpdate = function(frame)
-		if frame:GetModel() and frame:GetModel().find and frame:GetModel():find("worgenmale") then
-			frame:SetCamera(1)
-		end
-		frame:SetCamDistanceScale(1 - 0.01) --Blizzard bug fix
-		frame:SetCamDistanceScale(1)
-	end
+    portrait.PostUpdate = function(frame)
+        if frame:GetModel() and frame:GetModel().find and frame:GetModel():find("worgenmale") then
+            frame:SetCamera(1)
+        end
+        frame:SetCamDistanceScale(1 - 0.01) --Blizzard bug fix
+        frame:SetCamDistanceScale(1)
+    end
+    if frame.unit and frame.unit:find("boss") then
+        portrait.PostUpdate = nil
+    end
 
 	portrait.overlay = CreateFrame("Frame", nil, frame)
 	portrait.overlay:SetFrameLevel(frame:GetFrameLevel() - 5)

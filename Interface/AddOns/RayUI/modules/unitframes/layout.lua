@@ -832,7 +832,7 @@ function UF:LoadDPSLayout()
 			if i == 1 then
 				arena[i]:Point("RIGHT", RayUF_Parent, "RIGHT", -80, 180)
 			else
-				arena[i]:Point("TOP", arena[i-1], "BOTTOM", 0, -35)
+				arena[i]:Point("TOP", arena[i-1], "BOTTOM", 0, -36)
 			end
 			arena[i]:Size(BOSS_WIDTH, BOSS_HEIGHT)
 			arena[i]:SetParent(RayUF_Parent)
@@ -846,7 +846,7 @@ function UF:LoadDPSLayout()
 			if i == 1 then
 				boss[i]:Point("RIGHT", RayUF_Parent, "RIGHT", -80, 180)
 			else
-				boss[i]:Point("TOP", boss[i-1], "BOTTOM", 0, -35)             
+				boss[i]:Point("TOP", boss[i-1], "BOTTOM", 0, -36)             
 			end
 			boss[i]:Size(BOSS_WIDTH, BOSS_HEIGHT)
 			boss[i]:SetParent(RayUF_Parent)

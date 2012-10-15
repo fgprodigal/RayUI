@@ -470,7 +470,7 @@ function RW:NewWatcher(data)
 
 	module.holder = CreateFrame("Frame", nil, UIParent)
 	module.holder:SetSize(module.size, module.size)
-	module.parent = CreateFrame("Frame", module.name, UIParent)
+	module.parent = CreateFrame("Frame", module.name, RayUF_Parent)
 	module.parent:SetAllPoints(holder)
 
 	module:RegisterEvent("PLAYER_ENTERING_WORLD", "OnEvent")

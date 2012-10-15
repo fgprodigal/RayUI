@@ -1116,6 +1116,13 @@ R["Watcher"] = {
                 setpoint = positions.target_buff_icon,
                 size = 28,
 
+                --回生迷霧
+                { spellID = 119607, unitId = "target", caster = "player", filter = "BUFF" },  
+                { spellID = 119611, unitId = "target", caster = "player", filter = "BUFF" },
+                --迷霧繚繞
+                { spellID = 132120, unitId = "target", caster = "player", filter = "BUFF" },
+                --舒和之霧
+                { spellID = 115175, unitId = "target", caster = "player", filter = "BUFF" },
             },
             {
                 name = "玩家重要buff&debuff",
