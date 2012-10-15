@@ -1,6 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
-	<Script file="ButtonSet.lua"/>
 	<Script file="FriendsMenuXP.lua"/>
 	<Frame name = "FriendsMenuXPUpdateFrame">
 		<Scripts>
@@ -30,7 +29,7 @@
 						<AbsDimension x="15" y="15"/>
 					</Size>
 					<Anchors>
-						<Anchor point="RIGHT">
+						<Anchor point="LEFT">
 							<Offset>
 								<AbsDimension x="-5" y="0"/>
 							</Offset>
@@ -48,7 +47,7 @@
 				<Scripts>
 					<OnEnter>
 						UIDropDownMenu_StopCounting(self:GetParent():GetParent());
-						CloseDropDownMenus(self:GetParent():GetParent():GetID() + 1);
+						--CloseDropDownMenus(self:GetParent():GetParent():GetID() + 1);
 					</OnEnter>
 					<OnLeave>
 						UIDropDownMenu_StartCounting(self:GetParent():GetParent());
@@ -85,7 +84,7 @@
 		<DisabledFont style="GameFontDisableSmallLeft"/>
 	</Button>
 
-	<Button name="FriendsMenuXP" toplevel="true" frameStrata="FULLSCREEN_DIALOG" hidden="true" enableMouse="true" id="1">
+	<Button name="FriendsMenuXP" toplevel="true" frameStrata="FULLSCREEN_DIALOG" clampedToScreen="true" hidden="true" enableMouse="true" id="1">
 		<Size>
 			<AbsDimension x="180" y="10"/>
 		</Size>
@@ -178,7 +177,7 @@
 		</Scripts>
 	</Button>
 
-	<Button name="FriendsMenuXPSecure" toplevel="true" frameStrata="FULLSCREEN_DIALOG" hidden="true" enableMouse="true" id="2">
+	<Button name="FriendsMenuXPSecure" toplevel="true" frameStrata="FULLSCREEN_DIALOG" clampedToScreen="true" hidden="true" enableMouse="true" id="2">
 		<Size>
 			<AbsDimension x="180" y="10"/>
 		</Size>
@@ -195,7 +194,6 @@
 						<AbsValue val="32"/>
 					</EdgeSize>
 				</Backdrop>
-
 			</Frame>
 			<Frame name="$parentMenuBackdrop" setAllPoints="true">
 				<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">

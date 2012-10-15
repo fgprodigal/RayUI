@@ -1,6 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">	
 	<Script file='DragEmAll\DragEmAll.lua'/>
-	<Script file='FriendsMenuXP\SpellNames.lua'/>
 	<Script file='FriendsMenuXP\localization.enUS.lua'/>
 	<Script file='FriendsMenuXP\localization.zhCN.lua'/>
 	<Script file='FriendsMenuXP\localization.zhTW.lua'/>

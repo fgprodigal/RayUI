@@ -42,6 +42,8 @@ R["Watcher"] = {
                 { spellID = 8936, unitId = "target", caster = "player", filter = "BUFF" },
                 --精靈群襲
                 { spellID = 102355, unitId = "target", caster = "all", filter = "DEBUFF" },
+                --破甲
+                { spellID = 113746, unitId = "target", caster = "all", filter = "DEBUFF" },
             },
             {
                 name = "玩家重要buff&debuff",
@@ -882,6 +884,8 @@ R["Watcher"] = {
                 { spellID = 112961, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --致傷毒藥
                 { spellID = 8680, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --破甲
+                { spellID = 113746, unitId = "target", caster = "all", filter = "DEBUFF" },
             },
             {
                 name = "玩家重要buff&debuff",
@@ -958,8 +962,6 @@ R["Watcher"] = {
                 { spellID = 84617, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --宿怨
                 { spellID = 79140, unitId = "target", caster = "player", filter = "DEBUFF" },
-                --破甲
-                { spellID = 113746, unitId = "target", caster = "all", filter = "DEBUFF" },
             },
             {
                 name = "焦点buff&debuff",
