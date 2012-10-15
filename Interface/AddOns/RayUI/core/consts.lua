@@ -1,7 +1,7 @@
 local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
 local AddOnName = ...
 
-_, R.myclass = UnitClass("player")
+R.myclass = select(2, UnitClass("player"))
 R.level = UnitLevel("player")
 R.myname = UnitName("player")
 R.myrealm = GetRealmName()

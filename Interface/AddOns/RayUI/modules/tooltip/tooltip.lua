@@ -227,7 +227,9 @@ local function GetPlayerScore(unit)
 				local iLink = GetInventoryItemLink(unit, i)
 				if (iLink) then
 					ilvlAdd = TT:GetItemScore(iLink)
-					ilvl = ilvl + ilvlAdd
+					if ilvlAdd then
+						ilvl = ilvl + ilvlAdd
+					end
 					equipped = equipped + 1
 				end
 			end

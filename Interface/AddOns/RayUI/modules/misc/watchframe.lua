@@ -2,58 +2,24 @@ local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
 local M = R:GetModule("Misc")
 
 local function LoadFunc()
-	local RayUIWatchFrame = CreateFrame("Frame", nil, UIParent)
-	local RayUIWatchFrameHolder = CreateFrame("Frame", nil, UIParent)
-	RayUIWatchFrameHolder:SetWidth(250)
-	RayUIWatchFrameHolder:SetHeight(22)
-	RayUIWatchFrameHolder:SetPoint("RIGHT", UIParent, "RIGHT", -80, 290)
-	R:CreateMover(RayUIWatchFrameHolder, "WatchFrameMover", L["任务追踪锚点"], true)
+	local screenheight = GetScreenHeight()
+	local WatchFrameHolder = CreateFrame("Frame", "WatchFrameHolder", UIParent)
+	WatchFrameHolder:SetWidth(130)
+	WatchFrameHolder:SetHeight(22)
+	WatchFrameHolder:SetPoint("RIGHT", UIParent, "RIGHT", -80, 290)
 
-	local function init()
-		RayUIWatchFrame:UnregisterEvent("PLAYER_ENTERING_WORLD")
-		RayUIWatchFrame:RegisterEvent("CVAR_UPDATE")
-		RayUIWatchFrame:SetScript("OnEvent", function(_,_,cvar,value)
-			RayUIWatchFrame:SetWidth(250)
-		end)
-		RayUIWatchFrame:ClearAllPoints()
-		RayUIWatchFrame:SetPoint("TOP", RayUIWatchFrameHolder, "TOP", 0, 5)
-	end
+	R:CreateMover(WatchFrameHolder, "WatchFrameMover", L["任务追踪锚点"], true)
+	WatchFrameHolder:SetAllPoints(WatchFrameMover)
 
-	local function setup()
-		local screenheight = GetScreenHeight()
-		RayUIWatchFrame:SetHeight(screenheight / 1.6)
+	WatchFrame:ClearAllPoints()
+	WatchFrame:SetPoint("TOPRIGHT", WatchFrameHolder, "TOPRIGHT")
+	WatchFrame:Height(screenheight / 2)
 
-		RayUIWatchFrame:SetWidth(250)
-
-		WatchFrame:SetParent(RayUIWatchFrame)
-		WatchFrame:SetClampedToScreen(false)
-		WatchFrame:ClearAllPoints()
-		WatchFrame.ClearAllPoints = function() end
-		WatchFrame:SetPoint("TOPLEFT", 32,-2.5)
-		WatchFrame:SetPoint("BOTTOMRIGHT", 4,0)
-		WatchFrame.SetPoint = R.dummy
-
-		WatchFrameCollapseExpandButton:SetParent(RayUIWatchFrame)
-		WatchFrameCollapseExpandButton.Disable = R.dummy
-	end
-
-	local f = CreateFrame("Frame")
-	f:Hide()
-	f.elapsed = 0
-	f:SetScript("OnUpdate", function(self, elapsed)
-		f.elapsed = f.elapsed + elapsed
-		if f.elapsed > .5 then
-			setup()
-			f:Hide()
+	hooksecurefunc(WatchFrame,"SetPoint",function(_,_,parent)
+		if parent ~= WatchFrameHolder then
+			WatchFrame:ClearAllPoints()
+			WatchFrame:SetPoint("TOPRIGHT", WatchFrameHolder, "TOPRIGHT")
 		end
-	end)
-
-	RayUIWatchFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
-	RayUIWatchFrame:SetScript("OnEvent", function()
-		SetCVar("watchFrameWidth", 0)
-		InterfaceOptionsObjectivesPanelWatchFrameWidth:Kill()
-		init()
-		f:Show()
 	end)
 
 	--进出副本自动收放任务追踪

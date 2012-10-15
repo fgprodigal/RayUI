@@ -168,7 +168,7 @@ function B:UpdateSlot(bagID, slotID)
 		slot.shadow:Hide()
 	end
 	if (clink) then
-		local iType
+		local iType, _
 		slot.name, _, slot.rarity, _, _, iType = GetItemInfo(clink)
 		if R:IsItemUnusable(clink) then
 			SetItemButtonTextureVertexColor(slot, RED_FONT_COLOR.r, RED_FONT_COLOR.g, RED_FONT_COLOR.b)

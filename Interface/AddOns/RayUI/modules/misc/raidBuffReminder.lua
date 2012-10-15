@@ -99,8 +99,8 @@ local function LoadFunc()
 	local function CheckFilterForActiveBuff(filter)
 		local spellName, texture
 		for spell in pairs(filter) do
-			if spell ~= 'DEFAULT' then
-				spellName, _, texture = GetSpellInfo(spell)
+			if spell ~= "DEFAULT" then
+				local spellName, _, texture = GetSpellInfo(spell)
 
 				assert(spellName, spell..": ID is not correct.")
 
