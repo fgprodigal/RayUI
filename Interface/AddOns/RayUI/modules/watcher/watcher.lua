@@ -125,7 +125,6 @@ function watcherPrototype:CreateButton(mode)
 		button.cooldown = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
 		button.cooldown:SetAllPoints(button.icon)
 		button.cooldown:SetReverse()
-        button.cooldown:SetFrameLevel(2)
 		button.mode = "ICON"
 	end
 	button.count = button:CreateFontString(nil, "OVERLAY")
