@@ -466,8 +466,8 @@ function FriendsMenuXP_ShowDropdown(buttonSet, closeOrigin, anchor, relative, of
     if(DropDownList1:IsVisible()) then
         if DropDownList1:GetTop() and DropDownList1:GetTop()<UIParent:GetHeight()/2 and appendBottom then
             appendBottom = nil
-            anchor = "TOPLEFT"
-            relative = "TOPRIGHT"
+            anchor = "TOPRIGHT"
+            relative = "TOPLEFT"
         end
         dropDown:SetPoint(anchor, DropDownList1, relative, offsetx or 0, offsety or 0);
         if appendBottom then

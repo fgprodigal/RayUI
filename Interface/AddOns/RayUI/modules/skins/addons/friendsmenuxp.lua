@@ -6,6 +6,10 @@ local function SkinFriendsMenuXP()
 		FriendsMenuXPSecureMenuBackdrop:StripTextures()
         S:CreateBD(FriendsMenuXPSecureMenuBackdrop)
 	end
+	if FriendsMenuXP then
+		FriendsMenuXPMenuBackdrop:StripTextures()
+        S:CreateBD(FriendsMenuXPMenuBackdrop)
+	end
 end
 
 S:RegisterSkin("RayUI", SkinFriendsMenuXP)

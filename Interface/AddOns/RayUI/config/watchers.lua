@@ -1175,6 +1175,7 @@ R["Watcher"] = {
 				{ spellID = 116709, unitId = "target", caster = "player", filter = "DEBUFF" },
 				--微醺醉氣
 				{ spellID = 123727, unitId = "target", caster = "player", filter = "DEBUFF" },
+				{ spellID = 116330, unitId = "target", caster = "player", filter = "DEBUFF" },
 				--奪刃繩矛
 				{ spellID = 117368, unitId = "player", caster = "player", filter = "BUFF" },
             },
@@ -1232,6 +1233,8 @@ R["Watcher"] = {
                 size = 41,
 
                 --飾品
+                --灼熱之令
+                { spellID = 126489, unitId = "player", caster = "player", filter = "BUFF" },
                 --天神賜福
                 { spellID = 128984, unitId = "player", caster = "player", filter = "BUFF" },
                 { spellID = 128985, unitId = "player", caster = "player", filter = "BUFF" },
