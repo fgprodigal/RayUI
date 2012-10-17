@@ -218,11 +218,33 @@ local function LoadSkin()
 
 	hooksecurefunc("PetJournal_UpdatePetLoadOut", function()
 		for i = 1, 3 do
+			local petID, _, _, _, locked =  C_PetJournal.GetPetLoadOutInfo(i)
 			local bu = PetJournal.Loadout["Pet"..i]
 			bu.icon.bg:SetShown(not bu.helpFrame:IsShown())
 			bu.dragButton:SetEnabled(not bu.helpFrame:IsShown())
+			if not locked and petID > 0 then
+				local _, customName, _, _, _, _, name = C_PetJournal.GetPetInfoByPetID(petID)
+				local rarity = select(5,C_PetJournal.GetPetStats(petID))
+				local hex  = select(4,GetItemQualityColor(rarity-1))
+                name = customName or name
+                bu.name:SetText("|c"..hex..name.."|r")
+            end
 		end
 	end)
+
+    hooksecurefunc("PetJournal_UpdatePetCard", function()
+        if PetJournalPetCard.petID  then
+            local speciesID, customName, level, xp, maxXp, displayID, name, icon, petType, creatureID, sourceText, description, isWild, canBattle, tradable = C_PetJournal.GetPetInfoByPetID(PetJournalPetCard.petID)
+            if canBattle then
+                local health, maxHealth, power, speed, rarity = C_PetJournal.GetPetStats(PetJournalPetCard.petID)
+                PetJournalPetCard.QualityFrame.quality:SetText(_G["BATTLE_PET_BREED_QUALITY"..rarity])
+                local r,g,b,hex  = GetItemQualityColor(rarity-1)
+
+                name = customName or name
+                PetJournalPetCard.PetInfo.name:SetText("|c"..hex..name.."|r")
+            end
+        end
+    end)
 
 	PetJournal.SpellSelect.BgEnd:Hide()
 	PetJournal.SpellSelect.BgTiled:Hide()
@@ -236,6 +258,30 @@ local function LoadSkin()
 		bu.icon:SetTexCoord(.08, .92, .08, .92)
 		S:CreateBG(bu.icon)
 	end
+
+    local function UpdatePetList()
+        local scrollFrame = PetJournal.listScroll
+        local offset = HybridScrollFrame_GetOffset(scrollFrame)
+        local petButtons = scrollFrame.buttons
+        for i = 1,#petButtons do
+            pet = petButtons[i]
+            index = offset + i
+            local petID, speciesID, isOwned, customName, level, favorite, isRevoked, name, icon, petType, creatureID, sourceText, description, isWildPet, canBattle = C_PetJournal.GetPetInfoByIndex(index)
+			local health, maxHealth, attack, speed, rarity = C_PetJournal.GetPetStats(petID)
+            if rarity then
+                local r, g, b, hex  = GetItemQualityColor(rarity - 1)
+                name = customName or name
+                pet.name:SetText("|c"..hex..name.."|r")
+            end
+        end
+    end
+
+    local oldfunc = PetJournal.listScroll.update
+    function PetJournal.listScroll.update()
+        oldfunc()
+        UpdatePetList()
+    end
+    hooksecurefunc("PetJournal_UpdatePetList", UpdatePetList)
 
     local filter = ""
     local filterTable = {}

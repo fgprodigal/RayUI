@@ -138,7 +138,7 @@ local function utf8sub(str, start, numChars)
 end 
 
 oUF.Tags.Methods["RayUFRaid:name"] = function(u, r)
-    local name = (u == "vehicle" and UnitName(r or u)) or UnitName(u)
+    local name = UnitName(u)
 	local _, class = UnitClass(u)
 	local unitReaction = UnitReaction(u, "player")
 	local colorString
@@ -174,9 +174,6 @@ local function PostHealth(hp, unit)
 
     local suffix = self:GetAttribute"unitsuffix"
     if suffix == "pet" or unit == "vehicle" or unit == "pet" then
-        local r, g, b = .2, .9, .1
-        hp:SetStatusBarColor(r*.2, g*.2, b*.2)
-        hp.bg:SetVertexColor(r, g, b)
         return
     end
 
