@@ -46,6 +46,7 @@ local function LoadSkin()
 
 		infoBar.ActualHealthBar:ClearAllPoints()
 		infoBar.Name:ClearAllPoints()
+		infoBar.Name:SetFont(R["media"].font, R["media"].fontsize, "OUTLINE")
 
 		infoBar.FirstAttack = infoBar:CreateTexture(nil, "ARTWORK")
 		infoBar.FirstAttack:Size(30)
@@ -191,6 +192,9 @@ end)
 
 	hooksecurefunc("PetBattleUnitFrame_UpdateDisplay", function(self)
 		self.Icon:SetTexCoord(.08, .92, .08, .92)
+        if self.Name and self.petOwner and self.petIndex and self.petIndex <= C_PetBattles.GetNumPets(self.petOwner) then
+            self.Name:SetText(ITEM_QUALITY_COLORS[C_PetBattles.GetBreedQuality(self.petOwner,self.petIndex)-1].hex..self.Name:GetText().."|r")
+        end
 	end)
 
 	f.TopVersusText:ClearAllPoints()
@@ -369,6 +373,13 @@ end)
 		bf.ForfeitButton:SetPoint("LEFT", bf.CatchButton, "RIGHT", 10, 0)
 		SkinPetButton(bf.ForfeitButton)
 	end)
+
+    hooksecurefunc("PetBattleUnitTooltip_UpdateForUnit", function(self, petOwner, petIndex)
+        local rarity = C_PetBattles.GetBreedQuality(petOwner,petIndex)
+		local speciesID=C_PetBattles.GetPetSpeciesID(petOwner,petIndex)
+		local name, icon, petType, creatureID, sourceText, description, isWild, canBattle, tradable = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
+        self.Name:SetText(ITEM_QUALITY_COLORS[rarity-1].hex..name)
+    end)
 end
 
 S:RegisterSkin("RayUI", LoadSkin)
