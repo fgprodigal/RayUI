@@ -267,11 +267,13 @@ local function LoadSkin()
             pet = petButtons[i]
             index = offset + i
             local petID, speciesID, isOwned, customName, level, favorite, isRevoked, name, icon, petType, creatureID, sourceText, description, isWildPet, canBattle = C_PetJournal.GetPetInfoByIndex(index)
-			local health, maxHealth, attack, speed, rarity = C_PetJournal.GetPetStats(petID)
-            if rarity then
-                local r, g, b, hex  = GetItemQualityColor(rarity - 1)
-                name = customName or name
-                pet.name:SetText("|c"..hex..name.."|r")
+            if petID then
+                local health, maxHealth, attack, speed, rarity = C_PetJournal.GetPetStats(petID)
+                if rarity then
+                    local r, g, b, hex  = GetItemQualityColor(rarity - 1)
+                    name = customName or name
+                    pet.name:SetText("|c"..hex..name.."|r")
+                end
             end
         end
     end
