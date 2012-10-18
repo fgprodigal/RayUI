@@ -1,5 +1,4 @@
 if ( GetLocale() == "deDE" ) then 
-	FRIENDS_MENU_XP_LOADED = nil
 	FRIENDS_MENU_XP_CANNOT_TARGET = "FriendsMenuXP kann <$name$> nicht anvisieren."
 
 	FMXP_BUTTON_ADD_FRIEND = "Freund hinzuf\195\188gen"

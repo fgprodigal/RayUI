@@ -1,4 +1,3 @@
-FRIENDS_MENU_XP_LOADED = nil
 FRIENDS_MENU_XP_CANNOT_TARGET = "FriendsMenuXP can't target <$name$>."
 
 FMXP_BUTTON_ADD_FRIEND = "Add Friend"
