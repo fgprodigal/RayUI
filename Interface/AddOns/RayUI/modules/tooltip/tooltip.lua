@@ -160,15 +160,15 @@ function TT:GameTooltip_SetDefaultAnchor(tooltip, parent)
 		if owner and owner:match("RayUFRaid") then
 			local parent = _G[owner:match("RayUFRaid%d%d_%d")]
 			tooltip:Point("BOTTOMRIGHT", parent, "TOPRIGHT", 0, 23)
-		elseif RayUFRaid40_6UnitButton1 and RayUFRaid40_6UnitButton1:IsShown() and (GetScreenWidth() - RayUFRaid40_8:GetRight()) < 250 then
+		elseif RayUFRaid40_6UnitButton1 and RayUFRaid40_6UnitButton1:IsVisible() and (GetScreenWidth() - RayUFRaid40_8:GetRight()) < 250 then
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, RayUFRaid40_8:GetBottom() + RayUFRaid40_8:GetHeight() + 30)
-		elseif RayUI_ContainerFrame and RayUI_ContainerFrame:IsShown() and (GetScreenWidth() - RayUI_ContainerFrame:GetRight()) < 250 then
+		elseif RayUI_ContainerFrame and RayUI_ContainerFrame:IsVisible() and (GetScreenWidth() - RayUI_ContainerFrame:GetRight()) < 250 then
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, RayUI_ContainerFrame:GetBottom() + RayUI_ContainerFrame:GetHeight() + 30)
-		elseif RayUFRaid15_1UnitButton1 and RayUFRaid15_1UnitButton1:IsShown() and (GetScreenWidth() - RayUFRaid15_3:GetRight()) < 250 then
+		elseif RayUFRaid15_1UnitButton1 and RayUFRaid15_1UnitButton1:IsVisible() and (GetScreenWidth() - RayUFRaid15_3:GetRight()) < 250 then
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, RayUFRaid15_3:GetBottom() + RayUFRaid15_3:GetHeight() + 30)
-		elseif RayUFRaid25_1UnitButton1 and RayUFRaid25_1UnitButton1:IsShown() and (GetScreenWidth() - RayUFRaid25_5:GetRight()) < 250 then
+		elseif RayUFRaid25_1UnitButton1 and RayUFRaid25_1UnitButton1:IsVisible() and (GetScreenWidth() - RayUFRaid25_5:GetRight()) < 250 then
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, RayUFRaid25_5:GetBottom() + RayUFRaid25_5:GetHeight() + 30)
-		elseif NumerationFrame and NumerationFrame:IsShown() and (GetScreenWidth() - NumerationFrame:GetRight()) < 250 then
+		elseif NumerationFrame and NumerationFrame:IsVisible() and (GetScreenWidth() - NumerationFrame:GetRight()) < 250 then
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, NumerationFrame:GetBottom() + NumerationFrame:GetHeight() + 30)
 		else
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, 160)

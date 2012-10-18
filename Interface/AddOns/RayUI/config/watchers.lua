@@ -1492,6 +1492,10 @@ R["Watcher"] = {
 
                 --副本
                 --魔古山寶庫
+                --石衛士
+                --碧玉鎖鏈
+                { spellID = 130395, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
+
                 --馮
                 --烈焰星火
                 { spellID = 116784, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },

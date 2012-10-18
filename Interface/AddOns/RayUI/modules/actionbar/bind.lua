@@ -2,6 +2,7 @@ local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
 local AB = R:GetModule("ActionBar")
 
 local bind = CreateFrame("Frame", "HoverBind", UIParent)
+local SecureActionButton_OnClick = SecureActionButton_OnClick
 
 function AB:ActivateBindMode()
 	bind.active = true

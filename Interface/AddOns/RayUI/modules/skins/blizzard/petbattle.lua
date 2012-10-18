@@ -24,9 +24,8 @@ local function LoadSkin()
 		infoBar.healthBarWidth = 300
 
 		infoBar.IconBackdrop = CreateFrame("Frame", nil, infoBar)
+		infoBar.IconBackdrop:SetAllPoints(infoBar.Icon)
 		infoBar.IconBackdrop:CreateShadow()
-		infoBar.IconBackdrop.shadow:Point("TOPLEFT", infoBar.Icon, "TOPLEFT", -4, 4)
-		infoBar.IconBackdrop.shadow:Point("BOTTOMRIGHT", infoBar.Icon, "BOTTOMRIGHT", 4, -4)
 		infoBar.BorderFlash:Kill()
 		infoBar.HealthBarBG:Kill()
 		infoBar.HealthBarFrame:Kill()
@@ -253,23 +252,25 @@ end)
 		infoBar.HealthDivider:SetAlpha(0)	
 		infoBar:Size(40)
 		infoBar:CreateShadow("Background")
+		infoBar:ClearAllPoints()
 
 		infoBar.healthBarWidth = 40
+		infoBar.ActualHealthBar:SetTexture(R["media"].normal)
 		infoBar.ActualHealthBar:ClearAllPoints()
-		infoBar.ActualHealthBar:SetPoint("TOPLEFT", infoBar.backdrop, "BOTTOMLEFT", 2, -3)	
+		infoBar.ActualHealthBar:SetPoint("TOPLEFT", infoBar, "BOTTOMLEFT", 0, -5)	
 
 		infoBar.HealthBarBackdrop = CreateFrame("Frame", nil, infoBar)
 		infoBar.HealthBarBackdrop:SetFrameLevel(infoBar:GetFrameLevel() - 1)
 		infoBar.HealthBarBackdrop:CreateShadow("Background")
 		infoBar.HealthBarBackdrop:Width(infoBar.healthBarWidth)
 		infoBar.HealthBarBackdrop:Point("TOPLEFT", infoBar.ActualHealthBar, "TOPLEFT", 0, 0)
-		infoBar.HealthBarBackdrop:Point("BOTTOMLEFT", infoBar.ActualHealthBar, "BOTTOMLEFT", 0, 1)		
+		infoBar.HealthBarBackdrop:Point("BOTTOMLEFT", infoBar.ActualHealthBar, "BOTTOMLEFT", 0, 0)		
 	end
 
-	-- f.Ally2:SetPoint("TOPRIGHT", f.Ally2.iconPoint, "TOPLEFT", -6, -2)
-	-- f.Ally3:SetPoint("TOPRIGHT", f.Ally2, "TOPLEFT", -8, 0)
-	-- f.Enemy2:SetPoint("TOPLEFT", f.Enemy2.iconPoint, "TOPRIGHT", 6, -2)
-	-- f.Enemy3:SetPoint("TOPLEFT", f.Enemy2, "TOPRIGHT", 8, 0)
+	f.Ally2:SetPoint("TOPRIGHT", f.Ally2.iconPoint, "TOPLEFT", -6, -2)
+	f.Ally3:SetPoint("TOPRIGHT", f.Ally2, "TOPLEFT", -8, 0)
+	f.Enemy2:SetPoint("TOPLEFT", f.Enemy2.iconPoint, "TOPRIGHT", 6, -2)
+	f.Enemy3:SetPoint("TOPLEFT", f.Enemy2, "TOPRIGHT", 8, 0)
 
 	---------------------------------
 	-- PET BATTLE ACTION BAR SETUP --
