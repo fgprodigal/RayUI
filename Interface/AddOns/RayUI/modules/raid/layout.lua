@@ -542,15 +542,13 @@ function RA:Raid40SmartVisibility(event)
 	if not InCombatLockdown() then
 		self:SetAttribute("showPlayer", RA.db.showplayerinparty)
 		self:SetAttribute("showSolo", RA.db.showwhensolo)
+		self:SetAttribute("showRaid", true)
+		self:SetAttribute("showParty", RA.db.showgridwhenparty)
 		if inInstance and instanceType == "pvp" and maxPlayers == 40 then
 			RegisterAttributeDriver(self, "state-visibility", "[group:party,nogroup:raid][group:raid] show;hide")
-			self:SetAttribute("showRaid", true)
-			self:SetAttribute("showParty", RA.db.showgridwhenparty)
 		else
 			-- RegisterAttributeDriver(self, "state-visibility", "hide")
 			RegisterAttributeDriver(self, "state-visibility", "[@raid26,exists] show;hide")
-			self:SetAttribute("showRaid", false)
-			self:SetAttribute("showParty", false)
 		end
 	else
 		self:RegisterEvent("PLAYER_REGEN_ENABLED")
