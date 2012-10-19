@@ -497,11 +497,11 @@ function RA:Raid15SmartVisibility(event)
 		elseif inInstance and instanceType == "raid" and maxPlayers <= 15 then
 			RegisterAttributeDriver(self, "state-visibility", "[group:party,nogroup:raid][group:raid] show;hide")
 			self:SetAttribute("showRaid", true)
-			self:SetAttribute("showParty", RA.db.showgridwhenparty)
+			self:SetAttribute("showParty", true)
 		else
 			RegisterAttributeDriver(self, "state-visibility", "[@raid16,exists] hide;show")
 			self:SetAttribute("showRaid", true)
-			self:SetAttribute("showParty", RA.db.showgridwhenparty)
+			self:SetAttribute("showParty", true)
 		end
 	else
 		self:RegisterEvent("PLAYER_REGEN_ENABLED")
@@ -523,11 +523,11 @@ function RA:Raid25SmartVisibility(event)
 		elseif inInstance and instanceType == "raid" and maxPlayers > 15 then
 			RegisterAttributeDriver(self, "state-visibility", "[group:party,nogroup:raid][group:raid] show;hide")
 			self:SetAttribute("showRaid", true)
-			self:SetAttribute("showParty", RA.db.showgridwhenparty)
+			self:SetAttribute("showParty", true)
 		else
 			RegisterAttributeDriver(self, "state-visibility", "[@raid16,noexists] hide;show")
 			self:SetAttribute("showRaid", true)
-			self:SetAttribute("showParty", RA.db.showgridwhenparty)
+			self:SetAttribute("showParty", true)
 		end
 	else
 		self:RegisterEvent("PLAYER_REGEN_ENABLED")
@@ -543,7 +543,7 @@ function RA:Raid40SmartVisibility(event)
 		self:SetAttribute("showPlayer", RA.db.showplayerinparty)
 		self:SetAttribute("showSolo", RA.db.showwhensolo)
 		self:SetAttribute("showRaid", true)
-		self:SetAttribute("showParty", RA.db.showgridwhenparty)
+		self:SetAttribute("showParty", true)
 		if inInstance and instanceType == "pvp" and maxPlayers == 40 then
 			RegisterAttributeDriver(self, "state-visibility", "[group:party,nogroup:raid][group:raid] show;hide")
 		elseif inInstance then
@@ -611,7 +611,7 @@ function RA:SpawnHeader(name, group, layout)
     "oUF-initialConfigFunction", (initconfig):format(R:Scale(width), R:Scale(height)),
     "showPlayer", RA.db.showplayerinparty,
     "showSolo", RA.db.showwhensolo,
-    "showParty", RA.db.showgridwhenparty,
+    "showParty", true,
     "showRaid", true,
     "xOffset", xoff,
     "yOffset", yoff,

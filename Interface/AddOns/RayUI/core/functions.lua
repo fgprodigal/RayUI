@@ -305,6 +305,16 @@ function R:Print(...)
 	DEFAULT_CHAT_FRAME:AddMessage("|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r: " .. table.concat(tmp," ",1,n) )
 end
 
+function R:Debug(...)
+	if not R:IsDeveloper() then return end
+	local n=0
+	for i=1, select("#", ...) do
+		n=n+1
+		tmp[n] = tostring(select(i, ...))
+	end
+	DEFAULT_CHAT_FRAME:AddMessage("|cffff0000debug|r: " .. table.concat(tmp," ",1,n) )
+end
+
 function R:ColorGradient(perc, ...)
 	if perc >= 1 then
 		local r, g, b = select(select("#", ...) - 2, ...)

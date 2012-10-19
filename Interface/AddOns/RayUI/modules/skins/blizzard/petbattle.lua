@@ -53,7 +53,7 @@ local function LoadSkin()
 		if index == 1 then
 			infoBar.HealthBarBackdrop:Point("TOPLEFT", infoBar.ActualHealthBar, "TOPLEFT", 0, 0)
 			infoBar.HealthBarBackdrop:Point("BOTTOMLEFT", infoBar.ActualHealthBar, "BOTTOMLEFT", 0, 0)
-			infoBar.ActualHealthBar:SetVertexColor(171/255, 214/255, 116/255)	
+			infoBar.ActualHealthBar:SetVertexColor(171/255, 214/255, 116/255)
 			f.Ally2.iconPoint = infoBar.IconBackdrop
 			f.Ally3.iconPoint = infoBar.IconBackdrop
 

@@ -42,18 +42,13 @@ function UF:GetOptions()
 			name = L["显示"],
 			guiInline = true,
 			args = {
-				showParty = {
-					order = 1,
-					name = L["显示小队"],
-					type = "toggle",
-				},
 				showBossFrames = {
-					order = 2,
+					order = 1,
 					name = L["显示BOSS"],
 					type = "toggle",
 				},
 				showArenaFrames = {
-					order = 3,
+					order = 2,
 					name = L["显示竞技场头像"],
 					type = "toggle",
 				},

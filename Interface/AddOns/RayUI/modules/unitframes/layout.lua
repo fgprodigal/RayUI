@@ -852,30 +852,6 @@ function UF:LoadDPSLayout()
 			boss[i]:SetParent(RayUF_Parent)
 		end
 	end
-
-	local RA = R:GetModule("Raid")
-	if self.db.showParty and not RA.db.showgridwhenparty then
-		local party = oUF:SpawnHeader("RayUFParty", nil, 
-		"party",
-		-- "custom [group:party,nogroup:raid][@raid,noexists,group:raid] show;hide",
-		-- "solo",
-		"showParty", true,
-		"showPlayer", false,
-		-- "showSolo",true,
-		"oUF-initialConfigFunction", [[
-				local header = self:GetParent()
-				self:SetWidth(header:GetAttribute("initial-width"))
-				self:SetHeight(header:GetAttribute("initial-height"))
-			]],
-		"initial-width", PARTY_WIDTH,
-		"initial-height", PARTY_HEIGHT,
-		"yOffset", - 20,
-		"groupBy", "CLASS",
-		"groupingOrder", "WARRIOR,PALADIN,DEATHKNIGHT,DRUID,SHAMAN,PRIEST,MAGE,WARLOCK,ROGUE,HUNTER"	-- Trying to put classes that can tank first
-		)
-		party:Point("TOPRIGHT", RayUF_player, "TOPLEFT", -20, 0)
-		party:SetParent(RayUF_Parent)
-	end
 end
 
 UF.Layouts["DPS"] = UF.LoadDPSLayout

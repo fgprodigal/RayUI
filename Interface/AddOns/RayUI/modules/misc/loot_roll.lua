@@ -2,6 +2,7 @@ local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
 local M = R:GetModule("Misc")
 
 local function LoadFunc()
+	rollBars = {}
     local testMode = false
 	local pos = "TOP"
 
@@ -191,33 +192,6 @@ local function LoadFunc()
 		return frame
 	end
 
-	local anchor = CreateFrame("Button", nil, UIParent)
-	anchor:Width(328) 
-	anchor:Height(22)
-	anchor:SetBackdropColor(0.25, 0.25, 0.25, 1)
-	local label = anchor:CreateFontString(nil, "ARTWORK")
-	label:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
-	label:SetAllPoints(anchor)
-	label:SetText("teksLoot")
-
-	anchor:SetScript("OnClick", anchor.Hide)
-	anchor:SetScript("OnDragStart", anchor.StartMoving)
-	anchor:SetScript("OnDragStop", function(self)
-		self:StopMovingOrSizing()
-		self.db.x, self.db.y = self:GetCenter()
-	end)
-	anchor:SetMovable(true)
-	anchor:EnableMouse(true)
-	anchor:RegisterForDrag("LeftButton")
-	anchor:RegisterForClicks("RightButtonUp")
-	anchor:Hide()
-
-	rollBars = {}
-
-	local f = CreateRollFrame() -- Create one for good measure
-	f:Point("TOPLEFT", next(rollBars) and rollBars[#rollBars] or anchor, "BOTTOMLEFT", 0, -4)
-	table.insert(rollBars, f)
-
 	local function GetFrame()
 		for i,f in ipairs(rollBars) do
 			if not f.rollid then return f end
@@ -225,15 +199,15 @@ local function LoadFunc()
 
 		local f = CreateRollFrame()
 		if pos == "TOP" then
-			f:SetPoint("TOPLEFT", next(rollBars) and rollBars[#rollBars] or anchor, "BOTTOMLEFT", 0, R:Scale(-4))
+			f:Point("TOP", next(rollBars) and rollBars[#rollBars] or AlertFrameHolder, "BOTTOM", 0, -4)
 		else
-			f:SetPoint("BOTTOMLEFT", next(rollBars) and rollBars[#rollBars] or anchor, "TOPLEFT", 0, R:Scale(4))
+			f:Point("BOTTOM", next(rollBars) and rollBars[#rollBars] or AlertFrameHolder, "TOP", 0, 4)
 		end
 		table.insert(rollBars, f)
 		return f
 	end
 
-	local function START_LOOT_ROLL(rollid, time)
+	function M:START_LOOT_ROLL(event, rollid, time)
 		if cancelled_rolls[rollid] then return end
 
 		local f = GetFrame()
@@ -279,7 +253,7 @@ local function LoadFunc()
         AlertFrame_FixAnchors()
 	end
 	
-	local function LOOT_HISTORY_ROLL_CHANGED(itemIdx, playerIdx)
+	function M:LOOT_HISTORY_ROLL_CHANGED(event, itemIdx, playerIdx)
 		local rollID, itemLink, numPlayers, isDone, winnerIdx, isMasterLoot = C_LootHistory.GetItem(itemIdx);
 		local name, class, rollType, roll, isWinner = C_LootHistory.GetPlayerInfo(itemIdx, playerIdx);
 
@@ -294,28 +268,10 @@ local function LoadFunc()
 		end
 	end
 
-	anchor:RegisterEvent("PLAYER_ENTERING_WORLD")
-	anchor:SetScript("OnEvent", function(frame, event)
-		anchor:UnregisterEvent("PLAYER_ENTERING_WORLD")
-		anchor:RegisterEvent("START_LOOT_ROLL")
-		anchor:RegisterEvent("LOOT_HISTORY_ROLL_CHANGED")
-		UIParent:UnregisterEvent("START_LOOT_ROLL")
-		UIParent:UnregisterEvent("CANCEL_LOOT_ROLL")
-		anchor:SetScript("OnEvent", function(frame, event, ...)
-			if event == "LOOT_HISTORY_ROLL_CHANGED" then
-				LOOT_HISTORY_ROLL_CHANGED(...)
-			else
-				START_LOOT_ROLL(...)
-			end
-		end)
-
-		local anchorholder = CreateFrame("Frame", "AnchorHolder", UIParent)
-		anchorholder:SetPoint("TOP", UIParent, "TOP", 0, -200)
-		anchorholder:Width(anchor:GetWidth())
-		anchorholder:Height(anchor:GetHeight())
-
-		anchor:SetPoint("TOP", anchorholder, "TOP", 0, 0)
-	end)
+	UIParent:UnregisterEvent("START_LOOT_ROLL")
+	UIParent:UnregisterEvent("CANCEL_LOOT_ROLL")
+	M:RegisterEvent("START_LOOT_ROLL")
+	M:RegisterEvent("LOOT_HISTORY_ROLL_CHANGED")
 
 	SlashCmdList["LFrames"] = function() 
         local items = { 32837, 19019, 77949, 34196 }
@@ -341,6 +297,7 @@ local function LoadFunc()
                 f.time = 100000000
                 f:Show()
             end
+			AlertFrame_FixAnchors()
         end
 	end
 	SLASH_LFrames1 = "/lframes"

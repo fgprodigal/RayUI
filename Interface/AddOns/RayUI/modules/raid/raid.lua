@@ -85,13 +85,8 @@ function RA:GetOptions()
 					name = L["在队伍中显示自己"],
 					type = "toggle",
 				},
-				showgridwhenparty = {
-					order = 3,
-					name = L["小队也显示团队框体"],
-					type = "toggle",
-				},
 				raid40 = {
-					order = 4,
+					order = 3,
 					name = L["显示大战场6~8队"],
 					type = "toggle",
 				},
