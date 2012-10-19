@@ -13,7 +13,7 @@ G["media"]={
 	warning = "RayUI Warning",
 	errorsound = "RayUI Error",
 	backdropcolor = { .08, .08, .08 },
-	backdropfadecolor = { .05, .05, .05, .6 },
+	backdropfadecolor = { .05, .05, .05, .7 },
 	bordercolor = { 0, 0, 0 },
 }
 
