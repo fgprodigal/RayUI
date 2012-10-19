@@ -5,4 +5,5 @@
 	<Script file="fonts.lua"/>
 	<Script file="movers.lua"/>
 	<Script file="animation.lua"/>
+	<Script file="options.lua"/>
 </Ui>

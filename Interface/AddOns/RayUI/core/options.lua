@@ -5,8 +5,14 @@ R.Options = {
 	type = "group",
 	name = AddOnName,
 	args = {
-		general = {
+		header = {
 			order = 1,
+			type = "header",
+			name = L["版本"]..string.format(": |cff7aa6d6%s|r",R.version),
+			width = "full",
+		},
+		general = {
+			order = 2,
 			type = "group",
 			name = L["一般"],
 			get = function(info)
@@ -25,12 +31,12 @@ R.Options = {
 					min = 0.64, max = 1, step = 0.01,
 					isPercent = true,
 				},
-				logo = {
+				--[[ logo = {
 					order = 2,
 					type = "toggle",
 					name = L["登陆Logo"],
 					desc = L["开关登陆时的Logo"],
-				},
+				}, ]]
 				spacer = {
 					order = 3,
 					name = " ",
@@ -61,7 +67,7 @@ R.Options = {
 			},
 		},
 		media = {
-			order = 2,
+			order = 3,
 			type = "group",
 			name = L["字体材质"],
 			get = function(info)
@@ -69,7 +75,7 @@ R.Options = {
 			end,
 			set = function(info, value)
 				R.db.media[ info[#info] ] = value
-				-- StaticPopup_Show("CFG_RELOAD")
+				StaticPopup_Show("CFG_RELOAD")
 			end,
 			args = {
 				fontGroup = {
@@ -136,19 +142,19 @@ R.Options = {
 							type = "select", dialogControl = "LSM30_Statusbar",
 							order = 1,
 							name = L["一般材质"],
-							values = AceGUIWidgetLSMlists.statusbar,								
+							values = AceGUIWidgetLSMlists.statusbar,
 						},
 						blank = {
 							type = "select", dialogControl = "LSM30_Statusbar",
 							order = 2,
 							name = L["空白材质"],
-							values = AceGUIWidgetLSMlists.statusbar,								
+							values = AceGUIWidgetLSMlists.statusbar,
 						},		
 						glow = {
 							type = "select", dialogControl = "LSM30_Border",
 							order = 3,
 							name = L["阴影边框"],
-							values = AceGUIWidgetLSMlists.border,								
+							values = AceGUIWidgetLSMlists.border,
 						},
 					},
 				},
@@ -162,7 +168,63 @@ R.Options = {
 							type = "select", dialogControl = "LSM30_Sound",
 							order = 1,
 							name = L["报警声音"],
-							values = AceGUIWidgetLSMlists.sound,							
+							values = AceGUIWidgetLSMlists.sound,
+						},
+					},						
+				},
+				colorGroup = {
+					order = 4,
+					type = "group",
+					name = L["颜色"],
+					guiInline = true,
+					args = {
+						bordercolor = {
+							order = 1,
+							type = "color",
+							hasAlpha = false,
+							name = L["边框颜色"],
+							get = function(info)
+								local t = R.db.media[ info[#info] ]
+								return unpack(t)
+							end,
+							set = function(info, r, g, b)
+								R.db.media[ info[#info] ] = {}
+								local t = R.db.media[ info[#info] ]
+								t[1], t[2], t[3] = r, g, b
+								StaticPopup_Show("CFG_RELOAD")
+							end,
+						},
+						backdropcolor = {
+							order = 2,
+							type = "color",
+							hasAlpha = false,
+							name = L["背景颜色"],
+							get = function(info)
+								local t = R.db.media[ info[#info] ]
+								return unpack(t)
+							end,
+							set = function(info, r, g, b, a)
+								R.db.media[ info[#info] ] = {}
+								local t = R.db.media[ info[#info] ]
+								t[1], t[2], t[3] = r, g, b
+								StaticPopup_Show("CFG_RELOAD")
+							end,
+						},
+						backdropfadecolor = {
+							order = 3,
+							type = "color",
+							hasAlpha = true,
+							name = L["透明框架背景颜色"],
+							get = function(info)
+								local t = R.db.media[ info[#info] ]
+								return unpack(t)
+							end,
+							set = function(info, r, g, b, a)
+								R.db.media[ info[#info] ] = {}
+								local t = R.db.media[ info[#info] ]
+								t[1], t[2], t[3], t[4] = r, g, b, a
+								StaticPopup_Show("CFG_RELOAD")
+							end,
 						},
 					},						
 				},

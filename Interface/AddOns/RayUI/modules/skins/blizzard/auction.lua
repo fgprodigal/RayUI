@@ -266,12 +266,7 @@ local function LoadSkin()
 	bg:SetPoint("BOTTOMRIGHT", 109, 11)
 	bg:SetFrameLevel(BrowseDropDown:GetFrameLevel(-1))
 	S:CreateBD(bg, 0)
-
-	local tex = bg:CreateTexture(nil, "BACKGROUND")
-	tex:SetPoint("TOPLEFT")
-	tex:SetPoint("BOTTOMRIGHT")
-	tex:SetTexture(S["media"].backdrop)
-	tex:SetGradientAlpha(unpack(S["media"].DefGradient))
+	S:CreateGradient(bg)
 
 	local inputs = {
 		"BrowseMinLevel",

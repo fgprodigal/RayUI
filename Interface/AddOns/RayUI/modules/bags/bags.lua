@@ -317,11 +317,7 @@ function B:Layout(isBank)
 					border:SetFrameLevel(f.ContainerHolder[i]:GetFrameLevel()+1)
 					f.ContainerHolder[i].border = border
 					f.ContainerHolder[i].border:CreateBorder()
-
-					local tex = f.ContainerHolder[i]:CreateTexture(nil, "BACKGROUND")
-					tex:SetAllPoints()
-					tex:SetTexture(S["media"].backdrop)
-					tex:SetGradientAlpha(unpack(S["media"].DefGradient))
+					S:CreateGradient(f.ContainerHolder[i], 0.6)
 				end
 			end
 			f.ContainerHolder:Size(((buttonSize + buttonSpacing) * (isBank and i - 1 or i)) + buttonSpacing,buttonSize + (buttonSpacing * 2))
@@ -369,11 +365,7 @@ function B:Layout(isBank)
 						border:SetFrameLevel(f.Bags[bagID][slotID]:GetFrameLevel()+1)
 						f.Bags[bagID][slotID].border = border
 						f.Bags[bagID][slotID].border:CreateBorder()
-
-						local tex = f.Bags[bagID][slotID]:CreateTexture(nil, "BACKGROUND")
-						tex:SetAllPoints()
-						tex:SetTexture(S["media"].backdrop)
-						tex:SetGradientAlpha(unpack(S["media"].DefGradient))
+						S:CreateGradient(f.Bags[bagID][slotID], 0.6)
 					end
 					if not f.Bags[bagID][slotID].shadow then
 						local shadow = CreateFrame("Frame", nil, f.Bags[bagID][slotID])

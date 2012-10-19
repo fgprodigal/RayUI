@@ -37,7 +37,7 @@ local function CreateShadow(f, t, thickness, texture)
 	local offset = thickness - 1
 
 	if t == "Background" then
-		backdropa = 0.6
+		backdropr, backdropg, backdropb, backdropa = unpack(R["media"].backdropfadecolor)
 	else
 		backdropa = 0
 	end
@@ -71,10 +71,10 @@ end
 local function SetTemplate(f, t, texture)
 	local r, g, b, alpha = unpack(R["media"].backdropcolor)
 	f:SetBackdrop({
-	  bgFile = R["media"].normal,
+	  bgFile = R["media"].blank,
 	})
 	if t == "Transparent" then 
-		alpha = 0.6
+		r, g, b, alpha = unpack(R["media"].backdropfadecolor)
 	end
 	f:SetBackdropColor(r, g, b, alpha)
 	f:SetBackdropBorderColor(unpack(R["media"].bordercolor))

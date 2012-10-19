@@ -6,7 +6,9 @@ S.modName = L["插件美化"]
 S.SkinFuncs = {}
 S.SkinFuncs["RayUI"] = {}
 
-local alpha = .5 -- controls the backdrop opacity (0 = invisible, 1 = solid)
+local alpha
+local backdropcolorr, backdropcolorg, backdropcolorb
+local bordercolorr, bordercolorg, bordercolorb
 
 S["media"] = {
 	["checked"] = "Interface\\AddOns\\RayUI\\media\\CheckButtonHilight",
@@ -28,8 +30,6 @@ S["media"] = {
 		["MONK"] = { r = 0, g = 1 , b = 0.59 },
 	},
 }
-
-S["media"].DefGradient = {"VERTICAL", 0.1, 0.1, 0.1, .6, 0.1, 0.1, 0.1, .6}
 
 local r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b
 
@@ -129,6 +129,16 @@ function S:GetOptions()
 	return options
 end
 
+function S:CreateGradient(f)
+	local tex = f:CreateTexture(nil, "BACKGROUND", 1)
+	tex:SetInside(f, 1, 1)
+	tex:SetTexture(S["media"].backdrop)
+	-- tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+	tex:SetVertexColor(.08, .08, .08)
+	tex:SetAlpha(0.8)
+	f.gradientTex = tex
+end
+
 function S:CreateBD(f, a)
 	if not f then return end
 	f:SetBackdrop({
@@ -136,8 +146,8 @@ function S:CreateBD(f, a)
 		edgeFile = S["media"].backdrop, 
 		edgeSize = R.mult, 
 	})
-	f:SetBackdropColor(0, 0, 0, a or alpha)
-	f:SetBackdropBorderColor(0, 0, 0)
+	f:SetBackdropColor(backdropcolorr, backdropcolorg, backdropcolorb, a or alpha)
+	f:SetBackdropBorderColor(bordercolorr, bordercolorg, bordercolorb)
 end
 
 function S:CreateBG(frame)
@@ -163,8 +173,8 @@ function S:CreateSD(parent, size, r, g, b, alpha, offset)
 	sd:Point("TOPLEFT", parent, -sd.size - 1 - sd.offset, sd.size + 1 + sd.offset)
 	sd:Point("BOTTOMRIGHT", parent, sd.size + 1 + sd.offset, -sd.size - 1 - sd.offset)
 	sd:CreateShadow()
-	sd.shadow:SetBackdropBorderColor(r or 0, g or 0, b or 0)
-	sd.border:SetBackdropBorderColor(r or 0, g or 0, b or 0)
+	sd.shadow:SetBackdropBorderColor(r or bordercolorr, g or bordercolorg, b or bordercolorb)
+	sd.border:SetBackdropBorderColor(r or bordercolorr, g or bordercolorg, b or bordercolorb)
 	sd:SetAlpha(alpha or 1)
 end
 
@@ -201,7 +211,7 @@ end
 local function StopGlow(f)
 	if not f then return end
 	f:SetBackdropColor(0, 0, 0, 0)
-	f:SetBackdropBorderColor(0, 0, 0)
+	f:SetBackdropBorderColor(bordercolorr, bordercolorg, bordercolorb)
 	f.glow:SetScript("OnUpdate", nil)
 	f.glow:SetAlpha(0)
 end
@@ -220,12 +230,7 @@ function S:Reskin(f, noGlow)
 	if f.RightSeparator then f.RightSeparator:Hide() end
 
 	S:CreateBD(f, .0)
-
-	local tex = f:CreateTexture(nil, "BACKGROUND")
-	tex:SetPoint("TOPLEFT")
-	tex:SetPoint("BOTTOMRIGHT")
-	tex:SetTexture(S["media"].backdrop)
-	tex:SetGradientAlpha(unpack(S["media"].DefGradient))
+	S:CreateGradient(f)
 
 	if not noGlow then
 		f.glow = CreateFrame("Frame", nil, f)
@@ -278,12 +283,8 @@ function S:ReskinScroll(f)
 	bu.bg:Point("TOPLEFT", bu, 0, -2)
 	bu.bg:Point("BOTTOMRIGHT", bu, 0, 4)
 	S:CreateBD(bu.bg, 0)
-
-	local tex = f:CreateTexture(nil, "BACKGROUND")
-	tex:Point("TOPLEFT", bu.bg)
-	tex:Point("BOTTOMRIGHT", bu.bg)
-	tex:SetTexture(S["media"].backdrop)
-	tex:SetGradientAlpha(unpack(S["media"].DefGradient))
+	S:CreateGradient(f)
+	f.gradientTex:SetInside(bu.bg, 1, 1)
 
 	local up = _G[frame.."ScrollUpButton"]
 	local down = _G[frame.."ScrollDownButton"]
@@ -355,12 +356,7 @@ function S:ReskinDropDown(f)
 	bg:Point("BOTTOMRIGHT", -18, 8)
 	bg:SetFrameLevel(f:GetFrameLevel()-1)
 	S:CreateBD(bg, 0)
-
-	local tex = bg:CreateTexture(nil, "BACKGROUND")
-	tex:SetPoint("TOPLEFT")
-	tex:SetPoint("BOTTOMRIGHT")
-	tex:SetTexture(S["media"].backdrop)
-	tex:SetGradientAlpha(unpack(S["media"].DefGradient))
+	S:CreateGradient(bg)
 end
 
 function S:ReskinClose(f, a1, p, a2, x, y)
@@ -380,12 +376,7 @@ function S:ReskinClose(f, a1, p, a2, x, y)
 	f:SetDisabledTexture("")
 
 	S:CreateBD(f, 0)
-
-	local tex = f:CreateTexture(nil, "BACKGROUND")
-	tex:SetPoint("TOPLEFT")
-	tex:SetPoint("BOTTOMRIGHT")
-	tex:SetTexture(S["media"].backdrop)
-	tex:SetGradientAlpha(unpack(S["media"].DefGradient))
+	S:CreateGradient(f)
 
 	local text = f:CreateFontString(nil, "OVERLAY")
 	text:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
@@ -404,12 +395,7 @@ function S:ReskinInput(f, height, width)
 	if _G[frame.."Mid"] then _G[frame.."Mid"]:Hide() end
 	_G[frame.."Right"]:Hide()
 	S:CreateBD(f, 0)
-
-	local tex = f:CreateTexture(nil, "BACKGROUND")
-	tex:SetPoint("TOPLEFT")
-	tex:SetPoint("BOTTOMRIGHT")
-	tex:SetTexture(S["media"].backdrop)
-	tex:SetGradientAlpha(unpack(S["media"].DefGradient))
+	S:CreateGradient(f)
 
 	if height then f:Height(height) end
 	if width then f:Width(width) end
@@ -442,11 +428,7 @@ function S:ReskinCheck(f)
 	hl:Point("BOTTOMRIGHT", -5, 5)
 	hl:SetVertexColor(r, g, b, .2)
 
-	local tex = f:CreateTexture(nil, "BACKGROUND")
-	tex:Point("TOPLEFT", 5, -5)
-	tex:Point("BOTTOMRIGHT", -5, 5)
-	tex:SetTexture(S["media"].backdrop)
-	tex:SetGradientAlpha(unpack(S["media"].DefGradient))
+	S:CreateGradient(f)
 
 	local bd = CreateFrame("Frame", nil, f)
 	bd:Point("TOPLEFT", tex, -1, 1)
@@ -470,12 +452,7 @@ function S:ReskinSlider(f)
 	bd:SetFrameStrata("BACKGROUND")
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
 	S:CreateBD(bd, 0)
-
-	local tex = bd:CreateTexture(nil, "BACKGROUND")
-	tex:SetPoint("TOPLEFT")
-	tex:SetPoint("BOTTOMRIGHT")
-	tex:SetTexture(S["media"].backdrop)
-	tex:SetGradientAlpha(unpack(S["media"].DefGradient))
+	S:CreateGradient(bd)
 
 	local slider = select(4, f:GetRegions())
 	slider:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
@@ -567,7 +544,9 @@ function S:PLAYER_ENTERING_WORLD(event, addon)
 end
 
 function S:Initialize()
-	S["media"].backdrop = R["media"].normal
+	S["media"].backdrop = R["media"].blank
+	backdropcolorr, backdropcolorg, backdropcolorb, alpha = unpack(R["media"].backdropfadecolor)
+	bordercolorr, bordercolorg, bordercolorb = unpack(R["media"].bordercolor)
 	for addon, loadFunc in pairs(self.SkinFuncs) do
 		if addon ~= "RayUI" then
 			if IsAddOnLoaded(addon) then
