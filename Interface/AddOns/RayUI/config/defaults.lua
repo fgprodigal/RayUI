@@ -12,8 +12,8 @@ G["media"]={
 	fontflag = "THINOUTLINE",
 	warning = "RayUI Warning",
 	errorsound = "RayUI Error",
-	backdropcolor = { .08, .08, .08 },
-	backdropfadecolor = { .05, .05, .05, .7 },
+	backdropcolor = { .1, .1, .1 },
+	backdropfadecolor = { .05, .05, .05, .6 },
 	bordercolor = { 0, 0, 0 },
 }
 

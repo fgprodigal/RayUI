@@ -978,6 +978,7 @@ function UF:ConstructPaladinResourceBar(frame)
 	bars:SetFrameLevel(5)
 	bars:Point("BOTTOM", frame, "TOP", 0, 1)
 	local count = 5
+	bars.number = count
 
 	for i = 1, count do					
 		bars[i] = CreateFrame("StatusBar", nil, bars)
@@ -1005,6 +1006,8 @@ function UF:ConstructPaladinResourceBar(frame)
 		bars[i].shadow:SetFrameLevel(0)
 	end
 	
+	bars.PostUpdate = UF.UpdateHolyPower
+
 	return bars
 end
 
@@ -1180,6 +1183,25 @@ function UF:UpdateEclipse(unit)
 	else
 		self.Arrow:SetTexture(nil)
 		self.Spark:Show()
+	end
+end
+
+function UF:UpdateHolyPower()
+	local maxHolyPower = UnitPowerMax("player", SPELL_POWER_HOLY_POWER)
+	if maxHolyPower < self.number then
+		for i = 1, 3 do
+			self[i]:SetWidth(185/3)
+		end
+		self[4]:Hide()
+		self[5]:Hide()
+		self.number = maxHolyPower
+	elseif maxHolyPower > self.number then
+		for i = 1, 3 do
+			self[i]:SetWidth(180/5)
+		end
+		self[4]:Show()
+		self[5]:Show()
+		self.number = maxHolyPower
 	end
 end
 

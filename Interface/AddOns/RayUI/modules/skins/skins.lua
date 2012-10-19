@@ -8,6 +8,7 @@ S.SkinFuncs["RayUI"] = {}
 
 local alpha
 local backdropcolorr, backdropcolorg, backdropcolorb
+local backdropfadecolorr, backdropfadecolorg, backdropfadecolorb
 local bordercolorr, bordercolorg, bordercolorb
 
 S["media"] = {
@@ -130,11 +131,12 @@ function S:GetOptions()
 end
 
 function S:CreateGradient(f)
-	local tex = f:CreateTexture(nil, "BACKGROUND", 1)
+	local tex = f:CreateTexture(nil, "BACKGROUND")
+    tex:SetDrawLayer("BACKGROUND", 1)
 	tex:SetInside(f, 1, 1)
-	tex:SetTexture(S["media"].backdrop)
+	tex:SetTexture(R["media"].blank)
 	-- tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
-	tex:SetVertexColor(.08, .08, .08)
+	tex:SetVertexColor(backdropcolorr, backdropcolorg, backdropcolorb)
 	tex:SetAlpha(0.8)
 	f.gradientTex = tex
 end
@@ -142,11 +144,11 @@ end
 function S:CreateBD(f, a)
 	if not f then return end
 	f:SetBackdrop({
-		bgFile = S["media"].backdrop, 
-		edgeFile = S["media"].backdrop, 
+		bgFile = R["media"].blank, 
+		edgeFile = R["media"].blank, 
 		edgeSize = R.mult, 
 	})
-	f:SetBackdropColor(backdropcolorr, backdropcolorg, backdropcolorb, a or alpha)
+	f:SetBackdropColor(backdropfadecolorr, backdropfadecolorg, backdropfadecolorb, a or alpha)
 	f:SetBackdropBorderColor(bordercolorr, bordercolorg, bordercolorb)
 end
 
@@ -158,7 +160,7 @@ function S:CreateBG(frame)
 	local bg = f:CreateTexture(nil, "BACKGROUND")
 	bg:Point("TOPLEFT", frame, -1, 1)
 	bg:Point("BOTTOMRIGHT", frame, 1, -1)
-	bg:SetTexture(S["media"].backdrop)
+	bg:SetTexture(R["media"].blank)
 	bg:SetVertexColor(0, 0, 0)
 
 	return bg
@@ -202,18 +204,18 @@ end
 
 local function StartGlow(f)
 	if not f:IsEnabled() then return end
-	f:SetBackdropColor(r, g, b, .1)
+	f:SetBackdropColor(r, g, b, .2)
 	f:SetBackdropBorderColor(r, g, b)
-	f.glow:SetAlpha(1)
-	S:CreatePulse(f.glow)
+    f.glow:SetAlpha(1)
+    S:CreatePulse(f.glow)
 end
 
 local function StopGlow(f)
 	if not f then return end
 	f:SetBackdropColor(0, 0, 0, 0)
 	f:SetBackdropBorderColor(bordercolorr, bordercolorg, bordercolorb)
-	f.glow:SetScript("OnUpdate", nil)
-	f.glow:SetAlpha(0)
+    f.glow:SetScript("OnUpdate", nil)
+    f.glow:SetAlpha(0)
 end
 
 function S:Reskin(f, noGlow)
@@ -258,7 +260,7 @@ function S:CreateTab(f)
 	bg:SetFrameLevel(f:GetFrameLevel()-1)
 	S:CreateBD(bg)
 
-	f:SetHighlightTexture(S["media"].backdrop)
+	f:SetHighlightTexture(R["media"].blank)
 	local hl = f:GetHighlightTexture()
 	hl:Point("TOPLEFT", 10, -5)
 	hl:Point("BOTTOMRIGHT", -10, 1)
@@ -295,12 +297,12 @@ function S:ReskinScroll(f)
 	S:Reskin(up)
 	S:Reskin(down)
 
-	up:SetDisabledTexture(S["media"].backdrop)
+	up:SetDisabledTexture(R["media"].blank)
 	local dis1 = up:GetDisabledTexture()
 	dis1:SetVertexColor(0, 0, 0, .3)
 	dis1:SetDrawLayer("OVERLAY")
 
-	down:SetDisabledTexture(S["media"].backdrop)
+	down:SetDisabledTexture(R["media"].blank)
 	local dis2 = down:GetDisabledTexture()
 	dis2:SetVertexColor(0, 0, 0, .3)
 	dis2:SetDrawLayer("OVERLAY")
@@ -339,7 +341,7 @@ function S:ReskinDropDown(f)
 
 	S:Reskin(down)
 
-	down:SetDisabledTexture(S["media"].backdrop)
+	down:SetDisabledTexture(R["media"].blank)
 	local dis = down:GetDisabledTexture()
 	dis:SetVertexColor(0, 0, 0, .3)
 	dis:SetDrawLayer("OVERLAY")
@@ -406,7 +408,7 @@ function S:ReskinArrow(f, direction)
 	f:Size(18, 18)
 	S:Reskin(f)
 
-	f:SetDisabledTexture(S["media"].backdrop)
+	f:SetDisabledTexture(R["media"].blank)
 	local dis = f:GetDisabledTexture()
 	dis:SetVertexColor(0, 0, 0, .3)
 	dis:SetDrawLayer("OVERLAY")
@@ -422,7 +424,7 @@ function S:ReskinCheck(f)
 	if not f then return end
 	f:SetNormalTexture("")
 	f:SetPushedTexture("")
-	f:SetHighlightTexture(S["media"].backdrop)
+	f:SetHighlightTexture(R["media"].blank)
 	local hl = f:GetHighlightTexture()
 	hl:Point("TOPLEFT", 5, -5)
 	hl:Point("BOTTOMRIGHT", -5, 5)
@@ -544,8 +546,9 @@ function S:PLAYER_ENTERING_WORLD(event, addon)
 end
 
 function S:Initialize()
-	S["media"].backdrop = R["media"].blank
-	backdropcolorr, backdropcolorg, backdropcolorb, alpha = unpack(R["media"].backdropfadecolor)
+	S["media"].backdrop = R["media"].normal
+	backdropfadecolorr, backdropfadecolorg, backdropfadecolorb, alpha = unpack(R["media"].backdropfadecolor)
+	backdropcolorr, backdropcolorg, backdropcolorb = unpack(R["media"].backdropcolor)
 	bordercolorr, bordercolorg, bordercolorb = unpack(R["media"].bordercolor)
 	for addon, loadFunc in pairs(self.SkinFuncs) do
 		if addon ~= "RayUI" then
