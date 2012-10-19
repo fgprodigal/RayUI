@@ -16,10 +16,10 @@ R.Options = {
 			type = "group",
 			name = L["一般"],
 			get = function(info)
-				return R.db.general[ info[#info] ]
+				return R.global.general[ info[#info] ]
 			end,
 			set = function(info, value)
-				R.db.general[ info[#info] ] = value
+				R.global.general[ info[#info] ] = value
 				StaticPopup_Show("CFG_RELOAD")
 			end,
 			args = {
@@ -71,10 +71,10 @@ R.Options = {
 			type = "group",
 			name = L["字体材质"],
 			get = function(info)
-				return R.db.media[ info[#info] ]
+				return R.global.media[ info[#info] ]
 			end,
 			set = function(info, value)
-				R.db.media[ info[#info] ] = value
+				R.global.media[ info[#info] ] = value
 				StaticPopup_Show("CFG_RELOAD")
 			end,
 			args = {
@@ -90,7 +90,7 @@ R.Options = {
 							name = L["一般字体"],
 							values = AceGUIWidgetLSMlists.font,
 							set = function(info, value)
-								R.db.media[ info[#info] ] = value
+								R.global.media[ info[#info] ] = value
 								R:UpdateMedia()
 								R:UpdateFontTemplates()
 							end,
@@ -102,7 +102,7 @@ R.Options = {
 							type = "range",
 							min = 9, max = 22, step = 1,
 							set = function(info, value)
-								R.db.media[ info[#info] ] = value
+								R.global.media[ info[#info] ] = value
 								R:UpdateMedia()
 								R:UpdateFontTemplates()
 							end,
@@ -113,7 +113,7 @@ R.Options = {
 							name = L["伤害字体"],
 							values = AceGUIWidgetLSMlists.font,
 							set = function(info, value)
-								R.db.media[ info[#info] ] = value
+								R.global.media[ info[#info] ] = value
 								R:UpdateMedia()
 								R:UpdateFontTemplates()
 							end,
@@ -184,12 +184,12 @@ R.Options = {
 							hasAlpha = false,
 							name = L["边框颜色"],
 							get = function(info)
-								local t = R.db.media[ info[#info] ]
+								local t = R.global.media[ info[#info] ]
 								return unpack(t)
 							end,
 							set = function(info, r, g, b)
-								R.db.media[ info[#info] ] = {}
-								local t = R.db.media[ info[#info] ]
+								R.global.media[ info[#info] ] = {}
+								local t = R.global.media[ info[#info] ]
 								t[1], t[2], t[3] = r, g, b
 								StaticPopup_Show("CFG_RELOAD")
 							end,
@@ -200,12 +200,12 @@ R.Options = {
 							hasAlpha = false,
 							name = L["背景颜色"],
 							get = function(info)
-								local t = R.db.media[ info[#info] ]
+								local t = R.global.media[ info[#info] ]
 								return unpack(t)
 							end,
 							set = function(info, r, g, b, a)
-								R.db.media[ info[#info] ] = {}
-								local t = R.db.media[ info[#info] ]
+								R.global.media[ info[#info] ] = {}
+								local t = R.global.media[ info[#info] ]
 								t[1], t[2], t[3] = r, g, b
 								StaticPopup_Show("CFG_RELOAD")
 							end,
@@ -216,12 +216,12 @@ R.Options = {
 							hasAlpha = true,
 							name = L["透明框架背景颜色"],
 							get = function(info)
-								local t = R.db.media[ info[#info] ]
+								local t = R.global.media[ info[#info] ]
 								return unpack(t)
 							end,
 							set = function(info, r, g, b, a)
-								R.db.media[ info[#info] ] = {}
-								local t = R.db.media[ info[#info] ]
+								R.global.media[ info[#info] ] = {}
+								local t = R.global.media[ info[#info] ]
 								t[1], t[2], t[3], t[4] = r, g, b, a
 								StaticPopup_Show("CFG_RELOAD")
 							end,

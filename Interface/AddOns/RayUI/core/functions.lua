@@ -60,7 +60,7 @@ function R:UIScale()
 		R.ResScale = 1
 	end
 
-	self.mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/self.db.general.uiscale
+	self.mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/self.global.general.uiscale
 end
 
 function R:Scale(x)
@@ -545,28 +545,28 @@ end
 
 function R:UpdateMedia()
 	--Fonts
-	self["media"].font = LSM:Fetch("font", self.db["media"].font)
-	self["media"].dmgfont = LSM:Fetch("font", self.db["media"].dmgfont)
-	self["media"].pxfont = LSM:Fetch("font", self.db["media"].pxfont)
-	self["media"].cdfont = LSM:Fetch("font", self.db["media"].cdfont)
-	self["media"].fontsize = self.db["media"].fontsize
-	self["media"].fontflag = self.db["media"].fontflag
+	self["media"].font = LSM:Fetch("font", self.global["media"].font)
+	self["media"].dmgfont = LSM:Fetch("font", self.global["media"].dmgfont)
+	self["media"].pxfont = LSM:Fetch("font", self.global["media"].pxfont)
+	self["media"].cdfont = LSM:Fetch("font", self.global["media"].cdfont)
+	self["media"].fontsize = self.global["media"].fontsize
+	self["media"].fontflag = self.global["media"].fontflag
 
 	--Textures
-	self["media"].blank = LSM:Fetch("background", self.db["media"].blank)
-	self["media"].normal = LSM:Fetch("statusbar", self.db["media"].normal)
-	self["media"].glow = LSM:Fetch("border", self.db["media"].glow)
+	self["media"].blank = LSM:Fetch("background", self.global["media"].blank)
+	self["media"].normal = LSM:Fetch("statusbar", self.global["media"].normal)
+	self["media"].glow = LSM:Fetch("border", self.global["media"].glow)
 
 	--Border Color
-	self["media"].bordercolor = self.db["media"].bordercolor
+	self["media"].bordercolor = self.global["media"].bordercolor
 
 	--Backdrop Color
-	self["media"].backdropcolor = self.db["media"].backdropcolor
-	self["media"].backdropfadecolor = self.db["media"].backdropfadecolor
+	self["media"].backdropcolor = self.global["media"].backdropcolor
+	self["media"].backdropfadecolor = self.global["media"].backdropfadecolor
 
 	--Sound
-	self["media"].warning = LSM:Fetch("sound", self.db["media"].warning)
-	self["media"].errorsound = LSM:Fetch("sound", self.db["media"].errorsound)
+	self["media"].warning = LSM:Fetch("sound", self.global["media"].warning)
+	self["media"].errorsound = LSM:Fetch("sound", self.global["media"].errorsound)
 
 	self:UpdateBlizzardFonts()
 end

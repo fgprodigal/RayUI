@@ -346,10 +346,7 @@ function TT:PLAYER_ENTERING_WORLD(event)
 		WorldMapCompareTooltip3,
 		DropDownList1MenuBackdrop,
 		DropDownList2MenuBackdrop,
-		FloatingBattlePetTooltip,
 	}
-
-	FloatingBattlePetTooltip:StripTextures()
 
 	for _, tt in pairs(tooltips) do
 		self:SetStyle(tt)
@@ -382,7 +379,7 @@ function TT:SetStyle(tooltip)
 		})
 		tooltip.styled=true
 	end
-	tooltip:SetBackdropColor(0, 0, 0, 0.65)
+	tooltip:SetBackdropColor(unpack(R["media"].backdropfadecolor))
 	local item
 	if tooltip.GetItem then
 		item = select(2, tooltip:GetItem())
@@ -396,7 +393,7 @@ function TT:SetStyle(tooltip)
 			tooltip:SetBackdropBorderColor(0, 0, 0)
 		end
 	else
-		tooltip:SetBackdropBorderColor(0, 0, 0)
+		tooltip:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 	end
 	if tooltip.NumLines then
 		for index=1, tooltip:NumLines() do

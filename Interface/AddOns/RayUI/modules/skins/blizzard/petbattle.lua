@@ -206,6 +206,38 @@ end)
 			tt.Delimiter1:SetTexture(nil)
 			tt.Delimiter2:SetTexture(nil)
 		end
+		if tt.HealthBorder then
+			tt.HealthBorder:SetTexture(nil)
+			if not tt.hbd then
+				tt.hbd = CreateFrame("Frame", nil, tt)
+				tt.hbd:Point("TOPLEFT", tt.HealthBorder, "TOPLEFT", 0, 0)
+				tt.hbd:Point("BOTTOMRIGHT", tt.HealthBorder, "BOTTOMRIGHT", 0, -1)
+				tt.hbd:SetFrameLevel(0)
+				S:CreateBD(tt.hbd)
+			end
+		end
+		if tt.HealthBG then
+			tt.HealthBG:SetTexture(nil)
+		end
+		if tt.XPBorder then
+			tt.XPBorder:SetTexture(nil)
+			if not tt.xpbd then
+				tt.xpbd = CreateFrame("Frame", nil, tt)
+				tt.xpbd:Point("TOPLEFT", tt.XPBorder, "TOPLEFT", 0, 0)
+				tt.xpbd:Point("BOTTOMRIGHT", tt.XPBorder, "BOTTOMRIGHT", 0, -1)
+				tt.xpbd:SetFrameLevel(0)
+				S:CreateBD(tt.xpbd)
+			end
+		end
+		if tt.XPBG then
+			tt.XPBG:SetTexture(nil)
+		end
+		if tt.ActualHealthBar then
+			tt.ActualHealthBar:SetTexture(R["media"].normal)
+		end
+		if tt.XPBar then
+			tt.XPBar:SetTexture(R["media"].normal)
+		end
 		tt.BorderTop:SetTexture(nil)
 		tt.BorderTopLeft:SetTexture(nil)
 		tt.BorderTopRight:SetTexture(nil)
@@ -220,8 +252,8 @@ end)
 			edgeSize = R:Scale(4),
 			insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
 		})
-		tt:SetBackdropColor(0, 0, 0, 0.65)
-		tt:SetBackdropBorderColor(0, 0, 0, 1)
+		tt:SetBackdropColor(unpack(R["media"].backdropfadecolor))
+		tt:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 	end
 
 	SkinPetTooltip(PetBattlePrimaryAbilityTooltip)
@@ -380,6 +412,11 @@ end)
 		local speciesID=C_PetBattles.GetPetSpeciesID(petOwner,petIndex)
 		local name, icon, petType, creatureID, sourceText, description, isWild, canBattle, tradable = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
         self.Name:SetText(ITEM_QUALITY_COLORS[rarity-1].hex..name)
+		if ( petOwner == LE_BATTLE_PET_ALLY ) then
+			self.xpbd:Show()
+		else
+			self.xpbd:Hide()
+		end
     end)
 end
 

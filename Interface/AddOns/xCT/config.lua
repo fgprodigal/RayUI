@@ -1,4 +1,4 @@
-local R, L, P = unpack(RayUI)
+local R, L, P, G = unpack(RayUI)
 local LSM = LibStub("LibSharedMedia-3.0")
 local addon, ns=...
 ns.config={
@@ -23,10 +23,10 @@ ns.config={
 	["healtreshold"] = 1,		-- minimum healing to show in incoming/outgoing healing messages.
 
 -- appearence
-	["font"] = LSM:Fetch("font", P["media"].font),
+	["font"] = LSM:Fetch("font", G["media"].font),
 	["fontsize"] = 20,
 	["fontstyle"] = "OUTLINE",	-- valid options are "OUTLINE", "MONOCHROME", "THICKOUTLINE", "OUTLINE,MONOCHROME", "THICKOUTLINE,MONOCHROME"
-	["damagefont"] = LSM:Fetch("font", P["media"].dmgfont),
+	["damagefont"] = LSM:Fetch("font", G["media"].dmgfont),
 	["damagefontsize"] = 15,	-- size of xCT damage font. use "auto" to set it automatically depending on icon size, or use own value, 16 for example. if it's set to number value icons will change size.
 	["timevisible"] = 3, 		-- time (seconds) a single message will be visible. 3 is a good value.
 	["scrollable"] = false,		-- allows you to scroll frame lines with mousewheel.

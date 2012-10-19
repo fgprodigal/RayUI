@@ -2,15 +2,15 @@ local addonName = select(1, ...)
 ------------------------------------------------------
 -- MEDIA & CONFIG ------------------------------------
 ------------------------------------------------------
-local R, L, P, S
+local R, L, P, G, S
 local backdropcolor = { 0, 0, 0, 0.6 }
 local font = { GameFontNormal:GetFont(), 13, "THINOUTLINE" }
 if RayUI then
-	R, L, P = unpack(RayUI)
+	R, L, P, G = unpack(RayUI)
 	S = R:GetModule("Skins")
 	local LSM = LibStub("LibSharedMedia-3.0")
 	backdropcolor = R["media"].backdropcolor
-	font = { LSM:Fetch("font", P["media"].font), 13, "THINOUTLINE" }
+	font = { LSM:Fetch("font", G["media"].font), 13, "THINOUTLINE" }
 else
 	S = {}
 
@@ -150,7 +150,7 @@ local function LoadProfileWindow()
 		for i, addon in pairs(stAddonManager.AllAddons) do
 			if addon.name ~= addonName then			
 				DisableAddOn(addon.name)
-				stAddonManager.Buttons[i]:SetBackdropColor(unpack(P["media"].backdropcolor))
+				stAddonManager.Buttons[i]:SetBackdropColor(unpack(G["media"].backdropcolor))
 				addon.enabled = false
 			end
 		end

@@ -225,8 +225,8 @@ local function FontTemplate(fs, font, fontSize, fontStyle)
 	fs.fontSize = fontSize
 	fs.fontStyle = fontStyle
 	
-	if not font then font = LSM:Fetch("font", R.db.media.font) end
-	if not fontSize then fontSize = R.db.media.fontsize end
+	if not font then font = LSM:Fetch("font", R.global.media.font) end
+	if not fontSize then fontSize = R.global.media.fontsize end
 	
 	fs:SetFont(font, fontSize, fontStyle)
 	if fontStyle then

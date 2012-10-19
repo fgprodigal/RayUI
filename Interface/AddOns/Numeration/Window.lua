@@ -1,4 +1,4 @@
-local R, L, P = unpack(RayUI)
+local R, L, P, G = unpack(RayUI)
 local LSM = LibStub("LibSharedMedia-3.0")
 local addon = select(2, ...)
 local window = CreateFrame("Frame", "NumerationFrame", UIParent)
@@ -11,7 +11,7 @@ local noop = function() end
 local backAction = noop
 local reportAction = noop
 local backdrop = {
-	bgFile = LSM:Fetch("statusbar", P["media"].normal),
+	bgFile = LSM:Fetch("statusbar", G["media"].blank),
 	edgeFile = "", tile = true, tileSize = 16, edgeSize = 0,
 	insets = { left = 0, right = 0, top = 0, bottom = 0 }
 }

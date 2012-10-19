@@ -1,6 +1,6 @@
 ﻿local R, L, P, G = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
 
-P["media"]={
+G["media"]={
 	blank = "RayUI Blank",
 	normal = "RayUI Normal",
 	glow = "RayUI GlowBorder",
@@ -17,7 +17,7 @@ P["media"]={
 	bordercolor = { 0, 0, 0 },
 }
 
-P["general"]={
+G["general"]={
 	uiscale = 0.75,
 	logo = true,
 }

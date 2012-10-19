@@ -1,5 +1,5 @@
 local n = select(2, ...)
-local R, L, P = unpack(RayUI)
+local R, L, P, G = unpack(RayUI)
 local LSM = LibStub("LibSharedMedia-3.0")
 -- window settings
 n.windowsettings = {
@@ -12,7 +12,7 @@ n.windowsettings = {
 
 	titleheight = 16,
 	titlealpha = 0,
-	titlefont = LSM:Fetch("font", P["media"].font),
+	titlefont = LSM:Fetch("font", G["media"].font),
 	titlefontsize = 13,
 	titlefontcolor = {1, .82, 0},
 	buttonhighlightcolor = {1, 1, 1},
@@ -20,8 +20,8 @@ n.windowsettings = {
 	lineheight = 16,
 	linegap = 2,
 	linealpha = 1,
-	linetexture = LSM:Fetch("statusbar", P["media"].normal),
-	linefont = LSM:Fetch("font", P["media"].font),
+	linetexture = LSM:Fetch("statusbar", G["media"].normal),
+	linefont = LSM:Fetch("font", G["media"].font),
 	linefontsize = 12,
 	linefontcolor = {1, 1, 1},
 }
