@@ -252,6 +252,7 @@ local function LoadTalent()
 			Text:SetText(select(2, GetSpecializationInfo(GetSpecialization(false, false, active))))
 			self:SetScript("OnEnter", Spec_OnEnter)
 		else
+            Text:SetText(NONE..TALENTS)
 			self:SetScript("OnEnter", nil)
 		end
 	end

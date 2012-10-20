@@ -150,9 +150,15 @@ R.Options = {
 							name = L["空白材质"],
 							values = AceGUIWidgetLSMlists.statusbar,
 						},		
+						gloss = {
+							type = "select", dialogControl = "LSM30_Statusbar",
+							order = 3,
+							name = L["玻璃材质"],
+							values = AceGUIWidgetLSMlists.statusbar,
+						},
 						glow = {
 							type = "select", dialogControl = "LSM30_Border",
-							order = 3,
+							order = 4,
 							name = L["阴影边框"],
 							values = AceGUIWidgetLSMlists.border,
 						},
@@ -191,6 +197,7 @@ R.Options = {
 								R.global.media[ info[#info] ] = {}
 								local t = R.global.media[ info[#info] ]
 								t[1], t[2], t[3] = r, g, b
+                                R:UpdateDemoFrame()
 								StaticPopup_Show("CFG_RELOAD")
 							end,
 						},
@@ -207,6 +214,7 @@ R.Options = {
 								R.global.media[ info[#info] ] = {}
 								local t = R.global.media[ info[#info] ]
 								t[1], t[2], t[3] = r, g, b
+                                R:UpdateDemoFrame()
 								StaticPopup_Show("CFG_RELOAD")
 							end,
 						},
@@ -223,9 +231,21 @@ R.Options = {
 								R.global.media[ info[#info] ] = {}
 								local t = R.global.media[ info[#info] ]
 								t[1], t[2], t[3], t[4] = r, g, b, a
+                                R:UpdateDemoFrame()
 								StaticPopup_Show("CFG_RELOAD")
 							end,
 						},
+                        resetbutton = {
+                            type = "execute",
+                            order = 5,
+                            name = L["恢复默认"],
+                            func = function() 
+                                R.global.media.backdropcolor = G.media.backdropcolor
+                                R.global.media.backdropfadecolor = G.media.backdropfadecolor
+                                R.global.media.bordercolor = G.media.bordercolor
+                                ReloadUI()
+                            end,
+                        },
 					},						
 				},
 			},

@@ -4,6 +4,7 @@ G["media"]={
 	blank = "RayUI Blank",
 	normal = "RayUI Normal",
 	glow = "RayUI GlowBorder",
+    gloss = "RayUI Gloss",
 	font = "RayUI Font",
 	dmgfont = "RayUI Combat",
 	pxfont = "RayUI Pixel",
@@ -13,7 +14,7 @@ G["media"]={
 	warning = "RayUI Warning",
 	errorsound = "RayUI Error",
 	backdropcolor = { .1, .1, .1 },
-	backdropfadecolor = { .05, .05, .05, .6 },
+	backdropfadecolor = { .04, .04, .04, .7 },
 	bordercolor = { 0, 0, 0 },
 }
 

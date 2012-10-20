@@ -67,6 +67,7 @@ local function LoadCurrency()
 						newamount = amount
 					end
 				elseif id == 390 then
+                    RequestPVPRewards()
 					local pointsThisWeek, limitThisWeek = GetPVPRewards()
 					if pointsThisWeek and pointsThisWeek >= limitThisWeek then
 						newamount = "|cffff0000" .. amount .. "|r"

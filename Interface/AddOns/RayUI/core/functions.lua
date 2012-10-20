@@ -15,6 +15,7 @@ R.HiddenFrame:Hide()
 
 local AddonNotSupported = {}
 local BlackList = {"bigfoot", "duowan", "163ui", "neavo", "sora"}
+local demoFrame
 
 function R.dummy()
     return
@@ -553,8 +554,9 @@ function R:UpdateMedia()
 	self["media"].fontflag = self.global["media"].fontflag
 
 	--Textures
-	self["media"].blank = LSM:Fetch("background", self.global["media"].blank)
+	self["media"].blank = LSM:Fetch("statusbar", self.global["media"].blank)
 	self["media"].normal = LSM:Fetch("statusbar", self.global["media"].normal)
+	self["media"].gloss = LSM:Fetch("statusbar", self.global["media"].gloss)
 	self["media"].glow = LSM:Fetch("border", self.global["media"].glow)
 
 	--Border Color
@@ -569,6 +571,62 @@ function R:UpdateMedia()
 	self["media"].errorsound = LSM:Fetch("sound", self.global["media"].errorsound)
 
 	self:UpdateBlizzardFonts()
+end
+
+function R:CreateDemoFrame()
+    local S = R:GetModule("Skins")
+    demoFrame = CreateFrame("Frame", "RayUIDemoFrame", UIParent)
+    demoFrame:Size(300, 200)
+    demoFrame:Point("RIGHT", UIParent, "RIGHT", -100, 0)
+    demoFrame:SetTemplate("Transparent")
+    demoFrame.outBorder = CreateFrame("Frame", nil, demoFrame)
+    demoFrame.outBorder:SetOutside(demoFrame, 1, 1)
+    demoFrame.outBorder:CreateShadow()
+    demoFrame.title = demoFrame:CreateFontString(nil, "OVERLAY")
+    demoFrame.title:FontTemplate()
+    demoFrame.title:SetText("Demo Frame")
+    demoFrame.title:Point("TOPLEFT", 10, -5)
+    demoFrame.inlineFrame1 = CreateFrame("Frame", nil, demoFrame)
+    demoFrame.inlineFrame1:SetFrameLevel(demoFrame:GetFrameLevel() + 1)
+    demoFrame.inlineFrame1:Size(150, 150)
+    demoFrame.inlineFrame1:Point("TOPLEFT", 10, -30)
+    demoFrame.inlineFrame1:SetTemplate("Transparent")
+    demoFrame.button1 = CreateFrame("Button", nil, demoFrame, "UIPanelButtonTemplate")
+    demoFrame.button1:Point("BOTTOMLEFT", 30, 40)
+    demoFrame.button1:SetText("Test")
+    demoFrame.button1:Size(100, 20)
+    S:Reskin(demoFrame.button1)
+    demoFrame.button2 = CreateFrame("Button", nil, demoFrame, "UIPanelButtonTemplate")
+    demoFrame.button2:Point("BOTTOMRIGHT", -10, 10)
+    demoFrame.button2:SetText("Close")
+    demoFrame.button2:Size(100, 20)
+    demoFrame.button2:SetScript("OnClick", function() demoFrame:Hide() end)
+    S:Reskin(demoFrame.button2)
+
+    tinsert(UISpecialFrames, demoFrame:GetName())
+end
+
+function R:UpdateDemoFrame()
+    local borderr, borderg, borderb = unpack(R.global.media.bordercolor)
+    local backdropr, backdropg, backdropb = unpack(R.global.media.backdropcolor)
+    local backdropfader, backdropfadeg, backdropfadeb, backdropfadea = unpack(R.global.media.backdropfadecolor)
+    if not demoFrame then
+        self:CreateDemoFrame()
+    end
+    if not demoFrame:IsShown() then
+        demoFrame:Show()
+    end
+    demoFrame:SetBackdropColor(backdropfader, backdropfadeg, backdropfadeb, backdropfadea)
+    demoFrame:SetBackdropBorderColor(borderr, borderg, borderb)
+    demoFrame.outBorder.border:SetBackdropBorderColor(borderr, borderg, borderb)
+    demoFrame.inlineFrame1:SetBackdropColor(backdropfader, backdropfadeg, backdropfadeb, backdropfadea)
+    demoFrame.inlineFrame1:SetBackdropBorderColor(borderr, borderg, borderb)
+    demoFrame.button1:SetBackdropColor(backdropfader, backdropfadeg, backdropfadeb, backdropfadea)
+    demoFrame.button1:SetBackdropBorderColor(borderr, borderg, borderb)
+    demoFrame.button1.gradientTex:SetVertexColor(backdropr, backdropg, backdropb)
+    demoFrame.button2:SetBackdropColor(backdropfader, backdropfadeg, backdropfadeb, backdropfadea)
+    demoFrame.button2:SetBackdropBorderColor(borderr, borderg, borderb)
+    demoFrame.button2.gradientTex:SetVertexColor(backdropr, backdropg, backdropb)
 end
 
 R.Developer = { "夏琉君", "Theron", "Divineseraph", "水月君", "夏翎", }

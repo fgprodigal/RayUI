@@ -61,11 +61,11 @@ local function LoadSkin()
 	S:ReskinInput(GearManagerDialogPopupEditBox)
 
 	hooksecurefunc("CharacterFrame_Expand", function()
-		select(15, CharacterFrameExpandButton:GetRegions()):SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-left-active")
+		select(14, CharacterFrameExpandButton:GetRegions()):SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-left-active")
 	end)
 
 	hooksecurefunc("CharacterFrame_Collapse", function()
-		select(15, CharacterFrameExpandButton:GetRegions()):SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-right-active")
+		select(14, CharacterFrameExpandButton:GetRegions()):SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-right-active")
 	end)
 
 	hooksecurefunc("PaperDollFrame_CollapseStatCategory", function(categoryFrame)
@@ -290,7 +290,7 @@ local function LoadSkin()
 		end
 
 		tab.bg = CreateFrame("Frame", nil, tab)
-		tab.bg:Point("TOPLEFT", 2, -3)
+		tab.bg:Point("TOPLEFT", 1, -3)
 		tab.bg:Point("BOTTOMRIGHT", 0, -1)
 		tab.bg:SetFrameLevel(0)
 		S:CreateBD(tab.bg)

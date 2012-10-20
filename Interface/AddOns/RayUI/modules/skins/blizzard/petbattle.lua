@@ -246,14 +246,12 @@ end)
 		tt.BorderBottom:SetTexture(nil)
 		tt.BorderBottomRight:SetTexture(nil)
 		tt.BorderBottomLeft:SetTexture(nil)
-		tt:SetBackdrop( { 
-			edgeFile = R["media"].glow,
-			bgFile = R["media"].blank,
-			edgeSize = R:Scale(4),
-			insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
-		})
-		tt:SetBackdropColor(unpack(R["media"].backdropfadecolor))
-		tt:SetBackdropBorderColor(unpack(R["media"].bordercolor))
+        tt:SetBackdrop(nil)
+        tt:CreateShadow("Background")
+        tt.border:SetInside(tt)
+        tt.shadow:SetAllPoints(tt)
+		tt.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))
+		tt.shadow:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 	end
 
 	SkinPetTooltip(PetBattlePrimaryAbilityTooltip)

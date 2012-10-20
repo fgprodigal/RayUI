@@ -18,6 +18,16 @@ local ilvcurrent = {}
 
 local lastInspectRequest = 0
 
+local gcol = {.35, 1, .6}										-- Guild Color
+local pgcol = {1, .12, .8} 									-- Player's Guild Color
+
+local types = {
+    rare = " R ",
+    elite = " + ",
+    worldboss = " B ",
+    rareelite = " R+ ",
+}
+
 local function IsInspectFrameOpen()
 	return (InspectFrame and InspectFrame:IsShown()) or (Examiner and Examiner:IsShown())
 end
@@ -85,13 +95,12 @@ end
 
 function TT:TalentSetUnit()
 	TalentFrame:Hide()
-	local _, unit = GameTooltip:GetUnit()
-	if (not unit) then
-		local mFocus = GetMouseFocus()
-		if (mFocus) and (mFocus.unit) then
-			unit = mFocus.unit
-		end
-	end
+    local GMF = GetMouseFocus()
+    local unit = (select(2, GameTooltip:GetUnit())) or (GMF and GMF:GetAttribute("unit"))
+
+    if (not unit) and (UnitExists("mouseover")) then
+        unit = "mouseover"
+    end
 	if (not unit) or (not UnitIsPlayer(unit)) then
 		return
 	end
@@ -285,12 +294,17 @@ function TT:GetQuality(ItemScore)
 end
 
 function TT:iLVSetUnit()
-	local _, unit = GameTooltip:GetUnit()
-	local cacheLoaded = false
+    local GMF = GetMouseFocus()
+    local unit = (select(2, GameTooltip:GetUnit())) or (GMF and GMF:GetAttribute("unit"))
+
+    if (not unit) and (UnitExists("mouseover")) then
+        unit = "mouseover"
+    end
 	if not (unit) or not (UnitIsPlayer(unit)) or not (CanInspect(unit)) then
 		return
 	end
 
+	local cacheLoaded = false
 	wipe(ilvcurrent)
 	ilvcurrent.unit = unit
 	ilvcurrent.name = UnitName(unit)
@@ -344,8 +358,6 @@ function TT:PLAYER_ENTERING_WORLD(event)
 		WorldMapCompareTooltip1,
 		WorldMapCompareTooltip2,
 		WorldMapCompareTooltip3,
-		DropDownList1MenuBackdrop,
-		DropDownList2MenuBackdrop,
 	}
 
 	for _, tt in pairs(tooltips) do
@@ -371,12 +383,16 @@ function TT:SetStyle(tooltip)
         return tooltip:Hide()
     end
 	if not tooltip.styled then
-		tooltip:SetBackdrop({
+		--[[tooltip:SetBackdrop({
 			edgeFile = R["media"].glow,
 			bgFile = R["media"].blank,
 			edgeSize = R:Scale(4),
 			insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
-		})
+		})]]
+        tooltip:SetBackdrop(nil)
+        tooltip:CreateShadow("Background")
+        tooltip.border:SetInside(tooltip)
+        tooltip.shadow:SetAllPoints(tooltip)
 		tooltip.styled=true
 	end
 	tooltip:SetBackdropColor(unpack(R["media"].backdropfadecolor))
@@ -388,12 +404,15 @@ function TT:SetStyle(tooltip)
 		local quality = select(3, GetItemInfo(item))
 		if quality and quality > 1 then
 			local r, g, b = GetItemQualityColor(quality)
-			tooltip:SetBackdropBorderColor(r, g, b)
+			tooltip.border:SetBackdropBorderColor(r, g, b)
+			tooltip.shadow:SetBackdropBorderColor(r, g, b)
 		else
-			tooltip:SetBackdropBorderColor(0, 0, 0)
+			tooltip.border:SetBackdropBorderColor(0, 0, 0)
+			tooltip.shadow:SetBackdropBorderColor(0, 0, 0)
 		end
 	else
-		tooltip:SetBackdropBorderColor(unpack(R["media"].bordercolor))
+		tooltip.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))
+		tooltip.shadow:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 	end
 	if tooltip.NumLines then
 		for index=1, tooltip:NumLines() do
@@ -403,21 +422,78 @@ function TT:SetStyle(tooltip)
 	tooltip.needRefresh = true
 end
 
+function TT:OnTooltipSetUnit(tooltip)
+    local GMF = GetMouseFocus()
+    local unit = (select(2, tooltip:GetUnit())) or (GMF and GMF:GetAttribute("unit"))
+
+    if (not unit) and (UnitExists("mouseover")) then
+        unit = "mouseover"
+    end
+
+    if not unit then tooltip:Hide() return end
+
+    if self.db.hideincombat and InCombatLockdown() then
+        return tooltip:Hide()
+    end
+    local unitClassification = types[UnitClassification(unit)] or " "
+    local creatureType = UnitCreatureType(unit) or ""
+    local unitName = UnitName(unit)
+    local unitLevel = UnitLevel(unit)
+    local diffColor = unitLevel > 0 and GetQuestDifficultyColor(UnitLevel(unit)) or QuestDifficultyColors["impossible"]
+    if unitLevel < 0 then unitLevel = "??" end
+    if UnitIsPlayer(unit) then
+        local unitRace = UnitRace(unit)
+        local unitClass = UnitClass(unit)
+        local guild, rank = GetGuildInfo(unit)
+        local playerGuild = GetGuildInfo("player")
+        GameTooltipStatusBar:SetStatusBarColor(unpack({GameTooltip_UnitColor(unit)}))
+        if guild then
+            GameTooltipTextLeft2:SetFormattedText("<%s>"..R:RGBToHex(1, 1, 1).." %s|r", guild, rank)
+            if IsInGuild() and guild == playerGuild then
+                GameTooltipTextLeft2:SetTextColor(pgcol[1], pgcol[2], pgcol[3])
+            else
+                GameTooltipTextLeft2:SetTextColor(gcol[1], gcol[2], gcol[3])
+            end
+        end
+        if UnitExists(unit.."target") then
+            local r, g, b = GameTooltip_UnitColor(unit.."target")
+            if UnitName(unit.."target") == UnitName("player") then
+                text = R:RGBToHex(1, 0, 0)..">>"..YOU.."<<|r"
+            else
+                text = R:RGBToHex(r, g, b)..UnitName(unit.."target").."|r"
+            end
+            tooltip:AddDoubleLine(TARGET, text)
+        end
+        for i=2, GameTooltip:NumLines() do
+            if _G["GameTooltipTextLeft" .. i]:GetText():find(PLAYER) then
+                _G["GameTooltipTextLeft" .. i]:SetText(string.format(R:RGBToHex(diffColor.r, diffColor.g, diffColor.b).."%s|r ", unitLevel) .. unitRace .. " ".. unitClass)
+                break
+            end
+        end
+        if UnitFactionGroup(unit) and UnitFactionGroup(unit) ~= "Neutral" then
+            GameTooltipTextLeft1:SetText("|TInterface\\Addons\\RayUI\\media\\UI-PVP-"..select(1, UnitFactionGroup(unit))..".blp:16:16:0:0:64:64:5:40:0:35|t"..GameTooltipTextLeft1:GetText())
+        end
+    else
+        for i=2, GameTooltip:NumLines() do
+            if _G["GameTooltipTextLeft" .. i]:GetText():find(LEVEL) or _G["GameTooltipTextLeft" .. i]:GetText():find(creatureType) then
+                _G["GameTooltipTextLeft" .. i]:SetText(string.format(R:RGBToHex(diffColor.r, diffColor.g, diffColor.b).."%s|r", unitLevel) .. unitClassification .. creatureType)
+                break
+            end
+        end
+    end
+    for i = 1, GameTooltip:NumLines() do
+        local line = _G["GameTooltipTextLeft"..i]
+        while line and line:GetText() and (line:GetText() == PVP_ENABLED or line:GetText() == FACTION_HORDE or line:GetText() == FACTION_ALLIANCE) do
+            line:SetText()
+            break
+        end
+    end
+
+    self:iLVSetUnit()
+    self:TalentSetUnit()
+end
+
 function TT:Initialize()
-	local gcol = {.35, 1, .6}										-- Guild Color
-	local pgcol = {1, .12, .8} 									-- Player's Guild Color
-
-	local types = {
-		rare = " R ",
-		elite = " + ",
-		worldboss = " B ",
-		rareelite = " R+ ",
-	}
-
-	local hex = function(r, g, b)
-		return ("|cff%02x%02x%02x"):format(r * 255, g * 255, b * 255)
-	end
-
 	local truncate = function(value)
 		if value >= 1e6 then
 			return string.format("%.2fm", value / 1e6)
@@ -430,84 +506,22 @@ function TT:Initialize()
 
 	self:RawHook("GameTooltip_UnitColor", true)
 
-	GameTooltip:HookScript("OnTooltipSetUnit", function(self)
-		local unit = select(2, self:GetUnit())
-		if unit then
-            if TT.db.hideincombat and InCombatLockdown() then
-                return self:Hide()
-            end
-			local unitClassification = types[UnitClassification(unit)] or " "
-			local creatureType = UnitCreatureType(unit) or ""
-			local unitName = UnitName(unit)
-			local unitLevel = UnitLevel(unit)
-			local diffColor = unitLevel > 0 and GetQuestDifficultyColor(UnitLevel(unit)) or QuestDifficultyColors["impossible"]
-			if unitLevel < 0 then unitLevel = "??" end
-			if UnitIsPlayer(unit) then
-				local unitRace = UnitRace(unit)
-				local unitClass = UnitClass(unit)
-				local guild, rank = GetGuildInfo(unit)
-				local playerGuild = GetGuildInfo("player")
-				GameTooltipStatusBar:SetStatusBarColor(unpack({GameTooltip_UnitColor(unit)}))
-				if guild then
-					GameTooltipTextLeft2:SetFormattedText("<%s>"..hex(1, 1, 1).." %s|r", guild, rank)
-					if IsInGuild() and guild == playerGuild then
-						GameTooltipTextLeft2:SetTextColor(pgcol[1], pgcol[2], pgcol[3])
-					else
-						GameTooltipTextLeft2:SetTextColor(gcol[1], gcol[2], gcol[3])
-					end
-				end
-                if UnitExists(unit.."target") then
-                    local r, g, b = GameTooltip_UnitColor(unit.."target")
-                    if UnitName(unit.."target") == UnitName("player") then
-                        text = hex(1, 0, 0)..">>"..YOU.."<<|r"
-                    else
-                        text = hex(r, g, b)..UnitName(unit.."target").."|r"
-                    end
-                    self:AddDoubleLine(TARGET, text)
-                end
-				for i=2, GameTooltip:NumLines() do
-					if _G["GameTooltipTextLeft" .. i]:GetText():find(PLAYER) then
-						_G["GameTooltipTextLeft" .. i]:SetText(string.format(hex(diffColor.r, diffColor.g, diffColor.b).."%s|r ", unitLevel) .. unitRace .. " ".. unitClass)
-						break
-					end
-				end
-                if UnitFactionGroup(unit) and UnitFactionGroup(unit) ~= "Neutral" then
-					GameTooltipTextLeft1:SetText("|TInterface\\Addons\\RayUI\\media\\UI-PVP-"..select(1, UnitFactionGroup(unit))..".blp:16:16:0:0:64:64:5:40:0:35|t"..GameTooltipTextLeft1:GetText())
-                end
-			else
-				for i=2, GameTooltip:NumLines() do
-					if _G["GameTooltipTextLeft" .. i]:GetText():find(LEVEL) or _G["GameTooltipTextLeft" .. i]:GetText():find(creatureType) then
-						_G["GameTooltipTextLeft" .. i]:SetText(string.format(hex(diffColor.r, diffColor.g, diffColor.b).."%s|r", unitLevel) .. unitClassification .. creatureType)
-						break
-					end
-				end
-			end
-			for i = 1, GameTooltip:NumLines() do
-				local line = _G["GameTooltipTextLeft"..i]
-				while line and line:GetText() and (line:GetText() == PVP_ENABLED or line:GetText() == FACTION_HORDE or line:GetText() == FACTION_ALLIANCE) do
-					line:SetText()
-					break
-				end
-			end
-		end
+    self:HookScript(GameTooltip, "OnTooltipSetUnit")
 
-		TT:iLVSetUnit()
-		TT:TalentSetUnit()
-	end)
-
-	GameTooltipStatusBar.bg = CreateFrame("Frame", nil, GameTooltipStatusBar)
-	GameTooltipStatusBar.bg:Point("TOPLEFT", GameTooltipStatusBar, "TOPLEFT", -4, 4)
-	GameTooltipStatusBar.bg:Point("BOTTOMRIGHT", GameTooltipStatusBar, "BOTTOMRIGHT", 4, -4)
-	GameTooltipStatusBar.bg:SetFrameStrata(GameTooltipStatusBar:GetFrameStrata())
-	GameTooltipStatusBar.bg:SetFrameLevel(GameTooltipStatusBar:GetFrameLevel() - 1)
-	GameTooltipStatusBar.bg:SetBackdrop( { 
-		edgeFile = R["media"].glow,
-		bgFile = R["media"].blank,
-		edgeSize = R:Scale(4),
-		insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
-	})
-	GameTooltipStatusBar.bg:SetBackdropColor(0, 0, 0, 0.5)
-	GameTooltipStatusBar.bg:SetBackdropBorderColor(0, 0, 0, 0.8)
+	--GameTooltipStatusBar.bg = CreateFrame("Frame", nil, GameTooltipStatusBar)
+	--GameTooltipStatusBar.bg:Point("TOPLEFT", GameTooltipStatusBar, "TOPLEFT", -4, 4)
+	--GameTooltipStatusBar.bg:Point("BOTTOMRIGHT", GameTooltipStatusBar, "BOTTOMRIGHT", 4, -4)
+	--GameTooltipStatusBar.bg:SetFrameStrata(GameTooltipStatusBar:GetFrameStrata())
+	--GameTooltipStatusBar.bg:SetFrameLevel(GameTooltipStatusBar:GetFrameLevel() - 1)
+	--GameTooltipStatusBar.bg:SetBackdrop( { 
+		--edgeFile = R["media"].glow,
+		--bgFile = R["media"].blank,
+		--edgeSize = R:Scale(4),
+		--insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
+	--})
+	--GameTooltipStatusBar.bg:SetBackdropColor(0, 0, 0, 0.5)
+	--GameTooltipStatusBar.bg:SetBackdropBorderColor(0, 0, 0, 0.8)
+    GameTooltipStatusBar:CreateShadow("Background")
 	GameTooltipStatusBar:SetHeight(8)
 	GameTooltipStatusBar:SetStatusBarTexture(R["media"].normal)
 	GameTooltipStatusBar:ClearAllPoints()

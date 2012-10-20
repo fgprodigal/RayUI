@@ -29,6 +29,8 @@ local Healers = {
 	["神聖"] = true,
 	["神圣"] = true,
 	["戒律"] = true,
+    ["织雾"] = true,
+    ["織霧"] = true,
 }
 
 local DebuffWhiteList = {

@@ -130,15 +130,15 @@ function S:GetOptions()
 	return options
 end
 
-function S:CreateGradient(f)
+function S:CreateBackdropTexture(f)
 	local tex = f:CreateTexture(nil, "BACKGROUND")
     tex:SetDrawLayer("BACKGROUND", 1)
 	tex:SetInside(f, 1, 1)
-	tex:SetTexture(R["media"].blank)
+	tex:SetTexture(R["media"].gloss)
 	-- tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 	tex:SetVertexColor(backdropcolorr, backdropcolorg, backdropcolorb)
 	tex:SetAlpha(0.8)
-	f.gradientTex = tex
+	f.backdropTexture = tex
 end
 
 function S:CreateBD(f, a)
@@ -190,7 +190,7 @@ function S:CreatePulse(frame, speed, mult, alpha)
 		self.tslu = self.tslu + elapsed
 		if self.tslu > self.speed then
 			self.tslu = 0
-			self:SetAlpha(self.alpha)
+			self:SetAlpha(self.alpha*3/5)
 		end
 		self.alpha = self.alpha - elapsed*self.mult
 		if self.alpha < 0 and self.mult > 0 then
@@ -204,7 +204,7 @@ end
 
 local function StartGlow(f)
 	if not f:IsEnabled() then return end
-	f:SetBackdropColor(r, g, b, .2)
+	f:SetBackdropColor(r, g, b, .15)
 	f:SetBackdropBorderColor(r, g, b)
     f.glow:SetAlpha(1)
     S:CreatePulse(f.glow)
@@ -231,17 +231,16 @@ function S:Reskin(f, noGlow)
 	if f.LeftSeparator then f.LeftSeparator:Hide() end
 	if f.RightSeparator then f.RightSeparator:Hide() end
 
-	S:CreateBD(f, .0)
-	S:CreateGradient(f)
+    f:SetTemplate("Default", true)
 
 	if not noGlow then
 		f.glow = CreateFrame("Frame", nil, f)
 		f.glow:SetBackdrop({
 			edgeFile = R["media"].glow,
-			edgeSize = R:Scale(5),
+			edgeSize = R:Scale(4),
 		})
-		f.glow:Point("TOPLEFT", -6, 6)
-		f.glow:Point("BOTTOMRIGHT", 6, -6)
+		f.glow:Point("TOPLEFT", -4, 4)
+		f.glow:Point("BOTTOMRIGHT", 4, -4)
 		f.glow:SetBackdropBorderColor(r, g, b)
 		f.glow:SetAlpha(0)
 
@@ -285,8 +284,8 @@ function S:ReskinScroll(f)
 	bu.bg:Point("TOPLEFT", bu, 0, -2)
 	bu.bg:Point("BOTTOMRIGHT", bu, 0, 4)
 	S:CreateBD(bu.bg, 0)
-	S:CreateGradient(f)
-	f.gradientTex:SetInside(bu.bg, 1, 1)
+	S:CreateBackdropTexture(f)
+	f.backdropTexture:SetInside(bu.bg, 1, 1)
 
 	local up = _G[frame.."ScrollUpButton"]
 	local down = _G[frame.."ScrollDownButton"]
@@ -358,7 +357,7 @@ function S:ReskinDropDown(f)
 	bg:Point("BOTTOMRIGHT", -18, 8)
 	bg:SetFrameLevel(f:GetFrameLevel()-1)
 	S:CreateBD(bg, 0)
-	S:CreateGradient(bg)
+	S:CreateBackdropTexture(bg)
 end
 
 function S:ReskinClose(f, a1, p, a2, x, y)
@@ -378,7 +377,7 @@ function S:ReskinClose(f, a1, p, a2, x, y)
 	f:SetDisabledTexture("")
 
 	S:CreateBD(f, 0)
-	S:CreateGradient(f)
+	S:CreateBackdropTexture(f)
 
 	local text = f:CreateFontString(nil, "OVERLAY")
 	text:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
@@ -397,7 +396,7 @@ function S:ReskinInput(f, height, width)
 	if _G[frame.."Mid"] then _G[frame.."Mid"]:Hide() end
 	_G[frame.."Right"]:Hide()
 	S:CreateBD(f, 0)
-	S:CreateGradient(f)
+	S:CreateBackdropTexture(f)
 
 	if height then f:Height(height) end
 	if width then f:Width(width) end
@@ -430,11 +429,11 @@ function S:ReskinCheck(f)
 	hl:Point("BOTTOMRIGHT", -5, 5)
 	hl:SetVertexColor(r, g, b, .2)
 
-	S:CreateGradient(f)
+	S:CreateBackdropTexture(f)
+    f.backdropTexture:SetInside(f, 5, 5)
 
 	local bd = CreateFrame("Frame", nil, f)
-	bd:Point("TOPLEFT", tex, -1, 1)
-	bd:Point("BOTTOMRIGHT", tex, 1, -1)
+    bd:SetInside(f, 4, 4)
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
 	S:CreateBD(bd, 0)
 
@@ -454,7 +453,7 @@ function S:ReskinSlider(f)
 	bd:SetFrameStrata("BACKGROUND")
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
 	S:CreateBD(bd, 0)
-	S:CreateGradient(bd)
+	S:CreateBackdropTexture(bd)
 
 	local slider = select(4, f:GetRegions())
 	slider:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")

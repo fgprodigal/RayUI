@@ -1102,6 +1102,8 @@ local function NewLine(self)
 			col1:SetFontObject(GameTooltipText)
 			button:SetPoint("TOPLEFT", self.buttons[self.maxLines - 1], "BOTTOMLEFT", 0, -2)
 		end
+        col1:SetShadowColor(0, 0, 0)
+        col1:SetShadowOffset(R.mult, -R.mult)
 		button:SetScript("OnEnter", button_OnEnter)
 		button:SetScript("OnLeave", button_OnLeave)
 		button.check = check
@@ -1224,20 +1226,19 @@ local function AcquireFrame(self, registration, data, detachedData)
 		tooltip:EnableMouseWheel(true)
 		tooltip:SetFrameStrata(registration.strata or "TOOLTIP")
 		tooltip:SetFrameLevel(10)
-		local backdrop = {
-			bgFile = R["media"].blank,
-			edgeFile = R["media"].glow, edgeSize = R:Scale(4),
-			insets = {top = R:Scale(4), left = R:Scale(4), bottom = R:Scale(4), right = R:Scale(4)},
-		}
-		tooltip:SetBackdrop(backdrop)
+        tooltip:SetBackdrop(nil)
+        tooltip:CreateShadow("Background")
+        tooltip.border:SetInside(tooltip)
+        tooltip.shadow:SetAllPoints(tooltip)
 		tooltip.numLines = 0
 		tooltip.owner = nil
 		tooltip.fontSizePercent = tooltip.data and tooltip.data.fontSizePercent or 1
 		tooltip.maxLines = 0
 		tooltip.buttons = {}
 		tooltip.transparency = tooltip.data and tooltip.data.transparency or 0.6
-		tooltip:SetBackdropColor(0, 0, 0, tooltip.transparency)
-		tooltip:SetBackdropBorderColor(0, 0, 0, 1)
+		tooltip:SetBackdropColor(unpack(R["media"].backdropfadecolor))
+		tooltip.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))
+		tooltip.shadow:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 
 		tooltip:SetScript("OnUpdate", function(this, elapsed)
 			if not tooltip.updating and (not tooltip.enteredFrame or (overFrame and not MouseIsOver(overFrame))) then

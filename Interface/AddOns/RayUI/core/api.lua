@@ -30,53 +30,72 @@ end
 local function CreateShadow(f, t, thickness, texture)
 	if f.shadow then return end
 
-	local borderr, borderg, borderb, bordera = unpack(R["media"].bordercolor)
-	local backdropr, backdropg, backdropb, backdropa = unpack(R["media"].backdropcolor)
-	local frameLevel = f:GetFrameLevel() > 1 and f:GetFrameLevel() or 1
+	local borderr, borderg, borderb = 0, 0, 0
+    local backdropr, backdropg, backdropb, backdropa = unpack(R["media"].backdropcolor)
+	local frameLevel = f:GetFrameLevel() > 1 and f:GetFrameLevel() - 1 or 1
 	local thickness = thickness or 4
 	local offset = thickness - 1
 
-	if t == "Background" then
-		backdropr, backdropg, backdropb, backdropa = unpack(R["media"].backdropfadecolor)
-	else
-		backdropa = 0
-	end
+    if t == "Background" then
+        backdropr, backdropg, backdropb, backdropa = unpack(R["media"].backdropfadecolor)
+    else
+        backdropa = 0
+    end
 
 	local border = CreateFrame("Frame", nil, f)
 	border:SetFrameLevel(frameLevel)
-	border:Point("TOPLEFT", -1, 1)
-	border:Point("TOPRIGHT", 1, 1)
-	border:Point("BOTTOMRIGHT", 1, -1)
-	border:Point("BOTTOMLEFT", -1, -1)
-	border:CreateBorder()
+	border:SetOutside(f, 1, 1)
+    border:SetTemplate("Border")
 	f.border = border
 
 	local shadow = CreateFrame("Frame", nil, border)
 	shadow:SetFrameLevel(frameLevel - 1)
-	shadow:Point("TOPLEFT", -offset, offset)
-	shadow:Point("TOPRIGHT", offset, offset)
-	shadow:Point("BOTTOMRIGHT", offset, -offset)
-	shadow:Point("BOTTOMLEFT", -offset, -offset)
+	shadow:SetOutside(border, offset, offset)
 	shadow:SetBackdrop( { 
 		edgeFile = R["media"].glow,
-		bgFile = R["media"].blank,
+        bgFile = R["media"].blank, 
 		edgeSize = R:Scale(thickness),
 		insets = {left = R:Scale(thickness), right = R:Scale(thickness), top = R:Scale(thickness), bottom = R:Scale(thickness)},
 	})
 	shadow:SetBackdropColor( backdropr, backdropg, backdropb, backdropa )
-	shadow:SetBackdropBorderColor( borderr, borderg, borderb, bordera )
+	shadow:SetBackdropBorderColor( borderr, borderg, borderb )
 	f.shadow = shadow
 end
 
-local function SetTemplate(f, t, texture)
+local function SetTemplate(f, t, glossTex)
 	local r, g, b, alpha = unpack(R["media"].backdropcolor)
-	f:SetBackdrop({
-	  bgFile = R["media"].blank,
-	})
 	if t == "Transparent" then 
 		r, g, b, alpha = unpack(R["media"].backdropfadecolor)
 	end
-	f:SetBackdropColor(r, g, b, alpha)
+
+    if t == "Border" or glossTex then
+        f:SetBackdrop({
+            edgeFile = R["media"].blank, 
+            edgeSize = R.mult, 
+            tile = false,
+            tileSize = 0,
+        })
+    else
+        f:SetBackdrop({
+            bgFile = R["media"].blank, 
+            edgeFile = R["media"].blank, 
+            edgeSize = R.mult, 
+            tile = false,
+            tileSize = 0,
+        })
+    end
+
+	if glossTex then 
+        f.backdropTexture = f:CreateTexture(nil, "BACKGROUND")
+        f.backdropTexture:SetDrawLayer("BACKGROUND", 1)
+        f.backdropTexture:SetInside(f, 1, 1)
+        f.backdropTexture:SetTexture(R["media"].gloss)
+        f.backdropTexture:SetVertexColor(unpack(R["media"].backdropcolor))
+        f.backdropTexture:SetAlpha(.8)
+        alpha = 0
+	end
+
+	f:SetBackdropColor(backdropfadecolorr, backdropfadecolorg, backdropfadecolorb, alpha)
 	f:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 end
 

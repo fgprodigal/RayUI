@@ -156,12 +156,14 @@ L["字体材质"] = true
 		L["一般材质"] = true
 		L["空白材质"] = true
 		L["阴影边框"] = true
+        L["玻璃材质"] = true
 	L["声音"] = true
 		L["报警声音"] = true
 
 		L["边框颜色"] = true
 		L["背景颜色"] = true
 		L["透明框架背景颜色"] = true
+        L["恢复默认"] = true
 L["模块"] = true
 	L["世界地图"] = true
 	L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r世界地图模块."] = true
