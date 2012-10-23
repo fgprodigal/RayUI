@@ -833,7 +833,7 @@ function UF:LoadDPSLayout()
 
 	if self.db.showArenaFrames and not IsAddOnLoaded("Gladius") then
         local ArenaHeader = CreateFrame("Frame", nil, UIParent)
-        ArenaHeader:Point("RIGHT", RayUF_Parent, "RIGHT", -80, 180)
+        ArenaHeader:Point("TOPRIGHT", RayUF_Parent, "RIGHT", -80, 200)
         ArenaHeader:Width(BOSS_WIDTH)
         ArenaHeader:Height(R:Scale(BOSS_HEIGHT)*5 + R:Scale(36)*4)
 		local arena = {}
@@ -852,7 +852,7 @@ function UF:LoadDPSLayout()
 
 	if self.db.showBossFrames then
         local BossHeader = CreateFrame("Frame", nil, UIParent)
-        BossHeader:Point("RIGHT", RayUF_Parent, "RIGHT", -80, 180)
+        BossHeader:Point("TOPRIGHT", RayUF_Parent, "RIGHT", -80, 200)
         BossHeader:Width(BOSS_WIDTH)
         BossHeader:Height(R:Scale(BOSS_HEIGHT)*MAX_BOSS_FRAMES + R:Scale(36)*(MAX_BOSS_FRAMES-1))
 		local boss = {}

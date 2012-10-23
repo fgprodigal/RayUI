@@ -26,17 +26,6 @@ local function LoadFunc()
             end
 
             if not inGroup then
-                for guildIndex = 1, GetNumGuildMembers(true) do
-                    local guildMemberName = GetGuildRosterInfo(guildIndex)
-                    if guildMemberName == leaderName then
-                        AcceptGroup()
-                        inGroup = true
-                        break
-                    end
-                end
-            end
-
-            if not inGroup then
                 for bnIndex = 1, BNGetNumFriends() do
                     local _, _, _, _, name = BNGetFriendInfo(bnIndex)
                     leaderName = leaderName:match("(.+)%-.+") or leaderName
@@ -46,8 +35,20 @@ local function LoadFunc()
                     end
                 end
             end
+
+            if not inGroup then
+                for guildIndex = 1, GetNumGuildMembers() do
+                    local guildMemberName = GetGuildRosterInfo(guildIndex)
+                    if guildMemberName == leaderName then
+                        AcceptGroup()
+                        inGroup = true
+                        break
+                    end
+                end
+            end
         elseif event == "GROUP_ROSTER_UPDATE" and hideStatic == true then
             StaticPopup_Hide("PARTY_INVITE")
+            StaticPopup_Hide("PARTY_INVITE_XREALM")
             hideStatic = false
         end
     end
