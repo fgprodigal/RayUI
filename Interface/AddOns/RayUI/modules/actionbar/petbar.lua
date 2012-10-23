@@ -10,7 +10,7 @@ function AB:CreateBarPet()
 	bar:Point("BOTTOM", "UIParent", "BOTTOM", 0, 195)
 	bar:SetScale(AB.db.petbarscale)
 
-	R:CreateMover(bar, "PetBarMover", L["宠物动作条锚点"], true)  
+	R:CreateMover(bar, "PetBarMover", L["宠物动作条锚点"], true, nil, "ALL,ACTIONBARS")  
 
 	PetBarMover:SetScale(AB.db.petbarscale)
 

@@ -46,21 +46,25 @@ R.Options = {
 				ToggleAnchors = {
 					order = 4,
 					type = "execute",
+					name = L["解锁锚点"],
+					desc = L["解锁并移动头像和动作条"],
+					func = function()
+                        R:ToggleConfigMode()
+					end,
+				},
+                ResetAllMovers = {
+                    order = 5,
+                    type = "execute",
+                    name = L["重置锚点"],
+                    func = function() StaticPopup_Show("RESETMOVER_CHECK") end,
+                },	
+				ToggleTutorial = {
+					order = 6,
+					type = "execute",
 					name = L["显示小提示"],
 					func = function()
 						AceConfigDialog["Close"](AceConfigDialog,"RayUI")
 						R:GetModule("Tutorial"):Tutorials(true)
-						GameTooltip_Hide()
-					end,
-				},
-				ToggleTutorial = {
-					order = 4,
-					type = "execute",
-					name = L["解锁锚点"],
-					desc = L["解锁并移动头像和动作条"],
-					func = function()
-						AceConfigDialog["Close"](AceConfigDialog,"RayUI")
-						R:ToggleMovers()
 						GameTooltip_Hide()
 					end,
 				},
@@ -258,6 +262,17 @@ StaticPopupDialogs["CFG_RELOAD"] = {
 	button1 = ACCEPT,
 	button2 = CANCEL,
 	OnAccept = function() ReloadUI() end,
+	timeout = 0,
+	whileDead = 1,
+}
+
+StaticPopupDialogs["RESETMOVER_CHECK"] = {
+	text = L["是否重置所有锚点?"],
+	button1 = ACCEPT,
+	button2 = CANCEL,
+	OnAccept = function(self)
+		R:ResetMovers()
+	end,
 	timeout = 0,
 	whileDead = 1,
 }

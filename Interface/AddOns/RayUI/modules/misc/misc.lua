@@ -45,6 +45,9 @@ function M:GetOptions()
 					name = L["启用"],
 					desc = L["满级之后自动贪婪/分解绿装"],
 					type = "toggle",
+                    set = function(info, value)
+                        R.db.Misc.autodez = value
+                    end,
 				},
 			},
 		},
@@ -59,6 +62,9 @@ function M:GetOptions()
 					name = L["启用"],
 					desc = L["战场中自动释放尸体"],
 					type = "toggle",
+                    set = function(info, value)
+                        R.db.Misc.autorelease = value
+                    end,
 				},
 			},
 		},
@@ -72,13 +78,6 @@ function M:GetOptions()
 					order = 1,
 					name = L["启用"],
 					desc = L["自动修理、自动卖灰色物品"],
-					type = "toggle",
-				},
-				poisons = {
-					order = 2,
-					name = L["补购毒药"],
-					desc = L["自动补购毒药，数量在misc/merchant.lua里修改"],
-					disabled = function() return not (R.myclass == "ROGUE" and M.db.merchant) end,
 					type = "toggle",
 				},
 			},
@@ -101,6 +100,9 @@ function M:GetOptions()
 					desc = L["自动交接任务，按shift点npc则不自动交接"],
 					disabled = function() return not M.db.quest end,
 					type = "toggle",
+                    set = function(info, value)
+                        R.db.Misc.automation = value
+                    end,
 				},
 			},
 		},
@@ -141,6 +143,36 @@ function M:GetOptions()
 					desc = L["图标上显示持续时间"],
 					type = "toggle",
 					disabled = function() return not M.db.raidbuffreminder end,
+				},
+			},
+		},
+		autoinvitegroup = {
+			order = 13,
+			type = "group",
+			name = L["自动邀请"],
+			guiInline = true,
+			set = function(info, value)
+				R.db.Misc[ info[#info] ] = value
+			end,
+			args = {
+				autoAcceptInvite = {
+					order = 1,
+					name = L["自动接受邀请"],
+					desc = L["自动接受公会成员、好友及实名好友的组队邀请"],
+					type = "toggle",
+				},
+				autoInvite = {
+					order = 2,
+					name = L["自动邀请组队"],
+					desc = L["当他人密语自动邀请关键字时会自动邀请他组队"],
+					type = "toggle",
+				},
+				autoInviteKeywords = {
+					order = 3,
+					name = L["自动邀请关键字"],
+					desc = L["设置自动邀请的关键字，多个关键字用空格分割"],
+                    type = "input",
+					disabled = function() return not M.db.autoInvite end,
 				},
 			},
 		},

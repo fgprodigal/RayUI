@@ -37,15 +37,7 @@ local function LoadFunc()
 	end)
 
 	hooksecurefunc("WatchFrameItem_OnUpdate", function(self)
-		local hotkey = _G[self:GetName().."HotKey"]
 		local icon = _G[self:GetName().."IconTexture"]
-		if not self.reskinned then
-			_G[self:GetName().."NormalTexture"]:SetTexture(nil)
-			icon:SetTexCoord(.08, .92, .08, .92)
-			self:CreateShadow("Background")
-			self:StyleButton(true)
-			self.reskinned = true
-		end
 		local valid = IsQuestLogSpecialItemInRange(self:GetID())
 		if ( valid == 0 ) then
 			icon:SetVertexColor(1.0, 0.1, 0.1)
@@ -53,6 +45,21 @@ local function LoadFunc()
 			icon:SetVertexColor(1, 1, 1)
 		end
 	end)
+
+    local function SkinWatchFrameItems()
+        for i=1, WATCHFRAME_NUM_ITEMS do
+            local button = _G["WatchFrameItem"..i]
+            if not button.skinned then
+                _G["WatchFrameItem"..i.."NormalTexture"]:SetTexture(nil)
+                _G["WatchFrameItem"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
+                button:CreateShadow("Background")
+                button:StyleButton(true)
+                button.skinned = true
+            end
+        end 
+    end
+
+    WatchFrame:HookScript("OnEvent", SkinWatchFrameItems)
 end
 
 M:RegisterMiscModule("WatchFrame", LoadFunc)

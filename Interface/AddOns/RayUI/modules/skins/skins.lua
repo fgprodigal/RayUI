@@ -135,7 +135,7 @@ function S:CreateBackdropTexture(f)
     tex:SetDrawLayer("BACKGROUND", 1)
 	tex:SetInside(f, 1, 1)
 	tex:SetTexture(R["media"].gloss)
-	-- tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+	--tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 	tex:SetVertexColor(backdropcolorr, backdropcolorg, backdropcolorb)
 	tex:SetAlpha(0.8)
 	f.backdropTexture = tex
@@ -180,17 +180,18 @@ function S:CreateSD(parent, size, r, g, b, alpha, offset)
 	sd:SetAlpha(alpha or 1)
 end
 
-function S:CreatePulse(frame, speed, mult, alpha)
+function S:CreatePulse(frame, speed, alpha, mult)
 	if not frame then return end
-	frame.speed = speed or .05
+	frame.speed = .02
 	frame.mult = mult or 1
 	frame.alpha = alpha or 1
 	frame.tslu = 0
 	frame:SetScript("OnUpdate", function(self, elapsed)
+        elapsed = elapsed * ( speed or 5/4 )
 		self.tslu = self.tslu + elapsed
 		if self.tslu > self.speed then
 			self.tslu = 0
-			self:SetAlpha(self.alpha*3/5)
+			self:SetAlpha(self.alpha*(alpha or 3/5))
 		end
 		self.alpha = self.alpha - elapsed*self.mult
 		if self.alpha < 0 and self.mult > 0 then

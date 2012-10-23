@@ -4,9 +4,22 @@ local AddOnName = ...
 local AceConfig = LibStub("AceConfigDialog-3.0")
 
 R.CreatedMovers = {}
+local selectedValue = "GENERAL"
+local MoverTypes = {
+    "ALL",
+    "GENERAL",
+    "ACTIONBARS",
+    "RAID15",
+    "RAID25",
+    "RAID40",
+    "ARENA",
+}
 
-local print = function(...)
-	return print('|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r: ', ...)
+local function GetPoint(obj)
+	local point, anchor, secondaryPoint, x, y = obj:GetPoint()
+	if not anchor then anchor = UIParent end
+
+	return string.format("%s\031%s\031%s\031%d\031%d", point, anchor:GetName(), secondaryPoint, R:Round(x), R:Round(y))
 end
 
 local function CreateMover(parent, name, text, overlay, postdrag)
@@ -15,13 +28,13 @@ local function CreateMover(parent, name, text, overlay, postdrag)
 
 	if overlay == nil then overlay = true end
 
-	local p, p2, p3, p4, p5 = parent:GetPoint()
+	local point, anchor, secondaryPoint, x, y = string.split('\031', GetPoint(parent))
 
-	R.Movers = R.db["movers"]
+	R.movers = R.db["movers"]
 
-	if R.Movers == {} then R.Movers = nil end
-	if R.Movers and R.Movers[name] == {} or (R.Movers and R.Movers[name] and R.Movers[name]["moved"] == false) then 
-		R.Movers[name] = nil
+	if R.movers == {} then R.movers = nil end
+	if R.movers and R.movers[name] == {} or (R.movers and R.movers[name] and R.movers[name]["moved"] == false) then 
+		R.movers[name] = nil
 	end
 
 	local f = CreateFrame("Button", name, UIParent)
@@ -34,45 +47,69 @@ local function CreateMover(parent, name, text, overlay, postdrag)
 	else
 		f:SetFrameStrata("BACKGROUND")
 	end
-	if R["Movers"] and R["Movers"][name] then
-		f:SetPoint(R["Movers"][name]["p"], UIParent, R["Movers"][name]["p2"], R["Movers"][name]["p3"], R["Movers"][name]["p4"])
+	if R["movers"] and R["movers"][name] then
+		if type(R.db["movers"][name]) == "table" then
+            f:SetPoint(R["movers"][name]["p"], UIParent, R["movers"][name]["p2"], R["movers"][name]["p3"], R["movers"][name]["p4"])
+			R.db["movers"][name] = GetPoint(f)
+			f:ClearAllPoints()
+		end
+
+		local point, anchor, secondaryPoint, x, y = string.split('\031', R.db["movers"][name])
+		f:SetPoint(point, anchor, secondaryPoint, x, y)
 	else
-		f:SetPoint(p, p2, p3, p4, p5)
+		f:SetPoint(point, anchor, secondaryPoint, x, y)
 	end
 	S:Reskin(f)
-	S:CreateBD(f)
-	f.SetBackdropColor = R.dummy
-	f.SetBackdropBorderColor = R.dummy
 	f:RegisterForDrag("LeftButton", "RightButton")
 	f:SetScript("OnDragStart", function(self) 
-		if InCombatLockdown() then print(ERR_NOT_IN_COMBAT) return end
+		if InCombatLockdown() then R:Print(ERR_NOT_IN_COMBAT) return end
 		self:StartMoving() 
 	end)
 
 	f:SetScript("OnDragStop", function(self) 
-		if InCombatLockdown() then print(ERR_NOT_IN_COMBAT) return end
+		if InCombatLockdown() then R:Print(ERR_NOT_IN_COMBAT) return end
 		self:StopMovingOrSizing()
 
-		if not R.db["movers"] then R.db["movers"] = {} end
+		local screenWidth, screenHeight, screenCenter = UIParent:GetRight(), UIParent:GetTop(), UIParent:GetCenter()
+		local x, y = self:GetCenter()
+		local point
+		
+		local LEFT = screenWidth / 3
+		local RIGHT = screenWidth * 2 / 3
+		local TOP = screenHeight / 2
+		
+		if y >= TOP then
+			point = "TOP"
+			y = -(screenHeight - self:GetTop())
+		else
+			point = "BOTTOM"
+			y = self:GetBottom()
+		end
+		
+		if x >= RIGHT then
+			point = point.."RIGHT"
+			x = self:GetRight() - screenWidth
+		elseif x <= LEFT then
+			point = point.."LEFT"
+			x = self:GetLeft()
+		else
+			x = x - screenCenter
+		end
 
-		R.Movers = R.db["movers"]
+		self:ClearAllPoints()
+		self:Point(point, UIParent, point, x, y)
 
-		R.Movers[name] = {}
-		local p, _, p2, p3, p4 = self:GetPoint()
-		R.Movers[name]["p"] = p
-		R.Movers[name]["p2"] = p2
-		R.Movers[name]["p3"] = p3
-		R.Movers[name]["p4"] = p4
-
-		if postdrag ~= nil and type(postdrag) == 'function' then
-			postdrag(self)
+		R:SaveMoverPosition(name)
+		
+		if postdrag ~= nil and type(postdrag) == "function" then
+			postdrag(self, R:GetScreenQuadrant(self))
 		end
 
 		self:SetUserPlaced(false)
 	end)
 
 	parent:ClearAllPoints()
-	parent:SetPoint(p3, f, p3, 0, 0)
+	parent:SetPoint(point, f, 0, 0)
 	parent.ClearAllPoints = function() return end
 	parent.SetAllPoints = function() return end
 	parent.SetPoint = function() return end
@@ -88,7 +125,7 @@ local function CreateMover(parent, name, text, overlay, postdrag)
 	f.text = fs
 
 	f:HookScript("OnEnter", function(self) 
-		self.text:SetTextColor(self.glow:GetBackdropBorderColor())
+		self.text:SetTextColor(self:GetBackdropBorderColor())
 	end)
 	f:HookScript("OnLeave", function(self)
 		self.text:SetTextColor(1, 1, 1)
@@ -106,7 +143,8 @@ local function CreateMover(parent, name, text, overlay, postdrag)
 	end
 end
 
-function R:CreateMover(parent, name, text, overlay, postdrag)
+function R:CreateMover(parent, name, text, overlay, postdrag, moverTypes)
+	if not moverTypes then moverTypes = "ALL,GENERAL" end
 	local p, p2, p3, p4, p5 = parent:GetPoint()
 
 	if R.CreatedMovers[name] == nil then 
@@ -115,78 +153,71 @@ function R:CreateMover(parent, name, text, overlay, postdrag)
 		R.CreatedMovers[name]["text"] = text
 		R.CreatedMovers[name]["overlay"] = overlay
 		R.CreatedMovers[name]["postdrag"] = postdrag
-		R.CreatedMovers[name]["p"] = p
-		R.CreatedMovers[name]["p2"] = p2 or "UIParent"
-		R.CreatedMovers[name]["p3"] = p3
-		R.CreatedMovers[name]["p4"] = p4
-		R.CreatedMovers[name]["p5"] = p5
+		R.CreatedMovers[name]["point"] = GetPoint(parent)
+
+		R.CreatedMovers[name]["type"] = {}
+		local types = {string.split(",", moverTypes)}
+		for i = 1, #types do
+			local moverType = types[i]
+			R.CreatedMovers[name]["type"][moverType] = true
+		end
 	end
 
 	CreateMover(parent, name, text, overlay, postdrag)
 end
 
-function R:ToggleMovers()
-	if InCombatLockdown() then print(ERR_NOT_IN_COMBAT) return end
+function R:SaveMoverPosition(name)
+	if not _G[name] then return end
+	if not R.db.movers then R.db.movers = {} end
 
-	if RayUIMoverPopupWindow:IsShown() then
-		RayUIMoverPopupWindow:Hide()
-	else
-		RayUIMoverPopupWindow:Show()
-	end
-
-	if RayUF or oUF then
-		R:MoveoUF()
-	end
-
-	for name, _ in pairs(R.CreatedMovers) do
-		if _G[name]:IsShown() then
-			_G[name]:Hide()
-		else
-			_G[name]:Show()
-		end
-	end
+	R.db.movers[name] = GetPoint(_G[name])
 end
 
-function R:ResetMovers(arg)
-	if InCombatLockdown() then print(ERR_NOT_IN_COMBAT) return end
-	if arg == "" then
-		for name, _ in pairs(R.CreatedMovers) do
-			local n = _G[name]
-			_G[name]:ClearAllPoints()
-			_G[name]:SetPoint(R.CreatedMovers[name]["p"], R.CreatedMovers[name]["p2"], R.CreatedMovers[name]["p3"], R.CreatedMovers[name]["p4"], R.CreatedMovers[name]["p5"])
+function R:ToggleConfigMode(override, moverType)
+	if InCombatLockdown() then return end
+	if override ~= nil and override ~= "" then R.ConfigurationMode = override end
 
-
-			R.Movers = nil
-			R.db["movers"] = R.Movers
-
-			for key, value in pairs(R.CreatedMovers[name]) do
-				if key == "postdrag" and type(value) == 'function' then
-					value(n)
-				end
-			end
+	if R.ConfigurationMode ~= true then
+		if not RayUIMoverPopupWindow then
+			CreatePopup()
 		end
+		
+		RayUIMoverPopupWindow:Show()
+		AceConfig["Close"](AceConfig, "RayUI") 
+		GameTooltip:Hide()		
+		R.ConfigurationMode = true
 	else
-		for name, _ in pairs(R.CreatedMovers) do
-			for key, value in pairs(R.CreatedMovers[name]) do
-				local mover
-				if key == "text" then
-					if arg == value then 
-						_G[name]:ClearAllPoints()
-						_G[name]:SetPoint(R.CreatedMovers[name]["p"], R.CreatedMovers[name]["p2"], R.CreatedMovers[name]["p3"], R.CreatedMovers[name]["p4"], R.CreatedMovers[name]["p5"])
-
-						if R.Movers then
-							R.Movers[name] = nil
-						end
-						R.db["movers"] = R.Movers
-
-						if R.CreatedMovers[name]["postdrag"] ~= nil and type(R.CreatedMovers[name]["postdrag"]) == 'function' then
-							R.CreatedMovers[name]["postdrag"](_G[name])
-						end
-					end
-				end
-			end
-		end
+		if RayUIMoverPopupWindow then
+			RayUIMoverPopupWindow:Hide()
+		end	
+		
+		R.ConfigurationMode = false
 	end
+	
+	if type(moverType) ~= "string" then
+		moverType = nil
+	end
+	
+	self:ToggleMovers(R.ConfigurationMode, moverType or "GENERAL")
+end
+
+local function MoverTypes_OnClick(self)
+	selectedValue = self.value
+	R:ToggleConfigMode(false, self.value)
+	UIDropDownMenu_SetSelectedValue(RayUIMoverPopupWindowDropDown, self.value)
+end
+
+local function MoverTypes_Initialize()
+	local info = UIDropDownMenu_CreateInfo()
+	info.func = MoverTypes_OnClick
+	
+	for _, moverTypes in ipairs(MoverTypes) do
+		info.text = L[moverTypes]
+		info.value = moverTypes
+		UIDropDownMenu_AddButton(info)
+	end
+
+	UIDropDownMenu_SetSelectedValue(RayUIMoverPopupWindowDropDown, selectedValue)
 end
 
 local function CreatePopup()
@@ -228,41 +259,92 @@ local function CreatePopup()
 	_G[lock:GetName() .. "Text"]:SetText(L["锁定"])
 
 	lock:SetScript("OnClick", function(self)
-		R:ToggleMovers()
+		R:ToggleConfigMode(true)
 		AceConfig["Open"](AceConfig,"RayUI") 
+		selectedValue = "ALL"
+		UIDropDownMenu_SetSelectedValue(RayUIMoverPopupWindowDropDown, selectedValue)
 	end)
 
 	lock:SetPoint("BOTTOMRIGHT", -14, 14)
 	S:Reskin(lock)
 
 	f:RegisterEvent('PLAYER_REGEN_DISABLED')
-	f:SetScript('OnEvent', function(self)
+	f:SetScript("OnEvent", function(self)
 		if self:IsShown() then
 			self:Hide()
 		end
 	end)
+
+	local moverTypes = CreateFrame("Frame", f:GetName().."DropDown", f, "UIDropDownMenuTemplate")
+	moverTypes:Point("BOTTOMRIGHT", lock, "TOPRIGHT", 18, -5)
+    moverTypes:Width(160)
+	S:ReskinDropDown(moverTypes)
+	moverTypes.text = moverTypes:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+	moverTypes.text:SetPoint("RIGHT", moverTypes, "LEFT", 2, 2)
+	moverTypes.text:SetText(L["模式"])	
+	
+	
+	UIDropDownMenu_Initialize(moverTypes, MoverTypes_Initialize)
+end
+
+function R:ToggleMovers(show, moverType)
+	for name, _ in pairs(R.CreatedMovers) do
+		if not show then
+			_G[name]:Hide()
+		else
+			if R.CreatedMovers[name]["type"][moverType] then
+				_G[name]:Show()
+			else
+				_G[name]:Hide()
+			end
+		end
+	end
+end
+
+function R:ResetMovers(arg)
+	if arg == "" or arg == nil then
+		for name, _ in pairs(R.CreatedMovers) do
+			local f = _G[name]
+			local point, anchor, secondaryPoint, x, y = string.split('\031', R.CreatedMovers[name]["point"])
+			f:ClearAllPoints()
+			f:SetPoint(point, anchor, secondaryPoint, x, y)
+			
+			for key, value in pairs(R.CreatedMovers[name]) do
+				if key == "postdrag" and type(value) == "function" then
+					value(f, R:GetScreenQuadrant(f))
+				end
+			end
+		end	
+		self.db.movers = nil
+	else
+		for name, _ in pairs(R.CreatedMovers) do
+			for key, value in pairs(R.CreatedMovers[name]) do
+				local mover
+				if key == "text" then
+					if arg == value then 
+						local f = _G[name]
+						local point, anchor, secondaryPoint, x, y = string.split('\031', R.CreatedMovers[name]["point"])
+						f:ClearAllPoints()
+						f:SetPoint(point, anchor, secondaryPoint, x, y)				
+						
+						if self.db.movers then
+							self.db.movers[name] = nil
+						end
+						
+						if R.CreatedMovers[name]["postdrag"] ~= nil and type(R.CreatedMovers[name]["postdrag"]) == "function" then
+							R.CreatedMovers[name]["postdrag"](f, R:GetScreenQuadrant(f))
+						end
+					end
+				end
+			end	
+		end
+	end
 end
 
 function R:ADDON_LOADED(event, addon)
-	if addon ~= AddOnName then return end
-	for name, _ in pairs(R.CreatedMovers) do
-		local n = name
-		local p, t, o, pd
-		for key, value in pairs(R.CreatedMovers[name]) do
-			if key == "parent" then
-				p = value
-			elseif key == "text" then
-				t = value
-			elseif key == "overlay" then
-				o = value
-			elseif key == "postdrag" then
-				pd = value
-			end
-		end
-		CreateMover(p, n, t, o, pd)
-	end
-	CreatePopup()
-	self:UnregisterEvent("ADDON_LOADED")
+    if addon ~= AddOnName then return end
+    CreatePopup()
+    self:UnregisterEvent("ADDON_LOADED")
 end
 
 function R:PLAYER_REGEN_DISABLED()
@@ -271,11 +353,11 @@ function R:PLAYER_REGEN_DISABLED()
 		if _G[name]:IsShown() then
 			err = true
 			_G[name]:Hide()
-			self:Print(name)
 		end
 	end
 	if err == true then
 		R:Print(ERR_NOT_IN_COMBAT)
+        R:ToggleConfigMode(true)
 	end
 end
 

@@ -9,7 +9,7 @@ function AB:CreateBar1()
 	bar:Point("BOTTOM", "UIParent", "BOTTOM", -3 * AB.db.buttonsize -3 * AB.db.buttonspacing, 235)
 	bar:SetScale(AB.db.barscale)
 
-	R:CreateMover(bar, "ActionBar1Mover", L["动作条1锚点"], true)
+	R:CreateMover(bar, "ActionBar1Mover", L["动作条1锚点"], true, nil, "ALL,ACTIONBARS")
 	
 	MainMenuBarArtFrame:SetParent(bar)
 	MainMenuBarArtFrame:EnableMouse(false)

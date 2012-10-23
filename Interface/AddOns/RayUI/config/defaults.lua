@@ -166,6 +166,9 @@ P["Misc"]={
 	raidbuffreminder = true,
 		raidbuffreminderparty = false,
 		raidbuffreminderduration = true,
+    autoAcceptInvite = true,
+    autoInvite = true,
+    autoInviteKeywords = "111 123",
 }
 
 P["Skins"]={

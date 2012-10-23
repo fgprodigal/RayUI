@@ -21,5 +21,5 @@ function AB:CreateExtraButton()
 	PlayerPowerBarAlt:SetPoint("TOP", UIParent, "TOP", 0, -108)
 	PlayerPowerBarAlt.ignoreFramePositionManager = true
 
-	R:CreateMover(holder, "BossButton", "BossButton", true)
+	R:CreateMover(holder, "BossButton", "BossButton", true, nil, "ALL,ACTIONBARS,RAID15,RAID25,RAID40")
 end

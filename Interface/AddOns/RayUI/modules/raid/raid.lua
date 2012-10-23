@@ -87,7 +87,7 @@ function RA:GetOptions()
 				},
 				raid40 = {
 					order = 3,
-					name = L["显示大战场6~8队"],
+					name = L["显示6~8队"],
 					type = "toggle",
 				},
 			},

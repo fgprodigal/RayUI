@@ -91,7 +91,7 @@ function BF:StyleBuffs(button, index, framekind, anchor)
 		_G[buff]:StyleButton(1)
 	end
     
-    if index == 1 then _G[buff]:Point("CENTER", anchor, "CENTER", 0, 0) end
+    if index == 1 then _G[buff]:Point("TOPRIGHT", anchor, "TOPRIGHT", 0, 0) end
     if index ~= 1 then
 		makeitgrow(button, index, _G[button..1], framekind)
 	end
@@ -122,8 +122,8 @@ end
 
 function BF:Initialize()
 	buffholder = CreateFrame("Frame", "Buffs", UIParent)
-	buffholder:Height(buttonsize)
-	buffholder:Width(buttonsize)
+	buffholder:Height(R:Scale(buttonsize)*2 + R:Scale(spacing))
+	buffholder:Width(R:Scale(buttonsize)*buffsperrow + R:Scale(spacing)*(buffsperrow-1))
 	buffholder:SetFrameStrata("BACKGROUND")
 	buffholder:SetClampedToScreen(true)
 	buffholder:SetAlpha(0)
@@ -131,7 +131,7 @@ function BF:Initialize()
 	R:CreateMover(buffholder, "BuffMover", L["Buff锚点"], true)
 	debuffholder = CreateFrame("Frame", "Debuffs", UIParent)
 	debuffholder:Height(buttonsize)
-	debuffholder:Width(buttonsize)
+	debuffholder:Width(R:Scale(buttonsize)*buffsperrow + R:Scale(spacing)*(buffsperrow-1))
 	debuffholder:SetFrameStrata("BACKGROUND")
 	debuffholder:SetClampedToScreen(true)
 	debuffholder:SetAlpha(0)

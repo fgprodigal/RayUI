@@ -2,11 +2,10 @@ local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
 local M = R:GetModule("Misc")
 
 local function LoadFunc()
-	if not M.db.autodez then return end
-
 	local autogreed = CreateFrame("frame")
 	autogreed:RegisterEvent("START_LOOT_ROLL")
 	autogreed:SetScript("OnEvent", function(self, event, id)
+        if not M.db.autodez then return end
 		local name = select(2, GetLootRollItemInfo(id))
 
 		--Auto Need Chaos Orb

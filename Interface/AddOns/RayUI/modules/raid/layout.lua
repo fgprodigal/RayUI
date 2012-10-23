@@ -6,7 +6,6 @@ local oUF = RayUF or oUF
 
 local backdrop, border, border2, glowBorder
 RA._Objects = {}
-RA._Headers = {}
 
 local colors = RayUF.colors
 
@@ -569,11 +568,6 @@ function RA:SpawnHeader(name, group, layout)
 		visibility = "custom [@raid16,exists] hide;show"
 	end
 
-    local initconfig = [[
-    self:SetWidth(%d)
-    self:SetHeight(%d)
-    ]]
-
     local point, growth, xoff, yoff
     if horiz then
         point = "LEFT"
@@ -607,12 +601,8 @@ function RA:SpawnHeader(name, group, layout)
         end
     end
 
-    local header = oUF:SpawnHeader(name, nil, visibility,
-    "oUF-initialConfigFunction", (initconfig):format(R:Scale(width), R:Scale(height)),
-    "showPlayer", RA.db.showplayerinparty,
-    "showSolo", RA.db.showwhensolo,
-    "showParty", true,
-    "showRaid", true,
+    local header = oUF:SpawnHeader(name, nil, "raid",
+    "oUF-initialConfigFunction", ([[self:SetWidth(%d); self:SetHeight(%d);]]):format(R:Scale(width), R:Scale(height)), 
     "xOffset", xoff,
     "yOffset", yoff,
     "point", point,
@@ -624,6 +614,11 @@ function RA:SpawnHeader(name, group, layout)
     "unitsPerColumn", 5,
     "columnSpacing", RA.db.spacing,
     "columnAnchorPoint", growth)
+
+    RegisterAttributeDriver(header, "state-visibility", "show")	
+    header:SetAttribute("minHeight", R:Scale(height)*5 + R:Scale(RA.db.spacing)*4)
+    header:SetAttribute("minWidth", R:Scale(width))
+    RegisterAttributeDriver(header, "state-visibility", "hide")	
 
 	header:RegisterEvent("PLAYER_ENTERING_WORLD")
 	header:RegisterEvent("ZONE_CHANGED_NEW_AREA")
@@ -641,7 +636,7 @@ end
 function RA:SpawnRaid()
 	UIDropDownMenu_Initialize(dropdown, init, "MENU")
 	backdrop = {
-		bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
+		bgFile = R["media"].blank,
 		insets = {top = 0, left = 0, bottom = 0, right = 0},
 	}
 	border = {
@@ -649,11 +644,11 @@ function RA:SpawnRaid()
 		insets = {top = -R:Scale(2), left = -R:Scale(2), bottom = -R:Scale(2), right = -R:Scale(2)},
 	}
 	border2 = {
-		bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
+		bgFile = R["media"].blank,
 		insets = {top = -R.mult, left = -R.mult, bottom = -R.mult, right = -R.mult},
 	}
 	glowBorder = {
-		bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
+		bgFile = R["media"].blank,
 		edgeFile = R["media"].glow, edgeSize = R:Scale(5),
 		insets = {left = R:Scale(3), right = R:Scale(3), top = R:Scale(3), bottom = R:Scale(3)}
 	}
@@ -662,17 +657,43 @@ function RA:SpawnRaid()
 	RA:Colors()
 	CompactRaidFrameContainer:Kill()
 	CompactRaidFrameManager:Kill()
-	local raid10 = {}
+    for i = 1, 4 do
+        local frame = _G["PartyMemberFrame"..i]
+		frame:UnregisterAllEvents()
+		frame:Kill()
+
+		local health = frame.healthbar
+		if(health) then
+			health:UnregisterAllEvents()
+		end
+
+		local power = frame.manabar
+		if(power) then
+			power:UnregisterAllEvents()
+		end
+
+		local spell = frame.spellbar
+		if(spell) then
+			spell:UnregisterAllEvents()
+		end
+
+		local altpowerbar = frame.powerBarAlt
+		if(altpowerbar) then
+			altpowerbar:UnregisterAllEvents()
+		end
+    end
+	local raid15 = {}
 	for i=1, 3 do
 		local group = self:SpawnHeader("RayUFRaid15_"..i, i, 15)
 		if i == 1 then
 			group:Point("TOPLEFT", RayUF_Parent, "BOTTOMRIGHT", - RA.db.width*1.3*3 -  RA.db.spacing*2 - 50, 461)
 		else
-			group:Point(pos, raid10[i-1], posRel, colX or 0, colY or 0)
+			group:Point(pos, raid15[i-1], posRel, colX or 0, colY or 0)
 		end
-		raid10[i] = group
-		RA._Headers[group:GetName()] = group
+		raid15[i] = group
+        R:CreateMover(group, group:GetName().."Mover", "Raid1-15 Group"..i, nil, nil, "ALL,RAID15")
 		group:SetParent(RayUF_Parent)
+        RA.Raid15SmartVisibility(group)
 	end
 	local raid25 = {}
 	for i=1, 5 do
@@ -683,8 +704,9 @@ function RA:SpawnRaid()
 			group:Point(pos, raid25[i-1], posRel, colX or 0, colY or 0)
 		end
 		raid25[i] = group
-		RA._Headers[group:GetName()] = group
+        R:CreateMover(group, group:GetName().."Mover", "Raid1-25 Group"..i, nil, nil, "ALL,RAID25,RAID40")
 		group:SetParent(RayUF_Parent)
+        RA.Raid25SmartVisibility(group)
 	end
 	if RA.db.raid40 then
 		local raid40 = {}
@@ -696,8 +718,9 @@ function RA:SpawnRaid()
 				group:Point(pos, raid40[i-1], posRel, colX or 0, colY or 0)
 			end
 			raid40[i] = group
-			RA._Headers[group:GetName()] = group
-			group:SetParent(RayUF_Parent)
+            R:CreateMover(group, group:GetName().."Mover", "Raid1-40 Group"..i, nil, nil, "ALL,RAID40")
+            group:SetParent(RayUF_Parent)
+            RA.Raid40SmartVisibility(group)
 		end
 	end
 end

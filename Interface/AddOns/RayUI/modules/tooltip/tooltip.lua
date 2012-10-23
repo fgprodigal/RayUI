@@ -392,7 +392,6 @@ function TT:SetStyle(tooltip)
         tooltip:SetBackdrop(nil)
         tooltip:CreateShadow("Background")
         tooltip.border:SetInside(tooltip)
-        tooltip.shadow:SetAllPoints(tooltip)
 		tooltip.styled=true
 	end
 	tooltip:SetBackdropColor(unpack(R["media"].backdropfadecolor))

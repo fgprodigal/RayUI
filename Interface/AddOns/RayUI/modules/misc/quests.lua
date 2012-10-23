@@ -88,8 +88,6 @@ local function LoadFunc()
 		end
 	end)
 
-	if not M.db.automation then return end
-	--自动交接任务, Shift点npc不自动交接
     local Monomyth = CreateFrame("Frame")
     Monomyth:SetScript("OnEvent", function(self, event, ...) self[event](...) end)
 
@@ -98,7 +96,7 @@ local function LoadFunc()
     function Monomyth:Register(event, func)
         self:RegisterEvent(event)
         self[event] = function(...)
-            if(not IsShiftKeyDown()) then
+            if (not IsShiftKeyDown() and M.db.automation) then
                 func(...)
             end
         end

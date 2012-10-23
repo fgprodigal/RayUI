@@ -134,7 +134,7 @@ function UF:DPSLayout(frame, unit)
 				frame:SetValue(UnitPower("player"))
 				frame.text:SetText(UnitPower("player"))
 			end)
-			R:CreateMover(EnergyBarHolder, "EnergyBarMover", L["能量条锚点"], true)
+			R:CreateMover(EnergyBarHolder, "EnergyBarMover", L["能量条锚点"], true, nil, "ALL,RAID15,RAID25,RAID40")
 		else
 			local power = self:ConstructPowerBar(frame, true, true)
 			power:SetPoint("LEFT")
@@ -164,7 +164,7 @@ function UF:DPSLayout(frame, unit)
 			VengeanceBar.Text = VengeanceBar:CreateFontString(nil, "OVERLAY")
 			VengeanceBar.Text:SetPoint("CENTER")
 			VengeanceBar.Text:SetFont(R["media"].font, R["media"].fontsize + 2, R["media"].fontflag)
-			R:CreateMover(VengeanceBarHolder, "VengeanceBarMover", L["复仇条锚点"], true)
+			R:CreateMover(VengeanceBarHolder, "VengeanceBarMover", L["复仇条锚点"], true, nil, "ALL,RAID15,RAID25,RAID40")
 			frame.Vengeance = VengeanceBar
 		end
 
@@ -180,7 +180,7 @@ function UF:DPSLayout(frame, unit)
         castbar.Time:SetPoint("BOTTOMRIGHT", castbar, "TOPRIGHT", -5, -2)
         castbar.Icon:Hide()
         castbar.Iconbg:Hide()
-        R:CreateMover(castbar, "PlayerCastBarMover", L["施法条锚点"], true)
+        R:CreateMover(castbar, "PlayerCastBarMover", L["施法条锚点"], true, nil, "ALL,RAID15,RAID25,RAID40")
         frame.Castbar = castbar
 
 		-- Debuffs
@@ -794,63 +794,79 @@ function UF:LoadDPSLayout()
 	player:Point("BOTTOMRIGHT", RayUF_Parent, "BOTTOM", -80, 390)
 	player:Size(PLAYER_WIDTH, PLAYER_HEIGHT)
 	player:SetParent(RayUF_Parent)
+    R:CreateMover(player, player:GetName().."Mover", "Player Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	-- Target
 	local target = oUF:Spawn("target", "RayUF_target")
 	target:Point("BOTTOMLEFT", RayUF_Parent, "BOTTOM", 80, 390)
 	target:Size(TARGET_WIDTH, TARGET_HEIGHT)
 	target:SetParent(RayUF_Parent)
+    R:CreateMover(target, target:GetName().."Mover", "Target Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	-- Focus
 	local focus = oUF:Spawn("focus", "RayUF_focus")
 	focus:Point("BOTTOMRIGHT", RayUF_player, "TOPLEFT", -20, 20)
 	focus:Size(PARTY_WIDTH, PARTY_HEIGHT)
 	focus:SetParent(RayUF_Parent)
+    R:CreateMover(focus, focus:GetName().."Mover", "Focus Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	-- Target's Target
 	local tot = oUF:Spawn("targettarget", "RayUF_targettarget")
 	tot:Point("BOTTOMLEFT", RayUF_target, "TOPRIGHT", 5, 30)
 	tot:Size(SMALL_WIDTH, SMALL_HEIGHT)
 	tot:SetParent(RayUF_Parent)
+    R:CreateMover(tot, tot:GetName().."Mover", "ToT Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	-- Player's Pet
 	local pet = oUF:Spawn("pet", "RayUF_pet")
 	pet:Point("BOTTOM", RayUIPetBar, "TOP", 0, 3)
 	pet:Size(SMALL_WIDTH, PET_HEIGHT)
 	pet:SetParent(RayUF_Parent)
+    R:CreateMover(pet, pet:GetName().."Mover", "Pet Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	-- Focus's target
 	local focustarget = oUF:Spawn("focustarget", "RayUF_focustarget")
 	focustarget:Point("BOTTOMRIGHT", RayUF_focus, "BOTTOMLEFT", -10, 1)
 	focustarget:Size(SMALL_WIDTH, SMALL_HEIGHT)
 	focustarget:SetParent(RayUF_Parent)
+    R:CreateMover(focustarget, focustarget:GetName().."Mover", "Focus Target Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	if self.db.showArenaFrames and not IsAddOnLoaded("Gladius") then
+        local ArenaHeader = CreateFrame("Frame", nil, UIParent)
+        ArenaHeader:Point("RIGHT", RayUF_Parent, "RIGHT", -80, 180)
+        ArenaHeader:Width(BOSS_WIDTH)
+        ArenaHeader:Height(R:Scale(BOSS_HEIGHT)*5 + R:Scale(36)*4)
 		local arena = {}
 		for i = 1, 5 do
 			arena[i] = oUF:Spawn("arena"..i, "RayUFArena"..i)
 			if i == 1 then
-				arena[i]:Point("RIGHT", RayUF_Parent, "RIGHT", -80, 180)
+				arena[i]:Point("TOPRIGHT", ArenaHeader, "TOPRIGHT", 0, 0)
 			else
 				arena[i]:Point("TOP", arena[i-1], "BOTTOM", 0, -36)
 			end
 			arena[i]:Size(BOSS_WIDTH, BOSS_HEIGHT)
 			arena[i]:SetParent(RayUF_Parent)
 		end
+        R:CreateMover(ArenaHeader, "ArenaHeaderMover", "Arena Frames", nil, nil, "ALL,ARENA")
 	end
 
 	if self.db.showBossFrames then
+        local BossHeader = CreateFrame("Frame", nil, UIParent)
+        BossHeader:Point("RIGHT", RayUF_Parent, "RIGHT", -80, 180)
+        BossHeader:Width(BOSS_WIDTH)
+        BossHeader:Height(R:Scale(BOSS_HEIGHT)*MAX_BOSS_FRAMES + R:Scale(36)*(MAX_BOSS_FRAMES-1))
 		local boss = {}
 		for i = 1, MAX_BOSS_FRAMES do
 			boss[i] = oUF:Spawn("boss"..i, "RayUFBoss"..i)
 			if i == 1 then
-				boss[i]:Point("RIGHT", RayUF_Parent, "RIGHT", -80, 180)
+				boss[i]:Point("TOPRIGHT", BossHeader, "TOPRIGHT", 0, 0)
 			else
 				boss[i]:Point("TOP", boss[i-1], "BOTTOM", 0, -36)             
 			end
 			boss[i]:Size(BOSS_WIDTH, BOSS_HEIGHT)
 			boss[i]:SetParent(RayUF_Parent)
 		end
+        R:CreateMover(BossHeader, "BossHeaderMover", "Boss Frames", nil, nil, "ALL,RAID15,RAID25,RAID40")
 	end
 end
 

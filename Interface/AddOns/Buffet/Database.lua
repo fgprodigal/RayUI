@@ -111,6 +111,7 @@ ns.hppot = [[
 43569:1920
 57191:10000
 57193:8000
+76097:60000
 ]]
 
 if select(2, UnitClass("player")) == "ROGUE" then

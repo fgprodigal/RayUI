@@ -1402,7 +1402,7 @@ local function TestUF(msg)
 			end
 		end
 	elseif msg == "boss" or msg == "b" then
-		for i = 1, 4 do
+		for i = 1, MAX_BOSS_FRAMES do
 			local frame = _G["RayUFBoss"..i]
 			if frame and not frame.isForced then
 				UF:ForceShow(frame)

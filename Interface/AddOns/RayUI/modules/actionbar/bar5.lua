@@ -8,7 +8,7 @@ function AB:CreateBar5()
 	bar:Point("LEFT", "UIParent", "LEFT", 15, 0)
 	bar:SetScale(AB.db.barscale)
 
-	R:CreateMover(bar, "ActionBar5Mover", L["动作条5锚点"], true)  
+	R:CreateMover(bar, "ActionBar5Mover", L["动作条5锚点"], true, nil, "ALL,ACTIONBARS")  
 
 	MultiBarLeft:SetParent(bar)
 	  

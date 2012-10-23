@@ -27,7 +27,7 @@ local function Point(obj, arg1, arg2, arg3, arg4, arg5)
 	obj:SetPoint(arg1, arg2, arg3, arg4, arg5)
 end
 
-local function CreateShadow(f, t, thickness, texture)
+local function CreateShadow(f, t, thickness)
 	if f.shadow then return end
 
 	local borderr, borderg, borderb = 0, 0, 0
@@ -55,6 +55,8 @@ local function CreateShadow(f, t, thickness, texture)
 		edgeFile = R["media"].glow,
         bgFile = R["media"].blank, 
 		edgeSize = R:Scale(thickness),
+        tile = false,
+        tileSize = 0,
 		insets = {left = R:Scale(thickness), right = R:Scale(thickness), top = R:Scale(thickness), bottom = R:Scale(thickness)},
 	})
 	shadow:SetBackdropColor( backdropr, backdropg, backdropb, backdropa )
@@ -289,47 +291,6 @@ local function StripTextures(object, kill)
 	end
 end
 
-local function CreatePulse(frame, speed, mult, alpha)
-	frame.speed = speed or .05
-	frame.mult = mult or 1
-	frame.alpha = alpha or 1
-	frame.tslu = 0
-	frame:SetScript("OnUpdate", function(self, elapsed)
-		self.tslu = self.tslu + elapsed
-		if self.tslu > self.speed then
-			self.tslu = 0
-			self:SetAlpha(self.alpha)
-		end
-		self.alpha = self.alpha - elapsed*self.mult
-		if self.alpha < 0 and self.mult > 0 then
-			self.mult = self.mult*-1
-			self.alpha = 0
-		elseif self.alpha > 1 and self.mult < 0 then
-			self.mult = self.mult*-1
-		end
-	end)
-end
-
-local function StartGlow(f)
-	if f.shadow then
-		CreatePulse(f.shadow)
-	else
-		CreatePulse(f.glow)
-	end
-end
-
-local function StopGlow(f)
-	f:SetBackdropColor(0, 0, 0, 0)
-	f:SetBackdropBorderColor(0, 0, 0)
-	if f.shadow then
-		f.shadow:SetScript("OnUpdate", nil)
-		f.shadow:SetAlpha(0)
-	else
-		f.glow:SetScript("OnUpdate", nil)
-		f.glow:SetAlpha(0)
-	end
-end
-
 local function addapi(object)
 	local mt = getmetatable(object).__index
 	if not object.Size then mt.Size = Size end
@@ -348,9 +309,6 @@ local function addapi(object)
 	if not object.FadeOut then mt.FadeOut = FadeOut end
 	if not object.CreateBorder then mt.CreateBorder = CreateBorder end
 	if not object.StripTextures then mt.StripTextures = StripTextures end
-	if not object.CreateButton then mt.CreateButton = CreateButton end
-	if not object.StartGlow then mt.StartGlow = StartGlow end
-	if not object.StopGlow then mt.StopGlow = StopGlow end
 end
 local handled = {["Frame"] = true}
 local object = CreateFrame("Frame")

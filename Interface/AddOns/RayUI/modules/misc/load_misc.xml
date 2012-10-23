@@ -10,6 +10,7 @@
 	<Script file="debugTools.lua"/>
 	<Script file="durability.lua"/>
 	<Script file="hattrick.lua"/>
+	<Script file="invite.lua"/>
 	<Script file="loot_roll.lua"/>
 	<Script file="merchant.lua"/>
 	<Script file="mirror.lua"/>

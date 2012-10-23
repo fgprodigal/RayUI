@@ -138,17 +138,17 @@ function MM:CheckMail()
 	local mail = MiniMapMailFrame:IsShown() and true or false
 	if inv > 0 and mail then -- New invites and mail
 		Minimap.shadow:SetBackdropBorderColor(1, .5, 0)
-		Minimap:StartGlow()
+        R:GetModule("Skins"):CreatePulse(Minimap.shadow, 1, 1)
 	elseif inv > 0 and not mail then -- New invites and no mail
 		Minimap.shadow:SetBackdropBorderColor(1, 30/255, 60/255)
-		Minimap:StartGlow()
+        R:GetModule("Skins"):CreatePulse(Minimap.shadow, 1, 1)
 	elseif inv==0 and mail then -- No invites and new mail
 		Minimap.shadow:SetBackdropBorderColor(.5, 1, 1)
-		Minimap:StartGlow()
+        R:GetModule("Skins"):CreatePulse(Minimap.shadow, 1, 1)
 	else -- None of the above
-		Minimap:StopGlow()
-		Minimap.shadow:SetAlpha(1)
-		Minimap.shadow:SetBackdropBorderColor(unpack(R["media"].bordercolor))
+        Minimap.shadow:SetScript("OnUpdate", nil)
+        Minimap.shadow:SetAlpha(1)
+        Minimap.shadow:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 	end
 end
 

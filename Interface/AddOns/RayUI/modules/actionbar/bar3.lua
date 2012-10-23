@@ -8,7 +8,7 @@ function AB:CreateBar3()
 	bar:Point("BOTTOM", ActionBar1Mover, "TOP", 0, AB.db.buttonspacing)
 	bar:SetScale(AB.db.barscale)
 
-	R:CreateMover(bar, "ActionBar3Mover", L["动作条3锚点"], true)
+	R:CreateMover(bar, "ActionBar3Mover", L["动作条3锚点"], true, nil, "ALL,ACTIONBARS")
 
 	MultiBarBottomRight:SetParent(bar)
 	  

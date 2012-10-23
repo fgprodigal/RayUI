@@ -11,7 +11,7 @@ function AB:CreateStanceBar()
 	bar:SetPoint("BOTTOMLEFT", "UIParent", "BOTTOMLEFT", 15, 202)
 	bar:SetScale(AB.db.barscale)
 
-	R:CreateMover(bar, "StanceBarMover", L["职业条锚点"], true)  
+	R:CreateMover(bar, "StanceBarMover", L["职业条锚点"], true, nil, "ALL,ACTIONBARS")  
 
 	StanceBarFrame:SetParent(bar)
 	StanceBarFrame:EnableMouse(false)

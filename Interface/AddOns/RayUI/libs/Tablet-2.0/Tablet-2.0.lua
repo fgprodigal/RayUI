@@ -1229,7 +1229,6 @@ local function AcquireFrame(self, registration, data, detachedData)
         tooltip:SetBackdrop(nil)
         tooltip:CreateShadow("Background")
         tooltip.border:SetInside(tooltip)
-        tooltip.shadow:SetAllPoints(tooltip)
 		tooltip.numLines = 0
 		tooltip.owner = nil
 		tooltip.fontSizePercent = tooltip.data and tooltip.data.fontSizePercent or 1

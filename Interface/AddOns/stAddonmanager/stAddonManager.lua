@@ -457,7 +457,7 @@ local function LoadWindow()
 		
 		button:SetScript("OnMouseDown", function(self)
 			if addon.enabled then
-				self:SetBackdropColor(unpack(backdropcolor))
+                S:CreateBD(self)
 				DisableAddOn(addon.name)
 				addon.enabled = false
 			else

@@ -8,7 +8,7 @@ function AB:CreateBar4()
 	bar:Point("RIGHT", "UIParent", "RIGHT", -15, 0)
 	bar:SetScale(AB.db.barscale)
 
-	R:CreateMover(bar, "ActionBar4Mover", L["动作条4锚点"], true)  
+	R:CreateMover(bar, "ActionBar4Mover", L["动作条4锚点"], true, nil, "ALL,ACTIONBARS")  
 
 	MultiBarRight:SetParent(bar)
 	  
