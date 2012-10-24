@@ -46,6 +46,9 @@ local StopFlash = function(self)
 	if self.anim then
 		self.anim:Stop()
 	end
+    if self.cooldown then
+        self.cooldown:SetAlpha(1)
+    end
 end
 
 local function Flash(self)

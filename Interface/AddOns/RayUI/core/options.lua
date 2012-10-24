@@ -52,12 +52,23 @@ R.Options = {
                         R:ToggleConfigMode()
 					end,
 				},
-                ResetAllMovers = {
-                    order = 5,
-                    type = "execute",
-                    name = L["重置锚点"],
-                    func = function() StaticPopup_Show("RESETMOVER_CHECK") end,
-                },
+                --ResetAllMovers = {
+                    --order = 5,
+                    --type = "execute",
+                    --name = L["重置锚点"],
+                    --func = function() StaticPopup_Show("RESETMOVER_CHECK") end,
+                --},
+				ChoosLayout = {
+					order = 5,
+					type = "execute",
+					name = L["选择布局"],
+					desc = L["选择一个预设布局"],
+					func = function()
+						AceConfigDialog["Close"](AceConfigDialog,"RayUI")
+						R:ChooseLayout()
+						GameTooltip_Hide()
+					end,
+				},
 				ToggleTutorial = {
 					order = 6,
 					type = "execute",
@@ -65,24 +76,6 @@ R.Options = {
 					func = function()
 						AceConfigDialog["Close"](AceConfigDialog,"RayUI")
 						R:GetModule("Tutorial"):Tutorials(true)
-						GameTooltip_Hide()
-					end,
-				},
-				spacer2 = {
-					order = 7,
-					width = "full",
-					name = " ",
-					desc = " ",
-					type = "description",
-				},
-				ChoosLayout = {
-					order = 8,
-					type = "execute",
-					name = L["选择布局"],
-					desc = L["选择一个预设布局"],
-					func = function()
-						AceConfigDialog["Close"](AceConfigDialog,"RayUI")
-						R:ChooseLayout()
 						GameTooltip_Hide()
 					end,
 				},

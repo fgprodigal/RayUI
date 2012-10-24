@@ -24,6 +24,7 @@ function R:SetLayout(layout)
 	elseif layout == "dps" then
 		R.db.movers.ArenaHeaderMover = "TOPLEFTUIParentBOTTOM450460"
 		R.db.movers.BossHeaderMover = "TOPLEFTUIParentBOTTOM450460"
+		R.db.movers.RayUF_focusMover = "BOTTOMRIGHTRayUF_playerTOPLEFT-2050"
 		R.db.movers.RayUFRaid15_1Mover = "BOTTOMLEFTUIParentBOTTOMLEFT15235"
 		R.db.movers.RayUFRaid25_1Mover = "BOTTOMLEFTUIParentBOTTOMLEFT15235"
 		R.db.movers.RayUFRaid40_6Mover = "BOTTOMLEFTRayUFRaid25_1MoverTOPLEFT0"..R.db.Raid.spacing
