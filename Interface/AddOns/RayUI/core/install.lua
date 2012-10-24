@@ -46,6 +46,7 @@ function R:ChooseLayout()
 
 		f.CloseButton = CreateFrame("Button", nil, f, "UIPanelCloseButton")
 		f.CloseButton:SetScript("OnClick", function()
+			R.db.layoutchosen = true
 			f:Hide()
 		end)
 		S:ReskinClose(f.CloseButton)
