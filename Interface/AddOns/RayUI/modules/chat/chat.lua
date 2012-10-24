@@ -1141,16 +1141,11 @@ function CH:Initialize()
 	ChatHistoryEvent:RegisterEvent("CHAT_MSG_WHISPER")
 	ChatHistoryEvent:RegisterEvent("CHAT_MSG_WHISPER_INFORM")
 	ChatHistoryEvent:RegisterEvent("CHAT_MSG_YELL")
-	ChatHistoryEvent:RegisterEvent("PLAYER_LOGIN")
 	ChatHistoryEvent:RegisterEvent("ADDON_LOADED")
 	ChatHistoryEvent:SetScript("OnEvent", function(self, event, ...)
-		if event =="PLAYER_LOGIN" then
-			ChatHistoryEvent:UnregisterEvent("PLAYER_LOGIN")
-			CH:DisplayChatHistory()
-		else
-			CH:SaveChatHistory(event, ...)
-		end
+        CH:SaveChatHistory(event, ...)
 	end)
+    CH:DisplayChatHistory()
 
 	SetCVar("profanityFilter", 0)
 	SetCVar("chatStyle", "classic")

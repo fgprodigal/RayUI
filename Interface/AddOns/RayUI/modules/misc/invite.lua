@@ -26,22 +26,22 @@ local function LoadFunc()
             end
 
             if not inGroup then
-                for bnIndex = 1, BNGetNumFriends() do
-                    local _, _, _, _, name = BNGetFriendInfo(bnIndex)
-                    leaderName = leaderName:match("(.+)%-.+") or leaderName
-                    if name == leaderName then
+                for guildIndex = 1, GetNumGuildMembers() do
+                    local guildMemberName = GetGuildRosterInfo(guildIndex)
+                    if guildMemberName == leaderName then
                         AcceptGroup()
+                        inGroup = true
                         break
                     end
                 end
             end
 
             if not inGroup then
-                for guildIndex = 1, GetNumGuildMembers() do
-                    local guildMemberName = GetGuildRosterInfo(guildIndex)
-                    if guildMemberName == leaderName then
+                for bnIndex = 1, BNGetNumFriends() do
+                    local _, _, _, _, name = BNGetFriendInfo(bnIndex)
+                    leaderName = leaderName:match("(.+)%-.+") or leaderName
+                    if name == leaderName then
                         AcceptGroup()
-                        inGroup = true
                         break
                     end
                 end
