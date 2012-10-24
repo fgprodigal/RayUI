@@ -84,11 +84,11 @@ end
 -- @param persist if false, the command will be soft disabled/enabled when aceconsole is used as a mixin (default: true)
 function AceConsole:RegisterChatCommand( command, func, persist )
 	if type(command)~="string" then error([[Usage: AceConsole:RegisterChatCommand( "command", func[, persist ]): 'command' - expected a string]], 2) end
-
+	
 	if persist==nil then persist=true end	-- I'd rather have my addon's "/addon enable" around if the author screws up. Having some extra slash regged when it shouldnt be isn't as destructive. True is a better default. /Mikk
-
+	
 	local name = "ACECONSOLE_"..command:upper()
-
+	
 	if type( func ) == "string" then
 		SlashCmdList[name] = function(input, editBox)
 			self[func](self, input, editBox)
@@ -132,7 +132,7 @@ local function nils(n, ...)
 		return ...
 	end
 end
-
+	
 
 --- Retreive one or more space-separated arguments from a string. 
 -- Treats quoted strings and itemlinks as non-spaced.
@@ -144,7 +144,7 @@ end
 function AceConsole:GetArgs(str, numargs, startpos)
 	numargs = numargs or 1
 	startpos = max(startpos or 1, 1)
-
+	
 	local pos=startpos
 
 	-- find start of new arg
@@ -169,24 +169,24 @@ function AceConsole:GetArgs(str, numargs, startpos)
 	else
 		delim_or_pipe="([| ])"
 	end
-
+	
 	startpos = pos
-
+	
 	while true do
 		-- find delimiter or hyperlink
 		local ch,_
 		pos,_,ch = strfind(str, delim_or_pipe, pos)
-
+		
 		if not pos then break end
-
+		
 		if ch=="|" then
 			-- some kind of escape
-
+			
 			if strsub(str,pos,pos+1)=="|H" then
 				-- It's a |H....|hhyper link!|h
 				pos=strfind(str, "|h", pos+2)	-- first |h
 				if not pos then break end
-
+				
 				pos=strfind(str, "|h", pos+2)	-- second |h
 				if not pos then break end
 			elseif strsub(str,pos, pos+1) == "|T" then
@@ -194,16 +194,16 @@ function AceConsole:GetArgs(str, numargs, startpos)
 				pos=strfind(str, "|t", pos+2)
 				if not pos then break end
 			end
-
+			
 			pos=pos+2 -- skip past this escape (last |h if it was a hyperlink)
-
+		
 		else
 			-- found delimiter, done with this arg
 			return strsub(str, startpos, pos-1), AceConsole:GetArgs(str, numargs-1, pos+1)
 		end
-
+		
 	end
-
+	
 	-- search aborted, we hit end of string. return it all as one argument. (yes, even if it's an unterminated quote or hyperlink)
 	return strsub(str, startpos), nils(numargs-1, 1e9)
 end

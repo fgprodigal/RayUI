@@ -105,7 +105,6 @@ local function CreateWarningFrame()
 	S:SetBD(frame)
 	frame:Size(400, 400)
 	frame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
-	-- frame:Hide()
 	frame:EnableMouse(true)
 	frame:SetFrameStrata("DIALOG")
 
@@ -113,7 +112,7 @@ local function CreateWarningFrame()
 	titile:Point("TOPLEFT", 0, -10)
 	titile:Point("TOPRIGHT", 0, -10)
 	titile:SetFont(R["media"].font, R["media"].fontsize + 2, R["media"].fontflag)
-	titile:SetText("由于一些很复杂的原因, 关闭以下插件后才能正常使用|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r:")
+	titile:SetText("由於一些很複雜的原因, 關閉以下外掛程式後才能正常使用|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r:")
 
 	local scrollArea = CreateFrame("ScrollFrame", "RayUIWarningFrameScroll", frame, "UIPanelScrollFrameTemplate")
 	scrollArea:Point("TOPLEFT", frame, "TOPLEFT", 8, -40)
@@ -140,7 +139,7 @@ local function CreateWarningFrame()
 	button1:Size(150, 30)
 	button1:Point("BOTTOMLEFT", 10, 10)
 	S:Reskin(button1)
-	button1:SetText("帮我关掉它们")
+	button1:SetText("幫我關掉它們")
 	button1:SetScript("OnClick", function()
 		for i = 1, GetNumAddOns() do
 			if AddonNotSupported[i] then
@@ -154,7 +153,7 @@ local function CreateWarningFrame()
 	button2:Size(150, 30)
 	button2:Point("BOTTOMRIGHT", -10, 10)
 	S:Reskin(button2)
-	button2:SetText("不，我需要它们")
+	button2:SetText("不，我需要它們")
 	button2:SetScript("OnClick", function()
 		for i = 1, GetNumAddOns() do
 			if GetAddOnInfo(i) == "RayUI" then
@@ -194,6 +193,74 @@ function R:InitializeModules()
 			end
 		end
 	end
+end
+
+
+function R:PLAYER_ENTERING_WORLD()
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+	RequestTimePlayed()
+	Advanced_UIScaleSlider:Kill()
+	Advanced_UseUIScale:Kill()
+	SetCVar("useUiScale", 1)
+	SetCVar("uiScale", R.global.general.uiscale)
+	DEFAULT_CHAT_FRAME:AddMessage("欢迎使用|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r(v"..R.version..")，插件发布网址: |cff8A9DDE[|Hurl:http://rayui.org|hhttp://rayui.org|h]|r")
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD" )
+
+	local eventcount = 0
+	local RayUIGarbageCollector = CreateFrame("Frame")
+	RayUIGarbageCollector:RegisterAllEvents()
+	RayUIGarbageCollector:SetScript("OnEvent", function(self, event, addon)
+		eventcount = eventcount + 1
+		if QuestDifficultyColors["trivial"].r ~= 0.50 then
+			QuestDifficultyColors["trivial"].r = 0.50
+			QuestDifficultyColors["trivial"].g = 0.50
+			QuestDifficultyColors["trivial"].b = 0.50
+			QuestDifficultyColors["trivial"].font = QuestDifficulty_Trivial
+		end
+		if InCombatLockdown() then return end
+
+		if eventcount > 6000 then
+			collectgarbage("collect")
+			eventcount = 0
+		end
+	end)
+end
+
+function R:Initialize()
+	self:LoadMovers()
+	self:InitializeModules()
+
+	if not self.db.layoutchosen then
+		self:ChooseLayout()
+	end
+
+	self:CheckRole()
+	self:RegisterEvent("PLAYER_ENTERING_WORLD", "CheckRole")
+	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", "CheckRole")
+	self:RegisterEvent("PLAYER_TALENT_UPDATE", "CheckRole")
+	self:RegisterEvent("CHARACTER_POINTS_CHANGED", "CheckRole")
+	self:RegisterEvent("UNIT_INVENTORY_CHANGED", "CheckRole")
+	self:RegisterEvent("UPDATE_BONUS_ACTIONBAR", "CheckRole")
+	self:RegisterEvent("PLAYER_ENTERING_WORLD")
+	self:Delay(5, function() collectgarbage("collect") end)
+
+	local configButton = CreateFrame("Button", "RayUIConfigButton", GameMenuFrame, "GameMenuButtonTemplate")
+	configButton:SetSize(GameMenuButtonMacros:GetWidth(), GameMenuButtonMacros:GetHeight())
+	GameMenuFrame:SetHeight(GameMenuFrame:GetHeight()+GameMenuButtonMacros:GetHeight());
+	GameMenuButtonOptions:SetPoint("TOP", configButton, "BOTTOM", 0, -2)
+	configButton:SetPoint("TOP", GameMenuButtonHelp, "BOTTOM", 0, -2)
+	configButton:SetText(L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r设置"])
+	configButton:SetScript("OnClick", function()
+		if RayUIConfigTutorial then
+			RayUIConfigTutorial:Hide()
+			R.global.Tutorial.configbutton = true
+		end
+		HideUIPanel(GameMenuFrame)
+		self:OpenConfig()
+	end)
+
+	local S = self:GetModule("Skins")
+	S:Reskin(configButton)
 end
 
 --Check the player"s role
@@ -575,9 +642,9 @@ end
 
 function R:CreateDemoFrame()
     local S = R:GetModule("Skins")
-    demoFrame = CreateFrame("Frame", "RayUIDemoFrame", UIParent)
+    demoFrame = CreateFrame("Frame", "RayUIDemoFrame", LibStub("AceConfigDialog-3.0").OpenFrames["RayUI"].frame)
     demoFrame:Size(300, 200)
-    demoFrame:Point("RIGHT", UIParent, "RIGHT", -100, 0)
+    demoFrame:Point("LEFT", LibStub("AceConfigDialog-3.0").OpenFrames["RayUI"].frame, "RIGHT", 20, 0)
     demoFrame:SetTemplate("Transparent")
     demoFrame.outBorder = CreateFrame("Frame", nil, demoFrame)
     demoFrame.outBorder:SetOutside(demoFrame, 1, 1)
@@ -623,10 +690,10 @@ function R:UpdateDemoFrame()
     demoFrame.inlineFrame1:SetBackdropBorderColor(borderr, borderg, borderb)
     demoFrame.button1:SetBackdropColor(backdropfader, backdropfadeg, backdropfadeb, backdropfadea)
     demoFrame.button1:SetBackdropBorderColor(borderr, borderg, borderb)
-    demoFrame.button1.gradientTex:SetVertexColor(backdropr, backdropg, backdropb)
+    demoFrame.button1.backdropTexture:SetVertexColor(backdropr, backdropg, backdropb)
     demoFrame.button2:SetBackdropColor(backdropfader, backdropfadeg, backdropfadeb, backdropfadea)
     demoFrame.button2:SetBackdropBorderColor(borderr, borderg, borderb)
-    demoFrame.button2.gradientTex:SetVertexColor(backdropr, backdropg, backdropb)
+    demoFrame.button2.backdropTexture:SetVertexColor(backdropr, backdropg, backdropb)
 end
 
 R.Developer = { "夏琉君", "Theron", "Divineseraph", "水月君", "夏翎", }

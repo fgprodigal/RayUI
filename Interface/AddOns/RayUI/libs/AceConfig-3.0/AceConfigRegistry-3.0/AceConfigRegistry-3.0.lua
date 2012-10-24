@@ -8,8 +8,8 @@
 -- :IterateOptionsTables() (and :GetOptionsTable() if only given one argument) return a function reference that the requesting config handling addon must call with valid "uiType", "uiName".
 -- @class file
 -- @name AceConfigRegistry-3.0
--- @release $Id: AceConfigRegistry-3.0.lua 998 2010-12-01 18:39:53Z nevcairiel $
-local MAJOR, MINOR = "AceConfigRegistry-3.0", 13
+-- @release $Id: AceConfigRegistry-3.0.lua 1045 2011-12-09 17:58:40Z nevcairiel $
+local MAJOR, MINOR = "AceConfigRegistry-3.0", 14
 local AceConfigRegistry = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not AceConfigRegistry then return end
@@ -162,7 +162,7 @@ local typedkeys={
 		dropdownControl=optstring,
 	},
 	color={
-		hasAlpha=optbool,
+		hasAlpha=optmethodbool,
 	},
 	keybinding={
 		-- TODO
@@ -202,13 +202,13 @@ local function validate(options,errlvl,...)
 	if type(options.type)~="string" then
 		err(".type: expected a string, got a "..type(options.type), errlvl,...)
 	end
-
+	
 	-- get type and 'typedkeys' member
 	local tk = typedkeys[options.type]
 	if not tk then
 		err(".type: unknown type '"..options.type.."'", errlvl,...)
 	end
-
+	
 	-- make sure that all options[] are known parameters
 	for k,v in pairs(options) do
 		if not (tk[k] or basekeys[k]) then
@@ -338,7 +338,7 @@ function AceConfigRegistry:GetOptionsTable(appName, uiType, uiName)
 	if not f then
 		return nil
 	end
-
+	
 	if uiType then
 		return f(uiType,uiName,1)	-- get the table for us
 	else

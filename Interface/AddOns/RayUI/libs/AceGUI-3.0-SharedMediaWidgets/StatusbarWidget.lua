@@ -204,7 +204,7 @@ do
 		self.bar = bar
 
 		self.alignoffset = 31
-
+		
 		self.OnRelease = OnRelease
 		self.OnAcquire = OnAcquire
 		self.ClearFocus = ClearFocus

@@ -135,7 +135,6 @@ local function CreateMover(parent, name, text, overlay, postdrag)
 			f:ClearAllPoints()
 		end
 
-		print(name)
 		local point, anchor, secondaryPoint, x, y = string.split("\031", R.db["movers"][name])
 		f:SetPoint(point, anchor, secondaryPoint, x, y)
 	else
@@ -372,12 +371,6 @@ function R:LoadMovers()
 	end
 end
 
-function R:ADDON_LOADED(event, addon)
-    if addon ~= AddOnName then return end
-	self:LoadMovers()
-    self:UnregisterEvent("ADDON_LOADED")
-end
-
 function R:PLAYER_REGEN_DISABLED()
 	local err = false
 	for name, _ in pairs(R.CreatedMovers) do
@@ -392,5 +385,4 @@ function R:PLAYER_REGEN_DISABLED()
 	end
 end
 
-R:RegisterEvent("ADDON_LOADED")
 R:RegisterEvent("PLAYER_REGEN_DISABLED")

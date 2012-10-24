@@ -200,7 +200,7 @@ local tmpprofiles = {}
 -- @return Hashtable of all profiles with the internal name as keys and the display name as value.
 local function getProfileList(db, common, nocurrent)
 	local profiles = {}
-
+	
 	-- copy existing profiles into the table
 	local currentProfile = db:GetCurrentProfile()
 	for i,v in pairs(db:GetProfiles(tmpprofiles)) do 
@@ -208,14 +208,14 @@ local function getProfileList(db, common, nocurrent)
 			profiles[v] = v 
 		end 
 	end
-
+	
 	-- add our default profiles to choose from ( or rename existing profiles)
 	for k,v in pairs(defaultProfiles) do
 		if (common or profiles[k]) and not (nocurrent and k == currentProfile) then
 			profiles[k] = v
 		end
 	end
-
+	
 	return profiles
 end
 
@@ -244,7 +244,7 @@ end
 	List all active profiles
 	you can control the output with the .arg variable
 	currently four modes are supported
-
+	
 	(empty) - return all available profiles
 	"nocurrent" - returns all available profiles except the currently active profile
 	"common" - returns all avaialble profiles + some commonly used profiles ("char - realm", "realm", "class", "Default")
@@ -262,7 +262,7 @@ function OptionsHandlerPrototype:ListProfiles(info)
 	else
 		profiles = getProfileList(self.db)
 	end
-
+	
 	return profiles
 end
 
@@ -296,13 +296,13 @@ local function getOptionsHandler(db, noDefaultProfiles)
 	if not defaultProfiles then
 		generateDefaultProfiles(db)
 	end
-
+	
 	local handler = AceDBOptions.handlers[db] or { db = db, noDefaultProfiles = noDefaultProfiles }
-
+	
 	for k,v in pairs(OptionsHandlerPrototype) do
 		handler[k] = v
 	end
-
+	
 	AceDBOptions.handlers[db] = handler
 	return handler
 end
@@ -405,7 +405,7 @@ function AceDBOptions:GetOptionsTable(db, noDefaultProfiles)
 			name = L["profiles"],
 			desc = L["profiles_sub"],
 		}
-
+	
 	tbl.handler = getOptionsHandler(db, noDefaultProfiles)
 	tbl.args = optionsTable
 

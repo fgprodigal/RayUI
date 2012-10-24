@@ -1,6 +1,6 @@
 ﻿--[[
 Name: LibSharedMedia-3.0
-Revision: $Revision: 66 $
+Revision: $Revision: 62 $
 Author: Elkano (elkano@gmx.de)
 Inspired By: SurfaceLib by Haste/Otravi (troeks@gmail.com)
 Website: http://www.wowace.com/projects/libsharedmedia-3-0/
@@ -98,7 +98,7 @@ if locale == "koKR" then
 elseif locale == "zhCN" then
 	LOCALE_MASK = lib.LOCALE_BIT_zhCN
 --
-	SML_MT_font["伤害数字"]		= [[Fonts\ARKai_C.ttf]]
+	SML_MT_font["伤害数字"]		= [[Fonts\ARKai_DB.ttf]]
 	SML_MT_font["默认"]			= [[Fonts\ARKai_T.ttf]]
 	SML_MT_font["聊天"]			= [[Fonts\ARHei.ttf]]
 --
@@ -118,12 +118,9 @@ elseif locale == "ruRU" then
 	LOCALE_MASK = lib.LOCALE_BIT_ruRU
 --
 	SML_MT_font["Arial Narrow"]			= [[Fonts\ARIALN.TTF]]
-	SML_MT_font["Friz Quadrata TT"]		= [[Fonts\FRIZQT__.TTF]]
-	SML_MT_font["Morpheus"]				= [[Fonts\MORPHEUS.TTF]]
 	SML_MT_font["Nimrod MT"]			= [[Fonts\NIM_____.ttf]]
-	SML_MT_font["Skurri"]				= [[Fonts\SKURRI.TTF]]
---
-	lib.DefaultMedia.font = "Friz Quadrata TT"
+
+	lib.DefaultMedia.font = "Arial Narrow"
 --
 else
 	LOCALE_MASK = lib.LOCALE_BIT_western
@@ -134,7 +131,7 @@ else
 	SML_MT_font["Morpheus"]				= [[Fonts\MORPHEUS.TTF]]
 	SML_MT_font["Skurri"]				= [[Fonts\SKURRI.TTF]]
 --
-	lib.DefaultMedia.font = "Friz Quadrata TT"
+	lib.DefaultMedia.font = "Arial Narrow"
 --
 end
 
@@ -175,7 +172,7 @@ function lib:Register(mediatype, key, data, langmask)
 	if not mediaTable[mediatype] then mediaTable[mediatype] = {} end
 	local mtable = mediaTable[mediatype]
 	if mtable[key] then return false end
-
+	
 	mtable[key] = data
 	rebuildMediaList(mediatype)
 	self.callbacks:Fire("LibSharedMedia_Registered", mediatype, key)

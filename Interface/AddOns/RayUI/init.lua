@@ -93,12 +93,6 @@ function AddOn:OnInitialize()
 		v.db = AddOn.db[k]
 	end
 
-	self:InitializeModules()
-
-	if not self.db.layoutchosen then
-		self:ChooseLayout()
-	end
-
 	self:RegisterEvent("PLAYER_LOGIN", "Initialize")
 	self:RegisterChatCommand("RayUI", "OpenConfig")
 	self:RegisterChatCommand("RC", "OpenConfig")
@@ -113,65 +107,4 @@ function AddOn:OpenConfig()
 	f:RegisterForDrag("LeftButton")
 	f:SetScript("OnDragStart", function(self) self:StartMoving() self:SetUserPlaced(false) end)
 	f:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end)
-end
-
-function AddOn:PLAYER_ENTERING_WORLD()
-	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-	RequestTimePlayed()
-	Advanced_UIScaleSlider:Kill()
-	Advanced_UseUIScale:Kill()
-	SetCVar("useUiScale", 1)
-	SetCVar("uiScale", AddOn.global.general.uiscale)
-	DEFAULT_CHAT_FRAME:AddMessage("欢迎使用|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r(v"..AddOn.version..")，插件发布网址: |cff8A9DDE[|Hurl:http://rayui.org|hhttp://rayui.org|h]|r")
-	self:UnregisterEvent("PLAYER_ENTERING_WORLD" )
-
-	local eventcount = 0
-	local RayUIGarbageCollector = CreateFrame("Frame")
-	RayUIGarbageCollector:RegisterAllEvents()
-	RayUIGarbageCollector:SetScript("OnEvent", function(self, event, addon)
-		eventcount = eventcount + 1
-		if QuestDifficultyColors["trivial"].r ~= 0.50 then
-			QuestDifficultyColors["trivial"].r = 0.50
-			QuestDifficultyColors["trivial"].g = 0.50
-			QuestDifficultyColors["trivial"].b = 0.50
-			QuestDifficultyColors["trivial"].font = QuestDifficulty_Trivial
-		end
-		if InCombatLockdown() then return end
-
-		if eventcount > 6000 then
-			collectgarbage("collect")
-			eventcount = 0
-		end
-	end)
-end
-
-function AddOn:Initialize()
-	self:CheckRole()
-
-	self:RegisterEvent("PLAYER_ENTERING_WORLD", "CheckRole")
-	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", "CheckRole")
-	self:RegisterEvent("PLAYER_TALENT_UPDATE", "CheckRole")
-	self:RegisterEvent("CHARACTER_POINTS_CHANGED", "CheckRole")
-	self:RegisterEvent("UNIT_INVENTORY_CHANGED", "CheckRole")
-	self:RegisterEvent("UPDATE_BONUS_ACTIONBAR", "CheckRole")
-	self:RegisterEvent("PLAYER_ENTERING_WORLD")
-	self:Delay(5, function() collectgarbage("collect") end)
-
-	local configButton = CreateFrame("Button", "RayUIConfigButton", GameMenuFrame, "GameMenuButtonTemplate")
-	configButton:SetSize(GameMenuButtonMacros:GetWidth(), GameMenuButtonMacros:GetHeight())
-	GameMenuFrame:SetHeight(GameMenuFrame:GetHeight()+GameMenuButtonMacros:GetHeight());
-	GameMenuButtonOptions:SetPoint("TOP", configButton, "BOTTOM", 0, -2)
-	configButton:SetPoint("TOP", GameMenuButtonHelp, "BOTTOM", 0, -2)
-	configButton:SetText(Locale["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r设置"])
-	configButton:SetScript("OnClick", function()
-		if RayUIConfigTutorial then
-			RayUIConfigTutorial:Hide()
-			AddOn.global.Tutorial.configbutton = true
-		end
-		HideUIPanel(GameMenuFrame)
-		self:OpenConfig()
-	end)
-
-	local S = self:GetModule("Skins")
-	S:Reskin(configButton)
 end

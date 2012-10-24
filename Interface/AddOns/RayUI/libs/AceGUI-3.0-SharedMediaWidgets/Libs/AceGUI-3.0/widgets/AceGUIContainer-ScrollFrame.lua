@@ -76,7 +76,7 @@ local methods = {
 	["MoveScroll"] = function(self, value)
 		local status = self.status or self.localstatus
 		local height, viewheight = self.scrollframe:GetHeight(), self.content:GetHeight()
-
+		
 		if self.scrollBarShown then
 			local diff = height - viewheight
 			local delta = 1
