@@ -39,7 +39,7 @@ function AddOn:OnInitialize()
 
 	self:UIScale()
 	self:UpdateMedia()
-
+	
 	for k, v in self:IterateModules() do
 		if self.db[k] and self.DF["profile"][k] and (( self.DF["profile"][k].enable~=nil and self.DF["profile"][k].enable == true) or self.DF["profile"][k].enable == nil) and v.GetOptions then
 			AddOn.Options.args[k:gsub(" ", "_")] = {
@@ -94,6 +94,11 @@ function AddOn:OnInitialize()
 	end
 
 	self:InitializeModules()
+
+	if not self.db.layoutchosen then
+		self:ChooseLayout()
+	end
+
 	self:RegisterEvent("PLAYER_LOGIN", "Initialize")
 	self:RegisterChatCommand("RayUI", "OpenConfig")
 	self:RegisterChatCommand("RC", "OpenConfig")

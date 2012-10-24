@@ -152,6 +152,8 @@ L["显示小提示"] = true
 L["解锁并移动头像和动作条"] = true
 L["重置锚点"] = true
     L["是否重置所有锚点?"] = true
+L["选择布局"] = true
+	L["选择一个预设布局"] = true
 L["一般"] = true
 	L["UI缩放"] = true
 	L["UI界面缩放"] = true
@@ -395,4 +397,12 @@ L["飞行 & 地面"] = true
 L["游泳"] = true
 L["未知"]= true
 end
-L["ACTIONBARS"] = true
+do
+L["RayUI布局选择"] = true
+L["欢迎使用RayUI, 请选择一个布局开始使用."] = true
+L["默认"] = true
+L["伤害输出"] = true
+L["治疗"] = true
+L["(未完成)"] = true
+L["设置完成"] = true
+end
