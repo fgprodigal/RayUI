@@ -28,6 +28,7 @@ end
 
 local function tooltip(self)
 	local unit = self:GetParent().unit or "player"
+    unit = unit == "vehicle" and "player" or unit
 	local min, max = xp(unit)
 	local bars = unit == 'pet' and 6 or 20
 
@@ -45,6 +46,7 @@ end
 local function update(self)
 	local bar, unit = self.Experience, self.unit
 
+    unit = unit == "vehicle" and "player" or unit
 	local exhaustion = GetXPExhaustion()
 	local min, max = xp(unit)
 	bar:SetMinMaxValues(0, max)
@@ -79,7 +81,7 @@ end
 local function argcheck(self)
 	local bar = self.Experience
 
-	if(self.unit == 'player') then
+	if(self.unit == 'player' or self.unit == 'vehicle') then
 		if(IsXPUserDisabled()) then
 			self:DisableElement('Experience')
 			self:RegisterEvent('ENABLE_XP_GAIN', function(self)

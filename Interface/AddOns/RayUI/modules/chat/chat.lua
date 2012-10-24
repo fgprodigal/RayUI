@@ -1141,9 +1141,14 @@ function CH:Initialize()
 	ChatHistoryEvent:RegisterEvent("CHAT_MSG_WHISPER")
 	ChatHistoryEvent:RegisterEvent("CHAT_MSG_WHISPER_INFORM")
 	ChatHistoryEvent:RegisterEvent("CHAT_MSG_YELL")
-	ChatHistoryEvent:RegisterEvent("ADDON_LOADED")
+    ChatHistoryEvent:RegisterEvent("PLAYER_LOGIN")
 	ChatHistoryEvent:SetScript("OnEvent", function(self, event, ...)
-        CH:SaveChatHistory(event, ...)
+        if event =="PLAYER_LOGIN" then
+            ChatHistoryEvent:UnregisterEvent("PLAYER_LOGIN")
+            CH:DisplayChatHistory()
+        else
+            CH:SaveChatHistory(event, ...)
+        end
 	end)
     CH:DisplayChatHistory()
 

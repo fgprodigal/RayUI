@@ -228,7 +228,6 @@ end
 
 function R:Initialize()
 	self:LoadMovers()
-	self:InitializeModules()
 
 	if not self.db.layoutchosen then
 		self:ChooseLayout()
@@ -706,3 +705,8 @@ function R:IsDeveloper()
 	end
 	return false
 end
+
+function R:ADDON_LOADED(event, addon)
+    self:UnregisterEvent("ADDON_LOADED")
+end
+R:RegisterEvent("ADDON_LOADED")
