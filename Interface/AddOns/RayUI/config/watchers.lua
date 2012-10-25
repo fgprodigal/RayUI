@@ -103,11 +103,12 @@ R["Watcher"] = {
                 { spellID = 33745, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --血襲
                 { spellID = 9007, unitId = "target", caster = "player", filter = "DEBUFF" },
-                --割碎
-                { spellID = 33876, unitId = "target", caster = "player", filter = "DEBUFF" },
-                { spellID = 33878, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --精靈之火
                 { spellID = 770, unitId = "target", caster = "all", filter = "DEBUFF" },
+                --痛擊
+                { spellID = 106830, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --傷殘術
+                { spellID = 22570, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
             {
                 name = "焦点buff&debuff",
@@ -716,6 +717,8 @@ R["Watcher"] = {
                 { spellID = 123266,  unitId = "player", caster = "player", filter = "BUFF" },
                 --心靈鑚刺雕文
                 { spellID = 81292,  unitId = "player", caster = "player", filter = "BUFF" },
+                --命運無常
+                { spellID = 123254,  unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -1238,6 +1241,8 @@ R["Watcher"] = {
                 --天神賜福
                 { spellID = 128984, unitId = "player", caster = "player", filter = "BUFF" },
                 { spellID = 128985, unitId = "player", caster = "player", filter = "BUFF" },
+                --宇宙之光
+                { spellID = 126577, unitId = "player", caster = "player", filter = "BUFF" },
 
                 --工程
                 --神經突觸彈簧(敏捷)
@@ -1253,6 +1258,7 @@ R["Watcher"] = {
                 { spellID = 127915, unitId = "player", caster = "player", filter = "BUFF" },
 
                 --武器附魔
+                { spellID = 104993, unitId = "player", caster = "player", filter = "BUFF" },
 
                 --藥水
                 --土靈護甲

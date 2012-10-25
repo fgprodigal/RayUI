@@ -216,6 +216,10 @@ function MM:Info()
 	return L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r小地图模块."]
 end
 
+local function MinimapPostDrag(self, screenQuadrant)
+    MM:PositionButtonCollector(self, screenQuadrant)
+end
+
 function MM:Initialize()
 	if not IsAddOnLoaded("Blizzard_TimeManager") then
 		LoadAddOn("Blizzard_TimeManager")
@@ -263,6 +267,7 @@ function MM:Initialize()
 			Minimap_ZoomOut()
 		end
 	end)
+	R:CreateMover(Minimap, "MinimapMover", L["小地图锚点"], true, MinimapPostDrag)
 end
 
 R:RegisterModule(MM:GetName())

@@ -220,6 +220,10 @@ local function PostHealth(hp, unit)
 			end
 		end
 	end
+
+    if not self:IsElementEnabled("ReadyCheck") then
+        self:EnableElement("ReadyCheck")
+    end
 end
 
 function RA:UpdateHealth(hp)
@@ -633,12 +637,6 @@ function RA:SpawnHeader(name, group, layout)
     return header
 end
 
-local function UpdateHeader(header)
-    for _, frame in pairs({header:GetChildren()}) do
-        frame:EnableElement("ReadyCheck")
-    end
-end
-
 function RA:SpawnRaid()
 	UIDropDownMenu_Initialize(dropdown, init, "MENU")
 	backdrop = {
@@ -700,7 +698,6 @@ function RA:SpawnRaid()
         R:CreateMover(group, group:GetName().."Mover", "Raid1-15 Group"..i, nil, nil, "ALL,RAID15")
 		group:SetParent(RayUF_Parent)
         RA.Raid15SmartVisibility(group)
-        UpdateHeader(group)
 	end
 	local raid25 = {}
 	for i=1, 5 do
@@ -714,7 +711,6 @@ function RA:SpawnRaid()
         R:CreateMover(group, group:GetName().."Mover", "Raid1-25 Group"..i, nil, nil, "ALL,RAID25,RAID40")
 		group:SetParent(RayUF_Parent)
         RA.Raid25SmartVisibility(group)
-        UpdateHeader(group)
 	end
 	if RA.db.raid40 then
 		local raid40 = {}
@@ -729,7 +725,6 @@ function RA:SpawnRaid()
             R:CreateMover(group, group:GetName().."Mover", "Raid1-40 Group"..i, nil, nil, "ALL,RAID40")
             group:SetParent(RayUF_Parent)
             RA.Raid40SmartVisibility(group)
-            UpdateHeader(group)
 		end
 	end
 end
