@@ -231,6 +231,14 @@ function RA:UpdateHealth(hp)
     hp:SetOrientation("HORIZONTAL")
     hp.bg:SetTexture(R["media"].normal)
     hp.freebSmooth = UF.db.smooth
+	if UF.db.healthColorClass then
+		hp.colorReaction = true	
+		hp.colorClass = true
+		hp.bg.multiplier = .2
+	else
+		hp:SetStatusBarColor(.12, .12, .12, 1)
+		hp.bg:SetVertexColor(0.12, 0.12, 0.12, 1)
+	end
 
 	hp:ClearAllPoints()
 	hp:SetPoint"TOP"
@@ -281,6 +289,15 @@ function RA:UpdatePower(power)
     power:SetStatusBarTexture(R["media"].normal)
     power:SetOrientation("HORIZONTAL")
     power.bg:SetTexture(R["media"].normal)
+	if UF.db.powerColorClass then
+		power.colorReaction = true	
+		power.colorClass = true
+		power.bg.multiplier = .2
+	else
+		power.colorReaction = true
+		power:SetStatusBarColor(.12, .12, .12, 1)
+		power.bg:SetVertexColor(0.12, 0.12, 0.12, 1)
+	end
 
     power:ClearAllPoints()
 	power:SetPoint"LEFT"

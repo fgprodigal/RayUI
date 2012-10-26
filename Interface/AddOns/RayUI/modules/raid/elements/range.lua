@@ -107,12 +107,13 @@ end
 local timer = 0
 local OnRangeUpdate = function(self, elapsed)
     timer = timer + elapsed
+	if not IsInGroup() then return end
 
     if(timer >= update) then
         for _, object in next, _FRAMES do
             if(object:IsShown()) then
                 local range = object.freebRange
-                if(UnitIsConnected(object.unit) and not UnitInRange(object.unit) and not UnitIsUnit(object.unit, "player")) then
+                if(UnitIsConnected(object.unit) and not UnitInRange(object.unit) then
                     if(object:GetAlpha() == range.insideAlpha) then
                         object:SetAlpha(range.outsideAlpha)
                     end
