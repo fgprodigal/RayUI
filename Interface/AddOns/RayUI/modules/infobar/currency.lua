@@ -32,56 +32,24 @@ local function LoadCurrency()
 	db.Gold[R.myrealm] = db.Gold[R.myrealm] or {}
 
 	-- CURRENCY DATA BARS
-	local CurrencyData = {}
-	local tokens = {
-		{61, 250},	 -- Dalaran Jewelcrafter's Token
-		{81, 250},	 -- Dalaran Cooking Award
-		{241, 250},	 -- Champion Seal
-		{361, 200},  -- Illustrious Jewelcrafter's Token
-		{390, 3000}, -- Conquest Points
-		{391, 2000},  -- Tol Barad Commendation
-		{392, 4000}, -- Honor Points
-		{395, 4000}, -- Justice Points
-		{396, 4000}, -- Valor Points
-		{402, 250},	 -- Chef's Award 
-		{416, 300}, -- Mark of the World Tree
-		{515, 2000}, --Darkmoon Prize Ticket
-		{614, 2000}, --Mote of Darkness
-		{615, 2000}, --Essence of Corrupted Deathwing
-		{697, 10}, --Essence of Corrupted Deathwing
-	}
-
-	local function updateCurrency()
-		wipe(CurrencyData)
-		for i, v in ipairs(tokens) do
-			local id, max = unpack(v)
-			local name, amount, icon = GetCurrencyInfo(id)
-			local newamount
-
-			if name and amount > 0 then
-				if id == 396 then
-					local _, _, _, _, _, _, ppQuantity = GetLFGDungeonRewardCapBarInfo(301)
-					if ppQuantity and ppQuantity >= 1000 then
-						newamount = "|cffff0000" .. amount .. "|r"
-					else
-						newamount = amount
-					end
-				elseif id == 390 then
-                    RequestPVPRewards()
-					local pointsThisWeek, limitThisWeek = GetPVPRewards()
-					if pointsThisWeek and pointsThisWeek >= limitThisWeek then
-						newamount = "|cffff0000" .. amount .. "|r"
-					else
-						newamount = amount
-					end
-				else
-					newamount = (max >0 and amount >= max) and "|cffff0000" .. amount .. "|r" or amount
-				end
-				name = string.format("\124TInterface\\ICONS\\%s:%d:%d:0:0:64:64:5:59:5:59\124t %s", icon, 24, 24, name)
-				CurrencyData[name] = newamount
-			end
-		end
-	end
+	-- local CurrencyData = {}
+	-- local tokens = {
+		-- {61, 250},	 -- Dalaran Jewelcrafter's Token
+		-- {81, 250},	 -- Dalaran Cooking Award
+		-- {241, 250},	 -- Champion Seal
+		-- {361, 200},  -- Illustrious Jewelcrafter's Token
+		-- {390, 3000}, -- Conquest Points
+		-- {391, 2000},  -- Tol Barad Commendation
+		-- {392, 4000}, -- Honor Points
+		-- {395, 4000}, -- Justice Points
+		-- {396, 4000}, -- Valor Points
+		-- {402, 250},	 -- Chef's Award 
+		-- {416, 300}, -- Mark of the World Tree
+		-- {515, 2000}, --Darkmoon Prize Ticket
+		-- {614, 2000}, --Mote of Darkness
+		-- {615, 2000}, --Essence of Corrupted Deathwing
+		-- {697, 10}, --Essence of Corrupted Deathwing
+	-- }
 
 	local function formatMoney(money, icon)
 		local gold = floor(math.abs(money) / 10000)
@@ -126,9 +94,21 @@ local function LoadCurrency()
 		end
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddLine(CURRENCY, 0.69, 0.31, 0.31)
-		for name, amount in pairs(CurrencyData) do
-            GameTooltip:AddLine(" ")
-			GameTooltip:AddDoubleLine(name, amount, nil, nil, nil, 1, 1, 1)
+		for i=1, GetCurrencyListSize() do
+			local name, isHeader, isExpanded, isUnused, isWatched, count, icon, totalMax = GetCurrencyListInfo(i)
+			if not isHeader and icon and count>0 then
+				GameTooltip:AddLine(" ")
+				if totalMax and totalMax > 100 then
+					totalMax = math.floor(totalMax/100)
+				else
+					totalMax = totalMax or 0
+				end
+				if totalMax > 0 and count == totalMax then
+					GameTooltip:AddDoubleLine(string.format("\124T%s:%d:%d:0:0:64:64:5:59:5:59\124t %s", icon, 24, 24, name), count, nil, nil, nil, 1, 0, 0)
+				else
+					GameTooltip:AddDoubleLine(string.format("\124T%s:%d:%d:0:0:64:64:5:59:5:59\124t %s", icon, 24, 24, name), count, nil, nil, nil, 1, 1, 1)
+				end
+			end
 		end
 		GameTooltip:Show()
 	end
@@ -161,13 +141,10 @@ local function LoadCurrency()
 	Status:RegisterEvent("PLAYER_TRADE_MONEY")
 	Status:RegisterEvent("TRADE_MONEY_CHANGED")
 	Status:RegisterEvent("PLAYER_ENTERING_WORLD")
-	Status:RegisterEvent("PLAYER_HONOR_GAIN")
 	Status:SetScript("OnEnter", ShowCurrency)
 	Status:SetScript("OnMouseDown", ToggleAllBags)
 	Status:SetScript("OnLeave", GameTooltip_Hide)
 	Status:SetScript("OnEvent", OnEvent)
-
-	hooksecurefunc("BackpackTokenFrame_Update", updateCurrency)
 end
 
 IF:RegisterInfoText("Currency", LoadCurrency)
