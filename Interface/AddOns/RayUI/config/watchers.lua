@@ -74,8 +74,8 @@ R["Watcher"] = {
                 { spellID = 50334, unitId = "player", caster = "player", filter = "BUFF" },
                 --狂暴恢復
                 { spellID = 22842, unitId = "player", caster = "player", filter = "BUFF" },
-                --共生
-                { spellID = 100977, unitId = "player", caster = "player", filter = "BUFF" },
+                --猛獸迅捷
+                { spellID = 69369, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -103,8 +103,6 @@ R["Watcher"] = {
                 { spellID = 33745, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --血襲
                 { spellID = 9007, unitId = "target", caster = "player", filter = "DEBUFF" },
-                --精靈之火
-                { spellID = 770, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --痛擊
                 { spellID = 106830, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --傷殘術
