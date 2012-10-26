@@ -723,7 +723,7 @@ local function LoadSkin()
 	end
 
 	--实名好友弹窗位置
-	BNToastFrameCloseButton:SetAlpha(0)
+	S:ReskinClose(BNToastFrameCloseButton)
 	BNToastFrame:HookScript("OnShow", function(self)
 		self:ClearAllPoints()
 		if TempEnchant1:IsShown() or TempEnchant2:IsShown() then
