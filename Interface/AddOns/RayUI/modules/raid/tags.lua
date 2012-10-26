@@ -279,6 +279,10 @@ oUF.Tags.Events["RayUIRaid:int"] = "UNIT_AURA"
 oUF.Tags.Methods["RayUIRaid:fmagic"] = function(u) if UnitAura(u, GetSpellInfo(54648)) then return "|cffCC00FF"..x.."|r" end end
 oUF.Tags.Events["RayUIRaid:fmagic"] = "UNIT_AURA"
 
+--Monk
+oUF.Tags.Methods["RayUIRaid:rm"] = function(u) if UnitAura(u, GetSpellInfo(115151)) then return "|cff33FF33"..x.."|r" end end
+oUF.Tags.Events["RayUIRaid:rm"] = "UNIT_AURA"
+
 RA.classIndicators={
     ["DRUID"] = {
         ["TL"] = "",
@@ -346,7 +350,7 @@ RA.classIndicators={
     ["MONK"] = {
         ["TL"] = "",
         ["TR"] = "",
-        ["BL"] = "",
+        ["BL"] = "[RayUIRaid:rm]",
         ["BR"] = "",
         ["Cen"] = "",
     },

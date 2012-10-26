@@ -69,6 +69,7 @@ local dispelClass = {
     PALADIN = { Poison = true, Disease = true, Magic = true },
     MAGE = { Curse = true, },
     DRUID = { Curse = true, Poison = true, Magic = true },
+    MONK = { Poison = true, Disease = true, Magic = true },
 }
 
 local dispellist = dispelClass[R.myclass] or {}

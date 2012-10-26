@@ -471,11 +471,11 @@ function S:SetBD(f, x, y, x2, y2)
 		bg:Point("TOPLEFT", x, y)
 		bg:Point("BOTTOMRIGHT", x2, y2)
 	end
-	bg:SetFrameLevel(0)
+	bg:SetFrameLevel(f:GetFrameLevel())
 	S:CreateBD(bg)
 	S:CreateSD(bg)
 	f:HookScript("OnShow", function()
-		bg:SetFrameLevel(0)
+		bg:SetFrameLevel(f:GetFrameLevel())
 	end)
 end
 
