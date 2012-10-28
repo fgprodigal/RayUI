@@ -636,7 +636,7 @@ function B:CommandDecorator(func, groupsDefaults)
 	local bagGroups = {}
 	return function(groups)
 		if self.SortUpdateTimer:IsShown() then
-			R:Print("Already Running.. Bailing Out!")
+			R:Print(L["已在运行!"])
 			B:StopStacking()
 			return
 		end

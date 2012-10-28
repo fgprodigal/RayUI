@@ -204,7 +204,7 @@ oUF.Tags.Events["RayUIRaid:regrow"] = "UNIT_AURA"
 oUF.Tags.Methods["RayUIRaid:wg"] = function(u) if UnitAura(u, GetSpellInfo(48438)) then return "|cff33FF33"..x.."|r" end end
 oUF.Tags.Events["RayUIRaid:wg"] = "UNIT_AURA"
 
-oUF.Tags.Methods["RayUIRaid:motw"] = function(u) if not(UnitAura(u, GetSpellInfo(20217)) or UnitAura(u,GetSpellInfo(1126))) then return "|cff00A1DE"..x.."|r" end end
+oUF.Tags.Methods["RayUIRaid:motw"] = function(u) if not(UnitAura(u, GetSpellInfo(20217)) or UnitAura(u,GetSpellInfo(1126))  or UnitAura(u,GetSpellInfo(117666))) then return "|cff00A1DE"..x.."|r" end end
 oUF.Tags.Events["RayUIRaid:motw"] = "UNIT_AURA"
 
 -- Warrior

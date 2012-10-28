@@ -27,6 +27,8 @@ R["Watcher"] = {
                 { spellID = 774, unitId = "player", caster = "player", filter = "BUFF" },
                 --癒合
                 { spellID = 8936, unitId = "player", caster = "player", filter = "BUFF" },
+                --共生
+                { spellID = 100977, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标buff&debuff",
@@ -76,6 +78,12 @@ R["Watcher"] = {
                 { spellID = 22842, unitId = "player", caster = "player", filter = "BUFF" },
                 --猛獸迅捷
                 { spellID = 69369, unitId = "player", caster = "player", filter = "BUFF" },
+                --塞納留斯之夢
+                { spellID = 108381, unitId = "player", caster = "player", filter = "BUFF" },
+                --自然戒備
+                { spellID = 124974, unitId = "player", caster = "player", filter = "BUFF" },
+                --森林之魂
+                { spellID = 114108, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",

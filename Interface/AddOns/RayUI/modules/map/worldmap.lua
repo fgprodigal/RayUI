@@ -102,6 +102,7 @@ function WM:PLAYER_ENTERING_WORLD()
 end
 
 function WM:PLAYER_REGEN_DISABLED()
+	WorldMapFrameSizeDownButton:Disable()
 	WorldMapFrameSizeUpButton:Disable()
 	WorldMap_ToggleSizeDown()
 	WorldMapBlobFrame:DrawBlob(WORLDMAP_SETTINGS.selectedQuestId, false)
@@ -109,6 +110,7 @@ function WM:PLAYER_REGEN_DISABLED()
 end
 
 function WM:PLAYER_REGEN_ENABLED()
+	WorldMapFrameSizeDownButton:Enable()
 	WorldMapFrameSizeUpButton:Enable()
 end
 

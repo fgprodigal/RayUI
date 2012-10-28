@@ -513,42 +513,46 @@ local function SkinObjects(frame)
 	local threat, hpborder, overlay, oldname, oldlevel, bossicon, raidicon, elite = frame:GetRegions()
 	local _, cbborder, cbshield, cbicon = cb:GetRegions()
 
-	--Health Bar
-	frame.healthOriginal = oldhp
-	local hp = CreateFrame("Statusbar", nil, frame)
-	hp:SetFrameLevel(oldhp:GetFrameLevel())
-	hp:SetFrameStrata(oldhp:GetFrameStrata())
-	hp:SetStatusBarTexture(R["media"].normal)
-	CreateVirtualFrame(hp)
+	if not frame.hp then
+		--Health Bar
+		frame.healthOriginal = oldhp
+		frame.hp = CreateFrame("Statusbar", nil, frame)
+		frame.hp:SetFrameLevel(oldhp:GetFrameLevel())
+		frame.hp:SetFrameStrata(oldhp:GetFrameStrata())
+		frame.hp:SetStatusBarTexture(R["media"].normal)
+		CreateVirtualFrame(frame.hp)
+		frame.hp.hpbg = frame.hp:CreateTexture(nil, "BORDER")
+		frame.hp.hpbg:SetAllPoints(frame.hp)
+		frame.hp.hpbg:SetTexture(1,1,1,0.1) 
+	end
 
-	hp.oldlevel = oldlevel
-	hp.boss = bossicon
-	hp.elite = elite
+	frame.hp.oldlevel = oldlevel
+	frame.hp.boss = bossicon
+	frame.hp.elite = elite
 
-	hp.value = hp:CreateFontString(nil, "OVERLAY")
-	hp.value:SetFont(R["media"].font, FONTSIZE, R["media"].fontflag)
-	hp.value:SetShadowColor(0, 0, 0, 0.4)
-	hp.value:SetPoint("BOTTOMRIGHT", hp, "TOPRIGHT", 0, -4)
-	hp.value:SetJustifyH("RIGHT")
-	hp.value:SetTextColor(1,1,1)
-	hp.value:SetShadowOffset(R.mult, -R.mult)
+	if not frame.hp.value then
+		frame.hp.value = frame.hp:CreateFontString(nil, "OVERLAY")
+		frame.hp.value:SetFont(R["media"].font, FONTSIZE, R["media"].fontflag)
+		frame.hp.value:SetShadowColor(0, 0, 0, 0.4)
+		frame.hp.value:SetPoint("BOTTOMRIGHT", frame.hp, "TOPRIGHT", 0, -4)
+		frame.hp.value:SetJustifyH("RIGHT")
+		frame.hp.value:SetTextColor(1,1,1)
+		frame.hp.value:SetShadowOffset(R.mult, -R.mult)
+	end
 
-	--Create Name Text
-	hp.name = hp:CreateFontString(nil, "OVERLAY")
-	hp.name:SetPoint("BOTTOMLEFT", hp, "TOPLEFT", 0, -4)
-	hp.name:SetPoint("BOTTOMRIGHT", hp, "TOPRIGHT", -20, -4)
-	hp.name:SetFont(R["media"].font, FONTSIZE, R["media"].fontflag)
-	hp.name:SetJustifyH("LEFT")
-	hp.name:SetShadowColor(0, 0, 0, 0.4)
-	hp.name:SetShadowOffset(R.mult, -R.mult)
-	hp.oldname = oldname
+	if not frame.hp.name then
+		--Create Name Text
+		frame.hp.name = frame.hp:CreateFontString(nil, "OVERLAY")
+		frame.hp.name:SetPoint("BOTTOMLEFT", frame.hp, "TOPLEFT", 0, -4)
+		frame.hp.name:SetPoint("BOTTOMRIGHT", frame.hp, "TOPRIGHT", -20, -4)
+		frame.hp.name:SetFont(R["media"].font, FONTSIZE, R["media"].fontflag)
+		frame.hp.name:SetJustifyH("LEFT")
+		frame.hp.name:SetShadowColor(0, 0, 0, 0.4)
+		frame.hp.name:SetShadowOffset(R.mult, -R.mult)
+		frame.hp.oldname = oldname
+	end
 
-	hp.hpbg = hp:CreateTexture(nil, "BORDER")
-	hp.hpbg:SetAllPoints(hp)
-	hp.hpbg:SetTexture(1,1,1,0.1) 
-
-	hp:HookScript("OnShow", UpdateObjects)
-	frame.hp = hp
+	frame.hp:HookScript("OnShow", UpdateObjects)
 
 	--Cast Bar
 	cb:SetStatusBarTexture(R["media"].normal)
@@ -574,7 +578,7 @@ local function SkinObjects(frame)
 
 	--Setup CastBar Icon
 	cbicon:ClearAllPoints()
-	cbicon:SetPoint("TOPRIGHT", hp, "TOPLEFT", -3, 0)
+	cbicon:SetPoint("TOPRIGHT", frame.hp, "TOPLEFT", -3, 0)
 	cbicon:SetSize(iconSize, iconSize)
 	cbicon:SetTexCoord(.07, .93, .07, .93)
 	cbicon:SetDrawLayer("OVERLAY")
@@ -611,12 +615,12 @@ local function SkinObjects(frame)
 
 	--Highlight
 	overlay:SetTexture(1,1,1,0.15)
-	overlay:SetAllPoints(hp)
+	overlay:SetAllPoints(frame.hp)
 	frame.overlay = overlay
 
 	--Reposition and Resize RaidIcon
 	raidicon:ClearAllPoints()
-	raidicon:SetPoint("BOTTOM", hp, "TOP", 0, 2)
+	raidicon:SetPoint("BOTTOM", frame.hp, "TOP", 0, 2)
 	raidicon:SetSize(iconSize*1.4, iconSize*1.4)
 	raidicon:SetTexture([[Interface\AddOns\RayUI\media\raidicons.blp]])
 	frame.raidicon = raidicon
@@ -640,7 +644,7 @@ local function SkinObjects(frame)
 	QueueObject(frame, bossicon)
 	QueueObject(frame, elite)
 
-	UpdateObjects(hp)
+	UpdateObjects(frame.hp)
 	UpdateCastbar(cb)
 
 	frame:HookScript("OnHide", OnHide)
