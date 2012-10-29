@@ -75,6 +75,7 @@ function watcherPrototype:CreateButton(mode)
 	self.parent:SetSize(self.size, self.size)
 	button.icon = button:CreateTexture(nil, "BORDER")
 	button.icon:SetAllPoints()
+    button.icon:SetTexCoord(.08, .92, .08, .92)
 	button:SetScript("OnEnter", function(self)
 			GameTooltip:SetOwner(self, "ANCHOR_TOP")
 			if not RW.testing then
@@ -129,6 +130,7 @@ function watcherPrototype:CreateButton(mode)
 		button.cooldown = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
 		button.cooldown:SetAllPoints(button.icon)
 		button.cooldown:SetReverse()
+		button.cooldown:SetFrameLevel(3)
 		button.mode = "ICON"
 	end
 	button.count = button:CreateFontString(nil, "OVERLAY")
@@ -141,7 +143,6 @@ end
 
 function watcherPrototype:UpdateButton(button, index, icon, count, duration, expires, spellID, unitID, filter)
 	button.icon:SetTexture(icon)
-	button.icon:SetTexCoord(.1, .9, .1, .9)
 	button.count:SetText(count > 1 and count or "")
 	if button.cooldown then
 		if filter:find("CD") then

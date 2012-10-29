@@ -106,10 +106,10 @@ local function LoadStat()
 
 
 				local masteryName, _, _, _, _, _, _, _, _ = GetSpellInfo(masteryspell)
-				if masteryName then
-					GameTooltip:AddLine' '
-					GameTooltip:AddDoubleLine(masteryName, format(modifierString, GetCombatRating(CR_MASTERY), GetCombatRatingBonus(CR_MASTERY)), 1, 1, 1)
-				end
+                if masteryName then
+                    GameTooltip:AddLine' '
+                    GameTooltip:AddDoubleLine(masteryName, format(modifierString, GetCombatRating(CR_MASTERY), GetCombatRatingBonus(CR_MASTERY) * select(2, GetMasteryEffect())), 1, 1, 1)
+                end
 			end
 		end
 		GameTooltip:Show()

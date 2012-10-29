@@ -426,15 +426,15 @@ function S:ReskinCheck(f)
 	f:SetPushedTexture("")
 	f:SetHighlightTexture(R["media"].blank)
 	local hl = f:GetHighlightTexture()
-	hl:SetInside(f, 6, 6)
+	hl:SetInside(f, 5, 5)
 	hl:SetVertexColor(r, g, b, .2)
 
 	S:CreateBackdropTexture(f)
-    f.backdropTexture:SetInside(f, 6, 6)
+    f.backdropTexture:SetInside(f, 5, 5)
 
 	local bd = CreateFrame("Frame", nil, f)
     bd:SetInside(f, 4, 4)
-	bd:SetFrameLevel(f:GetFrameLevel()-1)
+	bd:SetFrameLevel(f:GetFrameLevel())
 	S:CreateBD(bd, 0)
 
 	local ch = f:GetCheckedTexture()

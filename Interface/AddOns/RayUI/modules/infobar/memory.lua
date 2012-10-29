@@ -133,7 +133,7 @@ local function LoadMemory()
 			local total = UpdateMemory()
 			infobar.Text:SetText(formatMem(total))
 			Status:SetValue(total)
-			local r, g, b = R:ColorGradient(total/10000, IF.InfoBarStatusColor[3][1], IF.InfoBarStatusColor[3][2], IF.InfoBarStatusColor[3][3], 
+			local r, g, b = R:ColorGradient(total/select(2, self:GetMinMaxValues()), IF.InfoBarStatusColor[3][1], IF.InfoBarStatusColor[3][2], IF.InfoBarStatusColor[3][3], 
 																	IF.InfoBarStatusColor[2][1], IF.InfoBarStatusColor[2][2], IF.InfoBarStatusColor[2][3],
 																	IF.InfoBarStatusColor[1][1], IF.InfoBarStatusColor[1][2], IF.InfoBarStatusColor[1][3])
 			Status:SetStatusBarColor(r, g, b)

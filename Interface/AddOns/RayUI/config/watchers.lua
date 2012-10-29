@@ -84,6 +84,10 @@ R["Watcher"] = {
                 { spellID = 124974, unitId = "player", caster = "player", filter = "BUFF" },
                 --森林之魂
                 { spellID = 114108, unitId = "player", caster = "player", filter = "BUFF" },
+                --星殞術
+                { spellID = 48505, unitId = "player", caster = "player", filter = "BUFF" },
+                --星穹大連線
+                { spellID = 112071, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",

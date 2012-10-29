@@ -56,28 +56,14 @@ local function LoadStatus()
 		else
 			if R.Role == "Tank" then
 				GameTooltip:AddLine(L["等级缓和"]..": ")
-				local lv = R.level +3
+				local lv = UnitLevel("player") +3
 				for i = 1, 4 do
 					GameTooltip:AddDoubleLine(lv,format(chanceString, CalculateMitigation(lv, effectiveArmor) * 100),1,1,1)
 					lv = lv - 1
 				end
 				lv = UnitLevel("target")
-				if lv and lv > 0 and (lv > R.level + 3 or lv < R.level) then
+				if lv and lv > 0 and (lv > UnitLevel("player") + 3 or lv < UnitLevel("player")) then
 					GameTooltip:AddDoubleLine(lv, format(chanceString, CalculateMitigation(lv, effectiveArmor) * 100),1,1,1)
-				end
-			elseif R.Role == "Caster" or R.Role == "Melee" then
-				GameTooltip:AddLine(MAGIC_RESISTANCES_COLON)
-
-				local baseResistance, effectiveResistance, posResitance, negResistance
-				for i = 2, 6 do
-					baseResistance, effectiveResistance, posResitance, negResistance = UnitResistance("player", i)
-					GameTooltip:AddDoubleLine(_G["DAMAGE_SCHOOL"..(i+1)], format(chanceString, (effectiveResistance / (effectiveResistance + (500 + R.level + 2.5))) * 100),1,1,1)
-				end
-
-				local spellpen = GetSpellPenetration()
-				if (R.myclass == "SHAMAN" or R.Role == "Caster") and spellpen > 0 then
-					GameTooltip:AddLine' '
-					GameTooltip:AddDoubleLine(ITEM_MOD_SPELL_PENETRATION_SHORT, spellpen,1,1,1)
 				end
 			end
 		end
