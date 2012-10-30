@@ -93,10 +93,10 @@ local function LoadFunc()
 
     local atBank, atMail
 
-    function Monomyth:Register(event, func)
+    function Monomyth:Register(event, func, override)
         self:RegisterEvent(event)
         self[event] = function(...)
-            if (not IsShiftKeyDown() and M.db.automation) then
+            if ((override or not IsShiftKeyDown()) and M.db.automation) then
                 func(...)
             end
         end
@@ -104,7 +104,7 @@ local function LoadFunc()
 
     local function IsTrackingTrivial()
         for index = 1, GetNumTrackingTypes() do
-            local name, __, active = GetTrackingInfo(index)
+            local name, _, active = GetTrackingInfo(index)
             if(name == MINIMAP_TRACKING_TRIVIAL_QUESTS) then
                 return active
             end
@@ -115,7 +115,7 @@ local function LoadFunc()
         local active = GetNumActiveQuests()
         if(active > 0) then
             for index = 1, active do
-                local __, complete = GetActiveTitle(index)
+                local _, complete = GetActiveTitle(index)
                 if(complete) then
                     SelectActiveQuest(index)
                 end
@@ -141,20 +141,6 @@ local function LoadFunc()
         return not not select(((index * 6) - 6) + 3, GetGossipAvailableQuests())
     end
 
-    local function GetNumGossipCompletedQuests()
-        local completed = 0
-        local active = GetNumGossipActiveQuests()
-        if(active > 0) then
-            for index = 1, active do
-                if(select(index + 3, (GetGossipActiveQuests()))) then
-                    completed = completed + 1
-                end
-            end
-        end
-
-        return completed
-    end
-
     Monomyth:Register("GOSSIP_SHOW", function()
         local active = GetNumGossipActiveQuests()
         if(active > 0) then
@@ -174,9 +160,9 @@ local function LoadFunc()
             end
         end
 
-        local __, instance = GetInstanceInfo()
+        local _, instance = GetInstanceInfo()
         if(available == 0 and active == 0 and GetNumGossipOptions() == 1 and instance ~= "raid") then
-            local __, type = GetGossipOptions()
+            local _, type = GetGossipOptions()
             if(type == "gossip") then
                 SelectGossipOption(1)
                 return
@@ -200,13 +186,26 @@ local function LoadFunc()
         end
     end)
 
+    QuestFrame:UnregisterEvent("QUEST_DETAIL")
     Monomyth:Register("QUEST_DETAIL", function()
-        if(not QuestGetAutoAccept()) then
-            AcceptQuest()
+        if(not QuestGetAutoAccept() and not QuestIsFromAreaTrigger()) then
+            QuestFrame_OnEvent(QuestFrame, "QUEST_DETAIL")
+
+            if(M.db.automation and not IsShiftKeyDown()) then
+                AcceptQuest()
+            end
         end
-    end)
+    end, true)
 
     Monomyth:Register("QUEST_ACCEPT_CONFIRM", AcceptQuest)
+
+    Monomyth:Register("QUEST_ACCEPTED", function(id)
+        if(not GetCVarBool("autoQuestWatch")) then return end
+
+        if(not IsQuestWatched(id) and GetNumQuestWatches() < MAX_WATCHABLE_QUESTS) then
+            AddQuestWatch(id)
+        end
+    end)
 
     Monomyth:Register("QUEST_PROGRESS", function()
         if(IsQuestCompletable()) then
@@ -231,7 +230,7 @@ local function LoadFunc()
             for index = 1, choices do
                 local link = GetQuestItemLink("choice", index)
                 if(link) then
-                    local __, __, __, __, __, __, __, __, __, __, value = GetItemInfo(link)
+                    local _, _, _, _, _, _, _, _, _, _, value = GetItemInfo(link)
 
                     if(string.match(link, "item:45724:")) then
                         -- Champion's Purse, contains 10 gold
@@ -300,31 +299,44 @@ local function LoadFunc()
         atMail = false
     end)
 
+    local ignoredItems = {
+        -- Inscription weapons
+        [31690] = true, -- Inscribed Tiger Staff
+        [31691] = true, -- Inscribed Crane Staff
+        [31692] = true, -- Inscribed Serpent Staff
+
+        -- Darkmoon Faire artifacts
+        [29443] = true, -- Imbued Crystal
+        [29444] = true, -- Monstrous Egg
+        [29445] = true, -- Mysterious Grimoire
+        [29446] = true, -- Ornate Weapon
+        [29451] = true, -- A Treatise on Strategy
+        [29456] = true, -- Banner of the Fallen
+        [29457] = true, -- Captured Insignia
+        [29458] = true, -- Fallen Adventurer's Journal
+        [29464] = true, -- Soothsayer's Runes
+    }
+
     Monomyth:Register("BAG_UPDATE", function(bag)
         if(atBank or atMail or atMerchant) then return end
 
         for slot = 1, GetContainerNumSlots(bag) do
-            local __, id, active = GetContainerItemQuestInfo(bag, slot)
-            if(id and not active and not IsQuestFlaggedCompleted(id)) then
+            local _, id, active = GetContainerItemQuestInfo(bag, slot)
+            if(id and not active and not IsQuestFlaggedCompleted(id) and not ignoredItems[id]) then
                 UseContainerItem(bag, slot)
             end
         end
     end)
 
+    local errors = {
+        [ERR_QUEST_ALREADY_DONE] = true,
+        [ERR_QUEST_FAILED_LOW_LEVEL] = true,
+        [ERR_QUEST_NEED_PREREQS] = true,
+    }   
+
     ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", function(self, event, message)
-        if(message == ERR_QUEST_ALREADY_DONE) then
-            return true
-        end
-    end)
-
-    hooksecurefunc("QuestLogTitleButton_OnClick", function(self)
-        if(self.isHeader) then return end
-        QuestLog_SetSelection(self:GetID())
-
-        if(IsControlKeyDown()) then
-            AbandonQuest()
-        elseif(IsAltKeyDown() and GetQuestLogPushable()) then
-            QuestLogPushQuest()
+        if M.db.automation then
+            return errors[message]
         end
     end)
 

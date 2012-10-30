@@ -1191,6 +1191,8 @@ R["Watcher"] = {
 				{ spellID = 116330, unitId = "target", caster = "player", filter = "DEBUFF" },
 				--奪刃繩矛
 				{ spellID = 117368, unitId = "player", caster = "player", filter = "BUFF" },
+                --旭日东升踢
+                { spellID = 130320, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
             {
                 name = "焦点buff&debuff",
@@ -1302,7 +1304,9 @@ R["Watcher"] = {
                 --血族之裔
                 { spellID = 105588, unitId = "player", caster = "all", filter = "BUFF" },
                 --吸血鬼的拥抱
-                { spellID = 15286, unitId = "player", caster = "all", filter = "BUFF" },
+                { spellID = 15290, unitId = "player", caster = "all", filter = "BUFF" },
+                --虔誠光環
+                { spellID = 31821, unitId = "player", caster = "all", filter = "BUFF" },
 
                 --種族天賦
                 --血之烈怒
