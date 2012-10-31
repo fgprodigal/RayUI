@@ -238,6 +238,20 @@ local function LoadSkin()
 	FriendsFrameBattlenetFrame.BroadcastButton:GetNormalTexture():SetTexCoord(.28, .72, .28, .72)
 	FriendsFrameBattlenetFrame.BroadcastButton:GetPushedTexture():SetTexCoord(.28, .72, .28, .72)
 	FriendsFrameBattlenetFrame.BroadcastButton:GetHighlightTexture():SetTexCoord(.28, .72, .28, .72)
+
+	for i = 1, 9 do
+		select(i, BattleTagInviteFrame.NoteFrame:GetRegions()):Hide()
+	end
+
+	S:CreateBD(BattleTagInviteFrame)
+	S:CreateSD(BattleTagInviteFrame)
+	S:CreateBD(BattleTagInviteFrame.NoteFrame, .25)
+
+	local _, send, cancel = BattleTagInviteFrame:GetChildren()
+	S:Reskin(send)
+	S:Reskin(cancel)
+
+	S:ReskinScroll(BattleTagInviteFrameScrollFrameScrollBar)
 end
 
 S:RegisterSkin("RayUI", LoadSkin)

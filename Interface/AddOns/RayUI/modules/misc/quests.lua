@@ -96,7 +96,7 @@ local function LoadFunc()
     function Monomyth:Register(event, func, override)
         self:RegisterEvent(event)
         self[event] = function(...)
-            if ((override or not IsShiftKeyDown()) and M.db.automation) then
+            if (override or (not IsShiftKeyDown() and M.db.automation)) then
                 func(...)
             end
         end
