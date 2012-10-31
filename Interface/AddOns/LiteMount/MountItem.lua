@@ -18,6 +18,13 @@ end
 
 function LM_MountItem:IsUsable(itemId)
 
+    local spell = LM_ITEM_MOUNT_ITEMS[itemId]
+
+    -- IsUsableSpell seems to test correctly whether it's indoors etc.
+    if spell and not IsUsableSpell(spell) then
+        return false
+    end
+
     if IsEquippableItem(itemId) then
         if not IsEquippedItem(itemId) then
             return false

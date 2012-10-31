@@ -91,10 +91,12 @@
                     GameTooltip:AddLine("|cffff00ff" .. HELPFRAME_REPORT_PLAYER_RIGHT_CLICK .. ": " .. MOUNT .. "|r")
                     GameTooltip:Show()
 
-                    local m = self:GetParent().mountid
+                    local m = self:GetParent().modelid
                     if m then
-                        LiteMountOptionsPreview.model:SetCreature(GetCompanionInfo("MOUNT", m))
+                        LiteMountOptionsPreview.model:SetCreature(m)
                         LiteMountOptionsPreview:Show()
+                    else
+                        LiteMountOptionsPreview:Hide()
                     end
                 </OnEnter>
                 <OnLeave>
@@ -104,7 +106,16 @@
                 <OnLoad>
                     self:SetAttribute("unit", "player")
                     self:RegisterForClicks("RightButtonUp")
+                    self:RegisterForDrag("LeftButton")
                 </OnLoad>
+                <OnDragStart>
+                    local parent = self:GetParent()
+                    if parent.spellid then
+                        PickupSpell(parent.spellid)
+                    elseif parent.itemid then
+                        PickupItem(parent.itemid)
+                    end
+                </OnDragStart>
             </Scripts>
         </Button>
 
@@ -197,6 +208,57 @@
             </Scripts>
         </ScrollFrame>
 
+        <CheckButton name="$parentAllSelect" parentKey="allSelect">
+            <Size x="32" y="32" />
+            <Anchors>
+                <Anchor point="BOTTOMLEFT" relativeTo="$parentScrollFrame" relativePoint="TOPLEFT" x="2" y="-2" />
+            </Anchors>
+            <Scripts>
+                <OnClick function="LiteMountOptions_AllSelect_OnClick" />
+                <OnEnter>
+                    GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+                    if not self:GetChecked() then
+                        GameTooltip:SetText(CHECK_ALL, 0, 1, 0)
+                    else
+                        GameTooltip:SetText(CLEAR_ALL, 1, 0, 0)
+                    end
+                </OnEnter>
+                <OnLeave>
+                    GameTooltip:Hide()
+                </OnLeave>
+            </Scripts>
+            <NormalTexture file="Interface\Buttons\UI-CheckBox-Up"/>
+            <PushedTexture file="Interface\Buttons\UI-CheckBox-Down"/>
+            <HighlightTexture file="Interface\Buttons\UI-CheckBox-Highlight" alphaMode="ADD"/>
+            <CheckedTexture file="Interface\Buttons\UI-CheckBox-Check"/>
+            <DisabledCheckedTexture file="Interface\Buttons\UI-CheckBox-Check-Disabled"/>           
+        </CheckButton>
+
+        <CheckButton name="$parentCharSpecific" parentkey="charSpecific">
+            <Size x="26" y="26" />
+            <Anchors>
+                <Anchor point="TOPRIGHT" x="-4" y="-4" />
+            </Anchors>
+            <NormalTexture file="Interface\Buttons\UI-CheckBox-Up"/>
+            <PushedTexture file="Interface\Buttons\UI-CheckBox-Down"/>
+            <HighlightTexture file="Interface\Buttons\UI-CheckBox-Highlight" alphaMode="ADD"/>
+            <CheckedTexture file="Interface\Buttons\UI-CheckBox-Check"/>
+            <DisabledCheckedTexture file="Interface\Buttons\UI-CheckBox-Check-Disabled"/>           
+            <Scripts>
+                <OnShow>
+                    self:SetChecked(not LM_Options:UseGlobal())
+                </OnShow>
+                <OnClick>
+                    if self:GetChecked() then
+                        LM_Options:SetGlobal()
+                    else
+                        LM_Options:SetGlobal(true)
+                    end
+                    LiteMountOptions_UpdateMountList()
+                </OnClick>
+            </Scripts>
+        </CheckButton>
+
         <EditBox name="$parentFilter" autofocus="false" inherits="SearchBoxTemplate" parentKey="filter">
             <Size x="180" y="26" />
             <Anchors>
@@ -208,22 +270,6 @@
             </Scripts>
         </EditBox>
 
-<!--
-        <PlayerModel name="LiteMountOptionsModel">
-            <Anchors>
-                <Anchor point="TOP" y="-16" />
-            </Anchors>
-            <Size x="320" y="240" />
-            <Scripts>
-                <OnLoad function="Model_OnLoad" />
-                <OnEvent function="Model_OnEvent" />
-                <OnUpdate function="Model_OnUpdate" />
-                <OnMouseDown function="Model_OnMouseDown" />
-                <OnMouseUp function="Model_OnMouseUp" />
-                <OnMouseWheel function="Model_OnMouseWheel" />
-            </Scripts>
-        </PlayerModel>
--->
     </Frames>
 
     <Layers>
@@ -231,6 +277,11 @@
             <FontString inherits="GameFontNormalLarge" parentKey="title">
                 <Anchors>
                     <Anchor point="TOPLEFT" x="16" y="-16" />
+                </Anchors>
+            </FontString>
+            <FontString inherits="GameFontRedSmall" parentKey="charSpecificText" text="Use character specific settings.">
+                <Anchors>
+                    <Anchor point="RIGHT" relativePoint="LEFT" relativeKey="$parent.charSpecific" x="-4" />
                 </Anchors>
             </FontString>
             <FontString name="$parentBit1Text" inherits="GameFontWhiteTiny" justifyH="CENTER" text="Run">

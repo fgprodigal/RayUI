@@ -3,9 +3,11 @@ Notes To Myself
 
 
 ------------------------------------------------------------------------------
-* Diff since tag
+* Diff since last release:
 
-    svn diff svn://svn.curseforge.net/wow/litemount/mainline/tags/4.2.0 \
+    TAGDIR=svn://svn.curseforge.net/wow/litemount/mainline/tags
+    LATEST=`svn ls -v $TAGDIR | grep -v 'beta' | tail -1 | awk '{print $NF}'`
+    svn diff svn://svn.curseforge.net/wow/litemount/mainline/tags/$LATEST \
              svn://svn.curseforge.net/wow/litemount/mainline/trunk
 
 
@@ -13,6 +15,35 @@ Notes To Myself
 * XML syntax check
 
     xmllint --noout UIOptionsFrame.xml
+
+
+------------------------------------------------------------------------------
+* To Do List
+
+    Try to get more translations done.
+
+    Mount weighting system.
+      - How does it work with the enable/disable all button.
+
+    Revisit and adjust/rewrite all the documentation.
+
+    Revisit the Unavailable macro suggestion buttons.
+
+
+------------------------------------------------------------------------------
+* Running Wild under ShapeShift
+
+    You can't use Running Wild when you are shapeshifted (e.g., you are
+    transformed into a Night Elf or Human by a dungeon buff).  Unfortunately
+    IsUsableSpell() still returns true in that case.
+
+
+------------------------------------------------------------------------------
+* Passenger-capable mounts
+
+    Possibility of preferring a passenger-capable mount if you are in
+    a group.  I think they would need to be flagged by hand though, which
+    is probably too much of a maintenance nightmare.
 
 
 ------------------------------------------------------------------------------
@@ -33,7 +64,7 @@ Notes To Myself
     is probably going to be a pain to maintain.  Consider ripping it out
     completely.
 
-    Also since we are now testing IsUsableSpell we don't need to separate
+    Also since we are now testing IsSpellKnown we don't need to separate
     out the spells by class they way they are set up now.
 
 
@@ -55,6 +86,16 @@ Notes To Myself
 
     Have an enable/disable all button. Have it apply only to the current match.
     Localize the Fly/Run/Swim texts.
+
+    Enable/disable all makes it too easy to accidentally screw up your
+    selections.  It needs to be done in conjunction with only applying
+    the changes on clicking "Okay".
+
+
+------------------------------------------------------------------------------
+* Drag button for mounts.
+
+    Implemented.  Blizzard are going to add seach on the mount pane anyway.
 
 
 ------------------------------------------------------------------------------
@@ -93,7 +134,16 @@ Notes To Myself
 ------------------------------------------------------------------------------
 * You can know tradeskill-only mounts for tradeskills you unlearned.
 
-    You can but IsUsableSpell seems to return false for them.
+    I was sure this used to work properly with IsUsableSpell() but it
+    definitely doesn't as of 5.0.4.  I've had to hard-code a list of
+    profession-specific mounts and the skillLines (clunky) that
+    indicate the profession for each.
+
+    There is probably still an issue with having enough skill in the
+    profession to know them.
+
+    By the look of the MoP data in wowhead there are no new mounts that
+    require professions to use (they are all BoE, anyone can use).
 
 
 ------------------------------------------------------------------------------
@@ -155,7 +205,7 @@ Notes To Myself
             LM_Options:GetMacro()
             LM_Options:SetMacro(macrotext)
 
-        * UIOptions*.xml / UIOptions*.lua
+        * UI/
             Here be dragons. UI to twiddle settings in LM_Options.
 
     Main stuff:

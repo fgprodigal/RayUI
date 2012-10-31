@@ -46,6 +46,10 @@ local ClassSuggestions = {
             ["iconspell"] = 116841,
             ["macro"] = "/cast Tiger's Lust",
         },
+        {
+            ["iconspell"] = 125883,
+            ["macro"] = "/cast Zen Flight",
+        },
     },
     ["PALADIN"] = {
         {
@@ -83,6 +87,10 @@ local ClassSuggestions = {
         {
             ["iconspell"] = 48020,
             ["macro"] = "/cast Demonic Circle: Teleport",
+        },
+        {
+            ["iconspell"] = 109151,
+            ["macro"] = "/cast Demonic Leap",
         },
     },
 }

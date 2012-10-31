@@ -28,6 +28,7 @@ go from disabling somthing to enabling it.
 
 ----------------------------------------------------------------------------]]--
 
+-- All of these values must be arrays so we can copy them by reference.
 local Default_LM_OptionsDB = {
     ["excludedspells"] = { },
     ["flagoverrides"]  = { },
@@ -37,30 +38,66 @@ local Default_LM_OptionsDB = {
 
 LM_Options = { }
 
+local function VersionUpgradeOptions(db)
+
+    for k,v in pairs(Default_LM_OptionsDB) do
+        if not db[k] then
+            db[k] = v
+        end
+    end
+
+end
+
 function LM_Options:Initialize()
 
     if not LM_OptionsDB then
         LM_OptionsDB = Default_LM_OptionsDB
     end
 
-    -- Compatibility fixups
-    if not LM_OptionsDB.excludedspells then
-        local orig = LM_OptionsDB
-        LM_OptionsDB = Default_LM_OptionsDB
-        LM_OptionsDB.excludedspells = orig
+    if not LM_GlobalOptionsDB then
+        LM_GlobalOptionsDB = Default_LM_OptionsDB
     end
 
-    if not LM_OptionsDB.macro then
-        LM_OptionsDB.macro = { }
+    VersionUpgradeOptions(LM_OptionsDB)
+    VersionUpgradeOptions(LM_GlobalOptionsDB)
+
+    -- The annoyance with this is that we don't want global macros, only
+    -- global mount excludes and flags.
+
+    self.db = { }
+    for k,v in pairs(LM_OptionsDB) do
+        self.db[k] = v
     end
 
-    if not LM_OptionsDB.combatMacro then
-        LM_OptionsDB.combatMacro = { }
+    if LM_UseGlobalOptions then
+        self.db["excludedspells"] = LM_GlobalOptionsDB.excludedspells
+        self.db["flagoverrides"] = LM_GlobalOptionsDB.flagoverrides
     end
-
-    self.db = LM_OptionsDB
 
 end
+
+function LM_Options:UseGlobal()
+    if LM_UseGlobalOptions then
+        return true
+    else
+        return nil
+    end
+end
+
+function LM_Options:SetGlobal(onoff)
+
+    LM_UseGlobalOptions = onoff
+
+    if onoff then
+        self.db["excludedspells"] = LM_GlobalOptionsDB.excludedspells
+        self.db["flagoverrides"] = LM_GlobalOptionsDB.flagoverrides
+    else
+        self.db["excludedspells"] = LM_OptionsDB.excludedspells
+        self.db["flagoverrides"] = LM_OptionsDB.flagoverrides
+    end
+
+end
+
 
 --[[----------------------------------------------------------------------------
      Excluded Spell stuff.

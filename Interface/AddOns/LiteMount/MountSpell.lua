@@ -32,10 +32,13 @@ function LM_MountSpell:IsKnown(spellId)
     return nil
 end
 
-local function KnowProfessionSkillLine(skillLine)
+local function KnowProfessionSkillLine(needSkillLine, needRank)
     for _,i in ipairs({ GetProfessions() }) do
-        if i and select(7, GetProfessionInfo(i)) == skillLine then
-            return true
+        if i then
+            local _, _, rank, _, _, _, sl = GetProfessionInfo(i)
+            if sl == needSkillLine and rank >= needRank then
+                return true
+            end
         end
     end
     return false
@@ -46,9 +49,9 @@ function LM_MountSpell:IsUsable(spellId)
         return nil
     end
 
-    local sl = LM_PROFESSION_MOUNT_SPELLS[spellId]
+    local need = LM_PROFESSION_MOUNT_SPELLS[spellId]
 
-    if sl and not KnowProfessionSkillLine(sl) then
+    if need and not KnowProfessionSkillLine(need[1], need[2]) then
         return nil
     end
 

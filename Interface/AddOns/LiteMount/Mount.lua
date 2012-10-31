@@ -108,7 +108,7 @@ function LM_Mount:GetMountByIndex(mountIndex)
 
     local m = LM_Mount:new()
 
-    m.mountId = mountIndex
+    m.modelId = ci[1]
     m.name = ci[2]
     m.spellId = ci[3]
     m.icon = ci[4]
@@ -134,8 +134,12 @@ function LM_Mount:SpellId()
     return self.spellId
 end
 
-function LM_Mount:MountID()
-    return self.mountId
+function LM_Mount:ItemId()
+    return self.itemId
+end
+
+function LM_Mount:ModelId()
+    return self.modelId
 end
 
 function LM_Mount:SpellName()

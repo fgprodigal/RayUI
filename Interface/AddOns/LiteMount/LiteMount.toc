@@ -1,10 +1,11 @@
 ## Interface: 50001
 ## Title: LiteMount
-## Version: 5.0.5
+## Version: 5.0.10
 ## Author: Xodiv of Proudmoore
 ## Email: mib@post.com
-## SavedVariables: LM_OptionsDB
-## X-Curse-Packaged-Version: 5.0.5
+## SavedVariables: LM_UseGlobalOptions, LM_GlobalOptionsDB
+## SavedVariablesPerCharacter: LM_OptionsDB
+## X-Curse-Packaged-Version: 5.0.10
 ## X-Curse-Project-Name: LiteMount
 ## X-Curse-Project-ID: litemount
 ## X-Curse-Repository-ID: wow/litemount/mainline
@@ -21,9 +22,9 @@ MountList.lua
 PlayerMounts.lua
 Location.lua
 Options.lua
+SlashCommand.lua
 Core.lua
 
-Macro.lua
 KeyBindingStrings.lua
 
 UI\UIOptionsCommon.lua

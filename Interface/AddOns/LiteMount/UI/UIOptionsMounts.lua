@@ -62,11 +62,63 @@ local function BitButtonUpdate(checkButton, mount)
     end
 end
 
+local function GetFilteredMountList()
+    local lmom = LiteMountOptionsMounts
+
+    local mounts = LiteMount:GetAllMounts()
+
+    local filtertext = lmom.filter:GetText()
+    if filtertext == SEARCH then
+        filtertext = ""
+    else
+        filtertext = string.lower(filtertext)
+    end
+    if filtertext ~= "" then
+        for i = #mounts, 1, -1 do
+            if not string.find(string.lower(mounts[i]:Name()), filtertext) then
+                table.remove(mounts, i)
+            end
+        end
+    end
+    return mounts
+end
+
+local function UpdateAllSelected(mounts)
+
+    if not mounts then
+        mounts = GetFilteredMountList()
+    end
+
+    local allEnabled = 1
+    local allDisabled = 1
+
+    for _,m in ipairs(mounts) do
+        if LM_Options:IsExcludedSpell(m:SpellId()) then
+            allEnabled = 0
+        else
+            allDisabled = 0
+        end
+    end
+
+    local checkedTexture = LiteMountOptionsMountsAllSelect:GetCheckedTexture()
+    if allDisabled == 1 then
+        LiteMountOptionsMountsAllSelect:SetChecked(0)
+    else
+        LiteMountOptionsMountsAllSelect:SetChecked(1)
+        if allEnabled == 1 then
+            checkedTexture:SetDesaturated(0)
+        else
+            checkedTexture:SetDesaturated(1)
+        end
+    end
+end
+
 local function UpdateMountButton(button, mount)
     button.icon:SetNormalTexture(mount:Icon())
     button.name:SetText(mount:Name())
     button.spellid = mount:SpellId()
-    button.mountid = mount:MountID()
+    button.itemid = mount:ItemId()
+    button.modelid = mount:ModelId()
 
     if not InCombatLockdown() then
         mount:SetupActionButton(button.icon)
@@ -86,6 +138,7 @@ local function UpdateMountButton(button, mount)
     button.enabled.setFunc = function(setting)
                             EnableDisableSpell(button.spellid, setting)
                             button.enabled:GetScript("OnEnter")(button.enabled)
+                            UpdateAllSelected()
                         end
 
     if GameTooltip:GetOwner() == button.enabled then
@@ -94,25 +147,24 @@ local function UpdateMountButton(button, mount)
 
 end
 
-local function GetFilteredMountList()
-    local lmom = LiteMountOptionsMounts
+function LiteMountOptions_AllSelect_OnClick(self)
+    local mounts = GetFilteredMountList()
 
-    mounts = LiteMount:GetAllMounts()
+    local on
 
-    local filtertext = lmom.filter:GetText()
-    if filtertext == SEARCH then
-        filtertext = ""
+    if self:GetChecked() then
+        on = "1"
     else
-        filtertext = string.lower(filtertext)
+        on = "0"
     end
-    if filtertext ~= "" then
-        for i = #mounts, 1, -1 do
-            if not string.find(string.lower(mounts[i]:Name()), filtertext) then
-                table.remove(mounts, i)
-            end
-        end
+
+    for _,m in ipairs(mounts) do
+        EnableDisableSpell(m:SpellId(), on)
     end
-    return mounts
+
+    self:GetScript("OnEnter")(self)
+    LiteMountOptions_UpdateMountList()
+
 end
 
 function LiteMountOptions_UpdateMountList()
@@ -123,7 +175,7 @@ function LiteMountOptions_UpdateMountList()
 
     if not buttons then return end
 
-    mounts = GetFilteredMountList()
+    local mounts = GetFilteredMountList()
 
     for i = 1, #buttons do
         local button = buttons[i]
@@ -135,6 +187,8 @@ function LiteMountOptions_UpdateMountList()
             button:Hide()
         end
     end
+
+    UpdateAllSelected(mounts)
 
     local totalHeight = scrollFrame.buttonHeight * #mounts
     local shownHeight = scrollFrame.buttonHeight * #buttons

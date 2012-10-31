@@ -27,10 +27,11 @@ LiteMount:RegisterEvent("PLAYER_LOGIN")
 local RescanEvents = {
     -- Companion change
     "COMPANION_LEARNED", "COMPANION_UNLEARNED",
-    -- Talents (might have mount abilities)
+    -- Talents (might have mount abilities). Glyphs that teach spells   
+    -- fire PLAYER_TALENT_UPDATE too, don't need to watch GLYPH_ events.
     "UNIT_LEVEL", "ACTIVE_TALENT_GROUP_CHANGED", "PLAYER_TALENT_UPDATE",
     -- You might have received a mount item
-    "BAG_UPDATE"
+    "BAG_UPDATE",
 }
 
 -- This is the macro that gets set as the default and will trigger if
@@ -83,7 +84,7 @@ function LiteMount:Initialize()
     -- i < GetNumCompanions("MOUNT").
     self.needScan = true
 
-    SlashCmdList["LiteMount"] = LiteMount_OpenOptionsPanel
+    SlashCmdList["LiteMount"] = LiteMount_SlashCommandFunc
     SLASH_LiteMount1 = "/litemount"
     SLASH_LiteMount2 = "/lmt"
 
