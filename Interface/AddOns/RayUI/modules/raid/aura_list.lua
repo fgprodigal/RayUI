@@ -47,7 +47,7 @@ RA.auras = {
 			[SpellName(123474)] = 5, -- Overwhelming Assault
 			-- Garalon
 			[SpellName(122835)] = 5, -- Pheromones
-			[SpellName(123081)] = 5, -- Pungency
+			[SpellName(123081)] = 6, -- Pungency
 			-- Wind Lord Mel'jarak
 			[SpellName(122125)] = 5, -- Corrosive Resin Pool
 			[SpellName(121885)] = 5, -- Amber Prison

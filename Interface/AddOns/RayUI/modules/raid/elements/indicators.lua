@@ -11,21 +11,21 @@ local update = .25
 
 local Enable = function(self)
     if(self.freebIndicators) then
-        self.AuraStatusTL = self.Health:CreateFontString(nil, "OVERLAY")
+        --[[self.AuraStatusTL = self.Health:CreateFontString(nil, "OVERLAY")
         self.AuraStatusTL:ClearAllPoints()
         self.AuraStatusTL:SetPoint("TOPLEFT", self.Health, 0, -1)
         self.AuraStatusTL:SetFont(indicator, RA.db.indicatorsize, "THINOUTLINE")
         self.AuraStatusTL.frequentUpdates = update
-        self:Tag(self.AuraStatusTL, RA.classIndicators[class]["TL"])
+        self:Tag(self.AuraStatusTL, RA.classIndicators[class]["TL"])]]
 
         self.AuraStatusTR = self.Health:CreateFontString(nil, "OVERLAY")
         self.AuraStatusTR:ClearAllPoints()
-        self.AuraStatusTR:SetPoint("TOPRIGHT", self.Health, 2, -1)
+        self.AuraStatusTR:SetPoint("RIGHT", self.Health, 2, 0)
         self.AuraStatusTR:SetFont(indicator, RA.db.indicatorsize, "THINOUTLINE")
         self.AuraStatusTR.frequentUpdates = update
         self:Tag(self.AuraStatusTR, RA.classIndicators[class]["TR"])
 
-        self.AuraStatusBL = self.Health:CreateFontString(nil, "OVERLAY")
+        --[[self.AuraStatusBL = self.Health:CreateFontString(nil, "OVERLAY")
         self.AuraStatusBL:ClearAllPoints()
         self.AuraStatusBL:SetPoint("BOTTOMLEFT", self.Health, 0, 0)
         self.AuraStatusBL:SetFont(indicator, RA.db.indicatorsize, "THINOUTLINE")
@@ -46,7 +46,7 @@ local Enable = function(self)
         self.AuraStatusCen:SetShadowOffset(1.25, -1.25)
         self.AuraStatusCen:SetWidth(RA.db.width)
         self.AuraStatusCen.frequentUpdates = update
-        self:Tag(self.AuraStatusCen, RA.classIndicators[class]["Cen"])
+        self:Tag(self.AuraStatusCen, RA.classIndicators[class]["Cen"])]]
     end
 end
 

@@ -1,20 +1,50 @@
 local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
 local hooked = false
 
-local function ShowFinish(text)
-	if not hooked then
-		hooksecurefunc("LevelUpDisplay_BuildPetBattleWinnerList", function(self)
-			if self.hooked then
-				self.winnerSoundKitID = 31749
-				self.hooked=nil
-			end
-		end)
-		hooked = true
-	end
-	LevelUpDisplay.hooked=true
-	LevelUpDisplay.type=TOAST_PET_BATTLE_WINNER
-	LevelUpDisplay:Show()
-	LevelUpDisplay.levelFrame.singleline:SetText(text)
+local function ShowFinish(text, subtext)
+    local levelUpTexCoords = {
+        gLine = { 0.00195313, 0.81835938, 0.00195313, 0.01562500 },
+        tint = {1, 0.996, 0.745},
+        gLineDelay = 0,
+    }
+
+    local script = LevelUpDisplay:GetScript("OnShow")
+    LevelUpDisplay.type = LEVEL_UP_TYPE_SCENARIO
+    LevelUpDisplay:SetScript("OnShow", nil)
+    LevelUpDisplay:Show()
+
+    LevelUpDisplay.scenarioFrame.level:SetText(text)
+    LevelUpDisplay.scenarioFrame.name:SetText(subtext)
+    LevelUpDisplay.scenarioFrame.description:SetText("")
+    LevelUpDisplay:SetPoint("TOP", 0, -250)
+
+    LevelUpDisplay.gLine:SetTexCoord(unpack(levelUpTexCoords.gLine))
+    LevelUpDisplay.gLine2:SetTexCoord(unpack(levelUpTexCoords.gLine))
+    LevelUpDisplay.gLine:SetVertexColor(unpack(levelUpTexCoords.tint))
+    LevelUpDisplay.gLine2:SetVertexColor(unpack(levelUpTexCoords.tint))
+    LevelUpDisplay.levelFrame.levelText:SetTextColor(NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
+    LevelUpDisplay.gLine.grow.anim1:SetStartDelay(levelUpTexCoords.gLineDelay)
+    LevelUpDisplay.gLine2.grow.anim1:SetStartDelay(levelUpTexCoords.gLineDelay)
+    LevelUpDisplay.blackBg.grow.anim1:SetStartDelay(levelUpTexCoords.gLineDelay)
+
+    LevelUpDisplay.scenarioFrame.newStage:Play()
+    PlaySoundKitID(31749)
+
+    LevelUpDisplay:SetScript("OnShow", script)
+
+	--if not hooked then
+		--hooksecurefunc("LevelUpDisplay_BuildPetBattleWinnerList", function(self)
+			--if self.hooked then
+				--self.winnerSoundKitID = 31749
+				--self.hooked=nil
+			--end
+		--end)
+		--hooked = true
+	--end
+	--LevelUpDisplay.hooked=true
+	--LevelUpDisplay.type=TOAST_PET_BATTLE_WINNER
+	--LevelUpDisplay:Show()
+	--LevelUpDisplay.levelFrame.singleline:SetText(text)
 end
 
 function R:SetLayout(layout)
@@ -70,7 +100,7 @@ function R:ChooseLayout()
 		f.Option1:SetScript("OnClick", function(self)
 			R.db.layoutchosen = true
 			R:SetLayout("default")
-			ShowFinish(L["设置完成"])
+			ShowFinish(L["设置完成"], self:GetText())
 			f:Hide()
 		end)
 		S:Reskin(f.Option1)
@@ -83,7 +113,7 @@ function R:ChooseLayout()
 		f.Option2:SetScript("OnClick", function(self)
 			R.db.layoutchosen = true
 			R:SetLayout("dps")
-			ShowFinish(L["设置完成"])
+			ShowFinish(L["设置完成"], self:GetText())
 			f:Hide()
 		end)
 		S:Reskin(f.Option2)		

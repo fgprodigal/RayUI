@@ -21,7 +21,7 @@ function CH:ChatEdit_CustomTabPressed(self)
             return
         end
     elseif (self:GetAttribute("chatType") == "PARTY") then
-        if (GetNumGroupMembers()>0) then
+        if (GetNumGroupMembers()>0 and IsInRaid()) then
             self:SetAttribute("chatType", "RAID")
             ChatEdit_UpdateHeader(self)
         elseif (GetNumBattlefieldScores()>0) then

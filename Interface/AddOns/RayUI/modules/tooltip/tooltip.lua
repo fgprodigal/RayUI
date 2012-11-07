@@ -472,9 +472,20 @@ function TT:OnTooltipSetUnit(tooltip)
         if UnitFactionGroup(unit) and UnitFactionGroup(unit) ~= "Neutral" then
             GameTooltipTextLeft1:SetText("|TInterface\\Addons\\RayUI\\media\\UI-PVP-"..select(1, UnitFactionGroup(unit))..".blp:16:16:0:0:64:64:5:40:0:35|t"..GameTooltipTextLeft1:GetText())
         end
+    elseif ( UnitIsWildBattlePet(unit) or UnitIsBattlePetCompanion(unit) ) then
+        local petLevel = UnitBattlePetLevel(unit)
+        local petType = _G["BATTLE_PET_DAMAGE_NAME_"..UnitBattlePetType(unit)]
+        for i=2, GameTooltip:NumLines() do
+            local text = _G["GameTooltipTextLeft" .. i]:GetText()
+            if text:find(LEVEL) then
+                _G["GameTooltipTextLeft" .. i]:SetText(petLevel .. unitClassification .. petType)
+                break
+            end
+        end
     else
         for i=2, GameTooltip:NumLines() do
-            if _G["GameTooltipTextLeft" .. i]:GetText():find(LEVEL) or _G["GameTooltipTextLeft" .. i]:GetText():find(creatureType) then
+            local text = _G["GameTooltipTextLeft" .. i]:GetText()
+            if text:find(LEVEL) or text:find(creatureType) then
                 _G["GameTooltipTextLeft" .. i]:SetText(string.format(R:RGBToHex(diffColor.r, diffColor.g, diffColor.b).."%s|r", unitLevel) .. unitClassification .. creatureType)
                 break
             end

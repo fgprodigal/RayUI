@@ -302,8 +302,10 @@ end
 
 function AB:Initialize()
 	self:HideBlizz()
-	InterfaceOptionsActionBarsPanelAlwaysShowActionBars:Kill()
-	if self.db.showgrid == true then
+	for i = 1, 5 do
+		AB["CreateBar"..i]()
+	end
+	if self.db.showgrid then
 		ActionButton_HideGrid = R.dummy
 		for i = 1, NUM_ACTIONBAR_BUTTONS do
 			local button = _G[format("ActionButton%d", i)]
@@ -332,13 +334,8 @@ function AB:Initialize()
 				ActionButton_ShowGrid(button)
 			end
 		end
-        SetCVar("alwaysShowActionBars", 1)
-    else
-        SetCVar("alwaysShowActionBars", 0)
-	end
-	for i = 1, 5 do
-		AB["CreateBar"..i]()
-	end
+        SetCVar("alwaysShowActionBars", "1")
+    end
 	self:CreateBarPet()
 	self:CreateStanceBar()
 	self:CreateVehicleExit()

@@ -19,7 +19,6 @@ local function LoadSkin()
 
 	BonusRollMoneyWonFrame:SetAlpha(1)
 	BonusRollMoneyWonFrame.SetAlpha = R.dummy
-
 	if not BonusRollMoneyWonFrame.bg then
 		BonusRollMoneyWonFrame.bg = CreateFrame("Frame", nil, BonusRollMoneyWonFrame)
 		BonusRollMoneyWonFrame.bg:SetPoint("TOPLEFT", BonusRollMoneyWonFrame, "TOPLEFT", 8, -8)
@@ -42,6 +41,32 @@ local function LoadSkin()
 	BonusRollMoneyWonFrame.Background:Kill()
 	BonusRollMoneyWonFrame.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	BonusRollMoneyWonFrame.IconBorder:Kill()
+
+
+	BonusRollMoneyWonFrame:SetAlpha(1)
+	BonusRollMoneyWonFrame.SetAlpha = R.dummy
+	if not BonusRollLootWonFrame.bg then
+		BonusRollLootWonFrame.bg = CreateFrame("Frame", nil, BonusRollLootWonFrame)
+		BonusRollLootWonFrame.bg:SetPoint("TOPLEFT", BonusRollLootWonFrame, "TOPLEFT", 8, -8)
+		BonusRollLootWonFrame.bg:SetPoint("BOTTOMRIGHT", BonusRollLootWonFrame, "BOTTOMRIGHT", -6, 8)
+		BonusRollLootWonFrame.bg:SetFrameLevel(BonusRollLootWonFrame:GetFrameLevel()-1)
+
+		-- Icon border
+		if not BonusRollLootWonFrame.Icon.b then
+			BonusRollLootWonFrame.Icon.b = S:CreateBG(BonusRollLootWonFrame.Icon)
+		end
+
+		BonusRollLootWonFrame:HookScript("OnEnter", function()
+			S:CreateBD(BonusRollLootWonFrame.bg)
+		end)
+
+		BonusRollLootWonFrame.animIn:HookScript("OnFinished", function()
+			S:CreateBD(BonusRollLootWonFrame.bg)
+		end)
+	end
+	BonusRollLootWonFrame.Background:Kill()
+	BonusRollLootWonFrame.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+	BonusRollLootWonFrame.IconBorder:Kill()
 end
 
 S:RegisterSkin("RayUI", LoadSkin)

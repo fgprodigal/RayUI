@@ -84,6 +84,8 @@ P["UnitFrames"]={
 	vengeance = true,
 }
 
+G["Raid"] = {}
+
 P["Raid"]={
 	enable = true,
     width = 65,
@@ -101,7 +103,7 @@ P["Raid"]={
     healoverflow = true,
     healothersonly = false,
     roleicon = true,    
-    indicatorsize = 5,
+    indicatorsize = 7,
     symbolsize = 11,
     leadersize = 12,
     aurasize = 18,

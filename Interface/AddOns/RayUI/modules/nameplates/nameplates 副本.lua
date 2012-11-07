@@ -140,6 +140,9 @@ function NP:CheckHealers()
 		local name, _, _, _, _, faction, _, _, _, _, _, _, _, _, _, talentSpec = GetBattlefieldScore(i)
 		if name then
 			name = name:match("(.+)%-.+") or name
+            if UnitBuff("player", GetSpellInfo(81748)) or UnitBuff("player", GetSpellInfo(81744)) then
+                faction = 1 - faction
+            end
 			if name and Healers[talentSpec] and factionOpposites[PlayerFaction] == faction then
 				BattleGroundHealers[name] = talentSpec
 			elseif name and BattleGroundHealers[name] then
@@ -391,17 +394,9 @@ local function UpdateCastText(frame, curValue)
 end
 
 --Sometimes castbar likes to randomly resize
-local OnValueChanged = function(self, curValue)
+local OnCastBarValueChanged = function(self, curValue)
 	UpdateCastText(self, curValue)
-	if self.needFix then
-		UpdateCastbar(self)
-		self.needFix = nil
-	end
-end
-
---Sometimes castbar likes to randomly resize
-local OnSizeChanged = function(self)
-	self.needFix = true
+    UpdateCastbar(self)
 end
 
 --We need to reset everything when a nameplate it hidden, this is so theres no left over data when a nameplate gets reshown for a differant mob.
@@ -432,9 +427,6 @@ local function Colorize(frame)
 
 	for class, color in pairs(RAID_CLASS_COLORS) do
 		local r, g, b = floor(r*100+.5)/100, floor(g*100+.5)/100, floor(b*100+.5)/100
-        if class == "MONK" then
-            b = b - 0.01
-        end
 		if RAID_CLASS_COLORS[class].r == r and RAID_CLASS_COLORS[class].g == g and RAID_CLASS_COLORS[class].b == b then
 			frame.hasClass = true
 			frame.isFriendly = false
@@ -463,6 +455,8 @@ local function Colorize(frame)
 	frame.hp:SetStatusBarColor(r,g,b)
 end
 
+--HealthBar OnShow, use this to set variables for the nameplate, also size the healthbar here because it likes to lose it's
+--size settings when it gets reshown
 local function OnHealthValueChanged(frame)
 	local frame = frame:GetParent()
 	frame.hp:SetMinMaxValues(frame.healthOriginal:GetMinMaxValues())
@@ -470,9 +464,7 @@ local function OnHealthValueChanged(frame)
 	frame.hp:SetValue(frame.healthOriginal:GetValue())
 end
 
---HealthBar OnShow, use this to set variables for the nameplate, also size the healthbar here because it likes to lose it's
---size settings when it gets reshown
-local function UpdateObjects(frame)
+local function UpdateHealth(frame)
 	local frame = frame:GetParent()
 
 	local r, g, b = frame.hp:GetStatusBarColor()
@@ -483,8 +475,7 @@ local function UpdateObjects(frame)
 	frame.hp:SetPoint("TOP", frame, "TOP", 0, -15)
 	frame.hp:GetStatusBarTexture():SetHorizTile(true)
 
-	frame.hp:SetMinMaxValues(frame.healthOriginal:GetMinMaxValues())
-	frame.hp:SetValue(frame.healthOriginal:GetValue())
+    OnHealthValueChanged(frame.healthOriginal)
 
 	--Colorize Plate
 	Colorize(frame)
@@ -561,9 +552,6 @@ local function SkinObjects(frame)
 		frame.hp.oldname = oldname
 	end
 
-	frame.hp:HookScript("OnShow", UpdateObjects)
-    frame.healthOriginal:HookScript("OnValueChanged", OnHealthValueChanged)
-
 	--Cast Bar
 	cb:SetStatusBarTexture(R["media"].normal)
 	CreateVirtualFrame(cb)
@@ -618,9 +606,6 @@ local function SkinObjects(frame)
 	cb.shield = cbshield
 	cbshield:ClearAllPoints()
 	cbshield:SetPoint("TOP", cb, "BOTTOM")
-	cb:HookScript("OnShow", UpdateCastbar)
-	cb:HookScript("OnSizeChanged", OnSizeChanged)
-	cb:HookScript("OnValueChanged", OnValueChanged)
 	frame.cb = cb
 
 	--Highlight
@@ -654,10 +639,17 @@ local function SkinObjects(frame)
 	QueueObject(frame, bossicon)
 	QueueObject(frame, elite)
 
-	UpdateObjects(frame.hp)
+	UpdateHealth(frame.hp)
 	UpdateCastbar(cb)
 
-	frame:HookScript("OnHide", OnHide)
+    if not frame.hooked then
+        frame.healthOriginal:HookScript("OnValueChanged", OnHealthValueChanged)
+        frame.hp:HookScript("OnShow", UpdateHealth)
+        frame.cb:HookScript("OnShow", UpdateCastbar)
+        frame.cb:HookScript("OnValueChanged", OnCastBarValueChanged)
+        frame.hooked = true
+    end
+
 	frames[frame] = true
 	frame.RayUIPlate = true
 end
@@ -775,7 +767,7 @@ local function ShowHealth(frame, ...)
 	local d =(valueHealth/maxHealth)*100
 
 	--Match values
-	frame.hp:SetValue(valueHealth - 1)	--Bug Fix 4.1
+	frame.hp:SetValue(valueHealth - 1)
 	frame.hp:SetValue(valueHealth)
 
 	frame.hp.value:SetText(string.format("%d%%", math.floor((valueHealth/maxHealth)*100)))

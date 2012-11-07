@@ -23,6 +23,9 @@ local enableTargetUpdate = function(object)
 
 	local total = 0
 	object:SetScript('OnUpdate', function(self, elapsed)
+        --if self:GetName() == "RayUFBoss2" then
+            --print(self.unit)
+        --end
 		if(not self.unit) then
 			return
 		elseif(total > self.onUpdateFrequency) then

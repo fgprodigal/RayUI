@@ -459,11 +459,11 @@ local BossIDs = {
    -- Heart of Fear (MoP-Raid 5.0.1)
    -------------------------------------------------------------------------------  
    [62837]  = true, -- Grand Empress Shek'zeer
-   [63664]  = true, -- Blade Lord Ta'yak
-   [63666]  = true, -- Amber-Shaper Un'sok
-   [63667]  = true, -- Garalon
-   [65501]  = true, -- Wind Lord Mel'jarak
-   [66791]	= true,	-- Zorlok
+   [62543]  = true, -- Blade Lord Ta'yak
+   [62511]  = true, -- Amber-Shaper Un'sok
+   [63191]  = true, -- Garalon
+   [62397]  = true, -- Wind Lord Mel'jarak
+   [62980]	= true,	-- Zorlok
    
    -------------------------------------------------------------------------------
    -- Hellfire Citadel: Hellfire Ramparts
@@ -1106,7 +1106,7 @@ local BossIDs = {
    [60586]  = true, -- Elder Asani
    [60999]  = true, -- Sha of Fear
    [62442]  = true, -- Tsulong
-   [63099]  = true, -- Lei Shi
+   [62983]  = true, -- Lei Shi
    
    -------------------------------------------------------------------------------
    -- The Bastion of Twilight

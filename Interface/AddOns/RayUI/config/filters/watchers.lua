@@ -64,8 +64,6 @@ R["Watcher"] = {
                 { spellID = 127538, unitId = "player", caster = "player", filter = "BUFF" },
                 --求生本能
                 { spellID = 61336, unitId = "player", caster = "player", filter = "BUFF" },
-                --生命之樹
-                { spellID = 33891, unitId = "player", caster = "player", filter = "BUFF" },
                 --節能施法
                 { spellID = 16870, unitId = "player", caster = "player", filter = "BUFF" },
                 --啟動
@@ -80,6 +78,7 @@ R["Watcher"] = {
                 { spellID = 69369, unitId = "player", caster = "player", filter = "BUFF" },
                 --塞納留斯之夢
                 { spellID = 108381, unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 108382, unitId = "player", caster = "player", filter = "BUFF" },
                 --自然戒備
                 { spellID = 124974, unitId = "player", caster = "player", filter = "BUFF" },
                 --森林之魂
@@ -88,6 +87,8 @@ R["Watcher"] = {
                 { spellID = 48505, unitId = "player", caster = "player", filter = "BUFF" },
                 --星穹大連線
                 { spellID = 112071, unitId = "player", caster = "player", filter = "BUFF" },
+                --化身
+                { spellID = 117679, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -1255,7 +1256,9 @@ R["Watcher"] = {
                 { spellID = 128985, unitId = "player", caster = "player", filter = "BUFF" },
                 --宇宙之光
                 { spellID = 126577, unitId = "player", caster = "player", filter = "BUFF" },
-
+                --無垠星辰之瓶
+                { spellID = 126554, unitId = "player", caster = "player", filter = "BUFF" },
+                
                 --工程
                 --神經突觸彈簧(敏捷)
                 { spellID = 96228, unitId = "player", caster = "player", filter = "BUFF" },
@@ -1527,6 +1530,10 @@ R["Watcher"] = {
 				--卡拉賈
                 --靈魂經絡
                 { spellID = 117549, unitId = "player", caster = "all", filter = "BUFF", fuzzy = true },
+
+                --恐懼之心
+                --風領主瑪爾加拉克
+                { spellID = 121885, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
 
 				--艾拉岡
 

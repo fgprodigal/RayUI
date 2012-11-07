@@ -59,23 +59,23 @@ local function LoadGuild()
 
 			-- Add to list
 			if online then
-				GuildTabletData[i] = GuildTabletData[i] or {}
+				GuildTabletData[guildonline + 1] = GuildTabletData[guildonline + 1] or {}
 				if CanViewOfficerNote() then
-					GuildTabletData[i][1] = cname
-					GuildTabletData[i][2] = lvl
-					GuildTabletData[i][3] = zone
-					GuildTabletData[i][4] = rank
-					GuildTabletData[i][5] = note
-					GuildTabletData[i][6] = offnote
-					GuildTabletData[i][7] = name
+					GuildTabletData[guildonline + 1][1] = cname
+					GuildTabletData[guildonline + 1][2] = lvl
+					GuildTabletData[guildonline + 1][3] = zone
+					GuildTabletData[guildonline + 1][4] = rank
+					GuildTabletData[guildonline + 1][5] = note
+					GuildTabletData[guildonline + 1][6] = offnote
+					GuildTabletData[guildonline + 1][7] = name
 				else
-					GuildTabletData[i][1] = cname
-					GuildTabletData[i][2] = lvl
-					GuildTabletData[i][3] = zone
-					GuildTabletData[i][4] = rank
-					GuildTabletData[i][5] = note
-					GuildTabletData[i][6] = " "
-					GuildTabletData[i][7] = name
+					GuildTabletData[guildonline + 1][1] = cname
+					GuildTabletData[guildonline + 1][2] = lvl
+					GuildTabletData[guildonline + 1][3] = zone
+					GuildTabletData[guildonline + 1][4] = rank
+					GuildTabletData[guildonline + 1][5] = note
+					GuildTabletData[guildonline + 1][6] = " "
+					GuildTabletData[guildonline + 1][7] = name
 				end
 				guildonline = guildonline + 1
 			end

@@ -327,7 +327,7 @@ local function LoadSkin()
 		end
 	end)	
 
-	hooksecurefunc("AlertFrame_FixAnchors", function()	
+	hooksecurefunc("AlertFrame_FixAnchors", function(self, screenQuadrant)	
 		if POSITION == "TOP" then
 			ANCHOR_POINT = "BOTTOM"
 			YOFFSET = -10
@@ -370,15 +370,23 @@ local function LoadSkin()
             AlertFrame:SetAllPoints(AlertFrameHolder)
         end	
 
-		GroupLootContainer:ClearAllPoints()
-		GroupLootContainer:SetPoint(POSITION, AlertFrame, ANCHOR_POINT)
-		
-		MissingLootFrame:ClearAllPoints()
-		MissingLootFrame:SetPoint(POSITION, AlertFrame, ANCHOR_POINT)
-		
-		if pos == "TOP" or pos == "BOTTOM" then
+		if screenQuadrant then
 			AlertFrame_FixAnchors()
 		end
+	end)
+
+	hooksecurefunc("AlertFrame_SetLootAnchors", function(alertAnchor)
+		if ( MissingLootFrame:IsShown() ) then
+            MissingLootFrame:ClearAllPoints()
+            MissingLootFrame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT)
+            if ( GroupLootContainer:IsShown() ) then
+                GroupLootContainer:ClearAllPoints()
+                GroupLootContainer:SetPoint(POSITION, MissingLootFrame, ANCHOR_POINT, 0, YOFFSET)
+            end		
+        elseif ( GroupLootContainer:IsShown() ) then
+            GroupLootContainer:ClearAllPoints()
+            GroupLootContainer:SetPoint(POSITION, alertAnchor, ANCHOR_POINT)	
+        end
 	end)
 
 	hooksecurefunc("AlertFrame_SetLootWonAnchors", function(alertAnchor)
@@ -460,6 +468,10 @@ local function LoadSkin()
 			frame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
 		end
 	end)
+
+    hooksecurefunc("GroupLootContainer_AddFrame", function()
+        AlertFrame_FixAnchors()
+    end)
 
 	hooksecurefunc(GroupLootContainer, "SetPoint", function(self, point, anchorTo, attachPoint, xOffset, yOffset)
 		if _G[anchorTo] == UIParent then

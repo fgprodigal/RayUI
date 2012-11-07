@@ -254,9 +254,9 @@ function UF:DPSLayout(frame, unit)
 		reputation:SetFrameLevel(1)
 
 		reputation.PostUpdate = function(frame, event, unit, bar)
-															local name, id = GetWatchedFactionInfo()
-															bar:SetStatusBarColor(FACTION_BAR_COLORS[id].r, FACTION_BAR_COLORS[id].g, FACTION_BAR_COLORS[id].b)
-														end
+            local name, id = GetWatchedFactionInfo()
+            bar:SetStatusBarColor(FACTION_BAR_COLORS[id].r, FACTION_BAR_COLORS[id].g, FACTION_BAR_COLORS[id].b)
+        end
 		reputation.Tooltip = true
 		reputation.colorStanding = true
 
@@ -766,7 +766,8 @@ function UF:DPSLayout(frame, unit)
 
     local ricon = frame:CreateTexture(nil, "OVERLAY")
     ricon:Point("BOTTOM", frame, "TOP", 0, -7)
-    ricon:SetSize(16,16)
+    ricon:SetSize(24, 24)
+	ricon:SetTexture("Interface\\AddOns\\RayUI\\media\\raidicons.blp")
     frame.RaidIcon = ricon
 
 	frame.mouseovers = {}
