@@ -179,6 +179,11 @@ function TT:GameTooltip_SetDefaultAnchor(tooltip, parent)
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, RayUFRaid25_5:GetBottom() + RayUFRaid25_5:GetHeight() + 30)
 		elseif NumerationFrame and NumerationFrame:IsVisible() and (GetScreenWidth() - NumerationFrame:GetRight()) < 250 then
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, NumerationFrame:GetBottom() + NumerationFrame:GetHeight() + 30)
+        elseif Skada then
+            local windows = Skada:GetWindows()
+            if #windows >= 1 and (GetScreenWidth() - windows[1].bargroup:GetRight()) < 250 then
+                tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, windows[1].bargroup:GetTop() + 30 + (windows[1].db.enabletitle and windows[1].db.barheight or 0))
+            end
 		else
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, 160)
 		end
@@ -269,7 +274,7 @@ function TT:SetiLV()
 			end
 		end
 	end
-	
+
 	for i = #ilvcache, 1, -1 do
 		if (ilvcurrent.name == ilvcache[i].name) then
 			tremove(ilvcache,i)
@@ -523,7 +528,7 @@ function TT:Initialize()
 	--GameTooltipStatusBar.bg:Point("BOTTOMRIGHT", GameTooltipStatusBar, "BOTTOMRIGHT", 4, -4)
 	--GameTooltipStatusBar.bg:SetFrameStrata(GameTooltipStatusBar:GetFrameStrata())
 	--GameTooltipStatusBar.bg:SetFrameLevel(GameTooltipStatusBar:GetFrameLevel() - 1)
-	--GameTooltipStatusBar.bg:SetBackdrop( { 
+	--GameTooltipStatusBar.bg:SetBackdrop( {
 		--edgeFile = R["media"].glow,
 		--bgFile = R["media"].blank,
 		--edgeSize = R:Scale(4),
