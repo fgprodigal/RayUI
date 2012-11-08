@@ -11,9 +11,11 @@ local function LoadSkin()
 		anchorframe:SetSize(200, 15)
 		anchorframe:SetPoint("TOPLEFT", 300, -300)
 
-		local function OnClick(self)
+		local function OnClick(self, button)
 			if IsModifiedClick() then
-				HandleModifiedItemClick(GetLootSlotLink(self.id))
+                if button == "LeftButton" then
+                    HandleModifiedItemClick(GetLootSlotLink(self.id))
+                end
 			else
 				StaticPopup_Hide("CONFIRM_LOOT_DISTRIBUTION")
 				LootFrame.selectedSlot = self.id
@@ -66,6 +68,7 @@ local function LoadSkin()
 			slot.quest:SetInside(slot)
 			slot.quest:SetTexCoord(.08, .92, .08, .92)
 			slot.quest:Hide()
+			slot:RegisterForClicks("LeftButtonUp", "RightButtonUp")
 			slot:SetScript("OnClick", OnClick)
 			slot:SetScript("OnEnter", OnEnter)
 			slot:SetScript("OnLeave", OnLeave)

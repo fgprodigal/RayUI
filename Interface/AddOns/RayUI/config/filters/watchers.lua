@@ -461,6 +461,8 @@ R["Watcher"] = {
                 { spellID = 55694, unitId = "player", caster = "player", filter = "BUFF" },
                 --橫掃攻擊
                 { spellID = 12328, unitId = "player", caster = "player", filter = "BUFF" },
+                --绞肉机
+                { spellID = 85739, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -479,7 +481,9 @@ R["Watcher"] = {
                 --破膽怒吼
                 { spellID = 5246, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --破甲
-                { spellID = 8647, unitId = "target", caster = "all", filter = "DEBUFF" },
+                { spellID = 113746, unitId = "target", caster = "all", filter = "DEBUFF" },
+                --巨人打击
+                { spellID = 86346, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --感染之傷（德魯伊）
                 { spellID = 48484, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --挫志咆哮（德魯伊）
