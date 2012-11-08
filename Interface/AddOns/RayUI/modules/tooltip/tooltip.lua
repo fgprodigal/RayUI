@@ -183,6 +183,8 @@ function TT:GameTooltip_SetDefaultAnchor(tooltip, parent)
             local windows = Skada:GetWindows()
             if #windows >= 1 and (GetScreenWidth() - windows[1].bargroup:GetRight()) < 250 then
                 tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, windows[1].bargroup:GetTop() + 30 + (windows[1].db.enabletitle and windows[1].db.barheight or 0))
+            else
+                tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, 160)
             end
 		else
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, 160)
