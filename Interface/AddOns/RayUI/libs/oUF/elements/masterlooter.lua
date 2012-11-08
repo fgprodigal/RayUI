@@ -45,7 +45,7 @@ local Update = function(self, event)
 
 	local method, pid, rid = GetLootMethod()
 	if(method == 'master') then
-		local mlUnit
+		local mlUnit = ""
 		if(pid and not rid) then
 			if(pid == 0) then
 				mlUnit = 'player'

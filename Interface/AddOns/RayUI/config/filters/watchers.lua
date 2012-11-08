@@ -160,8 +160,12 @@ R["Watcher"] = {
                 { spellID = 22812, filter = "CD" },
                 --寧靜
                 { spellID = 740, filter = "CD" },
-                --生命之樹
-                { spellID = 33891, filter = "CD" },
+                --化身
+                { spellID = 106731, filter = "CD" },
+                --自然戒備
+                { spellID = 124974, filter = "CD" },
+                --星穹大連線
+                { spellID = 112071, filter = "CD" },
                 
                 -- 物品
 				-- 手套
