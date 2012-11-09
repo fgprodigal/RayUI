@@ -23,7 +23,7 @@ function view:Init()
 	if not set then backAction() return end
 	local u = set.unit[addon.nav.unit]
 	if not u then backAction() return end
-	
+
 	local t = addon.types[addon.nav.type]
 	local text
 	if u.owner then
@@ -81,11 +81,11 @@ function view:Update(merged)
 	if not u then backAction() return end
 	local etype = addon.types[addon.nav.type].id
 	local etype2 = addon.types[addon.nav.type].id2
-	
+
 	-- compile and sort information table
 	local total = updateTables(set, u, etype, merged)
 	total = total + updateTables(set, u, etype2, merged)
-	
+
 	local action = nil
 	if addon.nav.set ~= "total" then
 		action = detailAction
@@ -94,7 +94,7 @@ function view:Update(merged)
 	-- display
 	self.first, self.last = addon:GetArea(self.first, #sorttbl)
 	if not self.last then return end
-	
+
 	local c = addon.color[u.class]
 	local maxvalue = nameToValue[sorttbl[1]]
 	for i = self.first, self.last do
@@ -102,14 +102,14 @@ function view:Update(merged)
 		local value = nameToValue[sorttbl[i]]
 		local id = nameToId[sorttbl[i]]
 		local name, icon = spellName[id], spellIcon[id]
-		
+
 		if name == nil then
 			name = id
-			icon = ""
-		elseif id == 0 or id == 75 then
+			icon = [[Interface\Icons\inv_misc_questionmark]]
+		elseif id == 0 then
 			icon = ""
 		end
-		
+
 		local line = addon.window:GetLine(i-self.first)
 		line:SetValues(value, maxvalue)
 		if petName then
@@ -125,7 +125,7 @@ function view:Update(merged)
 		line:SetReportNumber(i)
 		line:Show()
 	end
-	
+
 	sorttbl = wipe(sorttbl)
 	nameToValue = wipe(nameToValue)
 	nameToPetName = wipe(nameToPetName)
@@ -137,7 +137,7 @@ function view:Report(merged, num_lines)
 	local u = set.unit[addon.nav.unit]
 	local etype = addon.types[addon.nav.type].id
 	local etype2 = addon.types[addon.nav.type].id2
-	
+
 	-- compile and sort information table
 	local total = updateTables(set, u, etype, merged)
 	total = total + updateTables(set, u, etype2, merged)
@@ -145,21 +145,21 @@ function view:Report(merged, num_lines)
 	if #sorttbl < num_lines then
 		num_lines = #sorttbl
 	end
-	
+
 	-- display
 	addon:PrintHeaderLine(set)
 	for i = 1, num_lines do
 		local petName = nameToPetName[sorttbl[i]]
 		local value = nameToValue[sorttbl[i]]
 		local id = nameToId[sorttbl[i]]
-		local name = GetSpellLink(id) or GetSpellLink(6603)
-		
+		local name = GetSpellLink(id) or "["..id.."]"
+
 		if petName then
 			name = format("%s <%s>", name, petName)
 		end
 		addon:PrintLine("%i. %s  %s (%02.1f%%)", i, name, addon:ModNumber(value), value/total*100)
 	end
-	
+
 	sorttbl = wipe(sorttbl)
 	nameToValue = wipe(nameToValue)
 	nameToPetName = wipe(nameToPetName)

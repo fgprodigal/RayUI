@@ -54,20 +54,20 @@ function view:Update(merged)
 	local set = addon:GetSet(addon.nav.set)
 	if not set then return end
 	local etype = addon.types[addon.nav.type].id
-	
+
 	-- compile and sort information table
 	local total = updateTables(set, etype)
-	
+
 	-- display
 	self.first, self.last = addon:GetArea(self.first, #sorttbl)
 	if not self.last then return end
-	
+
 	local c = addon.types[addon.nav.type].c
 	local maxvalue = targetToValue[sorttbl[1]]
 	for i = self.first, self.last do
 		local target = sorttbl[i]
 		local value = targetToValue[target]
-		
+
 		local line = addon.window:GetLine(i-self.first)
 		line:SetValues(value, maxvalue)
 		line:SetLeftText("%i. %s", i, target)
@@ -78,7 +78,7 @@ function view:Update(merged)
 		line:SetReportNumber(i)
 		line:Show()
 	end
-	
+
 	sorttbl = wipe(sorttbl)
 	targetToValue = wipe(targetToValue)
 end
@@ -87,23 +87,23 @@ function view:Report(merged, num_lines)
 	local set = addon:GetSet(addon.nav.set)
 	if not set then return end
 	local etype = addon.types[addon.nav.type].id
-	
+
 	-- compile and sort information table
 	local total = updateTables(set, etype)
 	if #sorttbl == 0 then return end
 	if #sorttbl < num_lines then
 		num_lines = #sorttbl
 	end
-	
+
 	-- display
 	addon:PrintHeaderLine(set)
 	for i = 1, num_lines do
 		local target = sorttbl[i]
 		local value = targetToValue[target]
-		
+
 		addon:PrintLine("%i. %s  %s (%02.1f%%)", i, target, addon:ModNumber(value), value/total*100)
 	end
-	
+
 	sorttbl = wipe(sorttbl)
 	targetToValue = wipe(targetToValue)
 end

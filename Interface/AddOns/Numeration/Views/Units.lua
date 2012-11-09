@@ -89,20 +89,20 @@ function view:Update(merged)
 	if not set then return end
 	local etype = addon.types[addon.nav.type].id
 	local etype2 = addon.types[addon.nav.type].id2
-	
+
 	-- compile and sort information table
 	local total = updateTables(set, etype, etype2, merged)
-	
+
 	-- display
 	self.first, self.last = addon:GetArea(self.first, #sorttbl)
 	if not self.last then return end
-	
+
 	local maxvalue = nameToValue[sorttbl[1]]
 	for i = self.first, self.last do
 		local u = set.unit[sorttbl[i]]
 		local value, time = nameToValue[sorttbl[i]], nameToTime[sorttbl[i]]
 		local c = addon.color[u.class]
-		
+
 		local line = addon.window:GetLine(i-self.first)
 		line:SetValues(value, maxvalue)
 		if u.owner then
@@ -121,7 +121,7 @@ function view:Update(merged)
 		line:SetReportNumber(i)
 		line:Show()
 	end
-	
+
 	sorttbl = wipe(sorttbl)
 	nameToValue = wipe(nameToValue)
 	nameToTime = wipe(nameToTime)
@@ -144,32 +144,32 @@ function view:Report(merged, num_lines)
 	if not set then return end
 	local etype = addon.types[addon.nav.type].id
 	local etype2 = addon.types[addon.nav.type].id2
-	
+
 	-- compile and sort information table
 	local total = updateTables(set, etype, etype2, merged)
 	if #sorttbl == 0 then return end
 	if #sorttbl < num_lines then
 		num_lines = #sorttbl
 	end
-	
+
 	-- display
 	addon:PrintHeaderLine(set)
 	for i = 1, num_lines do
 		local u = set.unit[sorttbl[i]]
 		local value, time = nameToValue[sorttbl[i]], nameToTime[sorttbl[i]]
-		
+
 		local name = u.name
 		if u.owner then
 			name = format("%s <%s>", u.name, u.owner)
 		end
-		
+
 		if time ~= 0 then
 			addon:PrintLine("%i. %s  %s (%s, %02.1f%%)", i, name, addon:ModNumber(value), addon:ModNumber(value/time), value/total*100)
 		else
 			addon:PrintLine("%i. %s  %s (%02.1f%%)", i, name, addon:ModNumber(value), value/total*100)
 		end
 	end
-	
+
 	sorttbl = wipe(sorttbl)
 	nameToValue = wipe(nameToValue)
 	nameToTime = wipe(nameToTime)

@@ -1,4 +1,5 @@
 local addon = select(2, ...)
+local l = addon.locale
 local view = {}
 addon.views["UnitTargets"] = view
 view.first = 1
@@ -14,13 +15,13 @@ function view:Init()
 	if not set then backAction() return end
 	local u = set.unit[addon.nav.unit]
 	if not u then backAction() return end
-	
+
 	local t = addon.types[addon.nav.type]
 	local text
 	if u.owner then
-		text = format("%s Targets: %s <%s>", t.name, u.name, u.owner)
+		text = format("%s "..l.tar..": %s <%s>", t.name, u.name, u.owner)
 	else
-		text = format("%s Targets: %s", t.name, u.name)
+		text = format("%s "..l.tar..": %s", t.name, u.name)
 	end
 	addon.window:SetTitle(text, t.c[1], t.c[2], t.c[3])
 	addon.window:SetBackAction(backAction)
@@ -80,22 +81,22 @@ function view:Update(merged)
 	if not u then backAction() return end
 	local etype = addon.types[addon.nav.type].id
 	local etype2 = addon.types[addon.nav.type].id2
-	
+
 	-- compile and sort information table
 	local total = updateTables(set, u, etype, merged)
 	total = total + updateTables(set, u, etype2, merged)
-	
+
 	-- display
 	self.first, self.last = addon:GetArea(self.first, #sorttbl)
 	if not self.last then return end
-	
+
 	local c = addon.color[u.class]
 	local maxvalue = nameToValue[sorttbl[1]]
 	for i = self.first, self.last do
 		local petName = nameToPetName[sorttbl[i]]
 		local value = nameToValue[sorttbl[i]]
 		local target = nameToTarget[sorttbl[i]]
-		
+
 		local line = addon.window:GetLine(i-self.first)
 		line:SetValues(value, maxvalue)
 		if petName then
@@ -110,7 +111,7 @@ function view:Update(merged)
 		line:SetReportNumber(i)
 		line:Show()
 	end
-	
+
 	sorttbl = wipe(sorttbl)
 	nameToValue = wipe(nameToValue)
 	nameToPetName = wipe(nameToPetName)
@@ -122,7 +123,7 @@ function view:Report(merged, num_lines)
 	local u = set.unit[addon.nav.unit]
 	local etype = addon.types[addon.nav.type].id
 	local etype2 = addon.types[addon.nav.type].id2
-	
+
 	-- compile and sort information table
 	local total = updateTables(set, u, etype, merged)
 	total = total + updateTables(set, u, etype2, merged)
@@ -130,20 +131,20 @@ function view:Report(merged, num_lines)
 	if #sorttbl < num_lines then
 		num_lines = #sorttbl
 	end
-	
+
 	-- display
 	addon:PrintHeaderLine(set)
 	for i = 1, num_lines do
 		local petName = nameToPetName[sorttbl[i]]
 		local value = nameToValue[sorttbl[i]]
 		local target = nameToTarget[sorttbl[i]]
-		
+
 		if petName then
 			target = format("%s <%s>", target, petName)
 		end
 		addon:PrintLine("%i. %s  %s (%02.1f%%)", i, target, addon:ModNumber(value), value/total*100)
 	end
-	
+
 	sorttbl = wipe(sorttbl)
 	nameToValue = wipe(nameToValue)
 	nameToPetName = wipe(nameToPetName)

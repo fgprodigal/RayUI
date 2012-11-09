@@ -1,17 +1,19 @@
 ## Interface: 50001
 ## Title: Numeration
 ## Notes: yet another Damage Meter addon
-## Author: nekoh
-## Version: 1.3.8
-## OptionalDeps: LibDBIcon-1.0, !ClassColors
+## Author: nekoh, Wetxius
+## Thanks: Shestak
+## Version: 2.0.1
+## OptionalDeps: !ClassColors
 ## RequiredDeps: RayUI
 ## SavedVariablesPerCharacter: NumerationCharDB, NumerationCharOptions
 
-Libs\LibStub\LibStub.lua
-Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
-Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
-Libs\LibDBIcon-1.0\LibDBIcon-1.0.lua
-Libs\LibBossIDs-1.0\LibBossIDs-1.0.lua
+Locales.lua
+Libs\LibStub.lua
+Libs\CallbackHandler-1.0.lua
+Libs\LibDataBroker-1.1.lua
+Libs\LibDBIcon-1.0.lua
+Libs\LibBossIDs.lua
 
 Config.lua
 Core.lua
@@ -20,16 +22,12 @@ Collect.lua
 
 Views\Sets.lua
 Views\Type.lua
-
 Views\Units.lua
 Views\UnitSpells.lua
 Views\UnitTargets.lua
-
 Views\Targets.lua
 Views\TargetUnits.lua
-
 Views\Spells.lua
 Views\SpellUnits.lua
-
 Views\Deathlog.lua
 Views\DeathlogDetail.lua

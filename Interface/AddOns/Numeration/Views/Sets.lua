@@ -1,10 +1,11 @@
 local addon = select(2, ...)
+local l = addon.locale
 local view = {}
 addon.views["Sets"] = view
 view.first = 1
 
 function view:Init()
-	addon.window:SetTitle("选择: 分段", .1, .1, .1)
+	addon.window:SetTitle(l.sel_set, .1, .1, .1)
 	addon.window:SetBackAction(nil)
 end
 
@@ -36,8 +37,8 @@ local setLine = function(lineid, setid, title)
 end
 
 function view:Update()
-	setLine(0, "total", " 所有数据")
-	setLine(1, "current", " 当前战斗")
+	setLine(0, "total", " "..l.overall)
+	setLine(1, "current", " "..l.current)
 
 	self.first, self.last = addon:GetArea(self.first, #NumerationCharDB+2)
 	if not self.last then return end
@@ -46,5 +47,4 @@ function view:Update()
 		t = NumerationCharDB[i]
 		setLine(i-self.first+2, i)
 	end
-
 end

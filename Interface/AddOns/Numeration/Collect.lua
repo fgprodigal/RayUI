@@ -2,54 +2,62 @@
 local collect = {}
 addon.collect = collect
 
-local	UnitHealth, UnitHealthMax =
-		UnitHealth, UnitHealthMax
-
 local spellName = addon.spellName
 local deathlogHealFilter = {
-	[spellName[5394]] = true, -- Healing Stream Totem
-	[spellName[57774]] = true, -- Judgement of Light
-	[spellName[23881]] = true, -- Bloodthirst
-	[spellName[15286]] = true, -- Vampiric Embrace
+	[spellName[5394]] = true,	-- Healing Stream Totem
+	[spellName[117313]] = true,	-- Bloodthirst Heal
+	[spellName[15290]] = true,	-- Vampiric Embrace
+	[spellName[115547]] = true,	-- Glyph of Avenging Wrath
+	[spellName[127626]] = true,	-- Devouring Plague
+	[spellName[112974]] = true,	-- Leeching Poison
+	[spellName[63106]] = true,	-- Siphon Life
+	[spellName[108366]] = true,	-- Soul Leech
 }
 local deathlogTrackBuffs = {
-	--DEATHKNIGHT
-	[spellName[48707]] = true, -- Anti-Magic Shell
-	[spellName[48792]] = true, -- Icebound Fortitude
-	[spellName[54223]] = true, -- Shadow of Death
-	[spellName[55233]] = true, -- Vampiric Blood
-	-- DRUID
-	[spellName[22812]] = true, -- Barkskin
-	[spellName[61336]] = true, -- Survival Instincts
-	-- HUNTER
-	[spellName[19263]] = true, -- Deterrence
-	[spellName[5384]] = true, -- Feign Death
-	[spellName[63087]] = true, -- Glyph of Raptor Strike
-	-- MAGE
-	[spellName[45438]] = true, -- Ice Block
-	-- PALADIN
-	[spellName[498]] = true, -- Divine Protection
-	[spellName[642]] = true, -- Divine Shield
-	[spellName[1022]] = true, -- Hand of Protection
-	[spellName[1044]] = true, -- Hand of Freedom
-	[spellName[1038]] = true, -- Hand of Salvation
-	[spellName[6940]] = true, -- Hand of Sacrifice
---	[spellName[19752]] = true, -- Divine Intervention
-	--PRIEST
-	[spellName[47585]] = true, -- Dispersion
-	[spellName[33206]] = true, -- Pain Suppression
-	[spellName[47788]] = true, -- Guardian Spirit
-	[spellName[27827]] = true, -- Spirit of Redemption
-	-- ROGUE
-	[spellName[31224]] = true, -- Cloak of Shadows
-	[spellName[5277]] = true, -- Evasion
-	-- SHAMAN
-	[spellName[30823]] = true, -- Shamanistic Rage
-	-- WARRIOR
-	[spellName[871]] = true, -- Shield Wall
-	[spellName[2565]] = true, -- Shield Block
-	[spellName[12975]] = true, -- Last Stand
-	[spellName[23920]] = true, -- Spell Reflection
+	-- Death Knight
+	[spellName[55233]] = true,	-- Vampiric Blood
+	[spellName[48707]] = true,	-- Anti-Magic Shell
+	[spellName[48792]] = true,	-- Icebound Fortitude
+	-- Druid
+	[spellName[22812]] = true,	-- Barkskin
+	[spellName[102342]] = true,	-- Ironbark
+	[spellName[61336]] = true,	-- Survival Instincts
+	[spellName[106922]] = true,	-- Might of Ursoc
+	-- Hunter
+	[spellName[19263]] = true,	-- Deterrence
+	[spellName[5384]] = true,	-- Feign Death
+	-- Mage
+	[spellName[45438]] = true,	-- Ice Block
+	-- Monk
+	[spellName[116849]] = true,	-- Life Cocoon
+	[spellName[122783]] = true,	-- Diffuse Magic
+	[spellName[120954]] = true,	-- Fortifying Brew
+	-- Paladin
+	[spellName[642]] = true,	-- Divine Shield
+	[spellName[498]] = true,	-- Divine Protection
+	[spellName[31821]] = true,	-- Devotion Aura
+	[spellName[1022]] = true,	-- Hand of Protection
+	[spellName[6940]] = true,	-- Hand of Sacrifice
+	[spellName[114039]] = true,	-- Hand of Purity
+	-- Priest
+	[spellName[47585]] = true,	-- Dispersion
+	[spellName[33206]] = true,	-- Pain Suppression
+	[spellName[47788]] = true,	-- Guardian Spirit
+	[spellName[27827]] = true,	-- Spirit of Redemption
+	-- Rogue
+	[spellName[31224]] = true,	-- Cloak of Shadows
+	[spellName[5277]] = true,	-- Evasion
+	[spellName[1966]] = true,	-- Feint
+	-- Shaman
+	[spellName[108271]] = true,	-- Astral Shift
+	[spellName[30823]] = true,	-- Shamanistic Rage
+	-- Warlock
+	[spellName[110913]] = true,	-- Dark Bargain
+	[spellName[104773]] = true,	-- Unending Resolve
+	-- Warrior
+	[spellName[871]] = true,	-- Shield Wall
+	[spellName[12975]] = true,	-- Last Stand
+	[spellName[97463]] = true,	-- Rallying Cry
 }
 
 local deathData = {}
@@ -102,9 +110,9 @@ local fmtDamage = function(entry)
 	local amount, overkill = entry[4], entry[5]
 	local resisted, blocked, absorbed = entry[6], entry[7], entry[8]
 	local critical, glancing, crushing = entry[9], entry[10], entry[11]
-	local text = string.format("%s#DT#%s:%i:%i:%s:%s:%s:%s:%s", spellId, srcName or "Unknown", spellSchool, amount, overkill > 0 and overkill or "", resisted or "", blocked or "", absorbed or "", critical and "!" or glancing and "v" or crushing and "^" or "")
+	local text = string.format("%s#DT#%s:%i:%i:%s:%s:%s:%s:%s", spellId, srcName or UNKNOWN, spellSchool, amount, overkill > 0 and overkill or "", resisted or "", blocked or "", absorbed or "", critical and "!" or glancing and "v" or crushing and "^" or "")
 	if overkill > 0 then
-		return text, spellId, srcName or "Unknown", spellSchool, amount
+		return text, spellId, srcName or UNKNOWN, spellSchool, amount
 	end
 	return text
 end
@@ -112,7 +120,7 @@ local fmtMiss = function(entry)
 	local srcName = entry[1]
 	local spellId, spellSchool = entry[2], entry[3]
 	local missType, amountMissed = entry[4], entry[5]
-	return string.format("%i#DM#%s:%i:%s:%s", spellId, srcName or "Unknown", spellSchool, missType, amountMissed or "")
+	return string.format("%i#DM#%s:%i:%s:%s", spellId, srcName or UNKNOWN, spellSchool, missType, amountMissed or "")
 end
 local fmtHealing = function(entry)
 	local srcName = entry[1]
@@ -136,7 +144,7 @@ local function unitDied(timestamp, playerID, playerName)
 	local _, set = addon:GetSets()
 	if not set then return end
 	set.changed = true
-	
+
 	local deathlog = {
 		time = timestamp,
 	}
@@ -162,7 +170,7 @@ local function unitDied(timestamp, playerID, playerName)
 		tinsert(set.deathlog, deathlog)
 		set.deathlog.total = set.deathlog.total + 1
 	else
-		set.deathlog = { deathlog, total=1 }
+		set.deathlog = {deathlog, total=1}
 	end
 end
 local function unitRezzed(timestamp, playerID, playerName, spellId, rezzerName)
@@ -171,7 +179,7 @@ local function unitRezzed(timestamp, playerID, playerName, spellId, rezzerName)
 	local _, set = addon:GetSets()
 	if not set then return end
 	set.changed = true
-	
+
 	local deathlog = {
 		[0] = string.format("%s#%s#REZZ#%i:%s", playerName, class, spellId, rezzerName),
 		time = timestamp,
@@ -180,7 +188,7 @@ local function unitRezzed(timestamp, playerID, playerName, spellId, rezzerName)
 		tinsert(set.deathlog, deathlog)
 		set.deathlog.total = set.deathlog.total + 1
 	else
-		set.deathlog = { deathlog, total=1 }
+		set.deathlog = {deathlog, total=1}
 	end
 	clearEvts(playerID)
 end
@@ -203,10 +211,6 @@ local addDeathlogEvent = function(playerID, playerName, fmtFunc, timestamp, ...)
 		dd.last = dd.last + 1
 	end
 	dd[dd.last] = entry
-	-- hack for DK "Shadow of Death" ghouling
-	if fmtFunc == fmtDeBuff and entry[4] == "+" and entry[1] == 54223 then
-		unitDied(timestamp, playerID, playerName)
-	end
 end
 
 function addon:GUIDsUpdated()
@@ -217,28 +221,11 @@ function addon:GUIDsUpdated()
 	end
 end
 
----- IMPORTANT ABSORBS CATA CHANGES
----- WORK
--- 17 Power Word: Shield
--- 47753 Divine Aegis
--- 86273 Illuminated Healing
--- 88063 Guarded by the Light
----- WORK DIFFERENT
--- 48707 Anti-Magic Shell
----- NOT WORK
--- 543 Mage Ward
--- 6229 Shadow Ward
--- 47788 Guardian Spirit
--- 62606 Savage Defense
--- 64411 Blessing of Ancient Kings (self)
--- 64413 Protection of Ancient Kings
-
 local NotGuessedAbsorb = {
-	[17] = 1, -- Power Word: Shield
-	[47753] = 1, -- Divine Aegis
-	[86273] = 1, -- Illuminated Healing
-	[88063] = 1, -- Guarded by the Light
-	[48707] = 2, -- Anti-Magic Shell
+	[17] = 1,		-- Power Word: Shield
+	[47753] = 1,	-- Divine Aegis
+	[86273] = 1,	-- Illuminated Healing
+	[48707] = 2,	-- Anti-Magic Shell
 }
 
 local function addSpellDetails(u, etype, spellID, amount)
@@ -252,17 +239,17 @@ local function addSpellDetails(u, etype, spellID, amount)
 	else
 		event.total = event.total+amount
 	end
-	
+
 	event.spell[spellID] = (event.spell[spellID] or 0) + amount
 end
 local function addTargetDetails(u, etype, targetName, amount)
-	if not targetName then targetName = "Unknown" end
+	if not targetName then targetName = UNKNOWN end
 	local t = u[etype].target
 	if not t then
 		t = {}
 		u[etype].target = t
 	end
-	
+
 	t[targetName] = (t[targetName] or 0) + amount
 end
 
@@ -270,7 +257,7 @@ local function updateTime(u, etype, timestamp)
 	local last = u[etype].last
 	u[etype].last = timestamp
 	if not last then return end
-	
+
 	local t = u[etype].time or 0
 	local gap = timestamp-last
 	if gap < 5 then
@@ -309,7 +296,7 @@ function collect.SPELL_DAMAGE(timestamp, srcGUID, srcName, srcFlags, dstGUID, ds
 	if dstFriend then
 		if srcFriend then
 			EVENT("ff", srcGUID, dstName, spellId, amount)
-		elseif srcGUID ~= "Environment" then
+		elseif srcGUID ~= ENVIRONMENT_SUBHEADER then
 			addon:EnterCombatEvent(timestamp, srcGUID, srcName)
 		end
 		EVENT("dt", dstGUID, srcName, spellId, amount)
@@ -327,10 +314,12 @@ collect.RANGE_DAMAGE = collect.SPELL_DAMAGE
 collect.DAMAGE_SPLIT = collect.SPELL_DAMAGE
 collect.DAMAGE_SHIELD = collect.SPELL_DAMAGE
 function collect.SWING_DAMAGE(timestamp, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing)
-	collect.SPELL_DAMAGE(timestamp, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, 6603, spellName[6603], 0x01, amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing)
+	collect.SPELL_DAMAGE(timestamp, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, 88163, spellName[88163], 0x01, amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing)
 end
 function collect.ENVIRONMENTAL_DAMAGE(timestamp, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, environmentalType, amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing)
-	collect.SPELL_DAMAGE(timestamp, "Environment", "Environment", srcFlags, dstGUID, dstName, dstFlags, environmentalType, environmentalType, 0x01, amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing)
+	local EnviromentType = string.upper(environmentalType)
+	local EnviromentTypes = _G["ACTION_ENVIRONMENTAL_DAMAGE_"..EnviromentType]
+	collect.SPELL_DAMAGE(timestamp, ENVIRONMENT_SUBHEADER, ENVIRONMENT_SUBHEADER, srcFlags, dstGUID, dstName, dstFlags, EnviromentTypes, EnviromentTypes, 0x01, amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing)
 end
 
 function collect.SPELL_MISSED(timestamp, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, spellId, spellName, spellSchool, missType, amountMissed)
@@ -345,7 +334,7 @@ collect.SPELL_BUILDING_MISSED = collect.SPELL_MISSED
 collect.RANGE_MISSED = collect.SPELL_MISSED
 collect.DAMAGE_SHIELD_MISSED = collect.SPELL_MISSED
 function collect.SWING_MISSED(timestamp, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, missType, amountMissed)
-	collect.SPELL_MISSED(timestamp, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, 6603, spellName[6603], 0x01, missType, amountMissed)
+	collect.SPELL_MISSED(timestamp, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, 88163, spellName[88163], 0x01, missType, amountMissed)
 end
 
 function collect.SPELL_HEAL(timestamp, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, spellId, spellName, spellSchool, amount, overhealing, absorbed, critical)
@@ -370,6 +359,7 @@ function collect.SPELL_DISPEL(timestamp, srcGUID, srcName, srcFlags, dstGUID, ds
 	end
 end
 collect.SPELL_PERIODIC_DISPEL = collect.SPELL_DISPEL
+collect.SPELL_STOLEN = collect.SPELL_DISPEL
 
 function collect.SPELL_INTERRUPT(timestamp, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, spellId, spellName, spellSchool, extraSpellID, extraSpellName, extraSchool)
 	if addon.guidToClass[srcGUID] then
@@ -456,12 +446,13 @@ function collect:RemoveUnneededEvents()
 	if not addon.ids.dp then
 		collect.SPELL_DISPEL = nil
 		collect.SPELL_PERIODIC_DISPEL = nil
+		collect.SPELL_STOLEN = nil
 	end
-	
+
 	if not addon.ids.ir then
 		collect.SPELL_INTERRUPT = nil
 	end
-	
+
 	if not addon.ids.pg then
 		collect.SPELL_ENERGIZE = nil
 		collect.SPELL_PERIODIC_ENERGIZE = nil
