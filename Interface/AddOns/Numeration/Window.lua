@@ -261,7 +261,7 @@ end
 
 local SetIcon = function(f, icon)
 	if icon then
-		f:SetWidth(s.width-s.lineheight-4)
+		f:SetWidth(s.width-s.lineheight-2)
 		f.icon:SetTexture(icon)
 		f.icon:Show()
 	else

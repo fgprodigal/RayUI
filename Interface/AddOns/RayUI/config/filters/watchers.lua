@@ -454,7 +454,7 @@ R["Watcher"] = {
                 --勝利衝擊
                 { spellID = 34428, unitId = "player", caster = "player", filter = "BUFF" },
                 --盾牌格擋
-                { spellID = 2565, unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 132404, unitId = "player", caster = "player", filter = "BUFF" },
                 --盾墻
                 { spellID = 871, unitId = "player", caster = "player", filter = "BUFF" },
                 --狂怒恢復
@@ -463,6 +463,8 @@ R["Watcher"] = {
                 { spellID = 12328, unitId = "player", caster = "player", filter = "BUFF" },
                 --绞肉机
                 { spellID = 85739, unitId = "player", caster = "player", filter = "BUFF" },
+                --血腥體驗
+                { spellID = 125831, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -1182,6 +1184,8 @@ R["Watcher"] = {
 				{ spellID = 116740, unitId = "player", caster = "player", filter = "BUFF" },
 				--乾坤挪移
 				{ spellID = 125174, unitId = "player", caster = "player", filter = "BUFF" },
+				--蛟龍之誠
+				{ spellID = 127722, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -1236,6 +1240,10 @@ R["Watcher"] = {
 				{ spellID = 115315, filter = "CD" },
 				-- 移傷氣勁
 				{ spellID = 115213, filter = "CD" },
+				-- 氣繭護體
+				{ spellID = 116849, filter = "CD" },
+				-- 五氣歸元
+				{ spellID = 115310, filter = "CD" },
 
                 -- 物品
 				-- 手套
