@@ -71,7 +71,7 @@ R["Watcher"] = {
                 --樹皮術
                 { spellID = 22812, unitId = "player", caster = "player", filter = "BUFF" },
                 --狂暴
-                { spellID = 50334, unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 106951, unitId = "player", caster = "player", filter = "BUFF" },
                 --狂暴恢復
                 { spellID = 22842, unitId = "player", caster = "player", filter = "BUFF" },
                 --猛獸迅捷
@@ -740,6 +740,8 @@ R["Watcher"] = {
                 { spellID = 81292,  unitId = "player", caster = "player", filter = "BUFF" },
                 --命運無常
                 { spellID = 123254,  unitId = "player", caster = "player", filter = "BUFF" },
+                --天使之壁
+                { spellID = 114214,  unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",

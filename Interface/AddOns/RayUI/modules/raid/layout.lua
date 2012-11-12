@@ -727,8 +727,7 @@ function RA:SpawnHeader(name, group, layout)
 	local visibility = "custom [@raid16,noexists] hide;show"
 
 	if layout == 15 then
-		width = width * 1.3
-		height = height * 1.3
+		width, height = RA.db.bigwidth, RA.db.bigheight
 		visibility = "custom [@raid16,exists] hide;show"
 	end
 
@@ -779,9 +778,14 @@ function RA:SpawnHeader(name, group, layout)
     "columnSpacing", RA.db.spacing,
     "columnAnchorPoint", growth)
 
-    RegisterAttributeDriver(header, "state-visibility", "show")	
-    header:SetAttribute("minHeight", R:Scale(height)*5 + R:Scale(RA.db.spacing)*4)
-    header:SetAttribute("minWidth", R:Scale(width))
+    RegisterAttributeDriver(header, "state-visibility", "show")
+	if RA.db.horizontal then
+		header:SetAttribute("minHeight", R:Scale(height))
+		header:SetAttribute("minWidth", R:Scale(width)*5 + R:Scale(RA.db.spacing)*4)
+	else
+		header:SetAttribute("minHeight", R:Scale(height)*5 + R:Scale(RA.db.spacing)*4)
+		header:SetAttribute("minWidth", R:Scale(width))
+	end
     RegisterAttributeDriver(header, "state-visibility", "hide")	
 
 	header:RegisterEvent("PLAYER_ENTERING_WORLD")

@@ -262,7 +262,6 @@ local function SkinDBM()
 		self:CreateShadow("Background")
     end)
 
-
 	local RaidNotice_AddMessage_ = RaidNotice_AddMessage
 	RaidNotice_AddMessage = function(noticeFrame, textString, colorInfo)
 		if textString:find("|T") then
@@ -296,3 +295,21 @@ local function SkinDBM()
 end
 
 S:RegisterSkin("DBM-Core", SkinDBM)
+
+local function SkinGUI()
+	DBM_GUI_OptionsFrame:HookScript("OnShow", function()
+		DBM_GUI_OptionsFrame:StripTextures()
+		DBM_GUI_OptionsFrameBossMods:StripTextures()
+		DBM_GUI_OptionsFrameDBMOptions:StripTextures()
+		S:SetBD(DBM_GUI_OptionsFrame)
+		S:CreateBD(DBM_GUI_OptionsFrameBossMods)
+		S:CreateBD(DBM_GUI_OptionsFrameDBMOptions)
+		S:CreateBD(DBM_GUI_OptionsFramePanelContainer)
+	end)
+	-- U.SkinTab(DBM_GUI_OptionsFrameTab1)
+	-- U.SkinTab(DBM_GUI_OptionsFrameTab2)
+	S:Reskin(DBM_GUI_OptionsFrameOkay)
+	S:ReskinScroll(DBM_GUI_OptionsFramePanelContainerFOVScrollBar)
+end
+
+S:RegisterSkin("DBM-GUI", SkinGUI)

@@ -82,7 +82,7 @@ local function CreatePopup()
 	lock:SetScript("OnClick", function(self)
 		R:ToggleConfigMode(true)
 		AceConfig["Open"](AceConfig,"RayUI") 
-		selectedValue = "ALL"
+		selectedValue = "GENERAL"
 		UIDropDownMenu_SetSelectedValue(RayUIMoverPopupWindowDropDown, selectedValue)
 	end)
 

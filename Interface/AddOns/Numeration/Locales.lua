@@ -49,7 +49,7 @@ elseif GetLocale() == "zhTW" then
 		dmg_take_tar = "傷害承受: 目標",
 		dmg_take_abil = "傷害承受: 技能",
 		friend_fire = "隊友誤傷",
-		heal_take_abil = "治療承受: 技能",
+		heal_take_abil = "受到治療: 技能",
 		overheal = "過量治療",
 		death_log = "死亡記錄",
 		tar = "目標",

@@ -76,22 +76,22 @@ n.types = {
 		id2 = "ga",
 		c = {.25, .5, .85},
 	},
-	-- {
-		-- name = l.heal_take_abil,
-		-- id = "ht",
-		-- view = "Spells",
-		-- c = {.25, .5, .85},
-	-- },
-	-- {
-		-- name = SHOW_COMBAT_HEALING,
-		-- id = "hd",
-		-- c = {.25, .5, .85},
-	-- },
-	-- {
-		-- name = COMBAT_TEXT_ABSORB,
-		-- id = "ga",
-		-- c = {.25, .5, .85},
-	-- },
+	{
+		name = l.heal_take_abil,
+		id = "ht",
+		view = "Spells",
+		c = {.25, .5, .85},
+	},
+	{
+		name = SHOW_COMBAT_HEALING,
+		id = "hd",
+		c = {.25, .5, .85},
+	},
+	{
+		name = COMBAT_TEXT_ABSORB,
+		id = "ga",
+		c = {.25, .5, .85},
+	},
 	{
 		name = l.overheal,
 		id = "oh",

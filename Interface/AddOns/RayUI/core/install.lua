@@ -50,17 +50,44 @@ end
 function R:SetLayout(layout)
 	if not R.db.movers then R.db.movers = {} end
 	if layout == "healer" then
-
+		R:ResetMovers()
+		R.db.movers.RayUF_playerMover = "BOTTOMRIGHTRayUF_ParentBOTTOM-190390"
+		R.db.movers.RayUF_targetMover = "BOTTOMLEFTRayUF_ParentBOTTOM190390"
+		R.db.movers.RayUF_petMover = "TOPLEFTRayUF_playerMoverBOTTOMLEFT0-60"
+		R.db.movers.RayUFRaid15_1Mover = "BOTTOMUIParentBOTTOM0180"
+		R.db.movers.RayUFRaid15_2Mover = "BOTTOMRayUFRaid15_1MoverTOP0"..R.db.Raid.spacing
+		R.db.movers.RayUFRaid15_3Mover = "BOTTOMRayUFRaid15_2MoverTOP0"..R.db.Raid.spacing
+		R.db.movers.RayUFRaid25_1Mover = "BOTTOMUIParentBOTTOM0150"
+		R.db.movers.RayUFRaid25_2Mover = "BOTTOMRayUFRaid25_1MoverTOP0"..R.db.Raid.spacing
+		R.db.movers.RayUFRaid25_3Mover = "BOTTOMRayUFRaid25_2MoverTOP0"..R.db.Raid.spacing
+		R.db.movers.RayUFRaid25_4Mover = "BOTTOMRayUFRaid25_3MoverTOP0"..R.db.Raid.spacing
+		R.db.movers.RayUFRaid25_5Mover = "BOTTOMRayUFRaid25_4MoverTOP0"..R.db.Raid.spacing
+		R.db.movers.RayUFRaid40_6Mover = "BOTTOMRayUFRaid25_5MoverTOP0"..R.db.Raid.spacing
+		R.db.movers.RayUFRaid40_7Mover = "BOTTOMRayUFRaid40_6MoverTOP0"..R.db.Raid.spacing
+		R.db.movers.RayUFRaid40_8Mover = "BOTTOMRayUFRaid40_7MoverTOP0"..R.db.Raid.spacing
+		R.db.movers.PlayerCastBarMover = "BOTTOMUIParentBOTTOM0130"
+		R.db.movers.VengeanceBarMover = "BOTTOMUIParentBOTTOM0140"
+		R.db.movers.ActionBar1Mover = "BOTTOMUIParentBOTTOM"..(-3*R.db.ActionBar.buttonsize-3*R.db.ActionBar.buttonspacing).."50"
+		R.db.movers.ActionBar5Mover = "TOPRIGHTActionBar4MoverTOPLEFT"..-R.db.ActionBar.buttonspacing.."0"
+		R.db.movers.PetBarMover = "BOTTOMLEFTActionBar2MoverBOTTOMRIGHT"..R.db.ActionBar.buttonspacing.."0"
+		R.db.movers.AltPowerBarMover = "BOTTOMRIGHTUIParentBOTTOMRIGHT-36085"
+		R.db.Raid.horizontal = true
+		StaticPopup_Show("CFG_RELOAD")
 	elseif layout == "dps" then
+		R:ResetMovers()
 		R.db.movers.ArenaHeaderMover = "TOPLEFTUIParentBOTTOM450460"
 		R.db.movers.BossHeaderMover = "TOPLEFTUIParentBOTTOM450460"
 		R.db.movers.RayUF_focusMover = "BOTTOMRIGHTRayUF_playerTOPLEFT-2050"
 		R.db.movers.RayUFRaid15_1Mover = "BOTTOMLEFTUIParentBOTTOMLEFT15235"
 		R.db.movers.RayUFRaid25_1Mover = "BOTTOMLEFTUIParentBOTTOMLEFT15235"
 		R.db.movers.RayUFRaid40_6Mover = "BOTTOMLEFTRayUFRaid25_1MoverTOPLEFT0"..R.db.Raid.spacing
-		R.db.movers.ActionBar5Mover = "TOPRIGHTActionBar4MoverTOPLEFT-"..R.db.ActionBar.buttonspacing.."0"
+		R.db.movers.ActionBar5Mover = "TOPRIGHTActionBar4MoverTOPLEFT"..-R.db.ActionBar.buttonspacing.."0"
+		R.db.Raid.horizontal = false
+		StaticPopup_Show("CFG_RELOAD")
 	elseif layout == "default" then
 		R:ResetMovers()
+		R.db.Raid.horizontal = false
+		StaticPopup_Show("CFG_RELOAD")
 	end
 	R:SetMoversPositions()
 	R:GetModule("ActionBar"):UpdatePosition(GetActionBarToggles())
@@ -122,8 +149,13 @@ function R:ChooseLayout()
 		f.Option3:StripTextures()
 		f.Option3:Size(120, 30)
 		f.Option3:Point("LEFT", f.Option1, "RIGHT", 30, 0)
-		f.Option3:SetText(L["治疗"]..L["(未完成)"])
-		f.Option3:SetEnabled(false)
+		f.Option3:SetText(L["治疗"])
+		f.Option3:SetScript("OnClick", function(self)
+			R.db.layoutchosen = true
+			R:SetLayout("healer")
+			ShowFinish(L["设置完成"], self:GetText())
+			f:Hide()
+		end)
 		S:Reskin(f.Option3)	
 	end
 	RayUILayoutChooser:Show()

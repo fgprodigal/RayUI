@@ -1149,20 +1149,36 @@ function UF:ConstructDruidResourceBar(frame)
 	ebar.Spark = sbar:CreateTexture(nil, "OVERLAY")
 	ebar.Spark:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
 	ebar.Spark:SetBlendMode("ADD")
-	ebar.Spark:SetAlpha(0.5)
-	ebar.Spark:SetHeight(20)
-	ebar.Spark:Point("LEFT", sbar:GetStatusBarTexture(), "LEFT", -15, 0)
+	ebar.Spark:SetAlpha(0.8)
+	ebar.Spark:SetHeight(26)
+	ebar.Spark:SetWidth(10)
+	ebar.Spark:SetPoint("CENTER", sbar:GetStatusBarTexture(), "LEFT", 0, 0)
 
-	ebar.Arrow = sbar:CreateTexture(nil, "OVERLAY")
-	ebar.Arrow:SetSize(8,8)
-	ebar.Arrow:Point("CENTER", sbar:GetStatusBarTexture(), "LEFT", 0, 0)
+	ebar.Text = sbar:CreateFontString(nil, "OVERLAY")
+	ebar.Text:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
+	ebar.Text:SetPoint("CENTER", sbar:GetStatusBarTexture(), "LEFT", 0, 1)
 
+	ebar.PostUpdatePower = self.UpdateEclipse
 	ebar.PostUnitAura = self.UpdateEclipse
 
 	return ebar
 end
 
 function UF:UpdateEclipse(unit)
+	local direction = GetEclipseDirection()
+	local power = UnitPower("player", SPELL_POWER_ECLIPSE)
+	power = power < 0 and -power or power
+
+	if direction == "sun" then
+		self.Text:SetText(power.. ">")
+		self.Text:SetTextColor(0,.4,1)
+	elseif direction == "moon" then
+		self.Text:SetText("<".. power)
+		self.Text:SetTextColor(1,.6,0)
+	else
+		self.Text:SetText("")
+	end
+
     if self.hasSolarEclipse then
         self.border:SetBackdropBorderColor(1, .6, 0)
         self.shadow:SetBackdropBorderColor(1, .6, 0)
@@ -1173,17 +1189,6 @@ function UF:UpdateEclipse(unit)
         self.border:SetBackdropBorderColor(0, 0, 0)
         self.shadow:SetBackdropBorderColor(0, 0, 0)
     end
-	local direction = GetEclipseDirection()
-	if direction == "sun" then
-		self.Arrow:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-right-active")
-		self.Spark:Hide()
-	elseif direction == "moon" then
-		self.Arrow:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-left-active")
-		self.Spark:Hide()
-	else
-		self.Arrow:SetTexture(nil)
-		self.Spark:Show()
-	end
 end
 
 function UF:UpdateHolyPower()
