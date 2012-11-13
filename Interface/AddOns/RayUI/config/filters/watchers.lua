@@ -1137,6 +1137,12 @@ R["Watcher"] = {
                 { spellID = 132120, unitId = "player", caster = "player", filter = "BUFF" },
                 --舒和之霧
                 { spellID = 115175, unitId = "player", caster = "player", filter = "BUFF" },
+				--酒仙小緩勁
+				{ spellID = 124275, unitId = "player", caster = "all", filter = "DEBUFF" },
+				--酒仙中緩勁
+				{ spellID = 124274, unitId = "player", caster = "all", filter = "DEBUFF" },
+				--酒仙大緩勁
+				{ spellID = 124273, unitId = "player", caster = "all", filter = "DEBUFF" },
 			},
             {
                 name = "目标buff&debuff",
@@ -1168,12 +1174,8 @@ R["Watcher"] = {
 				{ spellID = 120954, unitId = "player", caster = "player", filter = "BUFF" },
 				--醉拳
 				{ spellID = 115307, unitId = "player", caster = "player", filter = "BUFF" },
-				--酒仙小緩勁
-				{ spellID = 124275, unitId = "player", caster = "all", filter = "DEBUFF" },
-				--酒仙中緩勁
-				{ spellID = 124274, unitId = "player", caster = "all", filter = "DEBUFF" },
-				--酒仙大緩勁
-				{ spellID = 124273, unitId = "player", caster = "all", filter = "DEBUFF" },
+				--護身氣勁
+				{ spellID = 115295, unitId = "player", caster = "player", filter = "BUFF" },
 				--飄渺絕釀
 				{ spellID = 115308, unitId = "player", caster = "player", filter = "BUFF" },
 				--繳械傷害提升5%
