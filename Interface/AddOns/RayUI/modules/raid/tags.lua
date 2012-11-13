@@ -349,8 +349,8 @@ RA.classIndicators={
     },
     ["MONK"] = {
         ["TL"] = "",
-        ["TR"] = "",
-        ["BL"] = "[RayUIRaid:rm]",
+        ["TR"] = "[RayUIRaid:motw]",
+        ["BL"] = "",
         ["BR"] = "",
         ["Cen"] = "",
     },

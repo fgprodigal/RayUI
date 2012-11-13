@@ -72,6 +72,8 @@ P["CooldownFlash"]={
 	enable = true,
 }
 
+G["UnitFrames"]={}
+
 P["UnitFrames"]={
 	powerColorClass = true,
 	healthColorClass = false,
@@ -82,6 +84,7 @@ P["UnitFrames"]={
 	showArenaFrames = true,
 	separateEnergy = false,
 	vengeance = true,
+	aurabar = false,
 }
 
 G["Raid"] = {}

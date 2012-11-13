@@ -1294,10 +1294,10 @@ R["Watcher"] = {
                 { spellID = 104993, unitId = "player", caster = "player", filter = "BUFF" },
 
                 --藥水
-                --土靈護甲
-                { spellID = 79475, unitId = "player", caster = "player", filter = "BUFF" },
-                --火山藥水
-                { spellID = 79476, unitId = "player", caster = "player", filter = "BUFF" },
+                --玉蛟藥水
+                { spellID = 105702, unitId = "player", caster = "player", filter = "BUFF" },
+                --兔妖之咬
+                { spellID = 105697, unitId = "player", caster = "player", filter = "BUFF" },
 
                 --特殊buff
                 --偷天換日

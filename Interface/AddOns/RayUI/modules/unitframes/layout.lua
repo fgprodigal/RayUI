@@ -325,6 +325,12 @@ function UF:DPSLayout(frame, unit)
 		frame.Resting = Resting
 		frame.Resting:SetTexture("Interface\\AddOns\\RayUI\\media\\rested")
 		frame.Resting:SetVertexColor(0.8, 0.8, 0.8)
+
+		if UF.db.aurabar then
+            frame.AuraBars = self:Construct_AuraBarHeader(frame)
+            frame.AuraBars:SetPoint("BOTTOMLEFT", frame, "TOPLEFT", 0, 33)
+            frame.AuraBars:SetPoint("BOTTOMRIGHT", frame, "TOPRIGHT", 0, 33)
+        end
 	end
 
 	if unit == "target" then
@@ -469,6 +475,12 @@ function UF:DPSLayout(frame, unit)
 				if frame.otherBar:GetValue() == 0 then frame.otherBar:SetAlpha(0) else frame.otherBar:SetAlpha(1) end
 			end
 		}
+
+		if UF.db.aurabar then
+            frame.AuraBars = self:Construct_AuraBarHeader(frame)
+            frame.AuraBars:SetPoint("BOTTOMLEFT", frame, "TOPLEFT", 0, 33)
+            frame.AuraBars:SetPoint("BOTTOMRIGHT", frame, "TOPRIGHT", 0, 33)
+        end
 	end
 
 	if unit == "party" or unit == "focus" then

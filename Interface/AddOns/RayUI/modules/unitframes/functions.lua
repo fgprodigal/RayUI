@@ -546,7 +546,8 @@ function UF:PostUpdateHealth(unit, cur, max)
 				self:SetStatusBarColor(0.5, 0.5, 0.5, 1)
 				self.bg:SetVertexColor(0.5, 0.5, 0.5, 1)
 			else
-				self.bg:SetVertexColor(0.12, 0.12, 0.12, 1)
+				-- self.bg:SetVertexColor(0.12, 0.12, 0.12, 1)
+				self.bg:SetVertexColor(r*.25, g*.25, b*.25, 1)
 			end
 		end
 	end
@@ -1238,6 +1239,99 @@ function UF:UpdateShardBar(spec)
 			self[i]:SetWidth((200 - (maxBars - 1)*5)/maxBars)
 		end
 	end
+end
+
+function UF:AuraBarFilter(unit, name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellID)
+	if R.global.UnitFrames.InvalidSpells[spellID] then
+		return false
+	end
+	local returnValue = true
+	local returnValueChanged = false
+	local isPlayer, isFriend
+	local auraType
+	
+	if unitCaster == "player" or unitCaster == "vehicle" then isPlayer = true end
+	if UnitIsFriend("player", unit) then isFriend = true end
+	if isFriend then
+		auraType = "HELPFUL"
+	else
+		auraType = "HARMFUL"
+	end
+
+    if isPlayer then
+        returnValue = true
+    else
+        returnValue = false
+    end
+	
+    if shouldConsolidate == 1 then
+        returnValue = false
+    end
+
+    if (duration == 0 or not duration) then
+        returnValue = false
+    end
+	
+    if R.global["UnitFrames"]["aurafilters"]["Blacklist"][name] then
+        returnValue = false
+    end
+
+    if R.global["UnitFrames"]["aurafilters"]["Whitelist"][name] then
+        returnValue = true
+    end
+
+	return returnValue	
+end
+
+function UF:Construct_AuraBars()
+	local bar = self.statusBar
+
+    bar:Height(5)
+    bar:ClearAllPoints()
+    bar:SetPoint("BOTTOMLEFT")
+    bar:SetPoint("BOTTOMRIGHT")
+	bar:CreateShadow("Background")
+
+	bar:SetStatusBarColor(unpack(RayUF.colors.class[R.myclass]))
+
+    bar.spelltime:FontTemplate(R["media"].font, R["media"].fontsize, "OUTLINE")
+    bar.spellname:FontTemplate(R["media"].font, R["media"].fontsize, "OUTLINE")
+
+	bar.spellname:ClearAllPoints()
+	bar.spellname:SetPoint("BOTTOMLEFT", bar, "TOPLEFT", 2, 2)
+	bar.spellname:SetPoint("BOTTOMRIGHT", bar, "TOPRIGHT", -20, 2)
+
+	bar.spelltime:ClearAllPoints()
+	bar.spelltime:SetPoint("BOTTOMRIGHT", bar, "TOPRIGHT", 0, 2)
+
+	bar.iconHolder:CreateShadow("Background")
+	bar.icon:SetDrawLayer("OVERLAY")
+
+	bar.iconHolder:RegisterForClicks("RightButtonUp")
+	bar.iconHolder:SetScript("OnClick", function(self)
+		if not IsShiftKeyDown() then return end
+		local auraName = self:GetParent().aura.name
+		
+		if auraName then
+			R.global["UnitFrames"]["aurafilters"]["Blacklist"][auraName] = true
+		end
+	end)
+end
+
+function UF:Construct_AuraBarHeader(frame)
+	local auraBar = CreateFrame("Frame", nil, frame)
+    auraBar.PostCreateBar = UF.Construct_AuraBars
+	auraBar.gap = 4
+	auraBar.spacing = 4
+	auraBar.spark = true
+	auraBar.sort = true
+    auraBar.filter = UF.AuraBarFilter
+    auraBar.friendlyAuraType = "HELPFUL"
+    auraBar.enemyAuraType = "HARMFUL"
+    auraBar.auraBarTexture = R["media"].normal
+    auraBar.buffColor = RayUF.colors.class[R.myclass]
+	
+	return auraBar
 end
 
 local attributeBlacklist = {["showplayer"] = true, ["showraid"] = true, ["showparty"] = true, ["showsolo"] = true}

@@ -48,9 +48,9 @@ local function ShowFinish(text, subtext)
 end
 
 function R:SetLayout(layout)
-	if not R.db.movers then R.db.movers = {} end
 	if layout == "healer" then
 		R:ResetMovers()
+		R.db.movers = {}
 		R.db.movers.RayUF_playerMover = "BOTTOMRIGHTRayUF_ParentBOTTOM-190390"
 		R.db.movers.RayUF_targetMover = "BOTTOMLEFTRayUF_ParentBOTTOM190390"
 		R.db.movers.RayUF_petMover = "TOPLEFTRayUF_playerMoverBOTTOMLEFT0-60"
@@ -75,6 +75,7 @@ function R:SetLayout(layout)
 		StaticPopup_Show("CFG_RELOAD")
 	elseif layout == "dps" then
 		R:ResetMovers()
+		R.db.movers = {}
 		R.db.movers.ArenaHeaderMover = "TOPLEFTUIParentBOTTOM450460"
 		R.db.movers.BossHeaderMover = "TOPLEFTUIParentBOTTOM450460"
 		R.db.movers.RayUF_focusMover = "BOTTOMRIGHTRayUF_playerTOPLEFT-2050"

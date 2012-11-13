@@ -216,7 +216,8 @@ local function PostHealth(hp, unit)
 				hp:SetStatusBarColor(0.5, 0.5, 0.5, 1)
 				hp.bg:SetVertexColor(0.5, 0.5, 0.5, 1)
 			else
-				hp.bg:SetVertexColor(0.12, 0.12, 0.12, 1)
+				-- hp.bg:SetVertexColor(0.12, 0.12, 0.12, 1)
+				hp.bg:SetVertexColor(r*.25, g*.25, b*.25, 1)
 			end
 		end
 	end
