@@ -465,6 +465,10 @@ R["Watcher"] = {
                 { spellID = 85739, unitId = "player", caster = "player", filter = "BUFF" },
                 --血腥體驗
                 { spellID = 125831, unitId = "player", caster = "player", filter = "BUFF" },
+                --怒击
+                { spellID = 131116, unitId = "player", caster = "player", filter = "BUFF" },
+                --浴血奋战
+                { spellID = 12292, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
