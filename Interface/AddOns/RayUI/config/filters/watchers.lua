@@ -465,9 +465,9 @@ R["Watcher"] = {
                 { spellID = 85739, unitId = "player", caster = "player", filter = "BUFF" },
                 --血腥體驗
                 { spellID = 125831, unitId = "player", caster = "player", filter = "BUFF" },
-                --怒击
+                --狂怒之擊!
                 { spellID = 131116, unitId = "player", caster = "player", filter = "BUFF" },
-                --浴血奋战
+                --浴血
                 { spellID = 12292, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {

@@ -39,20 +39,23 @@ local function SkinNumeration()
 	local _GetLine = window.GetLine
 	function window:GetLine(id)
 		local f = _GetLine(self, id)
-		f:SetWidth(Numeration.windowsettings.width-2)
+		f:SetWidth(Numeration.windowsettings.width)
 
-		if id ~= 0 then
+		if id == 0 then
+			f:ClearAllPoints()
+			f:SetPoint("TOPRIGHT", self.reset, "BOTTOMRIGHT", 1, -1)
+		else
 			local _, anchorTo = f:GetPoint()
 			f:Point("TOPRIGHT", anchorTo, "BOTTOMRIGHT", 0, -Numeration.windowsettings.linegap)
 		end
 
 		function f.SetIcon(f, icon)
 			if icon then
-				f:SetWidth(Numeration.windowsettings.width-Numeration.windowsettings.lineheight-2)
+				f:SetWidth(Numeration.windowsettings.width-Numeration.windowsettings.lineheight)
 				f.icon:SetTexture(icon)
 				f.icon:Show()
 			else
-				f:SetWidth(Numeration.windowsettings.width-2)
+				f:SetWidth(Numeration.windowsettings.width)
 				f.icon:Hide()
 			end
 		end

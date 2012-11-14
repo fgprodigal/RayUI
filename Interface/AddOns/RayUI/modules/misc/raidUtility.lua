@@ -21,7 +21,6 @@ local function LoadFunc()
 	local function DisbandRaidGroup()
 			if InCombatLockdown() then return end -- Prevent user error in combat
 
-			SendChatMessage(L["正在解散队伍.."], "RAID" or "PARTY")
 			if UnitInRaid("player") then
 				for i = 1, GetNumGroupMembers() do
 					local name, _, _, _, _, _, _, online = GetRaidRosterInfo(i)
@@ -31,7 +30,7 @@ local function LoadFunc()
 				end
 			else
 				for i = MAX_PARTY_MEMBERS, 1, -1 do
-					if GetPartyMember(i) then
+					if UnitExists("party"..i) then
 						UninviteUnit(UnitName("party"..i))
 					end
 				end
