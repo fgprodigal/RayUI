@@ -1135,7 +1135,6 @@ R["Watcher"] = {
 				--虎眼絕釀
 				{ spellID = 125195, unitId = "player", caster = "player", filter = "BUFF" },
                 --回生迷霧
-                { spellID = 119607, unitId = "player", caster = "player", filter = "BUFF" },  
                 { spellID = 119611, unitId = "player", caster = "player", filter = "BUFF" },
                 --迷霧繚繞
                 { spellID = 132120, unitId = "player", caster = "player", filter = "BUFF" },
@@ -1155,7 +1154,6 @@ R["Watcher"] = {
                 size = 28,
 
                 --回生迷霧
-                { spellID = 119607, unitId = "target", caster = "player", filter = "BUFF" },  
                 { spellID = 119611, unitId = "target", caster = "player", filter = "BUFF" },
                 --迷霧繚繞
                 { spellID = 132120, unitId = "target", caster = "player", filter = "BUFF" },

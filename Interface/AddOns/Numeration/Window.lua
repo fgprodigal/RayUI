@@ -1,9 +1,6 @@
-local R, L, P, G = unpack(RayUI)
-local LSM = LibStub("LibSharedMedia-3.0")
 local addon = select(2, ...)
 local l = addon.locale
 local window = CreateFrame("Frame", "NumerationFrame", UIParent)
-window:CreateShadow("Background")
 addon.window = window
 
 local lines = {}
@@ -12,9 +9,9 @@ local noop = function() end
 local backAction = noop
 local reportAction = noop
 local backdrop = {
-	bgFile = LSM:Fetch("statusbar", G["media"].blank),
+	bgFile = [[Interface\ChatFrame\ChatFrameBackground]],
 	edgeFile = "", tile = true, tileSize = 16, edgeSize = 0,
-	insets = { left = 0, right = 0, top = 0, bottom = 0 }
+	insets = {left = 0, right = 0, top = 0, bottom = 0}
 }
 local clickFunction = function(self, btn)
 	if btn == "LeftButton" then
@@ -87,7 +84,7 @@ function window:OnInitialize()
 	s = addon.windowsettings
 	self.maxlines = s.maxlines
 	self:SetWidth(s.width)
-	self:SetHeight(3+s.titleheight+s.maxlines*(s.lineheight+R:Scale(s.linegap)) - R:Scale(s.linegap))
+	self:SetHeight(3+s.titleheight+s.maxlines*(s.lineheight+s.linegap))
 
 	self:SetClampedToScreen(true)
 	self:EnableMouse(true)
@@ -150,11 +147,7 @@ function window:OnInitialize()
 	reset.text:SetFont(s.linefont, s.linefontsize, s.linefontstyle)
 	reset.text:SetShadowOffset(s.fontshadow and 1 or 0, s.fontshadow and -1 or 0)
 	reset.text:SetPoint("CENTER", 1, 0)
-	-- reset.text:SetText(">")
-	local tex = reset:CreateTexture(nil, "ARTWORK")
-	tex:Size(8, 8)
-	tex:SetPoint("CENTER")
-	tex:SetTexture("Interface\\AddOns\\Numeration\\arrow-right-active")
+	reset.text:SetText(">")
 
 	local segment = CreateFrame("Button", nil, self)
 	self.segment = segment
@@ -196,13 +189,13 @@ function window:OnInitialize()
 
 	local font = self:CreateFontString(nil, "ARTWORK")
 	self.titletext = font
-	font:SetJustifyH("CENTER")
+	font:SetJustifyH("LEFT")
 	font:SetFont(s.titlefont, s.titlefontsize, s.titlefontstyle)
 	font:SetShadowOffset(s.fontshadow and 1 or 0, s.fontshadow and -1 or 0)
 	font:SetTextColor(s.titlefontcolor[1], s.titlefontcolor[2], s.titlefontcolor[3], 1)
 	font:SetHeight(s.titlefontsize)
 	font:SetPoint("LEFT", title, "LEFT", 4, 0)
-	font:SetPoint("RIGHT", reset, "LEFT", -4, 0)
+	font:SetPoint("RIGHT", segment, "LEFT", -1, 0)
 
 	self.detailAction = noop
 	self:SetScript("OnMouseDown", clickFunction)
@@ -261,11 +254,11 @@ end
 
 local SetIcon = function(f, icon)
 	if icon then
-		f:SetWidth(s.width-s.lineheight-2)
+		f:SetWidth(s.width-s.lineheight-4)
 		f.icon:SetTexture(icon)
 		f.icon:Show()
 	else
-		f:SetWidth(s.width-2)
+		f:SetWidth(s.width-4)
 		f.icon:Hide()
 	end
 end
@@ -312,12 +305,12 @@ function window:GetLine(id)
 	f:SetScript("OnLeave", onLeave)
 	f:SetStatusBarTexture(s.linetexture)
 	f:SetStatusBarColor(.6, .6, .6, 1)
-	f:SetWidth(s.width-2)
+	f:SetWidth(s.width-4)
 	f:SetHeight(s.lineheight)
 	if id == 0 then
-		f:SetPoint("TOPRIGHT", self.reset, "BOTTOMRIGHT", 0, -1)
+		f:SetPoint("TOPRIGHT", self.reset, "BOTTOMRIGHT", -1, -1)
 	else
-		f:Point("TOPRIGHT", lines[id-1], "BOTTOMRIGHT", 0, -s.linegap)
+		f:SetPoint("TOPRIGHT", lines[id-1], "BOTTOMRIGHT", 0, -s.linegap)
 	end
 
 	local icon = f:CreateTexture(nil, "OVERLAY")

@@ -152,6 +152,19 @@ function S:GetOptions()
 				},
 			},
 		},
+		numerationgroup = {
+			order = 13,
+			type = "group",
+			name = "MogIt",
+			guiInline = true,
+			args = {
+				numeration = {
+					order = 1,
+					name = L["启用"],
+					type = "toggle",
+				},
+			},
+		},
 	}
 	return options
 end

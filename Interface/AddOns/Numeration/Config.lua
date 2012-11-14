@@ -1,33 +1,31 @@
 local n = select(2, ...)
-local R, L, P, G = unpack(RayUI)
-local LSM = LibStub("LibSharedMedia-3.0")
 local l = n.locale
 
 -- window settings
 n.windowsettings = {
-	pos = { "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -15, 30 },
-	width = 220,
-	maxlines = 7,
-	backgroundalpha = 0,
+	pos = {"TOPLEFT", 4, -4},
+	width = 280,
+	maxlines = 9,
+	backgroundalpha = 0.6,
+	fontshadow = true,
 	scrollbar = true,
-	fontshadow = false,
 
 	titleheight = 16,
-	titlealpha = 0,
-	titlefont = LSM:Fetch("font", G["media"].font),
+	titlealpha = 0.9,
+	titlefont = [[Fonts\ARIALN.TTF]],
+	titlefontstyle = "NONE",
 	titlefontsize = 13,
-	titlefontcolor = {1, .82, 0},
-	titlefontstyle = "OUTLINE",
-	buttonhighlightcolor = {1, 1, 1},
+	titlefontcolor = {1, 1, 1},
+	buttonhighlightcolor = {1, .82, 0},
 
-	lineheight = 16,
-	linegap = 2,
+	lineheight = 14,
+	linegap = 1,
 	linealpha = 1,
-	linetexture = LSM:Fetch("statusbar", G["media"].normal),
-	linefont = LSM:Fetch("font", G["media"].font),
-	linefontsize = 12,
+	linetexture = [[Interface\Tooltips\UI-Tooltip-Background]],
+	linefont = [[Fonts\ARIALN.TTF]],
+	linefontstyle = "NONE",
+	linefontsize = 11,
 	linefontcolor = {1, 1, 1},
-	linefontstyle = "OUTLINE",
 }
 
 -- core settings
@@ -76,22 +74,22 @@ n.types = {
 		id2 = "ga",
 		c = {.25, .5, .85},
 	},
-	{
-		name = l.heal_take_abil,
-		id = "ht",
-		view = "Spells",
-		c = {.25, .5, .85},
-	},
-	{
-		name = SHOW_COMBAT_HEALING,
-		id = "hd",
-		c = {.25, .5, .85},
-	},
-	{
-		name = COMBAT_TEXT_ABSORB,
-		id = "ga",
-		c = {.25, .5, .85},
-	},
+	-- {
+		-- name = l.heal_take_abil,
+		-- id = "ht",
+		-- view = "Spells",
+		-- c = {.25, .5, .85},
+	-- },
+	-- {
+		-- name = SHOW_COMBAT_HEALING,
+		-- id = "hd",
+		-- c = {.25, .5, .85},
+	-- },
+	-- {
+		-- name = COMBAT_TEXT_ABSORB,
+		-- id = "ga",
+		-- c = {.25, .5, .85},
+	-- },
 	{
 		name = l.overheal,
 		id = "oh",

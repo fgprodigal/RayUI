@@ -477,7 +477,6 @@ function TT:OnTooltipSetUnit(tooltip)
     if UnitIsPlayer(unit) then
         local unitRace = UnitRace(unit)
         local unitClass, unitClassEn = UnitClass(unit)
-		local unitLevel = UnitLevel(unit)
         local guild, rank = GetGuildInfo(unit)
         local playerGuild = GetGuildInfo("player")
 		local unitSpec = GetSpecialization()

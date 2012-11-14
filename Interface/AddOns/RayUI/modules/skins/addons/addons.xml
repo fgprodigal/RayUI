@@ -9,5 +9,6 @@
 	<Script file="friendsmenuxp.lua"/>
 	<Script file="mogit.lua"/>
 	<Script file="nugrunning.lua"/>
+	<Script file="numeration.lua"/>
 	<Script file="skada.lua"/>
 </Ui>

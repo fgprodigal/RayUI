@@ -5,7 +5,6 @@
 ## Thanks: Shestak
 ## Version: 2.0.1
 ## OptionalDeps: !ClassColors
-## RequiredDeps: RayUI
 ## SavedVariablesPerCharacter: NumerationCharDB, NumerationCharOptions
 
 Locales.lua

@@ -52,11 +52,11 @@ local function SkinNugRunning()
 
 		f.timeText:SetJustifyH("RIGHT")
 		f.timeText:ClearAllPoints()
-		f.timeText:Point("RIGHT", -5, 0)
+		f.timeText:Point("RIGHT", -5, 1)
 
 		f.spellText:ClearAllPoints()
-		f.spellText:Point("LEFT", f.bar)
-		f.spellText:Point("RIGHT", f.bar)
+		f.spellText:Point("LEFT", f.bar, 0, 1)
+		f.spellText:Point("RIGHT", f.bar, 0, 1)
 		f.spellText:SetWidth(f.bar:GetWidth())
 	end
 
@@ -85,6 +85,59 @@ local function SkinNugRunning()
 			time:SetFormattedText("%.1f", s)
 		else
 			time:SetText(0)
+		end
+	end
+
+	local defaultColor = {1, 1, 0}
+	local visualstackwidth  = 10
+	local visualstacksmax  = 5
+	function TimerBar.SetCount(self,amount)
+		if not amount then return end
+		local stacks = self.visualstacks
+		if not stacks then
+			stacks = CreateFrame("FRAME", nil, self.bar)
+			S:CreateBD(stacks, 1)
+			stacks:Height(visualstackwidth+2)
+			stacks:Point("LEFT", 2, 0)
+			stacks.tex = {}
+			self.visualstacks = stacks
+		end
+		if amount > 1 and amount <= visualstacksmax then
+			local width = (visualstackwidth*amount)+(amount-1)+2
+			stacks:Width(width)
+			stacks:Show()
+			for i = 1, amount do
+				if not stacks.tex[i] then
+					local tex = stacks:CreateTexture(nil, "ARTWORK")
+					tex:SetTexture(R["media"].normal)
+					tex:Point("TOP", 0, -1)
+					tex:Point("BOTTOM", 0, 1)
+					if i == 1 then
+						tex:Point("RIGHT", -1, 0)
+					else
+						tex:Point("RIGHT", stacks.tex[i-1], "LEFT", -1, 0)
+					end
+					tex:SetWidth(visualstackwidth)
+					stacks.tex[i] = tex
+				end
+				local r,g,b = unpack(self.opts.stackcolor and self.opts.stackcolor[i] or defaultColor)
+				stacks.tex[i]:SetVertexColor(r,g,b)
+				stacks.tex[i]:Show()
+			end
+			-- Hide stack textures that are not needed
+			for i = amount+1, visualstacksmax do
+				if not stacks.tex[i] then break end
+				stacks.tex[i]:Hide()
+			end
+		else
+			stacks:Hide()
+		end
+		-- Handle text
+		if amount < 1 or amount < visualstacksmax then
+			self.stacktext:Hide()
+		else
+			self.stacktext:SetText(amount)
+			self.stacktext:Show()
 		end
 	end
 

@@ -193,7 +193,8 @@ HelpIDs = ( {
     ROGUE = { 36554 };
 	SHAMAN = { 331 }; -- Healing Wave (40yd) - Lvl 7
 	WARLOCK = { 5697 }; -- Unending Breath (30yd) - Lvl 16
-	-- WARRIOR = {};
+	WARRIOR = { 20707 }; -- Soulstone
+	MONK = { 115450 }; -- Detox
 } )[ Class ];
 
 HarmIDs = ( {
@@ -213,6 +214,7 @@ HarmIDs = ( {
 	SHAMAN = { 403 }; -- Lightning Bolt (30yd) - Starter
 	WARLOCK = { 686 }; -- Shadow Bolt (40yd) - Starter
 	WARRIOR = { 355 }; -- Taunt (30yd) - Lvl 12
+	MONK = { 115546 }; -- Provoke
 } )[ Class ];
 
 oUF:AddElement( "SpellRange", Update, Enable, Disable );

@@ -84,8 +84,8 @@ end
 local function abrNumber(self, num)
 	if num >= 1e6 then
 		return ("%.1fm"):format(num / 1e6)
-	-- elseif num >= 1e3 then
-		-- return ("%.1fk"):format(num / 1e3)
+	elseif num >= 1e3 then
+		return ("%.1fk"):format(num / 1e3)
 	else
 		return ("%i"):format(num)
 	end

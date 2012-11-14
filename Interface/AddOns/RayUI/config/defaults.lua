@@ -190,6 +190,7 @@ P["Skins"]={
 	bigwigs = true,
 	nugrunning = true,
 	mogit = true,
+	numeration = true,
 }
 
 P["Bags"]={
