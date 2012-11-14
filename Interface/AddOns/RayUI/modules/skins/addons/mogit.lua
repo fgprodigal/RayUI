@@ -43,6 +43,14 @@ local function SkinMogIt()
 
 		return f
 	end
+
+	local _CreateModelFrame = MogIt.CreateModelFrame
+	function MogIt:CreateModelFrame(parent)
+		local f = _CreateModelFrame(self, parent)
+		S:CreateBD(f.model, 0)
+
+		return f
+	end
 end
 
 S:RegisterSkin("MogIt", SkinMogIt)
