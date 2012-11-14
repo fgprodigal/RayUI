@@ -189,6 +189,7 @@ P["Skins"]={
 	atlasloot = true,
 	bigwigs = true,
 	nugrunning = true,
+	mogit = true,
 }
 
 P["Bags"]={

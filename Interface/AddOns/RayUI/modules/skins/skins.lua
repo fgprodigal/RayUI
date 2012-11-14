@@ -139,6 +139,19 @@ function S:GetOptions()
 				},
 			},
 		},
+		mogitgroup = {
+			order = 12,
+			type = "group",
+			name = "MogIt",
+			guiInline = true,
+			args = {
+				mogit = {
+					order = 1,
+					name = L["启用"],
+					type = "toggle",
+				},
+			},
+		},
 	}
 	return options
 end
