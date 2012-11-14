@@ -2,7 +2,7 @@
 local S = R:GetModule("Skins")
 
 local function SkinSkada()
-	if not S.db.skada or not IsAddOnLoaded("Skada") then return end
+	if not S.db.skada then return end
 
 	local Skada = Skada
 	local barSpacing = R:Scale(1)
