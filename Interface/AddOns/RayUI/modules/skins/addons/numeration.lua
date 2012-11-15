@@ -9,7 +9,7 @@ local function SkinNumeration()
 	local _OnInitialize = window.OnInitialize
 	function window:OnInitialize()
 		_OnInitialize(self)
-		self:SetHeight(3+Numeration.windowsettings.titleheight+Numeration.windowsettings.maxlines*(Numeration.windowsettings.lineheight+R:Scale(Numeration.windowsettings.linegap)) - R:Scale(Numeration.windowsettings.linegap))
+		self:Height(3+Numeration.windowsettings.titleheight+Numeration.windowsettings.maxlines*(Numeration.windowsettings.lineheight+R:Scale(Numeration.windowsettings.linegap)) - R:Scale(Numeration.windowsettings.linegap))
 		self:SetBackdrop(nil)
 		self:CreateShadow("Background")
 		-- self.title:Hide()
@@ -85,6 +85,7 @@ local function SkinNumeration()
 	Numeration.windowsettings.buttonhighlightcolor = {1, 1, 1}
 	Numeration.windowsettings.linetexture = R["media"].normal
 	Numeration.windowsettings.linefont = R["media"].font
+	Numeration.windowsettings.titlefont = R["media"].font
 	Numeration.windowsettings.linefontsize = R["media"].fontsize
 	Numeration.windowsettings.linegap = 2
 	Numeration.windowsettings.fontshadow = false
