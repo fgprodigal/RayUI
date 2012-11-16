@@ -297,7 +297,9 @@ end
 S:RegisterSkin("DBM-Core", SkinDBM)
 
 local function SkinGUI()
+    local skinned = false
 	DBM_GUI_OptionsFrame:HookScript("OnShow", function()
+        if skinned then return end
 		DBM_GUI_OptionsFrame:StripTextures()
 		DBM_GUI_OptionsFrameBossMods:StripTextures()
 		DBM_GUI_OptionsFrameDBMOptions:StripTextures()
@@ -305,6 +307,7 @@ local function SkinGUI()
 		S:CreateBD(DBM_GUI_OptionsFrameBossMods)
 		S:CreateBD(DBM_GUI_OptionsFrameDBMOptions)
 		S:CreateBD(DBM_GUI_OptionsFramePanelContainer)
+        skinned = true
 	end)
 	-- U.SkinTab(DBM_GUI_OptionsFrameTab1)
 	-- U.SkinTab(DBM_GUI_OptionsFrameTab2)
