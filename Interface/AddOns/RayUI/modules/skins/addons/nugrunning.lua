@@ -141,6 +141,7 @@ local function SkinNugRunning()
 		end
 	end
 
+	NRunDB_Global = NRunDB_Global or {}
 	NRunDB_Global.localNames = true
 end
 

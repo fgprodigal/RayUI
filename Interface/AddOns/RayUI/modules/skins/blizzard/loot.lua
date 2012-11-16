@@ -307,7 +307,7 @@ local function LoadSkin()
 				bu.styled = true
 			end
 
-			bu.icon.bg:SetVertexColor(bu.name:GetVertexColor())
+			-- bu.icon.bg:SetVertexColor(bu.name:GetVertexColor())
 		end
 	end)
 
