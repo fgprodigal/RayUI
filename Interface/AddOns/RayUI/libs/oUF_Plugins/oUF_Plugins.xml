@@ -2,6 +2,7 @@
 	<Script file="AuraBars.lua"/>
 	<Script file="AuraWatch.lua"/>
 	<Script file="Fader.lua"/>
+	<Script file="RaidDebuffs.lua"/>
 	<Script file="Experience.lua"/>
 	<Script file="Reputation.lua"/>
 	<Script file="Smooth.lua"/>

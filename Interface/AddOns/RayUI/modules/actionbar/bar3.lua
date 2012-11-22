@@ -24,7 +24,7 @@ function AB:CreateBar3()
 		end
 	end
 
-	RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui] hide; show")
+    RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
 
 	if AB.db.bar3mouseover then  
 		AB.db.bar3fade = false

@@ -1,9 +1,25 @@
-local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
+local R, L, P, G = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
 local RA = R:NewModule("Raid", "AceEvent-3.0")
+
+local _, ns = ...
 local oUF = RayUF or oUF
 
 RA.modName = L["团队"]
 
+local function RegisterDebuffs()
+    local _, instanceType = IsInInstance()
+    local zone = GetCurrentMapAreaID()
+    local ORD = ns.oUF_RaidDebuffs or oUF_RaidDebuffs
+    if ORD then
+        ORD:ResetDebuffData()
+
+        if instanceType == "party" or instanceType == "raid" then
+            if G.Raid.RaidDebuffs.instances[zone] then
+                ORD:RegisterDebuffs(G.Raid.RaidDebuffs.instances[zone])
+            end
+        end
+    end
+end
 function RA:GetOptions()
 	local options = {
 		size = {
@@ -64,7 +80,7 @@ function RA:GetOptions()
 					order = 9,
 					name = L["技能图标大小"],
 					type = "range",
-					min = 10, max = 30, step = 1,
+					min = 20, max = 40, step = 1,
 				},
 				indicatorsize = {
 					order = 10,
@@ -251,6 +267,12 @@ end
 
 function RA:Initialize()
 	self:SpawnRaid()
+    RegisterDebuffs()
+
+    local event = CreateFrame("Frame")
+    event:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+    event:RegisterEvent("PLAYER_ENTERING_WORLD")
+    event:SetScript("OnEvent", RegisterDebuffs)
 end
 
 function RA:Info()

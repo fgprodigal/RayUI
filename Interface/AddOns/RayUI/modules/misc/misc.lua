@@ -176,6 +176,53 @@ function M:GetOptions()
 				},
 			},
 		},
+		raidcdgroup = {
+			order = 14,
+			type = "group",
+			name = L["团队技能冷却"],
+			guiInline = true,
+			args = {
+				raidcd = {
+					order = 1,
+					name = L["启用"],
+					type = "toggle",
+                    set = function(info, enable)
+                        R.db.Misc[ info[#info] ] = enable
+                        if enable then
+                            M:EnableRaidCD()
+                        else
+                            M:DisableRaidCD()
+                        end
+                    end,
+				},
+				raidcdwidth = {
+					order = 2,
+					name = L["长度"],
+					type = "range",
+					min = 100, max = 300, step = 1,
+                    set = function(info, value)
+                        R.db.Misc[ info[#info] ] = value
+                        RaidCDAnchor:SetWidth(value + 24)
+                        RaidCDMover:SetWidth(value + 24)
+                    end,
+					disabled = function() return not M.db.raidcd end,
+				},
+				raidcdgrowth = {
+					order = 3,
+					name = L["增长方向"],
+					type = "select",
+					values = {
+						["UP"] = L["上"],
+						["DOWN"] = L["下"],
+					},
+                    set = function(info, value)
+                        R.db.Misc[ info[#info] ] = value
+                        M:UpdateRaidCDPositions()
+                    end,
+					disabled = function() return not M.db.raidcd end,
+				},
+			},
+		},
 	}
 	return options
 end

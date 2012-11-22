@@ -279,8 +279,7 @@ function S:Reskin(f, noGlow)
 			edgeFile = R["media"].glow,
 			edgeSize = R:Scale(4),
 		})
-		f.glow:Point("TOPLEFT", -4, 4)
-		f.glow:Point("BOTTOMRIGHT", 4, -4)
+        f.glow:SetOutside(f, 4, 4)
 		f.glow:SetBackdropBorderColor(r, g, b)
 		f.glow:SetAlpha(0)
 
@@ -431,10 +430,10 @@ end
 function S:ReskinInput(f, height, width)
 	if not f then return end
 	local frame = f:GetName()
-	_G[frame.."Left"]:Hide()
+    if _G[frame.."Left"] then _G[frame.."Left"]:Hide() end
+    if _G[frame.."Right"] then _G[frame.."Right"]:Hide() end
 	if _G[frame.."Middle"] then _G[frame.."Middle"]:Hide() end
 	if _G[frame.."Mid"] then _G[frame.."Mid"]:Hide() end
-	_G[frame.."Right"]:Hide()
 	S:CreateBD(f, 0)
 	S:CreateBackdropTexture(f)
 

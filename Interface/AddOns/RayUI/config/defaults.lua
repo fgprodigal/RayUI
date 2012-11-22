@@ -111,7 +111,7 @@ P["Raid"]={
     indicatorsize = 7,
     symbolsize = 11,
     leadersize = 12,
-    aurasize = 18,
+    aurasize = 20,
     deficit = false, --缺失生命
     perc = false, --百分比
     actual = false, --当前生命
@@ -160,6 +160,8 @@ P["ActionBar"]={
 	stancealpha = false,
 }
 
+G["Misc"] = {}
+
 P["Misc"]={
 	anounce = true,
 	auction = true,
@@ -174,8 +176,11 @@ P["Misc"]={
 		raidbuffreminderparty = false,
 		raidbuffreminderduration = true,
     autoAcceptInvite = true,
-    autoInvite = true,
-    autoInviteKeywords = "111 123",
+        autoInvite = true,
+        autoInviteKeywords = "111 123",
+    raidcd = false,
+        raidcdwidth = 170,
+        raidcdgrowth = "UP"
 }
 
 P["Skins"]={

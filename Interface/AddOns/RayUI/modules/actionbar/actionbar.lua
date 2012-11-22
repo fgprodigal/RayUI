@@ -346,7 +346,7 @@ function AB:Initialize()
 	self:CreateRangeDisplay()
 	self:EnableAutoHide()
 
-	self:SecureHook("ActionButton_ShowOverlayGlow", "UpdateOverlayGlow")
+	--self:SecureHook("ActionButton_ShowOverlayGlow", "UpdateOverlayGlow")
 	self:SecureHook("ActionButton_UpdateHotkeys", "UpdateHotkey")
 	self:SecureHook("ActionButton_Update", "Style")
 	self:SecureHook("ActionButton_UpdateFlyout", "StyleFlyout")
@@ -502,8 +502,9 @@ function AB:Style(button)
 
 	if Count then
 		Count:ClearAllPoints()
-		Count:SetPoint("BOTTOMRIGHT", 0, R:Scale(2))
-		Count:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
+		Count:Point("BOTTOMRIGHT", 2, 0)
+		--Count:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
+        Count:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
 	end
 
 	if FloatingBG then
@@ -514,12 +515,15 @@ function AB:Style(button)
 		if AB.db.macroname ~= true then
 			Btname:SetDrawLayer("HIGHLIGHT")
 			Btname:Width(50)
+            Btname:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
+            Btname:ClearAllPoints()
+            Btname:Point("BOTTOM", 0, -3)
 		end
 	end
 
 	if not button.shadow then
 		if not totem then
-			if not flyout then
+			if not flyout and not button.noResize then
 				button:SetWidth(AB.db.buttonsize)
 				button:SetHeight(AB.db.buttonsize)
 			end
@@ -535,16 +539,23 @@ function AB:Style(button)
 
 	if HotKey then
 		HotKey:ClearAllPoints()
-		HotKey:SetPoint("TOPRIGHT", 0, 0)
-		HotKey:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
-		HotKey:SetShadowColor(0, 0, 0, 0.3)
-		HotKey.ClearAllPoints = R.dummy
-		HotKey.SetPoint = R.dummy
+		--HotKey:SetPoint("TOPRIGHT", 0, 0)
+		HotKey:Point("TOP", 0, 5)
+        HotKey:SetJustifyH("CENTER")
+        HotKey:Width(AB.db.buttonsize + 10)
+		--HotKey:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
+        HotKey:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
 		if not AB.db.hotkeys == true then
 			HotKey:SetText("")
 			HotKey:Hide()
 			HotKey.Show = R.dummy
 		end
+	end
+
+	if button.style then
+		button.style:SetDrawLayer("BACKGROUND", -7)	
+        button.border:SetFrameLevel(button:GetFrameLevel())
+        button.shadow:SetFrameLevel(button:GetFrameLevel())
 	end
 
 	button:StyleButton(true)

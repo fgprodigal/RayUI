@@ -35,6 +35,6 @@ function AB:CreateOverrideBar()
 	OverrideActionBar.LeaveButton:StyleButton(true)
 	OverrideActionBar.LeaveButton:SetPushedTexture(nil)
 
-	RegisterStateDriver(bar, "visibility", "[petbattle] hide; [overridebar][vehicleui] show; hide")
-	RegisterStateDriver(OverrideActionBar, "visibility", "[overridebar][vehicleui] show; hide")
+    RegisterStateDriver(bar, "visibility", "[petbattle] hide; [overridebar][vehicleui][possessbar,@vehicle,exists] show; hide")
+    RegisterStateDriver(OverrideActionBar, "visibility", "[overridebar][vehicleui][possessbar,@vehicle,exists] show; hide")
 end

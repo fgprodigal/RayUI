@@ -1321,6 +1321,8 @@ R["Watcher"] = {
                 { spellID = 126577, unitId = "player", caster = "player", filter = "BUFF" },
                 --無垠星辰之瓶
                 { spellID = 126554, unitId = "player", caster = "player", filter = "BUFF" },
+                --秦璽的極化徽印
+                { spellID = 126588, unitId = "player", caster = "player", filter = "BUFF" },
                 
                 --工程
                 --神經突觸彈簧(敏捷)
@@ -1608,7 +1610,10 @@ R["Watcher"] = {
                 --風領主瑪爾加拉克
                 { spellID = 121885, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
 
-				--艾拉岡
+                --豐泉臺
+                --恐懼之煞
+                --無畏
+                { spellID = 118977, unitId = "player", caster = "all", filter = "BUFF", fuzzy = true },
 
                 --其他
                 --漏油

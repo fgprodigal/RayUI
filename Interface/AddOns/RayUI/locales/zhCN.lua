@@ -24,6 +24,7 @@ L["Debuff锚点"] = true
 L["武器附魔锚点"] = true
 L["施法条锚点"] = true
 L["小地图锚点"] = true
+L["团队冷却锚点"] = true
 
 L["ALL"] = "全部"
 L["GENERAL"] = "综合"
@@ -324,6 +325,7 @@ L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r的各种实用便利小功能."] = 
             L["当他人密语自动邀请关键字时会自动邀请他组队"] = true
         L["自动邀请关键字"] = true
             L["设置自动邀请的关键字，多个关键字用空格分割"] = true
+    L["团队技能冷却"] = true
 L["插件美化"] = true
 L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r插件美化模块."] = true
 	L["Skada"] = true

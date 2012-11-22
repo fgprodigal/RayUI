@@ -38,7 +38,6 @@ function AB:CreateVehicleExit()
 		UpdateTooltip(self)
 	end)
 	veb:SetScript("OnLeave", GameTooltip_Hide)
-	RegisterStateDriver(veb, "visibility", "[vehicleui] hide; [@vehicle,exists] show; hide")
-	--frame is visibile when no vehicle ui is visible
-	RegisterStateDriver(bar, "visibility", "[vehicleui] hide; show")
+    RegisterStateDriver(veb, "visibility", "[petbattle][overridebar][vehicleui][possessbar] hide; [@vehicle,exists] show; hide")
+    RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui][possessbar] hide; show")
 end

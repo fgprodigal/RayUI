@@ -60,6 +60,12 @@ local function SkinNumeration()
 			end
 		end
 
+        f:SetScript("OnEnter", function(self)
+            if not self.spellId then return end
+            GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
+            GameTooltip:SetHyperlink("spell:"..self.spellId)
+        end)
+
 		return f
 	end
 

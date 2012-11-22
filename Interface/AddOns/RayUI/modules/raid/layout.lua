@@ -118,24 +118,6 @@ local function updateThreat(self, event, unit)
     self.Threat:Show()
 end
 
-local function utf8sub(str, start, numChars) 
-    local currentIndex = start 
-    while numChars > 0 and currentIndex <= #str do 
-        local char = string.byte(str, currentIndex) 
-        if char >= 240 then 
-            currentIndex = currentIndex + 4 
-        elseif char >= 225 then 
-            currentIndex = currentIndex + 3 
-        elseif char >= 192 then 
-            currentIndex = currentIndex + 2 
-        else 
-            currentIndex = currentIndex + 1 
-        end 
-        numChars = numChars - 1 
-    end 
-    return str:sub(start, currentIndex - 1) 
-end 
-
 oUF.Tags.Methods["RayUFRaid:name"] = function(u, r)
     local name = UnitName(u)
 	local _, class = UnitClass(u)
@@ -612,11 +594,31 @@ local function style(self)
     self.ReadyCheck:SetSize(RA.db.leadersize + 4, RA.db.leadersize+ 4)
 
     -- Auras
-    local auras = CreateFrame("Frame", nil, self)
-    auras:SetSize(RA.db.aurasize, RA.db.aurasize)
-    auras:SetPoint("CENTER", self.Health)
-    auras.size = RA.db.aurasize
-    self.freebAuras = auras
+    --local auras = CreateFrame("Frame", nil, self)
+    --auras:SetSize(RA.db.aurasize, RA.db.aurasize)
+    --auras:SetPoint("CENTER", self.Health)
+    --auras.size = RA.db.aurasize
+    --self.freebAuras = auras
+	self.RaidDebuffs = CreateFrame("Frame", nil, self)
+	self.RaidDebuffs:SetFrameLevel(10)
+	self.RaidDebuffs:SetPoint("CENTER", self.Health)
+	self.RaidDebuffs:CreateShadow("Background")
+	self.RaidDebuffs:Size(RA.db.aurasize, RA.db.aurasize)
+	
+	self.RaidDebuffs.icon = self.RaidDebuffs:CreateTexture(nil, "OVERLAY")
+	self.RaidDebuffs.icon:SetTexCoord(.08, .92, .08, .92)
+	self.RaidDebuffs.icon:SetInside(nil, 1, 1)
+	
+	self.RaidDebuffs.count = self.RaidDebuffs:CreateFontString(nil, "OVERLAY")
+	self.RaidDebuffs.count:SetFont(R["media"].font, 12, "OUTLINE")
+	self.RaidDebuffs.count:SetJustifyH("RIGHT")
+	self.RaidDebuffs.count:SetPoint("BOTTOMRIGHT", 4, -2)
+	
+	self.RaidDebuffs.time = self.RaidDebuffs:CreateFontString(nil, "OVERLAY")
+	self.RaidDebuffs.time:SetFont(R["media"].font, 12, "OUTLINE")
+	self.RaidDebuffs.time:SetJustifyH("CENTER")
+	self.RaidDebuffs.time:SetPoint("CENTER", 1, 0)
+	self.RaidDebuffs.time:SetTextColor(1, .9, 0)
 
     local auraWatch = CreateFrame("Frame", nil, self)
     auraWatch:SetFrameLevel(self:GetFrameLevel() + 25)

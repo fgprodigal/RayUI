@@ -16,6 +16,7 @@
 	<Script file="mirror.lua"/>
 	<Script file="quests.lua"/>
 	<Script file="raidBuffReminder.lua"/>
+	<Script file="raidCD.lua"/>
 	<Script file="raidmarker.lua"/>
 	<Script file="raidUtility.lua"/>
 	<Script file="timerTracker.lua"/>

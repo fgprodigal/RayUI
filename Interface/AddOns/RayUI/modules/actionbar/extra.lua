@@ -10,16 +10,24 @@ function AB:CreateExtraButton()
 	ExtraActionBarFrame:ClearAllPoints()
 	ExtraActionBarFrame:SetPoint("CENTER", holder, "CENTER")
 	ExtraActionBarFrame.ignoreFramePositionManager  = true
-	-- UIPARENT_MANAGED_FRAME_POSITIONS.ExtraActionBarFrame = nil
-	-- UIPARENT_MANAGED_FRAME_POSITIONS.PlayerPowerBarAlt.extraActionBarFrame = nil
-	-- UIPARENT_MANAGED_FRAME_POSITIONS.CastingBarFrame.extraActionBarFrame = nil
-	ExtraActionButton1Cooldown:Point("TOPLEFT", 1, -1)
-	ExtraActionButton1Cooldown:Point("BOTTOMRIGHT", -1, 1)
-	ExtraActionButton1:StyleButton(true)
-
-	PlayerPowerBarAlt:ClearAllPoints()
-	PlayerPowerBarAlt:SetPoint("TOP", UIParent, "TOP", 0, -108)
-	PlayerPowerBarAlt.ignoreFramePositionManager = true
+	--ExtraActionButton1Cooldown:Point("TOPLEFT", 1, -1)
+	--ExtraActionButton1Cooldown:Point("BOTTOMRIGHT", -1, 1)
+	--ExtraActionButton1:StyleButton(true)
+	for i=1, ExtraActionBarFrame:GetNumChildren() do
+		if _G["ExtraActionButton"..i] then
+			_G["ExtraActionButton"..i].noResize = true
+			_G["ExtraActionButton"..i].pushed = true
+			_G["ExtraActionButton"..i].checked = true
+			
+			self:Style(_G["ExtraActionButton"..i])
+            _G["ExtraActionButton"..i]:StyleButton(true)
+			_G["ExtraActionButton"..i.."Icon"]:SetDrawLayer("ARTWORK")
+			local tex = _G["ExtraActionButton"..i]:CreateTexture(nil, "OVERLAY")
+			tex:SetTexture(0.9, 0.8, 0.1, 0.3)
+			tex:SetAllPoints()
+			_G["ExtraActionButton"..i]:SetCheckedTexture(tex)
+		end
+	end
 
 	R:CreateMover(holder, "BossButton", "BossButton", true, nil, "ALL,ACTIONBARS,RAID15,RAID25,RAID40")
 end
