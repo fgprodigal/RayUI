@@ -166,7 +166,7 @@ R["Watcher"] = {
                 { spellID = 124974, filter = "CD" },
                 --星穹大連線
                 { spellID = 112071, filter = "CD" },
-                
+
                 -- 物品
 				-- 手套
 				{slotID = 10, filter = "CD"},
@@ -312,7 +312,7 @@ R["Watcher"] = {
                 { spellID = 131894, filter = "CD" },
                 --山貓衝刺
                 { spellID = 120697, filter = "CD" },
-                
+
                 -- 物品
 				-- 手套
 				{slotID = 10, filter = "CD"},
@@ -415,7 +415,7 @@ R["Watcher"] = {
                 { spellID = 45438, filter = "CD" },
                 --冰霜之球
                 { spellID = 84714, filter = "CD" },
-                
+
                 -- 物品
 				-- 手套
 				{slotID = 10, filter = "CD"},
@@ -478,7 +478,7 @@ R["Watcher"] = {
 
                 --震盪波
                 { spellID = 46968, unitId = "target", caster = "all", filter = "DEBUFF" },
-                -- 斷筋
+                --斷筋
                 { spellID = 1715, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --雷霆一擊
                 { spellID = 6343, unitId = "target", caster = "player", filter = "DEBUFF" },
@@ -494,6 +494,24 @@ R["Watcher"] = {
                 { spellID = 48484, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --挫志咆哮（德魯伊）
                 { spellID = 99, unitId = "target", caster = "all", filter = "DEBUFF" },
+            },
+            {
+                name = "CD",
+                iconSide = "LEFT",
+                size = 28,
+                barWidth = 170,
+                direction = function() return R:IsDeveloper() and "RIGHT" or "DOWN" end,
+                mode = function() return R:IsDeveloper() and "ICON" or "BAR" end,
+                setpoint = positions.cd_icon,
+
+                --鲁莽
+                { spellID = 1719, filter = "CD" },
+                --颅骨战旗
+                { spellID = 114207, filter = "CD" },
+                --浴血奋战
+                { spellID = 12292, filter = "CD" },
+                --致命平静
+                { spellID = 85730, filter = "CD" },
             },
         },
         ["SHAMAN"] = {
@@ -603,7 +621,7 @@ R["Watcher"] = {
                 { spellID = 2894, filter = "CD" },
                 --土元素圖騰
                 { spellID = 2062, filter = "CD" },
-                
+
                 -- 物品
 				-- 手套
 				{slotID = 10, filter = "CD"},
@@ -748,7 +766,7 @@ R["Watcher"] = {
 
                 --真言术：盾
                 { spellID = 17, unitId = "target", caster = "all", filter = "BUFF" },
-                --虚弱灵魂       
+                --虚弱灵魂
                 { spellID = 6788, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --恢复
                 { spellID = 139, unitId = "target", caster = "player", filter = "BUFF" },
@@ -846,7 +864,7 @@ R["Watcher"] = {
                 { spellID = 19236, filter = "CD" },
                 --大天使
                 { spellID = 81700, filter = "CD" },
-                
+
                 -- 物品
 				-- 手套
 				{slotID = 10, filter = "CD"},
@@ -1095,7 +1113,7 @@ R["Watcher"] = {
                 { spellID = 121471, filter = "CD" },
                 --奧術之流
                 { spellID = 25046, filter = "CD" },
-                
+
                 -- 物品
 				-- 手套
 				{slotID = 10, filter = "CD"},
@@ -1139,7 +1157,7 @@ R["Watcher"] = {
                 { spellID = 49222, unitId = "player", caster = "player", filter = "BUFF" },
                 --冰霜之柱
                 { spellID = 51271, unitId = "player", caster = "player", filter = "BUFF" },
-                --血魄充能			
+                --血魄充能
                 { spellID = 114851, unitId = "player", caster = "player", filter = "BUFF" },
                 --寶寶能量
                 { spellID = 91342, unitId = "pet", caster = "player", filter = "BUFF" },
@@ -1323,7 +1341,7 @@ R["Watcher"] = {
                 { spellID = 126554, unitId = "player", caster = "player", filter = "BUFF" },
                 --秦璽的極化徽印
                 { spellID = 126588, unitId = "player", caster = "player", filter = "BUFF" },
-                
+
                 --工程
                 --神經突觸彈簧(敏捷)
                 { spellID = 96228, unitId = "player", caster = "player", filter = "BUFF" },
