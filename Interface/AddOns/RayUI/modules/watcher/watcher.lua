@@ -10,6 +10,9 @@ RW.modules = {}
 local defaults = {}
 local watcherPrototype = {}
 local _G, UnitBuff, UnitDebuff, CooldownFrame_SetTimer = _G, UnitBuff, UnitDebuff, CooldownFrame_SetTimer
+local BUFF_FLASH_TIME_ON = 0.75
+local BUFF_FLASH_TIME_OFF = 0.75
+local BUFF_MIN_ALPHA = 0.2
 
 function watcherPrototype:OnEnable()
 		if self.parent then
@@ -24,45 +27,37 @@ function watcherPrototype:OnDisable()
 	end
 end
 
-local StartFlash = function(self, duration)
-	if not self.anim then
-		self.anim = self:CreateAnimationGroup("Flash")
-
-		self.anim.fadein = self.anim:CreateAnimation("ALPHA", "FadeIn")
-		self.anim.fadein:SetChange(0.8)
-		self.anim.fadein:SetOrder(2)
-
-		self.anim.fadeout = self.anim:CreateAnimation("ALPHA", "FadeOut")
-		self.anim.fadeout:SetChange(-0.8)
-		self.anim.fadeout:SetOrder(1)
+function RW:UpdateAlpha(elapsed)
+	self.BuffFrameFlashTime = self.BuffFrameFlashTime - elapsed
+	if ( self.BuffFrameFlashTime < 0 ) then
+		local overtime = -self.BuffFrameFlashTime
+		if ( self.BuffFrameFlashState == 0 ) then
+			self.BuffFrameFlashState = 1
+			self.BuffFrameFlashTime = BUFF_FLASH_TIME_ON
+		else
+			self.BuffFrameFlashState = 0
+			self.BuffFrameFlashTime = BUFF_FLASH_TIME_OFF
+		end
+		if ( overtime < self.BuffFrameFlashTime ) then
+			self.BuffFrameFlashTime = self.BuffFrameFlashTime - overtime
+		end
 	end
 
-	self.anim.fadein:SetDuration(duration)
-	self.anim.fadeout:SetDuration(duration)
-	self.anim:Play()
-end
-
-local StopFlash = function(self)
-	if self.anim then
-		self.anim:Stop()
+	if ( self.BuffFrameFlashState == 1 ) then
+		self.BuffAlphaValue = (BUFF_FLASH_TIME_ON - self.BuffFrameFlashTime) / BUFF_FLASH_TIME_ON
+	else
+		self.BuffAlphaValue = self.BuffFrameFlashTime / BUFF_FLASH_TIME_ON
 	end
-    if self.cooldown then
-        self.cooldown:SetAlpha(1)
-    end
-	self:SetAlpha(1)
+	self.BuffAlphaValue = (self.BuffAlphaValue * (1 - BUFF_MIN_ALPHA)) + BUFF_MIN_ALPHA
 end
 
 local function Flash(self)
 	local time = self.start + self.duration - GetTime()
 
-	if time < 0 then
-		StopFlash(self)
-	end
-
-	if time < 5 then
-		StartFlash(self, .75)
+	if time >0 and time < 5 then
+		self:SetAlpha(RW.AlphaFrame.BuffAlphaValue)
 	else
-		StopFlash(self)
+		self:SetAlpha(1)
 	end
 end
 
@@ -399,6 +394,11 @@ function RW:Initialize()
 		end
 	end
 	wipe(R["Watcher"]["filters"])
+	self.AlphaFrame = CreateFrame("Frame")
+	self.AlphaFrame.BuffAlphaValue = 1
+	self.AlphaFrame.BuffFrameFlashState = 1
+	self.AlphaFrame.BuffFrameFlashTime = 0
+	self.AlphaFrame:SetScript("OnUpdate", self.UpdateAlpha)
 end
 
 function RW:NewWatcher(data)

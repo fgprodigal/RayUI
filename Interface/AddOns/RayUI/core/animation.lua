@@ -108,6 +108,59 @@ function R:Slide(frame, direction, length, speed)
 	frame:SetScript("OnUpdate",R.simple_move)
 end
 
+function R:SetUpAnimGroup(object, type, ...)
+	if not type then type = "Flash" end
+
+	if type == "Flash" then
+		object.anim = object:CreateAnimationGroup("Flash")
+		object.anim.fadein = object.anim:CreateAnimation("ALPHA", "FadeIn")
+		object.anim.fadein:SetChange(1)
+		object.anim.fadein:SetOrder(2)
+
+		object.anim.fadeout = object.anim:CreateAnimation("ALPHA", "FadeOut")
+		object.anim.fadeout:SetChange(-1)
+		object.anim.fadeout:SetOrder(1)
+	else
+		local x, y, duration, customName = ...
+		if not customName then
+			customName = "anim"
+		end
+		object[customName] = object:CreateAnimationGroup("Move_In")
+		object[customName].in1 = object[customName]:CreateAnimation("Translation")
+		object[customName].in1:SetDuration(0)
+		object[customName].in1:SetOrder(1)
+		object[customName].in2 = object[customName]:CreateAnimation("Translation")
+		object[customName].in2:SetDuration(duration)
+		object[customName].in2:SetOrder(2)
+		object[customName].in2:SetSmoothing("OUT")
+		object[customName].out1 = object:CreateAnimationGroup("Move_Out")
+		object[customName].out2 = object[customName].out1:CreateAnimation("Translation")
+		object[customName].out2:SetDuration(duration)
+		object[customName].out2:SetOrder(1)
+		object[customName].out2:SetSmoothing("IN")
+		object[customName].in1:SetOffset(R:Scale(x), R:Scale(y))
+		object[customName].in2:SetOffset(R:Scale(-x), R:Scale(-y))
+		object[customName].out2:SetOffset(R:Scale(x), R:Scale(y))
+		object[customName].out1:SetScript("OnFinished", function() object:Hide() end)
+	end
+end
+
+function R:Flash(object, duration)
+	if not object.anim then
+		R:SetUpAnimGroup(object, "Flash")
+	end
+
+	object.anim.fadein:SetDuration(duration)
+	object.anim.fadeout:SetDuration(duration)
+	object.anim:Play()
+end
+
+function R:StopFlash(object)
+	if object.anim then
+		object.anim:Finish()
+	end
+end
+
 local frameFadeManager = CreateFrame("FRAME")
 local FADEFRAMES = {}
 
@@ -123,7 +176,7 @@ function R:UIFrameFade_OnUpdate(elapsed)
 		end
 		fadeInfo.fadeTimer = fadeInfo.fadeTimer + elapsed
 
-		-- If the fadeTimer is less then the desired fade time then set the alpha otherwise hold the fade state, call the finished function, or just finish the fade 
+		-- If the fadeTimer is less then the desired fade time then set the alpha otherwise hold the fade state, call the finished function, or just finish the fade
 		if ( fadeInfo.fadeTimer < fadeInfo.timeToFade ) then
 			if ( fadeInfo.mode == "IN" ) then
 				frame:SetAlpha((fadeInfo.fadeTimer / fadeInfo.timeToFade) * (fadeInfo.endAlpha - fadeInfo.startAlpha) + fadeInfo.startAlpha)
@@ -144,10 +197,10 @@ function R:UIFrameFade_OnUpdate(elapsed)
 				end
 			end
 		end
-		
+
 		index = index + 1
 	end
-	
+
 	if ( #FADEFRAMES == 0 ) then
 		frameFadeManager:SetScript("OnUpdate", nil)
 	end
@@ -185,7 +238,7 @@ function R:UIFrameFade(frame, fadeInfo)
 	if not frame:IsProtected() then
 		frame:Show()
 	end
-	
+
 	local index = 1
 	while FADEFRAMES[index] do
 		-- If frame is already set to fade then return

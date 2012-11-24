@@ -91,8 +91,8 @@ G["Raid"] = {}
 
 P["Raid"]={
 	enable = true,
-    width = 65,
-    height = 33,
+    width = 70,
+    height = 36,
 	bigwidth = 85,
 	bigheight = 43,
     spacing = 5,
