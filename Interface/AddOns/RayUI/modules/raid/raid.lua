@@ -20,6 +20,7 @@ local function RegisterDebuffs()
         end
     end
 end
+
 function RA:GetOptions()
 	local options = {
 		size = {

@@ -254,19 +254,19 @@ function A:UpdateWeaponText(auraButton, timeLeft)
 	local duration = auraButton.duration
 	if(timeLeft) then
 		if(timeLeft <= 0) then
-			self:SetAlpha(1)
+			auraButton:SetAlpha(1)
 			duration:SetText("")
 		else
 			local time = formatTime(timeLeft)
 			if timeLeft <= 86400.5 and timeLeft > 3600.5 then
 				duration:SetText(NORMAL_FONT_COLOR_CODE..time.."|r")
-				self:SetAlpha(1)
+				auraButton:SetAlpha(1)
 			elseif timeLeft <= 3600.5 and timeLeft > 60.5 then
 				duration:SetText(NORMAL_FONT_COLOR_CODE..time.."|r")
-				self:SetAlpha(1)
+				auraButton:SetAlpha(1)
 			elseif timeLeft <= 60.5 then
 				duration:SetText("|cffff0000"..time.."|r")
-				self:SetAlpha(A.AlphaFrame.BuffAlphaValue)
+				auraButton:SetAlpha(A.AlphaFrame.BuffAlphaValue)
 			end
 		end
 	end
