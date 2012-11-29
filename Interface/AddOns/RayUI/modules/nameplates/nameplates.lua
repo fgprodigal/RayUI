@@ -432,10 +432,11 @@ local function Colorize(frame)
 
 	for class, color in pairs(RAID_CLASS_COLORS) do
 		local r, g, b = floor(r*100+.5)/100, floor(g*100+.5)/100, floor(b*100+.5)/100
+		local bb = b
         if class == "MONK" then
-            b = b - 0.01
+            bb = bb - 0.01
         end
-		if RAID_CLASS_COLORS[class].r == r and RAID_CLASS_COLORS[class].g == g and RAID_CLASS_COLORS[class].b == b then
+		if RAID_CLASS_COLORS[class].r == r and RAID_CLASS_COLORS[class].g == g and RAID_CLASS_COLORS[class].b == bb then
 			frame.hasClass = true
 			frame.isFriendly = false
 			frame.hp:SetStatusBarColor(unpack(R.colors.class[class]))
@@ -443,7 +444,10 @@ local function Colorize(frame)
 		end
 	end
 
-	if g+b == 0 then -- hostile
+	if (r + b + b) > 2 then -- tapped
+		r,g,b = 0.6, 0.6, 0.6
+		frame.isFriendly = false	
+	elseif g+b == 0 then -- hostile
 		r,g,b = unpack(R.colors.reaction[1])
 		frame.isFriendly = false
 	elseif r+b == 0 then -- friendly npc
@@ -516,10 +520,11 @@ local function UpdateObjects(frame)
 end
 
 --This is where we create most "Static" objects for the nameplate, it gets fired when a nameplate is first seen.
-local function SkinObjects(frame)
+local function SkinObjects(frame, nameFrame)
 	local noscalemult = R.mult * UIParent:GetScale()
 	local oldhp, cb = frame:GetChildren()
-	local threat, hpborder, overlay, oldname, oldlevel, bossicon, raidicon, elite = frame:GetRegions()
+	local threat, hpborder, overlay, oldlevel, bossicon, raidicon, elite = frame:GetRegions()
+	local oldname = nameFrame:GetRegions()
 	local _, cbborder, cbshield, cbicon = cb:GetRegions()
 
 	if not frame.hp then
@@ -538,6 +543,10 @@ local function SkinObjects(frame)
 	frame.hp.oldlevel = oldlevel
 	frame.hp.boss = bossicon
 	frame.hp.elite = elite
+
+	if not frame.threat then	
+		frame.threat = threat	
+	end
 
 	if not frame.hp.value then
 		frame.hp.value = frame.hp:CreateFontString(nil, "OVERLAY")
@@ -624,6 +633,7 @@ local function SkinObjects(frame)
 	frame.cb = cb
 
 	--Highlight
+	overlay:SetParent(frame:GetParent())
 	overlay:SetTexture(1,1,1,0.15)
 	overlay:SetAllPoints(frame.hp)
 	frame.overlay = overlay
@@ -658,7 +668,7 @@ local function SkinObjects(frame)
 	UpdateCastbar(cb)
 
 	frame:HookScript("OnHide", OnHide)
-	frames[frame] = true
+	frames[frame:GetParent()] = true
 	frame.RayUIPlate = true
 end
 
@@ -666,9 +676,9 @@ local function UpdateThreat(frame, elapsed)
 	frame.hp:Show()
 	if frame.hasClass == true then return end
 
-	if frame.region:IsShown() then
+	if frame.threat:IsShown() then
 		--Ok we either have threat or we're losing/gaining it
-		local r, g, b = frame.region:GetVertexColor()
+		local r, g, b = frame.threat:GetVertexColor()
 		if g + b == 0 then
 			--Have Threat
 			if R.Role == "Tank" then
@@ -802,12 +812,17 @@ local function ShowHealth(frame, ...)
 	elseif (frame.hasClass ~= true and frame.isFriendly ~= true) then
 		frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 	end
+
+	while frame.hp:GetEffectiveScale() < 1 do
+		frame.hp:SetScale(frame.hp:GetScale() + 0.01)
+		frame:SetScale(frame.hp:GetScale() + 0.01)
+	end
 end
 
 --Scan all visible nameplate for a known unit.
 local function CheckUnit_Guid(frame, ...)
 	--local numParty, numRaid = GetNumSubgroupMembers(), GetNumGroupMembers()
-	if UnitExists("target") and frame:GetAlpha() == 1 and UnitName("target") == frame.hp.oldname:GetText() then
+	if UnitExists("target") and frame:GetParent():GetAlpha() == 1 and UnitName("target") == frame.hp.oldname:GetText() then
 		frame.guid = UnitGUID("target")
 		frame.unit = "target"
 		OnAura(frame, "target")
@@ -847,7 +862,7 @@ end
 local function ForEachPlate(functionToRun, ...)
 	for frame in pairs(frames) do
 		if frame:IsShown() then
-			functionToRun(frame, ...)
+			functionToRun(select(1,frame:GetChildren()), ...)
 		end
 	end
 end
@@ -857,11 +872,9 @@ local select = select
 local function HookFrames(...)
 	for index = 1, select("#", ...) do
 		local frame = select(index, ...)
-		local region = frame:GetRegions()
 
-		if(not frames[frame] and (frame:GetName() and frame:GetName():find("NamePlate%d")) and region and region:GetObjectType() == "Texture") then
-			SkinObjects(frame)
-			frame.region = region
+		if(not frames[frame] and (frame:GetName() and frame:GetName():find("NamePlate%d"))) then
+			SkinObjects(frame:GetChildren())
 		end
 	end
 end

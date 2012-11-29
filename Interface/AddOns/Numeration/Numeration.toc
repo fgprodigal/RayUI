@@ -1,4 +1,4 @@
-## Interface: 50001
+## Interface: 50100
 ## Title: Numeration
 ## Notes: yet another Damage Meter addon
 ## Author: nekoh, Wetxius

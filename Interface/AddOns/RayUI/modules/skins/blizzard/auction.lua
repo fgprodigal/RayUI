@@ -32,7 +32,7 @@ local function LoadSkin()
 	AuctionProgressBarText:SetPoint("CENTER", 0, 1)
 
 	S:ReskinClose(AuctionProgressFrameCancelButton, "LEFT", AuctionProgressBar, "RIGHT", 4, 0)
-	select(15, AuctionProgressFrameCancelButton:GetRegions()):SetPoint("CENTER", 0, 2)
+	select(14, AuctionProgressFrameCancelButton:GetRegions()):SetPoint("CENTER", 0, 2)
 
 	AuctionFrame:DisableDrawLayer("ARTWORK")
 	AuctionPortraitTexture:Hide()

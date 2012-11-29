@@ -543,7 +543,9 @@ end
 for class = 1, 2 do
 	local subs = {GetAuctionItemSubClasses(class)}
 	for i, subclass in ipairs(Unusable[class]) do
-		Unusable[subs[subclass]] = true
+		if subs[subclass] then
+			Unusable[subs[subclass]] = true
+		end
 	end
 	Unusable[class] = nil
 	subs = nil

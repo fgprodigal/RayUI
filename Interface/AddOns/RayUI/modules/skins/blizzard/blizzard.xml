@@ -29,6 +29,7 @@
 	<Script file='help.lua'/>
 	<Script file='inspect.lua'/>
 	<Script file='itemsocketing.lua'/>
+	<Script file='itemupgrade.lua'/>
 	<Script file='lfguild.lua'/>
 	<Script file='loot.lua'/>
 	<Script file='loothistory.lua'/>

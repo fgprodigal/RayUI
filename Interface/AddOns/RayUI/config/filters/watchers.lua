@@ -1607,7 +1607,9 @@ R["Watcher"] = {
                 { spellID = 20549, unitId = "player", caster = "all", filter = "DEBUFF" },
 
                 --副本
+
                 --魔古山寶庫
+
                 --石衛士
                 --碧玉鎖鏈
                 { spellID = 130395, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
@@ -1625,10 +1627,17 @@ R["Watcher"] = {
                 { spellID = 117549, unitId = "player", caster = "all", filter = "BUFF", fuzzy = true },
 
                 --恐懼之心
+
+                --刀鋒領主塔亞克
+				--無形打擊
+                { spellID = 123017, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
+
                 --風領主瑪爾加拉克
+				--琥珀監獄
                 { spellID = 121885, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
 
                 --豐泉臺
+
                 --恐懼之煞
                 --無畏
                 { spellID = 118977, unitId = "player", caster = "all", filter = "BUFF", fuzzy = true },
