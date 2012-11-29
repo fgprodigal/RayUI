@@ -13,7 +13,7 @@
  Examples
 
    local Harmony = {}
-   for index = 1, UnitPowerMax('player', SPELL_POWER_LIGHT_FORCE) do
+   for index = 1, UnitPowerMax('player', SPELL_POWER_CHI) do
       local Chi = self:CreateTexture(nil, 'BACKGROUND')
    
       -- Position and size of the chi orbs.
@@ -36,7 +36,7 @@
 local parent, ns = ...
 local oUF = ns.oUF
 
-local SPELL_POWER_LIGHT_FORCE = SPELL_POWER_LIGHT_FORCE
+local SPELL_POWER_CHI = SPELL_POWER_CHI
 
 local Update = function(self, event, unit)
 	if(unit ~= 'player') then return end
@@ -46,9 +46,9 @@ local Update = function(self, event, unit)
 		element:PreUpdate()
 	end
 
-	local chi = UnitPower(unit, SPELL_POWER_LIGHT_FORCE)
+	local chi = UnitPower(unit, SPELL_POWER_CHI)
 
-	for index = 1, UnitPowerMax(unit, SPELL_POWER_LIGHT_FORCE) do
+	for index = 1, UnitPowerMax(unit, SPELL_POWER_CHI) do
 		if(index <= chi) then
 			element[index]:Show()
 		else
@@ -78,7 +78,7 @@ local Enable = function(self, unit)
 		self:RegisterEvent('UNIT_POWER', Path, true)
 		self:RegisterEvent('UNIT_DISPLAYPOWER', Path, true)
 
-		for index = 1, UnitPowerMax(unit, SPELL_POWER_LIGHT_FORCE) do
+		for index = 1, UnitPowerMax(unit, SPELL_POWER_CHI) do
 			local chi = element[index]
 			if(chi:IsObjectType'Texture' and not chi:GetTexture()) then
 				chi:SetTexture[[Interface\PlayerFrame\MonkUI]]

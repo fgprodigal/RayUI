@@ -1212,7 +1212,7 @@ function UF:UpdateHolyPower()
 end
 
 function UF:UpdateHarmony()
-	local maxChi = UnitPowerMax("player", SPELL_POWER_LIGHT_FORCE)
+	local maxChi = UnitPowerMax("player", SPELL_POWER_CHI)
 	if maxChi < self.number then
 		for i = 1, 4 do
 			self[i]:SetWidth(185/4)

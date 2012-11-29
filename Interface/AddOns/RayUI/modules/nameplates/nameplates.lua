@@ -414,6 +414,7 @@ local function OnHide(frame)
 	frame.guid = nil
 	frame.hasClass = nil
 	frame.isFriendly = nil
+	frame.isTapped = nil
 	frame.hp.rcolor = nil
 	frame.hp.gcolor = nil
 	frame.hp.bcolor = nil
@@ -428,10 +429,14 @@ end
 
 --Color Nameplate
 local function Colorize(frame)
-	local r,g,b = frame.healthOriginal:GetStatusBarColor()
+	local r, g, b = frame.healthOriginal:GetStatusBarColor()
+    r, g, b = floor(r*100+.5)/100, floor(g*100+.5)/100, floor(b*100+.5)/100
+
+    if (r == frame.hp.originalr and g == frame.hp.originalg and b == frame.hp.originalb) then return end
+
+    frame.hp.originalr, frame.hp.originalg, frame.hp.originalb = r, g, b
 
 	for class, color in pairs(RAID_CLASS_COLORS) do
-		local r, g, b = floor(r*100+.5)/100, floor(g*100+.5)/100, floor(b*100+.5)/100
 		local bb = b
         if class == "MONK" then
             bb = bb - 0.01
@@ -444,9 +449,12 @@ local function Colorize(frame)
 		end
 	end
 
+    frame.isTapped = nil
+
 	if (r + b + b) > 2 then -- tapped
 		r,g,b = 0.6, 0.6, 0.6
 		frame.isFriendly = false
+		frame.isTapped = true
 	elseif g+b == 0 then -- hostile
 		r,g,b = unpack(R.colors.reaction[1])
 		frame.isFriendly = false
@@ -674,7 +682,7 @@ end
 
 local function UpdateThreat(frame, elapsed)
 	frame.hp:Show()
-	if frame.hasClass == true then return end
+	if frame.hasClass == true or frame.isTapped == true then return end
 
 	if frame.threat:IsShown() then
 		--Ok we either have threat or we're losing/gaining it
@@ -941,6 +949,13 @@ function NP:Initialize()
 			HookFrames(WorldFrame:GetChildren())
 		end
 
+		ForEachPlate(ShowHealth)
+		ForEachPlate(CheckFilter)
+		ForEachPlate(HideDrunkenText)
+		ForEachPlate(CheckUnit_Guid)
+		ForEachPlate(CheckSettings)
+		ForEachPlate(Colorize)
+
 		if(self.elapsed and self.elapsed > 0.2) then
 			ForEachPlate(UpdateThreat, self.elapsed)
 			ForEachPlate(AdjustNameLevel)
@@ -948,12 +963,6 @@ function NP:Initialize()
 		else
 			self.elapsed = (self.elapsed or 0) + elapsed
 		end
-
-		ForEachPlate(ShowHealth)
-		ForEachPlate(CheckFilter)
-		ForEachPlate(HideDrunkenText)
-		ForEachPlate(CheckUnit_Guid)
-		ForEachPlate(CheckSettings)
 	end)
 end
 
