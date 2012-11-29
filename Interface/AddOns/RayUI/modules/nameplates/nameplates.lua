@@ -446,7 +446,7 @@ local function Colorize(frame)
 
 	if (r + b + b) > 2 then -- tapped
 		r,g,b = 0.6, 0.6, 0.6
-		frame.isFriendly = false	
+		frame.isFriendly = false
 	elseif g+b == 0 then -- hostile
 		r,g,b = unpack(R.colors.reaction[1])
 		frame.isFriendly = false
@@ -815,7 +815,7 @@ local function ShowHealth(frame, ...)
 
 	while frame.hp:GetEffectiveScale() < 1 do
 		frame.hp:SetScale(frame.hp:GetScale() + 0.01)
-		frame:SetScale(frame.hp:GetScale() + 0.01)
+		-- frame:SetScale(frame.hp:GetScale() + 0.01)
 	end
 end
 
