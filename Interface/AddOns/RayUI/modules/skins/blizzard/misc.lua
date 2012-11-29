@@ -629,7 +629,8 @@ local function LoadSkin()
 		"InterfaceOptionsHelpPanelShowLuaErrors",
 		"InterfaceOptionsHelpPanelColorblindMode",
 		"InterfaceOptionsHelpPanelMovePad",
-		"InterfaceOptionsControlsPanelAutoOpenLootHistory"
+		"InterfaceOptionsControlsPanelAutoOpenLootHistory",
+		"InterfaceOptionsCombatPanelLossOfControl"
 	}
 	for i = 1, #checkboxes do
 		S:ReskinCheck(_G[checkboxes[i]])
@@ -656,7 +657,12 @@ local function LoadSkin()
 		"CompactUnitFrameProfilesGeneralOptionsFrameHealthTextDropdown",
 		"InterfaceOptionsCameraPanelStyleDropDown",
 		"InterfaceOptionsMousePanelClickMoveStyleDropDown",
-		"Advanced_GraphicsAPIDropDown"
+		"Advanced_GraphicsAPIDropDown",
+		"InterfaceOptionsCombatPanelLossOfControlFullDropDown",
+		"InterfaceOptionsCombatPanelLossOfControlSilenceDropDown",
+		"InterfaceOptionsCombatPanelLossOfControlInterruptDropDown",
+		"InterfaceOptionsCombatPanelLossOfControlDisarmDropDown",
+		"InterfaceOptionsCombatPanelLossOfControlRootDropDown"
 	}
 	for i = 1, #dropdowns do
 		S:ReskinDropDown(_G[dropdowns[i]])
