@@ -401,6 +401,8 @@ end
 --We need to reset everything when a nameplate it hidden, this is so theres no left over data when a nameplate gets reshown for a differant mob.
 local function OnHide(frame)
 	frame.hp:SetStatusBarColor(frame.hp.rcolor, frame.hp.gcolor, frame.hp.bcolor)
+    frame.hp:SetScale(1)
+    frame:SetScale(1)
 	frame.overlay:Hide()
 	frame.cb:Hide()
 	frame.unit = nil
@@ -815,10 +817,10 @@ local function ShowHealth(frame, ...)
 		frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 	end
 
-    while frame.hp:GetEffectiveScale() < 1 do
+    while frame.hp:GetScale() < 1 do
         frame.hp:SetScale(frame.hp:GetScale() + 0.01)
-        frame:SetScale(frame.hp:GetScale())
     end
+    frame:SetScale(frame.hp:GetScale())
 end
 
 --Scan all visible nameplate for a known unit.
@@ -881,7 +883,7 @@ local function HookFrames(...)
 	end
 end
 
-function NP:COMBAT_LOG_EVENT_UNFILTERED(event, ...)
+function NP:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, ...)
 	if event == "SPELL_AURA_REMOVED" then
 		local _, sourceGUID, _, _, _, destGUID, _, _, _, spellID = ...
 
