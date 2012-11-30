@@ -38,52 +38,63 @@ local function LoadSkin()
 	S:ReskinInput(BlackMarketHotItemBidPriceGold)
 	S:ReskinScroll(BlackMarketScrollFrameScrollBar)
 
-	hooksecurefunc("BlackMarketScrollFrame_Update", function()
-		local buttons = BlackMarketScrollFrame.buttons
-		for i = 1, #buttons do
+    local function UpdateBlackMarketList()
+        local scrollFrame = BlackMarketScrollFrame
+        local offset = HybridScrollFrame_GetOffset(scrollFrame)
+		local buttons = scrollFrame.buttons
+        local numButtons = #buttons
+
+		for i = 1, numButtons do
+            local index = i + offset
 			local bu = buttons[i]
 
-			bu.Item.IconTexture:SetTexCoord(.08, .92, .08, .92)
-			if not bu.reskinned then
-				bu.Left:Hide()
-				bu.Right:Hide()
-				select(3, bu:GetRegions()):Hide()
+            bu.Item.IconTexture:SetTexCoord(.08, .92, .08, .92)
+            if not bu.reskinned then
+                bu.Left:Hide()
+                bu.Right:Hide()
+                select(3, bu:GetRegions()):Hide()
 
-				bu.Item:SetNormalTexture("")
-				S:CreateBG(bu.Item)
+                bu.Item:SetNormalTexture("")
+                S:CreateBG(bu.Item)
 
-				local bg = CreateFrame("Frame", nil, bu)
-				bg:SetPoint("TOPLEFT")
-				bg:SetPoint("BOTTOMRIGHT", 0, 5)
-				bg:SetFrameLevel(bu:GetFrameLevel()-1)
-				S:CreateBD(bg, 0)
+                local bg = CreateFrame("Frame", nil, bu)
+                bg:SetPoint("TOPLEFT")
+                bg:SetPoint("BOTTOMRIGHT", 0, 5)
+                bg:SetFrameLevel(bu:GetFrameLevel()-1)
+                S:CreateBD(bg, 0)
 
-				local tex = bu:CreateTexture(nil, "BACKGROUND")
-				tex:SetPoint("TOPLEFT")
-				tex:SetPoint("BOTTOMRIGHT", 0, 5)
-				tex:SetTexture(0, 0, 0, .25)
+                local tex = bu:CreateTexture(nil, "BACKGROUND")
+                tex:SetPoint("TOPLEFT")
+                tex:SetPoint("BOTTOMRIGHT", 0, 5)
+                tex:SetTexture(0, 0, 0, .25)
 
-				bu:SetHighlightTexture(S["media"].backdrop)
-				local hl = bu:GetHighlightTexture()
-				hl:SetVertexColor(r, g, b, .2)
-				hl.SetAlpha = R.dummy
-				hl:ClearAllPoints()
-				hl:Point("TOPLEFT", 0, -1)
-				hl:Point("BOTTOMRIGHT", -1, 6)
+                bu:SetHighlightTexture(S["media"].backdrop)
+                local hl = bu:GetHighlightTexture()
+                hl:SetVertexColor(r, g, b, .2)
+                hl.SetAlpha = R.dummy
+                hl:ClearAllPoints()
+                hl:Point("TOPLEFT", 0, -1)
+                hl:Point("BOTTOMRIGHT", -1, 6)
 
-				bu.Item:StyleButton(true)
+                bu.Item:StyleButton(true)
 
-				bu.reskinned = true
-			end
+                bu.reskinned = true
+            end
 
-			local link = select(15, C_BlackMarket.GetItemInfoByIndex(i))
-			if link then
-				local _, _, quality = GetItemInfo(link)
-				local r, g, b = GetItemQualityColor(quality)
-				bu.Name:SetTextColor(r, g, b)
-			end
+            local link = select(15, C_BlackMarket.GetItemInfoByIndex(index))
+            if link then
+                local _, _, quality = GetItemInfo(link)
+                local r, g, b = GetItemQualityColor(quality)
+                bu.Name:SetTextColor(r, g, b)
+            end
 		end
-	end)
+    end
+    local oldfunc = BlackMarketScrollFrame.update
+    function BlackMarketScrollFrame.update()
+        oldfunc()
+        UpdateBlackMarketList()
+    end
+	hooksecurefunc("BlackMarketScrollFrame_Update", UpdateBlackMarketList)
 
 	hooksecurefunc("BlackMarketFrame_UpdateHotItem", function()
 		local link = select(15, C_BlackMarket.GetHotItem())

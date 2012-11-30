@@ -158,18 +158,12 @@ local function HideObjects(parent)
 	for object in pairs(parent.queue) do
 		if(object:GetObjectType() == "Texture") then
 			object:SetTexture(nil)
-			object.SetTexture = function() return end
+			object:SetTexCoord(0, 0, 0, 0)
 		elseif (object:GetObjectType() == "FontString") then
-			object.ClearAllPoints = function() return end
-			object.SetFont = function() return end
-			object.SetPoint = function() return end
-			object:Hide()
-			object.Show = function() return end
-			object.SetText = function() return end
-			object.SetShadowOffset = function() return end
+			object:SetWidth(0.001)
 		else
 			object:Hide()
-			object.Show = function() return end
+			object.Show = R.dummy
 		end
 	end
 end
@@ -692,12 +686,12 @@ local function UpdateThreat(frame, elapsed)
 			if R.Role == "Tank" then
 				frame.hp:SetStatusBarColor(goodR, goodG, goodB)
 				frame.hp.hpbg:SetTexture(goodR, goodG, goodB, 0.1)
-				frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
+				--frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 				frame.threatStatus = "GOOD"
 			else
 				frame.hp:SetStatusBarColor(badR, badG, badB)
 				frame.hp.hpbg:SetTexture(badR, badG, badB, 0.1)
-				frame.hp.backdrop:SetBackdropBorderColor(badR, badG, badB, 1)
+				--frame.hp.backdrop:SetBackdropBorderColor(badR, badG, badB, 1)
 				frame.threatStatus = "BAD"
 			end
 		else
@@ -707,24 +701,24 @@ local function UpdateThreat(frame, elapsed)
 					--Losing Threat
 					frame.hp:SetStatusBarColor(transitionR2, transitionG2, transitionB2)
 					frame.hp.hpbg:SetTexture(transitionR2, transitionG2, transitionB2, 0.1)
-					frame.hp.backdrop:SetBackdropBorderColor(badR, badG, badB, 1)
+					--frame.hp.backdrop:SetBackdropBorderColor(badR, badG, badB, 1)
 				else
 					--Gaining Threat
 					frame.hp:SetStatusBarColor(transitionR, transitionG, transitionB)
 					frame.hp.hpbg:SetTexture(transitionR, transitionG, transitionB, 0.1)
-					frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
+					--frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 				end
 			else
 				if frame.threatStatus == "GOOD" then
 					--Losing Threat
 					frame.hp:SetStatusBarColor(transitionR, transitionG, transitionB)
 					frame.hp.hpbg:SetTexture(transitionR, transitionG, transitionB, 0.1)
-					frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
+					--frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 				else
 					--Gaining Threat
 					frame.hp:SetStatusBarColor(transitionR2, transitionG2, transitionB2)
 					frame.hp.hpbg:SetTexture(transitionR2, transitionG2, transitionB2, 0.1)
-					frame.hp.backdrop:SetBackdropBorderColor(badR, badG, badB, 1)
+					--frame.hp.backdrop:SetBackdropBorderColor(badR, badG, badB, 1)
 				end
 			end
 		end
@@ -734,19 +728,19 @@ local function UpdateThreat(frame, elapsed)
 			if R.Role == "Tank" then
 				frame.hp:SetStatusBarColor(badR, badG, badB)
 				frame.hp.hpbg:SetTexture(badR, badG, badB, 0.1)
-				frame.hp.backdrop:SetBackdropBorderColor(badR, badG, badB, 1)
+				--frame.hp.backdrop:SetBackdropBorderColor(badR, badG, badB, 1)
 				frame.threatStatus = "BAD"
 			else
 				frame.hp:SetStatusBarColor(goodR, goodG, goodB)
 				frame.hp.hpbg:SetTexture(goodR, goodG, goodB, 0.1)
-				frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
+				--frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 				frame.threatStatus = "GOOD"
 			end
 		else
 			--Set colors to their original, not in combat
 			frame.hp:SetStatusBarColor(frame.hp.rcolor, frame.hp.gcolor, frame.hp.bcolor)
 			frame.hp.hpbg:SetTexture(frame.hp.rcolor, frame.hp.gcolor, frame.hp.bcolor, 0.1)
-			frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
+			--frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 			frame.threatStatus = nil
 		end
 	end
@@ -821,10 +815,10 @@ local function ShowHealth(frame, ...)
 		frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 	end
 
-	while frame.hp:GetEffectiveScale() < 1 do
-		frame.hp:SetScale(frame.hp:GetScale() + 0.01)
-		-- frame:SetScale(frame.hp:GetScale() + 0.01)
-	end
+    while frame.hp:GetEffectiveScale() < 1 do
+        frame.hp:SetScale(frame.hp:GetScale() + 0.01)
+        frame:SetScale(frame.hp:GetScale())
+    end
 end
 
 --Scan all visible nameplate for a known unit.

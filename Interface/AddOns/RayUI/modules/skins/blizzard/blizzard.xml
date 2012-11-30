@@ -33,6 +33,7 @@
 	<Script file='lfguild.lua'/>
 	<Script file='loot.lua'/>
 	<Script file='loothistory.lua'/>
+	<Script file='lossofcontrol.lua'/>
 	<Script file='macro.lua'/>
 	<Script file='mail.lua'/>
 	<Script file='merchant.lua'/>

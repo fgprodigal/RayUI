@@ -435,16 +435,7 @@ local function LoadSkin()
 		PetModelFrameRotateLeftButton:Hide()
 		PetModelFrameRotateRightButton:Hide()
 		PetModelFrameShadowOverlay:Hide()
-		PetPaperDollXPBar1:Hide()
-		select(2, PetPaperDollFrameExpBar:GetRegions()):Hide()
 		PetPaperDollPetModelBg:SetAlpha(0)
-		PetPaperDollFrameExpBar:SetStatusBarTexture(R["media"].normal)
-
-		local bbg = CreateFrame("Frame", nil, PetPaperDollFrameExpBar)
-		bbg:Point("TOPLEFT", -1, 1)
-		bbg:Point("BOTTOMRIGHT", 1, -1)
-		bbg:SetFrameLevel(PetPaperDollFrameExpBar:GetFrameLevel()-1)
-		S:CreateBD(bbg, .25)
 	end
 end
 

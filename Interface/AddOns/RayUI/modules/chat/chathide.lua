@@ -10,7 +10,7 @@ local whentoshow={
 		"party", "party_leader", "party_guide",
 		"whisper", "system", "channel",
 		"guild", "officer",
-		"battleground", "battleground_leader",
+		"instance_chat", "instance_chat_leader",
 		"raid", "raid_leader", "raid_warning",
 		"bn_whisper",
 		"bn_inline_toast_broadcast",

@@ -17,7 +17,7 @@ local function valueChanged(self, event, unit)
 	local name = UnitAura("player", vengeance, nil, "PLAYER|HELPFUL")
 
 	if name then
-		local value = select(14, UnitAura("player", vengeance, nil, "PLAYER|HELPFUL")) or -1
+		local value = select(15, UnitAura("player", vengeance, nil, "PLAYER|HELPFUL")) or -1
 		if value > 0 then
 			if value > bar.max then bar.max = value end
 			-- if value > bar.max then value = bar.max end

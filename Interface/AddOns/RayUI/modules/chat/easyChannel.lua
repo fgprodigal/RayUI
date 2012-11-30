@@ -12,7 +12,7 @@ function CH:ChatEdit_CustomTabPressed(self)
             self:SetAttribute("chatType", "RAID")
             ChatEdit_UpdateHeader(self)
         elseif (GetNumBattlefieldScores()>0) then
-            self:SetAttribute("chatType", "BATTLEGROUND")
+            self:SetAttribute("chatType", "INSTANCE")
             ChatEdit_UpdateHeader(self)
         elseif (IsInGuild()) then
             self:SetAttribute("chatType", "GUILD")
@@ -25,7 +25,7 @@ function CH:ChatEdit_CustomTabPressed(self)
             self:SetAttribute("chatType", "RAID")
             ChatEdit_UpdateHeader(self)
         elseif (GetNumBattlefieldScores()>0) then
-            self:SetAttribute("chatType", "BATTLEGROUND")
+            self:SetAttribute("chatType", "INSTANCE")
             ChatEdit_UpdateHeader(self)
         elseif (IsInGuild()) then
             self:SetAttribute("chatType", "GUILD")
@@ -36,7 +36,7 @@ function CH:ChatEdit_CustomTabPressed(self)
         end         
     elseif (self:GetAttribute("chatType") == "RAID") then
         if (GetNumBattlefieldScores()>0) then
-            self:SetAttribute("chatType", "BATTLEGROUND")
+            self:SetAttribute("chatType", "INSTANCE")
             ChatEdit_UpdateHeader(self)
         elseif (IsInGuild()) then
             self:SetAttribute("chatType", "GUILD")
@@ -45,7 +45,7 @@ function CH:ChatEdit_CustomTabPressed(self)
             self:SetAttribute("chatType", "SAY")
             ChatEdit_UpdateHeader(self)
         end
-    elseif (self:GetAttribute("chatType") == "BATTLEGROUND") then
+    elseif (self:GetAttribute("chatType") == "INSTANCE") then
         if (IsInGuild) then
             self:SetAttribute("chatType", "GUILD")
             ChatEdit_UpdateHeader(self)
