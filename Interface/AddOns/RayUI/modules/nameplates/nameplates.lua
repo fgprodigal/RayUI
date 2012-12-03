@@ -782,7 +782,7 @@ end
 
 --Force the name text of a nameplate to be behind other nameplates unless it is our target
 local function AdjustNameLevel(frame, ...)
-	if UnitName("target") == frame.hp.oldname:GetText() and frame:GetAlpha() == 1 then
+	if UnitExists("target") and UnitGUID("target") == frame.guid and frame:GetAlpha() == 1 then
 		frame.hp.name:SetDrawLayer("OVERLAY")
 	else
 		frame.hp.name:SetDrawLayer("ARTWORK")
@@ -803,7 +803,7 @@ local function ShowHealth(frame, ...)
 	frame.hp.value:SetText(string.format("%d%%", math.floor((valueHealth/maxHealth)*100)))
 
 	--Change frame style if the frame is our target or not
-	if UnitName("target") == frame.hp.oldname:GetText() and frame:GetAlpha() == 1 then
+	if UnitExists("target") and UnitGUID("target") == frame.guid and frame:GetAlpha() == 1 then
 		--Targetted Unit
 		frame.hp.name:SetTextColor(1, 1, 1)
 	else
