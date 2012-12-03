@@ -293,12 +293,8 @@ local function LoadSkin()
         end
     end
 
-    local oldfunc = PetJournal.listScroll.update
-    function PetJournal.listScroll.update()
-        oldfunc()
-        UpdatePetList()
-    end
     hooksecurefunc("PetJournal_UpdatePetList", UpdatePetList)
+    hooksecurefunc(PetJournal.listScroll, "update", UpdatePetList)
 
     -- local filter = ""
     -- local filterTable = {}

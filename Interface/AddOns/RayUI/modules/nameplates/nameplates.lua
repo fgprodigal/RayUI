@@ -149,6 +149,10 @@ function NP:CheckHealers()
 	end
 end
 
+local function RoundColors(r, g, b)
+    return floor(r*100+.5)/100, floor(g*100+.5)/100, floor(b*100+.5)/100
+end
+
 local function QueueObject(parent, object)
 	parent.queue = parent.queue or {}
 	parent.queue[object] = true
@@ -424,12 +428,7 @@ local function OnHide(frame)
 end
 
 --Color Nameplate
-local function Colorize(frame)
-	local r, g, b = frame.healthOriginal:GetStatusBarColor()
-    r, g, b = floor(r*100+.5)/100, floor(g*100+.5)/100, floor(b*100+.5)/100
-
-    if (r == frame.hp.originalr and g == frame.hp.originalg and b == frame.hp.originalb) then return end
-
+local function Colorize(frame, r, g, b)
     frame.hp.originalr, frame.hp.originalg, frame.hp.originalb = r, g, b
 
 	for class, color in pairs(RAID_CLASS_COLORS) do
@@ -471,6 +470,14 @@ local function Colorize(frame)
 	frame.hp:SetStatusBarColor(r,g,b)
 end
 
+local function UpdateColoring(frame)
+    local r, g, b = RoundColors(frame.healthOriginal:GetStatusBarColor())
+
+    if (r ~= frame.hp.originalr or g ~= frame.hp.originalg or b ~= frame.hp.originalb) then
+        Colorize(frame, r, g, b)
+    end
+end
+
 local function OnHealthValueChanged(frame)
 	local frame = frame:GetParent()
 	frame.hp:SetMinMaxValues(frame.healthOriginal:GetMinMaxValues())
@@ -495,8 +502,9 @@ local function UpdateObjects(frame)
 	frame.hp:SetValue(frame.healthOriginal:GetValue())
 
 	--Colorize Plate
-	Colorize(frame)
-	frame.hp.rcolor, frame.hp.gcolor, frame.hp.bcolor = frame.hp:GetStatusBarColor()
+    local r, g, b = RoundColors(frame.healthOriginal:GetStatusBarColor())
+    Colorize(frame, r, g, b)
+    frame.hp.rcolor, frame.hp.gcolor, frame.hp.bcolor = frame.hp:GetStatusBarColor()
 	frame.hp.hpbg:SetTexture(frame.hp.rcolor, frame.hp.gcolor, frame.hp.bcolor, 0.1)
 	frame.hp.name:SetTextColor(frame.hp.rcolor, frame.hp.gcolor, frame.hp.bcolor)
 
@@ -817,10 +825,10 @@ local function ShowHealth(frame, ...)
 		frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 	end
 
-    while frame.hp:GetScale() < 1 do
-        frame.hp:SetScale(frame.hp:GetScale() + 0.01)
+    while frame.hp:GetEffectiveScale() < 1 do
+        frame:SetScale(frame:GetScale() + 0.01)
     end
-    frame:SetScale(frame.hp:GetScale())
+    --frame:SetScale(frame.hp:GetScale())
 end
 
 --Scan all visible nameplate for a known unit.
@@ -950,7 +958,7 @@ function NP:Initialize()
 		ForEachPlate(HideDrunkenText)
 		ForEachPlate(CheckUnit_Guid)
 		ForEachPlate(CheckSettings)
-		ForEachPlate(Colorize)
+		ForEachPlate(UpdateColoring)
 
 		if(self.elapsed and self.elapsed > 0.2) then
 			ForEachPlate(UpdateThreat, self.elapsed)

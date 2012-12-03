@@ -137,7 +137,7 @@ local function LoadFunc()
 	end
 
 	function D:TaintError(event, addonName, addonFunc)
-		if PlayerTalentFrame and PlayerTalentFrame:IsShown() and PlayerTalentFrameTalents:IsShown() then
+		if addonName == "RayUI" and PlayerTalentFrame and PlayerTalentFrame:IsShown() and PlayerTalentFrameTalents:IsShown() then
 			for i = 1, 4, 1 do
 				if _G["StaticPopup"..i] then
 					_G["StaticPopup"..i]:Hide()

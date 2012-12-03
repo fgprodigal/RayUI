@@ -38,6 +38,17 @@ local function LoadSkin()
 
 	S:Reskin(TransmogrifyApplyButton)
 	S:ReskinClose(TransmogrifyArtFrameCloseButton)
+
+    TransmogrifyConfirmationPopup:StripTextures()
+    S:SetBD(TransmogrifyConfirmationPopup)
+    S:Reskin(TransmogrifyConfirmationPopup.Button1)
+    S:Reskin(TransmogrifyConfirmationPopup.Button2)
+    for i = 1, 2 do
+        local bu = _G["TransmogrifyConfirmationPopupItemFrame"..i]
+        bu:StyleButton(true)
+        bu.icon:SetTexCoord(.08, .92, .08, .92)
+        S:CreateBG(bu.icon)
+    end
 end
 
 S:RegisterSkin("Blizzard_ItemAlterationUI", LoadSkin)

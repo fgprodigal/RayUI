@@ -89,11 +89,7 @@ local function LoadSkin()
             end
 		end
     end
-    local oldfunc = BlackMarketScrollFrame.update
-    function BlackMarketScrollFrame.update()
-        oldfunc()
-        UpdateBlackMarketList()
-    end
+	hooksecurefunc(BlackMarketScrollFrame, "update", UpdateBlackMarketList)
 	hooksecurefunc("BlackMarketScrollFrame_Update", UpdateBlackMarketList)
 
 	hooksecurefunc("BlackMarketFrame_UpdateHotItem", function()

@@ -474,6 +474,15 @@ function TT:OnTooltipSetUnit(tooltip)
     local unitLevel = UnitLevel(unit)
     local diffColor = unitLevel > 0 and GetQuestDifficultyColor(UnitLevel(unit)) or QuestDifficultyColors["impossible"]
     if unitLevel < 0 then unitLevel = "??" end
+    if UnitExists(unit.."target") then
+        local r, g, b = GameTooltip_UnitColor(unit.."target")
+        if UnitName(unit.."target") == UnitName("player") then
+            text = R:RGBToHex(1, 0, 0)..">>"..YOU.."<<|r"
+        else
+            text = R:RGBToHex(r, g, b)..UnitName(unit.."target").."|r"
+        end
+        tooltip:AddDoubleLine(TARGET, text)
+    end
     if UnitIsPlayer(unit) then
         local unitRace = UnitRace(unit)
         local unitClass, unitClassEn = UnitClass(unit)
@@ -488,15 +497,6 @@ function TT:OnTooltipSetUnit(tooltip)
             else
                 GameTooltipTextLeft2:SetTextColor(gcol[1], gcol[2], gcol[3])
             end
-        end
-        if UnitExists(unit.."target") then
-            local r, g, b = GameTooltip_UnitColor(unit.."target")
-            if UnitName(unit.."target") == UnitName("player") then
-                text = R:RGBToHex(1, 0, 0)..">>"..YOU.."<<|r"
-            else
-                text = R:RGBToHex(r, g, b)..UnitName(unit.."target").."|r"
-            end
-            tooltip:AddDoubleLine(TARGET, text)
         end
         for i=2, GameTooltip:NumLines() do
             if _G["GameTooltipTextLeft" .. i]:GetText():find(PLAYER) then
