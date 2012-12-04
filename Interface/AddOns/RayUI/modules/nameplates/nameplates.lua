@@ -826,7 +826,7 @@ local function ShowHealth(frame, ...)
 	end
 
     while frame.hp:GetEffectiveScale() < 1 do
-        frame:SetScale(frame:GetScale() + 0.01)
+        frame.hp:SetScale(frame.hp:GetScale() + 0.01)
     end
     --frame:SetScale(frame.hp:GetScale())
 end
