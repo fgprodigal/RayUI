@@ -203,7 +203,7 @@ end
 local function UpdateAuraAnchors(frame)
 	for i = 1, 5 do
 		if frame.icons and frame.icons[i] and frame.icons[i]:IsShown() then
-			if frame.icons.lastShown then 
+			if frame.icons.lastShown then
 				frame.icons[i]:SetPoint("RIGHT", frame.icons.lastShown, "LEFT", -2, 0)
 			else
 				frame.icons[i]:SetPoint("RIGHT",frame.icons,"RIGHT")
@@ -227,7 +227,7 @@ local function CreateAuraIcon(parent)
 	button.shadow:SetFrameLevel(0)
 	button.shadow:Point("TOPLEFT", -2*noscalemult, 2*noscalemult)
 	button.shadow:Point("BOTTOMRIGHT", 2*noscalemult, -2*noscalemult)
-	button.shadow:SetBackdrop( { 
+	button.shadow:SetBackdrop( {
 		edgeFile = R["media"].glow,
 		bgFile = R["media"].blank,
 		edgeSize = R:Scale(4),
@@ -324,7 +324,7 @@ local function UpdateAuraIcon(button, unit, index, filter)
 	button.duration = duration
 	button.spellID = spellID
 	button.timeLeft = expirationTime
-	if count > 1 then 
+	if count > 1 then
 		button.count:SetText(count)
 	else
 		button.count:SetText("")
@@ -359,7 +359,7 @@ local function OnAura(frame, unit)
 	for index = i, #frame.icons do frame.icons[index]:Hide() end
 end
 
---Color the castbar depending on if we can interrupt or not, 
+--Color the castbar depending on if we can interrupt or not,
 --also resize it as nameplates somehow manage to resize some frames when they reappear after being hidden
 local function UpdateCastbar(frame)
 	frame:ClearAllPoints()
@@ -549,15 +549,15 @@ local function SkinObjects(frame, nameFrame)
 		CreateVirtualFrame(frame.hp)
 		frame.hp.hpbg = frame.hp:CreateTexture(nil, "BORDER")
 		frame.hp.hpbg:SetAllPoints(frame.hp)
-		frame.hp.hpbg:SetTexture(1,1,1,0.1) 
+		frame.hp.hpbg:SetTexture(1,1,1,0.1)
 	end
 
 	frame.hp.oldlevel = oldlevel
 	frame.hp.boss = bossicon
 	frame.hp.elite = elite
 
-	if not frame.threat then	
-		frame.threat = threat	
+	if not frame.threat then
+		frame.threat = threat
 	end
 
 	if not frame.hp.value then
@@ -825,9 +825,9 @@ local function ShowHealth(frame, ...)
 		frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 	end
 
-    while frame.hp:GetEffectiveScale() < 1 do
-        frame.hp:SetScale(frame.hp:GetScale() + 0.01)
-    end
+	if frame.hp:GetEffectiveScale() < 1 then
+		frame.hp:SetScale(1 / frame.hp:GetParent():GetEffectiveScale())
+	end
     --frame:SetScale(frame.hp:GetScale())
 end
 
@@ -862,10 +862,10 @@ local function MatchGUID(frame, destGUID, spellID)
 
 
 	if frame.guid == destGUID then
-		for _,icon in ipairs(frame.icons) do 
-			if icon.spellID == spellID then 
-				icon:Hide() 
-			end 
+		for _,icon in ipairs(frame.icons) do
+			if icon.spellID == spellID then
+				icon:Hide()
+			end
 		end
 	end
 end
@@ -908,10 +908,10 @@ function NP:PLAYER_ENTERING_WORLD()
 	SetCVar("ShowClassColorInNameplate", 1)
 	SetCVar("bloatnameplates", 0)
 	if NP.db.combat then
-		if InCombatLockdown() then 
-			SetCVar("nameplateShowEnemies", 1) 
-		else 
-			SetCVar("nameplateShowEnemies", 0) 
+		if InCombatLockdown() then
+			SetCVar("nameplateShowEnemies", 1)
+		else
+			SetCVar("nameplateShowEnemies", 0)
 		end
 	end
 	wipe(BattleGroundHealers)
