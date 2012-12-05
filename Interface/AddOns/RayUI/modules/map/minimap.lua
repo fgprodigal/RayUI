@@ -108,7 +108,7 @@ function MM:SkinMiniMap()
 		StreamingIcon:SetScale(0.8)
 	end
 	function GetMinimapShape()
-		return "SQUARE" 
+		return "SQUARE"
 	end
 	Minimap:SetMaskTexture("Interface\\Buttons\\WHITE8X8")
 	local zoneTextFrame = CreateFrame("Frame", nil, UIParent)
@@ -187,6 +187,8 @@ function MM:CreateMenu()
 		if(not CalendarFrame) then LoadAddOn("Blizzard_Calendar") end
 			Calendar_Toggle()
 		end},
+		{text = LOOT_ROLLS, notCheckable = true,
+		func = function() ToggleFrame(LootHistoryFrame) end},
 	}
 	Minimap:SetScript("OnMouseUp", function(_, btn)
 		if(btn=="RightButton" and not IsShiftKeyDown()) then
@@ -252,7 +254,7 @@ function MM:Initialize()
 	TimeManagerClockButton:SetScript("OnClick", function(_,btn)
 		if btn == "LeftButton" then
 			TimeManager_Toggle()
-		end 
+		end
 		if btn == "RightButton" then
 			if not CalendarFrame then
 				LoadAddOn("Blizzard_Calendar")
