@@ -73,11 +73,7 @@ function UF:ConstructHealthBar(frame, bg, text)
 		health.bg = health:CreateTexture(nil, "BORDER")
 		health.bg:SetAllPoints()
 		health.bg:SetTexture(R["media"].normal)
-		if self.db.smoothColor then
-			health.bg:SetVertexColor(0.12, 0.12, 0.12, 1)
-		else
-			health.bg:SetVertexColor(0.33, 0.33, 0.33, 1)
-		end
+        health.bg:SetVertexColor(.33, .33, .33)
 		health.bg.multiplier = .2
 	end
 
@@ -194,7 +190,7 @@ function UF:ConstructCastBar(frame)
 	castbar.bg = castbar:CreateTexture(nil, "BACKGROUND")
 	castbar.bg:SetTexture(R["media"].normal)
 	castbar.bg:SetAllPoints(true)
-	castbar.bg:SetVertexColor(.12,.12,.12)
+	castbar.bg:SetVertexColor(.12, .12, .12)
 	castbar.Text = castbar:CreateFontString(nil, "OVERLAY")
 	castbar.Text:SetFont(R["media"].font, 12, "THINOUTLINE")
 	castbar.Text:SetPoint("BOTTOMLEFT", castbar, "TOPLEFT", 5, -2)
@@ -543,13 +539,12 @@ function UF:PostUpdateHealth(unit, cur, max)
 		end
 		if UF.db.smoothColor then
 			if UnitIsDeadOrGhost(unit) or (not UnitIsConnected(unit)) then
-				self:SetStatusBarColor(0.5, 0.5, 0.5, 1)
-				self.bg:SetVertexColor(0.5, 0.5, 0.5, 1)
+				self:SetStatusBarColor(.5, .5, .5)
+				self.bg:SetVertexColor(.5, .5, .5)
 			else
-				-- self.bg:SetVertexColor(0.12, 0.12, 0.12, 1)
-				self.bg:SetVertexColor(r*.25, g*.25, b*.25, 1)
+				self.bg:SetVertexColor(r*.25, g*.25, b*.25)
 			end
-		end
+        end
 	end
 	local color = {1,1,1}
 	if UnitIsPlayer(unit) then

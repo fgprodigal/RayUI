@@ -195,11 +195,10 @@ local function PostHealth(hp, unit)
 		end
 		if UF.db.smoothColor then
 			if UnitIsDeadOrGhost(unit) or (not UnitIsConnected(unit)) then
-				hp:SetStatusBarColor(0.5, 0.5, 0.5, 1)
-				hp.bg:SetVertexColor(0.5, 0.5, 0.5, 1)
+				hp:SetStatusBarColor(.5, .5, .5)
+				hp.bg:SetVertexColor(.5, .5, .5)
 			else
-				-- hp.bg:SetVertexColor(0.12, 0.12, 0.12, 1)
-				hp.bg:SetVertexColor(r*.25, g*.25, b*.25, 1)
+				hp.bg:SetVertexColor(r*.25, g*.25, b*.25)
 			end
 		end
 	end
@@ -219,8 +218,8 @@ function RA:UpdateHealth(hp)
 		hp.colorClass = true
 		hp.bg.multiplier = .2
 	else
-		hp:SetStatusBarColor(.12, .12, .12, 1)
-		hp.bg:SetVertexColor(0.12, 0.12, 0.12, 1)
+		hp:SetStatusBarColor(.12, .12, .12)
+		hp.bg:SetVertexColor(.33, .33, .33)
 	end
 
 	hp:ClearAllPoints()
@@ -278,8 +277,8 @@ function RA:UpdatePower(power)
 		power.bg.multiplier = .2
 	else
 		power.colorReaction = true
-		power:SetStatusBarColor(.12, .12, .12, 1)
-		power.bg:SetVertexColor(0.12, 0.12, 0.12, 1)
+		power:SetStatusBarColor(.12, .12, .12)
+		power.bg:SetVertexColor(.12, .12, .12)
 	end
 
     power:ClearAllPoints()
