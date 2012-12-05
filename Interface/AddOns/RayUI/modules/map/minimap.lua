@@ -187,7 +187,7 @@ function MM:CreateMenu()
 		if(not CalendarFrame) then LoadAddOn("Blizzard_Calendar") end
 			Calendar_Toggle()
 		end},
-		{text = LOOT, notCheckable = true,
+		{text = LOOT_ROLLS, notCheckable = true,
 		func = function() ToggleFrame(LootHistoryFrame) end},
 	}
 	Minimap:SetScript("OnMouseUp", function(_, btn)
