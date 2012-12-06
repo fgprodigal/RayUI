@@ -347,9 +347,9 @@ R["Watcher"] = {
                 --腦部凍結
                 { spellID = 57761, unitId = "player", caster = "player", filter = "BUFF" },
                 --升溫
-                { spellID = 48107, unitId = "player", caster = "player", filter = "BUFF" },            
+                { spellID = 48107, unitId = "player", caster = "player", filter = "BUFF" },
                 --咒法結界
-                { spellID = 1463, unitId = "player", caster = "player", filter = "BUFF" },            
+                { spellID = 1463, unitId = "player", caster = "player", filter = "BUFF" },
                 --塑能師之能
                 { spellID = 116257, unitId = "player", caster = "player", filter = "BUFF" },
                 --力之符文
@@ -526,6 +526,14 @@ R["Watcher"] = {
                 { spellID = 12292, filter = "CD" },
                 --致命平静
                 { spellID = 85730, filter = "CD" },
+                --盾墙
+                { spellID = 871, filter = "CD" },
+                --集结呐喊
+                { spellID = 97462, filter = "CD" },
+                --破胆怒吼
+                { spellID = 5246, filter = "CD" },
+                --天神下凡
+                { spellID = 107574, filter = "CD" },
 
                 -- 物品
                 -- 手套
