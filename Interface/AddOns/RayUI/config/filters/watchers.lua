@@ -687,6 +687,14 @@ R["Watcher"] = {
 
                 --聖光信標
                 { spellID = 53563, unitId = "target", caster = "player", filter = "BUFF" },
+                --纯净之手
+                { spellID = 114039, unitId = "target", caster = "player", filter = "BUFF" },
+                --永恒之火
+                { spellID = 114163, unitId = "target", caster = "player", filter = "BUFF" },
+                --处决审判
+                { spellID = 114157, unitId = "target", caster = "player", filter = "BUFF" },
+                --圣洁护盾
+                { spellID = 20925, unitId = "target", caster = "player", filter = "BUFF" },
             },
             {
                 name = "玩家重要buff&debuff",
@@ -696,10 +704,18 @@ R["Watcher"] = {
 
                 --神聖之盾
                 { spellID = 20925, unitId = "player", caster = "player", filter = "BUFF" },
+                --神圣意志
+                { spellID = 90174, unitId = "player", caster = "player", filter = "BUFF" },
+                --破晓
+                { spellID = 88819, unitId = "player", caster = "player", filter = "BUFF" },
                 --神性祈求
                 { spellID = 54428, unitId = "player", caster = "player", filter = "BUFF" },
                 --神恩術
                 { spellID = 31842, unitId = "player", caster = "player", filter = "BUFF" },
+                --神圣复仇者
+                { spellID = 105809, unitId = "player", caster = "player", filter = "BUFF" },
+                --远古能量
+                { spellID = 86700, unitId = "player", caster = "player", filter = "BUFF" },
                 --異端審問
                 { spellID = 84963, unitId = "player", caster = "player", filter = "BUFF" },
                 --破曉之光
@@ -721,6 +737,8 @@ R["Watcher"] = {
                 setpoint = positions.target_proc_icon,
                 size = 38,
 
+                --制裁之錘
+                { spellID = 853, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --制裁之拳
                 { spellID = 105593, unitId = "target", caster = "all", filter = "DEBUFF" },
             },
@@ -735,7 +753,8 @@ R["Watcher"] = {
 
                 --制裁之錘
                 { spellID = 853, unitId = "focus", caster = "all", filter = "DEBUFF" },
-
+                --制裁之拳
+                { spellID = 105593, unitId = "target", caster = "all", filter = "DEBUFF" },
             },
             {
                 name = "CD",
