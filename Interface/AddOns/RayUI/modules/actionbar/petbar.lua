@@ -3,16 +3,11 @@ local AB = R:GetModule("ActionBar")
 
 function AB:CreateBarPet()
 	local num = NUM_PET_ACTION_SLOTS
+    local buttonsize = self.db.barpet.buttonsize
+    local buttonspacing = self.db.barpet.buttonspacing
 
 	local bar = CreateFrame("Frame","RayUIPetBar",UIParent, "SecureHandlerStateTemplate")
-	bar:SetWidth(AB.db.buttonsize*num+AB.db.buttonspacing*(num-1))
-	bar:SetHeight(AB.db.buttonsize)
-	bar:Point("BOTTOM", "UIParent", "BOTTOM", 0, 195)
-	bar:SetScale(AB.db.petbarscale)
-
-	R:CreateMover(bar, "PetBarMover", L["宠物动作条锚点"], true, nil, "ALL,ACTIONBARS")  
-
-	PetBarMover:SetScale(AB.db.petbarscale)
+	bar:Point("BOTTOM", "UIParent", "BOTTOM", 0, 185)
 
 	PetActionBarFrame:SetParent(bar)
 	PetActionBarFrame:EnableMouse(false)
@@ -111,30 +106,74 @@ function AB:CreateBarPet()
 		end
 	end)
 
-	for i=1, num do
-		local button = _G["PetActionButton"..i]
-		local cd = _G["PetActionButton"..i.."Cooldown"]
-		button:SetSize(AB.db.buttonsize, AB.db.buttonsize)
-		button:ClearAllPoints()
-		button:SetParent(RayUIPetBar)
-		if i == 1 then
-			button:SetPoint("BOTTOMLEFT", bar, 0,0)
-		else
-			local previous = _G["PetActionButton"..i-1]      
-			button:SetPoint("LEFT", previous, "RIGHT", AB.db.buttonspacing, 0)
-		end
-		cd:SetAllPoints(button)
-	end
+    self["Handled"]["barpet"] = bar
+    self:UpdatePetBar()
+	R:CreateMover(bar, "PetBarMover", L["宠物动作条锚点"], true, nil, "ALL,ACTIONBARS")  
+end
 
-	if AB.db.petbarmouseover then    
-		AB.db.petbarfade = false
+function AB:UpdatePetBar()
+    local bar = self["Handled"]["barpet"]
+    local buttonsPerRow = self.db.barpet.buttonsPerRow
+    local buttonsize = self.db.barpet.buttonsize
+    local buttonspacing = self.db.barpet.buttonspacing
+    local numColumns = ceil(NUM_PET_ACTION_SLOTS / buttonsPerRow)
+
+	bar:SetWidth(buttonsize*buttonsPerRow + buttonspacing*(buttonsPerRow - 1))
+	bar:SetHeight(buttonsize*numColumns + buttonspacing*(numColumns - 1))
+
+	if self.db.barpet.mouseover then
+		self.db.barpet.autohide = false
 		bar:SetAlpha(0)
 		bar:SetScript("OnEnter", function(self) UIFrameFadeIn(bar,0.5,bar:GetAlpha(),1) end)
 		bar:SetScript("OnLeave", function(self) UIFrameFadeOut(bar,0.5,bar:GetAlpha(),0) end)  
-		for i=1, num do
-			local pb = _G["PetActionButton"..i]
-			pb:HookScript("OnEnter", function(self) UIFrameFadeIn(bar,0.5,bar:GetAlpha(),1) end)
-			pb:HookScript("OnLeave", function(self) UIFrameFadeOut(bar,0.5,bar:GetAlpha(),0) end)
-		end   
-	end
+	else
+		bar:SetAlpha(1)
+		bar:SetScript("OnEnter", nil)
+		bar:SetScript("OnLeave", nil)  
+    end
+
+    if self.db.barpet.autohide then
+        bar:SetParent(RayUIActionBarHider)
+    else
+        bar:SetParent(UIParent)
+    end
+
+    local button, lastButton, lastColumnButton
+    for i = 1, NUM_PET_ACTION_SLOTS do
+		button = _G["PetActionButton"..i]
+		lastButton = _G["PetActionButton"..(i-1)]
+		lastColumnButton = _G["PetActionButton"..(i-buttonsPerRow)]
+        button:SetParent(RayUIPetBar)
+		button:SetSize(buttonsize, buttonsize)
+		button:ClearAllPoints()
+        button.noResize = true
+
+        if i == 1 then
+			button:SetPoint("TOPLEFT", bar, "TOPLEFT", 0, 0)
+        elseif (i - 1) % buttonsPerRow == 0 then
+			button:SetPoint("TOPLEFT", lastColumnButton, "BOTTOMLEFT", 0, -buttonspacing)
+        else
+			button:SetPoint("LEFT", lastButton, "RIGHT", buttonspacing, 0)
+        end
+
+        if self.db.barpet.mouseover then
+            if not self.hooks[button] then
+                self:HookScript(button, "OnEnter", function() UIFrameFadeIn(bar,0.5,bar:GetAlpha(),1) end)
+                self:HookScript(button, "OnLeave", function() UIFrameFadeOut(bar,0.5,bar:GetAlpha(),0) end)
+            end
+        else
+            if not self.hooks[button] then
+                self:Unhook(button, "OnEnter")
+                self:Unhook(button, "OnLeave")
+            end
+        end
+    end
+
+    if self.db.barpet.enable then
+        bar:Show()
+        RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][possessbar,@vehicle,exists]hide;[pet,novehicleui,nobonusbar:5]show;hide")
+    else
+        bar:Hide()
+        UnregisterStateDriver(bar, "visibility")
+    end
 end

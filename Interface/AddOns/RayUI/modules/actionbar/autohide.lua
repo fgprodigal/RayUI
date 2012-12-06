@@ -54,14 +54,6 @@ function AB:OnAutoHideEvent(event, addon)
 end
 
 function AB:EnableAutoHide()
-	if RayUIStanceBar and AB.db.stancebarfade then RayUIStanceBar:SetParent(RayUIActionBarHider) end
-	if RayUIPetBar and AB.db.petbarfade then RayUIPetBar:SetParent(RayUIActionBarHider) end
-	if RayUIActionBar1 and AB.db.bar1fade then RayUIActionBar1:SetParent(RayUIActionBarHider) end
-	if RayUIActionBar2 and AB.db.bar2fade then RayUIActionBar2:SetParent(RayUIActionBarHider) end
-	if RayUIActionBar3 and AB.db.bar3fade then RayUIActionBar3:SetParent(RayUIActionBarHider) end
-	if RayUIActionBar4 and AB.db.bar4fade then RayUIActionBar4:SetParent(RayUIActionBarHider) end
-	if RayUIActionBar5 and AB.db.bar5fade then RayUIActionBar5:SetParent(RayUIActionBarHider) end
-
 	AB:RegisterEvent("PLAYER_REGEN_ENABLED", "OnAutoHideEvent")
 	AB:RegisterEvent("PLAYER_REGEN_DISABLED", "OnAutoHideEvent")
 	AB:RegisterEvent("PLAYER_TARGET_CHANGED", "OnAutoHideEvent")

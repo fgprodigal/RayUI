@@ -249,7 +249,7 @@ local function LoadSkin()
 
 		self.PetInfo.icon.bg:SetBackdropBorderColor(r, g, b)
 		if PetJournalPetCard.petID  then
-            local speciesID, customName, level, xp, maxXp, displayID, name, icon, petType, creatureID, sourceText, description, isWild, canBattle, tradable = C_PetJournal.GetPetInfoByPetID(PetJournalPetCard.petID)
+            local speciesID, customName, _, _, _, _, _, name, icon, petType, creatureID, sourceText, description, isWild, canBattle, tradable = C_PetJournal.GetPetInfoByPetID(PetJournalPetCard.petID)
             if canBattle then
                 local health, maxHealth, power, speed, rarity = C_PetJournal.GetPetStats(PetJournalPetCard.petID)
                 PetJournalPetCard.QualityFrame.quality:SetText(_G["BATTLE_PET_BREED_QUALITY"..rarity])

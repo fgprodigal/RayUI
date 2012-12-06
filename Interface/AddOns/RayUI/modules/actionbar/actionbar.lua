@@ -2,6 +2,23 @@
 local AB = R:NewModule("ActionBar", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 
 AB.modName = L["动作条"]
+AB["Handled"] = {}
+
+local visibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show"
+local actionBarsName = {
+    "MainMenuBarArtFrame",
+    "MultiBarBottomRight",
+    "MultiBarBottomLeft",
+    "MultiBarRight",
+    "MultiBarLeft"
+}
+local actionButtonsName = {
+    bar1 = "ActionButton",
+    bar2 = "MultiBarBottomRightButton",
+    bar3 = "MultiBarBottomLeftButton",
+    bar4 = "MultiBarRightButton",
+    bar5 = "MultiBarLeftButton"
+}
 
 function AB:GetOptions()
 	local options = {
@@ -18,18 +35,6 @@ function AB:GetOptions()
 			type = "range",
 			min = 0.5, max = 1.5, step = 0.01,
 			isPercent = true,
-		},
-		buttonsize = {
-			order = 7,
-			name = L["按键大小"],
-			type = "range",
-			min = 20, max = 35, step = 1,
-		},
-		buttonspacing = {
-			order = 8,
-			name = L["按键间距"],
-			type = "range",
-			min = 1, max = 10, step = 1,
 		},
 		macroname = {
 			order = 9,
@@ -90,119 +95,53 @@ function AB:GetOptions()
 				},
 			},
 		},
-		Bar1Group = {
-			order = 14,
-			type = "group",
-			name = L["动作条1"],
-			guiInline = true,
-			args = {
-				bar1fade = {
-					type = "toggle",
-					name = L["自动隐藏"],
-					order = 1,
-				},
-				spacer = {
-					type = "description",
-					name = "",
-					desc = "",
-					order = 2,
-				},
-			},
-		},
-		Bar2Group = {
-			order = 15,
-			type = "group",
-			guiInline = true,
-			name = L["动作条2"],
-			args = {
-				bar2fade = {
-					type = "toggle",
-					name = L["自动隐藏"],
-					order = 1,
-				},
-				bar2mouseover = {
-					type = "toggle",
-					name = L["鼠标滑过显示"],
-					order = 2,
-				},
-			},
-		},
-		Bar3Group = {
-			order = 16,
-			type = "group",
-			guiInline = true,
-			name = L["动作条3"],
-			args = {
-				bar3fade = {
-					type = "toggle",
-					name = L["自动隐藏"],
-					order = 1,
-				},
-				bar3mouseover = {
-					type = "toggle",
-					name = L["鼠标滑过显示"],
-					order = 2,
-				},
-			},
-		},
-		Bar4Group = {
-			order = 17,
-			type = "group",
-			guiInline = true,
-			name = L["动作条4"],
-			args = {
-				bar4fade = {
-					type = "toggle",
-					name = L["自动隐藏"],
-					order = 1,
-				},
-				bar4mouseover = {
-					type = "toggle",
-					name = L["鼠标滑过显示"],
-					order = 2,
-				},
-			},
-		},
-		Bar5Group = {
-			order = 18,
-			type = "group",
-			guiInline = true,
-			name = L["动作条5"],
-			args = {
-				bar5fade = {
-					type = "toggle",
-					name = L["自动隐藏"],
-					order = 1,
-				},
-				bar5mouseover = {
-					type = "toggle",
-					name = L["鼠标滑过显示"],
-					order = 2,
-				},
-			},
-		},
 		PetGroup = {
-			order = 18,
+			order = 40,
 			type = "group",
-			guiInline = true,
+			guiInline = false,
 			name = L["宠物条"],
+            get = function(info) return R.db.ActionBar["barpet"][ info[#info] ] end,
+			set = function(info, value) R.db.ActionBar["barpet"][ info[#info] ] = value; AB:UpdatePetBar() end,
 			args = {
-				petbarfade = {
+                enable = {
+					order = 1,
+					type = "toggle",
+					name = L["启用"],
+				},
+				autohide = {
 					type = "toggle",
 					name = L["自动隐藏"],
-					order = 1,
+					order = 2,
 				},
-				petbarmouseover = {
+				mouseover = {
 					type = "toggle",
 					name = L["鼠标滑过显示"],
-					order = 2,
+					order = 3,
+				},
+                buttonsize = {
+					type = "range",
+					name = L["按键大小"],
+					min = 15, max = 40, step = 1,
+					order = 4,
+				},
+                buttonspacing = {
+					type = "range",
+					name = L["按键间距"],
+					min = 1, max = 10, step = 1,
+					order = 5,
+				},
+                buttonsPerRow = {
+					type = "range",
+					name = L["每行按键数"],
+					min = 1, max = NUM_PET_ACTION_SLOTS, step = 1,
+					order = 6,
 				},
 			},
 		},
 		StanceGroup = {
-			order = 20,
+			order = 41,
 			type = "group",
-			guiInline = true,
+			guiInline = false,
 			name = L["姿态条"],
 			args = {
 				stancebarfade = {
@@ -218,6 +157,51 @@ function AB:GetOptions()
 			},
 		},
 	}
+    for i = 1, 5 do
+        options["Bar"..i.."Group"] = {
+			order = 20 + i,
+			type = "group",
+			name = L["动作条"..i],
+			guiInline = false,
+            get = function(info) return R.db.ActionBar["bar"..i][ info[#info] ] end,
+			set = function(info, value) R.db.ActionBar["bar"..i][ info[#info] ] = value; AB:UpdatePositionAndSize("bar"..i) end,
+			args = {
+                enable = {
+					order = 1,
+					type = "toggle",
+					name = L["启用"],
+				},
+				autohide = {
+					type = "toggle",
+					name = L["自动隐藏"],
+					order = 2,
+				},
+				mouseover = {
+					type = "toggle",
+					name = L["鼠标滑过显示"],
+					order = 3,
+				},
+                buttonsize = {
+					type = "range",
+					name = L["按键大小"],
+					min = 15, max = 40, step = 1,
+					order = 4,
+				},
+                buttonspacing = {
+					type = "range",
+					name = L["按键间距"],
+					min = 1, max = 10, step = 1,
+					order = 5,
+				},
+                buttonsPerRow = {
+					type = "range",
+					name = L["每行按键数"],
+					min = 1, max = NUM_ACTIONBAR_BUTTONS, step = 1,
+					order = 6,
+				},
+			},
+        }
+    end
 	return options
 end
 
@@ -300,11 +284,118 @@ function AB:HideBlizz()
 	end)
 end
 
+function AB:CreateBar(id)
+    local point, anchor, attachTo, x, y = string.split(",", self["DefaultPosition"]["bar"..id])
+	local bar = CreateFrame("Frame", "RayUIActionBar"..id, UIParent, "SecureHandlerStateTemplate")
+    bar:Point(point, anchor, attachTo, x, y)
+
+	_G[actionBarsName[id]]:SetParent(bar)
+	
+    self["Handled"]["bar"..id] = bar
+    self:UpdatePositionAndSize("bar"..id)
+	R:CreateMover(bar, "ActionBar"..id.."Mover", L["动作条"..id.."锚点"], true, nil, "ALL,ACTIONBARS")  
+end
+
+function AB:UpdatePositionAndSize(barName)
+    local bar = self["Handled"][barName]
+    local buttonsPerRow = self.db[barName].buttonsPerRow
+    local buttonsize = self.db[barName].buttonsize
+    local buttonspacing = self.db[barName].buttonspacing
+    local numColumns = ceil(NUM_ACTIONBAR_BUTTONS / buttonsPerRow)
+
+	bar:SetWidth(buttonsize*buttonsPerRow + buttonspacing*(buttonsPerRow - 1))
+	bar:SetHeight(buttonsize*numColumns + buttonspacing*(numColumns - 1))
+
+    if not self.db.bar2.enable and not self.db.bar3.enable and not ( R.db.movers and R.db.movers.ActionBar1Mover ) then
+        local bar = ActionBar1Mover or self["Handled"]["bar1"]
+        bar:ClearAllPoints()
+        bar:Point("BOTTOM", UIParent, "BOTTOM", 0, 235)
+    elseif not ( R.db.movers and R.db.movers.ActionBar1Mover ) then
+        local bar = ActionBar1Mover or self["Handled"]["bar1"]
+        local point, anchor, attachTo, x, y = string.split(",", self["DefaultPosition"]["bar1"])
+        bar:Point(point, anchor, attachTo, x, y)
+    end
+
+	if self.db[barName].mouseover then
+		self.db[barName].autohide = false
+		bar:SetAlpha(0)
+		bar:SetScript("OnEnter", function(self) UIFrameFadeIn(bar,0.5,bar:GetAlpha(),1) end)
+		bar:SetScript("OnLeave", function(self) UIFrameFadeOut(bar,0.5,bar:GetAlpha(),0) end)  
+	else
+		bar:SetAlpha(1)
+		bar:SetScript("OnEnter", nil)
+		bar:SetScript("OnLeave", nil)  
+    end
+
+    if self.db[barName].autohide then
+        bar:SetParent(RayUIActionBarHider)
+    else
+        bar:SetParent(UIParent)
+    end
+
+    local button, lastButton, lastColumnButton
+    for i = 1, NUM_ACTIONBAR_BUTTONS do
+		button = _G[actionButtonsName[barName]..i]
+		lastButton = _G[actionButtonsName[barName]..(i-1)]
+		lastColumnButton = _G[actionButtonsName[barName]..(i-buttonsPerRow)]
+		button:SetSize(buttonsize, buttonsize)
+		button:ClearAllPoints()
+
+        if i == 1 then
+			button:SetPoint("TOPLEFT", bar, "TOPLEFT", 0, 0)
+        elseif (i - 1) % buttonsPerRow == 0 then
+			button:SetPoint("TOPLEFT", lastColumnButton, "BOTTOMLEFT", 0, -buttonspacing)
+        else
+			button:SetPoint("LEFT", lastButton, "RIGHT", buttonspacing, 0)
+        end
+
+        if self.db[barName].mouseover then
+            if not self.hooks[button] then
+                self:HookScript(button, "OnEnter", function() UIFrameFadeIn(bar,0.5,bar:GetAlpha(),1) end)
+                self:HookScript(button, "OnLeave", function() UIFrameFadeOut(bar,0.5,bar:GetAlpha(),0) end)
+            end
+        else
+            if not self.hooks[button] then
+                self:Unhook(button, "OnEnter")
+                self:Unhook(button, "OnLeave")
+            end
+        end
+    end
+
+    if self.db[barName].enable then
+        bar:Show()
+        RegisterStateDriver(bar, "visibility", visibility)
+    else
+        bar:Hide()
+        UnregisterStateDriver(bar, "visibility")
+    end
+end
+
 function AB:Initialize()
+    SetActionBarToggles(1, 1, 1, 1)
+    InterfaceOptionsActionBarsPanelBottomRight:Kill()
+    InterfaceOptionsActionBarsPanelBottomRight:SetScale(0.0001)
+	InterfaceOptionsActionBarsPanelBottomLeft:Kill()
+    InterfaceOptionsActionBarsPanelBottomLeft:SetScale(0.0001)
+	InterfaceOptionsActionBarsPanelRightTwo:Kill()
+    InterfaceOptionsActionBarsPanelRightTwo:SetScale(0.0001)
+	InterfaceOptionsActionBarsPanelRight:Kill()
+    InterfaceOptionsActionBarsPanelRight:SetScale(0.0001)
+
+    self["DefaultPosition"] = {
+        bar1 = "BOTTOM,UIParent,BOTTOM,"..(-3*AB.db.bar1.buttonsize - 3*AB.db.bar1.buttonspacing)..",235",
+        bar2 = "BOTTOM,UIParent,BOTTOM,"..(-3*AB.db.bar1.buttonsize - 3*AB.db.bar1.buttonspacing)..","..(235 + AB.db.bar3.buttonsize + AB.db.bar3.buttonspacing),
+        bar3 = "BOTTOMLEFT,UIParent,BOTTOM,"..(3*AB.db.bar1.buttonsize + 2.5*AB.db.bar1.buttonspacing + AB.db.bar2.buttonspacing)..",235",
+        bar4 = "RIGHT,UIParent,RIGHT,-15,0",
+        bar5 = "LEFT,UIParent,LEFT,15,0",
+    }
 	self:HideBlizz()
-	for i = 1, 5 do
-		AB["CreateBar"..i]()
-	end
+	--for i = 1, 5 do
+		--self["CreateBar"..i]()
+	--end
+    for i =1, 5 do
+        self:CreateBar(i)
+    end
 	if self.db.showgrid then
 		ActionButton_HideGrid = R.dummy
 		for i = 1, NUM_ACTIONBAR_BUTTONS do
@@ -353,7 +444,7 @@ function AB:Initialize()
 	self:SecureHook("StanceBar_Update", "StyleShift")
 	self:SecureHook("StanceBar_UpdateState", "StyleShift")
 	self:SecureHook("PetActionBar_Update", "StylePet")
-	self:SecureHook("SetActionBarToggles", "UpdatePosition")
+	--self:SecureHook("SetActionBarToggles", "UpdatePosition")
 	self:HookScript(SpellFlyout, "OnShow", "SetupFlyoutButton")
 
 	for i = 1, NUM_ACTIONBAR_BUTTONS do

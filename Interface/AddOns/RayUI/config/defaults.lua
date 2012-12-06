@@ -128,31 +128,67 @@ P["ActionBar"]={
 	buttonsize   = 28,
 	buttonspacing   = 6,
 	barscale = 1,
-	petbarscale = 0.9,
 	macroname = false,
 	itemcount = true,
 	hotkeys = true,
 	showgrid = true,
 
-	bar1fade = true,
+    bar1 = {
+        enable = true,
+        mouseover = false,
+        autohide = true,
+        buttonsPerRow = 12,
+        buttonsize = 28,
+        buttonspacing = 6,
+    },
 
-	bar2mouseover = false,
-	bar2fade = true,
+    bar2 = {
+        enable = true,
+        mouseover = false,
+        autohide = true,
+        buttonsPerRow = 12,
+        buttonsize = 28,
+        buttonspacing = 6,
+    },
 
-	bar3mouseover = false,
-	bar3fade = true,
+    bar3 = {
+        enable = true,
+        mouseover = false,
+        autohide = true,
+        buttonsPerRow = 6,
+        buttonsize = 28,
+        buttonspacing = 6,
+    },
 
-	bar4mouseover = false,
-	bar4fade = false,
+    bar4 = {
+        enable = true,
+        mouseover = false,
+        autohide = false,
+        buttonsPerRow = 1,
+        buttonsize = 28,
+        buttonspacing = 6,
+    },
 
-	bar5mouseover = true,
-	bar5fade = true,
+    bar5 = {
+        enable = true,
+        mouseover = true,
+        autohide = false,
+        buttonsPerRow = 1,
+        buttonsize = 28,
+        buttonspacing = 6,
+    },
+
+    barpet = {
+        enable = true,
+        mouseover = false,
+        autohide = true,
+        buttonsPerRow = 10,
+        buttonsize = 23,
+        buttonspacing = 6,
+    },
 
 	stancebarmouseover = false,
 	stancebarfade = false,
-
-	petbarmouseover = false,
-	petbarfade = true,
 
 	cooldownalpha = false,
 	cdalpha = 1,
