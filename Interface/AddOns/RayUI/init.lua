@@ -95,13 +95,43 @@ function AddOn:OnInitialize()
 
 	self:InitializeModules()
 
+    self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	self:RegisterEvent("PLAYER_LOGIN", "Initialize")
 	self:RegisterChatCommand("RayUI", "OpenConfig")
 	self:RegisterChatCommand("RC", "OpenConfig")
 	self:RegisterChatCommand("gm", ToggleHelpFrame)
 end
 
+function AddOn:PLAYER_REGEN_ENABLED()
+	AceConfigDialog:Open(AddOnName)
+	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+end
+
+function AddOn:PLAYER_REGEN_DISABLED()
+	local err = false
+	if AceConfigDialog.OpenFrames[AddOnName] then
+		self:RegisterEvent("PLAYER_REGEN_ENABLED")
+		AceConfigDialog:Close(AddOnName)
+		err = true
+	end
+	for name, _ in pairs(self.CreatedMovers) do
+		if _G[name]:IsShown() then
+			err = true
+			_G[name]:Hide()
+		end
+	end
+	if err == true then
+		self:Print(ERR_NOT_IN_COMBAT)
+        self:ToggleConfigMode(true)
+	end
+end
+
 function AddOn:OpenConfig()
+    if InCombatLockdown() then
+		self:Print(ERR_NOT_IN_COMBAT)
+		self:RegisterEvent("PLAYER_REGEN_ENABLED")
+		return
+    end
 	AceConfigDialog:SetDefaultSize("RayUI", 850, 650)
 	AceConfigDialog:Open("RayUI")
 	local f = AceConfigDialog.OpenFrames["RayUI"].frame

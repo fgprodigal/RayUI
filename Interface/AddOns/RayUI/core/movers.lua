@@ -377,19 +377,3 @@ function R:LoadMovers()
 		CreateMover(p, n, t, o, pd)
 	end
 end
-
-function R:PLAYER_REGEN_DISABLED()
-	local err = false
-	for name, _ in pairs(R.CreatedMovers) do
-		if _G[name]:IsShown() then
-			err = true
-			_G[name]:Hide()
-		end
-	end
-	if err == true then
-		R:Print(ERR_NOT_IN_COMBAT)
-        R:ToggleConfigMode(true)
-	end
-end
-
-R:RegisterEvent("PLAYER_REGEN_DISABLED")
