@@ -38,7 +38,9 @@ local function LoadFunc()
 
 			if eventType=="SPELL_INTERRUPT" then
 				if GetNumGroupMembers() > 0 then
-					if IsInInstance() then
+					local isInstance, instanceType = IsInInstance()
+					-- 在一个副本中 并且是JJC或者ZC或者查找组队地城中(随机本 随机团 场景战役)
+					if isInstance and (instanceType=="arena" or instanceType=="pvp" or IsInLFGDungeon()) then
 						SendChatMessage(msg..": "..destName.." \124cff71d5ff\124Hspell:"..id.."\124h["..effect.."]\124h\124r!", "INSTANCE_CHAT")
 					elseif IsInRaid() then
 						SendChatMessage(msg..": "..destName.." \124cff71d5ff\124Hspell:"..id.."\124h["..effect.."]\124h\124r!", "RAID")
@@ -75,7 +77,9 @@ local function LoadFunc()
 		local unit, spellName, spellrank, spelline, spellID = ...
 		if UnitIsEnemy("player", unit) and (spellID == 80167 or spellID == 94468 or spellID == 43183 or spellID == 57073 or spellName == "Drinking") then
 			if GetNumGroupMembers() > 0 then
-				if IsInInstance() then
+				local isInstance, instanceType = IsInInstance()
+				-- 在一个副本中 并且是JJC或者ZC或者查找组队地城中(随机本 随机团 场景战役)
+				if isInstance and (instanceType=="arena" or instanceType=="pvp" or IsInLFGDungeon()) then
 					SendChatMessage(UnitName(unit)..L["正在吃喝."], "INSTANCE_CHAT")
 				elseif IsInRaid() then
 					SendChatMessage(UnitName(unit)..L["正在吃喝."], "RAID")
