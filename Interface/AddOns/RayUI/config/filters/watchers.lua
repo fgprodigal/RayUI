@@ -344,8 +344,18 @@ R["Watcher"] = {
                 { spellID = 36032, unitId = "player", caster = "player", filter = "DEBUFF" },
                 --寒冰護體
                 { spellID = 11426, unitId = "player", caster = "player", filter = "BUFF" },
-                --2T13效果
-                { spellID = 105785, unitId = "player", caster = "player", filter = "BUFF" },
+                --冰冻智慧
+                { spellID = 57761, unitId = "player", caster = "player", filter = "BUFF" },
+                --热力迸发
+                { spellID = 48107, unitId = "player", caster = "player", filter = "BUFF" },
+                --咒术护盾
+                { spellID = 1463, unitId = "player", caster = "player", filter = "BUFF" },
+                --祈愿者之能
+                { spellID = 116257, unitId = "player", caster = "player", filter = "BUFF" },
+                --能量符文
+                { spellID = 116014, unitId = "player", caster = "player", filter = "BUFF" },
+                --咒术吸收
+                { spellID = 116267, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -371,6 +381,10 @@ R["Watcher"] = {
                 { spellID = 11366, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --極度冰凍
                 { spellID = 44572, unitId = "target", caster = "player", filter = "DEBUFF"},
+                --寒冰炸弹
+                { spellID = 112948, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --虚空风暴
+                { spellID = 114923, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
             {
                 name = "焦点buff&debuff",
@@ -512,6 +526,17 @@ R["Watcher"] = {
                 { spellID = 12292, filter = "CD" },
                 --致命平静
                 { spellID = 85730, filter = "CD" },
+
+                -- 物品
+                -- 手套
+                { slotID = 10, filter = "CD" },
+                -- 腰带
+                { slotID = 6, filter = "CD" },
+                -- 披风
+                { slotID = 15, filter = "CD" },
+                -- 饰品
+                { slotID = 13, filter = "CD" },
+                { slotID = 14, filter = "CD" },
             },
         },
         ["SHAMAN"] = {
