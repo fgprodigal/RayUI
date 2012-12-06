@@ -388,6 +388,23 @@ local function UpdateCastText(frame, curValue)
 	end
 end
 
+--Create our blacklist for nameplates, so prevent a certain nameplate from ever showing
+local function CheckFilter(frame, ...)
+	if PlateBlacklist[frame.hp.oldname:GetText()] then
+		frame:SetScript("OnUpdate", function() end)
+		frame.hp:Hide()
+		frame.cb:Hide()
+		frame.overlay:Hide()
+		frame.hp.oldlevel:Hide()
+	end
+
+	if BattleGroundHealers[frame.hp.oldname:GetText()] then
+		frame.healerIcon:Show()
+	else
+		frame.healerIcon:Hide()
+	end
+end
+
 --Sometimes castbar likes to randomly resize
 local OnValueChanged = function(self, curValue)
 	UpdateCastText(self, curValue)
@@ -528,6 +545,7 @@ local function UpdateObjects(frame)
 	frame:RegisterEvent("UNIT_AURA")
 	frame:HookScript("OnEvent", OnAura)
 
+    CheckFilter(frame)
 	HideObjects(frame)
 end
 
@@ -756,23 +774,6 @@ local function UpdateThreat(frame, elapsed)
 	end
 end
 
---Create our blacklist for nameplates, so prevent a certain nameplate from ever showing
-local function CheckFilter(frame, ...)
-	if PlateBlacklist[frame.hp.oldname:GetText()] then
-		frame:SetScript("OnUpdate", function() end)
-		frame.hp:Hide()
-		frame.cb:Hide()
-		frame.overlay:Hide()
-		frame.hp.oldlevel:Hide()
-	end
-
-	if BattleGroundHealers[frame.hp.oldname:GetText()] then
-		frame.healerIcon:Show()
-	else
-		frame.healerIcon:Hide()
-	end
-end
-
 --When becoming intoxicated blizzard likes to re-show the old level text, this should fix that
 local function HideDrunkenText(frame, ...)
 	if frame and frame.hp.oldlevel and frame.hp.oldlevel:IsShown() then
@@ -826,7 +827,8 @@ local function ShowHealth(frame, ...)
 	end
 
 	if frame.hp:GetEffectiveScale() < 1 then
-		frame.hp:SetScale(1 / frame.hp:GetParent():GetEffectiveScale())
+        frame.hp:SetScale(1 / frame.hp:GetParent():GetEffectiveScale())
+        --frame:SetScale(1)
 	end
     --frame:SetScale(frame.hp:GetScale())
 end
@@ -954,7 +956,6 @@ function NP:Initialize()
 		end
 
 		ForEachPlate(ShowHealth)
-		ForEachPlate(CheckFilter)
 		ForEachPlate(HideDrunkenText)
 		ForEachPlate(CheckUnit_Guid)
 		ForEachPlate(CheckSettings)
@@ -967,6 +968,8 @@ function NP:Initialize()
 		else
 			self.elapsed = (self.elapsed or 0) + elapsed
 		end
+
+		ForEachPlate(CheckFilter)
 	end)
 end
 

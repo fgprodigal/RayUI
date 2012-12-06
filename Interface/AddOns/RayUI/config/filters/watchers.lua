@@ -344,17 +344,17 @@ R["Watcher"] = {
                 { spellID = 36032, unitId = "player", caster = "player", filter = "DEBUFF" },
                 --寒冰護體
                 { spellID = 11426, unitId = "player", caster = "player", filter = "BUFF" },
-                --冰冻智慧
+                --腦部凍結
                 { spellID = 57761, unitId = "player", caster = "player", filter = "BUFF" },
-                --热力迸发
-                { spellID = 48107, unitId = "player", caster = "player", filter = "BUFF" },
-                --咒术护盾
-                { spellID = 1463, unitId = "player", caster = "player", filter = "BUFF" },
-                --祈愿者之能
+                --升溫
+                { spellID = 48107, unitId = "player", caster = "player", filter = "BUFF" },            
+                --咒法結界
+                { spellID = 1463, unitId = "player", caster = "player", filter = "BUFF" },            
+                --塑能師之能
                 { spellID = 116257, unitId = "player", caster = "player", filter = "BUFF" },
-                --能量符文
+                --力之符文
                 { spellID = 116014, unitId = "player", caster = "player", filter = "BUFF" },
-                --咒术吸收
+                --咒法轉移
                 { spellID = 116267, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
@@ -381,9 +381,9 @@ R["Watcher"] = {
                 { spellID = 11366, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --極度冰凍
                 { spellID = 44572, unitId = "target", caster = "player", filter = "DEBUFF"},
-                --寒冰炸弹
+                --冰霜爆彈
                 { spellID = 112948, unitId = "target", caster = "player", filter = "DEBUFF" },
-                --虚空风暴
+                --虛空暴雨
                 { spellID = 114923, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
             {

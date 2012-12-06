@@ -6,19 +6,6 @@ local function LoadSkin()
 	S:SetBD(AuctionFrame, 2, -10, 0, 10)
 	S:CreateBD(AuctionProgressFrame)
 
-	SideDressUpModel:HookScript("OnShow", function(self)
-		self:ClearAllPoints()
-		self:SetPoint("LEFT", self:GetParent():GetParent(), "RIGHT", 1, 0)
-	end)
-	SideDressUpModel.bg = CreateFrame("Frame", nil, SideDressUpModel)
-	SideDressUpModel.bg:SetPoint("TOPLEFT", 0, 1)
-	SideDressUpModel.bg:SetPoint("BOTTOMRIGHT", 1, -1)
-	SideDressUpModel.bg:SetFrameLevel(SideDressUpModel:GetFrameLevel()-1)
-	S:CreateBD(SideDressUpModel.bg)
-	S:Reskin(SideDressUpModelResetButton)
-	S:ReskinClose(SideDressUpModelCloseButton)
-	select(5, SideDressUpModelCloseButton:GetRegions()):Hide()
-
 	AuctionProgressBar:SetStatusBarTexture(S["media"].backdrop)
 	local ABBD = CreateFrame("Frame", nil, AuctionProgressBar)
 	ABBD:Point("TOPLEFT", -1, 1)
@@ -40,9 +27,6 @@ local function LoadSkin()
 		select(i, AuctionProgressFrame:GetRegions()):Hide()
 	end
 	AuctionProgressBarBorder:Hide()
-	for i = 1, 4 do
-		select(i, SideDressUpFrame:GetRegions()):Hide()
-	end
 	BrowseFilterScrollFrame:GetRegions():Hide()
 	select(2, BrowseFilterScrollFrame:GetRegions()):Hide()
 	BrowseScrollFrame:GetRegions():Hide()
@@ -85,7 +69,6 @@ local function LoadSkin()
 		"BidBuyoutButton",
 		"BidCloseButton",
 		"AuctionsCloseButton",
-		"SideDressUpModelResetButton",
 		"AuctionsCancelAuctionButton",
 		"AuctionsCreateAuctionButton",
 		"AuctionsNumStacksMaxButton",
