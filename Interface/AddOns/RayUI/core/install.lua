@@ -91,7 +91,9 @@ function R:SetLayout(layout)
 		StaticPopup_Show("CFG_RELOAD")
 	end
 	R:SetMoversPositions()
-	R:GetModule("ActionBar"):UpdatePosition(GetActionBarToggles())
+    for i = 1, 5 do
+        R:GetModule("ActionBar"):UpdatePositionAndSize("bar"..i)
+    end
 end
 
 function R:ChooseLayout()

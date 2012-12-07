@@ -48,9 +48,6 @@ function AB:OnAutoHideEvent(event, addon)
 	else
 		FadeOutActionButton()
 	end
-	if event == "PLAYER_REGEN_ENABLED" and self.needPosition then
-		self:UpdatePosition(GetActionBarToggles())
-	end
 end
 
 function AB:EnableAutoHide()

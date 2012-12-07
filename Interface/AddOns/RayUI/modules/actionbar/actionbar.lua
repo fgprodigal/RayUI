@@ -456,62 +456,6 @@ function AB:Initialize()
 	end
 end
 
-function AB:UpdatePosition(bar2,bar3)
-	if InCombatLockdown() then self.needPosition = true return end
-	if bar2 and bar3 then
-		RayUIVehicleBar:ClearAllPoints()
-		RayUIVehicleBar:SetPoint("TOPLEFT", "RayUIActionBar2", "TOPRIGHT", AB.db.buttonspacing, 0)
-		if not ( R.db.movers and R.db.movers.ActionBar1Mover ) then
-			ActionBar1Mover:ClearAllPoints()
-			ActionBar1Mover:Point("BOTTOM", UIParent, "BOTTOM", -3 * AB.db.buttonsize -3 * AB.db.buttonspacing, 235)
-		end
-		if RayUIActionBar2 and RayUIActionBar2:GetHeight() < AB.db.buttonsize*2 then
-			ActionBar2Mover:SetWidth(AB.db.buttonsize*6+AB.db.buttonspacing*5)
-			ActionBar2Mover:SetHeight(AB.db.buttonsize*2+AB.db.buttonspacing)
-			RayUIActionBar2:SetWidth(AB.db.buttonsize*6+AB.db.buttonspacing*5)
-			RayUIActionBar2:SetHeight(AB.db.buttonsize*2+AB.db.buttonspacing)
-			MultiBarBottomLeftButton7:ClearAllPoints()
-			MultiBarBottomLeftButton7:SetPoint("BOTTOMLEFT", RayUIActionBar2, 0,0)
-			if not ( R.db.movers and R.db.movers.ActionBar2Mover ) then
-				ActionBar2Mover:ClearAllPoints()
-				ActionBar2Mover:Point("BOTTOMLEFT", ActionBar1Mover, "BOTTOMRIGHT", AB.db.buttonspacing, 0)
-				RayUIActionBar2:ClearAllPoints()
-				RayUIActionBar2:Point("BOTTOMLEFT", ActionBar1Mover, "BOTTOMRIGHT", AB.db.buttonspacing, 0)
-			end
-		end
-	else
-		RayUIVehicleBar:ClearAllPoints()
-		RayUIVehicleBar:SetPoint("LEFT", "RayUIActionBar1", "RIGHT", AB.db.buttonspacing, 0)
-		if bar2 or bar3 then
-			if not ( R.db.movers and R.db.movers.ActionBar1Mover ) then
-				ActionBar1Mover:ClearAllPoints()
-				ActionBar1Mover:Point("BOTTOM", UIParent, "BOTTOM", 0, 235)
-			end
-		else
-			if not ( R.db.movers and R.db.movers.ActionBar1Mover ) then
-				ActionBar1Mover:ClearAllPoints()
-				ActionBar1Mover:Point("BOTTOM", UIParent, "BOTTOM", 0, 270)
-			end
-		end
-		if bar2 and not bar3 then
-			if RayUIActionBar2 and RayUIActionBar2:GetHeight() > AB.db.buttonsize then
-				ActionBar2Mover:SetWidth(AB.db.buttonsize*12+AB.db.buttonspacing*11)
-				ActionBar2Mover:SetHeight(AB.db.buttonsize)
-				RayUIActionBar2:SetWidth(AB.db.buttonsize*12+AB.db.buttonspacing*11)
-				RayUIActionBar2:SetHeight(AB.db.buttonsize)
-				MultiBarBottomLeftButton7:ClearAllPoints()
-				MultiBarBottomLeftButton7:SetPoint("LEFT", MultiBarBottomLeftButton6, "RIGHT", AB.db.buttonspacing,0)
-				if not ( R.db.movers and R.db.movers.ActionBar2Mover ) then
-					ActionBar2Mover:ClearAllPoints()
-					ActionBar2Mover:Point("BOTTOM", ActionBar1Mover, "TOP", 0, AB.db.buttonspacing)
-					RayUIActionBar2:ClearAllPoints()
-					RayUIActionBar2:Point("BOTTOM", ActionBar1Mover, "TOP", 0, AB.db.buttonspacing)
-				end
-			end
-		end
-	end
-end
-
 function AB:Info()
 	return L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r头像模块."]
 end

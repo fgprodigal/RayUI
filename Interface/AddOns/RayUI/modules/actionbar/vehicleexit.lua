@@ -5,7 +5,7 @@ function AB:CreateVehicleExit()
 	local bar = CreateFrame("Frame", "RayUIVehicleBar", UIParent, "SecureHandlerStateTemplate")
 	bar:SetHeight(AB.db.buttonsize)
 	bar:SetWidth(AB.db.buttonsize)
-	bar:SetPoint("TOPLEFT", "RayUIActionBar2", "TOPRIGHT", AB.db.buttonspacing, 0)
+	bar:SetPoint("BOTTOMLEFT", "RayUIActionBar3", "BOTTOMRIGHT", AB.db.buttonspacing, 0)
 	bar:SetScale(AB.db.barscale)
 
 	local veb = CreateFrame("BUTTON", nil, bar, "SecureActionButtonTemplate")

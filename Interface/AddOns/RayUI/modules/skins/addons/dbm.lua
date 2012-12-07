@@ -255,12 +255,14 @@ local function SkinDBM()
             self:Point("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -70)
         end
 	end)
-    DBM.InfoFrame:Show(5, "test")
-    DBM.InfoFrame:Hide()
-    DBMInfoFrame:HookScript("OnShow",function(self)
-		self:SetBackdrop(nil)
-		self:CreateShadow("Background")
-    end)
+    --if DBM.InfoFrame then
+        --DBM.InfoFrame:Show(5, "test")
+        --DBM.InfoFrame:Hide()
+        --DBMInfoFrame:HookScript("OnShow",function(self)
+            --self:SetBackdrop(nil)
+            --self:CreateShadow("Background")
+        --end)
+    --end
 
 	local RaidNotice_AddMessage_ = RaidNotice_AddMessage
 	RaidNotice_AddMessage = function(noticeFrame, textString, colorInfo)

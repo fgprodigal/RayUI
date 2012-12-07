@@ -55,6 +55,20 @@ local symbiosis = {
 	}
 }
 
+local ItemUpgrade = setmetatable ({
+	[446] = 4,
+	[447] = 8,
+
+	[454] = 4,
+	[455] = 8,
+
+	[460] = 8,
+	[461] = 12,
+	[462] = 16,
+
+	[452] = 8,
+},{__index=function() return 0 end})
+
 local function IsInspectFrameOpen()
 	return (InspectFrame and InspectFrame:IsShown()) or (Examiner and Examiner:IsShown())
 end
@@ -403,13 +417,14 @@ function TT:PLAYER_ENTERING_WORLD(event)
 end
 
 function TT:GetItemScore(iLink)
-   local _, _, itemRarity, itemLevel, _, _, _, _, itemEquip = GetItemInfo(iLink)
-   if (IsEquippableItem(iLink)) then
-      if not   (itemLevel > 1) and (itemRarity > 1) then
-      return 0
-      end
-   end
-   return itemLevel
+    local _, _, itemRarity, itemLevel, _, _, _, _, itemEquip = GetItemInfo(iLink)
+    if (IsEquippableItem(iLink)) then
+        if not   (itemLevel > 1) and (itemRarity > 1) then
+            return 0
+        end
+    end
+    local code = string.match(iLink, ":(%d+)|h")
+    return itemLevel + ItemUpgrade[tonumber(code)]
 end
 
 function TT:SetStyle(tooltip)

@@ -109,8 +109,8 @@ G.Raid.RaidDebuffs = {
 			[SpellName(123180)] = Defaults(5), -- Wind Step
 			[SpellName(123474)] = Defaults(5), -- Overwhelming Assault
 			-- Garalon
-			[SpellName(122835)] = Defaults(5), -- Pheromones
-			[SpellName(123081)] = Defaults(6), -- Pungency
+			--[SpellName(122835)] = Defaults(5), -- Pheromones
+			[SpellName(123081)] = Defaults(5), -- Pungency
 			-- Wind Lord Mel'jarak
 			[SpellName(122125)] = Defaults(5), -- Corrosive Resin Pool
 			[SpellName(121885)] = Defaults(5), -- Amber Prison
