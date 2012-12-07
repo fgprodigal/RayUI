@@ -6,12 +6,12 @@ local function LoadFunc()
 
 	local announce = CreateFrame("Frame")
 	local band = bit.band
-	local font = R["media"].font -- HOOG0555.ttf 
+	local font = R["media"].font -- HOOG0555.ttf
 	local fontflag = "OUTLINE" -- for pixelfont stick to this else OUTLINE or THINOUTLINE
 	local fontsize = 20 -- font size
 	local iconsize = 24
 	local COMBATLOG_OBJECT_AFFILIATION_MINE = COMBATLOG_OBJECT_AFFILIATION_MINE
-	 
+
 	-- Frame function
 	local function CreateMessageFrame(name)
 		local f = CreateFrame("ScrollingMessageFrame", name, UIParent)
@@ -28,7 +28,7 @@ local function LoadFunc()
 	end
 
 	local announceMessages = CreateMessageFrame("fDispelFrame")
-	 
+
 	local function OnEvent(self, event, timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, ...)
 		if (eventType=="SPELL_DISPEL" or eventType=="SPELL_STOLEN" or eventType=="SPELL_INTERRUPT" or eventType=="SPELL_DISPEL_FAILED") and band(sourceFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE then
 			local _, _, _, id, effect, _, etype = ...
@@ -37,10 +37,16 @@ local function LoadFunc()
 			local icon =GetSpellTexture(id)
 
 			if eventType=="SPELL_INTERRUPT" then
-				if GetNumGroupMembers() > 0 and IsInRaid() then
-					SendChatMessage(msg..": "..destName.." \124cff71d5ff\124Hspell:"..id.."\124h["..effect.."]\124h\124r!", "RAID")
-				elseif GetNumGroupMembers() > 0 then
-					SendChatMessage(msg..": "..destName.." \124cff71d5ff\124Hspell:"..id.."\124h["..effect.."]\124h\124r!", "PARTY")
+				if GetNumGroupMembers() > 0 then
+					local isInstance, instanceType = IsInInstance()
+					-- 在一个副本中 并且是JJC或者ZC或者查找组队地城中(随机本 随机团 场景战役)
+					if isInstance and (instanceType=="arena" or instanceType=="pvp" or IsInLFGDungeon()) then
+						SendChatMessage(msg..": "..destName.." \124cff71d5ff\124Hspell:"..id.."\124h["..effect.."]\124h\124r!", "INSTANCE_CHAT")
+					elseif IsInRaid() then
+						SendChatMessage(msg..": "..destName.." \124cff71d5ff\124Hspell:"..id.."\124h["..effect.."]\124h\124r!", "RAID")
+					else
+						SendChatMessage(msg..": "..destName.." \124cff71d5ff\124Hspell:"..id.."\124h["..effect.."]\124h\124r!", "PARTY")
+					end
 				end
 			end
 
@@ -70,10 +76,16 @@ local function LoadFunc()
 
 		local unit, spellName, spellrank, spelline, spellID = ...
 		if UnitIsEnemy("player", unit) and (spellID == 80167 or spellID == 94468 or spellID == 43183 or spellID == 57073 or spellName == "Drinking") then
-			if GetRealNumRaidMembers() > 0 then
-				SendChatMessage(UnitName(unit)..L["正在吃喝."], "RAID")
-			elseif GetRealNumPartyMembers() > 0 and not UnitInRaid("player") then
-				SendChatMessage(UnitName(unit)..L["正在吃喝."], "PARTY")
+			if GetNumGroupMembers() > 0 then
+				local isInstance, instanceType = IsInInstance()
+				-- 在一个副本中 并且是JJC或者ZC或者查找组队地城中(随机本 随机团 场景战役)
+				if isInstance and (instanceType=="arena" or instanceType=="pvp" or IsInLFGDungeon()) then
+					SendChatMessage(UnitName(unit)..L["正在吃喝."], "INSTANCE_CHAT")
+				elseif IsInRaid() then
+					SendChatMessage(UnitName(unit)..L["正在吃喝."], "RAID")
+				else
+					SendChatMessage(UnitName(unit)..L["正在吃喝."], "PARTY")
+				end
 			else
 				SendChatMessage(UnitName(unit)..L["正在吃喝."], "SAY")
 			end
@@ -81,14 +93,14 @@ local function LoadFunc()
 	end)
 
 	-------------------------------------------------------------------------------------
-	-- Credit Alleykat 
+	-- Credit Alleykat
 	-- Entering combat and allertrun function (can be used in anther ways)
 	------------------------------------------------------------------------------------
 	local speed = .057799924 -- how fast the text appears
-	local font = R["media"].font -- HOOG0555.ttf 
+	local font = R["media"].font -- HOOG0555.ttf
 	local fontflag = "OUTLINE" -- for pixelfont stick to this else OUTLINE or THINOUTLINE
 	local fontsize = 24 -- font size
-	 
+
 	local GetNextChar = function(word,num)
 		local c = word:byte(num)
 		local shift
@@ -104,25 +116,25 @@ local function LoadFunc()
 			end
 		return word:sub(num,num+shift-1),(num+shift)
 	end
-	 
+
 	local updaterun = CreateFrame("Frame")
-	 
+
 	local flowingframe = CreateFrame("Frame",nil,UIParent)
 	flowingframe:SetFrameStrata("HIGH")
 	flowingframe:SetPoint("CENTER",UIParent,0, 140) -- where we want the textframe
 	flowingframe:SetHeight(64)
-	 
+
 	local flowingtext = flowingframe:CreateFontString(nil,"OVERLAY")
 	flowingtext:SetFont(font,fontsize, fontflag)
 	flowingtext:SetShadowOffset(1.5,-1.5)
-	 
+
 	local rightchar = flowingframe:CreateFontString(nil,"OVERLAY")
 	rightchar:SetFont(font,60, fontflag)
 	rightchar:SetShadowOffset(1.5,-1.5)
 	rightchar:SetJustifyH("LEFT") -- left or right
-	 
+
 	local count,len,step,word,stringE,a,backstep
-	 
+
 	local nextstep = function()
 		a,step = GetNextChar (word,step)
 		flowingtext:SetText(stringE)
@@ -130,10 +142,10 @@ local function LoadFunc()
 		a = string.upper(a)
 		rightchar:SetText(a)
 	end
-	 
+
 	local backrun = CreateFrame("Frame")
 	backrun:Hide()
-	 
+
 	local updatestring = function(self,t)
 		count = count - t
 			if count < 0 then
@@ -156,10 +168,10 @@ local function LoadFunc()
 				end
 			end
 	end
-	 
+
 	updaterun:SetScript("OnUpdate",updatestring)
 	updaterun:Hide()
-	 
+
 	local backstepf = function()
 		local a = backstep
 		local firstchar
@@ -180,7 +192,7 @@ local function LoadFunc()
 		firstchar = string.upper(firstchar)
 		rightchar:SetText(firstchar)
 	end
-	 
+
 	local rollback = function(self,t)
 		count = count - t
 			if count < 0 then
@@ -194,31 +206,31 @@ local function LoadFunc()
 				end
 			end
 	end
-	 
+
 	backrun:SetScript("OnUpdate",rollback)
-	 
+
 	local allertrun = function(f,r,g,b)
 		flowingframe:Hide()
 		updaterun:Hide()
 		backrun:Hide()
-	 
+
 		flowingtext:SetText(f)
 		local l = flowingtext:GetWidth()
-	 
+
 		local color1 = r or 1
 		local color2 = g or 1
 		local color3 = b or 1
-	 
+
 		flowingtext:SetTextColor(color1*.95,color2*.95,color3*.95) -- color in RGB(red green blue)(alpha)
 		rightchar:SetTextColor(color1,color2,color3)
-	 
+
 		word = f
 		len = f:len()
 		step,backstep = 1,1
 		count = speed
 		stringE = ""
 		a = ""
-	 
+
 		flowingtext:SetText("")
 		flowingframe:SetWidth(l)
 		flowingtext:ClearAllPoints()
@@ -227,7 +239,7 @@ local function LoadFunc()
 		rightchar:ClearAllPoints()
 		rightchar:SetPoint("LEFT",flowingtext,"RIGHT")
 		rightchar:SetJustifyH("LEFT")
-	 
+
 		rightchar:SetText("")
 		updaterun:Show()
 		flowingframe:Show()
