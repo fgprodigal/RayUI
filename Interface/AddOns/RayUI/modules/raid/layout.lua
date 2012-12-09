@@ -861,7 +861,7 @@ function RA:SpawnRaid()
 			group:Point(pos, raid15[i-1], posRel, colX or 0, colY or 0)
 		end
 		raid15[i] = group
-        R:CreateMover(group, group:GetName().."Mover", "Raid1-15 Group"..i, nil, nil, "ALL,RAID15")
+        R:CreateMover(group, group:GetName().."Mover", "Raid1-15 Group"..i, nil, nil, "ALL,RAID15", true)
 		group:SetParent(RayUF_Parent)
         RA.Raid15SmartVisibility(group)
 	end
@@ -874,7 +874,7 @@ function RA:SpawnRaid()
 			group:Point(pos, raid25[i-1], posRel, colX or 0, colY or 0)
 		end
 		raid25[i] = group
-        R:CreateMover(group, group:GetName().."Mover", "Raid1-25 Group"..i, nil, nil, "ALL,RAID25,RAID40")
+        R:CreateMover(group, group:GetName().."Mover", "Raid1-25 Group"..i, nil, nil, "ALL,RAID25,RAID40", true)
 		group:SetParent(RayUF_Parent)
         RA.Raid25SmartVisibility(group)
 	end
@@ -888,7 +888,7 @@ function RA:SpawnRaid()
 				group:Point(pos, raid40[i-1], posRel, colX or 0, colY or 0)
 			end
 			raid40[i] = group
-            R:CreateMover(group, group:GetName().."Mover", "Raid1-40 Group"..i, nil, nil, "ALL,RAID40")
+            R:CreateMover(group, group:GetName().."Mover", "Raid1-40 Group"..i, nil, nil, "ALL,RAID40", true)
             group:SetParent(RayUF_Parent)
             RA.Raid40SmartVisibility(group)
 		end

@@ -5,7 +5,6 @@ function AB:CreateVehicleExit()
 	local bar = CreateFrame("Frame", "RayUIVehicleBar", UIParent, "SecureHandlerStateTemplate")
 	bar:SetHeight(AB.db.buttonsize)
 	bar:SetWidth(AB.db.buttonsize)
-	bar:SetPoint("BOTTOMLEFT", "RayUIActionBar3", "BOTTOMRIGHT", AB.db.buttonspacing, 0)
 	bar:SetScale(AB.db.barscale)
 
 	local veb = CreateFrame("BUTTON", nil, bar, "SecureActionButtonTemplate")
@@ -40,4 +39,10 @@ function AB:CreateVehicleExit()
 	veb:SetScript("OnLeave", GameTooltip_Hide)
     RegisterStateDriver(veb, "visibility", "[petbattle][overridebar][vehicleui][possessbar] hide; [@vehicle,exists] show; hide")
     RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui][possessbar] hide; show")
+
+    if not self.db.bar2.enable and not self.db.bar3.enable and not ( R.db.movers and R.db.movers.ActionBar1Mover ) then
+        bar:SetPoint("LEFT", "RayUIActionBar1", "RIGHT", AB.db.buttonspacing, 0)
+    elseif not ( R.db.movers and R.db.movers.ActionBar1Mover ) then
+        bar:SetPoint("BOTTOMLEFT", "RayUIActionBar3", "BOTTOMRIGHT", AB.db.buttonspacing, 0)
+    end
 end

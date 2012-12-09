@@ -155,7 +155,7 @@ function S:GetOptions()
 		numerationgroup = {
 			order = 13,
 			type = "group",
-			name = "MogIt",
+			name = "Numeration",
 			guiInline = true,
 			args = {
 				numeration = {

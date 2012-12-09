@@ -875,13 +875,13 @@ R["Watcher"] = {
                 --吸血之觸
                 { spellID = 34914, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --心靈恐慌
-                { spellID = 64044, unitId = "player", caster = "all", filter = "DEBUFF" },
+                { spellID = 64044, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --心靈恐慌（繳械效果）
-                { spellID = 64058, unitId = "player", caster = "all", filter = "DEBUFF" },
+                { spellID = 64058, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --精神控制
-                { spellID = 605, unitId = "player", caster = "all", filter = "DEBUFF" },
+                { spellID = 605, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --沉默
-                { spellID = 15487, unitId = "player", caster = "all", filter = "DEBUFF" },
+                { spellID = 15487, unitId = "target", caster = "all", filter = "DEBUFF" },
             },
             {
                 name = "焦点buff&debuff",
@@ -1320,7 +1320,7 @@ R["Watcher"] = {
 				{ spellID = 123727, unitId = "target", caster = "player", filter = "DEBUFF" },
 				{ spellID = 116330, unitId = "target", caster = "player", filter = "DEBUFF" },
 				--奪刃繩矛
-				{ spellID = 117368, unitId = "player", caster = "player", filter = "BUFF" },
+				{ spellID = 117368, unitId = "player", caster = "player", filter = "DEBUFF" },
                 --旭日东升踢
                 { spellID = 130320, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
@@ -1445,7 +1445,7 @@ R["Watcher"] = {
                 --血族之裔
                 { spellID = 105588, unitId = "player", caster = "all", filter = "BUFF" },
                 --吸血鬼的拥抱
-                { spellID = 15290, unitId = "player", caster = "all", filter = "BUFF" },
+                { spellID = 15286, unitId = "player", caster = "all", filter = "BUFF" },
                 --虔誠光環
                 { spellID = 31821, unitId = "player", caster = "all", filter = "BUFF" },
                 --風暴鞭笞圖騰

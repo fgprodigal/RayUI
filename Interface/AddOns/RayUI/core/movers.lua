@@ -113,7 +113,7 @@ local function CreatePopup()
 	UIDropDownMenu_Initialize(moverTypes, MoverTypes_Initialize)
 end
 
-local function CreateMover(parent, name, text, overlay, postdrag)
+local function CreateMover(parent, name, text, overlay, postdrag, ignoreSizeChange)
 	if not parent then return end
 	if R.CreatedMovers[name].Created then return end
 
@@ -194,8 +194,10 @@ local function CreateMover(parent, name, text, overlay, postdrag)
 		self:SetUserPlaced(false)
 	end)
 
-    parent:SetScript("OnSizeChanged", SizeChanged)
-	parent.mover = f
+    if not ignoreSizeChange then
+        parent:SetScript("OnSizeChanged", SizeChanged)
+        parent.mover = f
+    end
 	parent:ClearAllPoints()
 	parent:SetPoint(point, f, 0, 0)
 	parent.ClearAllPoints = function() return end
@@ -233,7 +235,7 @@ local function CreateMover(parent, name, text, overlay, postdrag)
 	R.CreatedMovers[name].Created = true
 end
 
-function R:CreateMover(parent, name, text, overlay, postdrag, moverTypes)
+function R:CreateMover(parent, name, text, overlay, postdrag, moverTypes, ignoreSizeChange)
 	if not moverTypes then moverTypes = "ALL,GENERAL" end
 
 	if R.CreatedMovers[name] == nil then 
@@ -252,7 +254,7 @@ function R:CreateMover(parent, name, text, overlay, postdrag, moverTypes)
 		end
 	end
 
-	CreateMover(parent, name, text, overlay, postdrag)
+	CreateMover(parent, name, text, overlay, postdrag, ignoreSizeChange)
 end
 
 function R:SaveMoverPosition(name)

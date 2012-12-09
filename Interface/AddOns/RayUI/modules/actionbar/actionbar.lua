@@ -310,10 +310,18 @@ function AB:UpdatePositionAndSize(barName)
         local bar = ActionBar1Mover or self["Handled"]["bar1"]
         bar:ClearAllPoints()
         bar:Point("BOTTOM", UIParent, "BOTTOM", 0, 235)
+        if RayUIVehicleBar then
+            RayUIVehicleBar:ClearAllPoints()
+            RayUIVehicleBar:SetPoint("LEFT", "RayUIActionBar1", "RIGHT", AB.db.buttonspacing, 0)
+        end
     elseif not ( R.db.movers and R.db.movers.ActionBar1Mover ) then
         local bar = ActionBar1Mover or self["Handled"]["bar1"]
         local point, anchor, attachTo, x, y = string.split(",", self["DefaultPosition"]["bar1"])
         bar:Point(point, anchor, attachTo, x, y)
+        if RayUIVehicleBar then
+            RayUIVehicleBar:ClearAllPoints()
+            RayUIVehicleBar:SetPoint("BOTTOMLEFT", "RayUIActionBar3", "BOTTOMRIGHT", AB.db.buttonspacing, 0)
+        end
     end
 
 	if self.db[barName].mouseover then
@@ -384,15 +392,12 @@ function AB:Initialize()
 
     self["DefaultPosition"] = {
         bar1 = "BOTTOM,UIParent,BOTTOM,"..(-3*AB.db.bar1.buttonsize - 3*AB.db.bar1.buttonspacing)..",235",
-        bar2 = "BOTTOM,UIParent,BOTTOM,"..(-3*AB.db.bar1.buttonsize - 3*AB.db.bar1.buttonspacing)..","..(235 + AB.db.bar3.buttonsize + AB.db.bar3.buttonspacing),
-        bar3 = "BOTTOMLEFT,UIParent,BOTTOM,"..(3*AB.db.bar1.buttonsize + 2.5*AB.db.bar1.buttonspacing + AB.db.bar2.buttonspacing)..",235",
+        bar2 = "BOTTOM,ActionBar1Mover,TOP,0,"..AB.db.bar2.buttonspacing,
+        bar3 = "BOTTOMLEFT,ActionBar1Mover,BOTTOMRIGHT,"..AB.db.bar3.buttonspacing..",0",
         bar4 = "RIGHT,UIParent,RIGHT,-15,0",
         bar5 = "LEFT,UIParent,LEFT,15,0",
     }
 	self:HideBlizz()
-	--for i = 1, 5 do
-		--self["CreateBar"..i]()
-	--end
     for i =1, 5 do
         self:CreateBar(i)
     end
@@ -559,8 +564,8 @@ function AB:Style(button)
 	if not button.shadow then
 		if not totem then
 			if not flyout and not button.noResize then
-				button:SetWidth(AB.db.buttonsize)
-				button:SetHeight(AB.db.buttonsize)
+				--button:SetWidth(AB.db.buttonsize)
+				--button:SetHeight(AB.db.buttonsize)
 			end
 
 			button:CreateShadow("Background")
