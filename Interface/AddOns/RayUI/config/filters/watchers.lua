@@ -1450,6 +1450,8 @@ R["Watcher"] = {
                 { spellID = 31821, unitId = "player", caster = "all", filter = "BUFF" },
                 --風暴鞭笞圖騰
                 { spellID = 120676, unitId = "player", caster = "all", filter = "BUFF" },
+                --骷髏戰旗
+                { spellID = 114206, unitId = "player", caster = "all", filter = "BUFF" },
 
                 --種族天賦
                 --血之烈怒

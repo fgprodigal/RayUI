@@ -826,9 +826,8 @@ local function ShowHealth(frame, ...)
 		frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 	end
 
-	if frame.hp:GetEffectiveScale() < 1 then
-        frame.hp:SetScale(1 / frame.hp:GetParent():GetEffectiveScale())
-        --frame:SetScale(1)
+	if frame:GetScale() < 1 then
+        frame:SetScale(1)
 	end
     --frame:SetScale(frame.hp:GetScale())
 end

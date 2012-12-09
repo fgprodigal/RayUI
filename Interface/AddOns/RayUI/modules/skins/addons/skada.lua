@@ -20,6 +20,7 @@ local function SkinSkada()
 		options.titleoptions.args.color = nil
 		options.windowoptions = nil
 		options.baroptions.args.barfont = nil
+		options.baroptions.args.reversegrowth = nil
 		options.titleoptions.args.font = nil
 	end
 
@@ -61,13 +62,13 @@ local function SkinSkada()
 		if not skada.shadow then
 			skada:CreateShadow("Background")
 		end
-		skada.shadow:ClearAllPoints()
+		skada.border:ClearAllPoints()
 		if win.db.enabletitle then
-			skada.shadow:Point('TOPLEFT', win.bargroup.button, 'TOPLEFT', -5, 5)
+			skada.border:Point("TOPLEFT", win.bargroup.button, "TOPLEFT", -1, 1)
 		else
-			skada.shadow:Point('TOPLEFT', win.bargroup, 'TOPLEFT', -5, 5)
+			skada.border:Point("TOPLEFT", win.bargroup.button, "TOPLEFT", -1, 1)
 		end
-		skada.shadow:Point('BOTTOMRIGHT', win.bargroup, 'BOTTOMRIGHT', 5, -5)
+		skada.border:Point("BOTTOMRIGHT", win.bargroup, "BOTTOMRIGHT", 1, -1)
 
 		win.bargroup.button:SetFrameStrata("MEDIUM")
 		win.bargroup.button:SetFrameLevel(5)
@@ -120,10 +121,10 @@ local function SkinSkada()
 	local windows = {}
 	function EmbedSkada()
 		if #windows == 1 then
-			EmbedWindow(windows[1], 220, 140/bars - barSpacing, 140, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -15, 30)
+			EmbedWindow(windows[1], 250, 140/bars - barSpacing, 140 - barSpacing, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -15, 30)
 		elseif #windows == 2 then
-			EmbedWindow(windows[1], 220, 140/bars - barSpacing, 140, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -15, 30)
-			EmbedWindow(windows[2], 220, 140/bars - barSpacing, 140, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -250, 0)
+			EmbedWindow(windows[1], 250, 140/bars - barSpacing, 140 - barSpacing, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -15, 30)
+			EmbedWindow(windows[2], 250, 140/bars - barSpacing, 140 - barSpacing, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -250, 0)
 		end
 	end
 

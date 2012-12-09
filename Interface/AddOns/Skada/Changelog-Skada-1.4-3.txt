@@ -1,0 +1,23 @@
+------------------------------------------------------------------------
+r400 | zarnivoop | 2012-08-29 07:31:10 +0000 (Wed, 29 Aug 2012) | 1 line
+Changed paths:
+   A /tags/1.4-3 (from /trunk:399)
+
+Tagging as 1.4-3
+------------------------------------------------------------------------
+r399 | Zarnivoop | 2012-08-29 07:30:00 +0000 (Wed, 29 Aug 2012) | 1 line
+Changed paths:
+   M /trunk/Skada.toc
+   M /trunk/modules/SkadaCC/SkadaCC.toc
+   M /trunk/modules/SkadaDamage/SkadaDamage.toc
+   M /trunk/modules/SkadaDamageTaken/SkadaDamageTaken.toc
+   M /trunk/modules/SkadaDeaths/SkadaDeaths.toc
+   M /trunk/modules/SkadaDebuffs/SkadaDebuffs.toc
+   M /trunk/modules/SkadaDispels/SkadaDispels.toc
+   M /trunk/modules/SkadaEnemies/SkadaEnemies.toc
+   M /trunk/modules/SkadaHealing/SkadaHealing.toc
+   M /trunk/modules/SkadaPower/SkadaPower.toc
+   M /trunk/modules/SkadaThreat/SkadaThreat.toc
+
+updated toc
+------------------------------------------------------------------------

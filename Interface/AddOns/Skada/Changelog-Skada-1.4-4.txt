@@ -1,0 +1,13 @@
+------------------------------------------------------------------------
+r402 | zarnivoop | 2012-10-10 07:36:51 +0000 (Wed, 10 Oct 2012) | 1 line
+Changed paths:
+   A /tags/1.4-4 (from /trunk:401)
+
+Tagging as 1.4-4
+------------------------------------------------------------------------
+r401 | mikk | 2012-09-29 17:51:15 +0000 (Sat, 29 Sep 2012) | 1 line
+Changed paths:
+   M /trunk/modules/SkadaDeaths/Deaths.lua
+
+Plug an error that can happen (does for my GF, not for me - huhh?) when you get healed by an external effect. We found it happening on the "Surrounding Mist" on Osul Mist Shamans.  "srcName" becomes nil and that wasn't checked for.
+------------------------------------------------------------------------
