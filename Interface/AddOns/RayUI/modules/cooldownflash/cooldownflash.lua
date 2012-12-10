@@ -10,7 +10,7 @@ local DCP = CreateFrame("frame", nil, UIParent)
 DCP:SetAlpha(0)
 DCP:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
 DCP.TextFrame = DCP:CreateFontString(nil, "ARTWORK")
-DCP.TextFrame:SetPoint("CENTER",DCP,"CENTER")
+DCP.TextFrame:SetPoint("TOP",DCP,"BOTTOM",0,-5)
 DCP.TextFrame:SetWidth(185)
 DCP.TextFrame:SetJustifyH("CENTER")
 DCP.TextFrame:SetTextColor(1,1,1)
@@ -110,7 +110,7 @@ local function OnUpdate(_,update)
             DCPT:SetVertexColor(1,1,1)
             DCP:SetAlpha(0)
             DCP:SetSize(CF.db.iconSize, CF.db.iconSize)
-        else
+        elseif CF.db.enable then
             if (not DCPT:GetTexture()) then
 				if (animating[1][3] ~= nil and CF.db.showSpellName) then
 					DCP.TextFrame:SetText(animating[1][3])
@@ -119,7 +119,6 @@ local function OnUpdate(_,update)
                 if animating[1][2] then
                     DCPT:SetVertexColor(unpack(CF.db.petOverlay))
                 end
-                PlaySoundFile("Interface\\AddOns\\Doom_CooldownPulse\\lubdub.wav")
             end
             local alpha = CF.db.maxAlpha
             if (runtimer < CF.db.fadeInTime) then
@@ -199,43 +198,56 @@ function CF:UseContainerItem(bag,slot)
     end
 end
 
+function CF:UseItemByName(itemName)
+    local itemID = string.match(itemName, "item:(%d+)")
+    if (itemID) then
+        local texture = select(10, GetItemInfo(itemID))
+        watching[itemID] = {GetTime(),"item",texture}
+        DCP:SetScript("OnUpdate", OnUpdate)
+    end
+end
+
+function CF:EnableCooldownFlash()
+    self:SecureHook("UseContainerItem")
+    self:SecureHook("UseInventoryItem")
+    self:SecureHook("UseAction")
+    self:SecureHook("UseItemByName")
+    DCP:RegisterEvent("ADDON_LOADED")
+    DCP:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
+    DCP:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+    DCP:RegisterEvent("PLAYER_ENTERING_WORLD")
+end
+
+function CF:DisableCooldownFlash()
+    self:Unhook("UseContainerItem")
+    self:Unhook("UseInventoryItem")
+    self:Unhook("UseAction")
+    self:Unhook("UseItemByName")
+    DCP:UnregisterEvent("ADDON_LOADED")
+    DCP:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED")
+    DCP:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+    DCP:UnregisterEvent("PLAYER_ENTERING_WORLD")
+    --DCP:SetScript("OnUpdate", nil)
+    --wipe(cooldowns)
+    --wipe(watching)
+end
+
 function CF:Initialize()
     DCP:SetSize(CF.db.iconSize, CF.db.iconSize)
     DCP:CreateShadow("Background")
-    DCP.TextFrame:SetFont(R["media"].font, 14, "OUTLINE")
+    DCP.TextFrame:SetFont(R["media"].font, 18, "OUTLINE")
     DCP.TextFrame:SetShadowOffset(2, -2)
     if self.db.enable then
-        self:SecureHook("UseContainerItem")
-        self:SecureHook("UseInventoryItem")
-        self:SecureHook("UseAction")
-        DCP:RegisterEvent("ADDON_LOADED")
-        DCP:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
-        DCP:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-        DCP:RegisterEvent("PLAYER_ENTERING_WORLD")
+        self:EnableCooldownFlash()
     end
     DCP:SetPoint("CENTER", UIParent, "CENTER")
 	R:CreateMover(DCP, "CooldownFlashMover", L["中部冷却闪光"], true, nil)  
     R.Options.args.CooldownFlash.args.toggle.set = function(info, v)
         CF.db.enable = v
         if v then
-            self:SecureHook("UseContainerItem")
-            self:SecureHook("UseInventoryItem")
-            self:SecureHook("UseAction")
-            DCP:RegisterEvent("ADDON_LOADED")
-            DCP:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
-            DCP:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-            DCP:RegisterEvent("PLAYER_ENTERING_WORLD")
+            self:EnableCooldownFlash()
         else
-            self:Unhook("UseContainerItem")
-            self:Unhook("UseInventoryItem")
-            self:Unhook("UseAction")
-            DCP:UnregisterEvent("ADDON_LOADED")
-            DCP:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED")
-            DCP:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-            DCP:UnregisterEvent("PLAYER_ENTERING_WORLD")
-            self:SetScript("OnUpdate", nil)
-            wipe(cooldowns)
-            wipe(watching)
+            self:DisableCooldownFlash()
         end
     end
     local spellname, _, icon = GetSpellInfo(16914)
