@@ -119,7 +119,7 @@ function Buffet:Edit(name, substring, food, pot, stone, shift)
 	if (pot and not stone) or (stone and not pot) then body = body .. "[combat] item:"..(pot or stone).."; " end
     body = body .. (pot and stone and "[nocombat] " or "").."item:"..(food or ( hasDaughter and "64488" or "6948" ))
 
-	if pot and stone then body = body .. "\n/castsequence [combat,nomod] reset="..(stone == 22044 and "120/" or "").."combat item:"..stone..", item:"..pot end
+	if pot and stone then body = body .. "\n/castsequence [combat,nomod] reset="..(stone == 5512 and "120/" or stone == 22044 and "120/" or "").."combat item:"..stone..", item:"..pot end
 
 	EditMacro(macroid, name, "INV_Misc_QuestionMark", substring:gsub("%%MACRO%%", body), 1)
 end

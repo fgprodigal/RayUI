@@ -78,7 +78,7 @@ local function OnUpdate(_,update)
             if (v[7] == "spell") then
                 start, duration = GetSpellCooldown(v[6])
             elseif (v[7] == "item") then
-                start, duration, enabled = GetItemCooldown(v[6])
+                start, duration, enabled = GetItemCooldown(i)
             elseif (v[7] == "pet") then
                 start, duration, enabled = GetPetActionCooldown(v[6])
             end
@@ -177,6 +177,7 @@ function CF:UseAction(slot)
     if (actionType == "item") then
         local texture = GetActionTexture(slot)
         watching[itemID] = {GetTime(),"item",texture}
+        DCP:SetScript("OnUpdate", OnUpdate)
     end
 end
 
@@ -185,6 +186,7 @@ function CF:UseInventoryItem(slot)
     if (itemID) then
         local texture = GetInventoryItemTexture("player", slot)
         watching[itemID] = {GetTime(),"item",texture}
+        DCP:SetScript("OnUpdate", OnUpdate)
     end
 end
 
@@ -193,6 +195,7 @@ function CF:UseContainerItem(bag,slot)
     if (itemID) then
         local texture = select(10, GetItemInfo(itemID))
         watching[itemID] = {GetTime(),"item",texture}
+        DCP:SetScript("OnUpdate", OnUpdate)
     end
 end
 
