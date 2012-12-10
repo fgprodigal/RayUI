@@ -135,8 +135,4 @@ function AddOn:OpenConfig()
 	AceConfigDialog:SetDefaultSize("RayUI", 850, 650)
 	AceConfigDialog:Open("RayUI")
 	local f = AceConfigDialog.OpenFrames["RayUI"].frame
-	f:SetMovable(true)
-	f:RegisterForDrag("LeftButton")
-	f:SetScript("OnDragStart", function(self) self:StartMoving() self:SetUserPlaced(false) end)
-	f:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end)
 end

@@ -7,6 +7,7 @@ local function LoadMemory()
 	local scriptProfile = GetCVar("scriptProfile") == "1"
 	infobar.Text:SetText("0 MB")
 
+    local maxMemorySize = 35
 	local int, int2 = 6, 5
 	local bandwidthString = "%.2f Mbps"
 	local percentageString = "%.2f%%"
@@ -15,11 +16,7 @@ local function LoadMemory()
 	local megaByteString = "%.2f MB"
 	local enteredFrame = false
 
-	if Is64BitClient() then
-		Status:SetMinMaxValues(0,15000)
-	else
-		Status:SetMinMaxValues(0,10000)
-	end
+    Status:SetMinMaxValues(0, maxMemorySize * 1024)
 
 	local function formatMem(memory)
 		local mult = 10^1

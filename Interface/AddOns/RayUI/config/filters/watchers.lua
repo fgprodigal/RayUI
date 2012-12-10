@@ -857,6 +857,8 @@ R["Watcher"] = {
                 { spellID = 123254,  unitId = "player", caster = "player", filter = "BUFF" },
                 --天使之壁
                 { spellID = 114214,  unitId = "player", caster = "player", filter = "BUFF" },
+                --精神護罩
+                { spellID = 109964,  unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -1103,6 +1105,10 @@ R["Watcher"] = {
                 { spellID = 84617, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --宿怨
                 { spellID = 79140, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --制裁之錘
+                { spellID = 853, unitId = "target", caster = "all", filter = "DEBUFF" },
+                --制裁之拳
+                { spellID = 105593, unitId = "target", caster = "all", filter = "DEBUFF" },
             },
             {
                 name = "焦点buff&debuff",

@@ -458,12 +458,12 @@ local BossIDs = {
     -------------------------------------------------------------------------------
    -- Heart of Fear (MoP-Raid 5.0.1)
    -------------------------------------------------------------------------------  
-   [62837]  = true, -- Grand Empress Shek'zeer
-   [63664]  = true, -- Blade Lord Ta'yak
-   [63666]  = true, -- Amber-Shaper Un'sok
-   [63667]  = true, -- Garalon
-   [65501]  = true, -- Wind Lord Mel'jarak
-   [66791]	= true,	-- Zorlok
+   [62980] = true,	-- Imperial Vizier Zor'lok
+   [62543] = true,	-- Blade Lord Ta'yak
+   [63191] = true,	-- Garalon
+   [62397] = true,	-- Wind Lord Mel'jarak
+   [62511] = true,	-- Amber-Shaper Un'sok
+   [62837] = true,	-- Grand Empress Shek'zeer
    
    -------------------------------------------------------------------------------
    -- Hellfire Citadel: Hellfire Ramparts
@@ -647,19 +647,21 @@ local BossIDs = {
    -------------------------------------------------------------------------------
    -- Mogu'Shan Vault (MoP-Raid 5.0.1)
    -------------------------------------------------------------------------------
-   [59915]	= true, -- Jasper, Stone Guard
-   [60009]	= true, -- Feng the Accursed
-   [60043]	= true, -- Jade, Stone Guard
-   [60047]	= true, -- Amethyst, Stone Guard
-   [60051]	= true, -- Cobalt, Stone Guard
-   [60143]  = true, -- Gara'jal the Spiritbinder
-   [60399]  = true, -- Qin-xi
-   [60400]  = true, -- Jan-xi
-   [60410]  = true, -- Elegon
-   [61421]  = true, -- Zian of the Endless Shadow -- 60701?
-   [61423]  = true, -- Qiang the Merciless -- 60709?
-   [61427]  = true, -- Subetai the Swift -- 60710?
-   [61429]  = true, -- Meng the Demented
+   [59915] = true,	-- Jasper, Stone Guard
+   [60043] = true,	-- Jade, Stone Guard
+   [60047] = true,	-- Amethyst, Stone Guard
+   [60051] = true,	-- Cobalt, Stone Guard
+   [60009] = true,	-- Feng the Accursed
+   [60143] = true,	-- Gara'jal the Spiritbinder
+   [60701] = true,	-- Zian of the Endless Shadow
+   [60708] = true,	-- Qiang the Merciless
+   [60709] = true,	-- Subetai the Swift
+   [60710] = true,	-- Meng the Demented
+   [60410] = true,	-- Elegon
+   [60396] = true,	-- Emperor's Rage
+   [60397] = true,	-- Emperor's Strength
+   [60399] = true,	-- Qin-xi
+   [60400] = true,	-- Jan-xi
 	 
    -------------------------------------------------------------------------------
    -- Molten Core
@@ -1101,12 +1103,12 @@ local BossIDs = {
    -------------------------------------------------------------------------------
    -- Terrace of Endless Spring (MoP Raid)
    -------------------------------------------------------------------------------
-   [60583]  = true, -- Protector Kaolan
-   [60585]  = true, -- Elder Regail
-   [60586]  = true, -- Elder Asani
-   [60999]  = true, -- Sha of Fear
-   [62442]  = true, -- Tsulong
-   [63099]  = true, -- Lei Shi
+   [60583] = true,	-- Protector Kaolan
+   [60585] = true,	-- Elder Regail
+   [60586] = true,	-- Elder Asani
+   [62442] = true,	-- Tsulong
+   [62983] = true,	-- Lei Shi
+   [60999] = true,	-- Sha of Fear
    
    -------------------------------------------------------------------------------
    -- The Bastion of Twilight

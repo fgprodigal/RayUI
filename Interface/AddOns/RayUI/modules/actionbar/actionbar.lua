@@ -462,7 +462,7 @@ function AB:Initialize()
 end
 
 function AB:Info()
-	return L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r头像模块."]
+	return L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r动作条模块."]
 end
 
 function AB:UpdateHotkey(button, actionButtonType)

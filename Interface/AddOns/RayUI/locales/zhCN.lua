@@ -340,6 +340,14 @@ L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r插件美化模块."] = true
 L["法术监视"] = true
 L["中部冷却闪光"] = true
 L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r中部冷却闪光模块, 技能冷却结束时在屏幕中部显示闪烁技能图标."] = true
+    L["图标大小"] = true
+    L["淡入时间"] = true
+    L["淡出时间"] = true
+    L["最大透明度"] = true
+    L["持续时间"] = true
+    L["动画大小"] = true
+    L["显示法术名称"] = true
+    L["测试"] = true
 
 L["背包"] = true
 	L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r背包模块."] = true

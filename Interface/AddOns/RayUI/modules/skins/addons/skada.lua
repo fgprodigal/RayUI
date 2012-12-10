@@ -7,9 +7,9 @@ local function SkinSkada()
 	local Skada = Skada
 	local barSpacing = R:Scale(1)
 	local bars = 8
+    local windowWidth = 280
 
 	local barmod = Skada.displays["bar"]
-
 	-- Used to strip unecessary options from the in-game config
 	local function StripOptions(options)
 		options.baroptions.args.barspacing = nil
@@ -24,7 +24,6 @@ local function SkinSkada()
 		options.titleoptions.args.font = nil
 	end
 
-	local barmod = Skada.displays["bar"]
 	barmod.AddDisplayOptions_ = barmod.AddDisplayOptions
 	barmod.AddDisplayOptions = function(self, win, options)
 		self:AddDisplayOptions_(win, options)
@@ -121,10 +120,10 @@ local function SkinSkada()
 	local windows = {}
 	function EmbedSkada()
 		if #windows == 1 then
-			EmbedWindow(windows[1], 250, 140/bars - barSpacing, 140 - barSpacing, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -15, 30)
+			EmbedWindow(windows[1], windowWidth, 140/bars - barSpacing, 140 - barSpacing, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -15, 30)
 		elseif #windows == 2 then
-			EmbedWindow(windows[1], 250, 140/bars - barSpacing, 140 - barSpacing, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -15, 30)
-			EmbedWindow(windows[2], 250, 140/bars - barSpacing, 140 - barSpacing, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -250, 0)
+			EmbedWindow(windows[1], windowWidth, 140/bars - barSpacing, 140 - barSpacing, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -15, 30)
+			EmbedWindow(windows[2], windowWidth, 140/bars - barSpacing, 140 - barSpacing, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", - windowWidth - 10, 0)
 		end
 	end
 

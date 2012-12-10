@@ -241,3 +241,15 @@ P["Bags"]={
 	bagWidth = 385,
 	bankWidth = 600,
 }
+
+P["CooldownFlash"]={
+    enable = true,
+    fadeInTime = 0.1, 
+    fadeOutTime = 0.2, 
+    maxAlpha = 0.8, 
+    animScale = 1.2, 
+    iconSize = 80, 
+    holdTime = 0.3,
+    petOverlay = {1,1,1},
+	showSpellName = false,
+}
