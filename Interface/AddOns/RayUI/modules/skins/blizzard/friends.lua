@@ -196,6 +196,7 @@ local function LoadSkin()
 	friendshandler:RegisterEvent("BN_FRIEND_ACCOUNT_OFFLINE")
 	friendshandler:SetScript("OnEvent", UpdateScroll)
 	FriendsFrameFriendsScrollFrame:HookScript("OnVerticalScroll", UpdateScroll)
+    hooksecurefunc(FriendsFrameFriendsScrollFrame, "update", UpdateScroll)
 
 	local whobg = CreateFrame("Frame", nil, WhoFrameEditBoxInset)
 	whobg:SetPoint("TOPLEFT")

@@ -100,6 +100,16 @@ local function SkinSkada()
 		end
 	end)
 
+    hooksecurefunc(Skada, "OpenReportWindow", function(self)
+        if not self.ReportWindow.frame.reskinned then
+            self.ReportWindow.frame:StripTextures()
+            S:SetBD(self.ReportWindow.frame)
+            local closeButton = self.ReportWindow.frame:GetChildren()
+            S:ReskinClose(closeButton)
+            self.ReportWindow.frame.reskinned = true
+        end
+    end)
+
 	if not S.db.skadaposition then return end
 
 	local function EmbedWindow(window, width, barheight, height, point, relativeFrame, relativePoint, ofsx, ofsy)
