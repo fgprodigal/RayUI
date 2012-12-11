@@ -65,7 +65,7 @@ local function SkinSkada()
 		if win.db.enabletitle then
 			skada.border:Point("TOPLEFT", win.bargroup.button, "TOPLEFT", -1, 1)
 		else
-			skada.border:Point("TOPLEFT", win.bargroup.button, "TOPLEFT", -1, 1)
+			skada.border:Point("TOPLEFT", win.bargroup, "TOPLEFT", -1, 1)
 		end
 		skada.border:Point("BOTTOMRIGHT", win.bargroup, "BOTTOMRIGHT", 1, -1)
 
@@ -115,8 +115,10 @@ local function SkinSkada()
 	local function EmbedWindow(window, width, barheight, height, point, relativeFrame, relativePoint, ofsx, ofsy)
 		window.db.barwidth = width
 		window.db.barheight = barheight
-		if window.db.enabletitle then 
+		if window.db.enabletitle then
 			height = height - barheight
+		else
+			height = height + barSpacing
 		end
 		window.db.background.height = height
 		window.db.spark = false
