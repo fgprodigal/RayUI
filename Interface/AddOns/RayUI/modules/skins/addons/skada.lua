@@ -120,7 +120,6 @@ local function SkinSkada()
 		else
 			height = height + barSpacing
 		end
-		print(height)
 		window.db.background.height = height
 		window.db.spark = false
 		window.db.barslocked = true
