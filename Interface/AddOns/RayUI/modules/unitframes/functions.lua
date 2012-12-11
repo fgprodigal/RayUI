@@ -1329,6 +1329,46 @@ function UF:Construct_AuraBarHeader(frame)
 	return auraBar
 end
 
+function UF:UpdatePrep(event)
+    if event == "ARENA_OPPONENT_UPDATE" then
+        for i=1, 5 do
+            if not _G["RayUFArena"..i] then return end
+            _G["RayUFArena"..i].prepFrame:Hide()
+        end
+    else
+        local numOpps = GetNumArenaOpponentSpecs()
+
+        if numOpps > 0 then
+            for i=1, 5 do
+                if not _G["RayUFArena"..i] then return end
+                local s = GetArenaOpponentSpec(i)
+                local _, spec, class, texture = nil, "UNKNOWN", "UNKNOWN", [[INTERFACE\ICONS\INV_MISC_QUESTIONMARK]]
+
+                if s and s > 0 then
+                    _, spec, _, texture, _, _, class = GetSpecializationInfoByID(s)
+                end
+
+                if (i <= numOpps) then
+                    if class and spec then
+                        local color = RAID_CLASS_COLORS[class]
+                        _G["RayUFArena"..i].prepFrame.SpecClass:SetText(spec.."  -  "..LOCALIZED_CLASS_NAMES_MALE[class])
+                        _G["RayUFArena"..i].prepFrame.Health:SetStatusBarColor(color.r, color.g, color.b)
+                        _G["RayUFArena"..i].prepFrame.Icon:SetTexture(texture)
+                        _G["RayUFArena"..i].prepFrame:Show()
+                    end
+                else
+                    _G["RayUFArena"..i].prepFrame:Hide()
+                end
+            end
+        else
+            for i=1, 5 do
+                if not _G["RayUFArena"..i] then return end
+                _G["RayUFArena"..i].prepFrame:Hide()
+            end
+        end
+    end
+end
+
 local attributeBlacklist = {["showplayer"] = true, ["showraid"] = true, ["showparty"] = true, ["showsolo"] = true}
 local configEnv
 local originalEnvs = {}

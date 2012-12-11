@@ -126,12 +126,7 @@ function UF:Initialize()
 
 	}, {__index = RayUF["colors"]})
 
-	for layout, spawnFunc in pairs(UF.Layouts) do
-		if spawnFunc then
-			spawnFunc(self)
-		end
-	end
-	wipe(UF.Layouts)
+    self:LoadUnitFrames()
 end
 
 function UF:Info()
