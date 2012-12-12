@@ -60,6 +60,7 @@ local function LoadFunc()
     end
 
     WatchFrame:HookScript("OnEvent", SkinWatchFrameItems)
+	hooksecurefunc("AddQuestWatch", SkinWatchFrameItems)
 end
 
 M:RegisterMiscModule("WatchFrame", LoadFunc)

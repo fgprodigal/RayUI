@@ -591,6 +591,7 @@ function CH:OnHyperlinkLeave(frame, linkData, link)
 end
 
 function CH:OnMouseScroll(frame, dir)
+    local bb = _G[frame:GetName().."ButtonFrameBottomButton"]
 	if dir > 0 then
 		if IsShiftKeyDown() then
 			frame:ScrollToTop()
@@ -608,6 +609,11 @@ function CH:OnMouseScroll(frame, dir)
 			frame:ScrollDown()
 		end
 	end
+    if frame:AtBottom() then
+        bb:Hide()
+    else
+        bb:Show()
+    end
 end
 
 function CH:LinkHoverOnLoad()
@@ -723,6 +729,18 @@ end
 
 function CH:FCF_StopAlertFlash(frame)
 	_G["ChatFrame" .. frame:GetID() .. "Tab"].ffl = nil
+end
+
+function CH:FCF_Tab_OnClick(tab)
+    local id = tab:GetID()
+    local chatFrame = _G["ChatFrame"..id]
+    local bb = _G["ChatFrame"..id.."ButtonFrameBottomButton"]
+
+    if chatFrame:AtBottom() then
+        bb:Hide()
+    else
+        bb:Show()
+    end
 end
 
 function CH:ChatEdit_AddHistory(editBox, line)
@@ -880,21 +898,21 @@ function CH:ApplyStyle(event, ...)
                 end
             end)
             local function BottomButtonClick(self)
-                self:GetParent():ScrollToBottom();
+                self:GetParent():ScrollToBottom()
+                self:Hide()
             end
             local bb = _G[frameName.."ButtonFrameBottomButton"]
             local flash = _G[frameName.."ButtonFrameBottomButtonFlash"]
-            R:GetModule("Skins"):ReskinArrow(ChatFrame1ButtonFrameBottomButton, "down")
+            R:GetModule("Skins"):ReskinArrow(bb, "down")
             bb:SetParent(cf)
-            bb:SetHeight(18)
-            bb:SetWidth(18)
             bb:ClearAllPoints()
             bb:SetPoint("TOPRIGHT", cf, "TOPRIGHT", 0, -20)
-            bb:SetAlpha(0.4)
             bb.SetPoint = R.dummy
-            flash:ClearAllPoints()
-            flash:Point("TOPLEFT", -3, 3)
-            flash:Point("BOTTOMRIGHT", 3, -3)
+            --flash:ClearAllPoints()
+            --flash:Point("TOPLEFT", -3, 3)
+            --flash:Point("BOTTOMRIGHT", 3, -3)
+            bb:Hide()
+            flash:Kill()
             bb:SetScript("OnClick", BottomButtonClick)
             local font, path = cf:GetFont()
             cf:SetFont(font, path, R["media"].fontflag)
@@ -1096,6 +1114,7 @@ function CH:Initialize()
 	self:SecureHook("FCFTab_UpdateColors", "FaneifyTab")
 	self:SecureHook("FCF_StartAlertFlash")
 	self:SecureHook("FCF_StopAlertFlash")
+    self:SecureHook("FCF_Tab_OnClick") 
 
 	local events = {
 		"CHAT_MSG_BATTLEGROUND", "CHAT_MSG_BATTLEGROUND_LEADER",

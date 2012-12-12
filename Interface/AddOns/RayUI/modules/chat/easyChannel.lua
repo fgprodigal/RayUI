@@ -4,49 +4,49 @@ local CH = R:GetModule("Chat")
 function CH:ChatEdit_CustomTabPressed(self)
     if strsub(tostring(self:GetText()), 1, 1) == "/" then return end
 
-    if  (self:GetAttribute("chatType") == "SAY")  then
-        if (GetNumSubgroupMembers()>0) then
-            self:SetAttribute("chatType", "PARTY")
-            ChatEdit_UpdateHeader(self)
-        elseif (GetNumGroupMembers()>0) then
-            self:SetAttribute("chatType", "RAID")
-            ChatEdit_UpdateHeader(self)
-        elseif (GetNumBattlefieldScores()>0) then
+    if self:GetAttribute("chatType") == "SAY" then
+        if IsPartyLFG() or GetNumBattlefieldScores()>0 then
             self:SetAttribute("chatType", "INSTANCE_CHAT")
             ChatEdit_UpdateHeader(self)
-        elseif (IsInGuild()) then
+        elseif IsInGroup() then
+            self:SetAttribute("chatType", "PARTY")
+            ChatEdit_UpdateHeader(self)
+        elseif IsInRaid() then
+            self:SetAttribute("chatType", "RAID")
+            ChatEdit_UpdateHeader(self)
+        elseif IsInGuild() then
             self:SetAttribute("chatType", "GUILD")
             ChatEdit_UpdateHeader(self)
         else
             return
         end
-    elseif (self:GetAttribute("chatType") == "PARTY") then
-        if (GetNumGroupMembers()>0 and IsInRaid()) then
-            self:SetAttribute("chatType", "RAID")
-            ChatEdit_UpdateHeader(self)
-        elseif (GetNumBattlefieldScores()>0) then
+    elseif self:GetAttribute("chatType") == "PARTY" then
+        if IsPartyLFG() or GetNumBattlefieldScores()>0 then
             self:SetAttribute("chatType", "INSTANCE_CHAT")
             ChatEdit_UpdateHeader(self)
-        elseif (IsInGuild()) then
+        elseif IsInRaid() then
+            self:SetAttribute("chatType", "RAID")
+            ChatEdit_UpdateHeader(self)
+        elseif IsInGuild() then
             self:SetAttribute("chatType", "GUILD")
             ChatEdit_UpdateHeader(self)
         else
             self:SetAttribute("chatType", "SAY")
             ChatEdit_UpdateHeader(self)
         end         
-    elseif (self:GetAttribute("chatType") == "RAID") then
-        if (GetNumBattlefieldScores()>0) then
+    elseif self:GetAttribute("chatType") == "RAID" then
+        if IsPartyLFG() or GetNumBattlefieldScores()>0 then
             self:SetAttribute("chatType", "INSTANCE_CHAT")
             ChatEdit_UpdateHeader(self)
-        elseif (IsInGuild()) then
+        elseif IsInGuild() then
             self:SetAttribute("chatType", "GUILD")
             ChatEdit_UpdateHeader(self)
         else
             self:SetAttribute("chatType", "SAY")
             ChatEdit_UpdateHeader(self)
         end
-    elseif (self:GetAttribute("chatType") == "INSTANCE_CHAT") then
-        if (IsInGuild) then
+    elseif self:GetAttribute("chatType") == "INSTANCE_CHAT" then
+        if IsInGuild() then
             self:SetAttribute("chatType", "GUILD")
             ChatEdit_UpdateHeader(self)
         else
@@ -56,7 +56,7 @@ function CH:ChatEdit_CustomTabPressed(self)
     elseif (self:GetAttribute("chatType") == "GUILD") then
         self:SetAttribute("chatType", "SAY")
         ChatEdit_UpdateHeader(self)
-    elseif (self:GetAttribute("chatType") ~= "WHISPER" and self:GetAttribute("chatType") ~= "BN_WHISPER") then
+    elseif self:GetAttribute("chatType") ~= "WHISPER" and self:GetAttribute("chatType") ~= "BN_WHISPER" then
         self:SetAttribute("chatType", "SAY")
         ChatEdit_UpdateHeader(self)
     end

@@ -37,10 +37,8 @@ local function LoadFunc()
 			local icon =GetSpellTexture(id)
 
 			if eventType=="SPELL_INTERRUPT" then
-				if GetNumGroupMembers() > 0 then
-					local isInstance, instanceType = IsInInstance()
-					-- 在一个副本中 并且是JJC或者ZC或者查找组队地城中(随机本 随机团 场景战役)
-					if isInstance and (instanceType=="arena" or instanceType=="pvp" or IsInLFGDungeon()) then
+				if IsInGroup() then
+					if IsPartyLFG() then
 						SendChatMessage(msg..": "..destName.." \124cff71d5ff\124Hspell:"..id.."\124h["..effect.."]\124h\124r!", "INSTANCE_CHAT")
 					elseif IsInRaid() then
 						SendChatMessage(msg..": "..destName.." \124cff71d5ff\124Hspell:"..id.."\124h["..effect.."]\124h\124r!", "RAID")
