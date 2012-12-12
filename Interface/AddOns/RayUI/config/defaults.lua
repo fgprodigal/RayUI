@@ -107,7 +107,7 @@ P["Raid"]={
     healbar = true,
     healoverflow = true,
     healothersonly = false,
-    roleicon = true,    
+    roleicon = true,
     indicatorsize = 7,
     symbolsize = 11,
     leadersize = 12,
@@ -243,13 +243,13 @@ P["Bags"]={
 }
 
 P["CooldownFlash"]={
-    enable = true,
-    fadeInTime = 0.1, 
-    fadeOutTime = 0.2, 
-    maxAlpha = 0.8, 
-    animScale = 1.2, 
-    iconSize = 80, 
-    holdTime = 0.3,
-    petOverlay = {1,1,1},
+	enable = true,
+	fadeInTime = 0.1,
+	fadeOutTime = 0.2,
+	maxAlpha = 0.8,
+	animScale = 1.2,
+	iconSize = 80,
+	holdTime = 0.3,
+	enablePet = false,
 	showSpellName = false,
 }

@@ -10,7 +10,7 @@ local DCP = CreateFrame("frame", nil, UIParent)
 DCP:SetAlpha(0)
 DCP:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
 DCP.TextFrame = DCP:CreateFontString(nil, "ARTWORK")
-DCP.TextFrame:SetPoint("CENTER",DCP,"CENTER")
+DCP.TextFrame:SetPoint("TOP",DCP,"BOTTOM",0,-5)
 DCP.TextFrame:SetWidth(185)
 DCP.TextFrame:SetJustifyH("CENTER")
 DCP.TextFrame:SetTextColor(1,1,1)
@@ -110,7 +110,7 @@ local function OnUpdate(_,update)
             DCPT:SetVertexColor(1,1,1)
             DCP:SetAlpha(0)
             DCP:SetSize(CF.db.iconSize, CF.db.iconSize)
-        else
+        elseif CF.db.enable then
             if (not DCPT:GetTexture()) then
 				if (animating[1][3] ~= nil and CF.db.showSpellName) then
 					DCP.TextFrame:SetText(animating[1][3])
@@ -119,7 +119,6 @@ local function OnUpdate(_,update)
                 if animating[1][2] then
                     DCPT:SetVertexColor(unpack(CF.db.petOverlay))
                 end
-                PlaySoundFile("Interface\\AddOns\\Doom_CooldownPulse\\lubdub.wav")
             end
             local alpha = CF.db.maxAlpha
             if (runtimer < CF.db.fadeInTime) then
@@ -146,7 +145,7 @@ function DCP:UNIT_SPELLCAST_SUCCEEDED(unit,spell,rank)
 end
 
 function DCP:COMBAT_LOG_EVENT_UNFILTERED(...)
---[[     local _,event,_,_,_,sourceFlags,_,_,_,_,_,spellID = ...
+    local _,event,_,_,_,sourceFlags,_,_,_,_,_,spellID = ...
     if (event == "SPELL_CAST_SUCCESS") then
         if (bit.band(sourceFlags,COMBATLOG_OBJECT_TYPE_PET) == COMBATLOG_OBJECT_TYPE_PET and bit.band(sourceFlags,COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE) then
             local name = GetSpellInfo(spellID)
@@ -160,7 +159,7 @@ function DCP:COMBAT_LOG_EVENT_UNFILTERED(...)
             end
             self:SetScript("OnUpdate", OnUpdate)
         end
-    end ]]
+    end
 end
 
 function DCP:PLAYER_ENTERING_WORLD()
@@ -177,6 +176,7 @@ function CF:UseAction(slot)
     if (actionType == "item") then
         local texture = GetActionTexture(slot)
         watching[itemID] = {GetTime(),"item",texture}
+        DCP:SetScript("OnUpdate", OnUpdate)
     end
 end
 
@@ -185,6 +185,7 @@ function CF:UseInventoryItem(slot)
     if (itemID) then
         local texture = GetInventoryItemTexture("player", slot)
         watching[itemID] = {GetTime(),"item",texture}
+        DCP:SetScript("OnUpdate", OnUpdate)
     end
 end
 
@@ -193,46 +194,60 @@ function CF:UseContainerItem(bag,slot)
     if (itemID) then
         local texture = select(10, GetItemInfo(itemID))
         watching[itemID] = {GetTime(),"item",texture}
+        DCP:SetScript("OnUpdate", OnUpdate)
     end
+end
+
+function CF:UseItemByName(itemName)
+    local itemID = string.match(itemName, "item:(%d+)")
+    if (itemID) then
+        local texture = select(10, GetItemInfo(itemID))
+        watching[itemID] = {GetTime(),"item",texture}
+        DCP:SetScript("OnUpdate", OnUpdate)
+    end
+end
+
+function CF:EnableCooldownFlash()
+    self:SecureHook("UseContainerItem")
+    self:SecureHook("UseInventoryItem")
+    self:SecureHook("UseAction")
+    self:SecureHook("UseItemByName")
+    DCP:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
+    DCP:RegisterEvent("PLAYER_ENTERING_WORLD")
+	if self.db.enablePet then
+		DCP:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	end
+end
+
+function CF:DisableCooldownFlash()
+    self:Unhook("UseContainerItem")
+    self:Unhook("UseInventoryItem")
+    self:Unhook("UseAction")
+    self:Unhook("UseItemByName")
+    DCP:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED")
+    DCP:UnregisterEvent("PLAYER_ENTERING_WORLD")
+    DCP:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+    --DCP:SetScript("OnUpdate", nil)
+    --wipe(cooldowns)
+    --wipe(watching)
 end
 
 function CF:Initialize()
     DCP:SetSize(CF.db.iconSize, CF.db.iconSize)
     DCP:CreateShadow("Background")
-    DCP.TextFrame:SetFont(R["media"].font, 14, "OUTLINE")
+    DCP.TextFrame:SetFont(R["media"].font, 18, "OUTLINE")
     DCP.TextFrame:SetShadowOffset(2, -2)
     if self.db.enable then
-        self:SecureHook("UseContainerItem")
-        self:SecureHook("UseInventoryItem")
-        self:SecureHook("UseAction")
-        DCP:RegisterEvent("ADDON_LOADED")
-        DCP:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
-        DCP:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-        DCP:RegisterEvent("PLAYER_ENTERING_WORLD")
+        self:EnableCooldownFlash()
     end
     DCP:SetPoint("CENTER", UIParent, "CENTER")
 	R:CreateMover(DCP, "CooldownFlashMover", L["中部冷却闪光"], true, nil)  
     R.Options.args.CooldownFlash.args.toggle.set = function(info, v)
         CF.db.enable = v
         if v then
-            self:SecureHook("UseContainerItem")
-            self:SecureHook("UseInventoryItem")
-            self:SecureHook("UseAction")
-            DCP:RegisterEvent("ADDON_LOADED")
-            DCP:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
-            DCP:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-            DCP:RegisterEvent("PLAYER_ENTERING_WORLD")
+            self:EnableCooldownFlash()
         else
-            self:Unhook("UseContainerItem")
-            self:Unhook("UseInventoryItem")
-            self:Unhook("UseAction")
-            DCP:UnregisterEvent("ADDON_LOADED")
-            DCP:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED")
-            DCP:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-            DCP:UnregisterEvent("PLAYER_ENTERING_WORLD")
-            self:SetScript("OnUpdate", nil)
-            wipe(cooldowns)
-            wipe(watching)
+            self:DisableCooldownFlash()
         end
     end
     local spellname, _, icon = GetSpellInfo(16914)
@@ -301,6 +316,21 @@ function CF:GetOptions()
 			type = "toggle",
             get = function(info) return R.db.CooldownFlash[ info[#info] ] end,
             set = function(info, value) R.db.CooldownFlash[ info[#info] ] = value end,
+            hidden = function() return not R.db.CooldownFlash.enable end,
+        },
+        enablePet = {
+			order = 12,
+			name = L["监视宠物技能"],
+			type = "toggle",
+            get = function(info) return R.db.CooldownFlash[ info[#info] ] end,
+            set = function(info, value)
+				R.db.CooldownFlash[ info[#info] ] = value
+				if value then
+					DCP:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+				else
+					DCP:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+				end
+			end,
             hidden = function() return not R.db.CooldownFlash.enable end,
         },
         test = {

@@ -132,10 +132,10 @@ local function SkinSkada()
 	local windows = {}
 	function EmbedSkada()
 		if #windows == 1 then
-			EmbedWindow(windows[1], windowWidth, 140/bars - barSpacing, 140 - barSpacing, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -15, 30)
+			EmbedWindow(windows[1], windowWidth, 140/bars - barSpacing, 140, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -15, 30)
 		elseif #windows == 2 then
-			EmbedWindow(windows[1], windowWidth, 140/bars - barSpacing, 140 - barSpacing, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -15, 30)
-			EmbedWindow(windows[2], windowWidth, 140/bars - barSpacing, 140 - barSpacing, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", - windowWidth - 10, 0)
+			EmbedWindow(windows[1], windowWidth, 140/bars - barSpacing, 140, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -15, 30)
+			EmbedWindow(windows[2], windowWidth, 140/bars - barSpacing, 140, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", - windowWidth - 10, 0)
 		end
 	end
 
