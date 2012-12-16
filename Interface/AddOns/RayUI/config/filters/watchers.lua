@@ -89,6 +89,8 @@ R["Watcher"] = {
                 { spellID = 112071, unitId = "player", caster = "player", filter = "BUFF" },
                 --化身
                 { spellID = 117679, unitId = "player", caster = "player", filter = "BUFF" },
+                --野性之心
+                { spellID = 108288, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -1044,6 +1046,8 @@ R["Watcher"] = {
                 { spellID = 13750, unitId = "player", caster = "player", filter = "BUFF" },
                 --閃避
                 { spellID = 5277, unitId = "player", caster = "player", filter = "BUFF" },
+                --戰鬥就緒
+                { spellID = 74001, unitId = "player", caster = "player", filter = "BUFF" },
                 --毒化
                 { spellID = 32645, unitId = "player", caster = "player", filter = "BUFF" },
                 --極限殺戮
@@ -1399,6 +1403,8 @@ R["Watcher"] = {
                 { spellID = 126554, unitId = "player", caster = "player", filter = "BUFF" },
                 --秦璽的極化徽印
                 { spellID = 126588, unitId = "player", caster = "player", filter = "BUFF" },
+                --霧中之懼
+                { spellID = 126649, unitId = "player", caster = "player", filter = "BUFF" },
 
                 --工程
                 --神經突觸彈簧(敏捷)

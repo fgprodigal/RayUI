@@ -142,7 +142,7 @@ local function LoadCurrency()
 	Status:RegisterEvent("TRADE_MONEY_CHANGED")
 	Status:RegisterEvent("PLAYER_ENTERING_WORLD")
 	Status:SetScript("OnEnter", ShowCurrency)
-	Status:SetScript("OnMouseDown", ToggleAllBags)
+	Status:SetScript("OnMouseDown", function() ToggleBackpack() end)
 	Status:SetScript("OnLeave", GameTooltip_Hide)
 	Status:SetScript("OnEvent", OnEvent)
 end

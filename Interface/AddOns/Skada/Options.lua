@@ -51,7 +51,7 @@ Skada.defaults = {
 	profile = {
 		version=1,
 		reset={instance=1, join=3, leave=1},
-		icon = {hide = false, radius = 80, minimapPos = 195},
+		icon = {hide = true, radius = 80, minimapPos = 195},
 		numberformat=1,
 		showranks=true,
 		setstokeep=10,

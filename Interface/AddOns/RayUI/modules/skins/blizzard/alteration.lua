@@ -39,6 +39,7 @@ local function LoadSkin()
 	S:Reskin(TransmogrifyApplyButton)
 	S:ReskinClose(TransmogrifyArtFrameCloseButton)
 
+	TransmogrifyConfirmationPopup:SetParent(UIParent)
     TransmogrifyConfirmationPopup:StripTextures()
     S:SetBD(TransmogrifyConfirmationPopup)
     S:Reskin(TransmogrifyConfirmationPopup.Button1)

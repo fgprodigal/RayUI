@@ -1,6 +1,5 @@
 local R, L, P, G = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
 local RA = R:NewModule("Raid", "AceEvent-3.0")
-
 local _, ns = ...
 local oUF = RayUF or oUF
 
@@ -269,6 +268,11 @@ end
 function RA:Initialize()
 	self:SpawnRaid()
     RegisterDebuffs()
+
+	local ORD = ns.oUF_RaidDebuffs or oUF_RaidDebuffs
+	if ORD then
+		ORD.MatchBySpellName = false
+	end
 
     local event = CreateFrame("Frame")
     event:RegisterEvent("ZONE_CHANGED_NEW_AREA")

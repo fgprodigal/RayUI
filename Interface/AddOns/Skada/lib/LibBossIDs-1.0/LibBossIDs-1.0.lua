@@ -1421,7 +1421,7 @@ local BossIDs = {
    -------------------------------------------------------------------------------
    
    [55085]	= true,	-- Peroth'arn
-   [54853]	= true,	-- Königin Azshara
+   [54853]	= true,	-- K?nigin Azshara
    [54969]	= true,	-- Mannoroth
    [55419]	= true,	-- Varo'then
    

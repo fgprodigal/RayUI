@@ -35,7 +35,7 @@ local function LoadSkin()
 		end
 	end
 
-	for i = 1, 3 do
+	for i = 1, 4 do
 		for j = 1, 3 do
 			S:Reskin(_G["StaticPopup"..i.."Button"..j])
 		end
@@ -60,6 +60,9 @@ local function LoadSkin()
 		"StaticPopup3MoneyInputFrameGold",
 		"StaticPopup3MoneyInputFrameSilver",
 		"StaticPopup3MoneyInputFrameCopper",
+		"StaticPopup4MoneyInputFrameGold",
+		"StaticPopup4MoneyInputFrameSilver",
+		"StaticPopup4MoneyInputFrameCopper",
 		"BagItemSearchBox",
 		"BankItemSearchBox"
 	}
@@ -74,6 +77,8 @@ local function LoadSkin()
 	StaticPopup2MoneyInputFrameCopper:SetPoint("LEFT", StaticPopup2MoneyInputFrameSilver, "RIGHT", 1, 0)
 	StaticPopup3MoneyInputFrameSilver:SetPoint("LEFT", StaticPopup3MoneyInputFrameGold, "RIGHT", 1, 0)
 	StaticPopup3MoneyInputFrameCopper:SetPoint("LEFT", StaticPopup3MoneyInputFrameSilver, "RIGHT", 1, 0)
+	StaticPopup4MoneyInputFrameSilver:SetPoint("LEFT", StaticPopup4MoneyInputFrameGold, "RIGHT", 1, 0)
+	StaticPopup4MoneyInputFrameCopper:SetPoint("LEFT", StaticPopup4MoneyInputFrameSilver, "RIGHT", 1, 0)
 	StackSplitFrame:GetRegions():Hide()
 
 	local buttons = {
@@ -123,6 +128,7 @@ local function LoadSkin()
 			"StaticPopup1",
 			"StaticPopup2",
 			"StaticPopup3",
+			"StaticPopup4",
 			"GameMenuFrame",
 			"InterfaceOptionsFrame",
 			"VideoOptionsFrame",

@@ -22,9 +22,9 @@ addon.MatchBySpellName = true
 addon.priority = 10
 
 local function add(spell, priority)
-	--if addon.MatchBySpellName and type(spell) == 'number' then
-		--spell = GetSpellInfo(spell)
-	--end
+	if addon.MatchBySpellName and type(spell) == 'number' then
+		spell = GetSpellInfo(spell)
+	end
 	
 	debuff_data[spell] = addon.priority + priority
 end

@@ -199,7 +199,10 @@ function CF:UseContainerItem(bag,slot)
 end
 
 function CF:UseItemByName(itemName)
-    local itemID = string.match(itemName, "item:(%d+)")
+	local itemID
+	if itemName then
+		itemID = string.match(select(2, GetItemInfo(itemName)), "item:(%d+)")
+	end
     if (itemID) then
         local texture = select(10, GetItemInfo(itemID))
         watching[itemID] = {GetTime(),"item",texture}

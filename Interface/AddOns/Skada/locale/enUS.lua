@@ -155,7 +155,7 @@ L["Raid"] = "Raid"
 L["Party"] = "Party"
 L["Guild"] = "Guild"
 L["Officer"] = "Officer"
-L["Self"] = "Self" 
+L["Self"] = "Self"
 
 L["'s Healing"] = "'s Healing"
 
@@ -377,3 +377,5 @@ L["The height of the title frame."] = "The height of the title frame."
 L["Title height"] = "Title height"
 L["Use class icons where applicable."] = "Use class icons where applicable."
 L["Class icons"] = "Class icons"
+
+L["RealID"] = "RealID"

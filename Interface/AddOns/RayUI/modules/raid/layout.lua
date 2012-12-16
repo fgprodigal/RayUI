@@ -174,24 +174,6 @@ local function PostHealth(hp, unit)
 
 		if(b) then
 			hp:SetStatusBarColor(r, g, b, 1)
-		elseif not UnitIsConnected(unit) then
-			local color = colors.disconnected
-			local power = hp.__owner.Power
-			if power then
-				power:SetValue(0)
-				if power.value then
-					power.value:SetText(nil)
-				end
-			end
-		elseif UnitIsDeadOrGhost(unit) then
-			local color = colors.disconnected
-			local power = hp.__owner.Power
-			if power then
-				power:SetValue(0)
-				if power.value then
-					power.value:SetText(nil)
-				end
-			end
 		end
 		if UF.db.smoothColor then
 			if UnitIsDeadOrGhost(unit) or (not UnitIsConnected(unit)) then
