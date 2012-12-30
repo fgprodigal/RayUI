@@ -12,6 +12,9 @@ local _ENV = {
 		if type(r) == "table" then
 			if r.r then r, g, b = r.r, r.g, r.b else r, g, b = unpack(r) end
 		end
+		if not r or type(r) == 'string' then --wtf?
+			return '|cffFFFFFF'
+		end
 		return string.format("|cff%02x%02x%02x", r*255, g*255, b*255)
 	end,
 	ColorGradient = oUF.ColorGradient,
@@ -52,7 +55,9 @@ local tagStrings = {
 
 	["level"] = [[function(u)
 		local l = UnitLevel(u)
-		if(l > 0) then
+		if ( UnitIsWildBattlePet(u) or UnitIsBattlePetCompanion(u) ) then
+			return UnitBattlePetLevel(u);
+		elseif(l > 0) then
 			return l
 		else
 			return '??'
@@ -279,22 +284,8 @@ local tagStrings = {
 		end
 	end]],
 
-	['holypower'] = [[function()
+	['holypower'] = [[funtion()
 		local num = UnitPower('player', SPELL_POWER_HOLY_POWER)
-		if(num > 0) then
-			return num
-		end
-	end]],
-
-	['chi'] = [[function()
-		local num = UnitPower('player', SPELL_POWER_LIGHT_FORCE)
-		if(num > 0) then
-			return num
-		end
-	end]],
-
-	['shadoworbs'] = [[function()
-		local num = UnitPower('player', SPELL_POWER_SHADOW_ORBS)
 		if(num > 0) then
 			return num
 		end
@@ -378,8 +369,6 @@ local tagEvents = {
 	['maxmana']             = 'UNIT_POWER UNIT_MAXPOWER',
 	['soulshards']          = 'UNIT_POWER',
 	['holypower']           = 'UNIT_POWER',
-	['chi']                 = 'UNIT_POWER',
-	['shadoworbs']          = 'UNIT_POWER',
 }
 
 local unitlessEvents = {
@@ -483,15 +472,34 @@ local UnregisterEvents = function(fontstr)
 	end
 end
 
+local OnEnter = function(self)
+	for _, fs in pairs(self.__mousetags) do
+		fs:SetAlpha(1)
+	end
+end
+
+local OnLeave = function(self)
+	for _, fs in pairs(self.__mousetags) do
+		fs:SetAlpha(0)
+	end
+end
+
 local tagPool = {}
 local funcPool = {}
 local tmp = {}
+local escapeSequences = {
+	["||c"] = "|c",
+	["||r"] = "|r",
+	["||T"] = "|T",
+	["||t"] = "|t",
+}
 
 local Tag = function(self, fs, tagstr)
 	if(not fs or not tagstr) then return end
 
 	if(not self.__tags) then
 		self.__tags = {}
+		self.__mousetags = {}
 		table.insert(self.__elements, OnShow)
 	else
 		-- Since people ignore everything that's good practice - unregister the tag
@@ -506,7 +514,38 @@ local Tag = function(self, fs, tagstr)
 	end
 
 	fs.parent = self
-
+	
+	for escapeSequence, replacement in pairs(escapeSequences) do
+		while tagstr:find(escapeSequence) do
+			tagstr = tagstr:gsub(escapeSequence, replacement)
+		end
+	end
+	
+	if tagstr:find('%[mouseover%]') then
+		table.insert(self.__mousetags, fs)
+		fs:SetAlpha(0)
+		if not self.__HookFunc then
+			self:HookScript('OnEnter', OnEnter)
+			self:HookScript('OnLeave', OnLeave)
+			self.__HookFunc = true;
+		end
+		tagstr = tagstr:gsub('%[mouseover%]', '')
+	else
+		for index, fontString in pairs(self.__mousetags) do
+			if fontString == fs then
+				self.__mousetags[index] = nil;
+				fs:SetAlpha(1)
+			end
+		end
+	end	
+	
+	local containsOnUpdate
+	for tag in tagstr:gmatch(_PATTERN) do
+		if not tagEvents[tag:sub(2, -2)] then
+			containsOnUpdate = true;
+		end	
+	end
+	
 	local func = tagPool[tagstr]
 	if(not func) then
 		local format, numTags = tagstr:gsub('%%', '%%%%'):gsub(_PATTERN, '%%s')
@@ -514,9 +553,9 @@ local Tag = function(self, fs, tagstr)
 
 		for bracket in tagstr:gmatch(_PATTERN) do
 			local tagFunc = funcPool[bracket] or tags[bracket:sub(2, -2)]
+			
 			if(not tagFunc) then
 				local tagName, s, e = getTagName(bracket)
-
 				local tag = tags[tagName]
 				if(tag) then
 					s = s - 2
@@ -559,7 +598,10 @@ local Tag = function(self, fs, tagstr)
 			if(tagFunc) then
 				table.insert(args, tagFunc)
 			else
-				return error(('Attempted to use invalid tag %s.'):format(bracket), 3)
+				numTags = -1
+				func = function(self)
+					return self:SetFormattedText('[error]')
+				end
 			end
 		end
 
@@ -610,7 +652,7 @@ local Tag = function(self, fs, tagstr)
 					args[3](unit, realUnit) or ''
 				)
 			end
-		else
+		elseif numTags ~= -1 then
 			func = function(self)
 				local parent = self.parent
 				local unit = parent.unit
@@ -628,16 +670,20 @@ local Tag = function(self, fs, tagstr)
 				return self:SetFormattedText(format, unpack(tmp, 1, numTags))
 			end
 		end
-
-		tagPool[tagstr] = func
+	
+		if numTags ~= -1 then
+			tagPool[tagstr] = func
+		end
 	end
 	fs.UpdateTag = func
-
+	
 	local unit = self.unit
-	if((unit and unit:match'%w+target') or fs.frequentUpdates) then
+	if((unit and unit:match'%w+target') or fs.frequentUpdates) or containsOnUpdate then
 		local timer
 		if(type(fs.frequentUpdates) == 'number') then
 			timer = fs.frequentUpdates
+		elseif containsOnUpdate then
+			timer = .1
 		else
 			timer = .5
 		end

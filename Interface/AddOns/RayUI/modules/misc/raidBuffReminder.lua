@@ -4,7 +4,7 @@ local M = R:GetModule("Misc")
 local function LoadFunc()
 	if not M.db.raidbuffreminder then return end
 
-	local bsize = ((Minimap:GetWidth() - 6) / 6) - 4
+	local bsize = (Minimap:GetWidth() +3) / 8 - 3
 
 	local Stats = {
 		[90363] = "HUNTER", -- Embrace of the Shale Spider
@@ -73,13 +73,48 @@ local function LoadFunc()
 		["DEFAULT"] = 19740
 	}
 
+	local Food = {
+		[104273] = true, --250 Agility
+		[104274] = true, --275 Agility
+		[104275] = true, --300 Agility
+
+		[104267] = true, -- 250 Strength
+		[104271] = true, -- 275 Strength
+		[104272] = true, -- 300 Strength
+
+		[104264] = true, -- 250 Intellect
+		[104276] = true, -- 275 Intellect
+		[104277] = true, -- 300 Intellect
+
+		[104277] = true, -- 250 Spirit
+		[104279] = true, -- 275 Spirit
+		[104280] = true, -- 300 Spirit
+
+		[104281] = true, -- 375 Stamina
+		[104282] = true, -- 415 Stamina
+		[104283] = true, -- 450 Stamina
+
+		["DEFAULT"] = 104275
+	}
+
+	local Flask = {
+		[105689.] = true, --Flask of Spring Blossoms
+		[105691.] = true, --Flask of the Warm Sun
+		[105693.] = true, --Flask of Falling Leaves
+		[105694.] = true, --Flask of the Earth
+		[105696.] = true, --Flask of Winter's Bite
+		["DEFAULT"] = 105689
+	}
+
 	local IndexTable = {
-		[1] = Stats,
-		[2] = Stamina,
-		[3] = AttackPower,
-		[4] = AttackSpeed,
-		[5] = CriticalStrike,
-		[6] = Mastery,
+		[1] = Flask,
+		[2] = Food,
+		[3] = Stats,
+		[4] = Stamina,
+		[5] = AttackPower,
+		[6] = AttackSpeed,
+		[7] = CriticalStrike,
+		[8] = Mastery,
 	}
 
 	local function FormatTime(s)
@@ -104,7 +139,14 @@ local function LoadFunc()
 
 				assert(spellName, spell..": ID is not correct.")
 
-				if UnitAura("player", spellName) then
+				local spn, _, _, _, _, _, _, _, _, _, spellID = UnitAura("player", spellName)
+				local food = true
+				
+				if filter == Food then
+					if spell ~= spellID then food = false end
+				end
+
+				if spn and food then
 					return spellName, texture
 				end
 			end
@@ -158,15 +200,15 @@ local function LoadFunc()
 		end
 
 		if R.Role == "Caster" then
-			IndexTable[3] = SpellPower
-			IndexTable[4] = SpellHaste
+			IndexTable[5] = SpellPower
+			IndexTable[6] = SpellHaste
 		else
-			IndexTable[3] = AttackPower
-			IndexTable[4] = AttackSpeed
+			IndexTable[5] = AttackPower
+			IndexTable[6] = AttackSpeed
 		end
 		
 		
-		for i = 1, 6 do
+		for i = 1, 8 do
 			local hasBuff, texture = CheckFilterForActiveBuff(IndexTable[i])
 			frame["spell"..i].t:SetTexture(texture)
 			if hasBuff then
@@ -205,37 +247,50 @@ local function LoadFunc()
 		GameTooltip:Hide()
 		GameTooltip:SetOwner(RaidBuffReminder, "ANCHOR_BOTTOM", 0, -10)
 		GameTooltip:ClearLines()
-		
+
 		local id = self:GetParent():GetID()
-		
-		if (id == 3 or id == 4) and R.Role == "Caster" then
-			IndexTable[3] = SpellPower
-			IndexTable[4] = SpellHaste
-			
-			GameTooltip:AddLine(_G["RAID_BUFF_"..id+2])
-		elseif id >= 5 then
-			GameTooltip:AddLine(_G["RAID_BUFF_"..id+2])
-		else
-			if R.Role ~= "Caster" then
-				IndexTable[3] = AttackPower
-				IndexTable[4] = AttackSpeed
-			end
+
+		if self:GetID() == 1 then
+			local text = select(7, GetItemInfo(76084))
+			GameTooltip:AddLine(text)
+		elseif self:GetID() == 2 then
+			local text = select(7, GetItemInfo(74648))
+			GameTooltip:AddLine(text)
+		elseif (id == 5 or id == 6) and R.Role == "Caster" then
+			IndexTable[5] = SpellPower
+			IndexTable[6] = SpellHaste
 			
 			GameTooltip:AddLine(_G["RAID_BUFF_"..id])
-		end
-
-		GameTooltip:AddLine(" ")
-		for spellID, buffProvider in pairs(IndexTable[id]) do
-			if spellID ~= "DEFAULT" then
-			local spellName = GetSpellInfo(spellID)
-			local color = RAID_CLASS_COLORS[buffProvider]
-
-			if self:GetParent().hasBuff == spellName then
-				GameTooltip:AddLine(spellName.." - "..ACTIVE_PETS, color.r, color.g, color.b)
-			else
-				GameTooltip:AddLine(spellName, color.r, color.g, color.b)
+		elseif id >= 7 then
+			GameTooltip:AddLine(_G["RAID_BUFF_"..id])
+		elseif id then
+			if R.Role ~= "Caster" then
+				IndexTable[5] = AttackPower
+				IndexTable[6] = AttackSpeed
 			end
+			
+			GameTooltip:AddLine(_G["RAID_BUFF_"..id-2])
 		end
+
+		if IndexTable[id] then
+			GameTooltip:AddLine(" ")
+			for spellID, buffProvider in pairs(IndexTable[id]) do
+				if spellID ~= "DEFAULT" then
+					local spellName = GetSpellInfo(spellID)
+					local color
+					if not RAID_CLASS_COLORS[buffProvider] then
+						color = { r = 1, g = 1, b = 1}
+					else
+						color = RAID_CLASS_COLORS[buffProvider]
+					end
+
+					if self:GetParent().hasBuff == spellName then
+						GameTooltip:AddLine(spellName.." - "..ACTIVE_PETS, color.r, color.g, color.b)
+					else
+						GameTooltip:AddLine(spellName, color.r, color.g, color.b)
+					end
+				end
+			end
 		end
 
 		GameTooltip:Show()
@@ -252,7 +307,7 @@ local function LoadFunc()
 		if isFirst then
 			button:SetPoint("LEFT", relativeTo, "LEFT", 0, 0)
 		else
-			button:SetPoint("LEFT", relativeTo, "RIGHT", 6, 0)
+			button:SetPoint("LEFT", relativeTo, "RIGHT", 3, 0)
 		end
 
 		if isLast then
@@ -270,36 +325,42 @@ local function LoadFunc()
 
 		button.timer = button.cd:CreateFontString(nil, "OVERLAY")
 		button.timer:Point("CENTER", 1, 0)
-		button.timer:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
+		-- button.timer:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
+		button.timer:SetFont(R["media"].font, 11, "OUTLINE")
+		button.timer:SetShadowOffset(R.mult, -R.mult)
+		button.timer:SetShadowColor(0, 0, 0)
 		
 		return button
 	end
 
 	local frame = CreateFrame("Frame", "RaidBuffReminder", Minimap)
 	frame:SetHeight(bsize)
-	frame:Point("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -6)
-	frame:Point("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -6)
+	frame:Point("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -4)
+	frame:Point("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -4)
 
 	frame.spell1 = CreateButton(frame, true)
 	frame.spell2 = CreateButton(frame.spell1)
 	frame.spell3 = CreateButton(frame.spell2)
 	frame.spell4 = CreateButton(frame.spell3)
 	frame.spell5 = CreateButton(frame.spell4)
-	frame.spell6 = CreateButton(frame.spell5, nil, true)
+	frame.spell6 = CreateButton(frame.spell5)
+	frame.spell7 = CreateButton(frame.spell6)
+	frame.spell8 = CreateButton(frame.spell7, nil, true)
+	frame.spell1:SetScript("OnEnter", Button_OnEnter)
+	frame.spell2:SetScript("OnEnter", Button_OnEnter)
 
 	for i=1, NUM_LE_RAID_BUFF_TYPES do
 		local id = i
 		if i > 4 then
 			id = i - 2
 		end
-		
-		frame["spell"..id]:SetID(id)
+		frame["spell"..i]:SetID(i)
 		
 		--This is so hackish its funny.. 
 		--Have to do this to be able to right click a consolidated buff icon in combat and remove the aura.
 		_G["ConsolidatedBuffsTooltipBuff"..i]:ClearAllPoints()
-		_G["ConsolidatedBuffsTooltipBuff"..i]:SetAllPoints(frame["spell"..id])
-		_G["ConsolidatedBuffsTooltipBuff"..i]:SetParent(frame["spell"..id])
+		_G["ConsolidatedBuffsTooltipBuff"..i]:SetAllPoints(frame["spell"..id+2])
+		_G["ConsolidatedBuffsTooltipBuff"..i]:SetParent(frame["spell"..id+2])
 		_G["ConsolidatedBuffsTooltipBuff"..i]:SetAlpha(0)
 		_G["ConsolidatedBuffsTooltipBuff"..i]:SetScript("OnEnter", Button_OnEnter)
 		_G["ConsolidatedBuffsTooltipBuff"..i]:SetScript("OnLeave", Button_OnLeave)		

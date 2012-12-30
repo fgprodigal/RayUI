@@ -107,7 +107,7 @@ end
 
 local playerClass = select(2, UnitClass('player'))
 local function CheckSpec(self, event, levels)
-	-- Not interested in gained points from leveling	
+	-- Not interested in gained points from leveling
 	if event == "CHARACTER_POINTS_CHANGED" and levels > 0 then return end
 	
 	--Check for certain talents to see if we can dispel magic or not
@@ -137,6 +137,13 @@ local function CheckSpec(self, event, levels)
 		end		
 	end
 end
+
+local eventframe = CreateFrame("Frame")
+eventframe:RegisterEvent("PLAYER_ENTERING_WORLD")
+eventframe:SetScript("OnEvent", function(self)
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+	CheckSpec()
+end)
 
 
 local function formatTime(s)

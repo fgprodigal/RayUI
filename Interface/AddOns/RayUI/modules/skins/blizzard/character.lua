@@ -310,6 +310,7 @@ local function LoadSkin()
 		ic:SetTexCoord(.08, .92, .08, .92)
 
 		S:CreateBD(bu, .25)
+		bu.pushed = true
 		bu:StyleButton(1)
 	end
 

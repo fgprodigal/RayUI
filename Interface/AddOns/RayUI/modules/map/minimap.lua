@@ -2,8 +2,6 @@
 local MM = R:NewModule("MiniMap", "AceEvent-3.0", "AceHook-3.0")
 MM.modName = L["小地图"]
 
-local Scale = 1
-
 local function ConvertSecondstoTime(value)
 	local hours, minues, seconds
 	hours = floor(value / 3600)
@@ -73,6 +71,7 @@ function MM:SkinMiniMap()
 	for i in pairs(frames) do
 		_G[frames[i]]:Kill()
 	end
+	Minimap:Size(175, 175)
 	Minimap:CreateShadow("Background")
 	MinimapCluster:EnableMouse(false)
 	MiniMapTrackingBackground:SetAlpha(0)
@@ -244,7 +243,6 @@ function MM:Initialize()
 	self:RawHook("TimeManagerClockButton_UpdateTooltip", true)
 	Minimap:ClearAllPoints()
 	Minimap:SetPoint("TOPLEFT", "UIParent", "TOPLEFT", 10, -40)
-	MinimapCluster:SetScale(Scale)
 	Minimap:SetFrameLevel(10)
 	local clockFrame, clockTime = TimeManagerClockButton:GetRegions()
 	clockFrame:Hide()

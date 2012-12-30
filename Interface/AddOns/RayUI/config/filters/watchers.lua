@@ -90,7 +90,7 @@ R["Watcher"] = {
                 --化身
                 { spellID = 117679, unitId = "player", caster = "player", filter = "BUFF" },
                 --野性之心
-                { spellID = 108288, unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 108294, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -1267,6 +1267,8 @@ R["Watcher"] = {
 				{ spellID = 124274, unitId = "player", caster = "all", filter = "DEBUFF" },
 				--酒仙大緩勁
 				{ spellID = 124273, unitId = "player", caster = "all", filter = "DEBUFF" },
+				--法力茶
+				{ spellID = 115867, unitId = "player", caster = "player", filter = "BUFF" },
 			},
             {
                 name = "目标buff&debuff",
@@ -1313,6 +1315,8 @@ R["Watcher"] = {
 				{ spellID = 125174, unitId = "player", caster = "player", filter = "BUFF" },
 				--蛟龍之誠
 				{ spellID = 127722, unitId = "player", caster = "player", filter = "BUFF" },
+				--精活迷霧
+				{ spellID = 118674, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -1423,7 +1427,7 @@ R["Watcher"] = {
 
                 --武器附魔
 				--玉魂
-                { spellID = 104993, unitId = "player", caster = "player", filter = "BUFF" },
+				{ spellID = 104993, unitId = "player", caster = "all", filter = "BUFF" },
 
                 --藥水
                 --玉蛟藥水

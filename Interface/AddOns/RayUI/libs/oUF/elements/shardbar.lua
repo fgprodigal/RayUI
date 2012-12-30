@@ -12,8 +12,11 @@ local SPEC_WARLOCK_DESTRUCTION = SPEC_WARLOCK_DESTRUCTION
 local SPEC_WARLOCK_AFFLICTION = SPEC_WARLOCK_AFFLICTION
 local SPEC_WARLOCK_DEMONOLOGY = SPEC_WARLOCK_DEMONOLOGY
 
-local DESTRO_COLORS = {230/255, 95/255,  95/255}
-local SHARD_COLORS = {148/255, 130/255, 201/255}
+oUF.colors.WarlockResource = {
+	[1] = {148/255, 130/255, 201/255},
+	[2] = {148/255, 130/255, 201/255},
+	[3] = {230/255, 95/255,  95/255}
+}
 
 local Update = function(self, event, unit, powerType)
 	local wsb = self.ShardBar
@@ -30,10 +33,14 @@ local Update = function(self, event, unit, powerType)
 		if not wsb:IsShown() then 
 			wsb:Show()
 		end
-		
-        for i = 1, 4 do
-            wsb[i]:Hide()
-        end
+
+		for i = 1, 4 do
+			wsb[i]:Show()
+			wsb[i]:SetStatusBarColor(unpack(oUF.colors.WarlockResource[spec]))
+			if wsb[i].bg then
+				wsb[i].bg:SetTexture(unpack(oUF.colors.WarlockResource[spec]))
+			end
+		end
 
 		if (spec == SPEC_WARLOCK_DESTRUCTION) then	
 			local maxPower = UnitPowerMax("player", SPELL_POWER_BURNING_EMBERS, true)
@@ -42,27 +49,35 @@ local Update = function(self, event, unit, powerType)
 			local numBars = floor(maxPower / MAX_POWER_PER_EMBER)
 			wsb.number = numBars
 			
+			-- bar unavailable
+			if numBars == 3 then
+				wsb[4]:Hide()
+			else
+				wsb[4]:Show()
+			end
+
 			for i = 1, numBars do
 				wsb[i]:SetMinMaxValues((MAX_POWER_PER_EMBER * i) - MAX_POWER_PER_EMBER, MAX_POWER_PER_EMBER * i)
-                if i > numEmbers + 1 then
-                    wsb[i]:Hide()
-                else
-                    wsb[i]:Show()
-                    wsb[i]:SetValue(power)
-                end
+				wsb[i]:SetValue(power)
 			end
 		elseif ( spec == SPEC_WARLOCK_AFFLICTION ) then
 			local numShards = UnitPower("player", SPELL_POWER_SOUL_SHARDS)
 			local maxShards = UnitPowerMax("player", SPELL_POWER_SOUL_SHARDS)
 			wsb.number = maxShards
 			
+			-- bar unavailable
+			if maxShards == 3 then
+				wsb[4]:Hide()
+			else
+				wsb[4]:Show()
+			end
+			
 			for i = 1, maxShards do
 				wsb[i]:SetMinMaxValues(0, 1)
 				if i <= numShards then
-					wsb[i]:Show()
 					wsb[i]:SetValue(1)
 				else
-					wsb[i]:Hide()
+					wsb[i]:SetValue(0)
 				end
 			end
 		elseif spec == SPEC_WARLOCK_DEMONOLOGY then
@@ -76,7 +91,6 @@ local Update = function(self, event, unit, powerType)
 			
 			wsb[1]:SetMinMaxValues(0, maxPower)
 			wsb[1]:SetValue(power)
-			wsb[1]:Show()
 		end
 	else
 		if wsb:IsShown() then 
@@ -115,10 +129,7 @@ local function Enable(self)
 			wsb[i]:GetStatusBarTexture():SetHorizTile(false)
 			
 			if wsb[i].bg then
-				local mu = wsb[i].bg.multiplier or 1
-				local r, g, b = wsb[i]:GetStatusBarColor()
-				wsb[i].bg:SetVertexColor(r * mu, g * mu, b * mu)
-				-- wsb[i].bg:SetAlpha(0.2)
+				wsb[i].bg:SetAlpha(0.2)
 				wsb[i].bg:SetAllPoints()
 			end
 		end
@@ -133,6 +144,8 @@ local function Disable(self)
 	local wsb = self.ShardBar
 	if(wsb) then
 		self:UnregisterEvent('UNIT_POWER', Path)
+		self:UnregisterEvent("PLAYER_TALENT_UPDATE", Path)
+		wsb:Hide()
 	end
 end
 

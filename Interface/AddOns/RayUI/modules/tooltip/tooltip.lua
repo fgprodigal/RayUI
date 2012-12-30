@@ -55,20 +55,6 @@ local symbiosis = {
 	}
 }
 
-local ItemUpgrade = setmetatable ({
-	[446] = 4,
-	[447] = 8,
-
-	[454] = 4,
-	[455] = 8,
-
-	[460] = 8,
-	[461] = 12,
-	[462] = 16,
-
-	[452] = 8,
-},{__index=function() return 0 end})
-
 local function IsInspectFrameOpen()
 	return (InspectFrame and InspectFrame:IsShown()) or (Examiner and Examiner:IsShown())
 end
@@ -423,8 +409,7 @@ function TT:GetItemScore(iLink)
             return 0
         end
     end
-    local code = string.match(iLink, ":(%d+)|h")
-    return itemLevel + ItemUpgrade[tonumber(code)]
+    return R:GetItemUpgradeLevel(iLink)
 end
 
 function TT:SetStyle(tooltip)

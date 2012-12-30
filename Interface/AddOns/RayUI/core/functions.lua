@@ -17,6 +17,32 @@ local AddonNotSupported = {}
 local BlackList = {"bigfoot", "duowan", "163ui", "neavo", "sora"}
 local demoFrame
 
+local ItemUpgrade = setmetatable ({
+	[1] = 8, -- 1/1
+	[373] = 4, -- 1/2
+	[374] = 8, -- 2/2
+	[375] = 4, -- 1/3
+	[376] = 4, -- 2/3
+	[377] = 4, -- 3/3
+	[379] = 4, -- 1/2
+	[380] = 4, -- 2/2
+	[445] = 0, -- 0/2
+	[446] = 4, -- 1/2
+	[447] = 8, -- 2/2
+	[451] = 0, -- 0/1
+	[452] = 8, -- 1/1
+	[453] = 0, -- 0/2
+	[454] = 4, -- 1/2
+	[455] = 8, -- 2/2
+	[456] = 0, -- 0/1
+	[457] = 8, -- 1/1
+	[458] = 0, -- 0/4
+	[459] = 4, -- 1/4
+	[460] = 8, -- 2/4
+	[461] = 12, -- 3/4
+	[462] = 16, -- 4/4
+},{__index=function() return 0 end})
+
 function R.dummy()
     return
 end
@@ -93,6 +119,16 @@ function R:TableIsEmpty(t)
 		return true
 	else
 		return next(t) == nil
+	end
+end
+
+function R:GetItemUpgradeLevel(iLink)
+	if not iLink then
+		return 0
+	else
+		local _, _, itemRarity, itemLevel, _, _, _, _, itemEquip = GetItemInfo(iLink)
+		local code = string.match(iLink, ":(%d+)|h")
+		return itemLevel + ItemUpgrade[tonumber(code)]
 	end
 end
 
@@ -188,13 +224,16 @@ function R:InitializeModules()
 		return
 	else
 		for i = 1, #self["RegisteredModules"] do
-			if (self.db[self["RegisteredModules"][i]] == nil or self.db[self["RegisteredModules"][i]].enable ~= false) and self:GetModule(self["RegisteredModules"][i]).Initialize then
-				self:GetModule(self["RegisteredModules"][i]):Initialize()
+			local module = self:GetModule(self["RegisteredModules"][i])
+			if (self.db[self["RegisteredModules"][i]] == nil or self.db[self["RegisteredModules"][i]].enable ~= false) and module.Initialize then
+				local _, catch = pcall(module.Initialize, module)
+				if catch and GetCVarBool("scriptErrors") == 1 then
+					ScriptErrorsFrame_OnError(catch, false)
+				end
 			end
 		end
 	end
 end
-
 
 function R:PLAYER_ENTERING_WORLD()
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
