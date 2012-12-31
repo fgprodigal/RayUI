@@ -52,6 +52,11 @@ function UF:GetOptions()
 					name = L["显示竞技场头像"],
 					type = "toggle",
 				},
+				showPortrait = {
+					order = 3,
+					name = L["启用头像覆盖血条"],
+					type = "toggle",
+				},
 			},
 		},
 		others = {

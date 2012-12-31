@@ -139,15 +139,16 @@ function UF:DPSLayout(frame, unit)
 			local power = self:ConstructPowerBar(frame, true, true)
 			power:SetPoint("LEFT")
 			power:SetPoint("RIGHT")
-			power:SetPoint("BOTTOM") 
+			power:SetPoint("BOTTOM")
 			power.value:Point("RIGHT", health, "RIGHT", -5, 0)
 			power:SetWidth(PLAYER_WIDTH)
 			power:SetHeight(PLAYER_HEIGHT * self.db.powerheight)
 			power:CreateShadow("Background")
 			frame.Power = power
 		end
-
-        frame.Portrait = self:ConstructPortrait(frame)
+		if self.db.showPortrait then
+        	frame.Portrait = self:ConstructPortrait(frame)
+        end
 
 		-- Vengeance Bar
 		if self.db.vengeance then
@@ -348,14 +349,16 @@ function UF:DPSLayout(frame, unit)
 		local power = self:ConstructPowerBar(frame, true, true)
 		power:SetPoint("LEFT")
 		power:SetPoint("RIGHT")
-		power:SetPoint("BOTTOM") 
+		power:SetPoint("BOTTOM")
 		power.value:Point("RIGHT", health, "RIGHT", -5, 0)
 		power:SetWidth(PLAYER_WIDTH)
 		power:SetHeight(PLAYER_HEIGHT * self.db.powerheight)
 		power:CreateShadow("Background")
 		frame.Power = power
 
-        frame.Portrait = self:ConstructPortrait(frame)
+        if self.db.showPortrait then
+        	frame.Portrait = self:ConstructPortrait(frame)
+        end
 
 		local castbar = self:ConstructCastBar(frame)
 		castbar:ClearAllPoints()
@@ -497,7 +500,7 @@ function UF:DPSLayout(frame, unit)
 		local power = self:ConstructPowerBar(frame, true, true)
 		power:SetPoint("LEFT")
 		power:SetPoint("RIGHT")
-		power:SetPoint("BOTTOM") 
+		power:SetPoint("BOTTOM")
 		power.value:Point("RIGHT", health, "RIGHT", -5, 0)
 		power:SetWidth(PLAYER_WIDTH)
 		power:SetHeight(PLAYER_HEIGHT * self.db.powerheight)
@@ -647,7 +650,7 @@ function UF:DPSLayout(frame, unit)
 		local power = self:ConstructPowerBar(frame, true, true)
 		power:SetPoint("LEFT")
 		power:SetPoint("RIGHT")
-		power:SetPoint("BOTTOM") 
+		power:SetPoint("BOTTOM")
 		power.value:Point("RIGHT", frame, "RIGHT", -5, 0)
 		power:SetWidth(BOSS_WIDTH)
 		power:SetHeight(BOSS_HEIGHT * self.db.powerheight)
@@ -817,7 +820,7 @@ function UF:DPSLayout(frame, unit)
 	tinsert(frame.mouseovers, frame.Health)
 
 	if frame.Power then
-		if frame.Power.value then 
+		if frame.Power.value then
 			tinsert(frame.mouseovers, frame.Power)
 		end
 	end
@@ -905,7 +908,7 @@ function UF:LoadUnitFrames()
 			if i == 1 then
 				boss[i]:Point("TOPRIGHT", BossHeader, "TOPRIGHT", 0, 0)
 			else
-				boss[i]:Point("TOP", boss[i-1], "BOTTOM", 0, -36)             
+				boss[i]:Point("TOP", boss[i-1], "BOTTOM", 0, -36)
 			end
 			boss[i]:Size(BOSS_WIDTH, BOSS_HEIGHT)
 			boss[i]:SetParent(RayUF_Parent)
