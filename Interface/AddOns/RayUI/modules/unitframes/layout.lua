@@ -507,7 +507,9 @@ function UF:DPSLayout(frame, unit)
 		power:CreateShadow("Background")
 		frame.Power = power
 
-        frame.Portrait = self:ConstructPortrait(frame)
+        if self.db.showPortrait then
+        	frame.Portrait = self:ConstructPortrait(frame)
+        end
 	end
 
 	if unit == "party" then
@@ -657,7 +659,9 @@ function UF:DPSLayout(frame, unit)
 		power:CreateShadow("Background")
 		frame.Power = power
 
-        frame.Portrait = self:ConstructPortrait(frame)
+        if self.db.showPortrait then
+        	frame.Portrait = self:ConstructPortrait(frame)
+        end
 
 		local debuffs = CreateFrame("Frame", nil, frame)
 		debuffs:SetHeight(BOSS_HEIGHT)
