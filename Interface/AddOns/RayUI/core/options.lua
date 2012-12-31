@@ -31,12 +31,16 @@ R.Options = {
 					min = 0.64, max = 1, step = 0.01,
 					isPercent = true,
 				},
-				--[[ logo = {
+				theme = {
 					order = 2,
 					type = "toggle",
-					name = L["登陆Logo"],
-					desc = L["开关登陆时的Logo"],
-				}, ]]
+					name = L["界面风格"],
+					type = "select",
+					values = {
+						["Shadow"] = L["阴影"],
+						["Pixel"] = L["1像素"],
+					},
+				},
 				spacer = {
 					order = 3,
 					name = " ",

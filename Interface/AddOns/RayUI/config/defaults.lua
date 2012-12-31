@@ -21,6 +21,7 @@ G["media"]={
 G["general"]={
 	uiscale = 0.75,
 	logo = true,
+	theme = "Shadow",
 }
 
 P["WorldMap"]={
@@ -82,6 +83,7 @@ P["UnitFrames"]={
 	powerheight = 0.13,
 	showBossFrames = true,
 	showArenaFrames = true,
+	showPortrait = true,
 	separateEnergy = false,
 	vengeance = true,
 	aurabar = false,

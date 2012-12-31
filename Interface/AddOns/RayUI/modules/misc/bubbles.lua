@@ -18,12 +18,20 @@ local function LoadFunc()
 			end
 		end
 
-		frame:SetBackdrop({
-			bgFile = R["media"].blank,
-			edgeFile = R["media"].glow,
-			tile = false, tileSize = 0, edgeSize = 5,
-			insets = {left = 4, right = 4, top = 4, bottom = 4}
-		})
+		if R.global.general.theme == "Shadow" then
+			frame:SetBackdrop({
+				edgeFile = R["media"].glow,
+				bgFile = R["media"].blank,
+				tile = false, tileSize = 0, edgeSize = 5,
+				insets = {left = 4, right = 4, top = 4, bottom = 4}
+			})
+		else
+			frame:SetBackdrop({
+				edgeFile = R["media"].blank,
+				bgFile = R["media"].blank,
+				tile = false, tileSize = 0, edgeSize = 1,
+			})
+		end
 		frame:SetClampedToScreen(false)
 		frame:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 		frame:SetBackdropColor(.1, .1, .1, .6)

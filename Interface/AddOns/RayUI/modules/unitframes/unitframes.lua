@@ -83,6 +83,14 @@ function UF:GetOptions()
 	return options
 end
 
+function UF:PLAYER_LOGIN(event)
+	if IsAddOnLoaded("Gnosis") or IsAddOnLoaded("AzCastBar") or IsAddOnLoaded("Quartz") then
+		for _, frame in pairs(oUF.objects) do
+			frame:DisableElement("Castbar")
+		end
+	end
+end
+
 function UF:Initialize()
 	RayUF["colors"] = setmetatable({
 		-- tapped = {tapped.r, tapped.g, tapped.b},
@@ -132,6 +140,7 @@ function UF:Initialize()
 	}, {__index = RayUF["colors"]})
 
     self:LoadUnitFrames()
+	self:RegisterEvent("PLAYER_LOGIN")
 end
 
 function UF:Info()

@@ -51,8 +51,9 @@ local function CreateShadow(f, t, thickness)
 	local shadow = CreateFrame("Frame", nil, border)
 	shadow:SetFrameLevel(frameLevel - 1)
 	shadow:SetOutside(border, offset, offset)
+	local edge = R.global.general.theme == "Shadow" and R["media"].glow or nil
 	shadow:SetBackdrop( { 
-		edgeFile = R["media"].glow,
+		edgeFile = edge,
         bgFile = R["media"].blank, 
 		edgeSize = R:Scale(thickness),
         tile = false,
