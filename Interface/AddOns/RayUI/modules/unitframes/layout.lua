@@ -689,27 +689,6 @@ function UF:DPSLayout(frame, unit)
 		frame.Castbar = castbar
 	end
 
-	if (unit and unit:find("boss%d") and self.db.showBossFrames == true) then
-		-- Alternative Power Bar
-		local altpp = CreateFrame("StatusBar", nil, frame)
-		altpp:SetStatusBarTexture(R["media"].normal)
-		altpp:GetStatusBarTexture():SetHorizTile(false)
-		altpp:SetFrameStrata("LOW")
-		altpp:SetHeight(4)
-		altpp:Point("TOPLEFT", frame, "BOTTOMLEFT", 0, -2)
-		altpp:Point("TOPRIGHT", frame, "BOTTOMRIGHT", 0, -2)
-		altpp.bg = altpp:CreateTexture(nil, "BORDER")
-		altpp.bg:SetAllPoints(altpp)
-		altpp.bg:SetTexture(R["media"].normal)
-		altpp.bg:SetVertexColor( 0,  0.76, 1)
-		altpp.bd = self:CreateBackdrop(altpp, altpp)
-		altpp.text = altpp:CreateFontString(nil, "OVERLAY")
-		altpp.text:SetFont(R["media"].font, 12, R["media"].fontflag)
-		altpp.text:SetPoint("CENTER")
-		altpp.PostUpdate = self.PostAltUpdate
-		frame.AltPowerBar = altpp
-	end
-
 	if (unit and unit:find("arena%d") and self.db.showArenaFrames == true) then
         if not frame.prepFrame then
             frame.prepFrame = CreateFrame("Frame", frame:GetName().."PrepFrame", UIParent)

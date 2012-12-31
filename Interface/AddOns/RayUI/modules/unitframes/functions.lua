@@ -24,25 +24,6 @@ local function ColorGradient(perc, color1, color2, color3)
 	return r2 + (r3-r2)*relperc, g2 + (g3-g2)*relperc, b2 + (b3-b2)*relperc
 end
 
-function UF:CreateBackdrop(parent, anchor) 
-    local frame = CreateFrame("Frame", nil, parent)
-    frame:SetFrameStrata("BACKGROUND")
-    frame:SetFrameLevel(0)
-
-	frame:Point("TOPLEFT", anchor, "TOPLEFT", -4, 4)
-	frame:Point("BOTTOMRIGHT", anchor, "BOTTOMRIGHT", 4, -4)
-	frame:SetBackdrop({
-		edgeFile = R["media"].glow, edgeSize = R:Scale(5),
-		bgFile = R["media"].blank,
-		insets = {left = R:Scale(3), right = R:Scale(3), top = R:Scale(3), bottom = R:Scale(3)}
-	})
-
-    frame:SetBackdropColor(0.1, 0.1, 0.1)
-    frame:SetBackdropBorderColor(0, 0, 0)
-
-    return frame
-end
-
 function UF:SpawnMenu()
 	local unit = self.unit:gsub("(.)", string.upper, 1)
 	if self.unit == "targettarget" then return end
@@ -186,7 +167,7 @@ function UF:ConstructCastBar(frame)
 	spark:Point("BOTTOMRIGHT", castbar:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
 	castbar.Spark = spark
 
-	castbar.shadow = UF:CreateBackdrop(castbar, castbar)
+	castbar:CreateShadow("Background")
 	castbar.bg = castbar:CreateTexture(nil, "BACKGROUND")
 	castbar.bg:SetTexture(R["media"].normal)
 	castbar.bg:SetAllPoints(true)
@@ -200,8 +181,8 @@ function UF:ConstructCastBar(frame)
 	castbar.Time:SetPoint("BOTTOMRIGHT", castbar, "TOPRIGHT", -5, -2)
 	castbar.Iconbg = CreateFrame("Frame", nil ,castbar)
 	castbar.Iconbg:SetPoint("BOTTOMRIGHT", castbar, "BOTTOMLEFT", -5, 0)
-	castbar.Iconbg:SetSize(21, 21)
-	UF:CreateBackdrop(castbar.Iconbg, castbar.Iconbg)
+	castbar.Iconbg:SetSize(20, 20)
+	castbar.Iconbg:CreateShadow("Background")
 	castbar.Icon = castbar:CreateTexture(nil, "OVERLAY")
 	castbar.Icon:SetAllPoints(castbar.Iconbg)
 	castbar.Icon:SetTexCoord(0.07, 0.93, 0.07, 0.93)
