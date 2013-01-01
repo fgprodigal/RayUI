@@ -76,6 +76,7 @@ function A:UpdateWeapon(button)
 	if not button.shadow then
 		button:Size(buttonsize -8, buttonsize-8)
 		button:CreateShadow("Background")
+		button.shadow:SetBackdropColor(0, 0, 0)
 		button.border:SetBackdropBorderColor(137/255, 0, 191/255)
 
 		button.time = _G[button:GetName().."Duration"]
@@ -117,6 +118,7 @@ function A:UpdateAuras(header, button)
 		end)
 
 		button:CreateShadow("Background")
+		button.shadow:SetBackdropColor(0, 0, 0)
 
 		button.highlight = button:CreateTexture(nil, "HIGHLIGHT")
 		button.highlight:SetTexture(1,1,1,0.45)

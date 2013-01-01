@@ -1317,6 +1317,10 @@ R["Watcher"] = {
 				{ spellID = 127722, unitId = "player", caster = "player", filter = "BUFF" },
 				--精活迷霧
 				{ spellID = 118674, unitId = "player", caster = "player", filter = "BUFF" },
+				--連段破:滅寂腿
+				{ spellID = 116768, unitId = "player", caster = "player", filter = "BUFF" },
+				--連段破:虎掌
+				{ spellID = 118864, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",

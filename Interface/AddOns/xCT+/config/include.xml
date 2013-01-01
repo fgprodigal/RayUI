@@ -1,0 +1,4 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+  <Script file="merge.lua"/>
+  <Script file="profile.lua"/>
+</Ui>

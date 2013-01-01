@@ -448,6 +448,7 @@ function AB:Initialize()
 	self:SecureHook("ActionButton_UpdateFlyout", "StyleFlyout")
 	self:SecureHook("StanceBar_Update", "StyleShift")
 	self:SecureHook("StanceBar_UpdateState", "StyleShift")
+	self:SecureHook("PossessBar_Update", "StylePossess")
 	self:SecureHook("PetActionBar_Update", "StylePet")
 	--self:SecureHook("SetActionBarToggles", "UpdatePosition")
 	self:HookScript(SpellFlyout, "OnShow", "SetupFlyoutButton")
@@ -606,6 +607,16 @@ end
 function AB:StyleShift()
 	for i=1, NUM_STANCE_SLOTS do
 		local name = "StanceButton"..i
+		local button  = _G[name]
+		local icon  = _G[name.."Icon"]
+		local normal  = _G[name.."NormalTexture"]
+		self:Style(button)
+	end
+end
+
+function AB:StylePossess()
+	for i=1, NUM_POSSESS_SLOTS do
+		local name = "PossessButton"..i
 		local button  = _G[name]
 		local icon  = _G[name.."Icon"]
 		local normal  = _G[name.."NormalTexture"]

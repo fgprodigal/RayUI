@@ -51,9 +51,8 @@ local function CreateShadow(f, t, thickness)
 	local shadow = CreateFrame("Frame", nil, border)
 	shadow:SetFrameLevel(frameLevel - 1)
 	shadow:SetOutside(border, offset, offset)
-	local edge = R.global.general.theme == "Shadow" and R["media"].glow or nil
 	shadow:SetBackdrop( { 
-		edgeFile = edge,
+		edgeFile = R.global.general.theme == "Shadow" and R["media"].glow or nil,
         bgFile = R["media"].blank, 
 		edgeSize = R:Scale(thickness),
         tile = false,
@@ -71,7 +70,7 @@ local function SetTemplate(f, t, glossTex)
 		r, g, b, alpha = unpack(R["media"].backdropfadecolor)
 	end
 
-    if t == "Border" or glossTex then
+    if t == "Border" then
         f:SetBackdrop({
             edgeFile = R["media"].blank, 
             edgeSize = R.mult, 

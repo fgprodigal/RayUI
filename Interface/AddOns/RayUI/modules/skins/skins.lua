@@ -244,10 +244,12 @@ end
 
 local function StartGlow(f)
 	if not f:IsEnabled() then return end
-	f:SetBackdropColor(r, g, b, .15)
+	f:SetBackdropColor(r, g, b, .2)
 	f:SetBackdropBorderColor(r, g, b)
-    f.glow:SetAlpha(1)
-    S:CreatePulse(f.glow)
+	if R.global.general.theme == "Shadow" then
+		f.glow:SetAlpha(1)
+		S:CreatePulse(f.glow)
+	end
 end
 
 local function StopGlow(f)

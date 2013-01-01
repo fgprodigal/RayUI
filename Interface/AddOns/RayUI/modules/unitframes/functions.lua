@@ -738,6 +738,8 @@ function UF:PostUpdateIcon(unit, icon, index, offset)
 			icon.border:SetBackdropBorderColor(237/255, 234/255, 142/255)
 			icon:GetHighlightTexture():StyleButton(1)
 			texture:StyleButton(1)
+			texture:Point("TOPLEFT", icon, 1, -1)
+			texture:Point("BOTTOMRIGHT", icon, -1, 1)
 		else
 			icon:GetHighlightTexture():StyleButton(true)
 			icon.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))

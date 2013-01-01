@@ -181,16 +181,29 @@ local function CreateVirtualFrame(parent, point)
 	local noscalemult = R.mult * UIParent:GetScale()
 	parent.backdrop = CreateFrame("Frame", nil ,parent)
 	parent.backdrop:SetAllPoints()
-	parent.backdrop:SetBackdrop({
-		bgFile = R["media"].blank,
-		edgeFile = R["media"].glow,
-		edgeSize = 3*noscalemult,
-		insets = {
-			top = 3*noscalemult, left = 3*noscalemult, bottom = 3*noscalemult, right = 3*noscalemult
-		}
-	})
-	parent.backdrop:SetPoint("TOPLEFT", point, -3*noscalemult, 3*noscalemult)
-	parent.backdrop:SetPoint("BOTTOMRIGHT", point, 3*noscalemult, -3*noscalemult)
+	if R.global.general.theme == "Shadow" then
+		parent.backdrop:SetBackdrop({
+			bgFile = R["media"].blank,
+			edgeFile = R["media"].glow,
+			edgeSize = 3*noscalemult,
+			insets = {
+				top = 3*noscalemult, left = 3*noscalemult, bottom = 3*noscalemult, right = 3*noscalemult
+			}
+		})
+		parent.backdrop:SetPoint("TOPLEFT", point, -3*noscalemult, 3*noscalemult)
+		parent.backdrop:SetPoint("BOTTOMRIGHT", point, 3*noscalemult, -3*noscalemult)
+	else
+		parent.backdrop:SetBackdrop({
+			bgFile = R["media"].blank,
+			edgeFile = R["media"].blank,
+			edgeSize = noscalemult,
+			insets = {
+				top = noscalemult, left = noscalemult, bottom = noscalemult, right = noscalemult
+			}
+		})
+		parent.backdrop:SetPoint("TOPLEFT", point, -noscalemult, noscalemult)
+		parent.backdrop:SetPoint("BOTTOMRIGHT", point, noscalemult, -noscalemult)
+	end
 	parent.backdrop:SetBackdropColor(.05, .05, .05, .9)
 	parent.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 	if parent:GetFrameLevel() - 1 >0 then
@@ -635,16 +648,29 @@ local function SkinObjects(frame, nameFrame)
 	if not cbicon.backdrop then
 		cbicon.backdrop = CreateFrame("Frame", nil ,cb)
 		cbicon.backdrop:SetAllPoints()
-		cbicon.backdrop:SetBackdrop({
-			bgFile = R["media"].blank,
-			edgeFile = R["media"].glow,
-			edgeSize = 3*noscalemult,
-			insets = {
-				top = 3*noscalemult, left = 3*noscalemult, bottom = 3*noscalemult, right = 3*noscalemult
-			}
-		})
-		cbicon.backdrop:SetPoint("TOPLEFT", cbicon, -3*noscalemult, 3*noscalemult)
-		cbicon.backdrop:SetPoint("BOTTOMRIGHT", cbicon, 3*noscalemult, -3*noscalemult)
+		if R.global.general.theme == "Shadow" then
+			cbicon.backdrop:SetBackdrop({
+				bgFile = R["media"].blank,
+				edgeFile = R["media"].glow,
+				edgeSize = 3*noscalemult,
+				insets = {
+					top = 3*noscalemult, left = 3*noscalemult, bottom = 3*noscalemult, right = 3*noscalemult
+				}
+			})
+			cbicon.backdrop:SetPoint("TOPLEFT", cbicon, -3*noscalemult, 3*noscalemult)
+			cbicon.backdrop:SetPoint("BOTTOMRIGHT", cbicon, 3*noscalemult, -3*noscalemult)
+		else
+			cbicon.backdrop:SetBackdrop({
+				bgFile = R["media"].blank,
+				edgeFile = R["media"].blank,
+				edgeSize = noscalemult,
+				insets = {
+					top = noscalemult, left = noscalemult, bottom = noscalemult, right = noscalemult
+				}
+			})
+			cbicon.backdrop:SetPoint("TOPLEFT", cbicon, -noscalemult, noscalemult)
+			cbicon.backdrop:SetPoint("BOTTOMRIGHT", cbicon, noscalemult, -noscalemult)
+		end
 		cbicon.backdrop:SetBackdropColor(.05, .05, .05, .9)
 		cbicon.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 		if cb:GetFrameLevel() - 1 >0 then

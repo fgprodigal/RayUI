@@ -95,7 +95,7 @@ function AB:CreateBarPet()
 		if event == "PLAYER_LOGIN" then
 			-- bug reported by Affli on t12 BETA
 			PetActionBarFrame.showgrid = 1 -- hack to never hide pet button. :X
-            RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][possessbar,@vehicle,exists]hide;[pet,novehicleui,nobonusbar:5]show;hide")
+            RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists]hide;[pet,novehicleui,nobonusbar:5]show;hide")
 			hooksecurefunc("PetActionBar_Update", PetBarUpdate)
 		elseif event == "PET_BAR_UPDATE" or event == "UNIT_PET" and arg1 == "player" 
 		or event == "PLAYER_CONTROL_LOST" or event == "PLAYER_CONTROL_GAINED" or event == "PLAYER_FARSIGHT_FOCUS_CHANGED" or event == "UNIT_FLAGS"

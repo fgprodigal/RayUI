@@ -147,8 +147,12 @@ function MM:CheckMail()
         R:GetModule("Skins"):CreatePulse(Minimap.shadow, 1, 1)
 	else -- None of the above
         Minimap.shadow:SetScript("OnUpdate", nil)
-        Minimap.shadow:SetAlpha(1)
-        Minimap.shadow:SetBackdropBorderColor(unpack(R["media"].bordercolor))
+		if R.global.general.theme == "Shadow" then
+			Minimap.shadow:SetAlpha(1)
+		else
+			Minimap.shadow:SetAlpha(0)
+        end
+		Minimap.shadow:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 	end
 end
 
@@ -210,8 +214,16 @@ function MM:CreateMenu()
 	self:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", "CheckMail")
 	self:RegisterEvent("UPDATE_PENDING_MAIL", "CheckMail")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", "CheckMail")
-	MiniMapMailFrame:HookScript("OnHide", MM.CheckMail)
-	MiniMapMailFrame:HookScript("OnShow", MM.CheckMail)
+	MM:HookScript(MiniMapMailFrame, "OnHide", "CheckMail")
+	MM:HookScript(MiniMapMailFrame, "OnShow", "CheckMail")
+	Minimap.shadow:SetBackdrop( { 
+		edgeFile = R["media"].glow,
+        bgFile = R["media"].blank, 
+		edgeSize = R:Scale(4),
+        tile = false,
+        tileSize = 0,
+		insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
+	})
 end
 
 function MM:Info()

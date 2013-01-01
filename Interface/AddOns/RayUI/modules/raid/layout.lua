@@ -112,7 +112,11 @@ local function updateThreat(self, event, unit)
         self.Threat:SetBackdropBorderColor(r, g, b, 1)
         self.border:SetBackdropColor(r, g, b, 1)
     else
-        self.Threat:SetBackdropBorderColor(0, 0, 0, 1)
+		if R.global.general.theme == "Shadow" then
+			self.Threat:SetBackdropBorderColor(0, 0, 0, 1)
+		else
+			self.Threat:SetBackdropBorderColor(0, 0, 0, 0)
+		end
         self.border:SetBackdropColor(0, 0, 0, 1)
     end
     self.Threat:Show()
@@ -469,7 +473,11 @@ local function style(self)
     threat:SetFrameLevel(0)
     threat:SetBackdrop(glowBorder)
     threat:SetBackdropColor(0, 0, 0, 0)
-    threat:SetBackdropBorderColor(0, 0, 0, 1)
+	if R.global.general.theme == "Shadow" then
+		threat:SetBackdropBorderColor(0, 0, 0, 1)
+	else
+		threat:SetBackdropBorderColor(0, 0, 0, 0)
+	end
     threat.Override = updateThreat
     self.Threat = threat
 
