@@ -78,7 +78,7 @@ addon.defaults = {
         
       -- fonts
         ["font"] = "RayUI Normal",
-        ["fontSize"] = 15,
+        ["fontSize"] = 18,
         ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "CENTER",
 
@@ -198,11 +198,11 @@ addon.defaults = {
       damage = {
         ["enabledFrame"] = true,
         ["secondaryFrame"] = 0,
-        ["insertText"] = "top",
+        ["insertText"] = "bottom",
         
       -- position
         ["X"] = -325,
-        ["Y"] = -35, -- -80,
+        ["Y"] = -30, -- -80,
         ["Width"] = 128,
         ["Height"] = 190,
         
@@ -234,7 +234,7 @@ addon.defaults = {
       
       -- positioon
         ["X"] = -415,
-        ["Y"] = 0,
+        ["Y"] = 5,
         ["Width"] = 128,
         ["Height"] = 260,
         
@@ -314,8 +314,8 @@ addon.defaults = {
       },
       
       procs = {
-        ["enabledFrame"] = true,
-        ["secondaryFrame"] = 0,
+        ["enabledFrame"] = false,
+        ["secondaryFrame"] = 1,
         ["insertText"] = "top",
         
       -- position
@@ -326,7 +326,7 @@ addon.defaults = {
         
       -- fonts
         ["font"] = "RayUI Normal",
-        ["fontSize"] = 20,
+        ["fontSize"] = 18,
         ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "CENTER",
         
