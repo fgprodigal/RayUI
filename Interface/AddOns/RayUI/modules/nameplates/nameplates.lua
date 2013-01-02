@@ -232,7 +232,7 @@ end
 local function CreateAuraIcon(parent)
 	local noscalemult = R.mult * UIParent:GetScale()
 	local button = CreateFrame("Frame",nil,parent)
-	button:SetScript("OnHide", function(self) UpdateAuraAnchors(self:GetParent()) end)
+	button:SetScript("OnHide", function(self) UpdateAuraAnchors(self:GetParent():GetParent()) end)
 	button:SetWidth(20)
 	button:SetHeight(20)
 
@@ -361,7 +361,7 @@ local function OnAura(frame, unit)
 		if DebuffWhiteList[name] then match = true end
 
 		if duration and match == true then
-			if not frame.icons[i] then frame.icons[i] = CreateAuraIcon(frame) end
+			if not frame.icons[i] then frame.icons[i] = CreateAuraIcon(frame.icons) end
 			local icon = frame.icons[i]
 			if i == 1 then icon:SetPoint("RIGHT",frame.icons,"RIGHT") end
 			if i ~= 1 and i <= 5 then icon:SetPoint("RIGHT", frame.icons[i-1], "LEFT", -2, 0) end
@@ -376,13 +376,17 @@ end
 --also resize it as nameplates somehow manage to resize some frames when they reappear after being hidden
 local function UpdateCastbar(frame)
 	frame:ClearAllPoints()
-	frame:SetSize(cbWidth, cbHeight)
-	frame:SetPoint("TOP", frame:GetParent().hp, "BOTTOM", 0, -8)
+	frame:SetPoint("TOPLEFT", frame:GetParent().hp, "BOTTOMLEFT", 0, -8)
+	frame:SetPoint("BOTTOMRIGHT", frame:GetParent().hp, "BOTTOMRIGHT", 0, -8-cbHeight)
 	frame:GetStatusBarTexture():SetHorizTile(true)
 	if(frame.shield:IsShown()) then
 		frame:SetStatusBarColor(1, 0, 0)
 	else
 		frame:SetStatusBarColor(0, 1, 0)
+	end
+
+	if frame:GetEffectiveScale() < 1 then
+		frame:SetScale(1 / frame:GetEffectiveScale())
 	end
 end
 
@@ -437,6 +441,8 @@ local function OnHide(frame)
 	frame.hp:SetStatusBarColor(frame.hp.rcolor, frame.hp.gcolor, frame.hp.bcolor)
     frame.hp:SetScale(1)
     frame:SetScale(1)
+    frame.icons:SetScale(1)
+    frame.cb:SetScale(1)
 	frame.overlay:Hide()
 	frame.cb:Hide()
 	frame.unit = nil
@@ -525,7 +531,7 @@ local function UpdateObjects(frame)
 	--Have to reposition this here so it doesnt resize after being hidden
 	frame.hp:ClearAllPoints()
 	frame.hp:SetSize(hpWidth, hpHeight)
-	frame.hp:SetPoint("TOP", frame, "TOP", 0, -15)
+	frame.hp:SetPoint("BOTTOM", frame, "BOTTOM", 0, 5)
 	frame.hp:GetStatusBarTexture():SetHorizTile(true)
 
 	frame.hp:SetMinMaxValues(frame.healthOriginal:GetMinMaxValues())
@@ -549,14 +555,27 @@ local function UpdateObjects(frame)
 	frame.overlay:ClearAllPoints()
 	frame.overlay:SetAllPoints(frame.hp)
 
-	if frame.icons then return end
-	frame.icons = CreateFrame("Frame",nil,frame)
-	frame.icons:SetPoint("BOTTOMRIGHT",frame.hp,"TOPRIGHT", 0, 3)
-	frame.icons:SetWidth(20 + hpWidth)
-	frame.icons:SetHeight(25)
-	frame.icons:SetFrameLevel(frame.hp:GetFrameLevel()+2)
-	frame:RegisterEvent("UNIT_AURA")
-	frame:HookScript("OnEvent", OnAura)
+	if not frame.icons then
+		frame.icons = CreateFrame("Frame", nil, frame)
+		frame.icons:SetPoint("BOTTOMRIGHT", frame.hp, "TOPRIGHT", 0, 3)
+		frame.icons:SetPoint("BOTTOMLEFT", frame.hp, "TOPLEFT", 0, 3)
+		frame.icons:SetHeight(25)
+		frame.icons:SetFrameLevel(frame.hp:GetFrameLevel()+2)
+		frame:RegisterEvent("UNIT_AURA")
+		frame:HookScript("OnEvent", OnAura)
+	end
+
+	local isSmallNP
+	if frame.hp:GetEffectiveScale() < 1 then
+		frame.hp:SetScale(1 / frame:GetEffectiveScale())
+		isSmallNP = true
+	end
+
+	if isSmallNP then
+		frame.hp:Width(hpWidth * .6)
+	end
+
+	frame.icons:SetScale(frame.hp:GetScale())
 
     CheckFilter(frame)
 	HideObjects(frame)
@@ -851,11 +870,6 @@ local function ShowHealth(frame, ...)
 	elseif (frame.hasClass ~= true and frame.isFriendly ~= true) then
 		frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 	end
-
-	if frame:GetScale() < 1 then
-        frame:SetScale(1)
-	end
-    --frame:SetScale(frame.hp:GetScale())
 end
 
 --Scan all visible nameplate for a known unit.
@@ -871,15 +885,6 @@ local function CheckUnit_Guid(frame, ...)
 		OnAura(frame, "mouseover")
 	else
 		frame.unit = nil
-	end
-end
-
---Update settings for nameplate to match config
-local function CheckSettings(frame, ...)
-	--Width
-	if frame.hp:GetWidth() ~= 110 then
-		frame.hp:Width(110)
-		hpWidth = 110
 	end
 end
 
@@ -983,7 +988,6 @@ function NP:Initialize()
 		ForEachPlate(ShowHealth)
 		ForEachPlate(HideDrunkenText)
 		ForEachPlate(CheckUnit_Guid)
-		ForEachPlate(CheckSettings)
 		ForEachPlate(UpdateColoring)
 
 		if(self.elapsed and self.elapsed > 0.2) then

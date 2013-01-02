@@ -25,6 +25,7 @@ L["武器附魔锚点"] = true
 L["施法条锚点"] = true
 L["小地图锚点"] = true
 L["团队冷却锚点"] = true
+L["团队buff提醒锚点"] = true
 
 L["ALL"] = "全部"
 L["GENERAL"] = "综合"

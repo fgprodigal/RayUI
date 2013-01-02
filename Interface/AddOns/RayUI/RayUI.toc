@@ -2,7 +2,7 @@
 ## Title: |cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r
 ## Version: 5.0
 ## Author: Ray
-## OptionalDeps: Skada,DBM-Core, BigWigs, AtlasLoot
+## OptionalDeps: Blizzard_DebugTools,Skada,DBM-Core, BigWigs, AtlasLoot
 ## RequiredDeps: Blizzard_CombatText
 ## X-Credits: Tukz, Elv, Haste, Haleth, Tekkub, Zork
 ## X-oUF: RayUF

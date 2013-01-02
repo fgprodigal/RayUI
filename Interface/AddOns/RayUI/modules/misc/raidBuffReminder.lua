@@ -4,7 +4,8 @@ local M = R:GetModule("Misc")
 local function LoadFunc()
 	if not M.db.raidbuffreminder then return end
 
-	local bsize = (Minimap:GetWidth() +3) / 8 - 3
+	-- local bsize = (Minimap:GetWidth() +3) / 8 - 3
+	local bsize = 30
 
 	local Stats = {
 		[90363] = "HUNTER", -- Embrace of the Shale Spider
@@ -62,7 +63,7 @@ local function LoadFunc()
 		[61316] = "MAGE", -- Dalaran Brilliance
 		[24932] = "DRUID", -- Leader of The Pact
 		[116781] = "MONK", -- Legacy of the White Tiger
-		["DEFAULT"] = 116781
+		["DEFAULT"] = 1459
 	}
 
 	local Mastery = {
@@ -160,18 +161,9 @@ local function LoadFunc()
 	local function UpdateRaidBuffReminderTime(self, elapsed)
 		if(self.expiration) then
 			self.expiration = math.max(self.expiration - elapsed, 0)
-			if(self.expiration <= 0) then
-				self.timer:SetText("")
-			else
-				local time = FormatTime(self.expiration)
-				if self.expiration <= 86400.5 and self.expiration > 600.5 then
-					self.timer:SetText("|cffcccccc"..time.."|r")
-				elseif self.expiration <= 600.5 and self.expiration > 60.5 then
-					self.timer:SetText("|cffffff00"..time.."|r")
-				elseif self.expiration <= 60.5 then
-					self.timer:SetText("|cffff0000"..time.."|r")
-				end
-			end
+			self.timerbar:SetValue(self.expiration)
+		else
+			self.timerbar:SetValue(select(2,self.timerbar:GetMinMaxValues()))
 		end
 	end
 
@@ -224,19 +216,24 @@ local function LoadFunc()
 				frame["spell"..i].duration = duration
 
 				if duration == 0 and expirationTime == 0 then
-					frame["spell"..i].t:SetAlpha(0.3)
+					frame["spell"..i].t:SetDesaturated(false)
+					frame["spell"..i].timerbar:SetMinMaxValues(0, 1)
+					frame["spell"..i].timerbar:SetValue(1)
+					frame["spell"..i].timerbar:Show()
 					frame["spell"..i]:SetScript("OnUpdate", nil)
 				else
-					CooldownFrame_SetTimer(frame["spell"..i].cd, expirationTime - duration, duration, 1)
-					frame["spell"..i].t:SetAlpha(0.3)
+					frame["spell"..i].t:SetDesaturated(false)
 					if M.db.raidbuffreminderduration == true then
+						frame["spell"..i].timerbar:SetMinMaxValues(0, duration)
+						frame["spell"..i].timerbar:SetValue(0)
+						frame["spell"..i].timerbar:Show()
 						frame["spell"..i]:SetScript("OnUpdate", UpdateRaidBuffReminderTime)
 					end
 				end
 				frame["spell"..i].hasBuff = hasBuff
 			else
-				CooldownFrame_SetTimer(frame["spell"..i].cd, 0, 0, 0)
-				frame["spell"..i].t:SetAlpha(1)
+				frame["spell"..i].t:SetDesaturated(true)
+				frame["spell"..i].timerbar:Hide()
 				frame["spell"..i].hasBuff = nil
 				frame["spell"..i]:SetScript("OnUpdate", nil)
 			end
@@ -245,15 +242,15 @@ local function LoadFunc()
 
 	local function Button_OnEnter(self)
 		GameTooltip:Hide()
-		GameTooltip:SetOwner(RaidBuffReminder, "ANCHOR_BOTTOM", 0, -10)
+		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMLEFT", -5, -5)
 		GameTooltip:ClearLines()
 
-		local id = self:GetParent():GetID()
+		local id = self:GetID()
 
-		if self:GetID() == 1 then
+		if id == 1 then
 			local text = select(7, GetItemInfo(76084))
 			GameTooltip:AddLine(text)
-		elseif self:GetID() == 2 then
+		elseif id == 2 then
 			local text = select(7, GetItemInfo(74648))
 			GameTooltip:AddLine(text)
 		elseif (id == 5 or id == 6) and R.Role == "Caster" then
@@ -272,7 +269,7 @@ local function LoadFunc()
 			GameTooltip:AddLine(_G["RAID_BUFF_"..id-2])
 		end
 
-		if IndexTable[id] then
+		if IndexTable[id] and id>2 then
 			GameTooltip:AddLine(" ")
 			for spellID, buffProvider in pairs(IndexTable[id]) do
 				if spellID ~= "DEFAULT" then
@@ -300,18 +297,14 @@ local function LoadFunc()
 		GameTooltip:Hide()
 	end
 
-	local function CreateButton(relativeTo, isFirst, isLast)
+	local function CreateButton(relativeTo, isFirst)
 		local button = CreateFrame("Frame", nil, RaidBuffReminder)
 		button:CreateShadow("Background")
 		button:SetSize(bsize, bsize)
 		if isFirst then
 			button:SetPoint("LEFT", relativeTo, "LEFT", 0, 0)
 		else
-			button:SetPoint("LEFT", relativeTo, "RIGHT", 3, 0)
-		end
-
-		if isLast then
-			button:SetPoint("RIGHT", RaidBuffReminder, "RIGHT", 0, 0)
+			button:SetPoint("LEFT", relativeTo, "RIGHT", 8, 0)
 		end
 
 		button.t = button:CreateTexture(nil, "OVERLAY")
@@ -319,53 +312,47 @@ local function LoadFunc()
 		button.t:SetAllPoints()
 		button.t:SetTexture("Interface\\Icons\\INV_Misc_QuestionMark")
 
+		button.highlight = button:CreateTexture(nil, "HIGHLIGHT")
+		button.highlight:SetTexture(1,1,1,0.45)
+		button.highlight:SetAllPoints(button.t)
+
 		button.cd = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
 		button.cd:SetAllPoints()
 		button.cd.noOCC = true
 
 		button.timer = button.cd:CreateFontString(nil, "OVERLAY")
 		button.timer:Point("CENTER", 1, 0)
-		-- button.timer:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
 		button.timer:SetFont(R["media"].font, 11, "OUTLINE")
 		button.timer:SetShadowOffset(R.mult, -R.mult)
 		button.timer:SetShadowColor(0, 0, 0)
+
+		button.timerbar = CreateFrame("StatusBar", nil, button)
+		button.timerbar:SetStatusBarTexture(R["media"].normal)
+		button.timerbar:SetStatusBarColor(unpack(R.colors.class[R.myclass]))
+		button.timerbar:SetPoint("TOPLEFT", button, "TOPLEFT", 0, 6)
+		button.timerbar:SetPoint("BOTTOMRIGHT", button, "TOPRIGHT", 0, 1)
+		button.timerbar:CreateShadow("Background")
+		button.timerbar:Hide()
 		
 		return button
 	end
 
 	local frame = CreateFrame("Frame", "RaidBuffReminder", Minimap)
-	frame:SetHeight(bsize)
-	frame:Point("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -4)
-	frame:Point("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -4)
+	frame:SetSize((bsize + 8)*8 - 8, bsize)
+	frame:Point("TOPRIGHT", UIParent, "TOPRIGHT", -14, -35)
 
-	frame.spell1 = CreateButton(frame, true)
-	frame.spell2 = CreateButton(frame.spell1)
-	frame.spell3 = CreateButton(frame.spell2)
-	frame.spell4 = CreateButton(frame.spell3)
-	frame.spell5 = CreateButton(frame.spell4)
-	frame.spell6 = CreateButton(frame.spell5)
-	frame.spell7 = CreateButton(frame.spell6)
-	frame.spell8 = CreateButton(frame.spell7, nil, true)
-	frame.spell1:SetScript("OnEnter", Button_OnEnter)
-	frame.spell2:SetScript("OnEnter", Button_OnEnter)
-
-	for i=1, NUM_LE_RAID_BUFF_TYPES do
-		local id = i
-		if i > 4 then
-			id = i - 2
+	for i = 1, 8 do
+		if i == 1 then
+			frame["spell"..i] = CreateButton(frame, true)
+		else
+			frame["spell"..i] = CreateButton(frame["spell"..i-1])
 		end
 		frame["spell"..i]:SetID(i)
-		
-		--This is so hackish its funny.. 
-		--Have to do this to be able to right click a consolidated buff icon in combat and remove the aura.
-		_G["ConsolidatedBuffsTooltipBuff"..i]:ClearAllPoints()
-		_G["ConsolidatedBuffsTooltipBuff"..i]:SetAllPoints(frame["spell"..id+2])
-		_G["ConsolidatedBuffsTooltipBuff"..i]:SetParent(frame["spell"..id+2])
-		_G["ConsolidatedBuffsTooltipBuff"..i]:SetAlpha(0)
-		_G["ConsolidatedBuffsTooltipBuff"..i]:SetScript("OnEnter", Button_OnEnter)
-		_G["ConsolidatedBuffsTooltipBuff"..i]:SetScript("OnLeave", Button_OnLeave)		
+		frame["spell"..i]:SetScript("OnEnter", Button_OnEnter)
+		frame["spell"..i]:SetScript("OnLeave", GameTooltip_Hide)
 	end
-	
+
+	R:CreateMover(frame, "RaidBuffReminderMover", L["团队buff提醒锚点"], true)
 	RaidBuffReminder:Show()
 	BuffFrame:RegisterEvent("UNIT_AURA")
 	frame:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")

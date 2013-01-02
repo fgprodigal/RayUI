@@ -285,7 +285,7 @@ function A:Initialize()
 	AurasHolder:SetFrameStrata("BACKGROUND")
 	AurasHolder:SetClampedToScreen(true)
 	AurasHolder:SetAlpha(0)
-	AurasHolder:Point("TOPRIGHT", UIParent, "TOPRIGHT", -14, -35)
+	AurasHolder:Point("TOPRIGHT", UIParent, "TOPRIGHT", -14, -73)
 	R:CreateMover(AurasHolder, "AurasMover", L["Buff锚点"], true, A.PostDrag)
 
 	self.BuffFrame = self:CreateAuraHeader("HELPFUL")
