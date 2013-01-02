@@ -74,7 +74,7 @@ end
 
 function A:UpdateWeapon(button)
 	if not button.shadow then
-		button:Size(buttonsize -8, buttonsize-8)
+		button:Size(buttonsize, buttonsize)
 		button:CreateShadow("Background")
 		button.shadow:SetBackdropColor(0, 0, 0)
 		button.border:SetBackdropBorderColor(137/255, 0, 191/255)
@@ -298,8 +298,8 @@ function A:Initialize()
 	self.AlphaFrame:SetScript("OnUpdate", A.UpdateAlpha)
 
 	self.EnchantHeader = CreateFrame("Frame", "RayUITemporaryEnchantFrame", UIParent, "SecureHandlerStateTemplate");
-	self.EnchantHeader:Size((buttonsize - 8) * 2 + spacing, buttonsize - 8)
-	self.EnchantHeader:Point("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -30)
+	self.EnchantHeader:Size(buttonsize * 2 + spacing, buttonsize)
+	self.EnchantHeader:Point("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -5)
 	self.EnchantHeader:SetAttribute("_onstate-show", [[
 			if newstate == "hide" then
 				self:Hide();
