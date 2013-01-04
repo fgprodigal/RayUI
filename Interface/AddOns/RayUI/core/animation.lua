@@ -285,3 +285,38 @@ end
 function R:UIFrameFadeRemoveFrame(frame)
 	R:tDeleteItem(FADEFRAMES, frame)
 end
+
+local smoothing = {}
+local function Smooth(self, value)
+	if value ~= self:GetValue() or value == 0 then
+		smoothing[self] = value
+	else
+		smoothing[self] = nil
+	end
+end
+
+function R:SmoothBar(bar)
+	if not bar.SetValue_ then
+		bar.SetValue_ = bar.SetValue
+		bar.SetValue = Smooth
+	end
+end
+
+local SmoothUpdate = CreateFrame("Frame")
+SmoothUpdate:SetScript("OnUpdate", function()
+	local limit = 30/GetFramerate()
+	local speed = 1/12
+
+	for bar, value in pairs(smoothing) do
+		local cur = bar:GetValue()
+		local new = cur + math.min((value-cur)*speed, math.max(value-cur, limit))
+		if new ~= new then
+			new = value
+		end
+		bar:SetValue_(new)
+		if (cur == value or math.abs(new - value) < 1) then
+			bar:SetValue_(value)
+			smoothing[bar] = nil
+		end
+	end
+end)

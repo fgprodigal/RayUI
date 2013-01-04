@@ -41,6 +41,8 @@ P["NamePlates"]={
 	showdebuff = true,
 	combat = false,
 	showhealer = true,
+	smooth = true,
+	fade = true,
 }
 
 P["Bag"]={

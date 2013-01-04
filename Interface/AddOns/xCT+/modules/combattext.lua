@@ -779,6 +779,7 @@ x.events = {
   ["CHAT_MSG_LOOT"] = function(msg)
     --format_loot
     local pM,iQ,iI,iN,iA = select(3, string.find(msg, format_loot))   -- Pre-Message, ItemColor, ItemID, ItemName, ItemAmount
+	if not iI then return end
     local qq,_,_,tt,st,_,_,ic = select(3, GetItemInfo(iI))             -- Item Quality, See "GetAuctionItemClasses()" For Type and Subtype, Item Icon Texture Location
     
     -- Item filter

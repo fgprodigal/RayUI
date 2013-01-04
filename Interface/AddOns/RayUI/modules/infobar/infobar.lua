@@ -16,6 +16,7 @@ function IF:CreateInfoBar(name, width, height, p1, rel, p2, x, y, noStatus)
 	bar.Status:SetStatusBarColor(unpack(IF.InfoBarStatusColor[3]))
 	bar.Status:SetAllPoints()
 	bar.Status:SetValue(100)
+	R:SmoothBar(bar.Status)
 
 	bar.Text = bar.Status:CreateFontString(nil, "OVERLAY")
 	bar.Text:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)

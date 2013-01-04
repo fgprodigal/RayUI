@@ -236,18 +236,20 @@ local function CreateAuraIcon(parent)
 	button:SetWidth(20)
 	button:SetHeight(20)
 
-	button.shadow = CreateFrame("Frame", nil, button)
-	button.shadow:SetFrameLevel(0)
-	button.shadow:Point("TOPLEFT", -2*noscalemult, 2*noscalemult)
-	button.shadow:Point("BOTTOMRIGHT", 2*noscalemult, -2*noscalemult)
-	button.shadow:SetBackdrop( {
-		edgeFile = R["media"].glow,
-		bgFile = R["media"].blank,
-		edgeSize = R:Scale(4),
-		insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
-	})
-	button.shadow:SetBackdropColor( 0, 0, 0 )
-	button.shadow:SetBackdropBorderColor( 0, 0, 0 )
+	if R.global.general.theme == "Shadow" then
+		button.shadow = CreateFrame("Frame", nil, button)
+		button.shadow:SetFrameLevel(0)
+		button.shadow:Point("TOPLEFT", -2*noscalemult, 2*noscalemult)
+		button.shadow:Point("BOTTOMRIGHT", 2*noscalemult, -2*noscalemult)
+		button.shadow:SetBackdrop( {
+			edgeFile = R["media"].glow,
+			bgFile = R["media"].blank,
+			edgeSize = R:Scale(4),
+			insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
+		})
+		button.shadow:SetBackdropColor( 0, 0, 0 )
+		button.shadow:SetBackdropBorderColor( 0, 0, 0 )
+	end
 
 	button.bord = button:CreateTexture(nil, "BORDER")
 	button.bord:SetTexture(0, 0, 0, 1)
@@ -379,10 +381,12 @@ local function UpdateCastbar(frame)
 	frame:SetPoint("TOPLEFT", frame:GetParent().hp, "BOTTOMLEFT", 0, -8)
 	frame:SetPoint("BOTTOMRIGHT", frame:GetParent().hp, "BOTTOMRIGHT", 0, -8-cbHeight)
 	frame:GetStatusBarTexture():SetHorizTile(true)
-	if(frame.shield:IsShown()) then
+	if(frame.oldshield:IsShown()) then
 		frame:SetStatusBarColor(1, 0, 0)
+		frame.shield:Show()
 	else
 		frame:SetStatusBarColor(0, 1, 0)
+		frame.shield:Hide()
 	end
 
 	if frame:GetEffectiveScale() < 1 then
@@ -434,33 +438,6 @@ end
 --Sometimes castbar likes to randomly resize
 local OnSizeChanged = function(self)
 	self.needFix = true
-end
-
---We need to reset everything when a nameplate it hidden, this is so theres no left over data when a nameplate gets reshown for a differant mob.
-local function OnHide(frame)
-	frame.hp:SetStatusBarColor(frame.hp.rcolor, frame.hp.gcolor, frame.hp.bcolor)
-    frame.hp:SetScale(1)
-    frame:SetScale(1)
-    frame.icons:SetScale(1)
-    frame.cb:SetScale(1)
-	frame.overlay:Hide()
-	frame.cb:Hide()
-	frame.unit = nil
-	frame.threatStatus = nil
-	frame.guid = nil
-	frame.hasClass = nil
-	frame.isFriendly = nil
-	frame.isTapped = nil
-	frame.hp.rcolor = nil
-	frame.hp.gcolor = nil
-	frame.hp.bcolor = nil
-	if frame.icons then
-		for _,icon in ipairs(frame.icons) do
-			icon:Hide()
-		end
-	end
-
-	frame:SetScript("OnUpdate",nil)
 end
 
 --Color Nameplate
@@ -523,7 +500,7 @@ end
 
 --HealthBar OnShow, use this to set variables for the nameplate, also size the healthbar here because it likes to lose it's
 --size settings when it gets reshown
-local function UpdateObjects(frame)
+local function OnFrameShow(frame)
 	local frame = frame:GetParent()
 
 	local r, g, b = frame.hp:GetStatusBarColor()
@@ -531,7 +508,7 @@ local function UpdateObjects(frame)
 	--Have to reposition this here so it doesnt resize after being hidden
 	frame.hp:ClearAllPoints()
 	frame.hp:SetSize(hpWidth, hpHeight)
-	frame.hp:SetPoint("BOTTOM", frame, "BOTTOM", 0, 5)
+	frame.hp:SetPoint("CENTER", frame, "CENTER", 0, 0)
 	frame.hp:GetStatusBarTexture():SetHorizTile(true)
 
 	frame.hp:SetMinMaxValues(frame.healthOriginal:GetMinMaxValues())
@@ -542,23 +519,21 @@ local function UpdateObjects(frame)
     Colorize(frame, r, g, b)
     frame.hp.rcolor, frame.hp.gcolor, frame.hp.bcolor = frame.hp:GetStatusBarColor()
 	frame.hp.hpbg:SetTexture(frame.hp.rcolor, frame.hp.gcolor, frame.hp.bcolor, 0.1)
+	frame.hp.name:SetJustifyH("LEFT")
 	frame.hp.name:SetTextColor(frame.hp.rcolor, frame.hp.gcolor, frame.hp.bcolor)
+	frame.hp.name:ClearAllPoints()
+	frame.hp.name:SetPoint("BOTTOMLEFT", frame.hp, "TOPLEFT", 0, -1)
+	frame.hp.name:SetPoint("BOTTOMRIGHT", frame.hp, "TOPRIGHT", -20, -1)
 
-	local level, elite, mylevel = tonumber(frame.hp.oldlevel:GetText()), frame.hp.elite:IsShown(), UnitLevel("player")
+	frame.hp.value:Show()
 
-	--Set the name text
-	if frame.hp.boss:IsShown() then
-		frame.hp.name:SetText(R:RGBToHex(0.8, 0.05, 0).." ??|r "..frame.hp.oldname:GetText())
-	else
-		frame.hp.name:SetText(R:RGBToHex(frame.hp.oldlevel:GetTextColor())..level..(elite and "+ |r" or "|r ")..frame.hp.oldname:GetText())
-	end
 	frame.overlay:ClearAllPoints()
 	frame.overlay:SetAllPoints(frame.hp)
 
 	if not frame.icons then
 		frame.icons = CreateFrame("Frame", nil, frame)
-		frame.icons:SetPoint("BOTTOMRIGHT", frame.hp, "TOPRIGHT", 0, 3)
-		frame.icons:SetPoint("BOTTOMLEFT", frame.hp, "TOPLEFT", 0, 3)
+		frame.icons:SetPoint("BOTTOMRIGHT", frame.hp, "TOPRIGHT", 0, 6)
+		frame.icons:SetPoint("BOTTOMLEFT", frame.hp, "TOPLEFT", 0, 6)
 		frame.icons:SetHeight(25)
 		frame.icons:SetFrameLevel(frame.hp:GetFrameLevel()+2)
 		frame:RegisterEvent("UNIT_AURA")
@@ -573,12 +548,84 @@ local function UpdateObjects(frame)
 
 	if isSmallNP then
 		frame.hp:Width(hpWidth * .6)
+		frame.hp:Height(hpHeight * .8)
+		frame.hp.value:Hide()
+		frame.hp.name:SetJustifyH("CENTER")
+		frame.hp.name:ClearAllPoints()
+		frame.hp.name:SetPoint("BOTTOMLEFT", frame.hp, "TOPLEFT", 0, -1)
+		frame.hp.name:SetPoint("BOTTOMRIGHT", frame.hp, "TOPRIGHT", 0, -1)
+	end
+
+	local level, mylevel = tonumber(frame.hp.oldlevel:GetText()), UnitLevel("player")
+
+	--Set the name text
+	if frame.hp.boss:IsShown() then
+		frame.hp.name:SetText(R:RGBToHex(0.8, 0.05, 0).." B|r "..frame.hp.oldname:GetText())
+	elseif isSmallNP then
+		frame.hp.name:SetText(frame.hp.oldname:GetText())
+	elseif frame.hp.elite:IsVisible() then
+		if frame.hp.elite:GetTexture() == "Interface\\Tooltips\\EliteNameplateIcon"then
+			frame.hp.name:SetText(R:RGBToHex(frame.hp.oldlevel:GetTextColor())..level.."+ |r"..frame.hp.oldname:GetText())
+		else
+			frame.hp.name:SetText(R:RGBToHex(frame.hp.oldlevel:GetTextColor())..level.."R |r"..frame.hp.oldname:GetText())
+		end
+	else
+		frame.hp.name:SetText(R:RGBToHex(frame.hp.oldlevel:GetTextColor())..level.." |r"..frame.hp.oldname:GetText())
 	end
 
 	frame.icons:SetScale(frame.hp:GetScale())
 
     CheckFilter(frame)
 	HideObjects(frame)
+end
+
+local function OnFrameUpdate(self, e)
+	self.defaultAlpha = self:GetAlpha()
+
+	if self.defaultAlpha == 1 and UnitExists("target")  then
+		self.currentAlpha = 1
+	elseif UnitExists("target") then
+		self.currentAlpha = .3
+	else
+		self.currentAlpha = 1
+	end
+
+	self.lastAlpha = self.lastAlpha or 0
+	self.lastAlpha  = self.lastAlpha + (self.currentAlpha - self.lastAlpha)/30
+
+	if (self.lastAlpha == self.currentAlpha or math.abs(self.lastAlpha - self.currentAlpha) < .02) then
+		self:SetAlpha(self.currentAlpha)
+	else
+		self:SetAlpha(self.lastAlpha)
+	end
+end
+
+--We need to reset everything when a nameplate it hidden, this is so theres no left over data when a nameplate gets reshown for a differant mob.
+local function OnFrameHide(frame)
+	frame.hp:SetStatusBarColor(frame.hp.rcolor, frame.hp.gcolor, frame.hp.bcolor)
+    frame.hp:SetScale(1)
+    frame:SetScale(1)
+    frame.icons:SetScale(1)
+    frame.cb:SetScale(1)
+	frame.overlay:Hide()
+	frame.cb:Hide()
+	frame.unit = nil
+	frame.threatStatus = nil
+	frame.guid = nil
+	frame.hasClass = nil
+	frame.isFriendly = nil
+	frame.isTapped = nil
+	frame.hp.rcolor = nil
+	frame.hp.gcolor = nil
+	frame.hp.bcolor = nil
+	if frame.icons then
+		for _,icon in ipairs(frame.icons) do
+			icon:Hide()
+		end
+	end
+	frame:GetChildren().lastAlpha = 0
+	frame:GetChildren().fadingTo = nil
+	frame:SetScript("OnUpdate",nil)
 end
 
 --This is where we create most "Static" objects for the nameplate, it gets fired when a nameplate is first seen.
@@ -593,6 +640,9 @@ local function SkinObjects(frame, nameFrame)
 		--Health Bar
 		frame.healthOriginal = oldhp
 		frame.hp = CreateFrame("Statusbar", nil, frame)
+		if NP.db.smooth then
+			R:SmoothBar(frame.hp)
+		end
 		frame.hp:SetFrameLevel(oldhp:GetFrameLevel())
 		frame.hp:SetFrameStrata(oldhp:GetFrameStrata())
 		frame.hp:SetStatusBarTexture(R["media"].normal)
@@ -614,7 +664,7 @@ local function SkinObjects(frame, nameFrame)
 		frame.hp.value = frame.hp:CreateFontString(nil, "OVERLAY")
 		frame.hp.value:SetFont(R["media"].font, FONTSIZE, R["media"].fontflag)
 		frame.hp.value:SetShadowColor(0, 0, 0, 0.4)
-		frame.hp.value:SetPoint("BOTTOMRIGHT", frame.hp, "TOPRIGHT", 0, -4)
+		frame.hp.value:SetPoint("BOTTOMRIGHT", frame.hp, "TOPRIGHT", 0, -1)
 		frame.hp.value:SetJustifyH("RIGHT")
 		frame.hp.value:SetTextColor(1,1,1)
 		frame.hp.value:SetShadowOffset(R.mult, -R.mult)
@@ -623,8 +673,8 @@ local function SkinObjects(frame, nameFrame)
 	if not frame.hp.name then
 		--Create Name Text
 		frame.hp.name = frame.hp:CreateFontString(nil, "OVERLAY")
-		frame.hp.name:SetPoint("BOTTOMLEFT", frame.hp, "TOPLEFT", 0, -4)
-		frame.hp.name:SetPoint("BOTTOMRIGHT", frame.hp, "TOPRIGHT", -20, -4)
+		frame.hp.name:SetPoint("BOTTOMLEFT", frame.hp, "TOPLEFT", 0, -1)
+		frame.hp.name:SetPoint("BOTTOMRIGHT", frame.hp, "TOPRIGHT", -20, -1)
 		frame.hp.name:SetFont(R["media"].font, FONTSIZE, R["media"].fontflag)
 		frame.hp.name:SetJustifyH("LEFT")
 		frame.hp.name:SetShadowColor(0, 0, 0, 0.4)
@@ -632,7 +682,7 @@ local function SkinObjects(frame, nameFrame)
 		frame.hp.oldname = oldname
 	end
 
-	frame.hp:HookScript("OnShow", UpdateObjects)
+	frame.hp:HookScript("OnShow", OnFrameShow)
     frame.healthOriginal:HookScript("OnValueChanged", OnHealthValueChanged)
 
 	--Cast Bar
@@ -699,7 +749,22 @@ local function SkinObjects(frame, nameFrame)
 		end
 	end
 
-	cb.shield = cbshield
+	if not cb.shield then
+		cb.shield = cb:CreateTexture(nil, "ARTWORK")
+		cb.shield:SetTexture("Interface\\AddOns\\RayUI\\media\\shield")
+		cb.shield:SetTexCoord(0, .53125, 0, .6875)
+
+		cb.shield:SetSize(12, 17)
+		cb.shield:SetPoint("CENTER", cb, 0, -2)
+
+		cb.shield:SetBlendMode("BLEND")
+		cb.shield:SetDrawLayer("ARTWORK", 7)
+		cb.shield:SetVertexColor(1, .1, .1)
+		
+		cb.shield:Hide()
+	end
+
+	cb.oldshield = cbshield
 	cbshield:ClearAllPoints()
 	cbshield:SetPoint("TOP", cb, "BOTTOM")
 	cb:HookScript("OnShow", UpdateCastbar)
@@ -739,10 +804,13 @@ local function SkinObjects(frame, nameFrame)
 	QueueObject(frame, bossicon)
 	QueueObject(frame, elite)
 
-	UpdateObjects(frame.hp)
+	OnFrameShow(frame.hp)
 	UpdateCastbar(cb)
 
-	frame:HookScript("OnHide", OnHide)
+	frame:HookScript("OnHide", OnFrameHide)
+	if NP.db.fade then
+		frame:GetParent():HookScript("OnUpdate", OnFrameUpdate)
+	end
 	frames[frame:GetParent()] = true
 	frame.RayUIPlate = true
 end
@@ -912,7 +980,6 @@ local function ForEachPlate(functionToRun, ...)
 end
 
 --Check if the frames default overlay texture matches blizzards nameplates default overlay texture
-local select = select
 local function HookFrames(...)
 	for index = 1, select("#", ...) do
 		local frame = select(index, ...)
