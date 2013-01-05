@@ -378,8 +378,8 @@ end
 --also resize it as nameplates somehow manage to resize some frames when they reappear after being hidden
 local function UpdateCastbar(frame)
 	frame:ClearAllPoints()
-	frame:SetPoint("TOPLEFT", frame:GetParent().hp, "BOTTOMLEFT", 0, -8)
-	frame:SetPoint("BOTTOMRIGHT", frame:GetParent().hp, "BOTTOMRIGHT", 0, -8-cbHeight)
+	frame:SetPoint("TOPLEFT", frame:GetParent().hp, "BOTTOMLEFT", 0, -4)
+	frame:SetPoint("BOTTOMRIGHT", frame:GetParent().hp, "BOTTOMRIGHT", 0, -4-cbHeight)
 	frame:GetStatusBarTexture():SetHorizTile(true)
 	if(frame.oldshield:IsShown()) then
 		frame:SetStatusBarColor(1, 0, 0)
@@ -560,15 +560,11 @@ local function OnFrameShow(frame)
 
 	--Set the name text
 	if frame.hp.boss:IsShown() then
-		frame.hp.name:SetText(R:RGBToHex(0.8, 0.05, 0).." B|r "..frame.hp.oldname:GetText())
+		frame.hp.name:SetText(R:RGBToHex(0.8, 0.05, 0).."?? |r "..frame.hp.oldname:GetText())
 	elseif isSmallNP then
 		frame.hp.name:SetText(frame.hp.oldname:GetText())
-	elseif frame.hp.elite:IsVisible() then
-		if frame.hp.elite:GetTexture() == "Interface\\Tooltips\\EliteNameplateIcon"then
-			frame.hp.name:SetText(R:RGBToHex(frame.hp.oldlevel:GetTextColor())..level.."+ |r"..frame.hp.oldname:GetText())
-		else
-			frame.hp.name:SetText(R:RGBToHex(frame.hp.oldlevel:GetTextColor())..level.."R |r"..frame.hp.oldname:GetText())
-		end
+	elseif frame.hp.elite:IsShown() then
+		frame.hp.name:SetText(R:RGBToHex(frame.hp.oldlevel:GetTextColor())..level.."+ |r"..frame.hp.oldname:GetText())
 	else
 		frame.hp.name:SetText(R:RGBToHex(frame.hp.oldlevel:GetTextColor())..level.." |r"..frame.hp.oldname:GetText())
 	end
@@ -591,7 +587,7 @@ local function OnFrameUpdate(self, e)
 	end
 
 	self.lastAlpha = self.lastAlpha or 0
-	self.lastAlpha  = self.lastAlpha + (self.currentAlpha - self.lastAlpha)/30
+	self.lastAlpha  = self.lastAlpha + (self.currentAlpha - self.lastAlpha)/18
 
 	if (self.lastAlpha == self.currentAlpha or math.abs(self.lastAlpha - self.currentAlpha) < .02) then
 		self:SetAlpha(self.currentAlpha)
@@ -710,7 +706,7 @@ local function SkinObjects(frame, nameFrame)
 	--Setup CastBar Icon
 	cbicon:ClearAllPoints()
 	cbicon:SetPoint("TOPRIGHT", frame.hp, "TOPLEFT", -3, 0)
-	cbicon:SetSize(iconSize, iconSize)
+	cbicon:SetSize(iconSize - 4, iconSize - 4)
 	cbicon:SetTexCoord(.07, .93, .07, .93)
 	cbicon:SetDrawLayer("OVERLAY")
 	cb.icon = cbicon
@@ -755,7 +751,7 @@ local function SkinObjects(frame, nameFrame)
 		cb.shield:SetTexCoord(0, .53125, 0, .6875)
 
 		cb.shield:SetSize(12, 17)
-		cb.shield:SetPoint("CENTER", cb, 0, -2)
+		cb.shield:SetPoint("CENTER", cb, 0, -1)
 
 		cb.shield:SetBlendMode("BLEND")
 		cb.shield:SetDrawLayer("ARTWORK", 7)
