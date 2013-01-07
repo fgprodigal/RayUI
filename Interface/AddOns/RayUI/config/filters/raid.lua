@@ -114,7 +114,7 @@ G.Raid.RaidDebuffs = {
 			-- Garalon
 			[SpellName(123081)] = Defaults(8), --Pungency
 			[SpellName(122774)] = Defaults(7), --Crush
-			[SpellName(123423)] = Defaults(8), --Weak Points
+			-- [SpellName(123423)] = Defaults(8), --Weak Points
 			-- Wind Lord Mel'jarak			
 			[SpellName(121881)] = Defaults(8), --Amber Prison
 			[SpellName(122055)] = Defaults(7), --Residue
