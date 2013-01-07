@@ -144,6 +144,13 @@ function M:GetOptions()
 					type = "toggle",
 					disabled = function() return not M.db.raidbuffreminder end,
 				},
+				consolidate = {
+					order = 4,
+					name = L["整合buff"],
+					desc = L["隐藏在团队buff提醒中显示的buff"],
+					type = "toggle",
+					disabled = function() return not M.db.raidbuffreminder end,
+				},
 			},
 		},
 		autoinvitegroup = {

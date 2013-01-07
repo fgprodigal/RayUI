@@ -42,7 +42,7 @@ P["NamePlates"]={
 	combat = false,
 	showhealer = true,
 	smooth = true,
-	fade = true,
+	fade = false,
 }
 
 P["Bag"]={
@@ -215,6 +215,7 @@ P["Misc"]={
 	raidbuffreminder = true,
 		raidbuffreminderparty = false,
 		raidbuffreminderduration = true,
+		consolidate = true,
     autoAcceptInvite = true,
         autoInvite = true,
         autoInviteKeywords = "111 123",

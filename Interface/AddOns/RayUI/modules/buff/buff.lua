@@ -165,6 +165,8 @@ function A:ScanAuras(event, unit)
 end
 
 function A:UpdateHeader(header)
+	header:SetAttribute("consolidateDuration", -1)
+	header:SetAttribute("consolidateTo", (R.db.Misc.raidbuffreminder == true and R.db.Misc.consolidate == true) and 1 or 0)
 	header:SetAttribute("maxWraps", 1)
 	header:SetAttribute("sortMethod", "TIME")
 	header:SetAttribute("sortDirection", "+")

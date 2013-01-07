@@ -131,6 +131,16 @@ function NP:GetOptions()
 			name = L["战场中标识治疗"],
 			type = "toggle",
 		},
+		smooth = {
+			order = 7,
+			name = L["平滑变化"],
+			type = "toggle",
+		},
+		fade = {
+			order = 8,
+			name = L["透明度渐变"],
+			type = "toggle",
+		},
 	}
 	return options
 end

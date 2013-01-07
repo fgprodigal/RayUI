@@ -28,7 +28,7 @@ G.Raid.AuraWatch = {
 		ClassBuff(123258, "TOPLEFT", {0.81, 0.85, 0.1}, true),	 -- Power Word: Shield Power Insight
 		ClassBuff(10060 , "RIGHT", {227/255, 23/255, 13/255}), -- Power Infusion
 		ClassBuff(47788, "LEFT", {221/255, 117/255, 0}, true), -- Guardian Spirit
-		ClassBuff(33206, "LEFT", {227/255, 23/255, 13/255}, true), -- Pain Suppression		
+		ClassBuff(33206, "LEFT", {227/255, 23/255, 13/255}, true), -- Pain Suppression
 	},
 	DRUID = {
 		ClassBuff(774, "TOPRIGHT", {0.8, 0.4, 0.8}),	 -- Rejuvenation
@@ -64,11 +64,11 @@ G.Raid.AuraWatch = {
 	},
 	WARRIOR = {
 		ClassBuff(114030, "TOPLEFT", {0.2, 0.2, 1}), -- Vigilance
-		ClassBuff(3411, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Intervene	
+		ClassBuff(3411, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Intervene
 		ClassBuff(114029, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Safe Guard
 	},
 	DEATHKNIGHT = {
-		ClassBuff(49016, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Unholy Frenzy	
+		ClassBuff(49016, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Unholy Frenzy
 	},
 	PET = {
 		ClassBuff(19615, 'TOPLEFT', {227/255, 23/255, 13/255}, true), -- Frenzy
@@ -101,63 +101,115 @@ G.Raid.RaidDebuffs = {
         [897] = {
             -- Heart of Fear
 			-- Imperial Vizier Zor'lok
-			[SpellName(122761)] = Defaults(5), -- Exhale
-			[SpellName(122760)] = Defaults(5), -- Exhale
-			[SpellName(122740)] = Defaults(5), -- Convert
-			[SpellName(123812)] = Defaults(5), -- Pheromones of Zeal
+			[SpellName(122761)] = Defaults(7), -- Exhale
+			[SpellName(122760)] = Defaults(7), -- Exhale			
+			[SpellName(123812)] = Defaults(7), --Pheromones of Zeal
+			[SpellName(122740)] = Defaults(7), --Convert (MC)
+			[SpellName(122706)] = Defaults(7), --Noise Cancelling (AMZ)
 			-- Blade Lord Ta'yak
-			[SpellName(123180)] = Defaults(5), -- Wind Step
-			[SpellName(123474)] = Defaults(5), -- Overwhelming Assault
+			[SpellName(123180)] = Defaults(7), -- Wind Step			
+			[SpellName(123474)] = Defaults(7), --Overwhelming Assault
+			[SpellName(122949)] = Defaults(7), --Unseen Strike
+			[SpellName(124783)] = Defaults(7), --Storm Unleashed
 			-- Garalon
-			--[SpellName(122835)] = Defaults(5), -- Pheromones
-			[SpellName(123081)] = Defaults(5), -- Pungency
-			-- Wind Lord Mel'jarak
-			[SpellName(122125)] = Defaults(5), -- Corrosive Resin Pool
-			[SpellName(121885)] = Defaults(5), -- Amber Prison
-			-- Wind Lord Mel'jarak
-			[SpellName(121949)] = Defaults(5), -- Parasitic Growth
-			-- Grand Empress Shek'zeer
+			[SpellName(123081)] = Defaults(8), --Pungency
+			[SpellName(122774)] = Defaults(7), --Crush
+			[SpellName(123423)] = Defaults(8), --Weak Points
+			-- Wind Lord Mel'jarak			
+			[SpellName(121881)] = Defaults(8), --Amber Prison
+			[SpellName(122055)] = Defaults(7), --Residue
+			[SpellName(122064)] = Defaults(7), --Corrosive Resin
+			--Amber-Shaper Un'sok
+			[SpellName(121949)] = Defaults(7), --Parasitic Growth
+			[SpellName(122784)] = Defaults(7), --Reshape Life
+			--Grand Empress Shek'zeer
+			[SpellName(123707)] = Defaults(7), --Eyes of the Empress
+			[SpellName(125390)] = Defaults(7), --Fixate
+			[SpellName(123788)] = Defaults(8), --Cry of Terror
+			[SpellName(124097)] = Defaults(7), --Sticky Resin
+			[SpellName(123184)] = Defaults(8), --Dissonance Field
+			[SpellName(124777)] = Defaults(7), --Poison Bomb
+			[SpellName(124821)] = Defaults(7), --Poison-Drenched Armor
+			[SpellName(124827)] = Defaults(7), --Poison Fumes
+			[SpellName(124849)] = Defaults(7), --Consuming Terror
+			[SpellName(124863)] = Defaults(7), --Visions of Demise
+			[SpellName(124862)] = Defaults(7), --Visions of Demise: Target
+			[SpellName(123845)] = Defaults(7), --Heart of Fear: Chosen
+			[SpellName(123846)] = Defaults(7), --Heart of Fear: Lure
+			[SpellName(125283)] = Defaults(7), --Sha Corruption
         },
         [896] = {
             -- Mogu'shan Vaults
             -- The Stone Guard
-			[SpellName(116281)] = Defaults(5), -- Cobalt Mine Blast
+			[SpellName(116281)] = Defaults(7), --Cobalt Mine Blast
 			-- Feng the Accursed
-			[SpellName(116784)] = Defaults(5), -- Wildfire Spark
-			[SpellName(116417)] = Defaults(5), -- Arcane Resonance
-			[SpellName(116942)] = Defaults(5), -- Flaming Spear
+			[SpellName(116784)] = Defaults(9), --Wildfire Spark
+			[SpellName(116374)] = Defaults(7), --Lightning Charge
+			[SpellName(116417)] = Defaults(8), --Arcane Resonance
 			-- Gara'jal the Spiritbinder
-			[SpellName(122151)] = Defaults(5), -- Voodoo Doll
-			[SpellName(116161)] = Defaults(5), -- Crossed Over
-			-- The Spirit Kings
-			[SpellName(117708)] = Defaults(5), -- Maddening Shout
-			[SpellName(118303)] = Defaults(6), -- Fixate
-			[SpellName(118048)] = Defaults(5), -- Pillaged
-			[SpellName(118135)] = Defaults(7), -- Pinned Down
+			[SpellName(122151)] = Defaults(8), --Voodoo Doll
+			[SpellName(116161)] = Defaults(7), --Crossed Over
+			[SpellName(116278)] = Defaults(7), --Soul Sever
+			-- The Spirit Kings			
+			--Meng the Demented
+			[SpellName(117708)] = Defaults(7), --Maddening Shout
+			--Subetai the Swift
+			[SpellName(118048)] = Defaults(7), --Pillaged
+			[SpellName(118047)] = Defaults(7), --Pillage: Target
+			[SpellName(118135)] = Defaults(7), --Pinned Down
+			[SpellName(118163)] = Defaults(7), --Robbed Blind
+			--Zian of the Endless Shadow
+			[SpellName(118303)] = Defaults(7), --Undying Shadow: Fixate
 			-- Elegon
-			-- [SpellName(117878)] = Defaults(5), -- Overcharged
-			[SpellName(117949)] = Defaults(5), -- Closed Circuit
+			[SpellName(117949)] = Defaults(7), --Closed Circuit
+			[SpellName(132222)] = Defaults(8), --Destabilizing Energies
 			-- Will of the Emperor
-			[SpellName(116835)] = Defaults(5), -- Devastating Arc
-			[SpellName(116778)] = Defaults(6), -- Focused Defense
-			[SpellName(116525)] = Defaults(6), -- Focused Assault
+			--Jan-xi and Qin-xi
+			[SpellName(116835)] = Defaults(7), --Devastating Arc
+			[SpellName(132425)] = Defaults(7), --Stomp
+			-- Rage
+			[SpellName(116525)] = Defaults(7), --Focused Assault (Rage fixate)
+			-- Courage
+			[SpellName(116778)] = Defaults(7), --Focused Defense (fixate)
+			[SpellName(117485)] = Defaults(7), --Impeding Thrust (slow debuff)
+			-- Strength
+			[SpellName(116550)] = Defaults(7), --Energizing Smash (knock down)
+			-- Titan Spark (Heroic)
+			[SpellName(116829)] = Defaults(7), --Focused Energy (fixate)
         },
 		[886] = {
             -- Terrace of Endless Spring
 			-- Protectors of the Endless
-			[SpellName(117436)] = Defaults(5), -- Lightning Prison
-			[SpellName(118091)] = Defaults(5), -- Defiled Ground
-			[SpellName(117519)] = Defaults(5), -- Touch of Sha
+			[SpellName(118091)] = Defaults(6), --Defiled Ground
+			[SpellName(117519)] = Defaults(6), --Touch of Sha
+			[SpellName(111850)] = Defaults(6), --Lightning Prison: Targeted
+			[SpellName(117436)] = Defaults(7), --Lightning Prison: Stunned
+			[SpellName(118191)] = Defaults(6), --Corrupted Essence
+			[SpellName(117986)] = Defaults(7), --Defiled Ground: Stacks
 			-- Tsulong
-			[SpellName(122752)] = Defaults(5), -- Shadow Breath
-			[SpellName(123011)] = Defaults(5), -- Terrorize
-			[SpellName(116161)] = Defaults(5), -- Crossed Over
+			[SpellName(122768)] = Defaults(7), --Dread Shadows
+			[SpellName(122777)] = Defaults(7), --Nightmares (dispellable)
+			[SpellName(122752)] = Defaults(7), --Shadow Breath
+			[SpellName(122789)] = Defaults(7), --Sunbeam
+			[SpellName(123012)] = Defaults(7), --Terrorize: 5% (dispellable)
+			[SpellName(123011)] = Defaults(7), --Terrorize: 10% (dispellable)
+			[SpellName(123036)] = Defaults(7), --Fright (dispellable)
+			[SpellName(122858)] = Defaults(6), --Bathed in Light
 			-- Lei Shi
-			[SpellName(123121)] = Defaults(5), -- Spray
+			[SpellName(123121)] = Defaults(7), --Spray
+			[SpellName(123705)] = Defaults(7), --Scary Fog
 			-- Sha of Fear
-			[SpellName(119985)] = Defaults(5), -- Dread Spray
-			[SpellName(119086)] = Defaults(5), -- Penetrating Bolt
-			[SpellName(119775)] = Defaults(5), -- Reaching Attack
+			[SpellName(119414)] = Defaults(7), --Breath of Fear
+			[SpellName(129147)] = Defaults(7), --Onimous Cackle
+			[SpellName(119983)] = Defaults(7), --Dread Spray
+			[SpellName(120669)] = Defaults(7), --Naked and Afraid
+			[SpellName(75683)] = Defaults(7), --Waterspout
+
+			[SpellName(120629)] = Defaults(7), --Huddle in Terror
+			[SpellName(120394)] = Defaults(7), --Eternal Darkness
+			[SpellName(129189)] = Defaults(7), --Sha Globe
+			[SpellName(119086)] = Defaults(7), --Penetrating Bolt
+			[SpellName(119775)] = Defaults(7), --Reaching Attack
         },
         [824] = {
             -- Dragon Soul
@@ -190,7 +242,7 @@ G.Raid.RaidDebuffs = {
             [SpellName(106200)] = Defaults(9),  --血液腐化:大地
             [SpellName(106199)] = Defaults(10),  --血液腐化:死亡
 
-            -- Madness 
+            -- Madness
             [SpellName(105841)] = Defaults(7),  --退化咬擊
             [SpellName(105445)] = Defaults(8),  --極熾高熱
             [SpellName(106444)] = Defaults(9),  --刺穿

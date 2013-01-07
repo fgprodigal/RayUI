@@ -142,7 +142,7 @@ local function LoadFunc()
 
 				local spn, _, _, _, _, _, _, _, _, _, spellID = UnitAura("player", spellName)
 				local food = true
-				
+
 				if filter == Food then
 					if spell ~= spellID then food = false end
 				end
@@ -176,18 +176,18 @@ local function LoadFunc()
 		elseif M.db.raidbuffreminderparty and GetNumGroupMembers() > 0 then
 			frame:Show()
 		end
-		
+
 		if event ~= "UNIT_AURA" and not InCombatLockdown() then
 			if R.Role == "Caster" then
 				ConsolidatedBuffsTooltipBuff3:Hide()
 				ConsolidatedBuffsTooltipBuff4:Hide()
 				ConsolidatedBuffsTooltipBuff5:Show()
-				ConsolidatedBuffsTooltipBuff6:Show()			
+				ConsolidatedBuffsTooltipBuff6:Show()
 			else
 				ConsolidatedBuffsTooltipBuff3:Show()
 				ConsolidatedBuffsTooltipBuff4:Show()
 				ConsolidatedBuffsTooltipBuff5:Hide()
-				ConsolidatedBuffsTooltipBuff6:Hide()		
+				ConsolidatedBuffsTooltipBuff6:Hide()
 			end
 		end
 
@@ -198,8 +198,8 @@ local function LoadFunc()
 			IndexTable[5] = AttackPower
 			IndexTable[6] = AttackSpeed
 		end
-		
-		
+
+
 		for i = 1, 8 do
 			local hasBuff, texture = CheckFilterForActiveBuff(IndexTable[i])
 			frame["spell"..i].t:SetTexture(texture)
@@ -253,48 +253,51 @@ local function LoadFunc()
 		elseif id == 2 then
 			local text = select(7, GetItemInfo(74648))
 			GameTooltip:AddLine(text)
-		elseif (id == 5 or id == 6) and R.Role == "Caster" then
+		end
+		GameTooltip:Show()
+	end
+
+	local function ConsolidatedBuffsTooltip_OnEnter(self)
+		GameTooltip:Hide()
+		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMLEFT", -5, -5)
+		GameTooltip:ClearLines()
+
+		local id = self:GetParent():GetID() - 2
+
+		IndexTable[7] = CriticalStrike
+		IndexTable[8] = Mastery
+		
+		if (id == 3 or id == 4) and R.role == "Caster" then
 			IndexTable[5] = SpellPower
 			IndexTable[6] = SpellHaste
 			
-			GameTooltip:AddLine(_G["RAID_BUFF_"..id])
-		elseif id >= 7 then
-			GameTooltip:AddLine(_G["RAID_BUFF_"..id])
-		elseif id then
-			if R.Role ~= "Caster" then
+			GameTooltip:AddLine(_G["RAID_BUFF_"..id+2])
+		elseif id >= 5 then
+			GameTooltip:AddLine(_G["RAID_BUFF_"..id+2])
+		else
+			if R.role ~= "Caster" then
 				IndexTable[5] = AttackPower
 				IndexTable[6] = AttackSpeed
 			end
 			
-			GameTooltip:AddLine(_G["RAID_BUFF_"..id-2])
+			GameTooltip:AddLine(_G["RAID_BUFF_"..id])
 		end
 
-		if IndexTable[id] and id>2 then
-			GameTooltip:AddLine(" ")
-			for spellID, buffProvider in pairs(IndexTable[id]) do
-				if spellID ~= "DEFAULT" then
-					local spellName = GetSpellInfo(spellID)
-					local color
-					if not RAID_CLASS_COLORS[buffProvider] then
-						color = { r = 1, g = 1, b = 1}
-					else
-						color = RAID_CLASS_COLORS[buffProvider]
-					end
-
-					if self:GetParent().hasBuff == spellName then
-						GameTooltip:AddLine(spellName.." - "..ACTIVE_PETS, color.r, color.g, color.b)
-					else
-						GameTooltip:AddLine(spellName, color.r, color.g, color.b)
-					end
+		GameTooltip:AddLine(" ")
+		for spellID, buffProvider in pairs(IndexTable[id+2]) do
+			if spellID ~= "DEFAULT" then
+				local spellName = GetSpellInfo(spellID)
+				local color = RAID_CLASS_COLORS[buffProvider]
+				
+				if self:GetParent().hasBuff == spellName then
+					GameTooltip:AddLine(spellName.." - "..ACTIVE_PETS, color.r, color.g, color.b)
+				else
+					GameTooltip:AddLine(spellName, color.r, color.g, color.b)
 				end
 			end
 		end
 
 		GameTooltip:Show()
-	end
-
-	local function Button_OnLeave(self)
-		GameTooltip:Hide()
 	end
 
 	local function CreateButton(relativeTo, isFirst)
@@ -312,9 +315,9 @@ local function LoadFunc()
 		button.t:SetAllPoints()
 		button.t:SetTexture("Interface\\Icons\\INV_Misc_QuestionMark")
 
-		button.highlight = button:CreateTexture(nil, "HIGHLIGHT")
-		button.highlight:SetTexture(1,1,1,0.45)
-		button.highlight:SetAllPoints(button.t)
+		-- button.highlight = button:CreateTexture(nil, "HIGHLIGHT")
+		-- button.highlight:SetTexture(1,1,1,0.45)
+		-- button.highlight:SetAllPoints(button.t)
 
 		button.cd = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
 		button.cd:SetAllPoints()
@@ -333,7 +336,7 @@ local function LoadFunc()
 		button.timerbar:Point("BOTTOMRIGHT", button, "TOPRIGHT", 0, 1)
 		button.timerbar:CreateShadow("Background")
 		button.timerbar:Hide()
-		
+
 		return button
 	end
 
@@ -348,8 +351,24 @@ local function LoadFunc()
 			frame["spell"..i] = CreateButton(frame["spell"..i-1])
 		end
 		frame["spell"..i]:SetID(i)
-		frame["spell"..i]:SetScript("OnEnter", Button_OnEnter)
-		frame["spell"..i]:SetScript("OnLeave", GameTooltip_Hide)
+
+		if i <= 2 then
+			frame["spell"..i]:SetScript("OnEnter", Button_OnEnter)
+			frame["spell"..i]:SetScript("OnLeave", GameTooltip_Hide)
+		end
+	end
+	
+	for i = 1, 8 do
+		local id = i
+		if i > 4 then
+			id = i - 2
+		end
+		_G["ConsolidatedBuffsTooltipBuff"..i]:ClearAllPoints()
+		_G["ConsolidatedBuffsTooltipBuff"..i]:SetAllPoints(frame["spell"..id+2])
+		_G["ConsolidatedBuffsTooltipBuff"..i]:SetParent(frame["spell"..id+2])
+		_G["ConsolidatedBuffsTooltipBuff"..i]:SetAlpha(0)
+		_G["ConsolidatedBuffsTooltipBuff"..i]:SetScript("OnEnter", ConsolidatedBuffsTooltip_OnEnter)
+		_G["ConsolidatedBuffsTooltipBuff"..i]:SetScript("OnLeave", GameTooltip_Hide)
 	end
 
 	R:CreateMover(frame, "RaidBuffReminderMover", L["团队buff提醒锚点"], true)
