@@ -197,6 +197,7 @@ L["模块"] = true
 		L["显示debuff"] = true
 		L["自动显示/隐藏"] = true
 		L["战场中标识治疗"] = true
+		L["非目标透明度"] = true
 		L["透明度渐变"] = true
 	L["背包"] = true
 	L["聊天栏"] = true
