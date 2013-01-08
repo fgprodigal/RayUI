@@ -136,8 +136,15 @@ function NP:GetOptions()
 			name = L["平滑变化"],
 			type = "toggle",
 		},
-		fade = {
+		fadeValue = {
 			order = 8,
+			name = L["非目标透明度"],
+			type = "range",
+			min = 0.0, max = 0.9, step = 0.01,
+			isPercent = true,
+		},
+		fade = {
+			order = 9,
 			name = L["透明度渐变"],
 			type = "toggle",
 		},
@@ -591,18 +598,22 @@ local function OnFrameUpdate(self, e)
 	if self.defaultAlpha == 1 and UnitExists("target")  then
 		self.currentAlpha = 1
 	elseif UnitExists("target") then
-		self.currentAlpha = .3
+		self.currentAlpha = NP.db.fadeValue
 	else
 		self.currentAlpha = 1
 	end
 
-	self.lastAlpha = self.lastAlpha or 0
-	self.lastAlpha  = self.lastAlpha + (self.currentAlpha - self.lastAlpha)/18
+	if NP.db.fade then
+		self.lastAlpha = self.lastAlpha or 0
+		self.lastAlpha  = self.lastAlpha + (self.currentAlpha - self.lastAlpha)/18
 
-	if (self.lastAlpha == self.currentAlpha or math.abs(self.lastAlpha - self.currentAlpha) < .02) then
-		self:SetAlpha(self.currentAlpha)
+		if (self.lastAlpha == self.currentAlpha or math.abs(self.lastAlpha - self.currentAlpha) < .02) then
+			self:SetAlpha(self.currentAlpha)
+		else
+			self:SetAlpha(self.lastAlpha)
+		end
 	else
-		self:SetAlpha(self.lastAlpha)
+		self:SetAlpha(self.currentAlpha)
 	end
 end
 
@@ -766,7 +777,7 @@ local function SkinObjects(frame, nameFrame)
 		cb.shield:SetBlendMode("BLEND")
 		cb.shield:SetDrawLayer("ARTWORK", 7)
 		cb.shield:SetVertexColor(1, .1, .1)
-		
+
 		cb.shield:Hide()
 	end
 
@@ -814,9 +825,7 @@ local function SkinObjects(frame, nameFrame)
 	UpdateCastbar(cb)
 
 	frame:HookScript("OnHide", OnFrameHide)
-	if NP.db.fade then
-		frame:GetParent():HookScript("OnUpdate", OnFrameUpdate)
-	end
+	frame:GetParent():HookScript("OnUpdate", OnFrameUpdate)
 	frames[frame:GetParent()] = true
 	frame.RayUIPlate = true
 end

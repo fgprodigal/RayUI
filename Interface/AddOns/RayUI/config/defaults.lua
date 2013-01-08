@@ -43,6 +43,7 @@ P["NamePlates"]={
 	showhealer = true,
 	smooth = true,
 	fade = false,
+    fadeValue = 0.5,
 }
 
 P["Bag"]={
