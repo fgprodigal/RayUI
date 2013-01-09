@@ -30,7 +30,7 @@ local function SkinNugRunning()
 		end
 
 		-- Force correct position of bar/icon
-		TimerBar.Resize(f, w, h)
+		-- TimerBar.Resize(f, w, h)
 
 		return f
 	end

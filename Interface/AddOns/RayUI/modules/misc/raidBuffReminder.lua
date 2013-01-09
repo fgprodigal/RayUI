@@ -266,20 +266,20 @@ local function LoadFunc()
 
 		IndexTable[7] = CriticalStrike
 		IndexTable[8] = Mastery
-		
-		if (id == 3 or id == 4) and R.role == "Caster" then
+
+		if (id == 3 or id == 4) and R.Role == "Caster" then
 			IndexTable[5] = SpellPower
 			IndexTable[6] = SpellHaste
-			
+
 			GameTooltip:AddLine(_G["RAID_BUFF_"..id+2])
 		elseif id >= 5 then
 			GameTooltip:AddLine(_G["RAID_BUFF_"..id+2])
 		else
-			if R.role ~= "Caster" then
+			if R.Role ~= "Caster" then
 				IndexTable[5] = AttackPower
 				IndexTable[6] = AttackSpeed
 			end
-			
+
 			GameTooltip:AddLine(_G["RAID_BUFF_"..id])
 		end
 
@@ -288,7 +288,7 @@ local function LoadFunc()
 			if spellID ~= "DEFAULT" then
 				local spellName = GetSpellInfo(spellID)
 				local color = RAID_CLASS_COLORS[buffProvider]
-				
+
 				if self:GetParent().hasBuff == spellName then
 					GameTooltip:AddLine(spellName.." - "..ACTIVE_PETS, color.r, color.g, color.b)
 				else
@@ -357,7 +357,7 @@ local function LoadFunc()
 			frame["spell"..i]:SetScript("OnLeave", GameTooltip_Hide)
 		end
 	end
-	
+
 	for i = 1, 8 do
 		local id = i
 		if i > 4 then
