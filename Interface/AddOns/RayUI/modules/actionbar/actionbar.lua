@@ -276,7 +276,7 @@ function AB:HideBlizz()
 	for _,tex in pairs(textureList) do
 		OverrideActionBar[tex]:SetAlpha(0)
 	end
-	
+
 	hooksecurefunc("TalentFrame_LoadUI", function()
 		PlayerTalentFrame:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 		TalentMicroButtonAlert:ClearAllPoints()
@@ -290,10 +290,10 @@ function AB:CreateBar(id)
     bar:Point(point, anchor, attachTo, x, y)
 
 	_G[actionBarsName[id]]:SetParent(bar)
-	
+
     self["Handled"]["bar"..id] = bar
     self:UpdatePositionAndSize("bar"..id)
-	R:CreateMover(bar, "ActionBar"..id.."Mover", L["动作条"..id.."锚点"], true, nil, "ALL,ACTIONBARS")  
+	R:CreateMover(bar, "ActionBar"..id.."Mover", L["动作条"..id.."锚点"], true, nil, "ALL,ACTIONBARS")
 end
 
 function AB:UpdatePositionAndSize(barName)
@@ -328,11 +328,11 @@ function AB:UpdatePositionAndSize(barName)
 		self.db[barName].autohide = false
 		bar:SetAlpha(0)
 		bar:SetScript("OnEnter", function(self) UIFrameFadeIn(bar,0.5,bar:GetAlpha(),1) end)
-		bar:SetScript("OnLeave", function(self) UIFrameFadeOut(bar,0.5,bar:GetAlpha(),0) end)  
+		bar:SetScript("OnLeave", function(self) UIFrameFadeOut(bar,0.5,bar:GetAlpha(),0) end)
 	else
 		bar:SetAlpha(1)
 		bar:SetScript("OnEnter", nil)
-		bar:SetScript("OnLeave", nil)  
+		bar:SetScript("OnLeave", nil)
     end
 
     if self.db[barName].autohide then
@@ -442,7 +442,6 @@ function AB:Initialize()
 	self:CreateRangeDisplay()
 	self:EnableAutoHide()
 
-	--self:SecureHook("ActionButton_ShowOverlayGlow", "UpdateOverlayGlow")
 	self:SecureHook("ActionButton_UpdateHotkeys", "UpdateHotkey")
 	self:SecureHook("ActionButton_Update", "Style")
 	self:SecureHook("ActionButton_UpdateFlyout", "StyleFlyout")
@@ -450,7 +449,6 @@ function AB:Initialize()
 	self:SecureHook("StanceBar_UpdateState", "StyleShift")
 	self:SecureHook("PossessBar_Update", "StylePossess")
 	self:SecureHook("PetActionBar_Update", "StylePet")
-	--self:SecureHook("SetActionBarToggles", "UpdatePosition")
 	self:HookScript(SpellFlyout, "OnShow", "SetupFlyoutButton")
 
 	for i = 1, NUM_ACTIONBAR_BUTTONS do
@@ -594,7 +592,7 @@ function AB:Style(button)
 	end
 
 	if button.style then
-		button.style:SetDrawLayer("BACKGROUND", -7)	
+		button.style:SetDrawLayer("BACKGROUND", -7)
         button.border:SetFrameLevel(button:GetFrameLevel())
         button.shadow:SetFrameLevel(button:GetFrameLevel())
 	end
@@ -637,9 +635,27 @@ end
 local buttons = 0
 function AB:SetupFlyoutButton()
 	for i=1, buttons do
-		if _G["SpellFlyoutButton"..i] then
+		local button = _G["SpellFlyoutButton"..i]
+		if button then
 			self:Style(_G["SpellFlyoutButton"..i], nil, true)
 			_G["SpellFlyoutButton"..i]:StyleButton(true)
+
+			if not AB.hooks[button] then
+				AB:HookScript(button, "OnEnter", function(self)
+					local bar = self:GetParent():GetParent():GetParent():GetParent()
+					local id = bar:GetName():match("RayUIActionBar(%d)")
+					if AB.db["bar"..id].mouseover then
+						R:UIFrameFadeIn(bar,0.5,bar:GetAlpha(),1)
+					end
+				end)
+				AB:HookScript(button, "OnLeave", function(self)
+					local bar = self:GetParent():GetParent():GetParent():GetParent()
+					local id = bar:GetName():match("RayUIActionBar(%d)")
+					if AB.db["bar"..id].mouseover then
+						R:UIFrameFadeOut(bar,0.5,bar:GetAlpha(),0)
+					end
+				end)
+			end
 		end
 	end
 end
@@ -656,9 +672,8 @@ function AB:StyleFlyout(button)
 	for i=1, GetNumFlyouts() do
 		local x = GetFlyoutID(i)
 		local _, _, numSlots, isKnown = GetFlyoutInfo(x)
-		if isKnown then
+		if isKnown and numSlots >  buttons then
 			buttons = numSlots
-			break
 		end
 	end
 
