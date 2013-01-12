@@ -53,8 +53,8 @@ local function LoadSkin()
 		bu:StyleButton(1)
 		bu:SetPushedTexture(nil)
 
-		ic:SetPoint("TOPLEFT", 1, -1)
-		ic:SetPoint("BOTTOMRIGHT", -1, 1)
+		ic:Point("TOPLEFT", 1, -1)
+		ic:Point("BOTTOMRIGHT", -1, 1)
 		ic:SetTexCoord(.08, .92, .08, .92)
 
 		S:CreateBD(bu, .25)

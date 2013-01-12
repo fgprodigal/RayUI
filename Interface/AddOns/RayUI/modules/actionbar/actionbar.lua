@@ -644,6 +644,7 @@ function AB:SetupFlyoutButton()
 				AB:HookScript(button, "OnEnter", function(self)
 					local bar = self:GetParent():GetParent():GetParent():GetParent()
 					local id = bar:GetName():match("RayUIActionBar(%d)")
+                    if not id then return end
 					if AB.db["bar"..id].mouseover then
 						R:UIFrameFadeIn(bar,0.5,bar:GetAlpha(),1)
 					end
@@ -651,6 +652,7 @@ function AB:SetupFlyoutButton()
 				AB:HookScript(button, "OnLeave", function(self)
 					local bar = self:GetParent():GetParent():GetParent():GetParent()
 					local id = bar:GetName():match("RayUIActionBar(%d)")
+                    if not id then return end
 					if AB.db["bar"..id].mouseover then
 						R:UIFrameFadeOut(bar,0.5,bar:GetAlpha(),0)
 					end

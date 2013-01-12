@@ -110,7 +110,12 @@ local function LoadSkin()
 				lootSlot:StyleButton()
 				glow:SetBackdropBorderColor(color.r, color.g, color.b)
 				lootSlot:SetBackdropColor(0, 0, 0)
-			else
+			elseif questId then
+				lootSlot.texture:SetInside()
+				lootSlot:StyleButton()
+				glow:SetBackdropBorderColor(1.0, 0.2, 0.2)
+				lootSlot:SetBackdropColor(0, 0, 0)
+            else
 				lootSlot.texture:SetAllPoints()
 				glow:SetBackdropBorderColor(0, 0, 0)
 				lootSlot:SetBackdropColor(0, 0, 0, 0)
