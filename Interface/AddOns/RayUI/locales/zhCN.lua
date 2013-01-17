@@ -72,6 +72,11 @@ L["当前"] = true
 L["最大"] = true
 L["最小"] = true
 L["平均"] = true
+L["本次登录:"] = true
+L["赚取:"] = true
+L["花费:"] = true
+L["赤字:"] = true
+L["利润:"] = true
 
 L["正在吃喝."] = true
 

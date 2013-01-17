@@ -1,8 +1,6 @@
 local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
 local B = R:GetModule("Blizzards")
 
-local first = true
-
 B.BlizzardStaticPopupDialogs = {
 	["CONFIRM_OVERWRITE_EQUIPMENT_SET"] = true,
 	["CONFIRM_SAVE_EQUIPMENT_SET"] = true,
@@ -211,18 +209,6 @@ B.BlizzardStaticPopupDialogs = {
 function B:PlayerTalentFrame_Toggle()
 	if ( not PlayerTalentFrame:IsShown() ) then
 		ShowUIPanel(PlayerTalentFrame)
-		if first then
-			if ( not GetSpecialization() ) then
-				PlayerTalentTab_OnClick(_G["PlayerTalentFrameTab"..SPECIALIZATION_TAB])
-			elseif ( GetNumUnspentTalents() > 0 ) then
-				PlayerTalentTab_OnClick(_G["PlayerTalentFrameTab"..TALENTS_TAB])
-			elseif ( selectedTab ) then
-				PlayerTalentTab_OnClick(_G["PlayerTalentFrameTab"..selectedTab])
-			else
-				PlayerTalentTab_OnClick(_G["PlayerTalentFrameTab"..TALENTS_TAB])
-			end
-			first = nil
-		end
 		TalentMicroButtonAlert:Hide()
 	else
 		PlayerTalentFrame_Close()
@@ -231,6 +217,18 @@ end
 
 function B:ADDON_LOADED(event, addon)
 	 if(addon=="Blizzard_TalentUI")then
+		-- ShowUIPanel(PlayerTalentFrame)
+		-- if ( not GetSpecialization() ) then
+			-- PlayerTalentTab_OnClick(_G["PlayerTalentFrameTab"..SPECIALIZATION_TAB])
+		-- elseif ( GetNumUnspentTalents() > 0 ) then
+			-- PlayerTalentTab_OnClick(_G["PlayerTalentFrameTab"..TALENTS_TAB])
+		-- elseif ( selectedTab ) then
+			-- PlayerTalentTab_OnClick(_G["PlayerTalentFrameTab"..selectedTab])
+		-- else
+			-- PlayerTalentTab_OnClick(_G["PlayerTalentFrameTab"..TALENTS_TAB])
+		-- end
+		-- TalentMicroButtonAlert:Hide()
+		-- PlayerTalentFrame_Close()
 		self:UnregisterEvent("ADDON_LOADED")
 		self:RawHook("PlayerTalentFrame_Toggle", true)
 		 for i=1, 10 do
@@ -241,7 +239,7 @@ function B:ADDON_LOADED(event, addon)
                     local frame = _G["StaticPopup"..index]
                     if frame:IsShown() and not issecurevariable(frame, "which") and not self.BlizzardStaticPopupDialogs[frame.which] then
                         local info = StaticPopupDialogs[frame.which]
-                        if info and issecurevariable(info, "OnCancel") then
+                        if info and info.OnCancel and issecurevariable(info, "OnCancel") then
                             info.OnCancel()
                         end
                     end

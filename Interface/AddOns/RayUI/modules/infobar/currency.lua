@@ -5,51 +5,10 @@ local function LoadCurrency()
 	local infobar = _G["RayUITopInfoBar7"]
 	local Status = infobar.Status
 	local db = R.global
+	local Profit = 0
+	local Spent = 0
 	infobar.Text:SetText(CURRENCY)
 	Status:SetValue(0)
-
-	if not db.Class then
-		if RayUIData.Class and type(RayUIData.Class) == "table" then
-			db.Class = RayUIData.Class
-			RayUIData.Class = nil
-		else
-			db.Class = {}
-		end
-	end
-
-	db.Class[R.myrealm] = db.Class[R.myrealm] or {}
-	db.Class[R.myrealm][R.myname] = R.myclass
-
-	if not db.Gold then
-		if RayUIData.Gold and type(RayUIData.Gold) == "table" then
-			db.Gold = RayUIData.Gold
-			RayUIData.Gold = nil
-		else
-			db.Gold = {}
-		end
-	end
-
-	db.Gold[R.myrealm] = db.Gold[R.myrealm] or {}
-
-	-- CURRENCY DATA BARS
-	-- local CurrencyData = {}
-	-- local tokens = {
-		-- {61, 250},	 -- Dalaran Jewelcrafter's Token
-		-- {81, 250},	 -- Dalaran Cooking Award
-		-- {241, 250},	 -- Champion Seal
-		-- {361, 200},  -- Illustrious Jewelcrafter's Token
-		-- {390, 3000}, -- Conquest Points
-		-- {391, 2000},  -- Tol Barad Commendation
-		-- {392, 4000}, -- Honor Points
-		-- {395, 4000}, -- Justice Points
-		-- {396, 4000}, -- Valor Points
-		-- {402, 250},	 -- Chef's Award 
-		-- {416, 300}, -- Mark of the World Tree
-		-- {515, 2000}, --Darkmoon Prize Ticket
-		-- {614, 2000}, --Mote of Darkness
-		-- {615, 2000}, --Essence of Corrupted Deathwing
-		-- {697, 10}, --Essence of Corrupted Deathwing
-	-- }
 
 	local function formatMoney(money, icon)
 		local gold = floor(math.abs(money) / 10000)
@@ -84,7 +43,17 @@ local function LoadCurrency()
 			total = total + v
 		end
 		GameTooltip:AddLine(GOLD_AMOUNT:gsub("%%d",""), 0.69, 0.31, 0.31)
+		GameTooltip:AddLine(" ")
 		GameTooltip:AddDoubleLine(R.myrealm, formatMoney(total, true), nil, nil, nil, 1, 1, 1)
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddLine(L["本次登录:"])
+		GameTooltip:AddDoubleLine(L["赚取:"], formatMoney(Profit), nil, nil, nil, 1, 1, 1)
+		GameTooltip:AddDoubleLine(L["花费:"], formatMoney(Spent), nil, nil, nil, 1, 1, 1)
+		if Profit < Spent then
+			GameTooltip:AddDoubleLine(L["赤字:"], formatMoney(Profit-Spent), 1, 0, 0, 1, 1, 1)
+		elseif (Profit-Spent)>0 then
+			GameTooltip:AddDoubleLine(L["利润:"], formatMoney(Profit-Spent), 0, 1, 0, 1, 1, 1)
+		end
 		GameTooltip:AddLine(" ")
 		for k, v in pairs(realmlist) do
 			local class = db.Class[R.myrealm][k]
@@ -114,13 +83,45 @@ local function LoadCurrency()
 	end
 
 	local function OnEvent(self, event)
+		if not IsLoggedIn() then return end
 		if event == "PLAYER_HONOR_GAIN" then
 			updateCurrency()
 		else
-			local money	= GetMoney()
-			infobar.Text:SetText(formatMoney(money))
+			if not db.Class then
+				if RayUIData.Class and type(RayUIData.Class) == "table" then
+					db.Class = RayUIData.Class
+					RayUIData.Class = nil
+				else
+					db.Class = {}
+				end
+			end
+
+			if db.Class[R.myrealm] == nil then db.Class[R.myrealm] = {} end
+			if db.Class[R.myrealm][R.myname] == nil then db.Class[R.myrealm][R.myname] = {} end
+
+			if not db.Gold then
+				if RayUIData.Gold and type(RayUIData.Gold) == "table" then
+					db.Gold = RayUIData.Gold
+					RayUIData.Gold = nil
+				else
+					db.Gold = {}
+				end
+			end
+
+			if db.Gold[R.myrealm] == nil then db.Gold[R.myrealm] = {} end
+
+			local NewMoney = GetMoney()
+			local OldMoney = db.Gold[R.myrealm][R.myname] or NewMoney
+			local Change = NewMoney-OldMoney
+			if OldMoney>NewMoney then
+				Spent = Spent - Change
+			else
+				Profit = Profit + Change
+			end
+
+			infobar.Text:SetText(formatMoney(NewMoney))
 			self:SetAllPoints(infobar)
-			db.Gold[R.myrealm][R.myname] = money
+			db.Gold[R.myrealm][R.myname] = NewMoney
 
 			local total = 0
 			local realmlist = db.Gold[R.myrealm]

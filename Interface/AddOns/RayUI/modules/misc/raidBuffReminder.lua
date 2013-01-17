@@ -12,15 +12,16 @@ local function LoadFunc()
 		[117667] = "MONK", --Legacy of The Emperor
 		[1126] = "DRUID", -- Mark of The Wild
 		[20217] = "PALADIN", -- Blessing Of Kings
+		[72586] = R.myclass, -- Blessing of Forgotten Kings
 		["DEFAULT"] = 20217
 	}
 
 	local Stamina = {
-		[111923] = "PRIEST", -- Fortitude
 		[90364] = "HUNTER", -- Qiraji Fortitude
 		[469] = "WARRIOR", -- Commanding Shout
 		[6307] = "WARLOCK", -- Imp. Blood Pact
 		[21562] = "PRIEST", -- Power Word: Fortitude
+		[111923] = R.myclass, -- Fortitude
 		["DEFAULT"] = 21562
 	}
 

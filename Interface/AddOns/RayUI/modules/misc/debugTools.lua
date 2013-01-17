@@ -137,15 +137,15 @@ local function LoadFunc()
 	end
 
 	function D:TaintError(event, addonName, addonFunc)
-		if addonName == "RayUI" and PlayerTalentFrame and PlayerTalentFrame:IsShown() and PlayerTalentFrameTalents:IsShown() then
-			for i = 1, 4, 1 do
-				if _G["StaticPopup"..i] then
-					_G["StaticPopup"..i]:Hide()
-				end
-			end
+		-- if addonName == "RayUI" and PlayerTalentFrame and PlayerTalentFrame:IsShown() and PlayerTalentFrameTalents:IsShown() then
+			-- for i = 1, 4, 1 do
+				-- if _G["StaticPopup"..i] then
+					-- _G["StaticPopup"..i]:Hide()
+				-- end
+			-- end
 			
-			StaticPopup_Show("TALENT_TAINT")
-		end
+			-- StaticPopup_Show("TALENT_TAINT")
+		-- end
 
 		if GetCVarBool("scriptErrors") ~= 1 or not R:IsDeveloper() or addonName ~= "RayUI" then return end
 		ScriptErrorsFrame_OnError(L["%s: %s 尝试调用保护函数 '%s'."]:format(event, addonName or "<name>", addonFunc or "<func>"), false)
