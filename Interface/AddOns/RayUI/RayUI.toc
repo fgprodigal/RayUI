@@ -17,3 +17,4 @@ config\load_config.xml
 core\load_core.xml
 modules\load_modules.xml
 mini\load_mini.xml
+core\test.lua

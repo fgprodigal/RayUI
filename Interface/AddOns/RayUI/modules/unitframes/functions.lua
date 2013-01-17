@@ -541,13 +541,7 @@ function UF:PostUpdateHealth(unit, cur, max)
 		color = oUF.colors.reaction[UnitReaction(unit, "player") or 5]
 	end
 	if cur < max then
-		if R.isHealer and UnitCanAssist("player", unit) then
-			if self.__owner.isMouseOver and not unit:match("^party") then
-				self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(UnitHealth(unit)))
-			else
-				self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(UnitHealth(unit) - UnitHealthMax(unit)))
-			end
-		elseif self.__owner.isMouseOver then
+		if self.__owner.isMouseOver then
 			self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(UnitHealth(unit)))
 		else
 			self.value:SetFormattedText("|cff%02x%02x%02x%d%%|r", color[1] * 255, color[2] * 255, color[3] * 255, floor(UnitHealth(unit) / UnitHealthMax(unit) * 100 + 0.5))

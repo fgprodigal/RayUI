@@ -16,6 +16,7 @@ local function LoadFunc()
 	}
 
 	local Stamina = {
+		[111923] = "PRIEST", -- Fortitude
 		[90364] = "HUNTER", -- Qiraji Fortitude
 		[469] = "WARRIOR", -- Commanding Shout
 		[6307] = "WARLOCK", -- Imp. Blood Pact
@@ -49,6 +50,7 @@ local function LoadFunc()
 	}
 
 	local SpellHaste = {
+		[135678] = "HUNTER", -- Energizing Spores
 		[24907] = "DRUID", -- Moonkin Aura
 		[51470] = "SHAMAN", -- Elemental Oath
 		[49868] = "PRIEST", -- Mind Quickening
