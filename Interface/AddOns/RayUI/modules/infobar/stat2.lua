@@ -149,4 +149,4 @@ local function LoadStatus()
 	Update(Status)
 end
 
-IF:RegisterInfoText("Status2", LoadStatus)
+-- IF:RegisterInfoText("Status2", LoadStatus)

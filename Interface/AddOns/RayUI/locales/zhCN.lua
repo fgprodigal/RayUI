@@ -50,6 +50,7 @@ L["放弃"] = true
 L["没有工会"] = true
 L["免伤分析"] = true
 L["免伤"] = true
+L["未命中"] = true
 L["等级缓和"] = true
 L["共释放内存"] = true
 L["带宽"] = true

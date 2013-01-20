@@ -1007,11 +1007,6 @@ function UF:ConstructWarlockResourceBar(frame)
 			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
 		end
 
-		bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
-		bars[i].bg:SetAllPoints(bars[i])
-		bars[i].bg:SetTexture(R["media"].normal)
-		bars[i].bg.multiplier = .2
-
 		bars[i]:CreateShadow("Background")
 		bars[i].shadow:SetFrameStrata("BACKGROUND")
 		bars[i].shadow:SetFrameLevel(0)

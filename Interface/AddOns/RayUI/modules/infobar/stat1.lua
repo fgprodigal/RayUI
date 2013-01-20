@@ -17,7 +17,7 @@ local function LoadStat()
 
 	local format = string.format
 	local targetlv, playerlv
-	local basemisschance, leveldifference, dodge, parry, block
+	local basemisschance, leveldifference, dodge, parry, block, avoidance, unhittable, avoided, blocked, numAvoidances, unhittableMax
 	local chanceString = "%.2f%%"
 	local modifierString = string.join("", "%d (+", chanceString, ")")
 	local manaRegenString = "%d / %d"
@@ -25,6 +25,15 @@ local function LoadStat()
 	local displayFloatString = string.join("", "%s%.2f%%|r")
 	local spellpwr, avoidance, pwr
 	local haste, hasteBonus
+
+	local function IsWearingShield()
+		local slotID = GetInventorySlotInfo("SecondaryHandSlot")
+		local itemID = GetInventoryItemID('player', slotID)
+		
+		if itemID then
+			return select(9, GetItemInfo(itemID))
+		end
+	end
 
 	local function ShowTooltip(self)
 		GameTooltip:SetOwner(self, "ANCHOR_TOP")
@@ -52,14 +61,22 @@ local function LoadStat()
 				else
 					GameTooltip:AddDoubleLine(L["免伤分析"], string.join("", " (", LEVEL, " ", playerlv, ")"))
 				end
-				GameTooltip:AddLine' '
+				GameTooltip:AddLine("")
 				GameTooltip:AddDoubleLine(DODGE_CHANCE, format(chanceString, dodge),1,1,1)
 				GameTooltip:AddDoubleLine(PARRY_CHANCE, format(chanceString, parry),1,1,1)
 				GameTooltip:AddDoubleLine(BLOCK_CHANCE, format(chanceString, block),1,1,1)
 				GameTooltip:AddDoubleLine(MISS_CHANCE, format(chanceString, basemisschance),1,1,1)
+				local _, effectiveArmor = UnitArmor("player")
+				GameTooltip:AddDoubleLine(ARMOR, format(chanceString, effectiveArmor),1,1,1)
+				if unhittable > 0 then
+					GameTooltip:AddDoubleLine(L["未命中"], "+"..format(chanceString, unhittable), 1, 1, 1, 0, 1, 0)
+				else
+					GameTooltip:AddDoubleLine(L["未命中"], format(chanceString, unhittable), 1, 1, 1, 1, 0, 0)
+				end
 			elseif R.Role == "Caster" then
 				GameTooltip:AddDoubleLine(STAT_HIT_CHANCE, format(modifierString, GetCombatRating(CR_HIT_SPELL), GetCombatRatingBonus(CR_HIT_SPELL)), 1, 1, 1)
 				GameTooltip:AddDoubleLine(STAT_HASTE, format(modifierString, GetCombatRating(CR_HASTE_SPELL), GetCombatRatingBonus(CR_HASTE_SPELL)), 1, 1, 1)
+				GameTooltip:AddDoubleLine(SPELL_CRIT_CHANCE, format(modifierString, GetCombatRating(CR_CRIT_SPELL), GetCombatRatingBonus(CR_CRIT_SPELL)), 1, 1, 1)
 				local base, combat = GetManaRegen()
 				GameTooltip:AddDoubleLine(MANA_REGEN, format(manaRegenString, base * 5, combat * 5), 1, 1, 1)
 			elseif R.Role == "Melee" then
@@ -68,25 +85,25 @@ local function LoadStat()
 
 				GameTooltip:AddDoubleLine(STAT_HIT_CHANCE, format(modifierString, hit, hitBonus), 1, 1, 1)
 
-				--Hunters don't use expertise
-				if R.myclass ~= "HUNTER" then
-					local expertisePercent, offhandExpertisePercent = GetExpertise()
-					expertisePercent = format("%.2f", expertisePercent)
-					offhandExpertisePercent = format("%.2f", offhandExpertisePercent)
+				local expertisePercent, offhandExpertisePercent = GetExpertise()
+				expertisePercent = format("%.2f", expertisePercent)
+				offhandExpertisePercent = format("%.2f", offhandExpertisePercent)
 
-					local expertisePercentDisplay
-					if IsDualWielding() then
-						expertisePercentDisplay = expertisePercent.."% / "..offhandExpertisePercent.."%"
-					else
-						expertisePercentDisplay = expertisePercent.."%"
-					end
-					GameTooltip:AddDoubleLine(COMBAT_RATING_NAME24, format('%d (+%s)', GetCombatRating(CR_EXPERTISE), expertisePercentDisplay), 1, 1, 1)
+				local expertisePercentDisplay
+				if IsDualWielding() then
+					expertisePercentDisplay = expertisePercent.."% / "..offhandExpertisePercent.."%"
+				else
+					expertisePercentDisplay = expertisePercent.."%"
 				end
+				GameTooltip:AddDoubleLine(COMBAT_RATING_NAME24, format('%d (+%s)', GetCombatRating(CR_EXPERTISE), expertisePercentDisplay), 1, 1, 1)
 
 				local haste = R.myclass == "HUNTER" and GetCombatRating(CR_HASTE_RANGED) or GetCombatRating(CR_HASTE_MELEE)
 				local hasteBonus = R.myclass == "HUNTER" and GetCombatRatingBonus(CR_HASTE_RANGED) or GetCombatRatingBonus(CR_HASTE_MELEE)
+				local crit = R.myclass == "HUNTER" and GetCombatRating(CR_CRIT_RANGED) or GetCombatRating(CR_CRIT_MELEE)
+				local critBonus = R.myclass == "HUNTER" and GetCombatRatingBonus(CR_CRIT_RANGED) or GetCombatRatingBonus(CR_CRIT_MELEE)
 
 				GameTooltip:AddDoubleLine(STAT_HASTE, format(modifierString, haste, hasteBonus), 1, 1, 1)
+				GameTooltip:AddDoubleLine(MELEE_CRIT_CHANCE, format(modifierString, crit, critBonus), 1, 1, 1)
 			end
 
 			local masteryspell
@@ -107,7 +124,6 @@ local function LoadStat()
 
 				local masteryName, _, _, _, _, _, _, _, _ = GetSpellInfo(masteryspell)
                 if masteryName then
-                    GameTooltip:AddLine' '
                     GameTooltip:AddDoubleLine(masteryName, format(modifierString, GetCombatRating(CR_MASTERY), GetCombatRatingBonus(CR_MASTERY) * select(2, GetMasteryEffect())), 1, 1, 1)
                 end
 			end
@@ -145,17 +161,27 @@ local function LoadStat()
 			block = (GetBlockChance()+abs(leveldifference*.2))
 		end
 
+		unhittableMax = 100
+		numAvoidances = 4
 		if dodge <= 0 then dodge = 0 end
 		if parry <= 0 then parry = 0 end
 		if block <= 0 then block = 0 end
 
-		if R.myclass == "DRUID" then
+		if R.myclass == "DRUID" and GetBonusBarOffset() == 3 then
 			parry = 0
-			block = 0
-		elseif R.myclass == "DEATHKNIGHT" then
-			block = 0
+			numAvoidances = numAvoidances - 1
 		end
-		avoidance = (dodge+parry+block+basemisschance)
+
+		if IsWearingShield() ~= "INVTYPE_SHIELD" then
+			block = 0
+			numAvoidances = numAvoidances - 1
+		end
+
+		unhittableMax = unhittableMax + ((0.2 * leveldifference) * numAvoidances)
+		avoided = (dodge+parry+basemisschance)
+		blocked = (100 - avoided)*block/100
+		avoidance = (avoided+blocked)
+		unhittable = avoidance - unhittableMax
 
 		Text:SetFormattedText(displayFloatString, L["免伤"]..": ", avoidance)
 		--Setup Tooltip
@@ -231,6 +257,7 @@ local function LoadStat()
 	end)
 	Status:RegisterEvent("UNIT_STATS")
 	Status:RegisterEvent("UNIT_AURA")
+	Status:RegisterEvent("UNIT_TARGET")
 	Status:RegisterEvent("FORGE_MASTER_ITEM_CHANGED")
 	Status:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 	Status:RegisterEvent("PLAYER_TALENT_UPDATE")

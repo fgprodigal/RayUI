@@ -97,7 +97,7 @@ local function LoadCurrency()
 			end
 
 			if db.Class[R.myrealm] == nil then db.Class[R.myrealm] = {} end
-			if db.Class[R.myrealm][R.myname] == nil then db.Class[R.myrealm][R.myname] = {} end
+			if db.Class[R.myrealm][R.myname] == nil then db.Class[R.myrealm][R.myname] = R.myclass end
 
 			if not db.Gold then
 				if RayUIData.Gold and type(RayUIData.Gold) == "table" then

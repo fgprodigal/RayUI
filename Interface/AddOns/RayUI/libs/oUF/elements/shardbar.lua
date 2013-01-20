@@ -36,10 +36,11 @@ local Update = function(self, event, unit, powerType)
 
 		for i = 1, 4 do
 			wsb[i]:Show()
-			wsb[i]:SetStatusBarColor(unpack(oUF.colors.WarlockResource[spec]))
-			if wsb[i].bg then
-				wsb[i].bg:SetTexture(unpack(oUF.colors.WarlockResource[spec]))
-			end
+			-- wsb[i]:SetStatusBarColor(unpack(oUF.colors.WarlockResource[spec]))
+			wsb[i]:SetStatusBarColor(unpack(oUF.colors.class.WARLOCK))
+			-- if wsb[i].bg then
+				-- wsb[i].bg:SetTexture(unpack(oUF.colors.WarlockResource[spec]))
+			-- end
 		end
 
 		if (spec == SPEC_WARLOCK_DESTRUCTION) then	
