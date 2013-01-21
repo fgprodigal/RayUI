@@ -1706,6 +1706,10 @@ R["Watcher"] = {
 				--無形打擊
                 { spellID = 123017, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
 
+                --加拉隆
+				--費洛蒙
+                { spellID = 122835, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
+
                 --風領主瑪爾加拉克
 				--琥珀監獄
                 { spellID = 121885, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
