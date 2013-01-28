@@ -996,6 +996,26 @@ R["Watcher"] = {
                 --爆燃
                 { spellID = 117828, unitId = "player", caster = "player", filter = "BUFF" },
             },
+			 {
+                name = "CD",
+                iconSide = "LEFT",
+                size = 28,
+                barWidth = 170,
+                direction = function() return R:IsDeveloper() and "RIGHT" or "DOWN" end,
+                mode = function() return R:IsDeveloper() and "ICON" or "BAR" end,
+                setpoint = positions.cd_icon,
+
+                -- 物品
+				-- 手套
+				{slotID = 10, filter = "CD"},
+				-- 腰带
+				{slotID = 6, filter = "CD"},
+				-- 披风
+				{slotID = 15, filter = "CD"},
+				-- 饰品
+				{slotID = 13, filter = "CD"},
+				{slotID = 14, filter = "CD"},
+            },
         },
         ["ROGUE"] = {
             {
@@ -1413,6 +1433,8 @@ R["Watcher"] = {
                 { spellID = 126588, unitId = "player", caster = "player", filter = "BUFF" },
                 --霧中之懼
                 { spellID = 126649, unitId = "player", caster = "player", filter = "BUFF" },
+                --恐懼精華
+                { spellID = 126659, unitId = "player", caster = "player", filter = "BUFF" },
 
                 --工程
                 --神經突觸彈簧(敏捷)

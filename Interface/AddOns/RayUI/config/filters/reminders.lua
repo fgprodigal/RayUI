@@ -140,17 +140,17 @@ P["Reminder"]["filters"] = {
 			["pvp"] = true,
 			["enable"] = true,
 		},
-		["非伤害性毒药"] = {
-			["spellGroup"] = {
-				[108211] = true, -- 吸血毒藥
-				[3408] = true, -- 致殘毒藥
-				[5761] = true, -- 麻痹毒藥
-				[108215] = true, -- 癱瘓毒藥
-			},
-			["instance"] = true,
-			["pvp"] = true,
-			["enable"] = true,
-		},
+		-- ["非伤害性毒药"] = {
+			-- ["spellGroup"] = {
+				-- [108211] = true, -- 吸血毒藥
+				-- [3408] = true, -- 致殘毒藥
+				-- [5761] = true, -- 麻痹毒藥
+				-- [108215] = true, -- 癱瘓毒藥
+			-- },
+			-- ["instance"] = true,
+			-- ["pvp"] = true,
+			-- ["enable"] = true,
+		-- },
 	},
 	DRUID = {
 	},
