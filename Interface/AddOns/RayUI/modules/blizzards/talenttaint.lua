@@ -383,18 +383,6 @@ end
 
 function B:ADDON_LOADED(event, addon)
 	 if(addon=="Blizzard_TalentUI")then
-		-- ShowUIPanel(PlayerTalentFrame)
-		-- if ( not GetSpecialization() ) then
-			-- PlayerTalentTab_OnClick(_G["PlayerTalentFrameTab"..SPECIALIZATION_TAB])
-		-- elseif ( GetNumUnspentTalents() > 0 ) then
-			-- PlayerTalentTab_OnClick(_G["PlayerTalentFrameTab"..TALENTS_TAB])
-		-- elseif ( selectedTab ) then
-			-- PlayerTalentTab_OnClick(_G["PlayerTalentFrameTab"..selectedTab])
-		-- else
-			-- PlayerTalentTab_OnClick(_G["PlayerTalentFrameTab"..TALENTS_TAB])
-		-- end
-		-- TalentMicroButtonAlert:Hide()
-		-- PlayerTalentFrame_Close()
 		self:UnregisterEvent("ADDON_LOADED")
 		self:RawHook("PlayerTalentFrame_Toggle", true)
 		 for i=1, 10 do
@@ -403,7 +391,7 @@ function B:ADDON_LOADED(event, addon)
             tab:SetScript("PreClick", function()
                 for index = 1, STATICPOPUP_NUMDIALOGS, 1 do
                     local frame = _G["StaticPopup"..index]
-                    if frame:IsShown() and not issecurevariable(frame, "which") and not self.BlizzardStaticPopupDialogs[frame.which] then
+                    if frame:IsShown() and not issecurevariable(frame, "which") --[[ and not self.BlizzardStaticPopupDialogs[frame.which] ]] then
                         local info = StaticPopupDialogs[frame.which]
                         if info and info.OnCancel and issecurevariable(info, "OnCancel") then
                             info.OnCancel()

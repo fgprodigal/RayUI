@@ -379,6 +379,13 @@ function AB:UpdatePositionAndSize(barName)
     end
 end
 
+function AB:PLAYER_ENTERING_WORLD()
+	local b1, b2, b3, b4 = GetActionBarToggles()
+	if (not b1 or not b2 or not b3 or not b4) then
+		SetActionBarToggles(1, 1, 1, 1)
+	end
+end
+
 function AB:Initialize()
     SetActionBarToggles(1, 1, 1, 1)
     InterfaceOptionsActionBarsPanelBottomRight:Kill()
@@ -450,6 +457,8 @@ function AB:Initialize()
 	self:SecureHook("PossessBar_Update", "StylePossess")
 	self:SecureHook("PetActionBar_Update", "StylePet")
 	self:HookScript(SpellFlyout, "OnShow", "SetupFlyoutButton")
+
+	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 	for i = 1, NUM_ACTIONBAR_BUTTONS do
 		self:Style(_G["ActionButton"..i])
