@@ -56,9 +56,13 @@ local function LoadCurrency()
 		end
 		GameTooltip:AddLine(" ")
 		for k, v in pairs(realmlist) do
+			local r, g, b = NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b
 			local class = db.Class[R.myrealm][k]
+			if RAID_CLASS_COLORS[class] then
+				r, g, b = RAID_CLASS_COLORS[class].r, RAID_CLASS_COLORS[class].g, RAID_CLASS_COLORS[class].b
+			end
 			if v >= 10000 then
-				GameTooltip:AddDoubleLine(k, formatMoney(v, true), RAID_CLASS_COLORS[class].r, RAID_CLASS_COLORS[class].g, RAID_CLASS_COLORS[class].b, 1, 1, 1)
+				GameTooltip:AddDoubleLine(k, formatMoney(v, true), r, g, b, 1, 1, 1)
 			end
 		end
 		GameTooltip:AddLine(" ")
@@ -97,7 +101,7 @@ local function LoadCurrency()
 			end
 
 			if db.Class[R.myrealm] == nil then db.Class[R.myrealm] = {} end
-			if db.Class[R.myrealm][R.myname] == nil then db.Class[R.myrealm][R.myname] = R.myclass end
+			db.Class[R.myrealm][R.myname] = R.myclass
 
 			if not db.Gold then
 				if RayUIData.Gold and type(RayUIData.Gold) == "table" then
