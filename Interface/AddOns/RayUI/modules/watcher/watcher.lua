@@ -9,7 +9,7 @@ RW.modules = {}
 
 local defaults = {}
 local watcherPrototype = {}
-local _G, UnitBuff, UnitDebuff, CooldownFrame_SetTimer = _G, UnitBuff, UnitDebuff, CooldownFrame_SetTimer
+local _G, UnitBuff, UnitDebuff = _G, UnitBuff, UnitDebuff
 local BUFF_FLASH_TIME_ON = 0.75
 local BUFF_FLASH_TIME_OFF = 0.75
 local BUFF_MIN_ALPHA = 0.2

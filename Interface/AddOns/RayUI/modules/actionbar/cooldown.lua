@@ -194,9 +194,18 @@ function AB:UpdateShapeshiftCDAlpha()
 	end
 end
 
+function AB:CooldownFrame_SetTimer(self, start, duration, enable, charges, maxCharges)
+	if not self.ex then
+		self.ex = CreateFrame("Cooldown", nil, self)
+		self.ex:SetAllPoints(self)
+	end
+	self.ex:SetCooldown(start,duration,1,1)
+end
+
 function AB:CreateCooldown(event, addon)
 	self:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN")
 	self:SecureHook("SetActionUIButton", "RegisterCooldown")
+	self:SecureHook("CooldownFrame_SetTimer")
 	for i, button in pairs(ActionBarButtonEventsFrame.frames) do
 		self:RegisterCooldown(button, button.action, button.cooldown)
 	end

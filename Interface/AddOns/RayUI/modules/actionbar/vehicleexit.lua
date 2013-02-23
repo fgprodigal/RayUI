@@ -41,7 +41,7 @@ function AB:CreateVehicleExit()
 
     if not self.db.bar2.enable and not self.db.bar3.enable and not ( R.db.movers and R.db.movers.ActionBar1Mover ) then
         bar:SetPoint("LEFT", "RayUIActionBar1", "RIGHT", AB.db.buttonspacing, 0)
-    elseif not ( R.db.movers and R.db.movers.ActionBar1Mover ) then
+    else--[[ if not ( R.db.movers and R.db.movers.ActionBar1Mover ) then ]]
         bar:SetPoint("BOTTOMLEFT", "RayUIActionBar3", "BOTTOMRIGHT", AB.db.buttonspacing, 0)
     end
 end
