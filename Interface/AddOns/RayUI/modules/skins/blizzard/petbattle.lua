@@ -374,7 +374,7 @@ end)
 		self.Icon:SetDrawLayer("BORDER")
 		self.checked = true
 		self:StyleButton(true)
-		self.SelectedHighlight:SetAlpha(0)
+		-- self.SelectedHighlight:SetAlpha(0)
 		self:SetFrameStrata("LOW")
 	end
 

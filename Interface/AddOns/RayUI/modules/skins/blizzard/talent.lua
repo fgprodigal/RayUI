@@ -84,6 +84,7 @@ local function LoadSkin()
 				frame.icon:SetTexCoord(.08, .92, .08, .92)
 				S:CreateBG(frame.icon)
 			end
+			frame.subText:SetTextColor(1, 1, 1)
 			index = index + 1
 		end
 		

@@ -125,9 +125,10 @@ local function LoadSkin()
 	AvailableQuestsText:SetShadowColor(0, 0, 0)
 	QuestInfoSpellObjectiveLearnLabel:SetTextColor(1, 1, 1)
 	QuestInfoSpellObjectiveLearnLabel.SetTextColor = R.dummy
+	QuestInfoTimerText:SetTextColor(1, 1, 1)
+	QuestInfoTimerText.SetTextColor = R.dummy
 	CurrentQuestsText:SetTextColor(1, 1, 1)
 	CurrentQuestsText.SetTextColor = R.dummy
-	CurrentQuestsText:SetShadowColor(0, 0, 0)
 	CurrentQuestsText:SetShadowColor(0, 0, 0)
 	CoreAbilityFont:SetTextColor(1, 1, 1)
 	SystemFont_Large:SetTextColor(1, 1, 1)

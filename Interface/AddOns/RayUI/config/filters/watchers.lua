@@ -445,6 +445,15 @@ R["Watcher"] = {
             },
         },
         ["WARRIOR"] = {
+			{
+                name = "玩家buff&debuff",
+                direction = "LEFT",
+                setpoint = positions.player_buff_icon,
+                size = 28,
+
+                --勝利
+                { spellID = 32216, unitId = "player", caster = "player", filter = "BUFF" },
+            },
             {
                 name = "玩家重要buff&debuff",
                 direction = "LEFT",

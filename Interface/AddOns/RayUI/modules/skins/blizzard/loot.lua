@@ -5,6 +5,49 @@ local function LoadSkin()
     local autoLootTable = {}
 
 	if not(IsAddOnLoaded("Butsu") or IsAddOnLoaded("LovelyLoot") or IsAddOnLoaded("XLoot")) then
+		MasterLooterFrame:StripTextures()
+		S:CreateBD(MasterLooterFrame)
+		MasterLooterFrame:SetFrameStrata("FULLSCREEN_DIALOG")
+
+		hooksecurefunc("MasterLooterFrame_Show", function()
+			local b = MasterLooterFrame.Item
+			if b then
+				local i = b.Icon
+				local icon = i:GetTexture()
+				local c = ITEM_QUALITY_COLORS[LootFrame.selectedQuality]
+
+				b:StripTextures()
+				i:SetTexture(icon)
+				i:SetTexCoord(.08, .92, .08, .92)
+				b.border = CreateFrame("Frame", nil, b)
+				b.border:SetBackdrop({
+					edgeFile = R["media"].blank,
+					bgFile = R["media"].blank,
+					edgeSize = R.mult,
+					insets = { left = -R.mult, right = -R.mult, top = -R.mult, bottom = -R.mult }
+				})
+				b.border:SetOutside(i)
+				b.border:SetBackdropBorderColor(c.r, c.g, c.b)
+				b.border:SetBackdropColor(0, 0, 0)
+				b.border:SetFrameLevel(b:GetFrameLevel() - 1)
+			end
+
+			for i=1, MasterLooterFrame:GetNumChildren() do
+				local child = select(i, MasterLooterFrame:GetChildren())
+				if child and not child.isSkinned and not child:GetName() then
+					if child:GetObjectType() == "Button" then
+						if child:GetPushedTexture() then
+							S:ReskinClose(child)
+						else
+							S:Reskin(child)
+						end
+						if child.Highlight then child.Highlight:SetAlpha(0) end
+						child.isSkinned = true
+					end
+				end
+			end
+		end)
+
 		local slotsize = 36
 		lootSlots = {}
 		local anchorframe = CreateFrame("Frame", "ItemLoot", UIParent)
@@ -21,6 +64,7 @@ local function LoadSkin()
 				LootFrame.selectedSlot = self.id
 				LootFrame.selectedQuality = self.quality
 				LootFrame.selectedItemName = self.text:GetText()
+				LootFrame.selectedTexture = self.texture:GetTexture()
 				LootSlot(self.id)
 			end
 		end
@@ -39,11 +83,11 @@ local function LoadSkin()
 		end
 
 		local function CreateLootSlot(self, id)
-			local slot = CreateFrame("Button", nil, self)
+			local slot = CreateFrame("Button", nil, self, "ItemButtonTemplate")
 			slot:SetPoint("TOPLEFT", 3, -20 - (id - 1) * (slotsize + 5))
 			slot:SetSize(slotsize, slotsize)
 			slot:SetBackdrop({
-					bgFile = R["media"].blank, 
+					bgFile = R["media"].blank,
 					insets = { left = -R.mult, right = -R.mult, top = -R.mult, bottom = -R.mult }
 				})
 			slot:StyleButton()
@@ -77,7 +121,7 @@ local function LoadSkin()
 		end
 
 		local function GetLootSlot(self, id)
-			if not lootSlots[id] then 
+			if not lootSlots[id] then
 				lootSlots[id] = CreateLootSlot(self, id)
 			end
 			return lootSlots[id]
@@ -194,6 +238,7 @@ local function LoadSkin()
 				ToggleDropDownMenu(1, nil, GroupLootDropDown, lootSlots[LootFrame.selectedSlot], 0, 0)
 			elseif event == "UPDATE_MASTER_LOOT_LIST" then
 				UIDropDownMenu_Refresh(GroupLootDropDown)
+				MasterLooterFrame_UpdatePlayers()
 			end
 		end
 
@@ -274,7 +319,7 @@ local function LoadSkin()
 			loot.announce[i]:SetScript("OnLeave", GameTooltip_Hide)
 			loot.announce[i]:SetBackdrop({
 				bgFile = R["media"].blank,
-				edgeFile = R["media"].blank, 
+				edgeFile = R["media"].blank,
 				edgeSize = R.mult
 			})
 			loot.announce[i]:SetBackdropBorderColor(unpack(R["media"].bordercolor))
@@ -294,7 +339,7 @@ local function LoadSkin()
         SLASH_AUTOLOOT1 = "/autoloot"
 
 	end
-	
+
 	-- Missing loot frame
 	MissingLootFrameCorner:Hide()
 
