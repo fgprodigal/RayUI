@@ -4,9 +4,9 @@ local RA = R:GetModule("Raid")
 local oUF = RayUF or oUF
 
 local foo = {""}
-local spellcache = setmetatable({}, 
-{__index=function(t,id) 
-	local a = {GetSpellInfo(id)} 
+local spellcache = setmetatable({},
+{__index=function(t,id)
+	local a = {GetSpellInfo(id)}
 
 	if GetSpellInfo(id) then
 	    t[id] = a
@@ -52,7 +52,7 @@ oUF.Tags.Methods["RayUIRaid:magic"] = function(u)
     while true do
         local name,_,_,_, dtype = UnitAura(u, index, "HARMFUL")
         if not name then break end
-        
+
         if dtype == "Magic" then
             return RA.debuffColor[dtype]..x
         end
@@ -68,7 +68,7 @@ oUF.Tags.Methods["RayUIRaid:disease"] = function(u)
     while true do
         local name,_,_,_, dtype = UnitAura(u, index, "HARMFUL")
         if not name then break end
-        
+
         if dtype == "Disease" then
             return RA.debuffColor[dtype]..x
         end
@@ -84,7 +84,7 @@ oUF.Tags.Methods["RayUIRaid:curse"] = function(u)
     while true do
         local name,_,_,_, dtype = UnitAura(u, index, "HARMFUL")
         if not name then break end
-        
+
         if dtype == "Curse" then
             return RA.debuffColor[dtype]..x
         end
@@ -100,7 +100,7 @@ oUF.Tags.Methods["RayUIRaid:poison"] = function(u)
     while true do
         local name,_,_,_, dtype = UnitAura(u, index, "HARMFUL")
         if not name then break end
-        
+
         if dtype == "Poison" then
             return RA.debuffColor[dtype]..x
         end
@@ -112,7 +112,7 @@ oUF.Tags.Events["RayUIRaid:poison"] = "UNIT_AURA"
 
 -- Priest
 local pomCount = {"i","h","g","f","Z","Y"}
-oUF.Tags.Methods["RayUIRaid:pom"] = function(u) 
+oUF.Tags.Methods["RayUIRaid:pom"] = function(u)
     local name, _,_, c, _,_,_, fromwho = UnitAura(u, GetSpellInfo(33076))
     if name and c > 0 then
         if(fromwho == "player") then
@@ -141,7 +141,7 @@ oUF.Tags.Events["RayUIRaid:rnw"] = "UNIT_AURA"
 
 oUF.Tags.Methods["RayUIRaid:rnwTime"] = function(u)
     local name, _,_,_,_,_, expirationTime, fromwho = UnitAura(u, GetSpellInfo(139))
-    if(fromwho == "player") then return getTime(expirationTime) end 
+    if(fromwho == "player") then return getTime(expirationTime) end
 end
 oUF.Tags.Events["RayUIRaid:rnwTime"] = "UNIT_AURA"
 
@@ -162,7 +162,7 @@ oUF.Tags.Events["RayUIRaid:pwb"] = "UNIT_AURA"
 
 -- Druid
 local lbCount = { 4, 2, 3}
-oUF.Tags.Methods["RayUIRaid:lb"] = function(u) 
+oUF.Tags.Methods["RayUIRaid:lb"] = function(u)
     local name, _,_, c,_,_, expirationTime, fromwho = UnitAura(u, GetSpellInfo(33763))
     if(fromwho == "player") then
         local spellTimer = GetTime()-expirationTime
@@ -194,7 +194,7 @@ oUF.Tags.Events["RayUIRaid:rejuv"] = "UNIT_AURA"
 
 oUF.Tags.Methods["RayUIRaid:rejuvTime"] = function(u)
     local name, _,_,_,_,_, expirationTime, fromwho = UnitAura(u, GetSpellInfo(774))
-    if(fromwho == "player") then return getTime(expirationTime) end 
+    if(fromwho == "player") then return getTime(expirationTime) end
 end
 oUF.Tags.Events["RayUIRaid:rejuvTime"] = "UNIT_AURA"
 
@@ -215,7 +215,7 @@ oUF.Tags.Methods["RayUIRaid:vigil"] = function(u) if UnitAura(u, GetSpellInfo(50
 oUF.Tags.Events["RayUIRaid:vigil"] = "UNIT_AURA"
 
 -- Shaman
-oUF.Tags.Methods["RayUIRaid:rip"] = function(u) 
+oUF.Tags.Methods["RayUIRaid:rip"] = function(u)
     local name, _,_,_,_,_,_, fromwho = UnitAura(u, GetSpellInfo(61295))
     if(fromwho == "player") then return "|cff00FEBF"..x.."|r" end
 end
@@ -223,13 +223,13 @@ oUF.Tags.Events["RayUIRaid:rip"] = "UNIT_AURA"
 
 oUF.Tags.Methods["RayUIRaid:ripTime"] = function(u)
     local name, _,_,_,_,_, expirationTime, fromwho = UnitAura(u, GetSpellInfo(61295))
-    if(fromwho == "player") then return getTime(expirationTime) end 
+    if(fromwho == "player") then return getTime(expirationTime) end
 end
 oUF.Tags.Events["RayUIRaid:ripTime"] = "UNIT_AURA"
 
 local earthCount = {"i","h","g","f","p","q","Z","Z","Y"}
-oUF.Tags.Methods["RayUIRaid:earth"] = function(u) 
-    local c = select(4, UnitAura(u, GetSpellInfo(974))) if c then return "|cffFFCF7F"..earthCount[c].."|r" end 
+oUF.Tags.Methods["RayUIRaid:earth"] = function(u)
+    local c = select(4, UnitAura(u, GetSpellInfo(974))) if c then return "|cffFFCF7F"..earthCount[c].."|r" end
 end
 oUF.Tags.Events["RayUIRaid:earth"] = "UNIT_AURA"
 
@@ -252,18 +252,18 @@ oUF.Tags.Methods["RayUIRaid:forbearance"] = function(u) if UnitDebuff(u, GetSpel
 oUF.Tags.Events["RayUIRaid:forbearance"] = "UNIT_AURA"
 
 -- Warlock
--- oUF.Tags.Methods["RayUIRaid:di"] = function(u) 
-    -- local name, _,_,_,_,_,_, fromwho = UnitAura(u, GetSpellInfo(109773)) 
-    -- if fromwho == "player" then
-        -- return "|cff6600FF"..x.."|r"
-    -- elseif name then
-        -- return "|cffCC00FF"..x.."|r"
-    -- end
--- end
--- oUF.Tags.Events["RayUIRaid:di"] = "UNIT_AURA"
+oUF.Tags.Methods["RayUIRaid:di"] = function(u)
+    local name, _,_,_,_,_,_, fromwho = UnitAura(u, GetSpellInfo(109773))
+    if fromwho == "player" then
+        return "|cff6600FF"..x.."|r"
+    elseif name then
+        return "|cffCC00FF"..x.."|r"
+    end
+end
+oUF.Tags.Events["RayUIRaid:di"] = "UNIT_AURA"
 
-oUF.Tags.Methods["RayUIRaid:ss"] = function(u) 
-    local name, _,_,_,_,_,_, fromwho = UnitAura(u, GetSpellInfo(20707)) 
+oUF.Tags.Methods["RayUIRaid:ss"] = function(u)
+    local name, _,_,_,_,_,_, fromwho = UnitAura(u, GetSpellInfo(20707))
     if fromwho == "player" then
         return "|cff6600FFY|r"
     elseif name then
@@ -307,7 +307,7 @@ RA.classIndicators={
     },
     ["WARLOCK"] = {
         ["TL"] = "",
-        ["TR"] = "[RayUIRaid:fort]",
+        ["TR"] = "[RayUIRaid:di]",
         ["BL"] = "",
         ["BR"] = "[RayUIRaid:ss]",
         ["Cen"] = "",

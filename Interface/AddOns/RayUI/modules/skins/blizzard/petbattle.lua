@@ -372,8 +372,8 @@ end)
 		self.Icon:SetTexCoord(.08, .92, .08, .92)
 		self.Icon:SetParent(self.shadow)
 		self.Icon:SetDrawLayer("BORDER")
-		self.checked = true
-		self:StyleButton(true)
+		-- self.checked = true
+		-- self:StyleButton(true)
 		-- self.SelectedHighlight:SetAlpha(0)
 		self:SetFrameStrata("LOW")
 	end
