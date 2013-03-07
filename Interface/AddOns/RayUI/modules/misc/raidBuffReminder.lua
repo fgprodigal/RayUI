@@ -19,7 +19,7 @@ local function LoadFunc()
 	local Stamina = {
 		[90364] = "HUNTER", -- Qiraji Fortitude
 		[469] = "WARRIOR", -- Commanding Shout
-		[6307] = "WARLOCK", -- Imp. Blood Pact
+		[109773] = "WARLOCK", -- Dark Intent
 		[21562] = "PRIEST", -- Power Word: Fortitude
 		[111923] = R.myclass, -- Fortitude
 		["DEFAULT"] = 21562
@@ -62,6 +62,8 @@ local function LoadFunc()
 		[126309] = "HUNTER", -- Still Water
 		[24604] = "HUNTER", -- Furious Howl
 		[90309] = "HUNTER", -- Terrifying Roar
+		[126373] = 'HUNTER', -- Fearless Roar
+		[97229] = 'HUNTER', -- Bellowing Roar
 		[1459] = "MAGE", -- Arcane Brilliance
 		[61316] = "MAGE", -- Dalaran Brilliance
 		[24932] = "DRUID", -- Leader of The Pact

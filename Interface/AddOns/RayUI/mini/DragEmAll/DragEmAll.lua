@@ -41,8 +41,6 @@ local frames = {
   ["PaperDollFrame"] = true,
   ["ReputationFrame"] = true,
   ["SkillFrame"] = true,
-  ["PVPFrame"] = false,
-  ["PVPBattlegroundFrame"] = true,
   ["SendMailFrame"] = true,
   ["TokenFrame"] = true,
   ["InterfaceOptionsFrame"] = false,
@@ -99,6 +97,7 @@ local lodFrames = {
   Blizzard_BlackMarketUI = { ["BlackMarketFrame"] = false }, -- UNTESTED
   Blizzard_ChallengesUI = { ["ChallengesLeaderboardFrame"] = false }, -- UNTESTED
   Blizzard_ItemUpgradeUI = { ["ItemUpgradeFrame"] = false, }, -- UNTESTED
+  Blizzard_PVPUI = { ["PVPUIFrame"] = false, }, -- UNTESTED
 }
 
 local parentFrame = {}

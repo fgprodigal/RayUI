@@ -796,7 +796,7 @@ function CH:DisplayChatHistory()
 		if (time() - temp[i]) > 21600 then
 			RayUICharacterData.ChatHistory[tostring(temp[i])] = nil
 		else
-			if type(data) == "table" then
+			if type(data) == "table" and data[20] ~= nil then
 				CH.timeOverride = temp[i]
 				ChatFrame_MessageEventHandler(DEFAULT_CHAT_FRAME, data[20], unpack(data))
 			end

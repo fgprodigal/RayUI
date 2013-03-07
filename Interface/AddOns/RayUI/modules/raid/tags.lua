@@ -154,7 +154,7 @@ oUF.Tags.Events["RayUIRaid:ws"] = "UNIT_AURA"
 oUF.Tags.Methods["RayUIRaid:fw"] = function(u) if UnitAura(u, GetSpellInfo(6346)) then return "|cff8B4513"..x.."|r" end end
 oUF.Tags.Events["RayUIRaid:fw"] = "UNIT_AURA"
 
-oUF.Tags.Methods["RayUIRaid:fort"] = function(u) if not(UnitAura(u, GetSpellInfo(21562)) or UnitAura(u, GetSpellInfo(6307)) or UnitAura(u, GetSpellInfo(469))) then return "|cff00A1DE"..x.."|r" end end
+oUF.Tags.Methods["RayUIRaid:fort"] = function(u) if not(UnitAura(u, GetSpellInfo(21562)) or UnitAura(u, GetSpellInfo(6307)) or UnitAura(u, GetSpellInfo(469)) or UnitAura(u, GetSpellInfo(109773))) then return "|cff00A1DE"..x.."|r" end end
 oUF.Tags.Events["RayUIRaid:fort"] = "UNIT_AURA"
 
 oUF.Tags.Methods["RayUIRaid:pwb"] = function(u) if UnitAura(u, GetSpellInfo(81782)) then return "|cffEEEE00"..x.."|r" end end
@@ -252,15 +252,15 @@ oUF.Tags.Methods["RayUIRaid:forbearance"] = function(u) if UnitDebuff(u, GetSpel
 oUF.Tags.Events["RayUIRaid:forbearance"] = "UNIT_AURA"
 
 -- Warlock
-oUF.Tags.Methods["RayUIRaid:di"] = function(u) 
-    local name, _,_,_,_,_,_, fromwho = UnitAura(u, GetSpellInfo(109773)) 
-    if fromwho == "player" then
-        return "|cff6600FF"..x.."|r"
-    elseif name then
-        return "|cffCC00FF"..x.."|r"
-    end
-end
-oUF.Tags.Events["RayUIRaid:di"] = "UNIT_AURA"
+-- oUF.Tags.Methods["RayUIRaid:di"] = function(u) 
+    -- local name, _,_,_,_,_,_, fromwho = UnitAura(u, GetSpellInfo(109773)) 
+    -- if fromwho == "player" then
+        -- return "|cff6600FF"..x.."|r"
+    -- elseif name then
+        -- return "|cffCC00FF"..x.."|r"
+    -- end
+-- end
+-- oUF.Tags.Events["RayUIRaid:di"] = "UNIT_AURA"
 
 oUF.Tags.Methods["RayUIRaid:ss"] = function(u) 
     local name, _,_,_,_,_,_, fromwho = UnitAura(u, GetSpellInfo(20707)) 
@@ -307,7 +307,7 @@ RA.classIndicators={
     },
     ["WARLOCK"] = {
         ["TL"] = "",
-        ["TR"] = "[RayUIRaid:di]",
+        ["TR"] = "[RayUIRaid:fort]",
         ["BL"] = "",
         ["BR"] = "[RayUIRaid:ss]",
         ["Cen"] = "",

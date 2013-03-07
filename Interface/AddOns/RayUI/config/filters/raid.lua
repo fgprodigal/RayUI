@@ -98,6 +98,53 @@ G.Raid.RaidDebuffs = {
 
     -- Raid Debuffs
     instances = {
+		[930] = {
+			-- Throne of Thunder
+			--Trash
+			[SpellName(138349)] = Defaults(7), -- Static Wound
+			[SpellName(137371)] = Defaults(7), -- Thundering Throw
+
+			--Horridon
+			[SpellName(136767)] = Defaults(7), --Triple Puncture
+
+			--Council of Elders
+			[SpellName(137641)] = Defaults(7), --Soul Fragment
+			[SpellName(137359)] = Defaults(7), --Shadowed Loa Spirit Fixate
+			[SpellName(137972)] = Defaults(7), --Twisted Fate
+
+			--Tortos
+			[SpellName(136753)] = Defaults(7), --Slashing Talons
+			[SpellName(137633)] = Defaults(7), --Crystal Shell
+
+			--Megaera
+			[SpellName(137731)] = Defaults(7), --Ignite Flesh
+
+			--Ji-Kun
+			[SpellName(138309)] = Defaults(7), --Slimed
+
+			--Durumu the Forgotten
+			[SpellName(133767)] = Defaults(7), --Serious Wound
+			[SpellName(133768)] = Defaults(7), --Arterial Cut
+
+			--Primordius
+			[SpellName(136050)] = Defaults(7), --Malformed Blood
+
+			--Dark Animus
+			[SpellName(138569)] = Defaults(7), --Explosive Slam
+
+			--Iron Qon
+			[SpellName(134691)] = Defaults(7), --Impale
+
+			--Twin Consorts
+			[SpellName(137440)] = Defaults(7), --Icy Shadows
+			[SpellName(137408)] = Defaults(7), --Fan of Flames
+			[SpellName(137360)] = Defaults(7), --Corrupted Healing
+
+			--Lei Shen
+			[SpellName(135000)] = Defaults(7), --Decapitate
+
+			--Ra-den
+		},
         [897] = {
             -- Heart of Fear
 			-- Imperial Vizier Zor'lok

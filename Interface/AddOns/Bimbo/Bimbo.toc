@@ -1,4 +1,4 @@
-## Interface: 50100
+## Interface: 50200
 
 ## Title: Bimbo
 ## Notes: Check for unenchanted and ungemmed items

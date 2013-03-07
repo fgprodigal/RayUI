@@ -10,7 +10,7 @@ Dependencies: LibStub
 License: Public Domain, Absolutely no Warranty.
 ]]
 
-local MAJOR, MINOR = "LibBossIDs-1.0", "$Revision: 81 $"
+local MAJOR, MINOR = "LibBossIDs-1.0", "$Revision: 83 $"
 local lib = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not lib then return end
@@ -1216,6 +1216,33 @@ local BossIDs = {
    -------------------------------------------------------------------------------
    [45871]	= true,	-- Nezir
    [46753]	= true,	-- Al'Akir
+
+   -------------------------------------------------------------------------------
+   -- Throne of Thunder
+   -------------------------------------------------------------------------------
+   -- Last Stand of the Zandalari
+   [69465]	= true,	-- Jin'rokh the Breaker
+   [68476]	= true,	-- Horridon
+   [69134]	= true,	-- Kazra'jin, Council of Elders
+   [69078]	= true,	-- Sul the Sandcrawler, Council of Elders
+   [69131]	= true,	-- Frost King Malakk, Council of Elders
+   [69132]	= true,	-- High Priestess Mar'li, Council of Elders
+   -- Forgotten Depths
+   [67977]	= true,	-- Tortos
+   [70229]	= true,	-- Flaming Head <Head of Megaera>
+   [70250]	= true,	-- Frozen Head <Head of Megaera>
+   [70251]	= true,	-- Venomous Head <Head of Megaera>
+   [69712]	= true,	-- Ji-Kun
+   -- Halls of Flesh-Shaping
+   [68036]	= true,	-- Durumu the Forgotten
+   [69017]	= true,	-- Primordius
+   [69427]	= true,	-- Dark Animus
+   -- Pinnacle of Storms
+   [68078]	= true,	-- Iron Qon <Master of Quilen>
+   [68905]	= true,	-- Lu'lin <Mistress of Solitude>, Twin Consorts
+   [68904]	= true,	-- Suen <Mistress of Anger>, Twin Consorts
+   [68397]	= true,	-- Lei Shen <The Thunder King>
+   --[]	= true,	-- Ra-den <Fallen Keeper of Storms>
 
    -------------------------------------------------------------------------------
    -- Trial of the Champion
