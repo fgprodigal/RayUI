@@ -1712,6 +1712,9 @@ R["Watcher"] = {
                 { spellID = 20549, unitId = "player", caster = "all", filter = "DEBUFF" },
 
                 --副本
+				--雷霆王座
+				--飛行
+				{ spellID = 133755, unitId = "player", caster = "all", filter = "BUFF", fuzzy = true },
 
                 --魔古山寶庫
 
