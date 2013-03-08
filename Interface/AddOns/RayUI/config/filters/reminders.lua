@@ -83,7 +83,6 @@ P["Reminder"]["filters"] = {
 				[469] = true, 
 			},
 			["negateGroup"] = {
-				[6307] = true, -- Blood Pact
 				[90364] = true, -- Qiraji Fortitude
 				[72590] = true, -- Drums of fortitude
 				[21562] = true, -- Fortitude
