@@ -134,6 +134,7 @@ G.Raid.RaidDebuffs = {
 
 			--Iron Qon
 			[SpellName(134691)] = Defaults(7), --Impale
+			[SpellName(134647)] = Defaults(7), --Scorched
 
 			--Twin Consorts
 			[SpellName(137440)] = Defaults(7), --Icy Shadows
@@ -144,6 +145,7 @@ G.Raid.RaidDebuffs = {
 			[SpellName(135000)] = Defaults(7), --Decapitate
 
 			--Ra-den
+
 		},
         [897] = {
             -- Heart of Fear
