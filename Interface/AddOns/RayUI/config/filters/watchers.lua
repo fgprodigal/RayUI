@@ -334,30 +334,33 @@ R["Watcher"] = {
                 setpoint = positions.player_proc_icon,
                 size = 38,
 
-                --冰霜之指
-                { spellID = 44544, unitId = "player", caster = "player", filter = "BUFF" },
-                --焦炎之痕
-                { spellID = 48108, unitId = "player", caster = "player", filter = "BUFF" },
-                --飛彈彈幕
-                { spellID = 79683, unitId = "player", caster = "player", filter = "BUFF" },
-                --秘法強化
-                { spellID = 12042, unitId = "player", caster = "player", filter = "BUFF" },
-                --秘法衝擊
-                { spellID = 36032, unitId = "player", caster = "player", filter = "DEBUFF" },
-                --寒冰護體
-                { spellID = 11426, unitId = "player", caster = "player", filter = "BUFF" },
-                --腦部凍結
-                { spellID = 57761, unitId = "player", caster = "player", filter = "BUFF" },
-                --升溫
-                { spellID = 48107, unitId = "player", caster = "player", filter = "BUFF" },
-                --咒法結界
-                { spellID = 1463, unitId = "player", caster = "player", filter = "BUFF" },
-                --塑能師之能
-                { spellID = 116257, unitId = "player", caster = "player", filter = "BUFF" },
-                --力之符文
-                { spellID = 116014, unitId = "player", caster = "player", filter = "BUFF" },
-                --咒法轉移
-                { spellID = 116267, unitId = "player", caster = "player", filter = "BUFF" },
+				--冰霜之指
+				{ spellID = 44544, unitId = "player", caster = "player", filter = "BUFF" },
+				--焦炎之痕
+				{ spellID = 48108, unitId = "player", caster = "player", filter = "BUFF" },
+				--飛彈彈幕
+				{ spellID = 79683, unitId = "player", caster = "player", filter = "BUFF" },
+				--秘法強化
+				{ spellID = 12042, unitId = "player", caster = "player", filter = "BUFF" },
+				--秘法衝擊
+				{ spellID = 36032, unitId = "player", caster = "player", filter = "DEBUFF" },
+				--寒冰護體
+				{ spellID = 11426, unitId = "player", caster = "player", filter = "BUFF" },
+				--腦部凍結
+				{ spellID = 57761, unitId = "player", caster = "player", filter = "BUFF" },
+				--升溫
+				{ spellID = 48107, unitId = "player", caster = "player", filter = "BUFF" },
+				--咒法結界
+				{ spellID = 1463, unitId = "player", caster = "player", filter = "BUFF" },
+				--塑能師之能
+				{ spellID = 116257, unitId = "player", caster = "player", filter = "BUFF" },
+				--力之符文
+				{ spellID = 116014, unitId = "player", caster = "player", filter = "BUFF" },
+				--咒法轉移
+				{ spellID = 116267, unitId = "player", caster = "player", filter = "BUFF" },
+				--冰寒脈動
+				{ spellID = 12472, unitId = "player", caster = "player", filter = "BUFF" },
+
             },
             {
                 name = "目标重要buff&debuff",
@@ -1454,6 +1457,10 @@ R["Watcher"] = {
                 { spellID = 96230, unitId = "player", caster = "player", filter = "BUFF" },
                 --迅轉偏斜甲
                 { spellID = 82176, unitId = "player", caster = "player", filter = "BUFF" },
+
+				--裁縫
+				--光紋
+				{ spellID = 125487, unitId = "player", caster = "player", filter = "BUFF" },
 
                 --生命精華
                 { spellID = 127915, unitId = "player", caster = "player", filter = "BUFF" },
