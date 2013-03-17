@@ -1,46 +1,46 @@
-Skada = LibStub("AceAddon-3.0"):NewAddon("Skada", "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0")
+
+local Skada = LibStub("AceAddon-3.0"):NewAddon("Skada", "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0")
+_G.Skada = Skada
+
 local L = LibStub("AceLocale-3.0"):GetLocale("Skada", false)
 local ldb = LibStub:GetLibrary("LibDataBroker-1.1")
 local icon = LibStub("LibDBIcon-1.0", true)
 local media = LibStub("LibSharedMedia-3.0")
 local boss = LibStub("LibBossIDs-1.0")
-
+local lds = LibStub:GetLibrary("LibDualSpec-1.0", 1)
 local dataobj = ldb:NewDataObject("Skada", {label = "Skada", type = "data source", icon = "Interface\\Icons\\Spell_Lightning_LightningBolt01", text = "n/a"})
-
--- Client version number
-local CLIENT_VERSION = tonumber((select(4, GetBuildInfo())))
-
-local WoW5 = CLIENT_VERSION > 50000
-local IsInRaid = IsInRaid or function() return GetNumRaidMembers() > 0 end
-local IsInGroup = IsInGroup or function()
-	return GetNumRaidMembers() > 0 or GetNumPartyMembers() > 0
-end
 
 -- Returns the group type (i.e., "party" or "raid") and the size of the group.
 function Skada:GetGroupTypeAndCount()
-	local type, count = "", 0
-	if WoW5 then
-		count = GetNumGroupMembers()
-		if IsInRaid() then
-			type = "raid"
-		elseif IsInGroup() then
-			type = "party"
-			-- To make the counts similar between 4.3 and 5.0, we need
-			-- to subtract one because GetNumPartyMembers() does not
-			-- include the player while GetNumGroupMembers() does.
-			count = count - 1
-		end
-	else
-		if GetNumRaidMembers() > 0 then
-			type = "raid"
-			count = GetNumRaidMembers()
-		elseif GetNumPartyMembers() > 0 then
-			type = "party"
-			count = GetNumPartyMembers()
-		end
+	local type
+	local count = GetNumGroupMembers()
+	if IsInRaid() then
+		type = "raid"
+	elseif IsInGroup() then
+		type = "party"
+		-- To make the counts similar between 4.3 and 5.0, we need
+		-- to subtract one because GetNumPartyMembers() does not
+		-- include the player while GetNumGroupMembers() does.
+		count = count - 1
 	end
 
 	return type, count
+end
+
+function Skada:ShowPopup()
+	if not StaticPopupDialogs["ResetSkadaDialog"] then
+		StaticPopupDialogs["ResetSkadaDialog"] = {
+			preferredIndex = 4,
+			text = L["Do you want to reset Skada?"],
+			button1 = ACCEPT,
+			button2 = CANCEL,
+			timeout = 30,
+			whileDead = 0,
+			hideOnEscape = 1,
+			OnAccept = function() Skada:Reset() end,
+		}
+	end
+	StaticPopup_Show("ResetSkadaDialog")
 end
 
 -- Keybindings
@@ -643,7 +643,7 @@ function Skada:Report(channel, chantype, report_mode_name, report_set_name, max,
 
 	-- Sort our temporary table according to value unless ordersort is set.
 	if not report_table.metadata.ordersort then
-		table.sort(report_table.dataset, function(a,b) return a and b and a.id and b.id and a.value > b.value end)
+		table.sort(report_table.dataset, Skada.valueid_sort)
 	end
 
 	-- Title
@@ -750,22 +750,6 @@ end
 local wasininstance
 local wasinpvp
 
-local function ask_for_reset()
-	if not StaticPopupDialogs["ResetSkadaDialog"] then
-		StaticPopupDialogs["ResetSkadaDialog"] = {
-			preferredIndex = 4,
-			text = L["Do you want to reset Skada?"],
-			button1 = ACCEPT,
-			button2 = CANCEL,
-			timeout = 30,
-			whileDead = 0,
-			hideOnEscape = 1,
-			OnAccept = function() Skada:Reset() end,
-		}
-	end
-	StaticPopup_Show("ResetSkadaDialog")
-end
-
 -- Are we in a PVP zone?
 local pvp_zones = {}
 local function is_in_pvp()
@@ -783,7 +767,7 @@ function Skada:PLAYER_ENTERING_WORLD()
 	-- If we are entering an instance, and we were not previously in an instance, and we got this event before... and we have some data...
 	if isininstance and wasininstance ~= nil and not wasininstance and self.db.profile.reset.instance ~= 1 and total ~= nil then
 		if self.db.profile.reset.instance == 3 then
-			ask_for_reset()
+			Skada:ShowPopup()
 		else
 			self:Reset()
 		end
@@ -825,7 +809,7 @@ local function check_for_join_and_leave()
 		-- We left a party.
 
 		if Skada.db.profile.reset.leave == 3 then
-			ask_for_reset()
+			Skada:ShowPopup()
 		elseif Skada.db.profile.reset.leave == 2 then
 			Skada:Reset()
 		end
@@ -840,7 +824,7 @@ local function check_for_join_and_leave()
 		-- We joined a raid.
 
 		if Skada.db.profile.reset.join == 3 then
-			ask_for_reset()
+			Skada:ShowPopup()
 		elseif Skada.db.profile.reset.join == 2 then
 			Skada:Reset()
 		end
@@ -856,20 +840,6 @@ local function check_for_join_and_leave()
 end
 
 function Skada:GROUP_ROSTER_UPDATE()
-	check_for_join_and_leave()
-
-	-- Check for new pets.
-	self:CheckPets()
-end
-
-function Skada:PARTY_MEMBERS_CHANGED()
-	check_for_join_and_leave()
-
-	-- Check for new pets.
-	self:CheckPets()
-end
-
-function Skada:RAID_ROSTER_UPDATE()
 	check_for_join_and_leave()
 
 	-- Check for new pets.
@@ -1278,10 +1248,15 @@ end
 
 -- Returns a player from the current. Safe to use to simply view a player without creating an entry.
 function Skada:find_player(set, playerid)
-	local player = nil
 	if set then
+		-- use a private index here for more efficient lookup
+		-- may eventually want to re-key .players by id but that would break external mods
+		set._playeridx = set._playeridx or {}
+		local player = set._playeridx[playerid]
+		if player then return player end
 		for i, p in ipairs(set.players) do
 			if p.id == playerid then
+				set._playeridx[playerid] = p
 				return p
 			end
 		end
@@ -1291,12 +1266,7 @@ end
 -- Returns or creates a player in the current.
 function Skada:get_player(set, playerid, playername)
 	-- Add player to set if it does not exist.
-	local player = nil
-	for i, p in ipairs(set.players) do
-		if p.id == playerid then
-			player = p
-		end
-	end
+	local player = Skada:find_player(set, playerid)
 
 	if not player then
 		-- If we do not supply a playername (often the case in submodes), we can not create an entry.
@@ -1940,6 +1910,16 @@ local function value_sort(a,b)
 	end
 end
 
+function Skada.valueid_sort(a,b)
+	if not a or a.value == nil or a.id == nil then
+		return false
+	elseif not b or b.value == nil or b.id == nil then
+		return true
+	else
+		return a.value > b.value
+	end
+end
+
 -- Tooltip display. Shows subview data for a specific row.
 -- Using a fake window, the subviews are asked to populate the window's dataset normally.
 local ttwin = Window:new()
@@ -2037,6 +2017,12 @@ function Skada:OnInitialize()
 	LibStub("AceConfig-3.0"):RegisterOptionsTable("Skada-Profiles", LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db))
 	self.profilesFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Skada-Profiles", "Profiles", "Skada")
 
+	-- Dual spec profiles
+	if lds then
+		lds:EnhanceDatabase(self.db, "SkadaDB")
+		lds:EnhanceOptions(LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db), self.db)
+	end
+
 	self:RegisterChatCommand("skada", "Command")
 	self.db.RegisterCallback(self, "OnProfileChanged", "ReloadSettings")
 	self.db.RegisterCallback(self, "OnProfileCopied", "ReloadSettings")
@@ -2061,12 +2047,7 @@ function Skada:OnEnable()
 
 
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
-	if WoW5 then
-		self:RegisterEvent("GROUP_ROSTER_UPDATE")
-	else
-		self:RegisterEvent("PARTY_MEMBERS_CHANGED")
-		self:RegisterEvent("RAID_ROSTER_UPDATE")
-	end
+	self:RegisterEvent("GROUP_ROSTER_UPDATE")
 	self:RegisterEvent("UNIT_PET")
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", COMBAT_LOG_EVENT_UNFILTERED)

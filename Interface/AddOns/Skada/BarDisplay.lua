@@ -34,7 +34,7 @@ function mod:Create(window)
 
 		-- Add window buttons.
 		window.bargroup:AddButton(L["Configure"], "Interface\\Addons\\Skada\\images\\icon-config", "Interface\\Addons\\Skada\\images\\icon-config", function() Skada:OpenMenu(window) end)
-		window.bargroup:AddButton(L["Reset"], "Interface\\Addons\\Skada\\images\\icon-reset", "Interface\\Addons\\Skada\\images\\icon-reset", function() StaticPopup_Show("ResetSkadaDialog") end)
+		window.bargroup:AddButton(L["Reset"], "Interface\\Addons\\Skada\\images\\icon-reset", "Interface\\Addons\\Skada\\images\\icon-reset", function() Skada:ShowPopup() end)
 		window.bargroup:AddButton(L["Segment"], "Interface\\Buttons\\UI-GuildButton-PublicNote-Up", "Interface\\Buttons\\UI-GuildButton-PublicNote-Up", function() Skada:SegmentMenu(window) end)
 		window.bargroup:AddButton(L["Mode"], "Interface\\Buttons\\UI-GuildButton-PublicNote-Up", "Interface\\Buttons\\UI-GuildButton-PublicNote-Up", function() Skada:ModeMenu(window) end)
 		window.bargroup:AddButton(L["Report"], "Interface\\Buttons\\UI-GuildButton-MOTD-Up", "Interface\\Buttons\\UI-GuildButton-MOTD-Up", function() Skada:OpenReportWindow(window) end)

@@ -9,7 +9,7 @@
  [=====================================]
  [  Author: Dandruff @ Whisperwind-US  ]
  [  xCT+ Version 3.x.x                 ]
- [  ©2012. All Rights Reserved.        ]
+ [  Â©2012. All Rights Reserved.        ]
  [====================================]]
  
 local ADDON_NAME, addon = ...
@@ -24,7 +24,7 @@ local ADDON_NAME, addon = ...
 -- =====================================================
 local function CreateMergeSpellEntry(class, interval, prep)
   return {
-         class = class,
+         class = class      or "ITEM",
       interval = interval   or 3,
           prep = prep       or 0,
     }
@@ -76,6 +76,7 @@ addon.merges = {
 
 -- hunter
   [2643]   = CreateMergeSpellEntry("HUNTER", .5),       -- Multi-Shot                                 (INSTANT)
+  [118459] = CreateMergeSpellEntry("HUNTER", .5),       -- Beast Cleave                               (INSTANT)
   [83077]  = CreateMergeSpellEntry("HUNTER", .5),       -- Serpent Sting (Instant Serpent Spread)     (INSTANT)
   [118253] = CreateMergeSpellEntry("HUNTER"),           -- Serpent Sting (Tick)
   [13812]  = CreateMergeSpellEntry("HUNTER"),           -- Explosive Trap
@@ -100,7 +101,9 @@ addon.merges = {
   [11113]  = CreateMergeSpellEntry("MAGE"),             -- Blast Wave
   [83619]  = CreateMergeSpellEntry("MAGE", .5),         -- Flame Orb                                  (INSTANT)
   [120]    = CreateMergeSpellEntry("MAGE"),             -- Cone of Cold
-
+  [114954] = CreateMergeSpellEntry("MAGE"),             -- Nether Tempest                             (Every 1s for 12s)
+  [114923] = CreateMergeSpellEntry("MAGE"),             -- Nether Tempest (50% to random player)      (Every 1s for 12s)
+  
 -- monk (damage)
   [113656] = CreateMergeSpellEntry("MONK"),             -- Fists of Fury                              (Instant w/ every 1s for 4s)
   [107270] = CreateMergeSpellEntry("MONK", 2.5),        -- Spinning Crane Kick                        (Over 2s)
@@ -108,6 +111,9 @@ addon.merges = {
   [117418] = CreateMergeSpellEntry("MONK", 4),          -- Fists of Fury                              (Every 1s for 4s)
   [121253] = CreateMergeSpellEntry("MONK", .5),         -- Keg Smash                                  (INSTANT)
   [115181] = CreateMergeSpellEntry("MONK", .5),         -- Breath of Fire                             (INSTANT)
+  [124098] = CreateMergeSpellEntry("MONK", 6),          -- Zen Sphere (Damage)                        (2 sec for 16 sec)
+  [125033] = CreateMergeSpellEntry("MONK", .5),         -- Zen Sphere: Detonate (Damage)              (INSTANT)
+  [132467] = CreateMergeSpellEntry("MONK", 6),          -- Chi Wave (Damage)
   
 -- monk (healing)
   [117640] = CreateMergeSpellEntry("MONK", 2.5),        -- Spinning Crane Kick (Heal)                 (Over 2s)
@@ -120,8 +126,16 @@ addon.merges = {
   [126890] = CreateMergeSpellEntry("MONK", 3),          -- Eminence (Statue)
   [127722] = CreateMergeSpellEntry("MONK", 3),          -- Serpent's Zeal
   [128591] = CreateMergeSpellEntry("MONK", 3),          -- Blackout Kick (Heal??)
+  [124040] = CreateMergeSpellEntry("MONK", 5),          -- Chi Torpedo                                (INSTANT)
+  [130654] = CreateMergeSpellEntry("MONK", 3),          -- Chi Burst
+  [115310] = CreateMergeSpellEntry("MONK"),             -- Revival
+  [124081] = CreateMergeSpellEntry("MONK", 6),          -- Zen Sphere (Heal)                          (2 sec for 16 sec)
+  [124101] = CreateMergeSpellEntry("MONK", .5),         -- Zen Sphere: Detonate (Heal)                (INSTANT)
+  [132463] = CreateMergeSpellEntry("MONK", 6),          -- Chi Wave (Heal)
   
 -- paladin (damage)
+  [122032] = CreateMergeSpellEntry("PALADIN"),          -- Glyph of Mass Exorcism
+  [96172]  = CreateMergeSpellEntry("PALADIN"),          -- Mastery: Hand of Light
   [81297]  = CreateMergeSpellEntry("PALADIN"),          -- Consecration
   [53385]  = CreateMergeSpellEntry("PALADIN"),          -- Divine Storm
   [31803]  = CreateMergeSpellEntry("PALADIN", 6),       -- Censure
@@ -129,6 +143,7 @@ addon.merges = {
   [88263]  = CreateMergeSpellEntry("PALADIN"),          -- Hammer of Righteous
   [101423] = CreateMergeSpellEntry("PALADIN"),          -- Seal of Righteousness
   [31935]  = CreateMergeSpellEntry("PALADIN"),          -- Avenger's Shield
+  [114919] = CreateMergeSpellEntry("PALADIN", 6.5),     -- Arcing Light (Damage)
 
 -- paladin (healing)
   [94289]  = CreateMergeSpellEntry("PALADIN"),          -- Protector of the Innocent
@@ -137,21 +152,27 @@ addon.merges = {
   [82327]  = CreateMergeSpellEntry("PALADIN"),          -- Holy Radiance
   [20167]  = CreateMergeSpellEntry("PALADIN"),          -- Seal of Insight (Heal)
   [121129] = CreateMergeSpellEntry("PALADIN", .5),      -- Daybreak                                   (INSTANT)
-  [119952] = CreateMergeSpellEntry("PALADIN", 6.5),     -- Arcing Light                               (Every 2s for 17.5s)
+  [119952] = CreateMergeSpellEntry("PALADIN", 6.5),     -- Arcing Light (Heal)                        (Every 2s for 17.5s)
+  [114163] = CreateMergeSpellEntry("PALADIN", 5),       -- Eternal Flame				                      (Every 3s for 30s)
+  [86678]  = CreateMergeSpellEntry("PALADIN"),          -- Light of the Ancient kings
   
 -- priest (damage)
   [47666]  = CreateMergeSpellEntry("PRIEST"),           -- Penance (Damage Effect)
   [132157] = CreateMergeSpellEntry("PRIEST", .5),       -- Holy Nova (Damage Effect)                  (INSTANT)
-  [589]    = CreateMergeSpellEntry("PRIEST"),           -- Shadow Word: Pain
-  [34914]  = CreateMergeSpellEntry("PRIEST"),           -- Vampiric Touch 
+  [589]    = CreateMergeSpellEntry("PRIEST", 6),        -- Shadow Word: Pain
+  [34914]  = CreateMergeSpellEntry("PRIEST", 6),        -- Vampiric Touch 
   [2944]   = CreateMergeSpellEntry("PRIEST"),           -- Devouring Plague
-  [127626] = CreateMergeSpellEntry("PRIEST", 6.5),      -- Devouring Plague (Poison?)
   [15407]  = CreateMergeSpellEntry("PRIEST"),           -- Mind Flay
   [49821]  = CreateMergeSpellEntry("PRIEST"),           -- Mind Seer (From Derap: first one is the cast)
   [124469] = CreateMergeSpellEntry("PRIEST"),           -- Mind Seer (the second one is the debuff that is applied to your target which lets you clip your mind sears like mind flay)
   [87532]  = CreateMergeSpellEntry("PRIEST"),           -- Shadowy Apparition
   [14914]  = CreateMergeSpellEntry("PRIEST"),           -- Holy Fire
-
+  [120696] = CreateMergeSpellEntry("PRIEST", 5),        -- Halo (Damage)                              (INSTANT... over 5ish)
+  [15290]  = CreateMergeSpellEntry("PRIEST", 5),        -- Vampiric Embrace (Damage repeated as heals)(over 15s)
+  
+  -- Merge Together:
+  -- 49821 & 124469 - Mind Seer
+  
 -- priest (healing)
   [47750]  = CreateMergeSpellEntry("PRIEST"),           -- Penance (Heal)
   [139]    = CreateMergeSpellEntry("PRIEST"),           -- Renew
@@ -168,6 +189,7 @@ addon.merges = {
   [110745] = CreateMergeSpellEntry("PRIEST", 3),        -- Divine Star                                (INSTANT... over 3ish)
   [120692] = CreateMergeSpellEntry("PRIEST", 3),        -- Halo                                       (INSTANT... over 3ish)
   [7001]   = CreateMergeSpellEntry("PRIEST", 4),        -- Light Well                                 (every 2s for 6s)
+  [127626] = CreateMergeSpellEntry("PRIEST", 6.5),      -- Devouring Plague (Heal)
   
 -- rogue
   [51723]  = CreateMergeSpellEntry("ROGUE", .5),        -- Fan of Knives                              (INSTANT)
@@ -252,9 +274,17 @@ addon.merges = {
   [845]    = CreateMergeSpellEntry("WARRIOR", .5),      -- Cleave                                     (INSTANT)
   [46968]  = CreateMergeSpellEntry("WARRIOR", .5),      -- Shockwave                                  (INSTANT)
   [6343]   = CreateMergeSpellEntry("WARRIOR", .5),      -- Thunder Clap                               (INSTANT)
+  [6572]   = CreateMergeSpellEntry("WARRIOR", .5),      -- Revenge                                    (INSTANT)
+  [115767] = CreateMergeSpellEntry("WARRIOR", 3),       -- Deep Wounds
   [1680]   = CreateMergeSpellEntry("WARRIOR"),          -- Whirlwind
+  [44949]  = CreateMergeSpellEntry("WARRIOR"),          -- Whirlwind Offhand
   [50622]  = CreateMergeSpellEntry("WARRIOR"),          -- Bladestorm
+  [113344] = CreateMergeSpellEntry("WARRIOR"),          -- Bloodbath
   [52174]  = CreateMergeSpellEntry("WARRIOR", .5),      -- Heroic Leap                                (INSTANT)
+  
+  -- Merge Main/Offhand together
+  --[96103]  = CreateMergeSpellEntry("WARRIOR", .5),      -- Raging Blow
+  --[85384]  = CreateMergeSpellEntry("WARRIOR", .5),      -- Raging Blow (Offhand)
   
 -- spammy items (old) ITEM CLASS CURRENTLY DOES NOTHING
   [109858] = CreateMergeSpellEntry("ITEM", 2.5),        -- Speaking of Rage - proc'd by: Vishanka, Jaws of the Earth (Heroic)

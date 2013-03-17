@@ -34,17 +34,20 @@ local function log_heal(set, heal, is_absorb)
 
 		-- Add to recipient healing.
 		do
-			local healed = player.healed[heal.dstName]
+			if heal.dstName then
+				local healed = player.healed[heal.dstName]
 
-			-- Create recipient if it does not exist.
-			if not healed then
-				healed = {class = select(2, UnitClass(heal.dstName)), amount = 0, shielding = 0}
-				player.healed[heal.dstName] = healed
-			end
+				-- Create recipient if it does not exist.
+				if not healed then
+					local _, className = UnitClass(heal.dstName)
+					healed = {class = className, amount = 0, shielding = 0}
+					player.healed[heal.dstName] = healed
+				end
 
-			healed.amount = healed.amount + amount
-			if is_absorb then
-				healed.shielding = healed.shielding + amount
+				healed.amount = healed.amount + amount
+				if is_absorb then
+					healed.shielding = healed.shielding + amount
+				end
 			end
 		end
 
@@ -54,7 +57,7 @@ local function log_heal(set, heal, is_absorb)
 
 			-- Create spell if it does not exist.
 			if not spell then
-				spell = {id = heal.spellid, name = heal.spellname, hits = 0, healing = 0, overhealing = 0, absorbed = 0, shielding = 0, critical = 0, min = 0, max = 0}
+				spell = {id = heal.spellid, name = heal.spellname, hits = 0, healing = 0, overhealing = 0, absorbed = 0, shielding = 0, critical = 0, min = nil, max = 0}
 				player.healingspells[heal.spellname] = spell
 			end
 
@@ -108,7 +111,7 @@ local function AuraApplied(timestamp, eventtype, srcGUID, srcName, srcFlags, dst
 	-- Auras
 	local spellId, spellName, spellSchool, auraType, amount = ...
 
-	if amount ~= nil then
+	if amount ~= nil and dstName and srcName then
 		-- see if the source and destination are both part valid
 		-- controlled by player:
 		local valid = (bit.band(srcFlags, dstFlags, COMBATLOG_OBJECT_CONTROL_PLAYER) ~= 0)

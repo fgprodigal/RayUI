@@ -15,7 +15,7 @@
 -- Get Addon's name and Blizzard's Addon Stub
 local AddonName, addon = ...
 
-local sgsub, ipairs, pairs, type, string_format, table_insert, print, tostring, tonumber, select, string_lower, collectgarbage, match =
+local sgsub, ipairs, pairs, type, string_format, table_insert, print, tostring, tonumber, select, string_lower, collectgarbage, string_match =
   string.gsub, ipairs, pairs, type, string.format, table.insert, print, tostring, tonumber, select, string.lower, collectgarbage, string.match
 
 -- Local Handle to the Engine
@@ -41,16 +41,31 @@ function x:OnInitialize()
   
   -- Perform xCT+ Update
   x:UpdatePlayer()
-  x:UpdateFrames()
+  
+  -- Delay updating frames until all other addons are loaded!
+  --x:UpdateFrames()
+  
   x:UpdateCombatTextEvents(true)
   x:UpdateSpamSpells()
   x:UpdateItemTypes()
+  x:UpdateAuraSpellFilter()
+  
+  -- Update combat text engine CVars
+  x.cvar_udpate()
   
   -- Everything got Initialized, show Startup Text
   if self.db.profile.showStartupText then
     print("Loaded |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r. To configure, type: |cffFF0000/xct|r")
   end
 end
+
+-- Need to create a handle to update frames when every other addon is done.
+local frameUpdate = CreateFrame("FRAME")
+frameUpdate:RegisterEvent("PLAYER_ENTERING_WORLD")
+frameUpdate:SetScript("OnEvent", function(self)
+  self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+  x:UpdateFrames()
+end)
 
 -- Profile Updated, need to refresh important stuff 
 function x:RefreshConfig()
@@ -130,8 +145,7 @@ function x:UpdateItemTypes()
   
   local allTypes = {
     order = 100,
-    name = "Always Show Filter",
-    desc = "|cffFFFF00New:|r Filter changed to whitelist",
+    name = "|cffFFFFFFFilter:|r |cff798BDDLoot|r",
     type = 'group',
     childGroups = "select",
     args = {
@@ -218,14 +232,14 @@ function x:UpdateItemTypes()
     allTypes.args[itype] = group
   end
 
-  addon.options.args["Frames"].args["loot"].args["typeFilter"] = allTypes
+  addon.options.args["spellFilter"].args["typeFilter"] = allTypes
 end
 
 local function getCP_1(info) return x.db.profile.spells.combo[x.player.class][info[#info]] end
 local function setCP_1(info, value) x.db.profile.spells.combo[x.player.class][info[#info]] = value end
 
 local function getCP_2(info)
-  local spec, index = match(info[#info], "(%d+),(.+)")
+  local spec, index = string_match(info[#info], "(%d+),(.+)")
   local value = x.db.profile.spells.combo[x.player.class][tonumber(spec)][tonumber(index) or index]
   if type(value) == "table" then
     return value.enabled
@@ -234,7 +248,7 @@ local function getCP_2(info)
   end
 end
 local function setCP_2(info, value)
-  local spec, index = match(info[#info], "(%d+),(.+)")
+  local spec, index = string_match(info[#info], "(%d+),(.+)")
   
   if value == true then
     for key, entry in pairs(x.db.profile.spells.combo[x.player.class][tonumber(spec)]) do
@@ -356,6 +370,164 @@ function x:UpdateComboTracker()
   x:QuickClassFrameUpdate()
 end
 
+-- Get and set methods for the spell filter
+local function getSF(info) return x.db.profile.spellFilter[info[#info-2]][info[#info]] end
+local function setSF(info, value) x.db.profile.spellFilter[info[#info-2]][info[#info]] = value end
+
+-- Update the Buff, Debuff and Spell filter list
+function x:UpdateAuraSpellFilter(specific)
+  local i = 10
+  
+  if not specific or specific == "buffs" then
+    -- Redo all the list
+    addon.options.args.spellFilter.args.listBuffs.args.list = {
+      name = "Filtered Buffs |cff798BDD(Uncheck to Disable)|r",
+      type = 'group',
+      guiInline = true,
+      order = 11,
+      args = { },
+    }
+  
+    local buffs = addon.options.args.spellFilter.args.listBuffs.args.list.args
+    local updated = false
+    
+    -- Update buffs
+    for name in pairs(x.db.profile.spellFilter.listBuffs) do
+      updated = true
+      buffs[name] = {
+        order = i,
+        name = name,
+        type = 'toggle',
+        get = getSF,
+        set = setSF,
+      }
+    end
+    
+    if not updated then
+      buffs["noSpells"] = {
+        order = 1,
+        name = "No items have been added to this list yet.",
+        type = 'description',
+      }
+    end
+  end
+  
+  i = 10
+  
+  -- Update debuffs
+  if not specific or specific == "debuffs" then
+    addon.options.args.spellFilter.args.listDebuffs.args.list = {
+      name = "Filtered Debuffs |cff798BDD(Uncheck to Disable)|r",
+      type = 'group',
+      guiInline = true,
+      order = 11,
+      args = { },
+    }
+  
+    local debuffs = addon.options.args.spellFilter.args.listDebuffs.args.list.args
+    local updated = false
+    
+    for name in pairs(x.db.profile.spellFilter.listDebuffs) do
+      updated = true
+      debuffs[name] = {
+        order = i,
+        name = name,
+        type = 'toggle',
+        get = getSF,
+        set = setSF,
+      }
+    end
+    
+    if not updated then
+      debuffs["noSpells"] = {
+        order = 1,
+        name = "No items have been added to this list yet.",
+        type = 'description',
+      }
+    end
+  end
+  
+  i = 10
+  
+  -- Update spells
+  if not specific or specific == "spells" then
+    addon.options.args.spellFilter.args.listSpells.args.list = {
+      name = "Filtered Spells |cff798BDD(Uncheck to Disable)|r",
+      type = 'group',
+      guiInline = true,
+      order = 11,
+      args = { },
+    }
+  
+    local spells = addon.options.args.spellFilter.args.listSpells.args.list.args
+    local updated = false
+    
+    for id in pairs(x.db.profile.spellFilter.listSpells) do
+      local spellID = tonumber(string_match(id, "%d+"))
+    
+      updated = true
+      spells[id] = {
+        order = i,
+        name = GetSpellInfo(spellID),
+        desc = "|cffFF0000ID|r |cff798BDD" .. id .. "|r\n",
+        type = 'toggle',
+        get = getSF,
+        set = setSF,
+      }
+    end
+    
+    if not updated then
+      spells["noSpells"] = {
+        order = 1,
+        name = "No items have been added to this list yet.",
+        type = 'description',
+      }
+    end
+  end
+  
+end
+
+-- Add and remove Buffs, debuffs, and spells from the filter
+function x:AddFilteredSpell(category, name)
+  if category == "listBuffs" then
+    x.db.profile.spellFilter.listBuffs[name] = true
+    x:UpdateAuraSpellFilter("buffs")
+  elseif category == "listDebuffs" then
+    x.db.profile.spellFilter.listDebuffs[name] = true
+    x:UpdateAuraSpellFilter("debuffs")
+  elseif category == "listSpells" then
+    local spellID = tonumber(string_match(name, "%d+"))
+    if spellID and GetSpellInfo(spellID) then
+      x.db.profile.spellFilter.listSpells[name] = true
+      x:UpdateAuraSpellFilter("spells")
+    else
+      print("|cffFF0000x|r|cffFFFF00CT+|r  Could not add invalid Spell ID: |cff798BDD" .. name .. "|r")
+    end
+  else
+    print("|cffFF0000x|r|cffFFFF00CT+|r  |cffFF0000Error:|r Unknown filter type '" .. category .. "'!")
+  end
+end
+
+function x:RemoveFilteredSpell(category, name)
+  if category == "listBuffs" then
+    x.db.profile.spellFilter.listBuffs[name] = nil
+    x:UpdateAuraSpellFilter("buffs")
+  elseif category == "listDebuffs" then
+    x.db.profile.spellFilter.listDebuffs[name] = nil
+    x:UpdateAuraSpellFilter("debuffs")
+  elseif category == "listSpells" then
+    local spellID = tonumber(string_match(name, "%d+"))
+    if spellID and GetSpellInfo(spellID) then
+      x.db.profile.spellFilter.listSpells[name] = nil
+      x:UpdateAuraSpellFilter("spells")
+    else
+      print("|cffFF0000x|r|cffFFFF00CT+|r  Could not remove invalid Spell ID: |cff798BDD" .. name .. "|r")
+    end
+    x:UpdateAuraSpellFilter("spells")
+  else
+    print("|cffFF0000x|r|cffFFFF00CT+|r  |cffFF0000Error:|r Unknown filter type '" .. category .. "'!")
+  end
+end
 
 -- Unused for now
 function x:OnEnable() end
@@ -377,7 +549,7 @@ x:RegisterChatCommand('xct', 'OpenxCTCommand')
 
 -- Process the slash command ('input' contains whatever follows the slash command)
 function x:OpenxCTCommand(input)
-  if string_lower(input):match('lock') then
+  if string_match(string_lower(input), 'lock') then
     if x.configuring then
       x:SaveAllFrames()
       x.EndConfigMode()
@@ -394,7 +566,7 @@ function x:OpenxCTCommand(input)
     return
   end
   
-  if string_lower(input):match('cancel') then
+  if string_match(string_lower(input),'cancel') then
     if x.configuring then
       x:UpdateFrames();
       x.EndConfigMode()
@@ -411,8 +583,8 @@ function x:OpenxCTCommand(input)
     return
   end
   
-  if string_lower(input):match('track %w+') then
-    local unit = string_lower(input):match('%s(%w+)')
+  if string_match(string_lower(input), 'track %w+') then
+    local unit = string_match(string_lower(input), '%s(%w+)')
     
     local name = UnitName(unit)
     

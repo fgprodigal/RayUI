@@ -1720,6 +1720,8 @@ R["Watcher"] = {
 
                 --副本
 				--雷霆王座
+				--电离反应
+				{ spellID = 138732, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
 				--飛行
 				{ spellID = 133755, unitId = "player", caster = "all", filter = "BUFF", fuzzy = true },
 

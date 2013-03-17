@@ -5,7 +5,7 @@ Skada.resetoptions = {[1] = L["No"], [2] = L["Yes"], [3] = L["Ask"]}
 
 Skada.windowdefaults = {
 	name = "Skada",
-	
+
 	barspacing=0,
 	bartexture="BantoBar",
 	barfont="Accidental Presidency",
@@ -22,9 +22,9 @@ Skada.windowdefaults = {
 	classcolorbars = true,
 	classcolortext = false,
 	classicons = true,
-	
+
 	buttons = {menu = true, reset = true, report = true, mode = true, segment = true},
-	
+
 	title = {height = 15, font="Accidental Presidency", fontsize=11,margin=0, texture="Aluminium", bordertexture="None", borderthickness=2, color = {r=0.1,g=0.1,b=0.3,a=0.8}, fontflags = ""},
 	background = {margin=0, height=200, texture="Solid", bordertexture="None", borderthickness=0, color = {r=0,g=0,b=0.5,a=0.2}},
 
@@ -32,13 +32,13 @@ Skada.windowdefaults = {
 	modeincombat="",
 	returnaftercombat=false,
 	wipemode="",
-	
+
 	hidden = false,
-	enabletitle = true, 
-	
+	enabletitle = true,
+
 	set = "current",
 	mode = nil,
-	
+
 	display = "bar",
 	snapto = true,
 	scale = 1
@@ -51,7 +51,7 @@ Skada.defaults = {
 	profile = {
 		version=1,
 		reset={instance=1, join=3, leave=1},
-		icon = {hide = true, radius = 80, minimapPos = 195},
+		icon = {hide = false, radius = 80, minimapPos = 195},
 		numberformat=1,
 		showranks=true,
 		setstokeep=10,
@@ -80,7 +80,7 @@ Skada.defaults = {
 -- Adds column configuration options for a mode.
 function Skada:AddColumnOptions(mod)
 	local db = self.db.profile.columns
-	
+
 	if mod.metadata and mod.metadata.columns then
 		local cols = {
        			type = "group",
@@ -89,21 +89,21 @@ function Skada:AddColumnOptions(mod)
        			inline=true,
 				args = {}
 		}
-	
+
 		for colname, value in pairs(mod.metadata.columns) do
 			local c = mod:GetName().."_"..colname
-			
+
 			-- Set initial value from db if available, otherwise use mod default value.
 			if db[c] ~= nil then
 				mod.metadata.columns[colname] = db[c]
 			end
-			
+
 			-- Add column option.
 			local col = {
 			        type="toggle",
 			        name=L[colname] or colname,
 			        get=function() return mod.metadata.columns[colname] end,
-			        set=function() 
+			        set=function()
 			        			mod.metadata.columns[colname] = not mod.metadata.columns[colname]
 			        			db[c] = mod.metadata.columns[colname]
 			        			Skada:UpdateDisplay(true)
@@ -111,10 +111,10 @@ function Skada:AddColumnOptions(mod)
 			}
 			cols.args[c] = col
 		end
-		
+
 		Skada.options.args.columns.args[mod:GetName()] = cols
 	end
-	
+
 end
 
 local deletewindow = nil
@@ -129,7 +129,7 @@ Skada.options = {
 						name=L["A damage meter."],
 						order=0,
 	        		},
-	        		
+
 	        		windows = {
 	        			type = "group",
 	        			name = L["Windows"],
@@ -143,7 +143,7 @@ Skada.options = {
 								set=function(self, val) if val and val ~= "" then Skada:CreateWindow(val, nil, newdisplay) end end,
 								order=1,
 							},
-							
+
 							display = {
 								type="select",
 								name=L["Display system"],
@@ -162,7 +162,7 @@ Skada.options = {
 
 						},
 	        		},
-	        		
+
 	        		resetoptions = {
 	        			type = "group",
 	        			name = L["Data resets"],
@@ -178,7 +178,7 @@ Skada.options = {
 								set=function(self, opt) Skada.db.profile.reset.instance = opt end,
 								order=30,
 							},
-							
+
 							resetjoin = {
 								type="select",
 								name=L["Reset on joining a group"],
@@ -188,7 +188,7 @@ Skada.options = {
 								set=function(self, opt) Skada.db.profile.reset.join = opt end,
 								order=31,
 							},
-		
+
 							resetleave = {
 								type="select",
 								name=L["Reset on leaving a group"],
@@ -198,9 +198,9 @@ Skada.options = {
 								set=function(self, opt) Skada.db.profile.reset.leave = opt end,
 								order=32,
 							},
-							
+
 				        }
-				        
+
 	        		},
 
 					tooltips = {
@@ -216,7 +216,7 @@ Skada.options = {
 							        get=function() return Skada.db.profile.tooltips end,
 							        set=function() Skada.db.profile.tooltips = not Skada.db.profile.tooltips end,
 							},
-							
+
 							informative = {
 							        type="toggle",
 							        name=L["Informative tooltips"],
@@ -225,7 +225,7 @@ Skada.options = {
 							        get=function() return Skada.db.profile.informativetooltips end,
 							        set=function() Skada.db.profile.informativetooltips = not Skada.db.profile.informativetooltips end,
 							},
-							
+
 							rows = {
 								type="range",
 								name=L["Subview rows"],
@@ -237,7 +237,7 @@ Skada.options = {
 								set=function(self, val) Skada.db.profile.tooltiprows = val end,
 								order=3,
 							},
-							
+
 							tooltippos = {
 								type="select",
 								name=L["Tooltip position"],
@@ -246,7 +246,7 @@ Skada.options = {
 								get=function() return Skada.db.profile.tooltippos end,
 								set=function(self, opt) Skada.db.profile.tooltippos = opt end,
 								order=4,
-							},							
+							},
 						}
 					},
 
@@ -255,7 +255,7 @@ Skada.options = {
 	        			name = L["General options"],
 	        			order=3,
 						args = {
-							
+
 							mmbutton = {
 							        type="toggle",
 							        name=L["Show minimap button"],
@@ -276,7 +276,7 @@ Skada.options = {
 							        get=function() return Skada.db.profile.mergepets end,
 							        set=function() Skada.db.profile.mergepets = not Skada.db.profile.mergepets end,
 							},
-							
+
 							showtotals = {
 							        type="toggle",
 							        name=L["Show totals"],
@@ -285,7 +285,7 @@ Skada.options = {
 							        get=function() return Skada.db.profile.showtotals end,
 							        set=function() Skada.db.profile.showtotals = not Skada.db.profile.showtotals end,
 							},
-							
+
 							onlykeepbosses = {
 							        type="toggle",
 							        name=L["Only keep boss fighs"],
@@ -294,7 +294,7 @@ Skada.options = {
 							        get=function() return Skada.db.profile.onlykeepbosses end,
 							        set=function() Skada.db.profile.onlykeepbosses = not Skada.db.profile.onlykeepbosses end,
 							},
-							
+
 							hidesolo = {
 							        type="toggle",
 							        name=L["Hide when solo"],
@@ -330,7 +330,7 @@ Skada.options = {
 							        			Skada:ApplySettings()
 							        		end,
 							},
-														
+
 							disablewhenhidden = {
 							        type="toggle",
 							        name=L["Disable while hidden"],
@@ -342,7 +342,7 @@ Skada.options = {
 							        			Skada:ApplySettings()
 							        		end,
 							},
-							
+
 							numberformat = {
 								type="select",
 								name=L["Number format"],
@@ -352,7 +352,7 @@ Skada.options = {
 								set=function(self, opt) Skada.db.profile.numberformat = opt end,
 								order=11,
 							},
-							
+
 							showranks = {
 							        type="toggle",
 							        name=L["Show rank numbers"],
@@ -394,7 +394,7 @@ Skada.options = {
 								set=function(self, val) Skada.db.profile.setstokeep = val end,
 								order=13,
 							},
-							
+
 							tenativecombatstart = {
 							        type="toggle",
 							        name=L["Aggressive combat detection"],
@@ -402,8 +402,8 @@ Skada.options = {
 							        order=10,
 							        get=function() return Skada.db.profile.tentativecombatstart end,
 							        set=function() Skada.db.profile.tentativecombatstart = not Skada.db.profile.tentativecombatstart end,
-							},							
-							
+							},
+
 						}
 	        		},
 
@@ -413,9 +413,9 @@ Skada.options = {
 	        			order=4,
 						args = {},
 	        		}
-	        		
-	        		
+
+
 	        }
-	        
+
 }
 

@@ -29,74 +29,48 @@ local defaultFont, defaultSize = InterfaceOptionsCombatTextPanelTargetEffectsTex
 
 -- Show Combat Options Title
 local fsTitle = InterfaceOptionsCombatTextPanel:CreateFontString(nil, "OVERLAY")
-fsTitle:SetTextColor(1.00, 0.82, 0.00, 1.00)
-fsTitle:SetFont(defaultFont, defaultSize + 6)
-fsTitle:SetText("xCT+ Combat Text Options")
-fsTitle:SetPoint("TOPLEFT", 16, -90)
+fsTitle:SetTextColor(1.00, 1.00, 1.00, 1.00)
+fsTitle:SetFont(defaultFont, defaultSize)
+fsTitle:SetText("|cff60A0FFPowered By |cffFF0000x|r|cff80F000CT|r+|r")
+--fsTitle:SetPoint("TOPLEFT", 16, -90)
+fsTitle:SetPoint("TOPLEFT", 180, -16)
 
 -- Move the Effects and Floating Options
-InterfaceOptionsCombatTextPanelTargetEffects:ClearAllPoints()
+--[[InterfaceOptionsCombatTextPanelTargetEffects:ClearAllPoints()
 InterfaceOptionsCombatTextPanelTargetEffects:SetPoint("TOPLEFT", 314, -132)
 InterfaceOptionsCombatTextPanelEnableFCT:ClearAllPoints()
 InterfaceOptionsCombatTextPanelEnableFCT:SetPoint("TOPLEFT", 18, -132)
 
 InterfaceOptionsCombatTextPanelTargetDamage:ClearAllPoints()
-InterfaceOptionsCombatTextPanelTargetDamage:SetPoint("TOPLEFT", 18, -355)
+InterfaceOptionsCombatTextPanelTargetDamage:SetPoint("TOPLEFT", 18, -355) ]]
 
-local initCVars = true
-local lastState = false
 
--- Hide invalid Objects
-function x:UpdateHeadNumbers()
-  if initCVars then
-    lastState = self.db.profile.blizzardFCT.blizzardHeadNumbers
-    SetCVar("CombatLogPeriodicSpells", self.db.profile.blizzardFCT.vars["CombatLogPeriodicSpells"])
-    SetCVar("PetMeleeDamage", self.db.profile.blizzardFCT.vars["PetMeleeDamage"])
-    SetCVar("CombatDamage", self.db.profile.blizzardFCT.vars["CombatDamage"])
-    SetCVar("CombatHealing", self.db.profile.blizzardFCT.vars["CombatHealing"])
-    
-    initCVars = false
-  end
+-- Hide Blizzard Combat Text Toggles
+InterfaceOptionsCombatTextPanelEnableFCT:Hide()
+InterfaceOptionsCombatTextPanelTargetEffects:Hide()
+InterfaceOptionsCombatTextPanelOtherTargetEffects:Hide()
+InterfaceOptionsCombatTextPanelDodgeParryMiss:Hide()
+InterfaceOptionsCombatTextPanelDamageReduction:Hide()
+InterfaceOptionsCombatTextPanelRepChanges:Hide()
+InterfaceOptionsCombatTextPanelReactiveAbilities:Hide()
+InterfaceOptionsCombatTextPanelFriendlyHealerNames:Hide()
+InterfaceOptionsCombatTextPanelCombatState:Hide()
+InterfaceOptionsCombatTextPanelComboPoints:Hide()
+InterfaceOptionsCombatTextPanelLowManaHealth:Hide()
+InterfaceOptionsCombatTextPanelEnergyGains:Hide()
+InterfaceOptionsCombatTextPanelPeriodicEnergyGains:Hide()
+InterfaceOptionsCombatTextPanelHonorGains:Hide()
+InterfaceOptionsCombatTextPanelAuras:Hide()
 
-  -- Always hide or show interface objects
-  if self.db.profile.blizzardFCT.blizzardHeadNumbers then
-    InterfaceOptionsCombatTextPanelTargetDamage:Show()
-    InterfaceOptionsCombatTextPanelPeriodicDamage:Show()
-    InterfaceOptionsCombatTextPanelPetDamage:Show()
-    InterfaceOptionsCombatTextPanelHealing:Show()
-  else
-    InterfaceOptionsCombatTextPanelTargetDamage:Hide()
-    InterfaceOptionsCombatTextPanelPeriodicDamage:Hide()
-    InterfaceOptionsCombatTextPanelPetDamage:Hide()
-    InterfaceOptionsCombatTextPanelHealing:Hide()
-  end
+-- Direction does NOT work with xCT+ at all
+InterfaceOptionsCombatTextPanelFCTDropDown:Hide()
 
-  -- Update if current state does not equal last state
-  local update = (self.db.profile.blizzardFCT.blizzardHeadNumbers ~= lastState)
-  
-  if update then
-    if self.db.profile.blizzardFCT.blizzardHeadNumbers then
-      SetCVar("CombatLogPeriodicSpells", self.db.profile.blizzardFCT.vars["CombatLogPeriodicSpells"])
-      SetCVar("PetMeleeDamage", self.db.profile.blizzardFCT.vars["PetMeleeDamage"])
-      SetCVar("CombatDamage", self.db.profile.blizzardFCT.vars["CombatDamage"])
-      SetCVar("CombatHealing", self.db.profile.blizzardFCT.vars["CombatHealing"])
-    else
-      -- backup cVars
-      self.db.profile.blizzardFCT.vars["CombatLogPeriodicSpells"] = GetCVar("CombatLogPeriodicSpells")
-      self.db.profile.blizzardFCT.vars["PetMeleeDamage"] = GetCVar("PetMeleeDamage")
-      self.db.profile.blizzardFCT.vars["CombatDamage"] = GetCVar("CombatDamage")
-      self.db.profile.blizzardFCT.vars["CombatHealing"] = GetCVar("CombatHealing")
-      
-      SetCVar("CombatLogPeriodicSpells", 0)
-      SetCVar("PetMeleeDamage", 0)
-      SetCVar("CombatDamage", 0)
-      SetCVar("CombatHealing", 0)
-    end
-    
-    -- our new state
-    lastState = self.db.profile.blizzardFCT.blizzardHeadNumbers
-  end
-end
+-- FCT Options
+InterfaceOptionsCombatTextPanelTargetDamage:Hide()
+InterfaceOptionsCombatTextPanelPeriodicDamage:Hide()
+InterfaceOptionsCombatTextPanelPetDamage:Hide()
+InterfaceOptionsCombatTextPanelHealing:Hide()
+
 
 function x:UpdateBlizzardFCT()
   if self.db.profile.blizzardFCT.enabled then
@@ -114,9 +88,6 @@ CombatText:SetScript("OnLoad", nil)
 CombatText:SetScript("OnEvent", nil)
 CombatText:SetScript("OnUpdate", nil)
 
--- Direction does NOT work with xCT+ at all
-InterfaceOptionsCombatTextPanelFCTDropDown:Hide()
-
 
 -- Create a button to delete profiles
 if not xCTCombatTextConfigButton then
@@ -124,19 +95,18 @@ if not xCTCombatTextConfigButton then
 end
 
 xCTCombatTextConfigButton:ClearAllPoints()
-xCTCombatTextConfigButton:SetPoint("BOTTOMRIGHT", -18, 18)
-xCTCombatTextConfigButton:SetSize(180, 26)
-xCTCombatTextConfigButton:SetText("|cffFFFFFFMore |r|cffFF0000x|r|cffFFFFFFCT+ Options...|r")
+xCTCombatTextConfigButton:SetPoint("TOPRIGHT", -36, -80)
+xCTCombatTextConfigButton:SetSize(200, 30)
+xCTCombatTextConfigButton:SetText("|cffFFFFFFGo to the |r|cffFF0000x|r|cff80F000CT|r|cff60A0FF+|r |cffFFFFFFOptions Panel...|r")
 xCTCombatTextConfigButton:Show()
 xCTCombatTextConfigButton:SetScript("OnClick", function(self)
-  --if not x.configuring then
-    InterfaceOptionsFrameOkay:Click()
-    LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME)
-  --end
+  InterfaceOptionsFrameOkay:Click()
+  LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME)
 end)
 
+-- Interface - Addons (Ace3 Blizzard Options)
 x.blizzardOptions = {
-  name = "|cffFF0000x|rCT+ - e|cffFF0000X|rtreme Combat Text",
+  name = "|cffFFFF00Combat Text - |r|cff60A0FFPowered By |cffFF0000x|r|cff80F000CT|r+|r",
   handler = x,
   type = 'group',
   args = {

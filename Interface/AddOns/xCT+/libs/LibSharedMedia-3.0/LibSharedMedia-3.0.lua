@@ -1,6 +1,6 @@
-﻿--[[
+--[[
 Name: LibSharedMedia-3.0
-Revision: $Revision: 62 $
+Revision: $Revision: 74 $
 Author: Elkano (elkano@gmx.de)
 Inspired By: SurfaceLib by Haste/Otravi (troeks@gmail.com)
 Website: http://www.wowace.com/projects/libsharedmedia-3-0/
@@ -9,7 +9,7 @@ Dependencies: LibStub, CallbackHandler-1.0
 License: LGPL v2.1
 ]]
 
-local MAJOR, MINOR = "LibSharedMedia-3.0", 100001 -- increase manualy on changes
+local MAJOR, MINOR = "LibSharedMedia-3.0", 5000402 -- 5.0.4 v2 / increase manually on changes
 local lib = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not lib then return end
@@ -59,6 +59,7 @@ lib.MediaType.SOUND			= "sound"				-- sound files
 -- populate lib with default Blizzard data
 -- BACKGROUND
 if not lib.MediaTable.background then lib.MediaTable.background = {} end
+lib.MediaTable.background["None"]									= [[]]
 lib.MediaTable.background["Blizzard Dialog Background"]				= [[Interface\DialogFrame\UI-DialogBox-Background]]
 lib.MediaTable.background["Blizzard Dialog Background Dark"]		= [[Interface\DialogFrame\UI-DialogBox-Background-Dark]]
 lib.MediaTable.background["Blizzard Dialog Background Gold"]		= [[Interface\DialogFrame\UI-DialogBox-Gold-Background]]
@@ -71,20 +72,45 @@ lib.MediaTable.background["Blizzard Rock"]							= [[Interface\FrameGeneral\UI-B
 lib.MediaTable.background["Blizzard Tabard Background"]				= [[Interface\TabardFrame\TabardFrameBackground]]
 lib.MediaTable.background["Blizzard Tooltip"]						= [[Interface\Tooltips\UI-Tooltip-Background]]
 lib.MediaTable.background["Solid"]									= [[Interface\Buttons\WHITE8X8]]
+lib.DefaultMedia.background = "None"
 
 -- BORDER
 if not lib.MediaTable.border then lib.MediaTable.border = {} end
-lib.MediaTable.border["None"]								= [[Interface\None]]
+lib.MediaTable.border["None"]								= [[]]
 lib.MediaTable.border["Blizzard Achievement Wood"]			= [[Interface\AchievementFrame\UI-Achievement-WoodBorder]]
 lib.MediaTable.border["Blizzard Chat Bubble"]				= [[Interface\Tooltips\ChatBubble-Backdrop]]
 lib.MediaTable.border["Blizzard Dialog"]					= [[Interface\DialogFrame\UI-DialogBox-Border]]
 lib.MediaTable.border["Blizzard Dialog Gold"]				= [[Interface\DialogFrame\UI-DialogBox-Gold-Border]]
 lib.MediaTable.border["Blizzard Party"]						= [[Interface\CHARACTERFRAME\UI-Party-Border]]
 lib.MediaTable.border["Blizzard Tooltip"]					= [[Interface\Tooltips\UI-Tooltip-Border]]
+lib.DefaultMedia.border = "None"
 
 -- FONT
 if not lib.MediaTable.font then lib.MediaTable.font = {} end
 local SML_MT_font = lib.MediaTable.font
+--[[
+file				name							latin	koKR	ruRU	zhCN	zhTW
+2002.ttf			2002							X		X		X		-		-
+2002B.ttf			2002 Bold						X		X		X		-		-
+ARHei.ttf			AR CrystalzcuheiGBK Demibold	X		-		X		X		X
+ARIALN.TTF			Arial Narrow					X		-		X		-		-
+ARKai_C.ttf			AR ZhongkaiGBK Medium (Combat)	X		-		X		X		X
+ARKai_T.ttf			AR ZhongkaiGBK Medium			X		-		X		X		X
+bHEI00M.ttf			AR Heiti2 Medium B5				-		-		-		-		X
+bHEI01B.ttf			AR Heiti2 Bold B5				-		-		-		-		X
+bKAI00M.ttf			AR Kaiti Medium B5				-		-		-		-		X
+bLEI00D.ttf			AR Leisu Demi B5				-		-		-		-		X
+FRIZQT__.TTF		Friz Quadrata TT				X		-		-		-		-
+FRIZQT___CYR.TTF	FrizQuadrataCTT					-		-		X		-		-
+K_Damage.TTF		YDIWingsM						-		X		X		-		-
+K_Pagetext.TTF		MoK								X		X		X		-		-
+MORPHEUS.TTF		Morpheus						X		-		-		-		-
+MORPHEUS_CYR.TTF	Morpheus						X		-		X		-		-
+NIM_____.ttf		Nimrod MT						X		-		X		-		-
+SKURRI.TTF			Skurri							X		-		-		-		-
+SKURRI_CYR.TTF		Skurri							X		-		X		-		-
+]]
+
 if locale == "koKR" then
 	LOCALE_MASK = lib.LOCALE_BIT_koKR
 --
@@ -98,7 +124,7 @@ if locale == "koKR" then
 elseif locale == "zhCN" then
 	LOCALE_MASK = lib.LOCALE_BIT_zhCN
 --
-	SML_MT_font["伤害数字"]		= [[Fonts\ARKai_DB.ttf]]
+	SML_MT_font["伤害数字"]		= [[Fonts\ARKai_C.ttf]]
 	SML_MT_font["默认"]			= [[Fonts\ARKai_T.ttf]]
 	SML_MT_font["聊天"]			= [[Fonts\ARHei.ttf]]
 --
@@ -117,21 +143,37 @@ elseif locale == "zhTW" then
 elseif locale == "ruRU" then
 	LOCALE_MASK = lib.LOCALE_BIT_ruRU
 --
-	SML_MT_font["Arial Narrow"]			= [[Fonts\ARIALN.TTF]]
-	SML_MT_font["Nimrod MT"]			= [[Fonts\NIM_____.ttf]]
-
-	lib.DefaultMedia.font = "Arial Narrow"
+	SML_MT_font["2002"]								= [[Fonts\2002.TTF]]
+	SML_MT_font["2002 Bold"]						= [[Fonts\2002B.TTF]]
+	SML_MT_font["AR CrystalzcuheiGBK Demibold"]		= [[Fonts\ARHei.TTF]]
+	SML_MT_font["AR ZhongkaiGBK Medium (Combat)"]	= [[Fonts\ARKai_C.TTF]]
+	SML_MT_font["AR ZhongkaiGBK Medium"]			= [[Fonts\ARKai_T.TTF]]
+	SML_MT_font["Arial Narrow"]						= [[Fonts\ARIALN.TTF]]
+	SML_MT_font["Friz Quadrata TT"]					= [[Fonts\FRIZQT___CYR.TTF]]
+	SML_MT_font["MoK"]								= [[Fonts\K_Pagetext.TTF]]
+	SML_MT_font["Morpheus"]							= [[Fonts\MORPHEUS_CYR.TTF]]
+	SML_MT_font["Nimrod MT"]						= [[Fonts\NIM_____.ttf]]
+	SML_MT_font["Skurri"]							= [[Fonts\SKURRI_CYR.TTF]]
+--
+	lib.DefaultMedia.font = "Friz Quadrata TT"
 --
 else
 	LOCALE_MASK = lib.LOCALE_BIT_western
 	locale_is_western = true
 --
-	SML_MT_font["Arial Narrow"]			= [[Fonts\ARIALN.TTF]]
-	SML_MT_font["Friz Quadrata TT"]		= [[Fonts\FRIZQT__.TTF]]
-	SML_MT_font["Morpheus"]				= [[Fonts\MORPHEUS.TTF]]
-	SML_MT_font["Skurri"]				= [[Fonts\SKURRI.TTF]]
+	SML_MT_font["2002"]								= [[Fonts\2002.TTF]]
+	SML_MT_font["2002 Bold"]						= [[Fonts\2002B.TTF]]
+	SML_MT_font["AR CrystalzcuheiGBK Demibold"]		= [[Fonts\ARHei.TTF]]
+	SML_MT_font["AR ZhongkaiGBK Medium (Combat)"]	= [[Fonts\ARKai_C.TTF]]
+	SML_MT_font["AR ZhongkaiGBK Medium"]			= [[Fonts\ARKai_T.TTF]]
+	SML_MT_font["Arial Narrow"]						= [[Fonts\ARIALN.TTF]]
+	SML_MT_font["Friz Quadrata TT"]					= [[Fonts\FRIZQT__.TTF]]
+	SML_MT_font["MoK"]								= [[Fonts\K_Pagetext.TTF]]
+	SML_MT_font["Morpheus"]							= [[Fonts\MORPHEUS_CYR.TTF]]
+	SML_MT_font["Nimrod MT"]						= [[Fonts\NIM_____.ttf]]
+	SML_MT_font["Skurri"]							= [[Fonts\SKURRI_CYR.TTF]]
 --
-	lib.DefaultMedia.font = "Arial Narrow"
+	lib.DefaultMedia.font = "Friz Quadrata TT"
 --
 end
 
@@ -139,6 +181,7 @@ end
 if not lib.MediaTable.statusbar then lib.MediaTable.statusbar = {} end
 lib.MediaTable.statusbar["Blizzard"]						= [[Interface\TargetingFrame\UI-StatusBar]]
 lib.MediaTable.statusbar["Blizzard Character Skills Bar"]	= [[Interface\PaperDollInfoFrame\UI-Character-Skills-Bar]]
+lib.MediaTable.statusbar["Blizzard Raid Bar"]				= [[Interface\RaidFrame\Raid-Bar-Hp-Fill]]
 lib.DefaultMedia.statusbar = "Blizzard"
 
 -- SOUND
@@ -183,8 +226,7 @@ function lib:Fetch(mediatype, key, noDefault)
 	local mtt = mediaTable[mediatype]
 	local overridekey = overrideMedia[mediatype]
 	local result = mtt and ((overridekey and mtt[overridekey] or mtt[key]) or (not noDefault and defaultMedia[mediatype] and mtt[defaultMedia[mediatype]])) or nil
-
-	return result
+	return result ~= "" and result or nil
 end
 
 function lib:IsValid(mediatype, key)

@@ -16,3 +16,6 @@ local AddonName, addon = ...
 addon.engine = LibStub("AceAddon-3.0"):NewAddon(AddonName, "AceConsole-3.0")
 
 xCT_Plus = addon.engine
+
+-- No Operation
+addon.noop = function(...) return end

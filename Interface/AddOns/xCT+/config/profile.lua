@@ -12,7 +12,7 @@
  [  ©2012. All Rights Reserved.        ]
  [====================================]]
 
- -- This file is a static default profile.  After you first profile is created, editing this file will nothing.
+ -- This file is a static default profile.  After your first profile is created, editing this file will do nothing.
 local ADDON_NAME, addon = ...
 
 -- =====================================================
@@ -31,25 +31,24 @@ local function CreateComboSpellEntry(default, spellID, watchUnit)
     }
 end
 
--- LOCALIZATION
-local COMBO = COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT  -- "Combo Points"
-
 addon.defaults = {
   profile = {
-    showStartupText = true,
+    showStartupText = false,
     
     blizzardFCT = {
-      blizzardHeadNumbers = false,
-      enabled = false,
+      blizzardHeadNumbers = true,
+      enabled = true,
       font = "RayUI Normal",
+      fontName = [[Interface\AddOns\]] .. ADDON_NAME .. [[\media\HOOGE.TTF]],
       fontSize = 32,
       fontOutline = "2OUTLINE",
-      vars = {
-        ["CombatLogPeriodicSpells"] = 1,
-        ["PetMeleeDamage"] = 1,
-        ["CombatDamage"] = 1,
-        ["CombatHealing"] = 1,
-      },
+      
+      -- CVars
+      ["CombatThreatChanges"] = true,
+      ["CombatDamage"] = true,
+      ["CombatHealing"] = true,
+      ["PetMeleeDamage"] = true,
+      ["CombatLogPeriodicSpells"] = true,
     },
     
     frameSettings = {
@@ -69,6 +68,7 @@ addon.defaults = {
         ["enabledFrame"] = true,
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
+        ["alpha"] = 100,
         
       -- position
         ["X"] = 0,
@@ -99,15 +99,20 @@ addon.defaults = {
       -- special tweaks
         ["showInterrupts"] = false,
         ["showDispells"] = false,
-        ["showPartyKills"] = true,
+        ["showPartyKills"] = false,
         ["showBuffs"] = false,
         ["showDebuffs"] = true,
+        ["showLowManaHealth"] = true,
+        ["showCombatState"] = true,
+        ["showRepChanges"] = true,
+        ["showHonorGains"] = true,
       },
       
       outgoing = {
         ["enabledFrame"] = true,
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
+        ["alpha"] = 100,
         
       -- position
         ["X"] = 382,
@@ -154,6 +159,7 @@ addon.defaults = {
         ["enabledFrame"] = false,
         ["secondaryFrame"] = 2,
         ["insertText"] = "bottom",
+        ["alpha"] = 100,
       
       -- position
         ["X"] = 256,
@@ -192,17 +198,17 @@ addon.defaults = {
       -- special tweaks
         ["showSwing"] = true,
         ["prefixSwing"] = true,
-        ["redirectSwing"] = false,
       },
       
       damage = {
         ["enabledFrame"] = true,
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
+        ["alpha"] = 100,
         
       -- position
         ["X"] = -325,
-        ["Y"] = -30, -- -80,
+        ["Y"] = -30,
         ["Width"] = 128,
         ["Height"] = 190,
         
@@ -225,12 +231,17 @@ addon.defaults = {
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
+      
+      -- Special Tweaks
+        ["showDodgeParryMiss"] = true,
+        ["showDamageReduction"] = true,
       },
 
       healing = {
         ["enabledFrame"] = true,
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
+        ["alpha"] = 100,
       
       -- positioon
         ["X"] = -415,
@@ -259,11 +270,15 @@ addon.defaults = {
         ["visibilityTime"] = 5,
         
       -- special tweaks
+        ["showFriendlyHealers"] = true,
         ["enableClassNames"] = true,
+        ["enableRealmNames"] = true,
+        ["enableOverHeal"] = true,
       },
       
       class = {
         ["enabledFrame"] = false,
+        ["alpha"] = 100,
         
       -- position
         ["X"] = 0,
@@ -272,7 +287,7 @@ addon.defaults = {
         ["Height"] = 64,
         
       -- fonts
-        ["font"] = "HOOGE (xCT)",
+        ["font"] = "RayUI Normal",
         ["fontSize"] = 32,
         ["fontOutline"] = "2OUTLINE",
         
@@ -285,6 +300,7 @@ addon.defaults = {
         ["enabledFrame"] = true,
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
+        ["alpha"] = 100,
         
       -- position
         ["X"] = 0,
@@ -311,22 +327,27 @@ addon.defaults = {
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
+        
+      -- special tweaks
+        ["showEnergyGains"] = true,
+        ["showPeriodicEnergyGains"] = true,
       },
       
       procs = {
         ["enabledFrame"] = false,
         ["secondaryFrame"] = 1,
         ["insertText"] = "top",
+        ["alpha"] = 100,
         
       -- position
-        ["X"] = -230,
-        ["Y"] = -60,
+        ["X"] = -256,
+        ["Y"] = -64,
         ["Width"] = 256,
         ["Height"] = 128,
         
       -- fonts
         ["font"] = "RayUI Normal",
-        ["fontSize"] = 18,
+        ["fontSize"] = 20,
         ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "CENTER",
         
@@ -349,6 +370,7 @@ addon.defaults = {
         ["enabledFrame"] = true,
         ["secondaryFrame"] = 0,
         ["insertText"] = "top",
+        ["alpha"] = 100,
         
       -- position 
         ["X"] = 0,
@@ -395,6 +417,8 @@ addon.defaults = {
       enableMerger = true,        -- enable/disable spam merger
       enableMergerDebug = false,  -- Shows spell IDs for debugging merged spells
       
+      mergeHealing = true,
+      
       mergeSwings = true,
       mergeRanged = true,
       
@@ -419,7 +443,9 @@ addon.defaults = {
           [1] = {                                         -- Balance
             CreateComboSpellEntry(true, 81192),           --   Lunar Shower
           },
-          [2] = { [COMBO] = true, },    -- Feral
+          [2] = {                                         -- Feral
+            [COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] = true,
+          }, 
           [3] = { },    -- Guardian
           [4] = { },    -- Restoration
         },
@@ -471,11 +497,12 @@ addon.defaults = {
           -- DO NOT USE - SHADOW PRIEST GET SHADOW ORBS
           [3] = {                                         -- Shadow
             [SHADOW_ORBS] = true,
+            -- 87160 Surge of Darkness
           },    
         },
         
         ["ROGUE"] = {
-          [COMBO] = true,
+          [COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] = true,
         
           -- DO NOT USE - ROGUES GET COMBO POINTS
           [1] = { },    -- Assassination
@@ -484,7 +511,9 @@ addon.defaults = {
         },
 
         ["SHAMAN"] = {
-          [1] = { },    -- Elemental
+          [1] = {                                         -- Elemental
+            CreateComboSpellEntry(true, 88767),           --   Fulmination
+          },    
           [2] = {                                         -- Enhancement
             CreateComboSpellEntry(true, 53817),           --   Maelstrom Weapon
           },
@@ -495,13 +524,13 @@ addon.defaults = {
 
         ["WARLOCK"] = {
           -- DO NOT USE - AFFLICTION WARLOCKS GET SOUL SHARDS
-          [1] = { [SOUL_SHARDS] = true },
+          [1] = { [SOUL_SHARDS] = true },                 -- Affliction
           
           -- DO NOT USE - DEMONOLOGY WARLOCKS GET DEMONIC FURY
-          [2] = { [DEMONIC_FURY] = true },
+          [2] = { [DEMONIC_FURY] = true },                -- Demonology
           
           -- DO NOT USE - DESTRUCTION WARLOCKS GET BURNING EMBERS
-          [3] = { [BURNING_EMBERS] = true },
+          [3] = { [BURNING_EMBERS] = true },              -- Destruction
         },
         
         ["WARRIOR"] = {
@@ -519,7 +548,25 @@ addon.defaults = {
       -- yes this is supposed to be blank :P
       -- it is dynamically generated in core.lua
       items = { },
+    },
     
+    spellFilter = {
+      ["whitelistBuffs"]    = false,
+      ["whitelistDebuffs"]  = false,
+      ["whitelistSpells"]   = false,
+
+      ["trackSpells"]       = false,
+      
+      listBuffs    = { },  -- Used to filter gains/fades of buffs    (Spell Name)
+      listDebuffs  = { },  -- Used to filter gains/fades of debuffs  (Spell Name)
+      listSpells   = { },  -- Used to filter outgoing spells         (Spell ID)
+      
+      -- Minimal Spell Amount
+      filterPowerValue = 0,
+      filterOutgoingDamageValue = 0,
+      filterOutgoingHealingValue = 0,
+      filterIncomingDamageValue = 0,
+      filterIncomingHealingValue = 0,
     },
   },
 }
