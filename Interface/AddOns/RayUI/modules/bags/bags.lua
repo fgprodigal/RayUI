@@ -1,4 +1,4 @@
-local R, L, P = unpack(RayUI) --Inport: Engine, Locales, ProfileDB
+local R, L, P = unpack(RayUI) --Import: Engine, Locales, ProfileDB
 local B = R:NewModule("Bags", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0")
 local S = R:GetModule("Skins")
 

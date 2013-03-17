@@ -1,5 +1,5 @@
 --Raid Utility by Elv22
-local R, L, P, G = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB
 local M = R:GetModule("Misc")
 
 local filter = COMBATLOG_OBJECT_AFFILIATION_RAID + COMBATLOG_OBJECT_AFFILIATION_PARTY + COMBATLOG_OBJECT_AFFILIATION_MINE
