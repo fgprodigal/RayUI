@@ -1,4 +1,4 @@
-﻿local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
+﻿local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local WM = R:NewModule("WorldMap", "AceEvent-3.0", "AceHook-3.0")
 WM.modName = L["世界地图"]
 

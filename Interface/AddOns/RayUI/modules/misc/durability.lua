@@ -1,5 +1,5 @@
 -- Based on tekability by Tekkub
-local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
+local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local M = R:GetModule("Misc")
 
 local function LoadFunc()

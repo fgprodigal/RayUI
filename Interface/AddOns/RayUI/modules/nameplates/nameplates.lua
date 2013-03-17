@@ -1,4 +1,4 @@
-local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
+local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local NP = R:NewModule("NamePlates", "AceEvent-3.0", "AceHook-3.0", "AceTimer-3.0")
 NP.modName = L["姓名板"]
 

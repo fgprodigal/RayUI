@@ -1,4 +1,4 @@
-local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
+local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local T = R:NewModule("Test", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 
 function T:Initialize()

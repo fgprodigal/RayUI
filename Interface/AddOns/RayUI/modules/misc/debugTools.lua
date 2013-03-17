@@ -1,4 +1,4 @@
-local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB, GlobalDB
+local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local, GlobalDB
 local M = R:GetModule("Misc")
 
 local function LoadFunc()

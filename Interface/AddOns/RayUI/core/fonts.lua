@@ -1,4 +1,4 @@
-﻿local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
+﻿local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 
 local function SetFont(obj, font, size, style, r, g, b, sr, sg, sb, sox, soy)
 	obj:SetFont(font, size, style)

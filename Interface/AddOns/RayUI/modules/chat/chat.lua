@@ -1,4 +1,4 @@
-﻿local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
+﻿local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local CH = R:NewModule("Chat", "AceEvent-3.0", "AceHook-3.0", "AceTimer-3.0", "AceConsole-3.0")
 CH.modName = L["聊天栏"]
 

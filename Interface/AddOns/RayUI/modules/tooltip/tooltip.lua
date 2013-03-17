@@ -1,4 +1,4 @@
-local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
+local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local TT = R:NewModule("Tooltip", "AceEvent-3.0", "AceHook-3.0")
 local TalentFrame = CreateFrame("Frame", nil)
 TalentFrame:Hide()

@@ -1,5 +1,5 @@
 --Create a Mover frame by Elv
-local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
+local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local AddOnName = ...
 local AceConfig = LibStub("AceConfigDialog-3.0")
 

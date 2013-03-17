@@ -1,4 +1,4 @@
-local R, L, P = unpack(select(2, ...)) --Inport: Engine, Locales, ProfileDB
+local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local CF = R:NewModule("CooldownFlash", "AceEvent-3.0", "AceHook-3.0")
 CF.modName = L["中部冷却闪光"]
 
