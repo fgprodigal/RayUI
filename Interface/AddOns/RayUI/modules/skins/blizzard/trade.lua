@@ -84,13 +84,7 @@ local function LoadSkin()
 			else
 				icontexture:SetVertexColor(1, 1, 1)
 			end
-			name:SetTextColor(GetItemQualityColor(quality))
-			if (quality <=1 ) then
-				glow:Point("TOPLEFT", 1, -1)
-				glow:Point("BOTTOMRIGHT", -1, 1)
-				glow:SetBackdropBorderColor(0, 0, 0)
-				button:SetBackdropColor(0, 0, 0, 0)
-			else
+			if quality and quality >1 then
 				glow:SetAllPoints()
 				glow:SetBackdropBorderColor(GetItemQualityColor(quality))
 				button:SetBackdrop({
@@ -98,6 +92,13 @@ local function LoadSkin()
 					insets = { left = -R.mult, right = -R.mult, top = -R.mult, bottom = -R.mult }
 				})
 				button:SetBackdropColor(0, 0, 0)
+				name:SetTextColor(GetItemQualityColor(quality))
+			else
+				glow:Point("TOPLEFT", 1, -1)
+				glow:Point("BOTTOMRIGHT", -1, 1)
+				glow:SetBackdropBorderColor(0, 0, 0)
+				button:SetBackdropColor(0, 0, 0, 0)
+				name:SetTextColor(1, 1, 1)
 			end
 			glow:Show()
 		else

@@ -417,7 +417,8 @@ local function LoadSkin()
 		"AudioOptionsSoundPanelSoundChannelsDropDown",
 		"AudioOptionsVoicePanelInputDeviceDropDown",
 		"AudioOptionsVoicePanelChatModeDropDown",
-		"AudioOptionsVoicePanelOutputDeviceDropDown"
+		"AudioOptionsVoicePanelOutputDeviceDropDown",
+		"InterfaceOptionsStatusTextPanelDisplayDropDown"
 		}
 	for i = 1, #dropdowns do
 		S:ReskinDropDown(_G[dropdowns[i]])
