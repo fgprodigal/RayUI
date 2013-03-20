@@ -16,7 +16,7 @@ local dataobj = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject("Cork "..s
 	nobg = true,
 })
 
-Cork.defaultspc[spellname.."-enabled"] = UnitLevel("player") >= 10
+Cork.defaultspc[spellname.."-enabled"] = UnitLevel("player") == MAX_PLAYER_LEVEL
 
 local function Test(unit) if Cork.dbpc[spellname.."-enabled"] and not (UnitAura("player", spellname) or UnitAura("player", spellname2)) and not (IsResting() and not Cork.db.debug) then return iconline end end
 
