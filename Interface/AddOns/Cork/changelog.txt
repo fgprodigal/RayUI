@@ -1,0 +1,355 @@
+5.2.0.52-Beta
+    Ice barrier!
+    Display corks in the same order they're fired (thanks @eridius)
+    Use consistant sorting, for @eridius
+    Use more refined sorting priorities
+    Sort the foods in the wellfed (by ID), again for @eridius
+    Filter out party units while in raids (thanks @eridius)
+    Don't show pets for raid buffs (thanks @eridius)
+    Kill the last bits of pet buffing, that's long dead
+    Fix inbg bug
+    Add a new lance
+    Helps to use the right thing to check for ingroupedness
+
+5.1.0.51-Beta
+    Add Druid Symbiosis
+    Only warn about rogue poisons if a 1H weapon is equipped
+    Add Bag of Shiny Things to openables
+    Use SetTracking() to track things (Thanks eridius)
+    Fix the icon on the generated macro (Thanks eridius)
+    Stop using #showtooltip just for icon purposes (Thanks eridius)
+    Fix Soulstone (the spell works a bit differently now)
+    Restrict sybiosis and beacon of light to groups only
+    Make "last buffed" reminders work when the spell hasn't been cast yet
+    Add frost mage water elem module
+    Warn about tele cloaks
+    EXP buff reminders ignore resting state
+    Darkmoon EXP ignores resting
+    Drums are overwritten by almighty monk buff (Thanks ckaotik)
+    Forgot to exclude the new flask buffs
+
+5.1.0.50-Beta
+    Hide tooltip during pet battles
+    Add darkmoon exp buff
+    Add minipet summoning module
+    Remove 8th anniversary buff item
+    Remove an old hunter aspect
+
+5.0.1.49-Beta
+    Add anniversary exp buff item
+    Add new fortitude runescroll
+
+5.0.1.48-Beta
+    Fix error with openable items
+
+5.0.1.47-Beta
+    Added bloated skinning items to open
+    Fix a bug with the new wellfed config
+    Add monk exp booster buff
+    Don't prompt for guild battle standard when it's on CD
+
+5.0.1.46-Beta
+    Add guild battle standard module
+    Add basic stance support for Monks (thanks jf647)
+    Add Legacy of the Emperor support for Monks
+    Add Legacy of the White Tiger
+    Rework mark logic for monks' buff
+    Update pally blessings for pandas
+    Fix error caused by monks
+    Fix alchy flask
+    Better config panel for well fed
+    New fishing boxes (thanks hughescr)
+
+5.0.1.45-Beta
+    5.0 updates, may not be complete (thanks hughescr and jf647)
+
+4.3.0.44-Beta
+    "Well fed"
+    Add support for DK presences (thanks jf647)
+    Don't let alchy endless flask override normal flasks
+    D'oh, fort spellID changed
+    Safeguard against using a buff item if no unit is in need
+    Remove group threshold setting, buff items only cast if all needy units in range
+    Crazy attempt to make blessings report back the spell it would cast
+    If a single unit is in need, don't display the raid-need line
+    Pally blessings need to condense down in raid
+    Remove raid type config, now dynamically adjusts to instance size
+    Remove tooltip limit, hardcode at 10 lines
+    Rejigger config panel for 4.2
+
+4.1.0.43-Beta
+    Don't do fancy shit for flask of enh... it doesn't work on initial login
+    Don't bitch at druids to cast mark on units that have both pally blessings
+    Ignore player for dark intent module
+
+4.1.0.42-Beta
+    Add warlock dark intent module
+    Fix quest item cork not going away if item is dropped
+    Add alchemist Flask of Enhancement
+    New fort scroll at 85
+    Update that ancient readme
+    Pet happenis is no more
+
+4.1.0.41-Beta
+    Add Beacon of Light
+
+4.0.0.40-Beta
+    Don't bug about druid swift flight either
+    Bleepin bloop
+    Add Poison support for Rogue Thrown weapons (thanks winks)
+    Generalize rogue poisons into a template
+    Make shaman enchants work with new template too
+    All those poisons are gone now
+    Don't try to temp-chant lances and other "misc" weapons
+
+4.0.0.39-Beta
+    And another openable box thing
+    Add new cat mats to combine module
+    Item cache failsafe kinda fixes #54 until Blizzy gives us an event that works
+    S M R T
+    Attempt to blacklist boss units, I think, i can't test this shit
+    What me break the crusader aura module? nevar!
+    Fix up pet happiness module for new UNIT_POWER events
+    I never had this error, but whatever, if it shuts the bitches up
+    Add archaeology module
+
+4.0.0.38-Beta
+    Add quest starting items module
+    Change Inner Fire to an advanced self buffer for Inner Fire or Inner Will (thanks James FitzGibbon)
+    New clam!
+    No point in using pet names in the soul link module
+    Soul shards are lower priority than summon pet
+    Soulshards can bitch even when we're in town
+    Use soulburn when summoning warlock demons
+
+4.0.0.37-Beta
+    Don't harass players to be well fed until, oh, lets say level 10
+    Don't bug warlocks to make a healthstone if they can't
+    Seems that poison was removed
+
+4.0.0.36-Beta
+    Item cache is gone, use the spell name instead of the item name for buffing items
+
+4.0.0.35-Beta
+    4 loops r hard
+
+4.0.0.34-Beta
+    That might be nil, fuh!
+
+4.0.0.33-Beta
+    New and updated modules for 4.0
+    There are NINE glyphs
+    Enable disabled hovering on spell buttons in config
+    Don't harass people to get artisan or master riding
+    Ignore azeroth flying on live, for now
+    Tweak the pvp zone detection
+    Add in-town buff debuggery
+    Can't buff pets in 4.0 it seems
+
+4.0.0.32-Beta
+    New unlearned spells module, only works in Cat
+    Pally buffs are a bit different in cat
+    Fix up macro generator for cat
+    Fix up raid buffer for cat
+    Talents API changed a bit in cat
+    Druid forms changed a tad in cat
+    Downranked spells module (wrath only)
+
+3.3.0.31-Beta
+    Fall back to single-target spells when out of reagents
+    Mage mana gem module (thanks fryguy)
+    Make int module ignore resting
+    Don't bother solo players with buff items
+
+3.3.0.30-Beta
+    Thanks Adirelle and PProvost for new good bits!
+    Fixed Abominable Might spell id.
+    Don't cork soulstone if player has buff
+    Always show repair warning if any equipped item is below 15% durability
+    Don't cork disconnected or non-visible characters
+    Don't buff raid items if player doesn't have item in bag
+    Added Rogue poisons
+
+3.3.0.29-Beta
+    Make warrior battle shout module suck less
+    Add warlock healthstone module
+    Add fished crates
+    Add fishing pole and lance module
+    Disable when vehicle UI is active
+    Disable the macro as well, don't just hide the toolip
+    Add more useful tooltips to config
+
+3.3.0.28-Beta
+    Fix shaman offhands that are offhand *only*
+    Force WellFed to the lowest priority when corking (so that we recover mana from our casts)
+    New clam
+    Vampiric Embrace is a buff now
+    Use new embed texture coords to crop off those goddamn borders on icons
+    Add soulstone module
+    Add glyph module
+
+3.2.0.27-Beta
+    Add exclusions to self buffer... fix hunter trueshot (doesn't stack with unleashed rage or abom might)
+    Horn of Winter and Strength of Earth dun stack
+
+3.2.0.26-Beta
+    Added "Combine" module, that combines small items into larger ones, e.g. 10 crystallized waters into eternal water. (Thanks Adirelle)
+    RaidBuff now ignores dead units and units in vehicle. (Thanks Adirelle)
+    Update "show in battleground" checkbox on config show. (Thanks Adirelle)
+    Embed update
+
+3.2.0.25-Beta
+    Add new raid buffing items
+    Make macro editboxes also accept drag
+    Default blank macro would be a good thing.
+
+3.2.0.24-Beta
+    UnitAura doesn't do isMine anymore
+    Rejigger druid bear list to avoid forgetting settings on low-level toons
+
+3.1.0.23-Beta
+    Make "last buffed" templates hide when resting
+    And we have shaman weapon buffs!
+    Warlock temp enchant (spellstone) module
+    Fixed range check issues (Fucking eh, Blizzy, 0 IS NOT FALSE IN LUA)
+    Make druid shapeshift module only cast if no other needs are up
+    Hide tooltip when on a taxi (thanks PProvost)
+    Fixed Warlock pets (thanks PProvost)
+    Unspent talent points module (thanks Iain Broadfoot)
+
+3.1.0.22-Beta
+    Fix tooltip not hiding when entering WG
+
+3.1.0.21-Beta
+    Make buffer modules hide when in town (resting)
+    Ignore arena unitids
+
+3.1.0.20-Beta
+    Fix macro blocking if well fed macro is nil (not blank)
+    Add more mini-config rows when possible
+    Add all-might/wis and all-kings buttons to pally blessing config
+
+3.1.0.19-Beta
+    Add talent "profiles", per-char settings automatically Swap for the current talent set
+    Fix for UnitAura changes in 3.1
+    Adjust hunter viper slider min/max on value change to ensure low never goes above high
+
+3.0.9.18-Beta
+    Fix secondary module config frames disappearing after first use
+
+3.0.9.17-Beta
+    Add scrollbar to module config group
+    Add option to hide tooltip in battlegrounds
+
+3.0.9.16-Beta
+    Clarify a tooltip just a smidge
+    Make sure all the modules are shown on the config pane
+    When in a raid, condese multi-target spells down into a single line
+    Add Well Fed module, cause I suck at keeping that buff up (I have year old buff food in my bag)
+    Add Vigilance to warrior modules
+    Add mage focus magic
+
+3.0.9.15-Beta
+    Add amp/damp magic modules for mages, default them to disabled
+    Fix mage Int module for players without dalaran int
+    Merge fear ward and earth shield modules into an abstract template, add druid thorns to new system
+
+3.0.9.14-Beta
+    Make crusader aura module only watch auras cast by the player
+    Move pally seals to normal buffs
+    Add raid mode setting for raid buffing classes
+    * 10-man will only watch groups 1 and 2 for needed buffs
+    * 25-man will watch groups 1-5
+    * 40-man will watch all groups
+    Smarter mage int module (Will cast Dalaran Int and ignore non-mana classes)
+    Don't show target and focus if they're the same unit
+    Update after the anchor is reset to position the tip correctly
+    Add anchor reset button
+
+3.0.3.13-Beta
+    Make crusader module properly update when aura module's config changes
+
+3.0.3.12-Beta
+    Extend the config list checkbox hit rects
+    Make self-buff modules show spell name instead of unit name
+    Pally crusader aura module
+    Warlock soul link fixes
+
+3.0.3.11-Beta
+    Fix anchor saving on drag stop
+
+3.0.3.10-Beta
+    Vehicles are NEVER happy...
+    Remove locale-specific bits from pet happy module
+
+3.0.3.9-Beta
+    Add a NR clam
+    "Feed Pet Effect" was renamed "Feed Pet"... bastards
+    Add aspect of the dragonhawk
+
+3.0.3.8-Beta
+    Tweak tooltip strata a smidge
+    Hunter Viper module (thanks adirelle)
+
+3.0.2.7-Beta
+    Don't track Earth Shield when solo
+    Greater wisdom and greater kings got swapped?
+    Allow bags to be opened when hunter pet module config is visible
+
+3.0.2.6-Beta
+    Don't check if pally blessings are mine if target is out of range
+    Remove 2.4.3 compat
+    Remove Omen of Clarity, is now passive
+
+3.0.2.5-Beta
+    Make raid buffer fall back to the single-target spell when checking range, since raid-wide spell range checking is currently broken
+
+3.0.1.4-Beta
+    Update for wrath build 8962 config panel breakage
+    Embed update
+    Fix raid buffer not actually checking if people in the group need a buff
+    Fix hunter pet feeder nil error on first use
+    Prevent corking when stealthed
+    Add dynamic mousewheel binding (Thanks Adirelle)
+
+3.0.1.3-Beta
+    Add priest fear ward module
+    Add shaman earth shield module, tracks the last group member you cast on
+    Make tooltip limit slider refresh the tooltip when changed
+    Add about panel
+    TOC metadata
+    Embed update
+
+3.0.1.2-Beta
+    Add compatibility layer for live.  Not super efficient, but it seems to get the jorb done
+    Fix raid buffer not checking focus and target on full scan
+    Delay spell checking till PLAYER_LOGIN
+    Prefer buffing the player first, players second, pets last
+    Pally seal was missing Seal of Wisdom
+
+    New Modules
+    * Clam shucker
+    * DK Horn of Winter
+    * DK Path of Frost
+    * Hunter pet happiness
+    * Repairs
+    * Tracking (Only spells, not "helpers")
+    * Warlock demons
+    * Warlock soul link
+
+    Config Enhancements
+    * Added keybinding (thanks clad)
+    * Add option to limit the tooltip lines (thanks clad)
+    * Add group threshold config
+    * Make cast on pets option char-wide instead of per-module
+    * Add macro generator
+    * Add pretty group box for modules
+    * Add module toggles to base config page
+    * Removed config panels for simple self buffs (only had "enable" toggle)
+    * Removed config for raid buffs (all options in the base panel now)
+    * Move advanced self buffer config into base config page
+    * Strip off the borders from icons
+    * Add solo/party/bg options to pally blessing module
+
+3.0.1.1-Beta
+    Initial redesign for Wrath

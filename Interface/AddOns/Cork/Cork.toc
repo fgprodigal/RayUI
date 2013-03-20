@@ -1,0 +1,71 @@
+## Interface: 50200
+
+## Title: Cork
+## Notes: Buff reminders and more
+## Author: Tekkub Stoutwrithe
+## Version: 5.2.0.52
+## X-Website: http://www.tekkub.net/
+## X-Email: tekkub-wow@googlegroups.com
+## X-Credits: Thiana (Warlock modules), Gnancy (Soullink module)
+## X-Category: Buffs
+## X-Icon: Interface\Icons\INV_Drink_11
+
+## SavedVariables: CorkDB
+## SavedVariablesPerCharacter: CorkDBPC
+
+## OptionalDeps: tekErr
+## RequiredDeps: RayUI
+
+externals\timer.lua
+
+tekKonfig\tekKonfig.xml
+CallbackHandler-1.0.lua
+LibDataBroker-1.1\LibDataBroker-1.1.lua
+
+Locale.lua
+KeyBlacklist.lua
+
+Cork.lua
+Config.lua
+MacroGenerator.lua
+Mousewheel.lua
+
+templates\ItemOpener.lua
+templates\SelfBuffer.lua
+templates\SelfBufferAdvanced.lua
+templates\RaidBuffer.lua
+templates\LastBuffedBuffer.lua
+templates\RaidBuffingItems.lua
+templates\TempEnchant.lua
+
+modules\DeathKnight.lua
+modules\Druid.lua
+modules\Hunter.lua
+modules\Mage.lua
+modules\MageGem.lua
+modules\Monk.lua
+modules\Paladin.lua
+modules\PaladinBlessings.lua
+modules\Priest.lua
+modules\RogueWeapon.lua
+modules\Shaman.lua
+modules\Warlock.lua
+modules\WarlockPets.lua
+modules\WarlockSoulLink.lua
+modules\WarlockHealthstone.lua
+modules\Warrior.lua
+
+modules\BuffItems.lua
+modules\BattleStandard.lua
+modules\WellFed.lua
+modules\Repairs.lua
+modules\Talents.lua
+modules\Tracking.lua
+modules\Combine.lua
+modules\Glyphs.lua
+modules\OpenableItems.lua
+modules\LancePole.lua
+modules\QuestStartingItems.lua
+modules\Dig.lua
+modules\Minipet.lua
+modules\DarkmoonExp.lua

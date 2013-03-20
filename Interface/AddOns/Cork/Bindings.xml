@@ -1,0 +1,5 @@
+<Bindings>
+	<Binding name="CLICK CorkFrame:LeftButton" header="CORK">
+		-- Click the CorkFrame
+	</Binding>
+</Bindings>
