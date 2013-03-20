@@ -1447,6 +1447,8 @@ R["Watcher"] = {
                 { spellID = 126649, unitId = "player", caster = "player", filter = "BUFF" },
                 --恐懼精華
                 { spellID = 126659, unitId = "player", caster = "player", filter = "BUFF" },
+                --智囊
+                { spellID = 139133, unitId = "player", caster = "player", filter = "BUFF" },
 
                 --工程
                 --神經突觸彈簧(敏捷)
