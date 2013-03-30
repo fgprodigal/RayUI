@@ -42,6 +42,8 @@ local ItemUpgrade = setmetatable ({
 	[461] = 12, -- 3/4
 	[462] = 16, -- 4/4
 	[470] = 8, -- 2/4
+	[471] = 12, -- 3/4
+	[472] = 16, -- 4/4
 },{__index=function() return 0 end})
 
 function R.dummy()

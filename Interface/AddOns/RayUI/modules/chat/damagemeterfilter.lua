@@ -20,13 +20,15 @@ local firstLines = {
 	"^Skada:(.*)來自(.*)，(.*) - (.*):$",					-- Skada zhTW, might change in new Skada version
 	"^Skada: (.*) for (.*), (.*) - (.*):$",					-- Better Skada support player details
 	"^(.*) Done for (.*)$"	,								-- TinyDPS
-	"^Numeration: (.*) for (.*)$"  ,                      -- Numeration
-	"^Numeration: (.*) - (.*)$"  ,                      -- Numeration
+	"^Numeration: (.*) for (.*)$"  ,                        -- Numeration
+	"^Numeration: (.*) - (.*)$"  ,                          -- Numeration
 }
 local nextLines = {
 	"^(%d+). (.*)$",										-- Recount and Skada
 	"^ (%d+). (.*)$", 										-- Skada, Numeration
 	"^.*%%%)$", 											-- Skada player details
+	"^Numeration: (.*)$",                                   -- Numeration
+	"^[+-]%d+.%d",                                          -- Numeration Deathlog Details
 	"^(%d+). (.*):(.*)(%d+)(.*)(%d+)%%(.*)%((%d+)%)$",		-- TinyDPS
 }
 local events = {
