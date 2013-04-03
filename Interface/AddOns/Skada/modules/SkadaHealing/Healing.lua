@@ -89,19 +89,26 @@ local function SpellHeal(timestamp, eventtype, srcGUID, srcName, srcFlags, dstGU
 	-- Healing
 	local spellId, spellName, spellSchool, samount, soverhealing, absorbed, scritical = ...
 
-	heal.dstName = dstName
-	heal.playerid = srcGUID
-	heal.playername = srcName
-	heal.spellid = spellId
-	heal.spellname = spellName
-	heal.amount = samount
-	heal.overhealing = soverhealing
-	heal.critical = scritical
-	heal.absorbed = absorbed
+	-- We want to avoid "heals" that are really drains from mobs
+	-- So check if a) the source is player-controlled
+	-- and b) the source and dest have the same reaction
+	-- (since we can't test directly if they're friendly to each other).
+	
+	if bit.band(srcFlags, COMBATLOG_OBJECT_CONTROL_PLAYER) ~= 0 and bit.band(srcFlags, dstFlags, COMBATLOG_OBJECT_REACTION_MASK) ~= 0 then
+		heal.dstName = dstName
+		heal.playerid = srcGUID
+		heal.playername = srcName
+		heal.spellid = spellId
+		heal.spellname = spellName
+		heal.amount = samount
+		heal.overhealing = soverhealing
+		heal.critical = scritical
+		heal.absorbed = absorbed
 
-	Skada:FixPets(heal)
-	log_heal(Skada.current, heal)
-	log_heal(Skada.total, heal)
+		Skada:FixPets(heal)
+		log_heal(Skada.current, heal)
+		log_heal(Skada.total, heal)
+	end
 end
 
 
@@ -202,6 +209,15 @@ local function getHPSByValue(set, player, healing)
 	local totaltime = Skada:PlayerActiveTime(set, player)
 
 	return healing / math.max(1,totaltime)
+end
+
+local function getRaidHPS(set)
+	if set.time > 0 then
+		return set.healing / math.max(1, set.time)
+	else
+		local endtime = set.endtime or time()
+		return set.healing / math.max(1, endtime - set.starttime)
+	end
 end
 
 function healingtaken:Update(win, set)
@@ -422,7 +438,10 @@ function mod:AddToTooltip(set, tooltip)
 end
 
 function mod:GetSetSummary(set)
-	return Skada:FormatNumber(set.healing)
+	return Skada:FormatValueText(
+		Skada:FormatNumber(set.healing), self.metadata.columns.Healing,
+		("%02.1f"):format(getRaidHPS(set)), self.metadata.columns.HPS
+	)
 end
 
 -- Called by Skada when a new player is added to a set.

@@ -1291,6 +1291,13 @@ function Skada:get_player(set, playerid, playername)
 		table.insert(set.players, player)
 	end
 
+        if player.name == UNKNOWN and playername ~= UNKNOWN then -- fixup players created before we had their info
+                local player_name, realm = string.split("-", playername, 2)
+                player.name = player_name or playername
+                player.class = select(2, UnitClass(playername))
+        end
+
+
 	-- The total set clears out first and last timestamps.
 	if not player.first then
 		player.first = time()
@@ -1440,7 +1447,7 @@ local function COMBAT_LOG_EVENT_UNFILTERED(event, timestamp, eventtype, hideCast
 	if Skada.current and src_is_interesting and not Skada.current.gotboss then
 		-- Store mob name for set name. For now, just save first unfriendly name available, or first boss available.
 		if bit.band(dstFlags, COMBATLOG_OBJECT_REACTION_HOSTILE) ~=0 then
-			if not Skada.current.gotboss and boss.BossIDs[tonumber(dstGUID:sub(7, 10), 16)] then
+			if not Skada.current.gotboss and boss.BossIDs[tonumber(dstGUID:sub(-13, -9), 16)] then
 				Skada.current.mobname = dstName
 				Skada.current.gotboss = true
 			elseif not Skada.current.mobname then
@@ -1812,7 +1819,7 @@ end
 -- Expects to find "playerid", "playername", and optionally "spellname" in the object.
 -- Playerid and playername are exchanged for the pet owner's, and spellname is modified to include pet name.
 function Skada:FixPets(action)
-	if action and action.playername and not UnitIsPlayer(action.playername) then
+	if action and action.playername then
 		local pet = pets[action.playerid]
 		if pet then
 
@@ -1825,7 +1832,7 @@ function Skada:FixPets(action)
 			else
 				action.playername = pet.name..": "..action.playername
 				-- create a unique ID for each player for each type of pet
-				local petMobID=action.playerid:sub(7,10); -- Get Pet creature ID
+				local petMobID=action.playerid:sub(-13, -9); -- Get Pet creature ID
 				action.playerid = pet.id .. petMobID; -- just append it to the pets owner id
 			end
 

@@ -244,9 +244,9 @@ addon.defaults = {
         ["alpha"] = 100,
       
       -- positioon
-        ["X"] = -415,
+        ["X"] = -465,
         ["Y"] = 5,
-        ["Width"] = 128,
+        ["Width"] = 228,
         ["Height"] = 260,
         
       -- fonts
