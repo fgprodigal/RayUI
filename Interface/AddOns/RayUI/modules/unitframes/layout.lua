@@ -50,7 +50,7 @@ function UF:DPSLayout(frame, unit)
 	frame:SetScript("OnLeave", UnitFrame_OnLeave)
 
 	-- Setup Menu
-	frame.menu = self.SpawnMenu
+	-- frame.menu = self.SpawnMenu
 
 	-- Frame Level
 	frame:SetFrameLevel(5)

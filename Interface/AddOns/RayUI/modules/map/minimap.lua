@@ -174,7 +174,7 @@ function MM:CreateMenu()
 		{text = GUILD, notCheckable = true,
 		func = function() ToggleGuildFrame(1) end},
 		{text = PLAYER_V_PLAYER, notCheckable = true,
-		func = function() ToggleFrame(PVPFrame) end},
+		func = function() if not PVPUIFrame then PVP_LoadUI() end ToggleFrame(PVPUIFrame) end},
 		{text = ENCOUNTER_JOURNAL, notCheckable = true,
 		func = function() if not IsAddOnLoaded("Blizzard_EncounterJournal") then LoadAddOn("Blizzard_EncounterJournal") end ToggleFrame(EncounterJournal) end},
 		{text = MOUNTS_AND_PETS, notCheckable = true,
