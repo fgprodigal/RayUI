@@ -51,8 +51,8 @@ function R:SetLayout(layout)
 	if layout == "healer" then
 		R:ResetMovers()
 		R.db.movers = {}
-		R.db.movers.RayUF_playerMover = "BOTTOMRIGHTRayUF_ParentBOTTOM-190390"
-		R.db.movers.RayUF_targetMover = "BOTTOMLEFTRayUF_ParentBOTTOM190390"
+		R.db.movers.RayUF_playerMover = "BOTTOMRIGHTUIParentBOTTOM-190390"
+		R.db.movers.RayUF_targetMover = "BOTTOMLEFTUIParentBOTTOM190390"
 		R.db.movers.RayUF_petMover = "TOPLEFTRayUF_playerMoverBOTTOMLEFT0-60"
 		R.db.movers.RayUFRaid15_1Mover = "BOTTOMUIParentBOTTOM0180"
 		R.db.movers.RayUFRaid15_2Mover = "BOTTOMRayUFRaid15_1MoverTOP0"..R.db.Raid.spacing
