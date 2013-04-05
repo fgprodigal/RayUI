@@ -846,26 +846,24 @@ function RA:SpawnRaid()
 	for i=1, 3 do
 		local group = self:SpawnHeader("RayUFRaid15_"..i, i, 15)
 		if i == 1 then
-			group:Point("TOPLEFT", RayUF_Parent, "BOTTOMRIGHT", - RA.db.width*1.3*3 -  RA.db.spacing*2 - 50, 461)
+			group:Point("TOPLEFT", UIParent, "BOTTOMRIGHT", - RA.db.width*1.3*3 -  RA.db.spacing*2 - 50, 461)
 		else
 			group:Point(pos, raid15[i-1], posRel, colX or 0, colY or 0)
 		end
 		raid15[i] = group
         R:CreateMover(group, group:GetName().."Mover", "Raid1-15 Group"..i, nil, nil, "ALL,RAID15", true)
-		group:SetParent(RayUF_Parent)
         RA.Raid15SmartVisibility(group)
 	end
 	local raid25 = {}
 	for i=1, 5 do
 		local group = self:SpawnHeader("RayUFRaid25_"..i, i, 25)
 		if i == 1 then
-			group:Point("TOPLEFT", RayUF_Parent, "BOTTOMRIGHT", - RA.db.width*5 -  RA.db.spacing*4 - 50, 422)
+			group:Point("TOPLEFT", UIParent, "BOTTOMRIGHT", - RA.db.width*5 -  RA.db.spacing*4 - 50, 422)
 		else
 			group:Point(pos, raid25[i-1], posRel, colX or 0, colY or 0)
 		end
 		raid25[i] = group
         R:CreateMover(group, group:GetName().."Mover", "Raid1-25 Group"..i, nil, nil, "ALL,RAID25,RAID40", true)
-		group:SetParent(RayUF_Parent)
         RA.Raid25SmartVisibility(group)
 	end
 	if RA.db.raid40 then
@@ -879,7 +877,6 @@ function RA:SpawnRaid()
 			end
 			raid40[i] = group
             R:CreateMover(group, group:GetName().."Mover", "Raid1-40 Group"..i, nil, nil, "ALL,RAID40", true)
-            group:SetParent(RayUF_Parent)
             RA.Raid40SmartVisibility(group)
 		end
 	end

@@ -1026,7 +1026,7 @@ if not RunOnNextFrame then
 end
 
 hooksecurefunc("SecureActionButton_OnClick", function(self, button, down)
-    if __visible==false and DropDownList1:IsVisible() then
+    if --[[ __visible==false and  ]]DropDownList1:IsVisible() then
 
         --[[------------------------------------------------------------
         以下复制自SecureTemplates.lua, 获取unit和actionType
@@ -1063,7 +1063,7 @@ hooksecurefunc("SecureActionButton_OnClick", function(self, button, down)
         local actionType = SecureButton_GetModifiedAttribute(self, "type", button);
 
         -- Perform the requested action!
-        if ( actionType == "menu") then
+        if ( actionType == "menu" or actionType == "togglemenu" ) then
 
             --================= 显示我们的下拉菜单 ==============
             local name, server = UnitName(unit);

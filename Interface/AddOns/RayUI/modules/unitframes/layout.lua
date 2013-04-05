@@ -815,55 +815,45 @@ function UF:LoadUnitFrames()
 	end)
 	oUF:SetActiveStyle("RayUF")
 
-	local RayUF_Parent = CreateFrame("Frame", "RayUF_Parent", UIParent, "SecureHandlerStateTemplate");
-	RayUF_Parent:SetAllPoints(UIParent)
-	RegisterStateDriver(RayUF_Parent, "visibility", "[petbattle] hide;show")
-
 	-- Player
 	local player = oUF:Spawn("player", "RayUF_player")
-	player:Point("BOTTOMRIGHT", RayUF_Parent, "BOTTOM", -80, 390)
+	player:Point("BOTTOMRIGHT", UIParent, "BOTTOM", -80, 390)
 	player:Size(PLAYER_WIDTH, PLAYER_HEIGHT)
-	player:SetParent(RayUF_Parent)
     R:CreateMover(player, player:GetName().."Mover", "Player Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	-- Target
 	local target = oUF:Spawn("target", "RayUF_target")
-	target:Point("BOTTOMLEFT", RayUF_Parent, "BOTTOM", 80, 390)
+	target:Point("BOTTOMLEFT", UIParent, "BOTTOM", 80, 390)
 	target:Size(TARGET_WIDTH, TARGET_HEIGHT)
-	target:SetParent(RayUF_Parent)
     R:CreateMover(target, target:GetName().."Mover", "Target Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	-- Focus
 	local focus = oUF:Spawn("focus", "RayUF_focus")
 	focus:Point("BOTTOMRIGHT", RayUF_player, "TOPLEFT", -20, 20)
 	focus:Size(PARTY_WIDTH, PARTY_HEIGHT)
-	focus:SetParent(RayUF_Parent)
     R:CreateMover(focus, focus:GetName().."Mover", "Focus Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	-- Target's Target
 	local tot = oUF:Spawn("targettarget", "RayUF_targettarget")
 	tot:Point("BOTTOMLEFT", RayUF_target, "TOPRIGHT", 5, 30)
 	tot:Size(SMALL_WIDTH, SMALL_HEIGHT)
-	tot:SetParent(RayUF_Parent)
     R:CreateMover(tot, tot:GetName().."Mover", "ToT Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	-- Player's Pet
 	local pet = oUF:Spawn("pet", "RayUF_pet")
 	pet:Point("BOTTOM", RayUIPetBar, "TOP", 0, 3)
 	pet:Size(SMALL_WIDTH, PET_HEIGHT)
-	pet:SetParent(RayUF_Parent)
     R:CreateMover(pet, pet:GetName().."Mover", "Pet Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	-- Focus's target
 	local focustarget = oUF:Spawn("focustarget", "RayUF_focustarget")
 	focustarget:Point("BOTTOMRIGHT", RayUF_focus, "BOTTOMLEFT", -10, 1)
 	focustarget:Size(SMALL_WIDTH, SMALL_HEIGHT)
-	focustarget:SetParent(RayUF_Parent)
     R:CreateMover(focustarget, focustarget:GetName().."Mover", "Focus Target Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	if self.db.showArenaFrames and not IsAddOnLoaded("Gladius") then
         local ArenaHeader = CreateFrame("Frame", nil, UIParent)
-        ArenaHeader:Point("TOPRIGHT", RayUF_Parent, "RIGHT", -110, 200)
+        ArenaHeader:Point("TOPRIGHT", UIParent, "RIGHT", -110, 200)
         ArenaHeader:Width(BOSS_WIDTH)
         ArenaHeader:Height(R:Scale(BOSS_HEIGHT)*5 + R:Scale(36)*4)
 		local arena = {}
@@ -875,14 +865,13 @@ function UF:LoadUnitFrames()
 				arena[i]:Point("TOP", arena[i-1], "BOTTOM", 0, -36)
 			end
 			arena[i]:Size(BOSS_WIDTH, BOSS_HEIGHT)
-			arena[i]:SetParent(RayUF_Parent)
 		end
         R:CreateMover(ArenaHeader, "ArenaHeaderMover", "Arena Frames", nil, nil, "ALL,ARENA")
 	end
 
 	if self.db.showBossFrames then
         local BossHeader = CreateFrame("Frame", nil, UIParent)
-        BossHeader:Point("TOPRIGHT", RayUF_Parent, "RIGHT", -80, 200)
+        BossHeader:Point("TOPRIGHT", UIParent, "RIGHT", -80, 200)
         BossHeader:Width(BOSS_WIDTH)
         BossHeader:Height(R:Scale(BOSS_HEIGHT)*MAX_BOSS_FRAMES + R:Scale(36)*(MAX_BOSS_FRAMES-1))
 		local boss = {}
@@ -894,7 +883,6 @@ function UF:LoadUnitFrames()
 				boss[i]:Point("TOP", boss[i-1], "BOTTOM", 0, -36)
 			end
 			boss[i]:Size(BOSS_WIDTH, BOSS_HEIGHT)
-			boss[i]:SetParent(RayUF_Parent)
 		end
         R:CreateMover(BossHeader, "BossHeaderMover", "Boss Frames", nil, nil, "ALL,RAID15,RAID25,RAID40")
 	end

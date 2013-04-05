@@ -92,11 +92,9 @@ for k, v in pairs{
 	EnableElement = function(self, name, unit)
 		argcheck(name, 2, 'string')
 		argcheck(unit, 3, 'string', 'nil')
-		
+
 		local element = elements[name]
-		
-		
-		if(not element or self:IsElementEnabled(name) or not activeElements[self]) then return end
+		if(not element or self:IsElementEnabled(name)) then return end
 
 		if(element.enable(self, unit or self.unit)) then
 			activeElements[self][name] = true
@@ -150,7 +148,7 @@ for k, v in pairs{
 
 	UpdateAllElements = function(self, event)
 		local unit = self.unit
-		if(not unit or not UnitExists(unit)) then return end
+		if(not UnitExists(unit)) then return end
 
 		if(self.PreUpdate) then
 			self:PreUpdate(event)
@@ -210,7 +208,7 @@ local initObject = function(unit, style, styleFunc, header, ...)
 
 		-- Handle the case where someone has modified the unitsuffix attribute in
 		-- oUF-initialConfigFunction.
-		if(suffix and objectUnit and not objectUnit:match(suffix)) then
+		if(suffix and not objectUnit:match(suffix)) then
 			objectUnit = objectUnit .. suffix
 		end
 
@@ -475,7 +473,7 @@ do
 				end
 
 				frame:SetAttribute('*type1', 'target')
-				frame:SetAttribute('*type2', 'togglemenu')
+				frame:SetAttribute('*type2', 'menu')
 				frame:SetAttribute('toggleForVehicle', true)
 				frame:SetAttribute('oUF-guessUnit', unit)
 			end
@@ -502,7 +500,7 @@ do
 
 		local isPetHeader = template:match'PetHeader'
 		local name = overrideName or generateName(nil, ...)
-		local header = CreateFrame('Frame', name, UIParent, template)
+		local header = CreateFrame('Frame', name, oUF_PetBattleFrameHider, template)
 
 		header:SetAttribute("template", "oUF_ClickCastUnitTemplate")
 		for i=1, select("#", ...), 2 do
@@ -547,7 +545,7 @@ function oUF:Spawn(unit, overrideName)
 	unit = unit:lower()
 
 	local name = overrideName or generateName(unit)
-	local object = CreateFrame("Button", name, UIParent, "SecureUnitButtonTemplate")
+	local object = CreateFrame("Button", name, oUF_PetBattleFrameHider, "SecureUnitButtonTemplate")
 	Private.UpdateUnits(object, unit)
 
 	self:DisableBlizzard(unit)

@@ -505,7 +505,7 @@ function TT:OnTooltipSetUnit(tooltip)
             end
         end
         if UnitFactionGroup(unit) and UnitFactionGroup(unit) ~= "Neutral" then
-            GameTooltipTextLeft1:SetText("|TInterface\\Addons\\RayUI\\media\\UI-PVP-"..select(1, UnitFactionGroup(unit))..".blp:16:16:0:0:64:64:5:40:0:35|t"..GameTooltipTextLeft1:GetText())
+            GameTooltipTextLeft1:SetText("|TInterface\\Addons\\RayUI\\media\\UI-PVP-"..select(1, UnitFactionGroup(unit))..".blp:16:16:0:0:64:64:5:40:0:35|t "..GameTooltipTextLeft1:GetText())
         end
 		self:iLVSetUnit()
 		self:TalentSetUnit()

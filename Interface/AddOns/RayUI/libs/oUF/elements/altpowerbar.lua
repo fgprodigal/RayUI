@@ -1,25 +1,116 @@
+--[[ Element: Alternative Power Bar
+
+ Handles visibility and updating of the alternative power bar.
+
+ This bar is used to display encounter/quest related power information, such as
+ the number of hour glass uses left on the end boss in End Time.
+
+ Widget
+
+ AltPowerBar - A StatusBar to represent alternative power.
+
+ Options
+
+ .colorTexture  - Use the vertex color values returned by
+                  UnitAlternatePowerTextureInfo to color the bar.
+
+ Notes
+
+ OnEnter and OnLeave handlers to display a tooltip will be set on the widget if
+ it is mouse enabled.
+
+ Examples
+
+   -- Position and size
+   local AltPowerBar = CreateFrame('StatusBar', nil, self)
+   AltPowerBar:SetHeight(20)
+   AltPowerBar:SetPoint('BOTTOM')
+   AltPowerBar:SetPoint('LEFT')
+   AltPowerBar:SetPoint('RIGHT')
+   
+   -- Register with oUF
+   self.AltPowerBar = AltPowerBar
+
+ Callbacks
+]]
+
 local parent, ns = ...
 local oUF = ns.oUF
 
 local ALTERNATE_POWER_INDEX = ALTERNATE_POWER_INDEX
 
+--[[ :UpdateTooltip()
+
+ The function called when the widget is hovered. Used to populate the tooltip.
+
+ Arguments
+
+ self - The AltPowerBar element.
+]]
+local UpdateTooltip = function(self)
+	GameTooltip:SetText(self.powerName, 1, 1, 1)
+	GameTooltip:AddLine(self.powerTooltip, nil, nil, nil, 1)
+	GameTooltip:Show()
+end
+
+local OnEnter = function(self)
+	if(not self:IsVisible()) then return end
+
+	GameTooltip_SetDefaultAnchor(GameTooltip, self)
+	self:UpdateTooltip()
+end
+
+local OnLeave = function()
+	GameTooltip:Hide()
+end
+
 local UpdatePower = function(self, event, unit, powerType)
-	if(self.unit ~= unit or powerType ~= 'ALTERNATE') or not unit then return end
+	if(self.unit ~= unit or powerType ~= 'ALTERNATE') then return end
 
 	local altpowerbar = self.AltPowerBar
 
+	--[[ :PreUpdate()
+
+	 Called before the element has been updated.
+
+	 Arguments
+
+	 self - The AltPowerBar element.
+	 ]]
 	if(altpowerbar.PreUpdate) then
 		altpowerbar:PreUpdate()
 	end
 
-	local barType, min = UnitAlternatePowerInfo(unit)
+	local _, r, g, b
+	if(altpowerbar.colorTexture) then
+		_, r, g, b = UnitAlternatePowerTextureInfo(unit, 2)
+	end
+
 	local cur = UnitPower(unit, ALTERNATE_POWER_INDEX)
 	local max = UnitPowerMax(unit, ALTERNATE_POWER_INDEX)
 
+	local barType, min, _, _, _, _, _, _, _, powerName, powerTooltip = UnitAlternatePowerInfo(unit)
 	altpowerbar.barType = barType
+	altpowerbar.powerName = powerName
+	altpowerbar.powerTooltip = powerTooltip
 	altpowerbar:SetMinMaxValues(min, max)
 	altpowerbar:SetValue(cur)
 
+	if(b) then
+		altpowerbar:SetStatusBarColor(r, g, b)
+	end
+
+	--[[ :PostUpdate(min, cur, max)
+
+	 Called after the element has been updated.
+
+	 Arguments
+
+	 self - The AltPowerBar element.
+	 min  - The minimum possible power value for the active type.
+	 cur  - The current power value.
+	 max  - The maximum possible power value for the active type.
+	]]
 	if(altpowerbar.PostUpdate) then
 		return altpowerbar:PostUpdate(min, cur, max)
 	end
@@ -30,7 +121,7 @@ local ForceUpdate = function(element)
 end
 
 local Toggler = function(self, event, unit)
-	if(unit ~= self.unit) or not unit then return end
+	if(unit ~= self.unit) then return end
 	local altpowerbar = self.AltPowerBar
 
 	local barType, minPower, _, _, _, hideFromOthers = UnitAlternatePowerInfo(unit)
@@ -58,6 +149,17 @@ local Enable = function(self, unit)
 		self:RegisterEvent('UNIT_POWER_BAR_HIDE', Toggler)
 
 		altpowerbar:Hide()
+
+		if(altpowerbar:IsMouseEnabled()) then
+			if(not altpowerbar:HasScript('OnEnter')) then
+				altpowerbar:SetScript('OnEnter', OnEnter)
+			end
+			altpowerbar:SetScript('OnLeave', OnLeave)
+
+			if(not altpowerbar.UpdateTooltip) then
+				altpowerbar.UpdateTooltip = UpdateTooltip
+			end
+		end
 
 		if(unit == 'player') then
 			PlayerPowerBarAlt:UnregisterEvent'UNIT_POWER_BAR_SHOW'
