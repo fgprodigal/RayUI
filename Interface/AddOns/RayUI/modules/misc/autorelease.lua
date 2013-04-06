@@ -7,8 +7,14 @@ local function LoadFunc()
 	autoreleasepvp:SetScript("OnEvent", function(self, event)
         if not M.db.autorelease then return end
 		local soulstone = GetSpellInfo(20707)
-		if ((R.myclass ~= "SHAMAN") and not (soulstone and UnitBuff("player", soulstone))) and BattlefieldMinimap and BattlefieldMinimap.status == "active" then
-			RepopMe()
+		if ((R.myclass ~= "SHAMAN") and not (soulstone and UnitBuff("player", soulstone))) then
+			for i=1,5 do
+				local status = GetBattlefieldStatus(i)
+				if status == "active" then
+					RepopMe()
+					break
+				end
+			end
 		end
 	end)
 end
