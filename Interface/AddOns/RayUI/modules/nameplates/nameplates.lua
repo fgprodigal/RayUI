@@ -476,7 +476,7 @@ local function Colorize(frame, r, g, b)
 
     frame.isTapped = nil
 
-	if (r + b + b) > 2 then -- tapped
+	if r>=.5 and r<=.6 and g>=.5 and g<=.6 and b>=.5 and b<=.6 then -- tapped
 		r,g,b = 0.6, 0.6, 0.6
 		frame.isFriendly = false
 		frame.isTapped = true

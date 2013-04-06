@@ -244,9 +244,9 @@ addon.defaults = {
         ["alpha"] = 100,
       
       -- positioon
-        ["X"] = -465,
+        ["X"] = -415,
         ["Y"] = 5,
-        ["Width"] = 228,
+        ["Width"] = 128,
         ["Height"] = 260,
         
       -- fonts
@@ -270,10 +270,10 @@ addon.defaults = {
         ["visibilityTime"] = 5,
         
       -- special tweaks
-        ["showFriendlyHealers"] = true,
+        ["showFriendlyHealers"] = false,
         ["enableClassNames"] = true,
-        ["enableRealmNames"] = true,
-        ["enableOverHeal"] = true,
+        ["enableRealmNames"] = false,
+        ["enableOverHeal"] = false,
       },
       
       class = {
