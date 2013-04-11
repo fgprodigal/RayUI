@@ -141,9 +141,9 @@ local function LoadFriend()
 				end
 
 				-- Faction
-				if faction == 0 then
+				if faction == "Horde" then
 					faction = FACTION_HORDE
-				elseif faction == 1 then
+				elseif faction == "Alliance" then
 					faction = FACTION_ALLIANCE
 				else
                     faction = ""

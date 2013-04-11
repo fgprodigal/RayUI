@@ -1728,6 +1728,8 @@ R["Watcher"] = {
 				{ spellID = 133755, unitId = "player", caster = "all", filter = "BUFF", fuzzy = true },
 				--主要營養
 				{ spellID = 140741, unitId = "player", caster = "all", filter = "BUFF", fuzzy = true },
+				--幽暗之魂
+				{ spellID = 137650, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
 
                 --魔古山寶庫
 
