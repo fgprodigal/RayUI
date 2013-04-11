@@ -8,4 +8,5 @@
 	<Script file='TooltipItemID\TooltipItemID.lua'/>
 	<Script file='TooltipItemIcon\TooltipItemIcon.lua'/>
 	<Script file='TradeTabs\TradeTabs.lua'/>
+	<Include file="yClassColors\yClassColors.xml"/>
 </Ui>
