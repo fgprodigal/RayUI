@@ -108,6 +108,8 @@ G.Raid.RaidDebuffs = {
 			[SpellName(136767)] = Defaults(7), --Triple Puncture
 
 			--Council of Elders
+			[SpellName(136922)] = Defaults(9), --霜寒刺骨
+			[SpellName(137650)] = Defaults(8), --幽暗之魂
 			[SpellName(137641)] = Defaults(7), --Soul Fragment
 			[SpellName(137359)] = Defaults(7), --Shadowed Loa Spirit Fixate
 			[SpellName(137972)] = Defaults(7), --Twisted Fate
