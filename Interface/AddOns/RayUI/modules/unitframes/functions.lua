@@ -194,6 +194,9 @@ function UF:ConstructCastBar(frame)
 	end
 	castbar.PostCastStart = UF.PostCastStart
 	castbar.PostChannelStart = UF.PostCastStart
+	castbar.PostCastStop = UF.PostCastStop
+	castbar.PostChannelStop = UF.PostCastStop
+	castbar.PostChannelUpdate = UF.PostChannelUpdate
 	castbar.CustomTimeText = UF.CustomCastTimeText
 	castbar.CustomDelayText = UF.CustomCastDelayText
 	castbar.PostCastInterruptible = UF.PostCastInterruptible
@@ -304,6 +307,46 @@ function UF:ConstructThreatBar()
 	RayUIThreatBar:SetAlpha(0)
 end
 
+local ticks = {}
+function UF:HideTicks()
+	for i=1, #ticks do
+		ticks[i]:Hide()
+	end		
+end
+
+function UF:SetCastTicks(frame, numTicks, extraTickRatio)
+	extraTickRatio = extraTickRatio or 0
+	UF:HideTicks()
+	if numTicks and numTicks <= 0 then return end;
+	local w = frame:GetWidth()
+	local d = w / (numTicks + extraTickRatio)
+	--local _, _, _, ms = GetNetStats()
+	for i = 1, numTicks - 1 + extraTickRatio do
+		if not ticks[i] then
+            ticks[i] = frame:CreateTexture(nil, "OVERLAY")
+            ticks[i]:SetDrawLayer("OVERLAY", 7)
+            ticks[i]:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]
+            ticks[i]:SetBlendMode("ADD")
+            ticks[i]:SetAlpha(.8)
+			ticks[i]:Width(10)
+			ticks[i]:SetHeight(frame:GetHeight() + 26)
+		end
+		
+		--[[if(ms ~= 0) then
+			local perc = (w / frame.max) * (ms / 1e5)
+			if(perc > 1) then perc = 1 end
+
+			ticks[i]:SetWidth((w * perc) / (numTicks + extraTickRatio))
+		else
+			ticks[i]:Width(1)
+		end]]
+		
+		ticks[i]:ClearAllPoints()
+		ticks[i]:SetPoint("CENTER", frame, "LEFT", d * i, 0)
+		ticks[i]:Show()
+	end
+end
+
 function UF:PostCastStart(unit, name, rank, castid)
 	if unit == "vehicle" then unit = "player" end
 	local r, g, b
@@ -322,6 +365,60 @@ function UF:PostCastStart(unit, name, rank, castid)
 	else
 		self:SetStatusBarColor(r * 1, g * 1, b * 1)
 	end
+
+	self.unit = unit
+
+	if unit == "player" then
+		local unitframe = R.global.UnitFrames
+		local baseTicks = unitframe.ChannelTicks[name]
+		
+        -- Detect channeling spell and if it's the same as the previously channeled one
+        if baseTicks and name == self.prevSpellCast then
+            self.chainChannel = true
+        elseif baseTicks then
+            self.chainChannel = nil
+            self.prevSpellCast = name
+        end
+		
+		if baseTicks and unitframe.ChannelTicksSize[name] and unitframe.HastedChannelTicks[name] then
+			local tickIncRate = 1 / baseTicks
+			local curHaste = UnitSpellHaste("player") * 0.01
+			local firstTickInc = tickIncRate / 2
+			local bonusTicks = 0
+			if curHaste >= firstTickInc then
+				bonusTicks = bonusTicks + 1
+			end
+			
+			local x = tonumber(R:Round(firstTickInc + tickIncRate, 2))
+			while curHaste >= x do
+				x = tonumber(R:Round(firstTickInc + (tickIncRate * bonusTicks), 2))
+				if curHaste >= x then
+					bonusTicks = bonusTicks + 1
+				end
+			end
+
+            local baseTickSize = unitframe.ChannelTicksSize[name]
+            local hastedTickSize = baseTickSize / (1 + curHaste)
+            local extraTick = self.max - hastedTickSize * (baseTicks + bonusTicks)
+            local extraTickRatio = extraTick / hastedTickSize
+
+			UF:SetCastTicks(self, baseTicks + bonusTicks, extraTickRatio)
+		elseif baseTicks and unitframe.ChannelTicksSize[name] then
+			local curHaste = UnitSpellHaste("player") * 0.01
+            local baseTickSize = unitframe.ChannelTicksSize[name]
+            local hastedTickSize = baseTickSize / (1 +  curHaste)
+            local extraTick = self.max - hastedTickSize * (baseTicks)
+            local extraTickRatio = extraTick / hastedTickSize
+
+			UF:SetCastTicks(self, baseTicks, extraTickRatio)
+		elseif baseTicks then
+			UF:SetCastTicks(self, baseTicks)
+		else
+			UF:HideTicks()
+		end
+	elseif unit == "player" then
+		UF:HideTicks()			
+	end	
 end
 
 function UF:CustomCastTimeText(duration)
@@ -330,6 +427,66 @@ end
 
 function UF:CustomCastDelayText(duration)
 	self.Time:SetText(("%.1f |cffff0000%s %.1f|r"):format(self.channeling and duration or self.max - duration, self.channeling and "- " or "+", self.delay))
+end
+
+function UF:PostCastStop(unit, name, castid)
+	self.chainChannel = nil
+	self.prevSpellCast = nil
+end
+
+function UF:PostChannelUpdate(unit, name)
+    if not (unit == "player" or unit == "vehicle") then return end
+	
+    local unitframe = R.global.UnitFrames
+    local baseTicks = unitframe.ChannelTicks[name]
+
+    if baseTicks and unitframe.ChannelTicksSize[name] and unitframe.HastedChannelTicks[name] then
+        local tickIncRate = 1 / baseTicks
+        local curHaste = UnitSpellHaste("player") * 0.01
+        local firstTickInc = tickIncRate / 2
+        local bonusTicks = 0
+        if curHaste >= firstTickInc then
+            bonusTicks = bonusTicks + 1
+        end
+
+        local x = tonumber(R:Round(firstTickInc + tickIncRate, 2))
+        while curHaste >= x do
+            x = tonumber(R:Round(firstTickInc + (tickIncRate * bonusTicks), 2))
+            if curHaste >= x then
+                bonusTicks = bonusTicks + 1
+            end
+        end
+
+        local baseTickSize = unitframe.ChannelTicksSize[name]
+        local hastedTickSize = baseTickSize / (1 + curHaste)
+        local extraTick = self.max - hastedTickSize * (baseTicks + bonusTicks)
+        if self.chainChannel then
+            self.extraTickRatio = extraTick / hastedTickSize
+            self.chainChannel = nil
+        end
+
+        UF:SetCastTicks(self, baseTicks + bonusTicks, self.extraTickRatio)
+    elseif baseTicks and unitframe.ChannelTicksSize[name] then
+        local curHaste = UnitSpellHaste("player") * 0.01
+        local baseTickSize = unitframe.ChannelTicksSize[name]
+        local hastedTickSize = baseTickSize / (1 + curHaste)
+        local extraTick = self.max - hastedTickSize * (baseTicks)
+        if self.chainChannel then
+            self.extraTickRatio = extraTick / hastedTickSize
+            self.chainChannel = nil
+        end
+
+        UF:SetCastTicks(self, baseTicks, self.extraTickRatio)
+    elseif baseTicks then
+        if self.chainChannel then
+            self.extraTickRatio = 1
+            self.chainChannel = nil
+        end
+
+        UF:SetCastTicks(self, baseTicks, self.extraTickRatio)
+    else
+        UF:HideTicks()
+    end
 end
 
 function UF:PostCastInterruptible(unit)
