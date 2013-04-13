@@ -688,6 +688,7 @@ function UF:DPSLayout(frame, unit)
 		castbar.Text:Point("LEFT", frame.Health, "LEFT", 2, 0)
 		castbar.Iconbg:ClearAllPoints()
 		castbar.Iconbg:Point("RIGHT", frame, "LEFT", -2, 1)
+        castbar.border:Hide()
 		castbar.shadow:Hide()
 		castbar.bg:Hide()
 		frame.Castbar = castbar
