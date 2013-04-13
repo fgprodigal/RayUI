@@ -341,13 +341,13 @@ function UF:SetCastTicks(frame, numTicks, extraTickRatio)
             width = 2
         end
 
-        if (width  > d * i) then
-            width = d * i
+        if (d * (i - 1) + width > w) then
+            width = w - d * (i - 1)
         end
 
         ticks[i]:SetWidth(width)
         ticks[i]:ClearAllPoints()
-        ticks[i]:SetPoint("RIGHT", frame, "LEFT", d * i, 0)
+        ticks[i]:SetPoint("LEFT", frame, "LEFT", d * (i - 1), 0)
         ticks[i]:Show()
     end
     frame.SafeZone:Hide()
