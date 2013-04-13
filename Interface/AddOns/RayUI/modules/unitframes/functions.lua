@@ -322,7 +322,7 @@ function UF:SetCastTicks(frame, numTicks, extraTickRatio)
     local w = frame:GetWidth()
     local d = w / (numTicks + extraTickRatio)
     local _, _, _, ms = GetNetStats()
-    for i = 1, numTicks - 1 + extraTickRatio do
+    for i = 1, numTicks + extraTickRatio do
         if not ticks[i] then
             ticks[i] = frame:CreateTexture(nil, "OVERLAY", 5)
             ticks[i]:SetTexture(R["media"].normal)
