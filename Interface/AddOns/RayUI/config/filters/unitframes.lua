@@ -46,42 +46,33 @@ G.UnitFrames.aurafilters["Whitelist"] = {
 }
 
 G.UnitFrames.ChannelTicks = {
-    --Warlock
-    [SpellName(1120)] = 6, --"Drain Soul"
-    [SpellName(689)] = 6, -- "Drain Life"
-    [SpellName(108371)] = 6, -- "Harvest Life"
-    [SpellName(5740)] = 4, -- "Rain of Fire"
-    [SpellName(755)] = 6, -- Health Funnel
-    [SpellName(103103)] = 4, --Malefic Grasp
-    --Druid
-    [SpellName(44203)] = 4, -- "Tranquility"
-    [SpellName(16914)] = 10, -- "Hurricane"
-    --Priest
-    [SpellName(15407)] = 3, -- "Mind Flay"
-    [SpellName(129197)] = 3, -- "Mind Flay (Insanity)"
-    [SpellName(48045)] = 5, -- "Mind Sear"
-    [SpellName(47540)] = 2, -- "Penance"
-    [SpellName(64901)] = 4, -- Hymn of Hope
-    [SpellName(64843)] = 4, -- Divine Hymn
-    --Mage
-    [SpellName(5143)] = 5, -- "Arcane Missiles"
-    [SpellName(10)] = 8, -- "Blizzard"
-    [SpellName(12051)] = 4, -- "Evocation"
+	-- priest
+	[SpellName(15407)] = 3, -- mind flay
+	[SpellName(129197)] = 3, -- mind flay (insanity)
+	[SpellName(32000)] = 5, -- mind sear
+	[SpellName(47540)] = 3, -- penance, first tick instant
+	[SpellName(64843)] = 4, -- divine hymn
+	[SpellName(64901)] = 4, -- hymn of hope
 
-    --Monk
-    [SpellName(115175)] = 9, -- "Smoothing Mist"
-}
+	-- mage
+	[SpellName(10)] = 8, -- blizzard
+	[SpellName(5143)] = 5, -- arcane missiles
+	[SpellName(12051)] = 4, -- evocation
 
-G.UnitFrames.ChannelTicksSize = {
-    --Warlock
-    [SpellName(1120)] = 2, --"Drain Soul"
-    [SpellName(689)] = 1, -- "Drain Life"
-    [SpellName(108371)] = 1, -- "Harvest Life"
-    [SpellName(103103)] = 1, -- "Malefic Grasp"
-}
+	-- warlock
+	[SpellName(1120)] = 5, -- drain soul
+	[SpellName(689)] = 3, -- drain life
+	[SpellName(4629)] = 4, -- rain of fire
+	[SpellName(1949)] = 15, -- hellfire
+	[SpellName(755)] = 3, -- health funnel
+	[SpellName(79268)] = 3, -- soul harvest
+	[SpellName(103103)] = 4, -- malefic grasp
 
---Spells Effected By Haste
-G.UnitFrames.HastedChannelTicks = {
-    [SpellName(64901)] = true, -- Hymn of Hope
-    [SpellName(64843)] = true, -- Divine Hymn
+	-- druid
+	[SpellName(740)] = 4, -- tranquility
+	[SpellName(16914)] = 10, -- hurricane
+
+	-- monk
+	[SpellName(101546)] = 3, -- spinning crane kick
+	[SpellName(115175)] = 9, -- smoothing mist
 }

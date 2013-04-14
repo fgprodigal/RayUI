@@ -201,10 +201,10 @@ function UF:ConstructCastBar(frame)
     castbar.CustomDelayText = UF.CustomCastDelayText
     castbar.PostCastInterruptible = UF.PostCastInterruptible
     castbar.PostCastNotInterruptible = UF.PostCastNotInterruptible
-    castbar.PostCastFailed = UF.PostCastFailed
+    -- castbar.PostCastFailed = UF.PostCastFailed
     castbar.PostCastInterrupted = UF.PostCastFailed
 
-    castbar.OnUpdate = UF.OnCastbarUpdate
+    -- castbar.OnUpdate = UF.OnCastbarUpdate
 
     return castbar
 end
@@ -315,14 +315,14 @@ function UF:HideTicks(frame)
     frame.SafeZone:Show()
 end
 
-function UF:SetCastTicks(frame, numTicks, extraTickRatio)
-    extraTickRatio = extraTickRatio or 0
+function UF:SetCastTicks(frame, numTicks, extraTick)
+    extraTick = extraTick or 0
     UF:HideTicks(frame)
     if numTicks and numTicks <= 0 then return end;
     local w = frame:GetWidth()
-    local d = w / (numTicks + extraTickRatio)
+    local d = w / (numTicks + extraTick)
     local _, _, _, ms = GetNetStats()
-    for i = 1, numTicks + extraTickRatio do
+    for i = 1, numTicks + extraTick do
         if not ticks[i] then
             ticks[i] = frame:CreateTexture(nil, "OVERLAY", 5)
             ticks[i]:SetTexture(R["media"].normal)
@@ -336,7 +336,7 @@ function UF:SetCastTicks(frame, numTicks, extraTickRatio)
             local perc = (w / frame.max) * (ms / 1e5)
             if(perc > 1) then perc = 1 end
 
-            width = (w * perc) / (numTicks + extraTickRatio)
+            width = (w * perc) / (numTicks + extraTick)
         else
             width = 2
         end
@@ -386,53 +386,33 @@ function UF:PostCastStart(unit, name, rank, castid)
             self.prevSpellCast = name
         end
 
-        if baseTicks and unitframe.ChannelTicksSize[name] and unitframe.HastedChannelTicks[name] then
-            local tickIncRate = 1 / baseTicks
-            local curHaste = UnitSpellHaste("player") * 0.01
-            local firstTickInc = tickIncRate / 2
-            local bonusTicks = 0
-            if curHaste >= firstTickInc then
-                bonusTicks = bonusTicks + 1
-            end
-
-            local x = tonumber(R:Round(firstTickInc + tickIncRate, 2))
-            while curHaste >= x do
-                x = tonumber(R:Round(firstTickInc + (tickIncRate * bonusTicks), 2))
-                if curHaste >= x then
-                    bonusTicks = bonusTicks + 1
-                end
-            end
-
-            local baseTickSize = unitframe.ChannelTicksSize[name]
-            local hastedTickSize = baseTickSize / (1 + curHaste)
-            local extraTick = self.max - hastedTickSize * (baseTicks + bonusTicks)
-            local extraTickRatio = extraTick / hastedTickSize
-
-            UF:SetCastTicks(self, baseTicks + bonusTicks, extraTickRatio)
-        elseif baseTicks and unitframe.ChannelTicksSize[name] then
-            local curHaste = UnitSpellHaste("player") * 0.01
-            local baseTickSize = unitframe.ChannelTicksSize[name]
-            local hastedTickSize = baseTickSize / (1 +  curHaste)
-            local extraTick = self.max - hastedTickSize * (baseTicks)
-            local extraTickRatio = extraTick / hastedTickSize
-
-            UF:SetCastTicks(self, baseTicks, extraTickRatio)
-        elseif baseTicks then
+        if baseTicks then
             UF:SetCastTicks(self, baseTicks)
         else
             UF:HideTicks(self)
         end
     elseif unit == "player" then
         UF:HideTicks(self)
-    end	
+    end
 end
 
 function UF:CustomCastTimeText(duration)
-    self.Time:SetText(("%.1f | %.1f"):format(self.channeling and duration or self.max - duration, self.max))
+    -- self.Time:SetText(("%.1f | %.1f"):format(self.channeling and duration or self.max - duration, self.max))
+	if self.channeling then
+		self.Time:SetText(("%.1f | %.1f"):format(duration, self.max))
+		self.Time:SetText(("%.1f | %.1f"):format(abs(duration - self.max), self.max))
+	else
+		self.Time:SetText(("%.1f | %.1f"):format(duration, self.max))
+	end
 end
 
 function UF:CustomCastDelayText(duration)
-    self.Time:SetText(("%.1f |cffff0000%s %.1f|r"):format(self.channeling and duration or self.max - duration, self.channeling and "- " or "+", self.delay))
+    -- self.Time:SetText(("%.1f |cffff0000%s %.1f|r"):format(self.channeling and duration or self.max - duration, self.channeling and "- " or "+", self.delay))
+    if self.channeling then
+		self.Time:SetText(("%.1f | %.1f |cffff0000%.1f|r"):format(duration, self.max, self.delay))
+	else
+		self.Time:SetText(("%.1f | %.1f |cffff0000%s %.1f|r"):format(duration, self.max, "+", self.delay))
+	end
 end
 
 function UF:PostCastStop(unit, name, castid)
@@ -446,52 +426,16 @@ function UF:PostChannelUpdate(unit, name)
     local unitframe = R.global.UnitFrames
     local baseTicks = unitframe.ChannelTicks[name]
 
-    if baseTicks and unitframe.ChannelTicksSize[name] and unitframe.HastedChannelTicks[name] then
-        local tickIncRate = 1 / baseTicks
-        local curHaste = UnitSpellHaste("player") * 0.01
-        local firstTickInc = tickIncRate / 2
-        local bonusTicks = 0
-        if curHaste >= firstTickInc then
-            bonusTicks = bonusTicks + 1
-        end
-
-        local x = tonumber(R:Round(firstTickInc + tickIncRate, 2))
-        while curHaste >= x do
-            x = tonumber(R:Round(firstTickInc + (tickIncRate * bonusTicks), 2))
-            if curHaste >= x then
-                bonusTicks = bonusTicks + 1
-            end
-        end
-
-        local baseTickSize = unitframe.ChannelTicksSize[name]
-        local hastedTickSize = baseTickSize / (1 + curHaste)
-        local extraTick = self.max - hastedTickSize * (baseTicks + bonusTicks)
+    if baseTicks then
+		local extraTick = 0
         if self.chainChannel then
-            self.extraTickRatio = extraTick / hastedTickSize
+            extraTick = 1
             self.chainChannel = nil
         end
 
-        UF:SetCastTicks(self, baseTicks + bonusTicks, self.extraTickRatio)
-    elseif baseTicks and unitframe.ChannelTicksSize[name] then
-        local curHaste = UnitSpellHaste("player") * 0.01
-        local baseTickSize = unitframe.ChannelTicksSize[name]
-        local hastedTickSize = baseTickSize / (1 + curHaste)
-        local extraTick = self.max - hastedTickSize * (baseTicks)
-        if self.chainChannel then
-            self.extraTickRatio = extraTick / hastedTickSize
-            self.chainChannel = nil
-        end
-
-        UF:SetCastTicks(self, baseTicks, self.extraTickRatio)
-    elseif baseTicks then
-        if self.chainChannel then
-            self.extraTickRatio = 1
-            self.chainChannel = nil
-        end
-
-        UF:SetCastTicks(self, baseTicks, self.extraTickRatio)
+        UF:SetCastTicks(self, baseTicks, extraTick)
     else
-        UF:HideTicks()
+        UF:HideTicks(self)
     end
 end
 
@@ -517,7 +461,7 @@ end
 
 function UF:PostCastNotInterruptible(unit)
     local r, g, b
-    if UnitIsPlayer(unit) and UnitIsFriend(unit, "player") and R.myname == "夏可" then
+    if UnitIsPlayer(unit) and UnitIsFriend(unit, "player") and R.myname == "夏可可" then
         r, g, b = 95/255, 182/255, 255/255
     elseif UnitIsPlayer(unit) and UnitIsFriend(unit, "player") then
         r, g, b = unpack(oUF.colors.class[select(2, UnitClass(unit))])
@@ -561,17 +505,9 @@ function UF:OnCastbarUpdate(elapsed)
 
         if(self.Time) then
             if(self.delay ~= 0) then
-                if(self.CustomDelayText) then
-                    self:CustomDelayText(duration)
-                else
-                    self.Time:SetFormattedText("%.1f|cffff0000-%.1f|r", duration, self.delay)
-                end
+				self:CustomDelayText(duration)
             else
-                if(self.CustomTimeText) then
-                    self:CustomTimeText(duration)
-                else
-                    self.Time:SetFormattedText("%.1f", duration)
-                end
+				self:CustomTimeText(duration)
             end
         end
 
@@ -604,17 +540,9 @@ function UF:OnCastbarUpdate(elapsed)
 
         if(self.Time) then
             if(self.delay ~= 0) then
-                if(self.CustomDelayText) then
-                    self:CustomDelayText(duration)
-                else
-                    self.Time:SetFormattedText("%.1f|cffff0000-%.1f|r", duration, self.delay)
-                end
+				self:CustomDelayText(duration)
             else
-                if(self.CustomTimeText) then
-                    self:CustomTimeText(duration)
-                else
-                    self.Time:SetFormattedText("%.1f", duration)
-                end
+				self:CustomTimeText(duration)
             end
         end
 
@@ -782,7 +710,7 @@ function UF:PostAltUpdate(min, cur, max)
 
     local unit = self:GetParent().unit
 
-    if unit == "player" and self.text then 
+    if unit == "player" and self.text then
         local type = select(10, UnitAlternatePowerInfo(unit))
 
         if perc > 0 then
@@ -795,7 +723,7 @@ function UF:PostAltUpdate(min, cur, max)
         -- if not self:GetParent().Power.value:GetText() or self:GetParent().Power.value:GetText() == "" then
         -- self.text:Point("BOTTOMRIGHT", self:GetParent().Health, "BOTTOMRIGHT")
         -- else
-        -- self.text:Point("RIGHT", self:GetParent().Power.value.value, "LEFT", 2, E.mult)	
+        -- self.text:Point("RIGHT", self:GetParent().Power.value.value, "LEFT", 2, E.mult)
         -- end
         if perc > 0 then
             self.text:SetText("|cffD7BEA5[|r"..format("%d%%", perc).."|cffD7BEA5]|r")
@@ -952,7 +880,7 @@ function UF:CustomFilter(unit, icon, name, rank, texture, count, dtype, duration
     end
 
     -- if UnitCanAttack(unit, "player") and UnitLevel(unit) == -1 then
-    -- if (R.Role == "Melee" and name and UF.PvEMeleeBossDebuffs[name]) or 
+    -- if (R.Role == "Melee" and name and UF.PvEMeleeBossDebuffs[name]) or
     -- (R.Role == "Caster" and name and UF.PvECasterBossDebuffs[name]) or
     -- (R.Role == "Tank" and name and UF.PvETankBossDebuffs[name]) or
     -- isPlayer then
@@ -1042,7 +970,7 @@ function UF:ConstructMonkResourceBar(frame)
     local count = 5
     bars.number = count
 
-    for i = 1, count do					
+    for i = 1, count do
         bars[i] = CreateFrame("StatusBar", nil, bars)
         bars[i]:SetStatusBarTexture(R["media"].normal)
         bars[i]:SetWidth((200 - (count - 1)*5)/count)
@@ -1080,7 +1008,7 @@ function UF:ConstructDeathKnightResourceBar(frame)
     bars:Point("BOTTOM", frame, "TOP", 0, 1)
     local count = 6
 
-    for i = 1, count do					
+    for i = 1, count do
         bars[i] = CreateFrame("StatusBar", nil, bars)
         bars[i]:SetStatusBarTexture(R["media"].normal)
         bars[i]:SetWidth((200 - (count - 1)*5)/count)
@@ -1114,7 +1042,7 @@ function UF:ConstructPaladinResourceBar(frame)
     local count = 5
     bars.number = count
 
-    for i = 1, count do					
+    for i = 1, count do
         bars[i] = CreateFrame("StatusBar", nil, bars)
         bars[i]:SetStatusBarTexture(R["media"].normal)
         bars[i]:SetWidth((200 - (count - 1)*5)/count)
@@ -1152,7 +1080,7 @@ function UF:ConstructWarlockResourceBar(frame)
     bars:Point("BOTTOM", frame, "TOP", 0, 1)
     local count = 4
 
-    for i = 1, count do					
+    for i = 1, count do
         bars[i] = CreateFrame("StatusBar", nil, bars)
         bars[i]:SetStatusBarTexture(R["media"].normal)
         bars[i]:SetWidth((200 - (count - 1)*5)/count)
@@ -1185,7 +1113,7 @@ function UF:ConstructPriestResourceBar(frame)
     bars:Point("BOTTOM", frame, "TOP", 0, 1)
     local count = 3
 
-    for i = 1, count do					
+    for i = 1, count do
         bars[i] = CreateFrame("StatusBar", nil, bars)
         bars[i]:SetStatusBarTexture(R["media"].normal)
         bars[i]:SetWidth((200 - (count - 1)*5)/count)
@@ -1408,7 +1336,7 @@ function UF:AuraBarFilter(unit, name, rank, icon, count, debuffType, duration, e
         returnValue = true
     end
 
-    return returnValue	
+    return returnValue
 end
 
 function UF:Construct_AuraBars()
@@ -1523,7 +1451,7 @@ local function createConfigEnv()
         UnitClass = function(unit)
             if unit:find("target") or unit:find("focus") then
                 return UnitClass(unit)
-            end		
+            end
 
             local classToken = CLASS_SORT_ORDER[math.random(1, #(CLASS_SORT_ORDER))]
             return LOCALIZED_CLASS_NAMES_MALE[classToken], classToken
@@ -1538,7 +1466,7 @@ end
 
 function UF:ForceShow(frame)
     if InCombatLockdown() then return end
-    if not frame.isForced then		
+    if not frame.isForced then
         frame.oldUnit = frame.unit
         frame.unit = "player"
         frame.isForced = true
@@ -1553,7 +1481,7 @@ function UF:ForceShow(frame)
         end
     end
     UnregisterUnitWatch(frame)
-    RegisterUnitWatch(frame, true)	
+    RegisterUnitWatch(frame, true)
 
     frame:Show()
 end
@@ -1609,7 +1537,7 @@ local function OnAttributeChanged(self, name)
     local startingIndex = - 4
     if self:GetAttribute("startingIndex") ~= startingIndex then
         self:SetAttribute("startingIndex", startingIndex)
-        UF:ShowChildUnits(self, self:GetChildren())	
+        UF:ShowChildUnits(self, self:GetChildren())
     end
 end
 

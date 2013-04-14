@@ -18,7 +18,7 @@ function AB:CreateExtraButton()
 			_G["ExtraActionButton"..i].noResize = true
 			_G["ExtraActionButton"..i].pushed = true
 			_G["ExtraActionButton"..i].checked = true
-			
+
 			self:Style(_G["ExtraActionButton"..i])
             _G["ExtraActionButton"..i]:StyleButton(true)
 			_G["ExtraActionButton"..i.."Icon"]:SetDrawLayer("ARTWORK")
@@ -27,6 +27,10 @@ function AB:CreateExtraButton()
 			tex:SetAllPoints()
 			_G["ExtraActionButton"..i]:SetCheckedTexture(tex)
 		end
+	end
+
+	if HasExtraActionBar() then
+		ExtraActionBarFrame:Show();
 	end
 
 	R:CreateMover(holder, "BossButton", "BossButton", true, nil, "ALL,ACTIONBARS,RAID15,RAID25,RAID40")

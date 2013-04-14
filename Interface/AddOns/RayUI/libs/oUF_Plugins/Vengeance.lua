@@ -1,8 +1,8 @@
 local _, ns = ...
 local oUF = RayUF or oUF
 
--- local vengeance = GetSpellInfo(93098)
-local vengeance = GetSpellInfo(76691)
+local vengeance = GetSpellInfo(93098)
+-- local vengeance = GetSpellInfo(76691)
 
 local function valueChanged(self, event, unit)
 	local R, L = unpack(RayUI)
@@ -54,14 +54,8 @@ local function maxChanged(self, event, unit)
 	end
 
 	local health = UnitHealthMax("player")
-	local stat, _, posBuff = UnitStat("player", 3)
-
-	if not health or not stat then return end
-
-	local basehealth = health - (posBuff*UnitHPPerStamina("player"))
-	bar.max = basehealth/10 + stat
-	bar:SetMinMaxValues(0, bar.max)
-	valueChanged(self, event, unit)
+	if not health then return end
+	bar.max = health
 end
 
 local function Enable(self, unit)

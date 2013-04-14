@@ -1449,6 +1449,8 @@ R["Watcher"] = {
                 { spellID = 126659, unitId = "player", caster = "player", filter = "BUFF" },
                 --智囊
                 { spellID = 139133, unitId = "player", caster = "player", filter = "BUFF" },
+                --超光速
+                { spellID = 138699, unitId = "player", caster = "player", filter = "BUFF" },
 
                 --工程
                 --神經突觸彈簧(敏捷)
