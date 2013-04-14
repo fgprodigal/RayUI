@@ -59,11 +59,11 @@ end
 function WM:CreateCoordString()
 	if player or cursor then return end
 	player = WorldMapButton:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-	player:SetFont("Fonts\\ARIALN.TTF",14)
+	player:SetFont(R["media"].font,14)
 	player:SetPoint("BOTTOMLEFT", WorldMapButton, "BOTTOM", -120, -22)
 	player:SetJustifyH("LEFT")
 	cursor = WorldMapButton:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-	cursor:SetFont("Fonts\\ARIALN.TTF",14)
+	cursor:SetFont(R["media"].font,14)
 	cursor:SetPoint("BOTTOMLEFT", WorldMapButton, "BOTTOM", 50, -22)
 	cursor:SetJustifyH("LEFT")
 end
