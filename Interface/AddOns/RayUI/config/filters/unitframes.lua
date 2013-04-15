@@ -65,7 +65,6 @@ G.UnitFrames.ChannelTicks = {
 	[SpellName(4629)] = 4, -- rain of fire
 	[SpellName(1949)] = 15, -- hellfire
 	[SpellName(755)] = 3, -- health funnel
-	[SpellName(79268)] = 3, -- soul harvest
 	[SpellName(103103)] = 4, -- malefic grasp
 
 	-- druid

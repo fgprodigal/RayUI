@@ -1,4 +1,4 @@
-local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB
 local AB = R:GetModule("ActionBar")
 
 local DAY, HOUR, MINUTE = 86400, 3600, 60 --used for formatting text
@@ -17,6 +17,8 @@ local DAYS_FORMAT = R:RGBToHex(0.4,0.4,1)..'%dh|r' --format for timers that have
 local floor = math.floor
 local min = math.min
 local GetTime = GetTime
+
+local cooldown = getmetatable(ActionButton1Cooldown).__index
 
 function AB:GetTimeText(s)
 	--format text as seconds when below a minute
@@ -71,32 +73,34 @@ function AB:Cooldown_OnSizeChanged(cd, width, height)
 	end
 end
 
-local function Cooldown_OnUpdate(self, elapsed)
-	if self.nextUpdate > 0 then
-		self.nextUpdate = self.nextUpdate - elapsed
-	else
-		local remain = self.duration - (GetTime() - self.start)
-		if remain > 0.01 then
-			if (self.fontScale * self:GetEffectiveScale() / UIParent:GetScale()) < MIN_SCALE then
-				self.text:SetText('')
-				self.nextUpdate  = 1
-			else
-				local formatStr, time, nextUpdate = AB:GetTimeText(remain)
-				self.text:SetFormattedText(formatStr, time)
-				self.nextUpdate = nextUpdate
-			end
+local function Cooldown_OnUpdate(cd, elapsed)
+	if cd.nextUpdate > 0 then
+		cd.nextUpdate = cd.nextUpdate - elapsed
+		return
+	end
+
+	local remain = cd.duration - (GetTime() - cd.start)
+	if remain > 0.05 then
+		if (cd.fontScale * cd:GetEffectiveScale() / UIParent:GetScale()) < MIN_SCALE then
+			cd.text:SetText("")
+			cd.nextUpdate  = 500
 		else
-			AB:Cooldown_StopTimer(self)
+			local formatStr, time, nextUpdate = AB:GetTimeText(remain)
+			cd.text:SetFormattedText(formatStr, time)
+			cd.nextUpdate = nextUpdate
 		end
+	else
+		AB:Cooldown_StopTimer(cd)
 	end
 end
 
-function AB:CreateCooldownTimer(cd)
-	local scaler = CreateFrame("Frame", nil, cd)
-	scaler:SetAllPoints(cd)
+function AB:CreateCooldownTimer(parent)
+	local scaler = CreateFrame("Frame", nil, parent)
+	scaler:SetAllPoints()
 
-	local timer = CreateFrame("Frame", nil, scaler); timer:Hide()
-	timer:SetAllPoints(scaler)
+	local timer = CreateFrame("Frame", nil, scaler)
+	timer:Hide()
+	timer:SetAllPoints()
 	timer:SetScript("OnUpdate", Cooldown_OnUpdate)
 
 	local text = timer:CreateFontString(nil, "OVERLAY")
@@ -104,17 +108,19 @@ function AB:CreateCooldownTimer(cd)
 	text:SetJustifyH("CENTER")
 	timer.text = text
 
-	self:Cooldown_OnSizeChanged(timer, scaler:GetSize())
-	scaler:SetScript("OnSizeChanged", function(cd, ...) AB:Cooldown_OnSizeChanged(timer, ...) end)
+	self:Cooldown_OnSizeChanged(timer, parent:GetSize())
+	parent:SetScript("OnSizeChanged", function(_, ...) self:Cooldown_OnSizeChanged(timer, ...) end)
 
-	cd.timer = timer
+	parent.timer = timer
 	return timer
 end
 
-function AB:OnSetCooldown(cd, start, duration)
+function AB:OnSetCooldown(cd, start, duration, charges, maxCharges)
 	if cd.noOCC then return end
+
+	local remainingCharges = charges or 0
 	--start timer
-	if start > 0 and duration > MIN_DURATION then
+	if start > 0 and duration > MIN_DURATION and remainingCharges == 0 then
 		local timer = cd.timer or self:CreateCooldownTimer(cd)
 		timer.start = start
 		timer.duration = duration
@@ -130,23 +136,29 @@ function AB:OnSetCooldown(cd, start, duration)
 	end
 end
 
-local actions, hooked = {}, {}
-function AB:RegisterCooldown(button, action, cooldown)
-	if not hooked[cooldown] then
-		cooldown:HookScript("OnShow", function(self) actions[self] = true end)
-		cooldown:HookScript("OnHide", function(self) actions[self] = nil end)
+local active, hooked = {}, {}
+function AB:RegisterCooldown(frame)
+	if not hooked[frame.cooldown] then
+		frame.cooldown:HookScript("OnShow", function(cd) active[cd] = true end)
+		frame.cooldown:HookScript("OnHide", function(cd) active[cd] = nil end)
+		hooked[frame.cooldown] = true
 	end
-	hooked[cooldown] = action
+end
+
+function AB:UpdateCooldown(cd)
+	local button = cd:GetParent()
+	local start, duration, enable = GetActionCooldown(button.action)
+
+	self:OnSetCooldown(cd, start, duration)
 end
 
 function AB:ACTIONBAR_UPDATE_COOLDOWN()
-	for cooldown in pairs(actions) do
-        local start, duration = GetActionCooldown(hooked[cooldown])
-        self:OnSetCooldown(cooldown, start, duration)
+	for cooldown in pairs(active) do
+		self:UpdateCooldown(cooldown)
 		if AB.db.cooldownalpha then
 			self:UpdateCDAlpha(cooldown:GetParent())
 		end
-    end
+	end
 end
 
 local function CDStop(frame)
@@ -202,21 +214,29 @@ function AB:CooldownFrame_SetTimer(self, start, duration, enable, charges, maxCh
 	self.ex:SetCooldown(start,duration,1,1)
 end
 
-function AB:CreateCooldown(event, addon)
+function AB:CreateCooldown()
 	self:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN")
 	self:SecureHook("SetActionUIButton", "RegisterCooldown")
-	self:SecureHook("CooldownFrame_SetTimer")
-	for i, button in pairs(ActionBarButtonEventsFrame.frames) do
-		self:RegisterCooldown(button, button.action, button.cooldown)
+	self:SecureHook("ActionBarButtonEventsFrame_RegisterFrame", "RegisterCooldown")
+
+	if ActionBarButtonEventsFrame.frames then
+		for _, frame in pairs(ActionBarButtonEventsFrame.frames) do
+			self:RegisterCooldown(frame)
+		end
 	end
+
 	if not self.hooks[cooldown] then
-		self:SecureHook(getmetatable(ActionButton1Cooldown).__index, "SetCooldown", "OnSetCooldown")
+		self:SecureHook(cooldown, "SetCooldown", "OnSetCooldown")
 	end
-	if AB.db.cooldownalpha then
+
+	self:SecureHook("CooldownFrame_SetTimer")
+
+	if self.db.cooldownalpha then
 		self:SecureHook("ActionButton_UpdateState", "UpdateCDAlpha")
 		self:SecureHook("ActionButton_UpdateAction", "UpdateCDAlpha")
 	end
-	if AB.db.stancealpha then
+
+	if self.db.stancealpha then
 		self:SecureHook("ActionButton_UpdateAction", "UpdateShapeshiftCDAlpha")
 	end
 end
