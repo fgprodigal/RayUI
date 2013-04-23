@@ -400,18 +400,17 @@ function UF:CustomCastTimeText(duration)
     -- self.Time:SetText(("%.1f | %.1f"):format(self.channeling and duration or self.max - duration, self.max))
 	if self.channeling then
 		self.Time:SetText(("%.1f | %.1f"):format(duration, self.max))
-		self.Time:SetText(("%.1f | %.1f"):format(abs(duration - self.max), self.max))
 	else
-		self.Time:SetText(("%.1f | %.1f"):format(duration, self.max))
+		self.Time:SetText(("%.1f | %.1f"):format(abs(duration - self.max), self.max))
 	end
 end
 
 function UF:CustomCastDelayText(duration)
     -- self.Time:SetText(("%.1f |cffff0000%s %.1f|r"):format(self.channeling and duration or self.max - duration, self.channeling and "- " or "+", self.delay))
     if self.channeling then
-		self.Time:SetText(("%.1f | %.1f |cffff0000%.1f|r"):format(duration, self.max, self.delay))
-	else
 		self.Time:SetText(("%.1f | %.1f |cffff0000%s %.1f|r"):format(duration, self.max, "+", self.delay))
+	else
+		self.Time:SetText(("%.1f | %.1f |cffff0000%.1f|r"):format(abs(duration - self.max), self.max, self.delay))
 	end
 end
 
