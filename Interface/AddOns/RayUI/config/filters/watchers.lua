@@ -1,4 +1,4 @@
-﻿local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+﻿local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 
 local positions = {
     player_buff_icon = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 80 },	-- "玩家buff&debuff"
@@ -360,6 +360,10 @@ R["Watcher"] = {
 				{ spellID = 116267, unitId = "player", caster = "player", filter = "BUFF" },
 				--冰寒脈動
 				{ spellID = 12472, unitId = "player", caster = "player", filter = "BUFF" },
+				--氣定神閒
+				{ spellID = 12043, unitId = "player", caster = "player", filter = "BUFF" },
+				--時光倒轉
+				{ spellID = 110909, unitId = "player", caster = "player", filter = "BUFF" },
 
             },
             {
@@ -434,6 +438,8 @@ R["Watcher"] = {
                 { spellID = 45438, filter = "CD" },
                 --冰霜之球
                 { spellID = 84714, filter = "CD" },
+                --冰霜炸彈
+                { spellID = 112948, filter = "CD" },
 
                 -- 物品
 				-- 手套
