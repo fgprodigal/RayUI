@@ -257,7 +257,7 @@ local initObject = function(unit, style, styleFunc, header, ...)
 			end
 
 			-- Fall-back to the old menu system on header frames.
-			object.menu = Private.menu
+			-- object.menu = Private.menu
 		end
 
 		Private.UpdateUnits(object, objectUnit)

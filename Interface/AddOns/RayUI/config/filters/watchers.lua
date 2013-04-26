@@ -364,6 +364,8 @@ R["Watcher"] = {
 				{ spellID = 12043, unitId = "player", caster = "player", filter = "BUFF" },
 				--時光倒轉
 				{ spellID = 110909, unitId = "player", caster = "player", filter = "BUFF" },
+                --冰霜炸彈
+                { spellID = 112948, filter = "CD" },
 
             },
             {
@@ -389,11 +391,13 @@ R["Watcher"] = {
                 --炎爆術
                 { spellID = 11366, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --極度冰凍
-                { spellID = 44572, unitId = "target", caster = "player", filter = "DEBUFF"},
+                { spellID = 44572, unitId = "target", caster = "all", filter = "DEBUFF"},
                 --冰霜爆彈
                 { spellID = 112948, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --虛空暴雨
                 { spellID = 114923, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --寒冰箭
+                { spellID = 16, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
             {
                 name = "焦点buff&debuff",
@@ -438,8 +442,6 @@ R["Watcher"] = {
                 { spellID = 45438, filter = "CD" },
                 --冰霜之球
                 { spellID = 84714, filter = "CD" },
-                --冰霜炸彈
-                { spellID = 112948, filter = "CD" },
 
                 -- 物品
 				-- 手套
@@ -1484,10 +1486,14 @@ R["Watcher"] = {
 				{ spellID = 104993, unitId = "player", caster = "all", filter = "BUFF" },
 
                 --藥水
-                --玉蛟藥水
+                --玉蛟
                 { spellID = 105702, unitId = "player", caster = "player", filter = "BUFF" },
                 --兔妖之咬
                 { spellID = 105697, unitId = "player", caster = "player", filter = "BUFF" },
+                --魔古之力
+                { spellID = 105706, unitId = "player", caster = "player", filter = "BUFF" },
+                --卡法加速
+                { spellID = 125282, unitId = "player", caster = "player", filter = "BUFF" },
 
                 --特殊buff
                 --偷天換日
@@ -1522,6 +1528,8 @@ R["Watcher"] = {
                 { spellID = 120676, unitId = "player", caster = "all", filter = "BUFF" },
                 --骷髏戰旗
                 { spellID = 114206, unitId = "player", caster = "all", filter = "BUFF" },
+                --時流暫緩
+                { spellID = 137590, unitId = "player", caster = "all", filter = "BUFF" },
 
                 --種族天賦
                 --血之烈怒

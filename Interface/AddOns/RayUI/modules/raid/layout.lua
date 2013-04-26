@@ -434,7 +434,7 @@ function UpdateAuraWatch(frame)
 end
 
 local function style(self)
-    -- self.menu = menu
+    self.menu = menu
 
     self.BG = CreateFrame("Frame", nil, self)
     self.BG:SetPoint("TOPLEFT", self, "TOPLEFT")
