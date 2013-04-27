@@ -199,6 +199,8 @@ function RA:UpdateHealth(hp)
     hp:SetOrientation("HORIZONTAL")
     hp.bg:SetTexture(R["media"].normal)
     hp.freebSmooth = UF.db.smooth
+	hp.colorReaction = nil	
+	hp.colorClass = nil
 	if UF.db.healthColorClass then
 		hp.colorReaction = true	
 		hp.colorClass = true
@@ -257,11 +259,15 @@ function RA:UpdatePower(power)
     power:SetStatusBarTexture(R["media"].normal)
     power:SetOrientation("HORIZONTAL")
     power.bg:SetTexture(R["media"].normal)
+	power.colorClass = nil
+	power.colorReaction = nil	
+	power.colorPower = nil
 	if UF.db.powerColorClass then
 		power.colorReaction = true	
 		power.colorClass = true
 		power.bg.multiplier = .2
 	else
+		power.colorPower = true
 		power.colorReaction = true
 		power:SetStatusBarColor(.12, .12, .12)
 		power.bg:SetVertexColor(.12, .12, .12)
@@ -496,6 +502,7 @@ local function style(self)
     self.Power:SetParent(self)
     self.Power.bg = self.Power:CreateTexture(nil, "BORDER")
     self.Power.bg:SetAllPoints(self.Power)
+	self.Power.frequentUpdates = false
     RA:UpdatePower(self.Power)
 
     -- Highlight tex
