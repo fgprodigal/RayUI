@@ -702,6 +702,10 @@ R["Watcher"] = {
                 { spellID = 53563, unitId = "player", caster = "player", filter = "BUFF" },
                 --純潔審判
                 { spellID = 53657, unitId = "player", caster = "player", filter = "BUFF" },
+				--永恆之火
+				{ spellID = 114163, unitId = "player", caster = "player", filter = "BUFF" },
+				--無私治療者
+				{ spellID = 114250, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标buff&debuff",
@@ -719,6 +723,10 @@ R["Watcher"] = {
                 { spellID = 114157, unitId = "target", caster = "player", filter = "BUFF" },
                 --圣洁护盾
                 { spellID = 20925, unitId = "target", caster = "player", filter = "BUFF" },
+				--譴責
+				{ spellID = 31803, unitId = "target", caster = "player", filter = "DEBUFF" },
+				--弱化攻擊
+				{ spellID = 115798, unitId = "target", caster = "all", filter = "DEBUFF" },
             },
             {
                 name = "玩家重要buff&debuff",
@@ -754,6 +762,22 @@ R["Watcher"] = {
                 { spellID = 31884, unitId = "player", caster = "player", filter = "BUFF" },
                 --精通光環
                 { spellID = 31821, unitId = "player", caster = "player", filter = "BUFF" },
+				--圣盾術
+				{ spellID = 642, unitId = "player", caster = "player", filter = "BUFF" },
+				--遠古諸王守護者
+				{ spellID = 86698, unitId = "player", caster = "player", filter = "BUFF" },
+				--忠誠防衛者
+				{ spellID = 31850, unitId = "player", caster = "player", filter = "BUFF" },
+				--光速
+				{ spellID = 85499, unitId = "player", caster = "player", filter = "BUFF" },
+				--榮耀壁壘
+				{ spellID = 114637, unitId = "player", caster = "player", filter = "BUFF" },
+				--大十字軍
+				{ spellID = 85416, unitId = "player", caster = "player", filter = "BUFF" },
+				--遠古諸王之光
+				{ spellID = 86678, unitId = "player", caster = "all", filter = "BUFF" },
+				--道高一丈
+				{ spellID = 87173, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -765,6 +789,14 @@ R["Watcher"] = {
                 { spellID = 853, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --制裁之拳
                 { spellID = 105593, unitId = "target", caster = "all", filter = "DEBUFF" },
+				--自律
+				{ spellID = 25771, unitId = "target", caster = "all", filter = "DEBUFF" },
+				--罪之重擔
+				{ spellID = 110300, unitId = "target", caster = "player", filter = "DEBUFF" },
+				--公正聖印
+				{ spellID = 20170, unitId = "target", caster = "player", filter = "DEBUFF" },
+				--問罪
+				{ spellID = 2812, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
             {
                 name = "焦点buff&debuff",
@@ -1913,9 +1945,9 @@ R["Watcher"] = {
                 -- 戰爭踐踏
                 { spellID = 20549, unitId = "player", caster = "all", filter = "DEBUFF" },
 				-- 震動掌
-				{ spellID = 107079, unitID = "player", caster = "all", filter = "DEBUFF" },
+				{ spellID = 107079, unitId = "player", caster = "all", filter = "DEBUFF" },
 				-- 奧流之術
-				{ spellID = 28730, unitID = "player", caster = "all", filter = "DEBUFF" },
+				{ spellID = 28730, unitId = "player", caster = "all", filter = "DEBUFF" },
 
                 --副本
 				--雷霆王座
