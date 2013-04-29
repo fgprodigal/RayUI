@@ -14,6 +14,8 @@
 	<Script file="loot_roll.lua"/>
 	<Script file="merchant.lua"/>
 	<Script file="mirror.lua"/>
+	<Script file="OneClickEnchantScroll.lua"/>
+	<Script file="ProfessionsDatabase.lua"/>
 	<Script file="quests.lua"/>
 	<Script file="raidBuffReminder.lua"/>
 	<Script file="raidCD.lua"/>

@@ -277,8 +277,8 @@ local function LoadSkin()
 
 	S:Reskin(WatchFrameCollapseExpandButton)
 	local downtex = WatchFrameCollapseExpandButton:CreateTexture(nil, "ARTWORK")
-	downtex:SetSize(8, 8)
-	downtex:SetPoint("CENTER", 1, 0)
+	downtex:Size(8, 8)
+	downtex:Point("CENTER", 1, 0)
 	downtex:SetVertexColor(1, 1, 1)
 
 	if WatchFrame.userCollapsed then

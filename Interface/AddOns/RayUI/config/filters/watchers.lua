@@ -778,7 +778,7 @@ R["Watcher"] = {
                 --制裁之錘
                 { spellID = 853, unitId = "focus", caster = "all", filter = "DEBUFF" },
                 --制裁之拳
-                { spellID = 105593, unitId = "target", caster = "all", filter = "DEBUFF" },
+                { spellID = 105593, unitId = "focus", caster = "all", filter = "DEBUFF" },
             },
             {
                 name = "CD",
