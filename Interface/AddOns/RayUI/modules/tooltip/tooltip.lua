@@ -193,9 +193,21 @@ function TT:GameTooltip_SetDefaultAnchor(tooltip, parent)
 		end
 
 		tooltip:ClearAllPoints()
-		if owner and owner:match("RayUFRaid") and R.db.layout ~= "healer" then
+		if owner and owner:match("RayUFRaid") then
 			local parent = _G[owner:match("RayUFRaid%d%d_%d")]
-			tooltip:Point("BOTTOMRIGHT", parent, "TOPRIGHT", 0, 23)
+			if R.db.Raid.horizontal then
+				if R.db.Raid.growth == "RIGHT" then
+					tooltip:Point("BOTTOMRIGHT", parent, "BOTTOMLEFT", -23, 0)
+				else
+					tooltip:Point("BOTTOMLEFT", parent, "BOTTOMRIGHT", 23, 0)
+				end
+			else
+				if R.db.Raid.growth == "UP" then
+					tooltip:Point("TOPRIGHT", parent, "BOTTOMRIGHT", 0, -23)
+				else
+					tooltip:Point("BOTTOMRIGHT", parent, "TOPRIGHT", 0, 23)
+				end
+			end
 		elseif RayUFRaid40_6UnitButton1 and RayUFRaid40_6UnitButton1:IsVisible() and (GetScreenWidth() - RayUFRaid40_8:GetRight()) < 250 then
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, RayUFRaid40_8:GetBottom() + RayUFRaid40_8:GetHeight() + 30)
 		elseif RayUI_ContainerFrame and RayUI_ContainerFrame:IsVisible() and (GetScreenWidth() - RayUI_ContainerFrame:GetRight()) < 250 then
@@ -206,13 +218,13 @@ function TT:GameTooltip_SetDefaultAnchor(tooltip, parent)
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, RayUFRaid25_5:GetBottom() + RayUFRaid25_5:GetHeight() + 30)
 		elseif NumerationFrame and NumerationFrame:IsVisible() and (GetScreenWidth() - NumerationFrame:GetRight()) < 250 then
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, NumerationFrame:GetBottom() + NumerationFrame:GetHeight() + 30)
-        elseif Skada then
-            local windows = Skada:GetWindows()
-            if #windows >= 1 and (GetScreenWidth() - windows[1].bargroup:GetRight()) < 250 then
-                tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, windows[1].bargroup:GetTop() + 30 + (windows[1].db.enabletitle and windows[1].db.barheight or 0))
-            else
-                tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, 160)
-            end
+		elseif Skada then
+			local windows = Skada:GetWindows()
+			if #windows >= 1 and (GetScreenWidth() - windows[1].bargroup:GetRight()) < 250 then
+				tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, windows[1].bargroup:GetTop() + 30 + (windows[1].db.enabletitle and windows[1].db.barheight or 0))
+			else
+				tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, 160)
+			end
 		else
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, 160)
 		end
