@@ -193,7 +193,7 @@ function TT:GameTooltip_SetDefaultAnchor(tooltip, parent)
 		end
 
 		tooltip:ClearAllPoints()
-		if owner and owner:match("RayUFRaid") then
+		if owner and owner:match("RayUFRaid") and R.db.layout ~= "healer" then
 			local parent = _G[owner:match("RayUFRaid%d%d_%d")]
 			tooltip:Point("BOTTOMRIGHT", parent, "TOPRIGHT", 0, 23)
 		elseif RayUFRaid40_6UnitButton1 and RayUFRaid40_6UnitButton1:IsVisible() and (GetScreenWidth() - RayUFRaid40_8:GetRight()) < 250 then
