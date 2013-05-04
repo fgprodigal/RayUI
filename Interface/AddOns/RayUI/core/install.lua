@@ -48,6 +48,7 @@ local function ShowFinish(text, subtext)
 end
 
 function R:SetLayout(layout)
+	R.db.layout = layout
 	if layout == "healer" then
 		R:ResetMovers()
 		R.db.movers = {}
@@ -118,8 +119,8 @@ function R:ChooseLayout()
 		f.Title:SetText(L["RayUI布局选择"])
 
 		f.Desc = f:CreateFontString(nil, "OVERLAY")
-		f.Desc:FontTemplate()	
-		f.Desc:Point("TOPLEFT", 20, -80)		
+		f.Desc:FontTemplate()
+		f.Desc:Point("TOPLEFT", 20, -80)
 		f.Desc:Width(f:GetWidth() - 40)
 		f.Desc:SetText(L["欢迎使用RayUI, 请选择一个布局开始使用."])
 
@@ -146,7 +147,7 @@ function R:ChooseLayout()
 			ShowFinish(L["设置完成"], self:GetText())
 			f:Hide()
 		end)
-		S:Reskin(f.Option2)		
+		S:Reskin(f.Option2)
 
 		f.Option3 = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
 		f.Option3:StripTextures()
@@ -159,7 +160,7 @@ function R:ChooseLayout()
 			ShowFinish(L["设置完成"], self:GetText())
 			f:Hide()
 		end)
-		S:Reskin(f.Option3)	
+		S:Reskin(f.Option3)
 	end
 	RayUILayoutChooser:Show()
 end
