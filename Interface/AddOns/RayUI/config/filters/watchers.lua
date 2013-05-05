@@ -1636,6 +1636,10 @@ R["Watcher"] = {
                 { spellID = 20572, unitId = "player", caster = "player", filter = "BUFF" },
                 -- 狂暴
                 { spellID = 26297, unitId = "player", caster = "player", filter = "BUFF" },
+
+				--套裝
+                { spellID = 138317, unitId = "player", caster = "player", filter = "BUFF" },
+				
             },
             {
                 name = "PVE/PVP玩家buff&debuff",

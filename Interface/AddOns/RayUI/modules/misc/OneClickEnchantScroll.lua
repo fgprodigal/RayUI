@@ -18,6 +18,7 @@ local function LoadFunc()
 				DoTradeSkill(TradeSkillFrame.selectedSkill)
 				UseItemByName(38682)
 			end)
+			button:Hide()
 
 			function TradeSkillFrame_SetSelection(id)
 				oldfunc(id)
