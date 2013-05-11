@@ -5,7 +5,7 @@ local function SkinSkada()
 	if not S.db.skada then return end
 
 	local Skada = Skada
-	local barSpacing = R:Scale(1)
+	local barSpacing = R:Scale(0)
 	local bars = 8
     local windowWidth = 280
 
