@@ -401,6 +401,20 @@ function S:ReskinDropDown(f)
 	S:CreateBackdropTexture(bg)
 end
 
+local function colourClose(f)
+	if f:IsEnabled() then
+		for _, pixel in pairs(f.pixels) do
+			pixel:SetVertexColor(r, g, b)
+		end
+	end
+end
+
+local function clearClose(f)
+	for _, pixel in pairs(f.pixels) do
+		pixel:SetVertexColor(1, 1, 1)
+	end
+end
+
 function S:ReskinClose(f, a1, p, a2, x, y)
 	if not f then return end
 	f:Size(17, 17)
@@ -420,13 +434,40 @@ function S:ReskinClose(f, a1, p, a2, x, y)
 	S:CreateBD(f, 0)
 	S:CreateBackdropTexture(f)
 
-	local text = f:CreateFontString(nil, "OVERLAY")
-	text:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
-	text:Point("CENTER", 2, 1)
-	text:SetText("x")
+	f:SetDisabledTexture(S.media.backdrop)
+	local dis = f:GetDisabledTexture()
+	dis:SetVertexColor(0, 0, 0, .4)
+	dis:SetDrawLayer("OVERLAY")
+	dis:SetAllPoints()
 
-	f:HookScript("OnEnter", function(self) text:SetTextColor(1, .1, .1) end)
- 	f:HookScript("OnLeave", function(self) text:SetTextColor(1, 1, 1) end)
+	f.pixels = {}
+
+	for i = 1, 7 do
+		local tex = f:CreateTexture()
+		tex:SetTexture(1, 1, 1)
+		tex:Size(1, 1)
+		tex:Point("BOTTOMLEFT", 4+i, 4+i)
+		tinsert(f.pixels, tex)
+	end
+
+	for i = 1, 7 do
+		local tex = f:CreateTexture()
+		tex:SetTexture(1, 1, 1)
+		tex:Size(1, 1)
+		tex:Point("TOPLEFT", 4+i, -4-i)
+		tinsert(f.pixels, tex)
+	end
+
+	f:HookScript("OnEnter", colourClose)
+ 	f:HookScript("OnLeave", clearClose)
+
+	-- local text = f:CreateFontString(nil, "OVERLAY")
+	-- text:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
+	-- text:Point("CENTER", 2, 1)
+	-- text:SetText("x")
+
+	-- f:HookScript("OnEnter", function(self) text:SetTextColor(1, .1, .1) end)
+ 	-- f:HookScript("OnLeave", function(self) text:SetTextColor(1, 1, 1) end)
 end
 
 function S:ReskinInput(f, height, width)
