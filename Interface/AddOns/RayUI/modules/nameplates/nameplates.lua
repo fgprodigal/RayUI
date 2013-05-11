@@ -795,6 +795,18 @@ local function SkinObjects(frame, nameFrame)
 	overlay:SetAllPoints(frame.hp)
 	frame.overlay = overlay
 
+	if not frame.targetGlow then
+		frame.targetGlow = frame.hp:CreateTexture(nil, "BACKGROUND")
+		frame.targetGlow:SetTexture("Interface\\AddOns\\RayUI\\media\\nameplate-target-glow")
+		frame.targetGlow:SetTexCoord(0, .593, 0, .875)
+		frame.targetGlow:SetPoint("TOPLEFT", frame.hp, "BOTTOMLEFT", 0, 0)
+		frame.targetGlow:SetPoint("TOPRIGHT", frame.hp, "BOTTOMRIGHT", 0, 0)
+		frame.targetGlow:SetVertexColor(.3, .7, 1, 1)
+		-- frame.targetGlow:SetSize(hpWidth, 5)
+		frame.targetGlow:SetHeight(5)
+		frame.targetGlow:Hide()
+	end
+
 	--Reposition and Resize RaidIcon
 	raidicon:ClearAllPoints()
 	raidicon:SetPoint("BOTTOM", frame.hp, "TOP", 0, 2)
@@ -932,13 +944,16 @@ local function ShowHealth(frame, ...)
 	frame.hp.value:SetText(string.format("%d%%", math.floor((valueHealth/maxHealth)*100)))
 
 	--Change frame style if the frame is our target or not
+	frame.hp.name:SetTextColor(frame.hp:GetStatusBarColor())
+
 	if UnitExists("target") and UnitGUID("target") == frame.guid and frame:GetAlpha() == 1 then
 		--Targetted Unit
 		frame.hp.name:SetTextColor(1, 1, 1)
+		frame.targetGlow:Show()
 	else
 		--Not Targetted
-		-- frame.hp.name:SetTextColor(1, 1, 1)
 		frame.hp.name:SetTextColor(frame.hp:GetStatusBarColor())
+		frame.targetGlow:Hide()
 	end
 
 	--Setup frame shadow to change depending on enemy players health, also setup targetted unit to have white shadow

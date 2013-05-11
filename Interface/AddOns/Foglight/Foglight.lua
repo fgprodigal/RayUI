@@ -1,7 +1,7 @@
 ------------------------
 -- Adjustable settings
 local r, g, b, a = 0.5, 0.5, 0.5, 1 -- Overlay color & alpha
-local terrainAlpha = 1 -- Terrain opacity
+local terrainAlpha = .8 -- Terrain opacity
 ------------------------
 
 local overlayFrame = CreateFrame("frame", nil, WorldMapDetailFrame)

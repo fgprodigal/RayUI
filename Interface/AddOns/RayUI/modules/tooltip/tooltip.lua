@@ -511,7 +511,7 @@ function TT:OnTooltipSetUnit(tooltip)
             end
         end
         for i=2, GameTooltip:NumLines() do
-            if _G["GameTooltipTextLeft" .. i]:GetText():find(PLAYER) then
+            if _G["GameTooltipTextLeft" .. i]:GetText():find(("(%s)"):format(PLAYER)) then
                 _G["GameTooltipTextLeft" .. i]:SetText(string.format(R:RGBToHex(diffColor.r, diffColor.g, diffColor.b).."%s|r ", unitLevel) .. unitRace .. " ".. unitClass)
                 break
             end
