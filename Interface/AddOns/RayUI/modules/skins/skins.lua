@@ -206,7 +206,7 @@ function S:CreateBG(frame)
 end
 
 function S:CreateSD(parent, size, r, g, b, alpha, offset)
-	if not parent then return end
+	if not parent or R.global.general.theme~="Shadow" then return end
 	local sd = CreateFrame("Frame", nil, parent)
 	sd.size = size or 5
 	sd.size = sd.size - 5
@@ -295,15 +295,15 @@ function S:CreateTab(f)
 	f:DisableDrawLayer("BACKGROUND")
 
 	local bg = CreateFrame("Frame", nil, f)
-	bg:Point("TOPLEFT", 9, -4)
-	bg:Point("BOTTOMRIGHT", -9, 0)
+	bg:Point("TOPLEFT", 8, -3)
+	bg:Point("BOTTOMRIGHT", -8, 0)
 	bg:SetFrameLevel(f:GetFrameLevel()-1)
 	S:CreateBD(bg)
 
 	f:SetHighlightTexture(R["media"].blank)
 	local hl = f:GetHighlightTexture()
-	hl:Point("TOPLEFT", 10, -5)
-	hl:Point("BOTTOMRIGHT", -10, 1)
+	hl:Point("TOPLEFT", 9, -4)
+	hl:Point("BOTTOMRIGHT", -9, 1)
 	hl:SetVertexColor(r, g, b, .25)
 end
 

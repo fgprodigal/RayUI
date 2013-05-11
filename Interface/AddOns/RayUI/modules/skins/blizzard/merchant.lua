@@ -2,8 +2,7 @@ local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, loc
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
-	S:CreateBD(MerchantFrame)
-	S:CreateSD(MerchantFrame)
+	S:ReskinPortraitFrame(MerchantFrame, true)
 
 	MerchantFrameInset:DisableDrawLayer("BORDER")
 	MerchantMoneyInset:DisableDrawLayer("BORDER")
@@ -20,7 +19,6 @@ local function LoadSkin()
 	S:ReskinClose(MerchantFrameCloseButton)
 	S:ReskinDropDown(MerchantFrameLootFilter)
 
-	MerchantFramePortrait:Hide()
 	S:ReskinArrow(MerchantPrevPageButton, "left")
 	S:ReskinArrow(MerchantNextPageButton, "right")
 	MerchantPrevPageButton:GetRegions():Hide()
@@ -28,13 +26,11 @@ local function LoadSkin()
 	select(2, MerchantPrevPageButton:GetRegions()):Hide()
 	select(2, MerchantNextPageButton:GetRegions()):Hide()
 	MerchantNameText:SetDrawLayer("ARTWORK")
-	MerchantFrame:DisableDrawLayer("BORDER")
-	MerchantFrame:DisableDrawLayer("OVERLAY")
 	MerchantFrameTab2:SetPoint("LEFT", MerchantFrameTab1, "RIGHT", -15, 0)
 	S:CreateTab(MerchantFrameTab1)
 	S:CreateTab(MerchantFrameTab2)
 
-	for i = 1, 12 do
+	for i = 1, BUYBACK_ITEMS_PER_PAGE do
 		local button = _G["MerchantItem"..i]
 		local bu = _G["MerchantItem"..i.."ItemButton"]
 		local ic = _G["MerchantItem"..i.."ItemButtonIconTexture"]

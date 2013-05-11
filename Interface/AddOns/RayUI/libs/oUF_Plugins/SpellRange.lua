@@ -204,6 +204,7 @@ HarmIDs = ( {
 	MAGE = { 
         133, -- Fireball (40yd) - Starter
         116,
+		30451,
     };
 	PALADIN = {
 		62124, -- Hand of Reckoning (30yd) - Lvl 14

@@ -54,7 +54,8 @@ local function LoadSkin()
 		"GMChatOpenLog",
 		"HelpFrameKnowledgebaseNavBarHomeButton",
 		"HelpFrameTicketSubmit",
-		"HelpFrameTicketCancel"
+		"HelpFrameTicketCancel",
+		"HelpFrameOpenTicketHelpItemRestoration"
 	}
 	for i = 1, #buttons do
 		local button = _G[buttons[i]]
