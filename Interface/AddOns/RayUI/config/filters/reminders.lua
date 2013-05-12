@@ -43,7 +43,7 @@ P["Reminder"]["filters"] = {
 	PALADIN = {
 		["正义之怒"] = { -- righteous fury group
 			["spellGroup"] = {
-				[25780] = true, 
+				[25780] = true,
 			},
 			["role"] = "Tank",
 			["instance"] = true,
@@ -80,11 +80,11 @@ P["Reminder"]["filters"] = {
 	WARRIOR = {
 		["命令怒吼"] = { -- commanding Shout group
 			["spellGroup"] = {
-				[469] = true, 
+				[469] = true,
 			},
 			["negateGroup"] = {
 				[21562] = true,
-				[6307] = true,
+				[90364] = true,
 				[109773] = true,
 			},
 			["role"] = "Tank",
@@ -94,7 +94,7 @@ P["Reminder"]["filters"] = {
 		},
 		["战斗怒吼"] = { -- battle Shout group
 			["spellGroup"] = {
-				[6673] = true, 
+				[6673] = true,
 			},
 			["negateGroup"] = {
 				[57330] = true, -- horn of Winter
@@ -109,7 +109,7 @@ P["Reminder"]["filters"] = {
 	DEATHKNIGHT = {
 		["寒冬号角"] = { -- horn of Winter group
 			["spellGroup"] = {
-				[57330] = true, 
+				[57330] = true,
 			},
 			["negateGroup"] = {
 				[6673] = true, -- battle Shout
@@ -121,7 +121,7 @@ P["Reminder"]["filters"] = {
 		},
 		["鲜血灵气"] = { -- blood presence group
 			["spellGroup"] = {
-				[48263] = true, 
+				[48263] = true,
 			},
 			["role"] = "Tank",
 			["instance"] = true,
@@ -129,7 +129,7 @@ P["Reminder"]["filters"] = {
 			["enable"] = true,
 		},
 	},
-	ROGUE = { 
+	ROGUE = {
 		["伤害性毒药"] = {
 			["spellGroup"] = {
 				[2823] = true, -- 致命毒藥
