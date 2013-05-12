@@ -14,5 +14,6 @@
 	<Include file="tooltip\load_tooltip.xml"/>
 	<Include file="watcher\load_watcher.xml"/>
 	<Include file="tutorial\load_tutorial.xml"/>
+	<Include file="reminder\load_reminder.xml"/>
 	<Include file="misc\load_misc.xml"/>
 </Ui>
