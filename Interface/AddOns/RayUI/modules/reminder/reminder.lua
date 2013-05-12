@@ -6,6 +6,7 @@ function RM:PlayerHasFilteredBuff(db, checkPersonal)
 	for buff, value in pairs(db) do
 		if value == true then
 			local name = GetSpellInfo(buff)
+			if not name then return end
 			local _, _, icon, _, _, _, _, unitCaster, _, _, _ = UnitBuff("player", name)
 			if checkPersonal then
 				if (name and icon and unitCaster == "player") then
