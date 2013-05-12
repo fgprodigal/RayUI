@@ -1220,6 +1220,48 @@ function UF:ConstructDruidResourceBar(frame)
     return ebar
 end
 
+function UF:ConstructMageResourceBar(frame)
+    local bars = CreateFrame("Frame", nil, frame)
+    bars:SetSize(200, 5)
+    bars:SetFrameLevel(5)
+    bars:Point("BOTTOM", frame, "TOP", 0, 1)
+    local count = 2
+    bars.number = count
+
+    for i = 1, count do
+        bars[i] = CreateFrame("StatusBar", nil, bars)
+        bars[i]:SetStatusBarTexture(R["media"].normal)
+        bars[i]:SetWidth((200 - (count - 1)*5)/count)
+        bars[i]:SetHeight(5)
+        bars[i]:GetStatusBarTexture():SetHorizTile(false)
+
+        local color = RayUF.colors.class[R.myclass]
+        bars[i]:SetStatusBarColor(unpack(color))
+
+        if i == 1 then
+            bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
+        else
+            bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
+        end
+
+        bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
+        bars[i].bg:SetAllPoints(bars[i])
+        bars[i].bg:SetTexture(R["media"].normal)
+        bars[i].bg.multiplier = .2
+
+        bars[i]:CreateShadow("Background")
+        bars[i].shadow:SetFrameStrata("BACKGROUND")
+        bars[i].shadow:SetFrameLevel(0)
+		bars[i].__parent = bars
+    end
+
+	bars.Colors = RayUF.colors.class["MAGE"]
+	bars.ExpColors = { 1, 0, 0 }
+	bars.BgColors = { 0, 0, 0 }
+
+    return bars
+end
+
 function UF:UpdateEclipse(unit)
     local direction = GetEclipseDirection()
     local power = UnitPower("player", SPELL_POWER_ECLIPSE)
@@ -1410,7 +1452,7 @@ function UF:UpdatePrep(event)
 
                 if (i <= numOpps) then
                     if class and spec then
-                        local color = RAID_CLASS_COLORS[class]
+                        local color = R.colors.class[class]
                         _G["RayUFArena"..i].prepFrame.SpecClass:SetText(spec.."  -  "..LOCALIZED_CLASS_NAMES_MALE[class])
                         _G["RayUFArena"..i].prepFrame.Health:SetStatusBarColor(color.r, color.g, color.b)
                         _G["RayUFArena"..i].prepFrame.Icon:SetTexture(texture)

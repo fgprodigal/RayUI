@@ -58,7 +58,7 @@ local function LoadFriend()
 
 				curFriendsOnline = curFriendsOnline + 1
 
-				local r, g, b = RAID_CLASS_COLORS[ClassLookup[class]].r, RAID_CLASS_COLORS[ClassLookup[class]].g, RAID_CLASS_COLORS[ClassLookup[class]].b
+				local r, g, b = R.colors.class[ClassLookup[class]].r, R.colors.class[ClassLookup[class]].g, R.colors.class[ClassLookup[class]].b
 				-- Name
 				local cname
 				if ( status == "" and name ) then
@@ -97,7 +97,7 @@ local function LoadFriend()
 
 				local r, g, b = FRIENDS_BNET_NAME_COLOR.r, FRIENDS_BNET_NAME_COLOR.g, FRIENDS_BNET_NAME_COLOR.b
                 if class and ClassLookup[class] then
-                    r, g, b = RAID_CLASS_COLORS[ClassLookup[class]].r, RAID_CLASS_COLORS[ClassLookup[class]].g, RAID_CLASS_COLORS[ClassLookup[class]].b
+                    r, g, b = R.colors.class[ClassLookup[class]].r, R.colors.class[ClassLookup[class]].g, R.colors.class[ClassLookup[class]].b
                 end
 				-- Name
 				local cname

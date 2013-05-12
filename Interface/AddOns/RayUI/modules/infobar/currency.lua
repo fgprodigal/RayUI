@@ -58,8 +58,8 @@ local function LoadCurrency()
 		for k, v in pairs(realmlist) do
 			local r, g, b = NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b
 			local class = db.Class[R.myrealm][k]
-			if RAID_CLASS_COLORS[class] then
-				r, g, b = RAID_CLASS_COLORS[class].r, RAID_CLASS_COLORS[class].g, RAID_CLASS_COLORS[class].b
+			if R.colors.class[class] then
+				r, g, b = R.colors.class[class].r, R.colors.class[class].g, R.colors.class[class].b
 			end
 			if v >= 10000 then
 				GameTooltip:AddDoubleLine(k, formatMoney(v, true), r, g, b, 1, 1, 1)

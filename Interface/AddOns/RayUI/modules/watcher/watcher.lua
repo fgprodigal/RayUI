@@ -4,7 +4,7 @@ local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 
 RW.modName = L["法术监视"]
 
-local colors = RAID_CLASS_COLORS
+local colors = R.colors.class
 RW.modules = {}
 
 local defaults = {}

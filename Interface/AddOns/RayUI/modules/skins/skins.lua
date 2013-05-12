@@ -17,19 +17,7 @@ S["media"] = {
 	["arrowDown"] = "Interface\\AddOns\\RayUI\\media\\arrow-down-active",
 	["arrowLeft"] = "Interface\\AddOns\\RayUI\\media\\arrow-left-active",
 	["arrowRight"] = "Interface\\AddOns\\RayUI\\media\\arrow-right-active",
-	["classcolours"] = {
-		["HUNTER"] = { r = 0.58, g = 0.86, b = 0.49 },
-		["WARLOCK"] = { r = 0.6, g = 0.47, b = 0.85 },
-		["PALADIN"] = { r = 1, g = 0.22, b = 0.52 },
-		["PRIEST"] = { r = 0.8, g = 0.87, b = .9 },
-		["MAGE"] = { r = 0, g = 0.76, b = 1 },
-		["ROGUE"] = { r = 1, g = 0.91, b = 0.2 },
-		["DRUID"] = { r = 1, g = 0.49, b = 0.04 },
-		["SHAMAN"] = { r = 0, g = 0.6, b = 0.6 },
-		["WARRIOR"] = { r = 0.9, g = 0.65, b = 0.45 },
-		["DEATHKNIGHT"] = { r = 0.77, g = 0.12 , b = 0.23 },
-		["MONK"] = { r = 0, g = 1 , b = 0.59 },
-	},
+	["classcolours"] = R.colors.class
 }
 
 local r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b

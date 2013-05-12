@@ -2,14 +2,11 @@ local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, loc
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
-	S:CreateBD(TradeSkillFrame)
-	S:CreateSD(TradeSkillFrame)
+	S:ReskinPortraitFrame(TradeSkillFrame, true)
 	S:CreateBD(TradeSkillGuildFrame)
 	S:CreateSD(TradeSkillGuildFrame)
 	S:CreateBD(TradeSkillGuildFrameContainer, .25)
 
-	TradeSkillFrame:DisableDrawLayer("BORDER")
-	TradeSkillFrameInset:DisableDrawLayer("BORDER")
 	TradeSkillFramePortrait:Hide()
 	TradeSkillFramePortrait.Show = R.dummy
 	for i = 18, 20 do

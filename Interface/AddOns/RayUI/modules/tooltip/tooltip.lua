@@ -261,9 +261,9 @@ function TT:GameTooltip_UnitColor(unit)
 	if UnitIsPlayer(unit) then
 		local class = select(2, UnitClass(unit))
 		if class then
-			r = RAID_CLASS_COLORS[class].r
-			g = RAID_CLASS_COLORS[class].g
-			b = RAID_CLASS_COLORS[class].b
+			r = R.colors.class[class].r
+			g = R.colors.class[class].g
+			b = R.colors.class[class].b
 		end
 	end
 	return r, g, b

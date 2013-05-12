@@ -461,15 +461,15 @@ end
 local function Colorize(frame, r, g, b)
     frame.hp.originalr, frame.hp.originalg, frame.hp.originalb = r, g, b
 
-	for class, color in pairs(RAID_CLASS_COLORS) do
+	for class, color in pairs(R.colors.class) do
 		local bb = b
         if class == "MONK" then
             bb = bb - 0.01
         end
-		if RAID_CLASS_COLORS[class].r == r and RAID_CLASS_COLORS[class].g == g and RAID_CLASS_COLORS[class].b == bb then
+		if R.colors.class[class].r == r and R.colors.class[class].g == g and R.colors.class[class].b == bb then
 			frame.hasClass = true
 			frame.isFriendly = false
-			frame.hp:SetStatusBarColor(unpack(R.colors.class[class]))
+			frame.hp:SetStatusBarColor(unpack(RayUF.colors.class[class]))
 			return
 		end
 	end
@@ -481,16 +481,16 @@ local function Colorize(frame, r, g, b)
 		frame.isFriendly = false
 		frame.isTapped = true
 	elseif g+b == 0 then -- hostile
-		r,g,b = unpack(R.colors.reaction[1])
+		r,g,b = unpack(RayUF.colors.reaction[1])
 		frame.isFriendly = false
 	elseif r+b == 0 then -- friendly npc
-		r,g,b = unpack(R.colors.power["MANA"])
+		r,g,b = unpack(RayUF.colors.power["MANA"])
 		frame.isFriendly = true
 	elseif r+g > 1.95 then -- neutral
-		r,g,b = unpack(R.colors.reaction[4])
+		r,g,b = unpack(RayUF.colors.reaction[4])
 		frame.isFriendly = false
 	elseif r+g == 0 then -- friendly player
-		r,g,b = unpack(R.colors.reaction[5])
+		r,g,b = unpack(RayUF.colors.reaction[5])
 		frame.isFriendly = true
 	else -- enemy player
 		frame.isFriendly = false

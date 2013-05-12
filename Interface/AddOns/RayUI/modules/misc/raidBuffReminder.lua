@@ -292,7 +292,7 @@ local function LoadFunc()
 		for spellID, buffProvider in pairs(IndexTable[id+2]) do
 			if spellID ~= "DEFAULT" then
 				local spellName = GetSpellInfo(spellID)
-				local color = RAID_CLASS_COLORS[buffProvider]
+				local color = R.colors.class[buffProvider]
 
 				if self:GetParent().hasBuff == spellName then
 					GameTooltip:AddLine(spellName.." - "..ACTIVE_PETS, color.r, color.g, color.b)
@@ -336,7 +336,7 @@ local function LoadFunc()
 
 		button.timerbar = CreateFrame("StatusBar", nil, button)
 		button.timerbar:SetStatusBarTexture(R["media"].normal)
-		button.timerbar:SetStatusBarColor(unpack(R.colors.class[R.myclass]))
+		button.timerbar:SetStatusBarColor(unpack(RayUF.colors.class[R.myclass]))
 		button.timerbar:Point("TOPLEFT", button, "TOPLEFT", 0, 6)
 		button.timerbar:Point("BOTTOMRIGHT", button, "TOPRIGHT", 0, 1)
 		button.timerbar:CreateShadow("Background")

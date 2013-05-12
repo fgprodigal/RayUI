@@ -164,6 +164,8 @@ function WM:SkinWorldMap()
 
 	S:ReskinCheck(WorldMapTrackQuest)
 	S:ReskinCheck(WorldMapShowDigSites)
+	WorldMapShowDigSitesText:ClearAllPoints()
+	WorldMapShowDigSitesText:SetPoint("RIGHT", WorldMapShowDigSites, "LEFT", -4, 1)
 	WorldMapFrameSizeUpButton:SetFrameStrata("HIGH")
 	WorldMapFrameSizeUpButton.SetFrameStrata = R.dummy
 	WorldMapFrameSizeDownButton:SetFrameStrata("HIGH")

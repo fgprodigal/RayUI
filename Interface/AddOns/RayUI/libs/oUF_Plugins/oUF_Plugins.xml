@@ -6,6 +6,7 @@
 	<Script file="RaidDebuffs.lua"/>
 	<Script file="Experience.lua"/>
 	<Script file="Reputation.lua"/>
+	<Script file="RuneOfPower.lua"/>
 	<Script file="Smooth.lua"/>
 	<Script file="SpellRange.lua"/>	
 	<Script file="TotemBar.lua"/>

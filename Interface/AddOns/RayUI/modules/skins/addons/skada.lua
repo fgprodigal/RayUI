@@ -9,6 +9,7 @@ local function SkinSkada()
 	local bars = 8
     local windowWidth = 280
 
+	Skada.classcolors = R.colors.class
 	local barmod = Skada.displays["bar"]
 	-- Used to strip unecessary options from the in-game config
 	local function StripOptions(options)

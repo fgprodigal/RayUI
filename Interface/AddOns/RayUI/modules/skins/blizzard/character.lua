@@ -95,7 +95,7 @@ local function LoadSkin()
 	function PaperDollFrame_SetLevel()
         local primaryTalentTree = GetSpecialization()
         local classDisplayName, class = UnitClass("player")
-        local classColor = RAID_CLASS_COLORS[class]
+        local classColor = R.colors.class[class]
         local classColorString = format("ff%.2x%.2x%.2x", classColor.r * 255, classColor.g * 255, classColor.b * 255)
 
         if (primaryTalentTree) then

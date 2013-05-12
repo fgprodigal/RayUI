@@ -129,9 +129,9 @@ oUF.Tags.Methods["RayUFRaid:name"] = function(u, r)
 	local colorString
 
 	if (UnitIsPlayer(u)) then
-		local class = RAID_CLASS_COLORS[class]
+		local class = RayUF.colors.class[class]
 		if not class then return "" end
-		colorString = R:RGBToHex(class.r, class.g, class.b)
+		colorString = R:RGBToHex(class[1], class[2], class[3])
 	elseif (unitReaction) then
 		local reaction = RayUF["colors"].reaction[unitReaction]
 		colorString = R:RGBToHex(reaction[1], reaction[2], reaction[3])

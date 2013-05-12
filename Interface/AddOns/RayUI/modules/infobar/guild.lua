@@ -38,7 +38,7 @@ local function LoadGuild()
 			local gPrelist
 			local name, rank, _, lvl, _class, zone, note, offnote, online, status, class, _, _, mobile = GetGuildRosterInfo(i)
 
-			local r, g, b = RAID_CLASS_COLORS[class].r, RAID_CLASS_COLORS[class].g, RAID_CLASS_COLORS[class].b
+			local r, g, b = R.colors.class[class].r, R.colors.class[class].g, R.colors.class[class].b
 			-- Player Name
 			local cname
 			if status == 0 then

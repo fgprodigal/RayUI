@@ -94,53 +94,6 @@ function UF:PLAYER_LOGIN(event)
 end
 
 function UF:Initialize()
-	RayUF["colors"] = setmetatable({
-		-- tapped = {tapped.r, tapped.g, tapped.b},
-		-- disconnected = {dc.r, dc.g, dc.b},
-		-- health = {health.r, health.g, health.b},
-		power = setmetatable({
-			["MANA"] = {0, 0.8, 1},
-			-- ["RAGE"] = {rage.r, rage.g, rage.b},
-			-- ["FOCUS"] = {focus.r, focus.g, focus.b},
-			-- ["ENERGY"] = {energy.r, energy.g, energy.b},
-			-- ["RUNES"] = {0.55, 0.57, 0.61},
-			-- ["RUNIC_POWER"] = {runic.r, runic.g, runic.b},
-			-- ["AMMOSLOT"] = {0.8, 0.6, 0},
-			-- ["FUEL"] = {0, 0.55, 0.5},
-			-- ["POWER_TYPE_STEAM"] = {0.55, 0.57, 0.61},
-			-- ["POWER_TYPE_PYRITE"] = {0.60, 0.09, 0.17},
-		}, {__index = RayUF["colors"].power}),
-		runes = setmetatable({
-				-- [1] = {.69,.31,.31},
-				-- [2] = {.33,.59,.33},
-				-- [3] = {.31,.45,.63},
-				-- [4] = {.84,.75,.65},
-		}, {__index = RayUF["colors"].runes}),
-		reaction = setmetatable({
-			[1] = {1, 0.2, 0.2}, -- Hated
-			[2] = {1, 0.2, 0.2}, -- Hostile
-			[3] = {1, 0.6, 0.2}, -- Unfriendly
-			[4] = {1, 1, 0.2}, -- Neutral
-			[5] = {0.2, 1, 0.2}, -- Friendly
-			[6] = {0.2, 1, 0.2}, -- Honored
-			[7] = {0.2, 1, 0.2}, -- Revered
-			[8] = {0.2, 1, 0.2}, -- Exalted
-		}, {__index = RayUF["colors"].reaction}),
-		class = setmetatable({
-			-- ["DEATHKNIGHT"] = { 0.77, 0.12, 0.23 },
-			-- ["DRUID"]       = { 1, 0.49, 0.04 },
-			-- ["HUNTER"]      = { 0.58, 0.86, 0.49 },
-			-- ["MAGE"]        = { 0, 0.76, 1 },
-			-- ["PALADIN"]     = { 1, 0.22, 0.52 },
-			-- ["PRIEST"]      = { 0.8, 0.87, .9 },
-			-- ["ROGUE"]       = { 1, 0.91, 0.2 },
-			-- ["SHAMAN"]      = {  41/255,  79/255, 155/255 },
-			-- ["WARLOCK"]     = { 0.6, 0.47, 0.85 },
-			-- ["WARRIOR"]     = { 0.9, 0.65, 0.45 },
-		}, {__index = RayUF["colors"].class}),
-
-	}, {__index = RayUF["colors"]})
-
     self:LoadUnitFrames()
 	self:RegisterEvent("PLAYER_LOGIN")
 end

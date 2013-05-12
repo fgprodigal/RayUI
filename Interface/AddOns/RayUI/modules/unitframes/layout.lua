@@ -218,6 +218,8 @@ function UF:DPSLayout(frame, unit)
 			frame.TotemBar = self:ConstructShamanResourceBar(frame)
 		elseif R.myclass == "DRUID" then
 			frame.EclipseBar = self:ConstructDruidResourceBar(frame)
+		elseif R.myclass == "MAGE" then
+			frame.RunePower = self:ConstructMageResourceBar(frame)
 		end
 
 		self:ConstructThreatBar()

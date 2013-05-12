@@ -129,7 +129,7 @@ local function StartTimer(name, spellId)
 	bar.spellId = spellId
 	bar.name = name
 	bar:Show()
-	local color = RAID_CLASS_COLORS[select(2, UnitClass(name))]
+	local color = R.colors.class[select(2, UnitClass(name))]
 	if color then
 		bar:SetStatusBarColor(color.r, color.g, color.b)
 	else

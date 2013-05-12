@@ -42,7 +42,7 @@ P["NamePlates"]={
 	combat = false,
 	showhealer = true,
 	smooth = true,
-	fade = false,
+	fade = true,
     fadeValue = 0.5,
 }
 
