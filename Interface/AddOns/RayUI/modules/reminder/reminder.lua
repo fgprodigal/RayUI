@@ -182,15 +182,15 @@ function RM:UpdateReminderIcon(event, unit)
 	if not self.hasTexture or UnitInVehicle("player") then self:Hide() return end
 
 	if db.spellGroup then
-		if roleCheck and treeCheck and combatCheck and (instanceCheck or PVPCheck) and not RM:PlayerHasFilteredBuff(db.spellGroup, db.personal) then
+		if roleCheck and treeCheck and (combatCheck or instanceCheck or PVPCheck) and not RM:PlayerHasFilteredBuff(db.spellGroup, db.personal) then
 			self.hint = L["缺少"]..L[self.groupName]
 			self:Show()
-		elseif combatCheck and (instanceCheck or PVPCheck) and db.reverseCheck and (not roleCheck or not treeCheck) and RM:PlayerHasFilteredBuff(db.spellGroup, db.personal) and GetSpecialization() and not (db.talentTreeException == GetSpecialization()) then
+		elseif (combatCheck or instanceCheck or PVPCheck) and db.reverseCheck and (not roleCheck or not treeCheck) and RM:PlayerHasFilteredBuff(db.spellGroup, db.personal) and GetSpecialization() and not (db.talentTreeException == GetSpecialization()) then
 			self.hint = L["请取消"]..L[self.groupName]
 			self:Show()
 		end
 	elseif db.stanceCheck and GetNumShapeshiftForms() > 0 then
-		if roleCheck and treeCheck and combatCheck and (instanceCheck or PVPCheck) then
+		if roleCheck and treeCheck and (combatCheck or instanceCheck or PVPCheck) then
             local index = GetShapeshiftForm()
             if index < 1 or index > GetNumShapeshiftForms() then
                 self.hint = L["缺少"]..L[self.groupName]
@@ -201,7 +201,7 @@ function RM:UpdateReminderIcon(event, unit)
             end
         end
 	elseif db.weaponCheck then
-		if roleCheck and treeCheck and combatCheck and (instanceCheck or PVPCheck) then
+		if roleCheck and treeCheck and (combatCheck or instanceCheck or PVPCheck) then
 			if not hasOffhandWeapon and not hasMainHandEnchant then
 				self.hint = L["缺少"]..L[self.groupName]
 				self:Show()

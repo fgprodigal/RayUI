@@ -12,8 +12,8 @@ local OVERLAY = [=[Interface\TargetingFrame\UI-TargetingFrame-Flash]=]
 local numChildren = -1
 local frames = {}
 
-local goodR, goodG, goodB = .2, .6, .1
-local badR, badG, badB = .7, .2, .1
+local goodR, goodG, goodB = unpack(RayUF["colors"].reaction[5])
+local badR, badG, badB = unpack(RayUF["colors"].reaction[1])
 local transitionR, transitionG, transitionB = 218/255, 197/255, 92/255
 local transitionR2, transitionG2, transitionB2 = 240/255, 154/255, 17/255
 

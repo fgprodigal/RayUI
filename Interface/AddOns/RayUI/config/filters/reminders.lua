@@ -10,6 +10,7 @@ P["Reminder"]["filters"] = {
 				[73413] = true, -- inner will
 			},
 			["instance"] = true,
+			["combat"] = true,
 			["pvp"] = true,
 			["enable"] = true,
 		},
@@ -20,8 +21,8 @@ P["Reminder"]["filters"] = {
 				[13165] = true, -- hawk
                 [109260] = true,
 			},
-			["combat"] = true,
 			["instance"] = true,
+			["combat"] = true,
 			["personal"] = true,
 			["enable"] = true,
 		},
@@ -34,6 +35,7 @@ P["Reminder"]["filters"] = {
 				[30482] = true, -- molten armor
 			},
 			["instance"] = true,
+			["combat"] = true,
 			["pvp"] = true,
 			["enable"] = true,
 		},
@@ -47,6 +49,7 @@ P["Reminder"]["filters"] = {
 			},
 			["role"] = "Tank",
 			["instance"] = true,
+			["combat"] = true,
 			["reverseCheck"] = true,
 			["talentTreeException"] = 1, --Holy paladins use RF sometimes
 			["enable"] = true,
@@ -54,6 +57,7 @@ P["Reminder"]["filters"] = {
 		["圣印"] = { --check weapons for enchants
 			["stanceCheck"] = true,
 			["instance"] = true,
+			["combat"] = true,
 			["pvp"] = true,
 			["minLevel"] = 3,
 			["enable"] = true,
@@ -66,12 +70,14 @@ P["Reminder"]["filters"] = {
 				[324] = true, -- lightning shield
 			},
 			["instance"] = true,
+			["combat"] = true,
 			["pvp"] = true,
 			["enable"] = true,
 		},
 		["武器附魔"] = { --check weapons for enchants
 			["weaponCheck"] = true,
 			["instance"] = true,
+			["combat"] = true,
 			["pvp"] = true,
 			["minLevel"] = 10,
 			["enable"] = true,
@@ -89,6 +95,7 @@ P["Reminder"]["filters"] = {
 			},
 			["role"] = "Tank",
 			["instance"] = true,
+			["combat"] = true,
 			["pvp"] = true,
 			["enable"] = true,
 		},
@@ -101,6 +108,7 @@ P["Reminder"]["filters"] = {
 				[19506] = true, -- trueshot aura
 			},
 			["instance"] = true,
+			["combat"] = true,
 			["pvp"] = true,
 			["role"] = "Melee",
 			["enable"] = true,
@@ -116,6 +124,7 @@ P["Reminder"]["filters"] = {
 				[93435] = true, -- roar of courage (hunter pet)
 			},
 			["instance"] = true,
+			["combat"] = true,
 			["pvp"] = true,
 			["enable"] = true,
 		},
@@ -125,6 +134,7 @@ P["Reminder"]["filters"] = {
 			},
 			["role"] = "Tank",
 			["instance"] = true,
+			["combat"] = true,
 			["reverseCheck"] = true,
 			["enable"] = true,
 		},
@@ -136,6 +146,7 @@ P["Reminder"]["filters"] = {
 				[8679] = true, -- 致傷毒藥
 			},
 			["instance"] = true,
+			["combat"] = true,
 			["pvp"] = true,
 			["enable"] = true,
 		},
@@ -147,6 +158,7 @@ P["Reminder"]["filters"] = {
 				-- [108215] = true, -- 癱瘓毒藥
 			-- },
 			-- ["instance"] = true,
+			-- ["combat"] = true,
 			-- ["pvp"] = true,
 			-- ["enable"] = true,
 		-- },
