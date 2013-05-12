@@ -86,17 +86,34 @@ local function LoadSkin()
 
 	for i = 1, FRIENDS_TO_DISPLAY do
 		local bu = _G["FriendsFrameFriendsScrollFrameButton"..i]
-		local ic = bu.gameIcon
-
-		bu.background:Hide()
-		bu.travelPassButton:SetAlpha(0)
-		bu.travelPassButton:EnableMouse(false)
-
-		bu:SetHighlightTexture(S.media.backdrop)
+		local ic = _G["FriendsFrameFriendsScrollFrameButton"..i.."GameIcon"]
+		local inv = _G["FriendsFrameFriendsScrollFrameButton"..i.."TravelPassButton"]
+		local summon = _G["FriendsFrameFriendsScrollFrameButton"..i.."SummonButton"]
+		bu:SetHighlightTexture(S["media"].backdrop)
 		bu:GetHighlightTexture():SetVertexColor(.24, .56, 1, .2)
 
 		ic:Size(22, 22)
 		ic:SetTexCoord(.15, .85, .15, .85)
+
+		ic:ClearAllPoints()
+		ic:Point("RIGHT", bu, "RIGHT", -24, 0)
+		ic.SetPoint = R.dummy
+
+		S:Reskin(inv)
+		inv:Size(15, 25)
+		inv:ClearAllPoints()
+		inv:Point("RIGHT", bu, "RIGHT", -4, 0)
+		inv.SetPoint = R.dummy
+		local text = inv:CreateFontString(nil, "OVERLAY")
+		text:SetFont(R["media"].font, R["media"].fontsize)
+		text:SetShadowOffset(R.mult, -R.mult)
+		text:SetPoint("CENTER")
+		text:SetText("+")
+
+        select(1, summon:GetRegions()):SetTexCoord( .08, .92, .08, .92)
+        select(10, summon:GetRegions()):SetAlpha(0)
+        summon:StyleButton(1)
+        S:CreateBD(summon, 0)
 
 		bu.bg = CreateFrame("Frame", nil, bu)
 		bu.bg:SetAllPoints(ic)

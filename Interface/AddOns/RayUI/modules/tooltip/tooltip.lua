@@ -404,6 +404,10 @@ function TT:PLAYER_ENTERING_WORLD(event)
 		WorldMapCompareTooltip1,
 		WorldMapCompareTooltip2,
 		WorldMapCompareTooltip3,
+		ChatMenu,
+		EmoteMenu,
+		LanguageMenu,
+		VoiceMacroMenu,
 	}
 
 	for _, tt in pairs(tooltips) do
@@ -439,6 +443,22 @@ function TT:SetStyle(tooltip)
         tooltip:CreateShadow("Background")
         tooltip.border:SetInside(tooltip)
 		tooltip.styled=true
+
+		local getBackdrop = function()
+			return tooltip.shadow:GetBackdrop()
+		end
+
+		local getBackdropColor = function()
+			return unpack(R["media"].backdropfadecolor)
+		end
+
+		local getBackdropBorderColor = function()
+			return 0, 0, 0
+		end
+
+		tooltip.GetBackdrop = getBackdrop
+		tooltip.GetBackdropColor = getBackdropColor
+		tooltip.GetBackdropBorderColor = getBackdropBorderColor
 	end
 	tooltip:SetBackdropColor(unpack(R["media"].backdropfadecolor))
 	local item

@@ -365,6 +365,7 @@ end)
 
 
 	local function SkinPetButton(self)
+		local r, g, b = unpack(RayUF.colors.class[R.myclass])
 		if not self.shadow then
 			self:CreateShadow()
 		end
@@ -372,9 +373,16 @@ end)
 		self.Icon:SetTexCoord(.08, .92, .08, .92)
 		self.Icon:SetParent(self.shadow)
 		self.Icon:SetDrawLayer("BORDER")
-		self.pushed = true
 		self.checked = true
 		self:StyleButton(true)
+
+		local pushed = self:GetPushedTexture()
+		pushed:SetTexture(r, g, b, .2)
+		pushed:SetDrawLayer("BACKGROUND")
+		pushed:SetAllPoints()
+
+		self.SelectedHighlight:SetTexture(r, g, b, .2)
+		self.SelectedHighlight:SetAllPoints()
 		-- self.SelectedHighlight:SetAlpha(0)
 		-- self:SetFrameStrata("LOW")
 	end

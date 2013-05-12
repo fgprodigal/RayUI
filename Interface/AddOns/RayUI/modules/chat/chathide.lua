@@ -80,7 +80,7 @@ end
 
 function CH:OnEvent(event, ...)
 	-- if event == "CHAT_MSG_CHANNEL" and channelNumbers and not channelNumbers[select(8,...)] and not select(9,...):find("TCForwarder") and not select(9,...):find("LFGForwarder") then return end
-	-- if event == "CHAT_MSG_CHANNEL" and select(1,...):find("%^LFW_") then return end
+	if event == "CHAT_MSG_CHANNEL" and select(1,...):find("^%^LFW_") then return end
 	timeout = 0
 	if CH.ChatIn == false then
 		if isMoving then
