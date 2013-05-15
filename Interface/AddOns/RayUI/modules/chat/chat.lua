@@ -32,6 +32,56 @@ local function GetTimeForSavedMessage()
 	return time().."."..randomTime
 end
 
+local function GetColor(className, isLocal)
+	if isLocal then
+		local found
+		for k,v in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do
+			if v == className then className = k found = true break end
+		end
+		if not found then
+			for k,v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
+				if v == className then className = k break end
+			end
+		end
+	end
+	local tbl = R.colors.class[className]
+	local color = ("%02x%02x%02x"):format(tbl.r*255, tbl.g*255, tbl.b*255)
+	return color
+end
+
+local changeBNetName = function(misc, id, moreMisc, fakeName, tag, colon)
+	local _, charName, _, _, _, _, _, englishClass = BNGetToonInfo(id)
+	if englishClass and englishClass ~= "" then
+		fakeName = "[|cFF"..GetColor(englishClass, true)..fakeName.."|r]"
+	end
+	return misc..id..moreMisc..fakeName..tag..(colon == ":" and ":" or colon)
+end
+
+function CH:GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
+	local chatType = strsub(event, 10)
+	if ( strsub(chatType, 1, 7) == "WHISPER" ) then
+		chatType = "WHISPER"
+	end
+	if ( strsub(chatType, 1, 7) == "CHANNEL" ) then
+		chatType = "CHANNEL"..arg8
+	end
+	local info = ChatTypeInfo[chatType]
+
+	if ( info and info.colorNameByClass and arg12 ) then
+		local localizedClass, englishClass, localizedRace, englishRace, sex = GetPlayerInfoByGUID(arg12)
+
+		if ( englishClass ) then
+			local classColorTable = R.colors.class[englishClass]
+			if ( not classColorTable ) then
+				return arg2
+			end
+			return string.format("\124cff%.2x%.2x%.2x", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255)..arg2.."\124r"
+		end
+	end
+
+	return arg2
+end
+
 local function CreatCopyFrame()
 	local S = R:GetModule("Skins")
 	frame = CreateFrame("Frame", "CopyFrame", UIParent)
@@ -664,6 +714,7 @@ function CH:AddMessage(text, ...)
 		text = ("|cffffffff|HTimeCopy|h|r%s|h%s"):format(BetterDate(CHAT_TIMESTAMP_FORMAT or "|cff64C2F5[%H:%M]|r ", time()), text)
 	end
 	text = string.gsub(text, "%[(%d+)%. .-%]", "[%1]")
+	text = string.gsub(text, "(|HBNplayer:%S-|k:)(%d-)(:%S-|h)%[(%S-)%](|?h?)(:?)", changeBNetName)
     text = string.gsub(text, "EUI", "ElvUI")
 	return self.OldAddMessage(self, text, ...)
 end
@@ -1143,6 +1194,7 @@ function CH:Initialize()
     self:EnableDumpTool()
 	self:ScheduleRepeatingTimer("SetChatPosition", 1)
 	self:RawHook("SetItemRef", true)
+	self:RawHook("GetColoredName", true)
 
 	ChatHistoryEvent:RegisterEvent("CHAT_MSG_BATTLEGROUND")
 	ChatHistoryEvent:RegisterEvent("CHAT_MSG_BATTLEGROUND_LEADER")

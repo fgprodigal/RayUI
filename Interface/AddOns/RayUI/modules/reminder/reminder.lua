@@ -44,8 +44,7 @@ function RM:UpdateReminderIcon(event, unit)
 	if db.spellGroup then
 		for buff, value in pairs(db.spellGroup) do
 			if value == true then
-				local name = GetSpellInfo(buff)
-				local usable, nomana = IsUsableSpell(name)
+				local usable, nomana = IsUsableSpell(buff)
 				if (usable or nomana) and IsSpellKnown(buff) then
 					self.cacheTexture = select(3, GetSpellInfo(buff))
 					self.icon:SetTexture(self.cacheTexture)

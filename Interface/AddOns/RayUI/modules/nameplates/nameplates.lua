@@ -461,12 +461,12 @@ end
 local function Colorize(frame, r, g, b)
     frame.hp.originalr, frame.hp.originalg, frame.hp.originalb = r, g, b
 
-	for class, color in pairs(R.colors.class) do
+	for class, color in pairs(RAID_CLASS_COLORS) do
 		local bb = b
         if class == "MONK" then
             bb = bb - 0.01
         end
-		if R.colors.class[class].r == r and R.colors.class[class].g == g and R.colors.class[class].b == bb then
+		if RAID_CLASS_COLORS[class].r == r and RAID_CLASS_COLORS[class].g == g and RAID_CLASS_COLORS[class].b == bb then
 			frame.hasClass = true
 			frame.isFriendly = false
 			frame.hp:SetStatusBarColor(unpack(RayUF.colors.class[class]))

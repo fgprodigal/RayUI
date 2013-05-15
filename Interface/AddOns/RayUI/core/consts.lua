@@ -41,10 +41,3 @@ R.colors = {
 for class, color in pairs(RayUF.colors.class) do
 	R.colors.class[class] = { r = color[1], g = color[2], b = color[3] }
 end
-
-for class, color in pairs(RayUF.colors.class) do
-	RAID_CLASS_COLORS[class].r = color[1]
-	RAID_CLASS_COLORS[class].g = color[2]
-	RAID_CLASS_COLORS[class].b = color[3]
-	RAID_CLASS_COLORS[class].colorStr = string.format("ff%02x%02x%02x", color[1]*255, color[2]*255, color[3]*255)
-end
