@@ -1,5 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">	
 	<Script file="defaults.lua"/>
+	<Script file="addons.lua"/>
     <Script file="filters\watchers.lua"/>
 	<Script file="filters\reminders.lua"/>
     <Script file="filters\raid.lua"/>
