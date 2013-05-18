@@ -361,7 +361,7 @@ function T:InitTutorial()
 	btnOpen:SetPoint("CENTER", parent, "CENTER", 0, 0)
 	btnOpen:SetText(ButtonTexts.tutorial)
 	btnOpen:SetAttribute("type", "macro")
-	btnOpen:SetAttribute("macrotext", "/testuf r25\n/tar "..R.myname.."\n/focus\n/run RayUIShowTutorial_Stage1()\n/run RayUITutorialButtonClose:Show()\n/run RayUITutorialButtonOpen:Hide()\n/run RayUITutorialButtonSkip:Hide()")
+	btnOpen:SetAttribute("macrotext", "/testuf r25\n/tar "..R.myname.."\n/focus\n/run RayUIShowTutorial_Stage1()\n/run RayUITutorialButtonClose:Show()\n/run RayUITutorialButtonOpen:Hide()")
 	
 	-- local btnSkip = createTextButton("RayUITutorialButtonSkip", UIParent)
 	-- btnSkip:SetPoint("CENTER", parent, "CENTER", 0, -54)
@@ -384,14 +384,12 @@ function T:InitTutorial()
 	
 	-- Skin Buttons
 	R:GetModule("Skins"):Reskin(btnOpen)
-	R:GetModule("Skins"):Reskin(btnSkip)
 	R:GetModule("Skins"):Reskin(btnClose)
 end
 
 function TestTutorial()
 	if RayUITutorialButton then
 		RayUITutorialButtonOpen:Show()
-		RayUITutorialButtonSkip:Show()
 		RayUITutorialBG:SetAlpha(1)
 		RayUITutorialBG:Show()
 	else
