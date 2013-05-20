@@ -519,7 +519,7 @@ R["Watcher"] = {
                 --斷筋
                 { spellID = 1715, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --雷霆一擊
-                { spellID = 6343, unitId = "target", caster = "player", filter = "DEBUFF" },
+                { spellID = 115798, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --挫志怒吼
                 { spellID = 1160, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --破膽怒吼
@@ -1639,7 +1639,7 @@ R["Watcher"] = {
 
 				--套裝
                 { spellID = 138317, unitId = "player", caster = "player", filter = "BUFF" },
-				
+
             },
             {
                 name = "PVE/PVP玩家buff&debuff",
