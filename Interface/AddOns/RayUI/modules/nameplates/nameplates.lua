@@ -415,13 +415,13 @@ end
 local function UpdateCastText(frame, curValue)
 	local minValue, maxValue = frame:GetMinMaxValues()
 
-	if UnitChannelInfo("target") then
+	-- if UnitChannelInfo("target") then
 		frame.time:SetFormattedText("%.1f ", curValue)
-	end
+	-- end
 
-	if UnitCastingInfo("target") then
-		frame.time:SetFormattedText("%.1f ", maxValue - curValue)
-	end
+	-- if UnitCastingInfo("target") then
+		-- frame.time:SetFormattedText("%.1f ", maxValue - curValue)
+	-- end
 end
 
 --Create our blacklist for nameplates, so prevent a certain nameplate from ever showing

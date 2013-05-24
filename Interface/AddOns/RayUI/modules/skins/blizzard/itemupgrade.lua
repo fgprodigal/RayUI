@@ -42,14 +42,6 @@ local function LoadSkin()
 		end
 	end)
 
-	ItemUpgradeFrame.ItemButton.CurrencyIcon:SetTexCoord(.08, .92, .08, .92)
-	S:CreateBG(ItemUpgradeFrame.ItemButton.CurrencyIcon)
-
-	local currency = ItemUpgradeFrameMoneyFrame.Currency
-	currency.icon:SetPoint("LEFT", currency.count, "RIGHT", 1, 0)
-	currency.icon:SetTexCoord(.08, .92, .08, .92)
-	S:CreateBG(currency.icon)
-
 	local bg = CreateFrame("Frame", nil, ItemUpgradeFrame)
 	bg:SetAllPoints(ItemUpgradeFrame)
 	bg:SetFrameLevel(ItemUpgradeFrame:GetFrameLevel()-1)
