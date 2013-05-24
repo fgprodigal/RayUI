@@ -417,12 +417,10 @@ local function UpdateCastText(frame, curValue)
 
 	if UnitChannelInfo("target") then
 		frame.time:SetFormattedText("%.1f ", curValue)
-		frame.name:SetText(select(1, (UnitChannelInfo("target"))))
 	end
 
 	if UnitCastingInfo("target") then
 		frame.time:SetFormattedText("%.1f ", maxValue - curValue)
-		frame.name:SetText(select(1, (UnitCastingInfo("target"))))
 	end
 end
 
@@ -651,7 +649,7 @@ local function SkinObjects(frame, nameFrame)
 	local oldhp, cb = frame:GetChildren()
 	local threat, hpborder, overlay, oldlevel, bossicon, raidicon, elite = frame:GetRegions()
 	local oldname = nameFrame:GetRegions()
-	local _, cbborder, cbshield, cbicon = cb:GetRegions()
+	local _, cbborder, cbshield, cbicon, cbtext, cbshadow = cb:GetRegions()
 
 	if not frame.hp then
 		--Health Bar
@@ -716,7 +714,8 @@ local function SkinObjects(frame, nameFrame)
 	cb.time:SetShadowOffset(R.mult, -R.mult)
 
 	--Create Cast Name Text
-	cb.name = cb:CreateFontString(nil, "ARTWORK")
+	cb.name = cbtext
+	cb.name:ClearAllPoints()
 	cb.name:SetPoint("TOPLEFT", cb, "BOTTOMLEFT", 0, -1)
 	cb.name:SetFont(R["media"].font, FONTSIZE, R["media"].fontflag)
 	cb.name:SetJustifyH("LEFT")
@@ -829,6 +828,7 @@ local function SkinObjects(frame, nameFrame)
 	QueueObject(frame, hpborder)
 	QueueObject(frame, cbshield)
 	QueueObject(frame, cbborder)
+	QueueObject(frame, cbshadow)
 	QueueObject(frame, oldname)
 	QueueObject(frame, bossicon)
 	QueueObject(frame, elite)

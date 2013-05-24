@@ -29,7 +29,6 @@ local function LoadSkin()
 		select(i, EncounterJournalInstanceSelectDungeonTab:GetRegions()):SetAlpha(0)
 		select(i, EncounterJournalInstanceSelectRaidTab:GetRegions()):SetAlpha(0)
 	end
-	EncounterJournalEncounterFrameModelFrameShadow:Hide()
 	EncounterJournalEncounterFrameInfoDifficultyUpLeft:SetAlpha(0)
 	EncounterJournalEncounterFrameInfoDifficultyUpRIGHT:SetAlpha(0)
 	EncounterJournalEncounterFrameInfoDifficultyDownLeft:SetAlpha(0)
@@ -106,12 +105,6 @@ local function LoadSkin()
 	EncounterJournalEncounterFrameInfoDetailsScrollFrameScrollChildDescription:SetTextColor(1, 1, 1)
 	EncounterJournalEncounterFrameInfoDetailsScrollFrameScrollChildDescription:SetShadowOffset(1, -1)
 	EncounterJournalEncounterFrameInfoEncounterTitle:SetTextColor(1, 1, 1)
-
-	local modelbg = CreateFrame("Frame", nil, EncounterJournalEncounterFrameModelFrame)
-	modelbg:Point("TOPLEFT", -1, 1)
-	modelbg:Point("BOTTOMRIGHT", 1, -1)
-	modelbg:SetFrameLevel(EncounterJournalEncounterFrameModelFrame:GetFrameLevel()-1)
-	S:CreateBD(modelbg, .25)
 
 	hooksecurefunc("EncounterJournal_DisplayInstance", function()
 		local bossIndex = 1;
@@ -243,6 +236,7 @@ local function LoadSkin()
 	S:ReskinScroll(EncounterJournalEncounterFrameInstanceFrameLoreScrollFrameScrollBar)
 	S:ReskinScroll(EncounterJournalEncounterFrameInfoDetailsScrollFrameScrollBar)
 	S:ReskinScroll(EncounterJournalEncounterFrameInfoLootScrollFrameScrollBar)
+	S:ReskinScroll(EncounterJournalEncounterFrameInfoBossesScrollFrameScrollBar)
 	S:ReskinScroll(EncounterJournalSearchResultsScrollFrameScrollBar)
 end
 
