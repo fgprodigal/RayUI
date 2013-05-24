@@ -1561,6 +1561,8 @@ R["Watcher"] = {
 				{ spellID = 126659, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 宇宙之光 (智力, 觸發)
 				{ spellID = 126577, unitId = "player", caster = "player", filter = "BUFF" },
+				-- 完美瞄準 (智力, 觸發)
+				{ spellID = 138963, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 治療
 				-- 秦璽的極化徽印 (智力, 觸發)
 				{ spellID = 126588, unitId = "player", caster = "player", filter = "BUFF" },
