@@ -414,7 +414,7 @@ end
 do
 L["RayUI提示"] = "RayUI提示"
 L["不再提示"] = "不再提示"
-L["访问 http://rayui.org 反馈问题"] = "訪問 http://rayui.org 反饋問題"
+L["到 https://github.com/fgprodigal/RayUI 创建issue来反馈问题"] = "到 http://rayui.org 创建issue来反饋問題"
 L["找不到微型菜单? 中键点击小地图试试"] = "找不到微型菜單? 中鍵點擊小地圖試試"
 end
 do
