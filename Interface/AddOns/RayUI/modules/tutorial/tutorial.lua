@@ -3,7 +3,7 @@ local T = R:NewModule("Tutorial", "AceEvent-3.0")
 local ADDON_NAME = ...
 
 T.TutorialList = {
-	L["访问 http://rayui.org 反馈问题"],
+	L["到 https://github.com/fgprodigal/RayUI 创建issue来反馈问题"],
 	L["找不到微型菜单? 中键点击小地图试试"],
 }
 
@@ -34,22 +34,22 @@ end
 function T:SetNextTutorial()
 	self.db.currentTutorial = self.db.currentTutorial or 0
 	self.db.currentTutorial = self.db.currentTutorial + 1
-	
+
 	if self.db.currentTutorial > #T.TutorialList then
 		self.db.currentTutorial = 1
 	end
-	
+
 	RayUITutorialWindow.desc:SetText(T.TutorialList[self.db.currentTutorial])
 end
 
 function T:SetPrevTutorial()
 	self.db.currentTutorial = self.db.currentTutorial or 0
 	self.db.currentTutorial = self.db.currentTutorial - 1
-	
+
 	if self.db.currentTutorial <= 0 then
 		self.db.currentTutorial = #T.TutorialList
 	end
-	
+
 	RayUITutorialWindow.desc:SetText(T.TutorialList[self.db.currentTutorial])
 end
 
@@ -77,13 +77,13 @@ function T:SpawnTutorialFrame()
 	header:RegisterForClicks("AnyUp", "AnyDown")
 	header:SetScript("OnMouseDown", function() f:StartMoving() end)
 	header:SetScript("OnMouseUp", function() f:StopMovingOrSizing() end)
-	
+
 	local title = header:CreateFontString(nil, "OVERLAY")
 	title:SetFontObject(GameFontNormal)
 	title:SetPoint("CENTER", header, "CENTER")
 	title:SetJustifyH("CENTER")
 	title:SetText(L["RayUI提示"])
-		
+
 	local desc = f:CreateFontString("ARTWORK")
 	desc:SetFontObject(GameFontHighlight)
 	desc:SetJustifyV("TOP")
@@ -91,7 +91,7 @@ function T:SpawnTutorialFrame()
 	desc:SetPoint("TOPLEFT", 18, -32)
 	desc:SetPoint("BOTTOMRIGHT", -18, 30)
 	f.desc = desc
-	
+
 	f.disableButton = CreateFrame("CheckButton", f:GetName().."DisableButton", f, "OptionsCheckButtonTemplate")
 	_G[f.disableButton:GetName() .. "Text"]:SetText(L["不再提示"])
 	f.disableButton:SetPoint("BOTTOMLEFT", 10, 10)
@@ -101,22 +101,22 @@ function T:SpawnTutorialFrame()
 	f.disableButton:SetScript("OnClick", function(self) T.db.hideTutorial = self:GetChecked() end)
 
 	f.hideButton = CreateFrame("Button", f:GetName().."HideButton", f, "OptionsButtonTemplate")
-	f.hideButton:SetPoint("BOTTOMRIGHT", -10, 10)	
-	S:Reskin(f.hideButton)	
+	f.hideButton:SetPoint("BOTTOMRIGHT", -10, 10)
+	S:Reskin(f.hideButton)
 	_G[f.hideButton:GetName() .. "Text"]:SetText(CLOSE)
 	f.hideButton:SetScript("OnClick", function(self) self:GetParent():Hide() end)
-	
+
 	f.nextButton = CreateFrame("Button", f:GetName().."NextButton", f, "OptionsButtonTemplate")
-	f.nextButton:SetPoint("RIGHT", f.hideButton, "LEFT", -4, 0)	
+	f.nextButton:SetPoint("RIGHT", f.hideButton, "LEFT", -4, 0)
 	f.nextButton:Width(20)
-	S:Reskin(f.nextButton)	
+	S:Reskin(f.nextButton)
 	_G[f.nextButton:GetName() .. "Text"]:SetText(">")
 	f.nextButton:SetScript("OnClick", function(self) T:SetNextTutorial() end)
 
 	f.prevButton = CreateFrame("Button", f:GetName().."PrevButton", f, "OptionsButtonTemplate")
-	f.prevButton:SetPoint("RIGHT", f.nextButton, "LEFT", -4, 0)	
+	f.prevButton:SetPoint("RIGHT", f.nextButton, "LEFT", -4, 0)
 	f.prevButton:Width(20)
-	S:Reskin(f.prevButton)	
+	S:Reskin(f.prevButton)
 	_G[f.prevButton:GetName() .. "Text"]:SetText("<")
 	f.prevButton:SetScript("OnClick", function(self) T:SetPrevTutorial() end)
 
@@ -130,7 +130,7 @@ function T:Tutorials(forceShow)
 	if not f then
 		f = T:SpawnTutorialFrame()
 	end
-	
+
 	f:Show()
 	self:SetNextTutorial()
 end
@@ -271,7 +271,7 @@ function RayUITutorial_HelpPlate_AnimateOnFinished(self)
 		button.box:Hide()
 		button.boxHighlight:Hide()
 	end
-	
+
 	HP_CP = nil
 	HelpPlate:Hide()
 end
@@ -298,7 +298,7 @@ local function RayUITutorial_HelpPlate_Show( self, parent, mainHelpButton )
 	if ( HP_CP ) then
 		RayUITutorial_HelpPlate_Hide()
 	end
-	
+
 	HP_CP = self
 	HP_CP.mainHelpButton = mainHelpButton
 	for i = 1, #self do
@@ -324,7 +324,7 @@ function RayUIShowTutorial_Stage1()
 	if ( helpPlate and not HelpPlate_IsShowing(helpPlate) ) then
 		RayUITutorial_HelpPlate_Show( helpPlate, UIParent, rTB )
 	end
-	
+
 	HelpPlate:EnableMouse(false)
 end
 
@@ -342,7 +342,7 @@ function T:InitTutorial()
 	rTB = CreateFrame("Button", "RayUITutorialButton", UIParent, "MainHelpPlateButton")
 	rTB:SetPoint("CENTER", UIParent, "CENTER", 0, -38)
 	rTB:Hide()
-	
+
 	-- Dark BG
 	local tBG = CreateFrame("Frame", "RayUITutorialBG", UIParent)
 	tBG:SetParent(UIParent)
@@ -355,14 +355,14 @@ function T:InitTutorial()
 		bgFile = R["media"].blank,
 	})
 	tBG:SetBackdropColor(0, 0, 0, 0.4)
-	
+
 	-- Buttons
 	local btnOpen = createTextButton("RayUITutorialButtonOpen", UIParent)
 	btnOpen:SetPoint("CENTER", parent, "CENTER", 0, 0)
 	btnOpen:SetText(ButtonTexts.tutorial)
 	btnOpen:SetAttribute("type", "macro")
 	btnOpen:SetAttribute("macrotext", "/testuf r25\n/tar "..R.myname.."\n/focus\n/run RayUIShowTutorial_Stage1()\n/run RayUITutorialButtonClose:Show()\n/run RayUITutorialButtonOpen:Hide()")
-	
+
 	-- local btnSkip = createTextButton("RayUITutorialButtonSkip", UIParent)
 	-- btnSkip:SetPoint("CENTER", parent, "CENTER", 0, -54)
 	-- btnSkip:SetText(ButtonTexts.skip)
@@ -374,14 +374,14 @@ function T:InitTutorial()
 		-- tBG:Hide()
 		-- R.global.Tutorial.tutorialdone = true
 	-- end)
-	
+
 	local btnClose = createTextButton("RayUITutorialButtonClose", HelpPlate)
 	btnClose:SetPoint("CENTER", parent, "CENTER", 0, 0)
 	btnClose:SetText(ButtonTexts.finished)
 	btnClose:SetAttribute("type", "macro")
 	btnClose:SetAttribute("macrotext", "/testuf r25\n/clearfocus\n/cleartarget\n/run RayUITutorial_HelpPlate_Hide()\n/run RayUITutorialButtonClose:Hide()\n/run UIFrameFadeOut(RayUITutorialBG, 0.3, 0.5, 0)\n/run RayUI[1].global.Tutorial.tutorialdone = true")
 	btnClose:Hide()
-	
+
 	-- Skin Buttons
 	R:GetModule("Skins"):Reskin(btnOpen)
 	R:GetModule("Skins"):Reskin(btnClose)
