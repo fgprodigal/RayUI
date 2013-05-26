@@ -31,11 +31,7 @@ local function LoadFunc()
 
 	local function OnEvent(self, event, timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, ...)
 		if (eventType=="SPELL_DISPEL" or eventType=="SPELL_STOLEN" or eventType=="SPELL_INTERRUPT" or eventType=="SPELL_DISPEL_FAILED") and band(sourceFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE then
-			local id, effect, _, id2, effect2, _, etype = ...
-            if eventType=="SPELL_INTERRUPT" then
-                effect = effect2 
-                id = id2
-            end
+			local _, _, _, id, effect, _, etype = ...
 			local msg = _G["ACTION_" .. eventType]
 			local color
 			local icon =GetSpellTexture(id)
