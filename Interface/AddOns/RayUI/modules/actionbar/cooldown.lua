@@ -211,7 +211,9 @@ function AB:CooldownFrame_SetTimer(self, start, duration, enable, charges, maxCh
 		self.ex = CreateFrame("Cooldown", nil, self)
 		self.ex:SetAllPoints(self)
 	end
-	self.ex:SetCooldown(start,duration,1,1)
+	if start and duration then
+		self.ex:SetCooldown(start,duration,1,1)
+	end
 end
 
 function AB:CreateCooldown()

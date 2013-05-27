@@ -1,6 +1,5 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="blizzards.lua"/>
 	<Script file="talenttaint.lua"/>
-	<Script file="fixtradeskill.lua"/>
 	<Script file="death.lua"/>
 </Ui>

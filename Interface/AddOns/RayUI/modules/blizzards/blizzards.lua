@@ -4,7 +4,6 @@ local B = R:NewModule("Blizzards", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.
 function B:Initialize()
 	self:TalentTaint()
 	self:FixDeathPopup()
-	self:FixTradeSkill()
 end
 
 R:RegisterModule(B:GetName())
