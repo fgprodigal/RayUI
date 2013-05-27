@@ -34,7 +34,7 @@ local function LoadFunc()
 		for i = 1, chars do
 			suffix = suffix.."/"
 		end
-		local link = format("trade:%d:%d:%d:%s:%s", spellId, maxed, maxed, guid, suffix)
+		local link = format("trade:%s:%d:%d:%d:%s", guid, spellId, maxed, maxed, suffix)
 		local text = format("|H%s|h[%s]|h", link, GetSpellInfo(spellId) or "spellId#"..spellId)
 		if IsModifiedClick() then
 			local fixedLink = format("|cffffd000%s|r", text)
