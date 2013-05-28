@@ -9,4 +9,6 @@
 	<Script file='TooltipItemIcon\TooltipItemIcon.lua'/>
 	<Script file='TradeTabs\TradeTabs.lua'/>
 	<Include file="yClassColors\yClassColors.xml"/>
+	<Script file='HabeebIt\Encounters.lua'/>
+	<Script file='HabeebIt\HabeebIt.lua'/>
 </Ui>
