@@ -494,6 +494,7 @@ local function LoadSkin()
 		"InterfaceOptionsControlsPanelAutoClearAFK",
 		"InterfaceOptionsControlsPanelBlockTrades",
 		"InterfaceOptionsControlsPanelBlockGuildInvites",
+		"InterfaceOptionsControlsPanelBlockChatChannelInvites",
 		"InterfaceOptionsControlsPanelLootAtMouse",
 		"InterfaceOptionsControlsPanelAutoLootCorpse",
 		"InterfaceOptionsControlsPanelInteractOnLeftClick",
