@@ -413,37 +413,83 @@ function AB:Initialize()
     for i =1, 5 do
         self:CreateBar(i)
     end
+
 	if self.db.showgrid then
 		ActionButton_HideGrid = R.dummy
-		for i = 1, NUM_ACTIONBAR_BUTTONS do
-			local button = _G[format("ActionButton%d", i)]
+		SetCVar("alwaysShowActionBars", "1")
+	else
+		ActionButton_ShowGrid = R.dummy
+		SetCVar("alwaysShowActionBars", nil)
+	end
+
+	for i = 1, NUM_ACTIONBAR_BUTTONS do
+		local button = _G[format("ActionButton%d", i)]
+		button:UnregisterEvent("ACTIONBAR_SHOWGRID")
+		button:UnregisterEvent("ACTIONBAR_HIDEGRID")
+		if self.db.showgrid then
 			button:SetAttribute("showgrid", 1)
 			ActionButton_ShowGrid(button)
+		else
+			button:SetAttribute("showgrid", 0)
+			ActionButton_HideGrid(button)
+		end
 
-			button = _G[format("MultiBarRightButton%d", i)]
+		button = _G[format("MultiBarRightButton%d", i)]
+		button:UnregisterEvent("ACTIONBAR_SHOWGRID")
+		button:UnregisterEvent("ACTIONBAR_HIDEGRID")
+		if self.db.showgrid then
 			button:SetAttribute("showgrid", 1)
 			ActionButton_ShowGrid(button)
+		else
+			button:SetAttribute("showgrid", 0)
+			ActionButton_HideGrid(button)
+		end
 
-			button = _G[format("MultiBarBottomRightButton%d", i)]
+		button = _G[format("MultiBarBottomRightButton%d", i)]
+		button:UnregisterEvent("ACTIONBAR_SHOWGRID")
+		button:UnregisterEvent("ACTIONBAR_HIDEGRID")
+		if self.db.showgrid then
 			button:SetAttribute("showgrid", 1)
 			ActionButton_ShowGrid(button)
+		else
+			button:SetAttribute("showgrid", 0)
+			ActionButton_HideGrid(button)
+		end
 
-			button = _G[format("MultiBarLeftButton%d", i)]
+		button = _G[format("MultiBarLeftButton%d", i)]
+		button:UnregisterEvent("ACTIONBAR_SHOWGRID")
+		button:UnregisterEvent("ACTIONBAR_HIDEGRID")
+		if self.db.showgrid then
 			button:SetAttribute("showgrid", 1)
 			ActionButton_ShowGrid(button)
+		else
+			button:SetAttribute("showgrid", 0)
+			ActionButton_HideGrid(button)
+		end
 
-			button = _G[format("MultiBarBottomLeftButton%d", i)]
+		button = _G[format("MultiBarBottomLeftButton%d", i)]
+		button:UnregisterEvent("ACTIONBAR_SHOWGRID")
+		button:UnregisterEvent("ACTIONBAR_HIDEGRID")
+		if self.db.showgrid then
 			button:SetAttribute("showgrid", 1)
 			ActionButton_ShowGrid(button)
+		else
+			button:SetAttribute("showgrid", 0)
+			ActionButton_HideGrid(button)
+		end
 
-			button = _G[format("PetActionButton%d", i)]
-			if button then
-				button:SetAttribute("showgrid", 1)
-				ActionButton_ShowGrid(button)
+		button = _G[format("PetActionButton%d", i)]
+		if button then
+			button:UnregisterEvent("PET_BAR_SHOWGRID")
+			button:UnregisterEvent("PET_BAR_HIDEGRID")
+			if self.db.showgrid then
+				PetActionBar_ShowGrid()
+			else
+				PetActionBar_HideGrid()
 			end
 		end
-        SetCVar("alwaysShowActionBars", "1")
     end
+
 	self:CreateBarPet()
 	self:CreateStanceBar()
 	self:CreateVehicleExit()
