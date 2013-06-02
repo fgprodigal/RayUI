@@ -46,44 +46,6 @@ local function ColorGradient(perc, color1, color2, color3)
 	return r2 + (r3-r2)*relperc, g2 + (g3-g2)*relperc, b2 + (b3-b2)*relperc
 end
 
-local init = function(self)
-    if RA.db.hidemenu and InCombatLockdown() then
-        return
-    end
-
-    local unit = self:GetParent().unit
-    local menu, name, id
-
-    if(not unit) then
-        return
-    end
-
-    if(UnitIsUnit(unit, "player")) then
-        menu = "SELF"
-    elseif(UnitIsUnit(unit, "vehicle")) then
-        menu = "VEHICLE"
-    elseif(UnitIsUnit(unit, "pet")) then
-        menu = "PET"
-    elseif(UnitIsPlayer(unit)) then
-        id = UnitInRaid(unit)
-        if(id) then
-            menu = "RAID_PLAYER"
-            name = GetRaidRosterInfo(id)
-        elseif(UnitInParty(unit)) then
-            menu = "PARTY"
-        else
-            menu = "PLAYER"
-        end
-    else
-        menu = "TARGET"
-        name = RAID_TARGET_ICON
-    end
-
-    if(menu) then
-        UnitPopup_ShowMenu(self, menu, unit, name, id)
-    end
-end
-
 -- Show Target Border
 local function ChangedTarget(self)
     if UnitIsUnit("target", self.unit) then
@@ -464,6 +426,7 @@ local function style(self)
 
     -- Threat
     local threat = CreateFrame("Frame", nil, self)
+	threat:SetFrameStrata("BACKGROUND")
     threat:Point("TOPLEFT", self, "TOPLEFT", -5, 5)
     threat:Point("BOTTOMRIGHT", self, "BOTTOMRIGHT", 5, -5)
     threat:SetFrameLevel(0)
@@ -478,7 +441,7 @@ local function style(self)
     self.Threat = threat
 
     -- Name
-    local name = self:CreateFontString(nil, "OVERLAY")
+    local name = self:CreateFontString(nil, "ARTKWORK")
     name:SetPoint("CENTER", self.Health)
     name:SetJustifyH("CENTER")
     name:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
@@ -486,6 +449,16 @@ local function style(self)
     name.overrideUnit = true
     self.Name = name
     self:Tag(self.Name, "[RayUFRaid:name]")
+
+	-- Name
+	local healtext = self:CreateFontString(nil, "ARTKWORK")
+	healtext:SetPoint("BOTTOM", self.Health)
+	healtext:SetShadowOffset(1.25, -1.25)
+	healtext:SetFont(R["media"].font, R["media"].fontsize - 2, R["media"].fontflag)
+	healtext:SetWidth(RA.db.width)
+	healtext:SetText("123")
+	self.Healtext = healtext
+	self:Tag(healtext, "[RayUIRaid:def]")
 
     -- Power
     self.Power = CreateFrame("StatusBar", nil, self)
@@ -511,7 +484,7 @@ local function style(self)
     tBorder:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT")
     tBorder:SetBackdrop(border)
     tBorder:SetBackdropColor(.8, .8, .8, 1)
-    tBorder:SetFrameLevel(1)
+    tBorder:SetFrameLevel(2)
     tBorder:Hide()
     self.TargetBorder = tBorder
 
@@ -522,7 +495,7 @@ local function style(self)
     fBorder:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT")
     fBorder:SetBackdrop(border)
     fBorder:SetBackdropColor(.6, .8, 0, 1)
-    fBorder:SetFrameLevel(1)
+    fBorder:SetFrameLevel(2)
     fBorder:Hide()
     self.FocusHighlight = fBorder
 
@@ -573,11 +546,8 @@ local function style(self)
     self.Range = RA.db.arrow == false and range
 
     -- ReadyCheck
-	local ReadyCheck = CreateFrame("Frame", nil, self.Health)
-    ReadyCheck:SetPoint("CENTER")
-    ReadyCheck:SetSize(RA.db.leadersize + 4, RA.db.leadersize + 4)
-    self.ReadyCheck = ReadyCheck:CreateTexture(nil, "OVERLAY")
-    self.ReadyCheck:SetPoint("TOP")
+    self.ReadyCheck = self.Health:CreateTexture(nil, "OVERLAY")
+    self.ReadyCheck:SetPoint("TOP", self)
     self.ReadyCheck:SetSize(RA.db.leadersize + 4, RA.db.leadersize+ 4)
 
     -- Auras
@@ -790,7 +760,6 @@ function RA:SpawnHeader(name, group, layout)
 end
 
 function RA:SpawnRaid()
-	UIDropDownMenu_Initialize(dropdown, init, "MENU")
 	backdrop = {
 		bgFile = R["media"].blank,
 		insets = {top = -R.mult, left = -R.mult, bottom = -R.mult, right = -R.mult},
