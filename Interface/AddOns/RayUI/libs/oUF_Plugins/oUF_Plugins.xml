@@ -1,6 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="AuraBars.lua"/>
 	<Script file="AuraWatch.lua"/>
+	<Script file="HealPredictionAndAbsorb.lua"/>
 	<Script file="Fader.lua"/>
 	<Script file="PVPSpecIcons.lua"/>
 	<Script file="RaidDebuffs.lua"/>

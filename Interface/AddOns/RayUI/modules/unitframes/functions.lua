@@ -1262,6 +1262,44 @@ function UF:ConstructMageResourceBar(frame)
     return bars
 end
 
+function UF:EnableHealPredictionAndAbsorb(frame)
+	local mhpb = frame:CreateTexture(nil, "BORDER", 5)
+	mhpb:SetWidth(1)
+	mhpb:SetTexture(R["media"].blank)
+	mhpb:SetVertexColor(0, 1, 0.5, 0.25)
+
+	local ohpb = frame:CreateTexture(nil, "BORDER", 5)
+	ohpb:SetWidth(1)
+	ohpb:SetTexture(R["media"].blank)
+	ohpb:SetVertexColor(0, 1, 0, 0.25)
+
+	local abb = frame:CreateTexture(nil, "BORDER", 5)
+	abb:SetWidth(1)
+	abb:SetTexture(R["media"].blank)
+	abb:SetVertexColor(.66, 1, 1, .7)
+
+	local abbo = frame:CreateTexture(nil, "BORDER", 6)
+	abbo:SetTexture("Interface\\RaidFrame\\Shield-Overlay", true, true)
+	abbo:SetAllPoints(abb)
+	abbo.tileSize = 32
+
+	local oag = frame:CreateTexture(nil, "ARTWORK", 1)
+	oag:SetWidth(15)
+	oag:SetTexture("Interface\\RaidFrame\\Shield-Overshield")
+	oag:SetBlendMode("ADD")
+	oag:SetPoint("TOPLEFT", frame.Health, "TOPRIGHT", -5, 3)
+	oag:SetPoint("BOTTOMLEFT", frame.Health, "BOTTOMRIGHT", -5, -3)
+
+	frame.HealPredictionAndAbsorb = {
+		myBar = mhpb,
+		otherBar = ohpb,
+		absorbBar = abb,
+		absorbBarOverlay = abbo,
+		overAbsorbGlow = oag,
+		maxOverflow = 1,
+	}
+end
+
 function UF:UpdateEclipse(unit)
     local direction = GetEclipseDirection()
     local power = UnitPower("player", SPELL_POWER_ECLIPSE)

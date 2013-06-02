@@ -110,14 +110,12 @@ local function updateThreat(self, event, unit)
     if(status and status > 1) then
         local r, g, b = GetThreatStatusColor(status)
         self.Threat:SetBackdropBorderColor(r, g, b, 1)
-        self.border:SetBackdropColor(r, g, b, 1)
     else
 		if R.global.general.theme == "Shadow" then
 			self.Threat:SetBackdropBorderColor(0, 0, 0, 1)
 		else
 			self.Threat:SetBackdropBorderColor(0, 0, 0, 0)
 		end
-        self.border:SetBackdropColor(0, 0, 0, 1)
     end
     self.Threat:Show()
 end
@@ -238,7 +236,6 @@ local function PostPower(power, unit)
 
     if (perc < 10 and UnitIsConnected(unit) and ptype == "MANA" and not UnitIsDeadOrGhost(unit)) then
         self.Threat:SetBackdropBorderColor(0, 0, 1, 1)
-        self.border:SetBackdropColor(0, 0, 1, 1)
     else
         -- pass the coloring back to the threat func
         updateThreat(self, nil, unit)
@@ -443,27 +440,20 @@ local function style(self)
     -- self.menu = menu
 
     self.BG = CreateFrame("Frame", nil, self)
+    self.BG:SetFrameStrata("BACKGROUND")
     self.BG:SetPoint("TOPLEFT", self, "TOPLEFT")
     self.BG:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT")
     self.BG:SetFrameLevel(3)
     self.BG:SetBackdrop(backdrop)
     self.BG:SetBackdropColor(0, 0, 0)
 
-    self.border = CreateFrame("Frame", nil, self)
-    self.border:SetPoint("TOPLEFT", self, "TOPLEFT")
-    self.border:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT")
-    self.border:SetFrameLevel(2)
-    self.border:SetBackdrop(border2)
-    self.border:SetBackdropColor(0, 0, 0)
-
     -- Mouseover script
     self:SetScript("OnEnter", OnEnter)
     self:SetScript("OnLeave", OnLeave)
     self:RegisterForClicks("AnyUp")
 
-    -- Health
-    self.Health = CreateFrame"StatusBar"
-    self.Health:SetParent(self)
+    self.Health = CreateFrame("StatusBar", nil, self)
+    self.Health:SetFrameStrata("LOW")
     self.Health.frequentUpdates = true
 
     self.Health.bg = self.Health:CreateTexture(nil, "BORDER")
@@ -488,8 +478,8 @@ local function style(self)
     self.Threat = threat
 
     -- Name
-    local name = self.Health:CreateFontString(nil, "OVERLAY", -8)
-    name:SetPoint("CENTER")
+    local name = self:CreateFontString(nil, "OVERLAY")
+    name:SetPoint("CENTER", self.Health)
     name:SetJustifyH("CENTER")
     name:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
     name:SetWidth(RA.db.width)
@@ -498,8 +488,8 @@ local function style(self)
     self:Tag(self.Name, "[RayUFRaid:name]")
 
     -- Power
-    self.Power = CreateFrame"StatusBar"
-    self.Power:SetParent(self)
+    self.Power = CreateFrame("StatusBar", nil, self)
+    self.Power:SetFrameStrata("LOW")
     self.Power.bg = self.Power:CreateTexture(nil, "BORDER")
     self.Power.bg:SetAllPoints(self.Power)
 	self.Power.frequentUpdates = false
@@ -516,6 +506,7 @@ local function style(self)
 
     -- Target tex
     local tBorder = CreateFrame("Frame", nil, self)
+	tBorder:SetFrameStrata("BACKGROUND")
     tBorder:SetPoint("TOPLEFT", self, "TOPLEFT")
     tBorder:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT")
     tBorder:SetBackdrop(border)
@@ -526,6 +517,7 @@ local function style(self)
 
     -- Focus tex
     local fBorder = CreateFrame("Frame", nil, self)
+	fBorder:SetFrameStrata("BACKGROUND")
     fBorder:SetPoint("TOPLEFT", self, "TOPLEFT")
     fBorder:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT")
     fBorder:SetBackdrop(border)
@@ -566,7 +558,6 @@ local function style(self)
 
     self.freebIndicators = true
     self.freebAfk = true
-    self.freebHeals = true
 
     self.ResurrectIcon = self.Health:CreateTexture(nil, "OVERLAY")
     self.ResurrectIcon:SetPoint("TOP", self, 0, -2)
@@ -590,11 +581,6 @@ local function style(self)
     self.ReadyCheck:SetSize(RA.db.leadersize + 4, RA.db.leadersize+ 4)
 
     -- Auras
-    --local auras = CreateFrame("Frame", nil, self)
-    --auras:SetSize(RA.db.aurasize, RA.db.aurasize)
-    --auras:SetPoint("CENTER", self.Health)
-    --auras.size = RA.db.aurasize
-    --self.freebAuras = auras
 	self.RaidDebuffs = CreateFrame("Frame", nil, self)
 	self.RaidDebuffs:SetFrameLevel(10)
 	self.RaidDebuffs:SetPoint("CENTER", self.Health)
@@ -625,6 +611,9 @@ local function style(self)
     auraWatch.icons = {}
     self.AuraWatch = auraWatch
     UpdateAuraWatch(self)
+
+	-- Heal Prediction
+	UF:EnableHealPredictionAndAbsorb(self)
 
     -- Add events
     self:RegisterEvent("PLAYER_FOCUS_CHANGED", FocusTarget)
@@ -804,15 +793,11 @@ function RA:SpawnRaid()
 	UIDropDownMenu_Initialize(dropdown, init, "MENU")
 	backdrop = {
 		bgFile = R["media"].blank,
-		insets = {top = 0, left = 0, bottom = 0, right = 0},
+		insets = {top = -R.mult, left = -R.mult, bottom = -R.mult, right = -R.mult},
 	}
 	border = {
 		bgFile = R["media"].blank,
 		insets = {top = -R:Scale(2), left = -R:Scale(2), bottom = -R:Scale(2), right = -R:Scale(2)},
-	}
-	border2 = {
-		bgFile = R["media"].blank,
-		insets = {top = -R.mult, left = -R.mult, bottom = -R.mult, right = -R.mult},
 	}
 	glowBorder = {
 		bgFile = R["media"].blank,

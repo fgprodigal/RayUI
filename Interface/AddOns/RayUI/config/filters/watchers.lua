@@ -1032,6 +1032,8 @@ R["Watcher"] = {
                 { spellID = 1098, unitId = "pet", caster = "player", filter = "DEBUFF" },
                 --惡魔跳躍
                 { spellID = 54785, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --獻祭
+                { spellID = 108686, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
             {
                 name = "玩家重要buff&debuff",

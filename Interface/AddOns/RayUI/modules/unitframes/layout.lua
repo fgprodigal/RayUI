@@ -100,6 +100,9 @@ function UF:DPSLayout(frame, unit)
 		  insideAlpha = 1,
 		  outsideAlpha = 0.3}
 
+	-- Heal Prediction
+	self:EnableHealPredictionAndAbsorb(frame)	
+
 	if unit == "player" then
 		health:SetSize(PLAYER_WIDTH, PLAYER_HEIGHT * (1 - self.db.powerheight) - 10)
 		health.value:Point("LEFT", health, "LEFT", 5, 0)
@@ -289,31 +292,6 @@ function UF:DPSLayout(frame, unit)
 		frame.Experience = experience
 		frame.Reputation = reputation
 
-		-- Heal Prediction
-		local mhpb = CreateFrame("StatusBar", nil, frame)
-		mhpb:SetPoint("BOTTOMLEFT", frame.Health:GetStatusBarTexture(), "BOTTOMRIGHT")
-		mhpb:SetPoint("TOPLEFT", frame.Health:GetStatusBarTexture(), "TOPRIGHT")
-		mhpb:SetWidth(health:GetWidth())
-		mhpb:SetStatusBarTexture(R["media"].blank)
-		mhpb:SetStatusBarColor(0, 1, 0.5, 0.25)
-
-		local ohpb = CreateFrame("StatusBar", nil, frame)
-		ohpb:SetPoint("BOTTOMLEFT", mhpb:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
-		ohpb:SetPoint("TOPLEFT", mhpb:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
-		ohpb:SetWidth(mhpb:GetWidth())
-		ohpb:SetStatusBarTexture(R["media"].blank)
-		ohpb:SetStatusBarColor(0, 1, 0, 0.25)
-
-		frame.HealPrediction = {
-			myBar = mhpb,
-			otherBar = ohpb,
-			maxOverflow = 1,
-			PostUpdate = function(frame)
-				if frame.myBar:GetValue() == 0 then frame.myBar:SetAlpha(0) else frame.myBar:SetAlpha(1) end
-				if frame.otherBar:GetValue() == 0 then frame.otherBar:SetAlpha(0) else frame.otherBar:SetAlpha(1) end
-			end
-		}
-
 		local Combat = frame:CreateTexture(nil, "OVERLAY")
 		Combat:SetSize(20, 20)
 		Combat:ClearAllPoints()
@@ -456,31 +434,6 @@ function UF:DPSLayout(frame, unit)
 			end
 		end
 
-		-- Heal Prediction
-		local mhpb = CreateFrame("StatusBar", nil, frame)
-		mhpb:SetPoint("BOTTOMLEFT", frame.Health:GetStatusBarTexture(), "BOTTOMRIGHT")
-		mhpb:SetPoint("TOPLEFT", frame.Health:GetStatusBarTexture(), "TOPRIGHT")
-		mhpb:SetWidth(health:GetWidth())
-		mhpb:SetStatusBarTexture(R["media"].blank)
-		mhpb:SetStatusBarColor(0, 1, 0.5, 0.25)
-
-		local ohpb = CreateFrame("StatusBar", nil, frame)
-		ohpb:SetPoint("BOTTOMLEFT", mhpb:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
-		ohpb:SetPoint("TOPLEFT", mhpb:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
-		ohpb:SetWidth(mhpb:GetWidth())
-		ohpb:SetStatusBarTexture(R["media"].blank)
-		ohpb:SetStatusBarColor(0, 1, 0, 0.25)
-
-		frame.HealPrediction = {
-			myBar = mhpb,
-			otherBar = ohpb,
-			maxOverflow = 1,
-			PostUpdate = function(frame)
-				if frame.myBar:GetValue() == 0 then frame.myBar:SetAlpha(0) else frame.myBar:SetAlpha(1) end
-				if frame.otherBar:GetValue() == 0 then frame.otherBar:SetAlpha(0) else frame.otherBar:SetAlpha(1) end
-			end
-		}
-
 		if UF.db.aurabar then
             frame.AuraBars = self:Construct_AuraBarHeader(frame)
             frame.AuraBars:SetPoint("BOTTOMLEFT", frame, "TOPLEFT", 0, 33)
@@ -512,33 +465,6 @@ function UF:DPSLayout(frame, unit)
         if self.db.showPortrait then
         	frame.Portrait = self:ConstructPortrait(frame)
         end
-	end
-
-	if unit == "party" then
-		-- Heal Prediction
-		local mhpb = CreateFrame("StatusBar", nil, frame)
-		mhpb:SetPoint("BOTTOMLEFT", frame.Health:GetStatusBarTexture(), "BOTTOMRIGHT")
-		mhpb:SetPoint("TOPLEFT", frame.Health:GetStatusBarTexture(), "TOPRIGHT")
-		mhpb:SetWidth(health:GetWidth())
-		mhpb:SetStatusBarTexture(R["media"].blank)
-		mhpb:SetStatusBarColor(0, 1, 0.5, 0.25)
-
-		local ohpb = CreateFrame("StatusBar", nil, frame)
-		ohpb:SetPoint("BOTTOMLEFT", mhpb:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
-		ohpb:SetPoint("TOPLEFT", mhpb:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
-		ohpb:SetWidth(mhpb:GetWidth())
-		ohpb:SetStatusBarTexture(R["media"].blank)
-		ohpb:SetStatusBarColor(0, 1, 0, 0.25)
-
-		frame.HealPrediction = {
-			myBar = mhpb,
-			otherBar = ohpb,
-			maxOverflow = 1,
-			PostUpdate = function(frame)
-				if frame.myBar:GetValue() == 0 then frame.myBar:SetAlpha(0) else frame.myBar:SetAlpha(1) end
-				if frame.otherBar:GetValue() == 0 then frame.otherBar:SetAlpha(0) else frame.otherBar:SetAlpha(1) end
-			end
-		}
 	end
 
 	if unit == "focus" then
