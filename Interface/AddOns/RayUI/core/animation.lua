@@ -305,7 +305,7 @@ end
 local SmoothUpdate = CreateFrame("Frame")
 SmoothUpdate:SetScript("OnUpdate", function()
 	local limit = 30/GetFramerate()
-	local speed = 1/12
+	local speed = 1/8
 
 	for bar, value in pairs(smoothing) do
 		local cur = bar:GetValue()

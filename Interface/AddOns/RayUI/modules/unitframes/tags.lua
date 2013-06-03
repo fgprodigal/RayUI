@@ -136,22 +136,6 @@ oUF.Tags.Methods["RayUF:info"] = function(u)
 end
 oUF.Tags.Events["RayUF:info"] = "UNIT_HEALTH"
 
-oUF.Tags.Methods["RayUF:curxp"] = function(unit)
-    return siValue(UnitXP(unit))
-end
-
-oUF.Tags.Methods["RayUF:maxxp"] = function(unit)
-    return siValue(UnitXPMax(unit))
-end
-
-oUF.Tags.Methods["RayUF:perxp"] = function(unit)
-    return math.floor(UnitXP(unit) / UnitXPMax(unit) * 100 + 0.5)
-end
-
-oUF.Tags.Events["RayUF:curxp"] = "PLAYER_XP_UPDATE PLAYER_LEVEL_UP"
-oUF.Tags.Events["RayUF:maxxp"] = "PLAYER_XP_UPDATE PLAYER_LEVEL_UP"
-oUF.Tags.Events["RayUF:perxp"] = "PLAYER_XP_UPDATE PLAYER_LEVEL_UP"
-
 oUF.Tags.Methods["RayUF:altpower"] = function(u)
 	local cur = UnitPower(u, ALTERNATE_POWER_INDEX)
 	local max = UnitPowerMax(u, ALTERNATE_POWER_INDEX)

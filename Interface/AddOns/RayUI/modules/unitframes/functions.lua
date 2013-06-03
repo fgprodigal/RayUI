@@ -60,7 +60,7 @@ function UF:ConstructHealthBar(frame, bg, text)
 
     if text then
         health.value = frame.textframe:CreateFontString(nil, "OVERLAY")
-        health.value:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
+        health.value:SetFont(R["media"].font, R["media"].fontsize - 1, R["media"].fontflag)
         health.value:SetJustifyH("LEFT")
         health.value:SetParent(frame.textframe)
     end
@@ -102,7 +102,7 @@ function UF:ConstructPowerBar(frame, bg, text)
         textframe:SetFrameLevel(frame:GetFrameLevel()+5)
 
         power.value = textframe:CreateFontString(nil, "OVERLAY")
-        power.value:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
+        power.value:SetFont(R["media"].font, R["media"].fontsize - 1, R["media"].fontflag)
         power.value:SetJustifyH("LEFT")
         power.value:SetParent(textframe)
     end
@@ -892,75 +892,6 @@ function UF:CustomFilter(unit, icon, name, rank, texture, count, dtype, duration
     return true
 end
 
-function UF:FocusText(frame)
-    local focusdummy = CreateFrame("BUTTON", "focusdummy", frame, "SecureActionButtonTemplate")
-    focusdummy:SetFrameStrata("HIGH")
-    focusdummy:SetWidth(25)
-    focusdummy:SetHeight(25)
-    focusdummy:Point("CENTER", frame.Health, 0, 0)
-    focusdummy:EnableMouse(true)
-    focusdummy:RegisterForClicks("AnyUp")
-    focusdummy:SetAttribute("type", "macro")
-    focusdummy:SetAttribute("macrotext", "/focus")
-    focusdummy:SetBackdrop({
-        bgFile =  [=[Interface\ChatFrame\ChatFrameBackground]=],
-        edgeFile = "Interface\\Buttons\\WHITE8x8",
-        edgeSize = 1,
-        insets = {
-            left = 0,
-            right = 0,
-            top = 0,
-            bottom = 0
-        }
-    })
-    focusdummy:SetBackdropColor(.1,.1,.1,0)
-    focusdummy:SetBackdropBorderColor(0,0,0,0)
-
-    focusdummytext = focusdummy:CreateFontString(frame,"OVERLAY")
-    focusdummytext:Point("CENTER", frame.Health, 0, 0)
-    focusdummytext:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
-    focusdummytext:SetText(L["焦点"])
-    focusdummytext:SetVertexColor(1,0.2,0.1,0)
-
-    focusdummy:SetScript("OnLeave", function(frame) focusdummytext:SetVertexColor(1,0.2,0.1,0) end)
-    focusdummy:SetScript("OnEnter", function(frame) focusdummytext:SetTextColor(.6,.6,.6) end)
-end
-
-function UF:ClearFocusText(frame)
-    local clearfocus = CreateFrame("BUTTON", "focusdummy", frame, "SecureActionButtonTemplate")
-    clearfocus:SetFrameStrata("HIGH")
-    clearfocus:SetWidth(25)
-    clearfocus:SetHeight(20)
-    clearfocus:Point("TOP", frame,0, 0)
-    clearfocus:EnableMouse(true)
-    clearfocus:RegisterForClicks("AnyUp")
-    clearfocus:SetAttribute("type", "macro")
-    clearfocus:SetAttribute("macrotext", "/clearfocus")
-
-    clearfocus:SetBackdrop({
-        bgFile =  [=[Interface\ChatFrame\ChatFrameBackground]=],
-        edgeFile = "Interface\\Buttons\\WHITE8x8",
-        edgeSize = 1,
-        insets = {
-            left = 0,
-            right = 0,
-            top = 0,
-            bottom = 0
-        }
-    })
-    clearfocus:SetBackdropColor(.1,.1,.1,0)
-    clearfocus:SetBackdropBorderColor(0,0,0,0)
-
-    clearfocustext = clearfocus:CreateFontString(frame,"OVERLAY")
-    clearfocustext:Point("CENTER", frame.Health, 0, 0)
-    clearfocustext:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
-    clearfocustext:SetText(L["取消焦点"])
-    clearfocustext:SetVertexColor(1,0.2,0.1,0)
-
-    clearfocus:SetScript("OnLeave", function(frame) clearfocustext:SetVertexColor(1,0.2,0.1,0) end)
-    clearfocus:SetScript("OnEnter", function(frame) clearfocustext:SetTextColor(.6,.6,.6) end)
-end
-
 function UF:ConstructMonkResourceBar(frame)
     local bars = CreateFrame("Frame", nil, frame)
     bars:SetSize(200, 5)
@@ -1279,8 +1210,8 @@ function UF:EnableHealPredictionAndAbsorb(frame)
 	abb:SetVertexColor(.66, 1, 1, .7)
 
 	local abbo = frame:CreateTexture(nil, "BORDER", 6)
-	abbo:SetTexture("Interface\\RaidFrame\\Shield-Overlay", true, true)
 	abbo:SetAllPoints(abb)
+	abbo:SetTexture("Interface\\RaidFrame\\Shield-Overlay", true, true)
 	abbo.tileSize = 32
 
 	local oag = frame:CreateTexture(nil, "ARTWORK", 1)

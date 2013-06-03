@@ -14,7 +14,7 @@ local function UpdateFillBar(frame, previousTexture, bar, amount)
 	bar:SetPoint("BOTTOMLEFT", previousTexture, "BOTTOMRIGHT", 0, 0)
 
 	local totalWidth, totalHeight = frame.Health:GetSize()
-	local _, totalMax = frame.Health:GetMinMaxValues()
+	local totalMax = UnitHealthMax(frame.unit)
 
 	local barSize = (amount / totalMax) * totalWidth
 	bar:SetWidth(barSize)

@@ -995,7 +995,8 @@ R["Watcher"] = {
                 size = 28,
 
                 --元素詛咒
-                { spellID = 1490, unitId = "target", caster = "player", filter = "DEBUFF" },
+                { spellID = 1490, unitId = "target", caster = "all", filter = "DEBUFF" },
+                { spellID = 104225, unitId = "target", caster = "all", filter = "DEBUFF" },
             },
             {
                 name = "目标重要buff&debuff",

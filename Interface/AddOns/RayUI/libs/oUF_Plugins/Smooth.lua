@@ -49,7 +49,7 @@ f:SetScript('OnUpdate', function()
 
 	for bar, value in pairs(smoothing) do
 		local cur = bar:GetValue()
-		local new = cur + min((value-cur)/12, max(value-cur, limit))
+		local new = cur + min((value-cur)/8, max(value-cur, limit))
 		if new ~= new then
 			-- Mad hax to prevent QNAN.
 			new = value

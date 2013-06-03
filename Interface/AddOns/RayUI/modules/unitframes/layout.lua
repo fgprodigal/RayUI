@@ -49,9 +49,6 @@ function UF:DPSLayout(frame, unit)
 	frame:SetScript("OnEnter", UnitFrame_OnEnter)
 	frame:SetScript("OnLeave", UnitFrame_OnLeave)
 
-	-- Setup Menu
-	-- frame.menu = self.SpawnMenu
-
 	-- Frame Level
 	frame:SetFrameLevel(5)
 
@@ -69,7 +66,7 @@ function UF:DPSLayout(frame, unit)
 
 	-- Name
 	local name = frame.textframe:CreateFontString(nil, "OVERLAY")
-	name:SetFont(R["media"].font, 15, R["media"].fontflag)
+	name:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
 	frame.Name = name
 
 	-- mouseover highlight
@@ -104,10 +101,10 @@ function UF:DPSLayout(frame, unit)
 	self:EnableHealPredictionAndAbsorb(frame)	
 
 	if unit == "player" then
-		health:SetSize(PLAYER_WIDTH, PLAYER_HEIGHT * (1 - self.db.powerheight) - 10)
-		health.value:Point("LEFT", health, "LEFT", 5, 0)
-		name:Point("TOPLEFT", health, "BOTTOMLEFT", 0, 3)
-		name:Point("TOPRIGHT", health, "BOTTOMRIGHT", 0, 3)
+		health:Size(PLAYER_WIDTH, PLAYER_HEIGHT * (1 - self.db.powerheight) - 1)
+		health.value:Point("TOPRIGHT", health, "TOPRIGHT", -8, -2)
+		name:Point("BOTTOMLEFT", health, "BOTTOMLEFT", 8, 3)
+		name:Point("BOTTOMRIGHT", health, "BOTTOMRIGHT", -8, 3)
 		name:SetJustifyH("LEFT")
 
 		if self.db.healthColorClass then
@@ -120,12 +117,12 @@ function UF:DPSLayout(frame, unit)
 		if self.db.separateEnergy and R.myclass == "ROGUE" then
 			local EnergyBarHolder = CreateFrame("Frame", nil, frame)
 			EnergyBarHolder:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 311)
-			EnergyBarHolder:SetSize(ENERGY_WIDTH, ENERGY_HEIGHT + 13)
+			EnergyBarHolder:Size(ENERGY_WIDTH, ENERGY_HEIGHT + 13)
 			local EnergyBar = CreateFrame("Statusbar", "RayUF_EnergyBar", EnergyBarHolder)
 			EnergyBar:SetStatusBarTexture(R["media"].normal)
 			EnergyBar:SetStatusBarColor(unpack(self.db.powerColorClass and oUF.colors.class[R.myclass] or oUF.colors.power["ENERGY"]))
 			EnergyBar:SetPoint("BOTTOM", 0, 3)
-			EnergyBar:SetSize(ENERGY_WIDTH, ENERGY_HEIGHT)
+			EnergyBar:Size(ENERGY_WIDTH, ENERGY_HEIGHT)
 			EnergyBar:CreateShadow("Background")
 			EnergyBar.shadow:SetBackdropColor(.12, .12, .12, 1)
 			EnergyBar.text = EnergyBar:CreateFontString(nil, "OVERLAY")
@@ -143,7 +140,7 @@ function UF:DPSLayout(frame, unit)
 			power:SetPoint("LEFT")
 			power:SetPoint("RIGHT")
 			power:SetPoint("BOTTOM")
-			power.value:Point("RIGHT", health, "RIGHT", -5, 0)
+			power.value:Point("BOTTOMRIGHT", health, "BOTTOMRIGHT", -8, 2)
 			power:SetWidth(PLAYER_WIDTH)
 			power:SetHeight(PLAYER_HEIGHT * self.db.powerheight)
 			power:CreateShadow("Background")
@@ -157,12 +154,12 @@ function UF:DPSLayout(frame, unit)
 		if self.db.vengeance then
 			local VengeanceBarHolder = CreateFrame("Frame", nil, frame)
 			VengeanceBarHolder:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 317)
-			VengeanceBarHolder:SetSize(ENERGY_WIDTH, ENERGY_HEIGHT)
+			VengeanceBarHolder:Size(ENERGY_WIDTH, ENERGY_HEIGHT)
 			local VengeanceBar = CreateFrame("Statusbar", "RayUF_VengeanceBar", VengeanceBarHolder)
 			VengeanceBar:SetStatusBarTexture(R["media"].normal)
 			VengeanceBar:SetStatusBarColor(unpack(self.db.powerColorClass and oUF.colors.class[R.myclass] or oUF.colors.power["RAGE"]))
 			VengeanceBar:SetPoint("CENTER")
-			VengeanceBar:SetSize(ENERGY_WIDTH, ENERGY_HEIGHT)
+			VengeanceBar:Size(ENERGY_WIDTH, ENERGY_HEIGHT)
 			VengeanceBar:CreateShadow("Background")
 			VengeanceBar.shadow:SetBackdropColor(.12, .12, .12, 1)
 			VengeanceBar.Text = VengeanceBar:CreateFontString(nil, "OVERLAY")
@@ -293,7 +290,7 @@ function UF:DPSLayout(frame, unit)
 		frame.Reputation = reputation
 
 		local Combat = frame:CreateTexture(nil, "OVERLAY")
-		Combat:SetSize(20, 20)
+		Combat:Size(20, 20)
 		Combat:ClearAllPoints()
 		Combat:Point("LEFT", health, "LEFT", -10, -5)
 		frame.Combat = Combat
@@ -301,7 +298,7 @@ function UF:DPSLayout(frame, unit)
 		frame.Combat:SetVertexColor(0.6, 0, 0)
 
 		local Resting = frame:CreateTexture(nil, "OVERLAY")
-		Resting:SetSize(20, 20)
+		Resting:Size(20, 20)
 		Resting:Point("BOTTOM", Combat, "BOTTOM", 0, 25)
 		frame.Resting = Resting
 		frame.Resting:SetTexture("Interface\\AddOns\\RayUI\\media\\rested")
@@ -315,22 +312,21 @@ function UF:DPSLayout(frame, unit)
 	end
 
 	if unit == "target" then
-		health:SetSize(TARGET_WIDTH, TARGET_HEIGHT * (1 - self.db.powerheight) - 10)
-		health.value:Point("LEFT", health, "LEFT", 5, 0)
-		name:Point("TOPLEFT", health, "BOTTOMLEFT", 0, 3)
-		name:Point("TOPRIGHT", health, "BOTTOMRIGHT", 0, 3)
+		health:Size(TARGET_WIDTH, TARGET_HEIGHT * (1 - self.db.powerheight) - 1)
+		health.value:Point("TOPLEFT", health, "TOPLEFT", 8, -2)
+		name:Point("BOTTOMLEFT", health, "BOTTOMLEFT", 8, 3)
+		name:Point("BOTTOMRIGHT", health, "BOTTOMRIGHT", -8, 3)
 		name:SetJustifyH("RIGHT")
 		if self.db.healthColorClass then
 			frame:Tag(name, "[RayUF:name] [RayUF:info]")
 		else
-			frame:Tag(name, "[RayUF:color][RayUF:name] [RayUF:info]")
+			frame:Tag(name, "[RayUF:info] [RayUF:color][RayUF:name]")
 		end
-		self:FocusText(frame)
 		local power = self:ConstructPowerBar(frame, true, true)
 		power:SetPoint("LEFT")
 		power:SetPoint("RIGHT")
 		power:SetPoint("BOTTOM")
-		power.value:Point("RIGHT", health, "RIGHT", -5, 0)
+		power.value:Point("BOTTOMLEFT", health, "BOTTOMLEFT", 8, 2)
 		power:SetWidth(PLAYER_WIDTH)
 		power:SetHeight(PLAYER_HEIGHT * self.db.powerheight)
 		power:CreateShadow("Background")
@@ -442,10 +438,10 @@ function UF:DPSLayout(frame, unit)
 	end
 
 	if unit == "party" or unit == "focus" then
-		health:SetSize(PARTY_WIDTH, PARTY_HEIGHT * (1 - self.db.powerheight) - 10)
-		health.value:Point("LEFT", health, "LEFT", 5, 0)
-		name:Point("TOPLEFT", health, "BOTTOMLEFT", 0, 3)
-		name:Point("TOPRIGHT", health, "BOTTOMRIGHT", 0, 3)
+		health:Size(PARTY_WIDTH, PARTY_HEIGHT * (1 - self.db.powerheight) - 1)
+		health.value:Point("TOPRIGHT", health, "TOPRIGHT", -8, -2)
+		name:Point("BOTTOMLEFT", health, "BOTTOMLEFT", 8, 3)
+		name:Point("BOTTOMRIGHT", health, "BOTTOMRIGHT", -8, 3)
 		name:SetJustifyH("LEFT")
 		if self.db.healthColorClass then
 			frame:Tag(name, "[RayUF:name] [RayUF:info]")
@@ -456,7 +452,7 @@ function UF:DPSLayout(frame, unit)
 		power:SetPoint("LEFT")
 		power:SetPoint("RIGHT")
 		power:SetPoint("BOTTOM")
-		power.value:Point("RIGHT", health, "RIGHT", -5, 0)
+		power.value:Point("BOTTOMRIGHT", health, "BOTTOMRIGHT", -8, 2)
 		power:SetWidth(PLAYER_WIDTH)
 		power:SetHeight(PLAYER_HEIGHT * self.db.powerheight)
 		power:CreateShadow("Background")
@@ -478,13 +474,11 @@ function UF:DPSLayout(frame, unit)
 		castbar.Text:SetPoint("BOTTOMLEFT", castbar, "TOPLEFT", 5, -2)
 		castbar.Time:ClearAllPoints()
 		castbar.Time:SetPoint("BOTTOMRIGHT", castbar, "TOPRIGHT", -5, -2)
-		castbar.Iconbg:SetSize(25, 25)
+		castbar.Iconbg:Size(25, 25)
 		castbar.Iconbg:ClearAllPoints()
 		castbar.Iconbg:SetPoint("BOTTOM", castbar, "TOP", 0, 5)
 		castbar:SetParent(UIParent)
 		frame.Castbar = castbar
-
-		self:ClearFocusText(frame)
 
 		-- Debuffs
 		local debuffs = CreateFrame("Frame", nil, frame)
@@ -505,7 +499,7 @@ function UF:DPSLayout(frame, unit)
 	end
 
 	if unit == "targettarget" or unit == "pet" or unit == "pettarget" or unit == "focustarget" then
-		health:SetSize(SMALL_WIDTH, SMALL_HEIGHT * 0.9)
+		health:Size(SMALL_WIDTH, SMALL_HEIGHT * 0.9)
 		health.value:Point("LEFT", frame, "LEFT", 5, 0)
 		if unit == "pet" then
 			health:SetHeight(PET_HEIGHT * 0.9)
@@ -567,7 +561,7 @@ function UF:DPSLayout(frame, unit)
 	end
 
 	if (unit and unit:find("arena%d") and self.db.showArenaFrames == true) or (unit and unit:find("boss%d") and self.db.showBossFrames == true) then
-		health:SetSize(BOSS_WIDTH, BOSS_HEIGHT * (1 - self.db.powerheight)-2)
+		health:Size(BOSS_WIDTH, BOSS_HEIGHT * (1 - self.db.powerheight)-2)
 		health.value:Point("LEFT", frame, "LEFT", 5, 0)
 		name:Point("BOTTOM", health, -6, -15)
 		name:Point("LEFT", health, 0, 0)
@@ -666,31 +660,31 @@ function UF:DPSLayout(frame, unit)
 	end
 
     local leader = frame:CreateTexture(nil, "OVERLAY")
-    leader:SetSize(16, 16)
+    leader:Size(16, 16)
     leader:Point("TOPLEFT", frame, "TOPLEFT", 7, 10)
     frame.Leader = leader
 
 	-- Assistant Icon
 	local assistant = frame:CreateTexture(nil, "OVERLAY")
     assistant:Point("TOPLEFT", frame, "TOPLEFT", 7, 10)
-    assistant:SetSize(16, 16)
+    assistant:Size(16, 16)
     frame.Assistant = assistant
 
     local masterlooter = frame:CreateTexture(nil, "OVERLAY")
-    masterlooter:SetSize(16, 16)
+    masterlooter:Size(16, 16)
     masterlooter:Point("TOPLEFT", frame, "TOPLEFT", 20, 10)
     frame.MasterLooter = masterlooter
 	frame.MasterLooter:SetTexture("Interface\\AddOns\\RayUI\\media\\looter")
 	frame.MasterLooter:SetVertexColor(0.8, 0.8, 0.8)
 
     local LFDRole = frame:CreateTexture(nil, "OVERLAY")
-    LFDRole:SetSize(16, 16)
+    LFDRole:Size(16, 16)
     LFDRole:Point("TOPLEFT", frame, -10, 10)
 	frame.LFDRole = LFDRole
 	frame.LFDRole:SetTexture("Interface\\AddOns\\RayUI\\media\\lfd_role")
 
     local PvP = frame:CreateTexture(nil, "OVERLAY")
-    PvP:SetSize(35, 35)
+    PvP:Size(35, 35)
     PvP:Point("TOPRIGHT", frame, 22, 8)
     frame.PvP = PvP
 	frame.PvP.Override = function(frame, event, unit)
@@ -716,7 +710,7 @@ function UF:DPSLayout(frame, unit)
 	end
 
     local QuestIcon = frame:CreateTexture(nil, "OVERLAY")
-    QuestIcon:SetSize(24, 24)
+    QuestIcon:Size(24, 24)
     QuestIcon:Point("BOTTOMRIGHT", frame, 15, -2)
     frame.QuestIcon = QuestIcon
 	frame.QuestIcon:SetTexture("Interface\\AddOns\\RayUI\\media\\quest")
@@ -724,7 +718,7 @@ function UF:DPSLayout(frame, unit)
 
     local ricon = frame:CreateTexture(nil, "OVERLAY")
     ricon:Point("BOTTOM", frame, "TOP", 0, -7)
-    ricon:SetSize(24, 24)
+    ricon:Size(24, 24)
 	ricon:SetTexture("Interface\\AddOns\\RayUI\\media\\raidicons.blp")
     frame.RaidIcon = ricon
 
