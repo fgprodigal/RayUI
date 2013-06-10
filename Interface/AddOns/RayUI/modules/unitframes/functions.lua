@@ -91,7 +91,7 @@ function UF:ConstructPowerBar(frame, bg, text)
     if bg then
         power.bg = power:CreateTexture(nil, "BORDER")
         power.bg:SetAllPoints()
-        power.bg:SetTexture(R["media"].blank)
+        power.bg:SetTexture(R["media"].normal)
         power.bg.multiplier = 0.2
     end
 
@@ -1083,7 +1083,7 @@ function UF:ConstructShamanResourceBar(frame)
         bars[i]:GetStatusBarTexture():SetHorizTile(false)
         bars[i]:SetFrameLevel(5)
 
-        bars[i]:SetBackdrop({bgFile = R["media"].blank})
+        bars[i]:SetBackdrop({bgFile = R["media"].normal})
         bars[i]:SetBackdropColor(0.5, 0.5, 0.5)
         bars[i]:SetMinMaxValues(0, 1)
 
@@ -1196,20 +1196,20 @@ end
 function UF:EnableHealPredictionAndAbsorb(frame)
 	local mhpb = frame:CreateTexture(nil, "BORDER", 5)
 	mhpb:SetWidth(1)
-	mhpb:SetTexture(R["media"].blank)
+	mhpb:SetTexture(R["media"].normal)
 	mhpb:SetVertexColor(0, 1, 0.5, 0.25)
 
 	local ohpb = frame:CreateTexture(nil, "BORDER", 5)
 	ohpb:SetWidth(1)
-	ohpb:SetTexture(R["media"].blank)
+	ohpb:SetTexture(R["media"].normal)
 	ohpb:SetVertexColor(0, 1, 0, 0.25)
 
 	local abb = frame:CreateTexture(nil, "BORDER", 5)
 	abb:SetWidth(1)
-	abb:SetTexture(R["media"].blank)
+	abb:SetTexture(R["media"].normal)
 	abb:SetVertexColor(.66, 1, 1, .7)
 
-	local abbo = frame:CreateTexture(nil, "BORDER", 6)
+	local abbo = frame:CreateTexture(nil, "BORDER", 7)
 	abbo:SetAllPoints(abb)
 	abbo:SetTexture("Interface\\RaidFrame\\Shield-Overlay", true, true)
 	abbo.tileSize = 32

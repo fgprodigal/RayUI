@@ -6,6 +6,7 @@
 	<Script file="bugsack.lua"/>
 	<Script file="clique.lua"/>
 	<Script file="dbm.lua"/>
+	<Script file="extracd.lua"/>
 	<Script file="friendsmenuxp.lua"/>
 	<Script file="mogit.lua"/>
 	<Script file="nugrunning.lua"/>

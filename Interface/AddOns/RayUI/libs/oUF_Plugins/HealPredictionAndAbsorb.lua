@@ -1,3 +1,6 @@
+--[[ Element: Heal Prediction And Absorb Bar
+			By Ray
+]]--
 local _, ns = ...
 local oUF = RayUF or oUF
 

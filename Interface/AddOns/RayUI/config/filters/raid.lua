@@ -147,6 +147,7 @@ G.Raid.RaidDebuffs = {
 
 			--Lei Shen
 			[SpellName(135000)] = Defaults(7), --Decapitate
+			[SpellName(139011)] = Defaults(8), --Decapitate
 
 			--Ra-den
 

@@ -58,6 +58,7 @@ local function LoadSkin()
 	S:ReskinCheck(ReputationDetailAtWarCheckBox)
 	S:ReskinCheck(ReputationDetailInactiveCheckBox)
 	S:ReskinCheck(ReputationDetailMainScreenCheckBox)
+	S:ReskinCheck(ReputationDetailLFGBonusReputationCheckBox)
 	S:ReskinInput(GearManagerDialogPopupEditBox)
 
 	hooksecurefunc("CharacterFrame_Expand", function()

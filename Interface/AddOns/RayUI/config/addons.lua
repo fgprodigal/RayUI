@@ -107,6 +107,9 @@ function AddOn.MikScrollingBattleText()
 		["critOutlineIndex"] = 2,
 		["normalFontSize"] = 16,
 	}
+
+	MSBTProfiles_SavedVarsPerChar = MSBTProfiles_SavedVarsPerChar or {}
+	MSBTProfiles_SavedVarsPerChar.currentProfileName = MSBTProfiles_SavedVarsPerChar.currentProfileName or "RayUI"
 end
 
 local eventFrame = CreateFrame("Frame")

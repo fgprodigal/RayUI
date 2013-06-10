@@ -415,10 +415,10 @@ function AB:Initialize()
     end
 
 	if self.db.showgrid then
-		ActionButton_HideGrid = R.dummy
+		-- ActionButton_HideGrid = R.dummy
 		SetCVar("alwaysShowActionBars", "1")
 	else
-		ActionButton_ShowGrid = R.dummy
+		-- ActionButton_ShowGrid = R.dummy
 		SetCVar("alwaysShowActionBars", nil)
 	end
 
