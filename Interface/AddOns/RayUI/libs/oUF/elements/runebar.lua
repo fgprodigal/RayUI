@@ -40,10 +40,12 @@
 
 if select(2, UnitClass("player")) ~= "DEATHKNIGHT" then return end
 
+
 local parent, ns = ...
 local oUF = ns.oUF
+local floor = math.floor
 
-oUF.colors.runes = {
+oUF.colors.Runes = {
 	{1, 0, 0},   -- blood
 	{0, .5, 0},  -- unholy
 	{0, 1, 1},   -- frost
@@ -69,9 +71,8 @@ local UpdateType = function(self, event, rid, alt)
 	local runeType = GetRuneType(rid) or alt
 	if isUsable and runeType == 1 then runeType = 4; end
 	if not runeType then return; end
-	local colors = oUF.colors.runes[runeType]
+	local colors = oUF.colors.Runes[runeType]
 	local r, g, b = colors[1], colors[2], colors[3]
-
 	rune:SetStatusBarColor(r, g, b)
 
 	if(rune.bg) then
@@ -135,7 +136,7 @@ local Enable = function(self, unit)
 
 			-- From my minor testing this is a okey solution. A full login always remove
 			-- the death runes, or at least the clients knowledge about them.
-			UpdateType(self, nil, i, math.floor((runemap[i]+1)/2))
+			UpdateType(self, nil, i, floor((runemap[i]+1)/2))
 		end
 
 		-- oUF leaves the vehicle events registered on the player frame, so

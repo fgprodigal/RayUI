@@ -124,8 +124,8 @@ function UF:ConstructPortrait(frame)
     local portrait = CreateFrame("PlayerModel", nil, frame)
     portrait:SetFrameStrata("LOW")
     portrait:SetFrameLevel(frame.Health:GetFrameLevel() + 1)
-    portrait:SetPoint("TOPLEFT", frame.Health, "TOPLEFT", 0, 0)
-    portrait:SetPoint("BOTTOMRIGHT", frame.Health, "BOTTOMRIGHT", 0, 0)
+    portrait:Point("TOPLEFT", frame.Health, "TOPLEFT", 1, -1)
+    portrait:Point("BOTTOMRIGHT", frame.Health, "BOTTOMRIGHT", -1, 1)
     portrait:SetAlpha(.2)
     portrait.PostUpdate = function(frame)
         if frame:GetModel() and frame:GetModel().find and frame:GetModel():find("worgenmale") then
@@ -632,7 +632,7 @@ function UF:PostUpdateHealth(unit, cur, max)
         if self.__owner.isMouseOver then
             self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(UnitHealth(unit)))
         else
-            self.value:SetFormattedText("|cff%02x%02x%02x%d%%|r", color[1] * 255, color[2] * 255, color[3] * 255, floor(UnitHealth(unit) / UnitHealthMax(unit) * 100 + 0.5))
+            self.value:SetFormattedText("|cff%02x%02x%02x%.1f%%|r", color[1] * 255, color[2] * 255, color[3] * 255, UnitHealth(unit) / UnitHealthMax(unit) * 100)
         end
     elseif self.__owner.isMouseOver then
         self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(UnitHealthMax(unit)))
@@ -670,7 +670,7 @@ function UF:PostUpdatePower(unit, cur, max)
         if self.__owner.isMouseOver then
             self.value:SetFormattedText("%s - |cff%02x%02x%02x%s|r", R:ShortValue(UnitPower(unit)), color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(UnitPowerMax(unit)))
         elseif type == "MANA" then
-            self.value:SetFormattedText("|cff%02x%02x%02x%d%%|r", color[1] * 255, color[2] * 255, color[3] * 255, floor(UnitPower(unit) / UnitPowerMax(unit) * 100 + 0.5))
+            self.value:SetFormattedText("|cff%02x%02x%02x%.1f%%|r", color[1] * 255, color[2] * 255, color[3] * 255,  UnitPower(unit) / UnitPowerMax(unit) * 100)
         elseif cur > 0 then
             self.value:SetFormattedText("|cff%02x%02x%02x%d|r", color[1] * 255, color[2] * 255, color[3] * 255, UnitPower(unit))
         else

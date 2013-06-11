@@ -250,7 +250,6 @@ function R:InitializeModules()
 end
 
 function R:PLAYER_ENTERING_WORLD()
-	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	RequestTimePlayed()
 	Advanced_UIScaleSlider:Kill()
 	Advanced_UseUIScale:Kill()

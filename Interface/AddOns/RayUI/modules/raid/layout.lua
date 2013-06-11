@@ -547,7 +547,7 @@ local function style(self)
 
     -- ReadyCheck
     self.ReadyCheck = self.Health:CreateTexture(nil, "OVERLAY")
-    self.ReadyCheck:SetPoint("TOP", self)
+    self.ReadyCheck:SetPoint("BOTTOM", self)
     self.ReadyCheck:SetSize(RA.db.leadersize + 4, RA.db.leadersize+ 4)
 
     -- Auras
@@ -812,6 +812,7 @@ function RA:SpawnRaid()
 			group:Point(pos, raid15[i-1], posRel, colX or 0, colY or 0)
 		end
 		raid15[i] = group
+		group:Show()
         R:CreateMover(group, group:GetName().."Mover", "Raid1-15 Group"..i, nil, nil, "ALL,RAID15", true)
         RA.Raid15SmartVisibility(group)
 	end
@@ -824,6 +825,7 @@ function RA:SpawnRaid()
 			group:Point(pos, raid25[i-1], posRel, colX or 0, colY or 0)
 		end
 		raid25[i] = group
+		group:Show()
         R:CreateMover(group, group:GetName().."Mover", "Raid1-25 Group"..i, nil, nil, "ALL,RAID25,RAID40", true)
         RA.Raid25SmartVisibility(group)
 	end
@@ -837,6 +839,7 @@ function RA:SpawnRaid()
 				group:Point(pos, raid40[i-1], posRel, colX or 0, colY or 0)
 			end
 			raid40[i] = group
+			group:Show()
             R:CreateMover(group, group:GetName().."Mover", "Raid1-40 Group"..i, nil, nil, "ALL,RAID40", true)
             RA.Raid40SmartVisibility(group)
 		end

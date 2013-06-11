@@ -770,6 +770,8 @@ R["Watcher"] = {
 				{ spellID = 31850, unitId = "player", caster = "player", filter = "BUFF" },
 				--光速
 				{ spellID = 85499, unitId = "player", caster = "player", filter = "BUFF" },
+				--公正之盾
+				{ spellID = 132403, unitId = "player", caster = "player", filter = "BUFF" },
 				--榮耀壁壘
 				{ spellID = 114637, unitId = "player", caster = "player", filter = "BUFF" },
 				--大十字軍
@@ -1089,6 +1091,8 @@ R["Watcher"] = {
                 { spellID = 84747, unitId = "player", caster = "player", filter = "BUFF" },
                 --預知
                 { spellID = 115189, unitId = "player", caster = "player", filter = "BUFF" },
+                --手裏劍
+                { spellID = 137586, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标buff&debuff",
