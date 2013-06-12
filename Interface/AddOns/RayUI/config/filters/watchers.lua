@@ -1527,7 +1527,7 @@ R["Watcher"] = {
 				-- 稷坤的傳說之羽 (力量, 觸發)
 				{ spellID = 138759, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 贊達拉火花 (力量, 觸發)
-				{ spellID = 138958, unitId = "player", caster = "player", filter = "BUFF" },
+				{ spellID = 138960, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 普莫迪斯的狂怒咒符 (力量, 觸發)
 				{ spellID = 138870, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 雙妃之凝視 (暴擊, 觸發)

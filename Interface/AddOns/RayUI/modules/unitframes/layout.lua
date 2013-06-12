@@ -93,9 +93,12 @@ function UF:DPSLayout(frame, unit)
 	frame:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", UF.UpdateThreatStatus)
 
 	-- SpellRange
-	frame.SpellRange = {
-		  insideAlpha = 1,
-		  outsideAlpha = 0.3}
+	if unit ~= "player" then
+		frame.Range = {
+			insideAlpha = 1,
+			outsideAlpha = 0.4
+		}
+	end
 
 	-- Heal Prediction
 	self:EnableHealPredictionAndAbsorb(frame)	

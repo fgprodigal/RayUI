@@ -9,7 +9,6 @@
 	<Script file="Reputation.lua"/>
 	<Script file="RuneOfPower.lua"/>
 	<Script file="Smooth.lua"/>
-	<Script file="SpellRange.lua"/>	
 	<Script file="TotemBar.lua"/>
 	<Script file="Trinkets.lua"/>
 	<Script file="Vengeance.lua"/>

@@ -104,7 +104,7 @@ function RM:UpdateReminderIcon(event, unit)
 	end
 
 	if db.combat then
-		if InCombatLockdown() then
+		if UnitAffectingCombat("player") then
 			combatCheck = true
 		else
 			combatCheck = nil
