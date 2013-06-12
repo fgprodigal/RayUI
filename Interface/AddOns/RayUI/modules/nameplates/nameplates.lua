@@ -287,7 +287,7 @@ local function CreateAuraIcon(parent)
 	button.count = button:CreateFontString(nil,"OVERLAY")
 	button.count:SetFont(R["media"].font,9,R["media"].fontflag)
 	button.count:SetShadowColor(0, 0, 0, 0.4)
-	button.count:SetPoint("TOPRIGHT", button, "TOPRIGHT", 2, 0)
+	button.count:SetPoint("TOPRIGHT", button, "TOPRIGHT", 2, 2)
 	return button
 end
 

@@ -1984,6 +1984,8 @@ R["Watcher"] = {
 				{ spellID = 140741, unitId = "player", caster = "all", filter = "BUFF", fuzzy = true },
 				-- 靜電震擊
 				{ spellID = 135695, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
+				-- 動盪生命
+				{ spellID = 138297, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
 
                 --魔古山寶庫
                 --石衛士

@@ -45,6 +45,8 @@ end
 
 local function maxChanged(self, event, unit)
 	local R, L = unpack(RayUI)
+
+	unit = event == "PLAYER_ENTERING_WORLD" and "player" or unit
 	if unit ~= "player" then return end
 	local bar = self.Vengeance
 
@@ -53,7 +55,7 @@ local function maxChanged(self, event, unit)
 		return
 	end
 
-	local health = UnitHealthMax("player")
+	local health = UnitHealthMax(unit)
 	if not health then return end
 	bar.max = health
 end
@@ -64,7 +66,6 @@ local function Enable(self, unit)
 	if bar and unit == "player" then
 		bar.max = 0
 		bar.value = 0
-		maxChanged(self, nil, unit)
 		self:RegisterEvent("UNIT_AURA", valueChanged)
 		self:RegisterEvent("PLAYER_ENTERING_WORLD", maxChanged)
 		self:RegisterEvent("UNIT_MAXHEALTH", maxChanged)
