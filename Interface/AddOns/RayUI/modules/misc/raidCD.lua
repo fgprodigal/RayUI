@@ -47,6 +47,14 @@ local function StopTimer(bar)
 	M:UpdateRaidCDPositions()
 end
 
+local function StopAllTimer()
+	for i = 1, #bars do
+		bars[i]:Hide()
+		bars[i]:SetScript("OnUpdate", nil)
+	end
+	wipe(bars)
+end
+
 local function BarUpdate(self, elapsed)
 	local curTime = GetTime()
 	if self.endTime < curTime then
@@ -141,7 +149,8 @@ local function StartTimer(name, spellId)
 	bar:SetScript("OnEnter", OnEnter)
 	bar:SetScript("OnLeave", OnLeave)
 	bar:SetScript("OnMouseDown", OnMouseDown)
-	tinsert(bars, bar)
+	bar.id = #bars+1
+	bars[#bars+1] = bar
 	M:UpdateRaidCDPositions()
 end
 
@@ -155,9 +164,7 @@ end
 
 function M:ZONE_CHANGED_NEW_AREA()
 	if select(2, IsInInstance()) == "arena" then
-		for k, v in pairs(bars) do
-            StopTimer(v)
-		end
+		StopAllTimer()
 	end
 end
 
@@ -183,9 +190,7 @@ local function checkForWipe()
 	end
 	if (w and bossfight) then
 		bossfight=false
-		for k, v in pairs(bars) do
-			StopTimer(v)
-		end
+		StopAllTimer()
 	end
 	if not w then M:ScheduleTimer(checkForWipe, 2) end
 end
@@ -206,9 +211,7 @@ function M:DisableRaidCD()
     M:UnregisterEvent("ZONE_CHANGED_NEW_AREA")
     M:UnregisterEvent("INSTANCE_ENCOUNTER_ENGAGE_UNIT")
     M:UnregisterEvent("PLAYER_REGEN_ENABLED")
-    for k, v in pairs(bars) do
-        StopTimer(v)
-    end
+    StopAllTimer()
 end
 
 local function LoadFunc()
