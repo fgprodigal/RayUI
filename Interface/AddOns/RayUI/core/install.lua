@@ -73,7 +73,7 @@ function R:SetLayout(layout)
 		R.db.movers.PetBarMover = "BOTTOMLEFTActionBar2MoverBOTTOMRIGHT"..R.db.ActionBar.buttonspacing.."0"
 		R.db.movers.AltPowerBarMover = "BOTTOMRIGHTUIParentBOTTOMRIGHT-36085"
 		R.db.Raid.horizontal = true
-		R.db.Raid.growth = "RIGHT"
+		R.db.Raid.growth = "UP"
 		StaticPopup_Show("CFG_RELOAD")
 	elseif layout == "dps" then
 		R:ResetMovers()
@@ -86,12 +86,12 @@ function R:SetLayout(layout)
 		R.db.movers.RayUFRaid40_6Mover = "BOTTOMLEFTRayUFRaid25_1MoverTOPLEFT0"..R.db.Raid.spacing
 		R.db.movers.ActionBar5Mover = "TOPRIGHTActionBar4MoverTOPLEFT"..-R.db.ActionBar.buttonspacing.."0"
 		R.db.Raid.horizontal = false
-		R.db.Raid.growth = "DOWN"
+		R.db.Raid.growth = "RIGHT"
 		StaticPopup_Show("CFG_RELOAD")
 	elseif layout == "default" then
 		R:ResetMovers()
 		R.db.Raid.horizontal = false
-		R.db.Raid.growth = "DOWN"
+		R.db.Raid.growth = "RIGHT"
 		StaticPopup_Show("CFG_RELOAD")
 	end
 	R:SetMoversPositions()

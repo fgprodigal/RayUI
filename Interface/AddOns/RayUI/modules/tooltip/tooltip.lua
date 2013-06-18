@@ -196,17 +196,9 @@ function TT:GameTooltip_SetDefaultAnchor(tooltip, parent)
 		if owner and owner:match("RayUFRaid") then
 			local parent = _G[owner:match("RayUFRaid%d%d_%d")]
 			if R.db.Raid.horizontal then
-				if R.db.Raid.growth == "RIGHT" then
-					tooltip:Point("BOTTOMRIGHT", parent, "BOTTOMLEFT", -23, 0)
-				else
-					tooltip:Point("BOTTOMLEFT", parent, "BOTTOMRIGHT", 23, 0)
-				end
+				tooltip:Point("BOTTOMRIGHT", parent, "BOTTOMLEFT", -23, 0)
 			else
-				if R.db.Raid.growth == "UP" then
-					tooltip:Point("TOPRIGHT", parent, "BOTTOMRIGHT", 0, -23)
-				else
-					tooltip:Point("BOTTOMRIGHT", parent, "TOPRIGHT", 0, 23)
-				end
+				tooltip:Point("BOTTOMRIGHT", parent, "TOPRIGHT", 0, 23)
 			end
 		elseif RayUFRaid40_6UnitButton1 and RayUFRaid40_6UnitButton1:IsVisible() and (GetScreenWidth() - RayUFRaid40_8:GetRight()) < 250 then
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, RayUFRaid40_8:GetBottom() + RayUFRaid40_8:GetHeight() + 30)
