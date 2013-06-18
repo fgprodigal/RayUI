@@ -140,7 +140,6 @@ local function LoadSkin()
 
 	QuestInfoSkillPointFrameIconTexture:SetSize(40, 40)
 	QuestInfoSkillPointFrameIconTexture:SetTexCoord(.08, .92, .08, .92)
-	QuestLogDetailFrame:DisableDrawLayer("BORDER")
 	QuestLogDetailFrame:DisableDrawLayer("ARTWORK")
 
 	QuestLogFrameShowMapButton:StripTextures()

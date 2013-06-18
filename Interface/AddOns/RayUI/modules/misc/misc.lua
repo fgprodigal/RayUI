@@ -1,5 +1,6 @@
 local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
-local M = R:NewModule("Misc", "AceEvent-3.0")
+local M = R:NewModule("Misc", "AceEvent-3.0", "AceTimer-3.0")
+
 M.modName = L["小玩意儿"]
 
 M.Modules = {}

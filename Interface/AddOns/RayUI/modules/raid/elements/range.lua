@@ -113,9 +113,9 @@ local OnRangeUpdate = function(self, elapsed)
             if(object:IsShown()) then
                 local range = object.freebRange
                 if UnitIsConnected(object.unit) and not UnitInRange(object.unit) and IsInGroup() then
-                    if(object:GetAlpha() == range.insideAlpha) then
-                        object:SetAlpha(range.outsideAlpha)
-                    end
+                    -- if(object:GetAlpha() == range.insideAlpha) then
+                        -- object:SetAlpha(range.outsideAlpha)
+                    -- end
 
                     object.OoR = true
                     if not RA.db.arrowmouseover then
@@ -126,11 +126,11 @@ local OnRangeUpdate = function(self, elapsed)
                             object.freebarrow:Hide()
                         end
                     end
-                elseif(object:GetAlpha() ~= range.insideAlpha) then
-                    object:SetAlpha(range.insideAlpha)
-                    if object.freebarrow:IsShown() then
-                        object.freebarrow:Hide()
-                    end
+                -- elseif(object:GetAlpha() ~= range.insideAlpha) then
+                    -- object:SetAlpha(range.insideAlpha)
+                    -- if object.freebarrow:IsShown() then
+                        -- object.freebarrow:Hide()
+                    -- end
                 else
                     object.OoR = false
                 end

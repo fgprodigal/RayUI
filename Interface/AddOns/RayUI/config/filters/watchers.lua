@@ -1302,6 +1302,8 @@ R["Watcher"] = {
                 { spellID = 51271, unitId = "player", caster = "player", filter = "BUFF" },
                 --血魄充能
                 { spellID = 114851, unitId = "player", caster = "player", filter = "BUFF" },
+                --黑暗救贖
+                { spellID = 101568, unitId = "player", caster = "player", filter = "BUFF" },
                 --寶寶能量
                 { spellID = 91342, unitId = "pet", caster = "player", filter = "BUFF" },
                 --黑暗變身

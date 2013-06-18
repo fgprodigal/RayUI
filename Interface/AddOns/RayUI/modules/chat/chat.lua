@@ -197,8 +197,8 @@ local function ChatCopyButtons(id)
 			end)
 		end
 
-		button:SetScript("OnEnter", function() 
-			button:SetAlpha(1) 
+		button:SetScript("OnEnter", function()
+			button:SetAlpha(1)
 		end)
 		button:SetScript("OnLeave", function() button:SetAlpha(0) end)
 	end
@@ -250,7 +250,7 @@ function CH:GetOptions()
 end
 
 function CH:Info()
-	return L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r聊天模块."] 
+	return L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r聊天模块."]
 end
 
 function CH:EditBox_MouseOn()
@@ -828,20 +828,20 @@ function CH:SaveChatHistory(event, ...)
 
 		if c > 128 then
 			RayUICharacterData.ChatHistory[k] = nil
-		end	  
+		end
 	end
 end
 
-function CH:DisplayChatHistory()	
+function CH:DisplayChatHistory()
 	local temp, data = {}
 	for id, _ in pairs(RayUICharacterData.ChatHistory) do
 		table.insert(temp, tonumber(id))
 	end
-	
+
 	table.sort(temp, function(a, b)
 		return a < b
 	end)
-	
+
 	for i = 1, #temp do
 		data = RayUICharacterData.ChatHistory[tostring(temp[i])]
 		if (time() - temp[i]) > 21600 then
@@ -865,8 +865,8 @@ function CH:ApplyStyle(event, ...)
 
             cf:SetParent(ChatBG)
             local ebParts = {"Left", "Mid", "Right", "Middle"}
-            for j = 1, #CHAT_FRAME_TEXTURES do 
-                _G[frameName..CHAT_FRAME_TEXTURES[j]]:SetTexture(nil) 
+            for j = 1, #CHAT_FRAME_TEXTURES do
+                _G[frameName..CHAT_FRAME_TEXTURES[j]]:SetTexture(nil)
             end
             for _, ebPart in ipairs(ebParts) do
                 if _G[frameName.."EditBoxFocus"..ebPart] then
@@ -972,7 +972,7 @@ function CH:ApplyStyle(event, ...)
 			self:SecureHook(eb, "AddHistoryLine", "ChatEdit_AddHistory")
 			for i, text in pairs(RayUICharacterData.ChatEditHistory) do
 				eb:AddHistoryLine(text)
-			end	
+			end
 
             cf.styled = true
         end
@@ -1165,7 +1165,7 @@ function CH:Initialize()
 	self:SecureHook("FCFTab_UpdateColors", "FaneifyTab")
 	self:SecureHook("FCF_StartAlertFlash")
 	self:SecureHook("FCF_StopAlertFlash")
-    self:SecureHook("FCF_Tab_OnClick") 
+    self:SecureHook("FCF_Tab_OnClick")
 
 	local events = {
 		"CHAT_MSG_BATTLEGROUND", "CHAT_MSG_BATTLEGROUND_LEADER",
@@ -1214,7 +1214,7 @@ function CH:Initialize()
 	ChatHistoryEvent:RegisterEvent("CHAT_MSG_WHISPER")
 	ChatHistoryEvent:RegisterEvent("CHAT_MSG_WHISPER_INFORM")
 	ChatHistoryEvent:RegisterEvent("CHAT_MSG_YELL")
-    ChatHistoryEvent:RegisterEvent("PLAYER_LOGIN")
+    -- ChatHistoryEvent:RegisterEvent("PLAYER_LOGIN")
 	ChatHistoryEvent:SetScript("OnEvent", function(self, event, ...)
         if event =="PLAYER_LOGIN" then
             ChatHistoryEvent:UnregisterEvent("PLAYER_LOGIN")

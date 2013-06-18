@@ -2,7 +2,6 @@ local _, ns = ...
 
 local currentEncounterID
 local itemButtons = {}
-local position = "TOP"
 
 local BACKDROP = {
 	bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=], tile = true, tileSize = 16,
@@ -88,24 +87,12 @@ local function HandleClick()
 	Handle:ClearAllPoints()
 
 	if(collapsed) then
-		if(position == "BOTTOM") then
-			Handle.Arrow:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-up-active")
-			Handle:Point("BOTTOM", Container, 0, -15)
-		else
-			Handle.Arrow:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-down-active")
-			Handle:Point("TOP", Container, 0, 15)
-		end
-
+		Handle.Arrow:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-left-active")
+		Handle:Point("LEFT", BonusRollFrame, "RIGHT", 288, 0)
 		Container:Show()
 	else
-		if(position == "BOTTOM") then
-			Handle.Arrow:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-down-active")
-			Handle:Point("TOP", BonusRollFrame, "BOTTOM", 0, 1)
-		else
-			Handle.Arrow:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-up-active")
-			Handle:Point("BOTTOM", BonusRollFrame, "TOP", 0, -1)
-		end
-
+		Handle.Arrow:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-right-active")
+		Handle:Point("LEFT", BonusRollFrame, "RIGHT", 1, 0)
 		Container:Hide()
 	end
 
@@ -114,29 +101,14 @@ end
 
 function Container:HandleUpdate()
 	self:ClearAllPoints()
-
-	if(position == "BOTTOM") then
-		self:Point("TOP", BonusRollFrame, "BOTTOM", 0, -1)
-
-		Handle.Arrow:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-down-active")
-		Handle.TopCenter:Hide()
-		Handle.TopRight:Hide()
-		Handle.TopLeft:Hide()
-		Handle.BottomCenter:Show()
-		Handle.BottomRight:Show()
-		Handle.BottomLeft:Show()
-	else
-		self:Point("BOTTOM", BonusRollFrame, "TOP", 0, 1)
-
-		Handle.Arrow:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-up-active")
-		Handle.TopCenter:Show()
-		Handle.TopRight:Show()
-		Handle.TopLeft:Show()
-		Handle.BottomCenter:Hide()
-		Handle.BottomRight:Hide()
-		Handle.BottomLeft:Hide()
-	end
-
+	self:Point("TOPLEFT", BonusRollFrame, "TOPRIGHT", 1, 0)
+	Handle.Arrow:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-right-active")
+	Handle.TopCenter:Show()
+	Handle.TopRight:Show()
+	Handle.TopLeft:Show()
+	Handle.BottomCenter:Hide()
+	Handle.BottomRight:Hide()
+	Handle.BottomLeft:Hide()
 	self:Hide()
 	collapsed = true
 end
@@ -247,13 +219,7 @@ function Container:Populate()
 
 			ItemButton.itemID = itemID
 			ItemButton.itemLink = itemLink
-
-			if(position == "BOTTOM") then
-				ItemButton:Point("TOP", 0, (6 + ((numItems - 1) * 40)) * -1)
-			else
-				ItemButton:Point("BOTTOM", 0, 6 + ((numItems - 1) * 40))
-			end
-
+			ItemButton:Point("TOP", 0, (6 + ((numItems - 1) * 40)) * -1)
 			ItemButton:Show()
 		end
 	end
@@ -338,13 +304,8 @@ end
 function Container:PLAYER_LOGIN()
 	local S = RayUI[1]:GetModule("Skins")
 
-	if(position == "BOTTOM") then
-		self:Point("TOP", BonusRollFrame, "BOTTOM", 0, -1)
-		Handle:Point("TOP", BonusRollFrame, "BOTTOM", 0, 1)
-	else
-		self:Point("BOTTOM", BonusRollFrame, "TOP", 0, 1)
-		Handle:Point("BOTTOM", BonusRollFrame, "TOP", 0, -1)
-	end
+	self:Point("TOPLEFT", BonusRollFrame, "TOPRIGHT", 1, 0)
+	Handle:Point("LEFT", BonusRollFrame, "RIGHT", 1, 0)
 
 	self:SetWidth(286)
 	self:SetFrameLevel(self:GetParent():GetFrameLevel() - 2)
@@ -360,7 +321,7 @@ function Container:PLAYER_LOGIN()
 	Empty:SetText("This encounter has no possible items for\nyour current class and/or specialization.")
 	self.Empty = Empty
 
-	Handle:SetSize(64, 16)
+	Handle:SetSize(16, 64)
 	Handle:SetScript("OnClick", HandleClick)
 	Handle.Arrow = Handle:GetNormalTexture()
 	Handle.Arrow = Handle:CreateTexture(nil, "ARTWORK")
@@ -449,12 +410,7 @@ SlashCmdList.TestHabeebIt = function()
 
 		ItemButton.itemID = itemID
 		ItemButton.itemLink = itemLink
-
-		if(position == "BOTTOM") then
-			ItemButton:Point("TOP", 0, (6 + ((numItems - 1) * 40)) * -1)
-		else
-			ItemButton:Point("BOTTOM", 0, 6 + ((numItems - 1) * 40))
-		end
+		ItemButton:Point("TOP", 0, (6 + ((numItems - 1) * 40)) * -1)
 
 		ItemButton:Show()
 	end

@@ -543,7 +543,7 @@ local function style(self)
     }
 
     self.freebRange = RA.db.arrow and range
-    self.Range = RA.db.arrow == false and range
+    self.Range = range
 
     -- ReadyCheck
     self.ReadyCheck = self.Health:CreateTexture(nil, "OVERLAY")

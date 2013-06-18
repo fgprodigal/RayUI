@@ -1209,7 +1209,7 @@ function UF:EnableHealPredictionAndAbsorb(frame)
 	abb:SetTexture(R["media"].normal)
 	abb:SetVertexColor(.66, 1, 1, .7)
 
-	local abbo = frame:CreateTexture(nil, "BORDER", 7)
+	local abbo = frame:CreateTexture(nil, "ARTWORK", 1)
 	abbo:SetAllPoints(abb)
 	abbo:SetTexture("Interface\\RaidFrame\\Shield-Overlay", true, true)
 	abbo.tileSize = 32
@@ -1218,8 +1218,8 @@ function UF:EnableHealPredictionAndAbsorb(frame)
 	oag:SetWidth(15)
 	oag:SetTexture("Interface\\RaidFrame\\Shield-Overshield")
 	oag:SetBlendMode("ADD")
-	oag:SetPoint("TOPLEFT", frame.Health, "TOPRIGHT", -5, 3)
-	oag:SetPoint("BOTTOMLEFT", frame.Health, "BOTTOMRIGHT", -5, -3)
+	oag:SetPoint("TOPLEFT", frame.Health, "TOPRIGHT", -5, 0)
+	oag:SetPoint("BOTTOMLEFT", frame.Health, "BOTTOMRIGHT", -5, 0)
 
 	frame.HealPredictionAndAbsorb = {
 		myBar = mhpb,

@@ -91,13 +91,59 @@ local function LoadFunc()
     local Monomyth = CreateFrame("Frame")
     Monomyth:SetScript("OnEvent", function(self, event, ...) self[event](...) end)
 
-    local atBank, atMail
+	local DelayHandler
+	do
+		local currentInfo = {}
+
+		local Delayer = Monomyth:CreateAnimationGroup()
+		Delayer:CreateAnimation():SetDuration(.25)
+		Delayer:SetLooping("NONE")
+		Delayer:SetScript("OnFinished", function()
+			DelayHandler(unpack(currentInfo))
+		end)
+
+		local delayed = true
+		function DelayHandler(func, ...)
+			if(delayed) then
+				delayed = false
+
+				table.wipe(currentInfo)
+				table.insert(currentInfo, func)
+
+				for index = 1, select("#", ...) do
+					local argument = select(index, ...)
+					table.insert(currentInfo, argument)
+				end
+
+				Delayer:Play()
+			else
+				delayed = true
+				func(...)
+			end
+		end
+	end
+
+    local atBank, atMail, atMerchant
+
+	local delayEvent = {
+		GOSSIP_SHOW = true,
+		GOSSIP_CONFIRM = true,
+		QUEST_GREETING = true,
+		QUEST_DETAIL = true,
+		QUEST_ACCEPT_CONFIRM = true,
+		QUEST_PROGRESS = true,
+		QUEST_AUTOCOMPLETE = true,
+	}
 
     function Monomyth:Register(event, func, override)
         self:RegisterEvent(event)
         self[event] = function(...)
             if (override or (not IsShiftKeyDown() and M.db.automation)) then
-                func(...)
+                if delayEvent[event] then
+					DelayHandler(func, ...)
+				else
+					func(...)
+				end
             end
         end
     end
@@ -160,15 +206,35 @@ local function LoadFunc()
             end
         end
 
-        local _, instance = GetInstanceInfo()
-        if(available == 0 and active == 0 and GetNumGossipOptions() == 1 and instance ~= "raid") then
-            local _, type = GetGossipOptions()
-            if(type == "gossip") then
-                SelectGossipOption(1)
-                return
-            end
-        end
+		if(available == 0 and active == 0 and GetNumGossipOptions() == 1) then
+			local _, instance = GetInstanceInfo()
+			if instance ~= "raid" then
+				local _, type = GetGossipOptions()
+				if(type == "gossip") then
+					SelectGossipOption(1)
+					return
+				end
+			end
+		end
     end)
+
+	local ignoredItems = {
+        -- Inscription weapons
+        [31690] = true, -- Inscribed Tiger Staff
+        [31691] = true, -- Inscribed Crane Staff
+        [31692] = true, -- Inscribed Serpent Staff
+
+        -- Darkmoon Faire artifacts
+        [29443] = true, -- Imbued Crystal
+        [29444] = true, -- Monstrous Egg
+        [29445] = true, -- Mysterious Grimoire
+        [29446] = true, -- Ornate Weapon
+        [29451] = true, -- A Treatise on Strategy
+        [29456] = true, -- Banner of the Fallen
+        [29457] = true, -- Captured Insignia
+        [29458] = true, -- Fallen Adventurer's Journal
+        [29464] = true, -- Soothsayer's Runes
+    }
 
     local darkmoonNPC = {
         [57850] = true, -- Teleportologist Fozlebub
@@ -207,64 +273,79 @@ local function LoadFunc()
         end
     end)
 
-    Monomyth:Register("QUEST_PROGRESS", function()
-        if(IsQuestCompletable()) then
-            CompleteQuest()
-        end
+    local choiceQueue
+    Monomyth:Register("QUEST_ITEM_UPDATE", function(...)
+        if(choiceQueue and Monomyth[choiceQueue]) then
+			Monomyth[choiceQueue]()
+		end
     end)
 
-    local choiceQueue, choiceFinished
-    Monomyth:Register("QUEST_ITEM_UPDATE", function(...)
-        if(choiceQueue) then
-            Monomyth.QUEST_COMPLETE()
-        end
+	Monomyth:Register("QUEST_PROGRESS", function()
+        if(IsQuestCompletable()) then
+			local requiredItems = GetNumQuestItems()
+			if(requiredItems > 0) then
+				for index = 1, requiredItems do
+					local link = GetQuestItemLink("required", index)
+					if(link) then
+						local id = tonumber(string.match(link, "item:(%d+)"))
+						for _, itemID in pairs(ignoredItems) do
+							if(itemID == id) then
+								return
+							end
+						end
+					else
+						choiceQueue = "QUEST_PROGRESS"
+						return
+					end
+				end
+			end
+
+			CompleteQuest()
+		end
     end)
 
     Monomyth:Register("QUEST_COMPLETE", function()
-        local choices = GetNumQuestChoices()
-        if(choices <= 1) then
-            GetQuestReward(1)
-        elseif(choices > 1) then
-            local bestValue, bestIndex = 0
+		local choices = GetNumQuestChoices()
+		if(choices <= 1) then
+			GetQuestReward(1)
+		elseif(choices > 1) then
+			local bestValue, bestIndex = 0
 
-            for index = 1, choices do
-                local link = GetQuestItemLink("choice", index)
-                if(link) then
-                    local _, _, _, _, _, _, _, _, _, _, value = GetItemInfo(link)
+			for index = 1, choices do
+				local link = GetQuestItemLink("choice", index)
+				if(link) then
+					local _, _, _, _, _, _, _, _, _, _, value = GetItemInfo(link)
 
-                    if(string.match(link, "item:45724:")) then
-                        -- Champion's Purse, contains 10 gold
-                        value = 1e5
-                    end
+					if(string.match(link, "item:45724:")) then
+						-- Champion's Purse, contains 10 gold
+						value = 1e5
+					end
 
-                    if(value > bestValue) then
-                        bestValue, bestIndex = value, index
-                    end
-                else
-                    choiceQueue = true
-                    return GetQuestItemInfo("choice", index)
-                end
-            end
+					if(value > bestValue) then
+						bestValue, bestIndex = value, index
+					end
+				else
+					choiceQueue = "QUEST_COMPLETE"
+					return GetQuestItemInfo("choice", index)
+				end
+			end
 
-            if(bestIndex) then
-                choiceFinished = true
-                _G["QuestInfoItem" .. bestIndex]:Click()
-            end
-        end
-    end)
+			if(bestIndex) then
+				_G["QuestInfoItem" .. bestIndex]:Click()
+			end
+		end
+	end)
 
     Monomyth:Register("QUEST_FINISHED", function()
-        if(choiceFinished) then
-            choiceQueue = false
-        end
+        choiceQueue = nil
     end)
 
     Monomyth:Register("QUEST_AUTOCOMPLETE", function(id)
         local index = GetQuestLogIndexByID(id)
-        if(GetQuestLogIsAutoComplete(index)) then
-            -- The quest might not be considered complete, investigate later
-            ShowQuestComplete(index)
-        end
+		if(GetQuestLogIsAutoComplete(index)) then
+			-- The quest might not be considered complete, investigate later
+			ShowQuestComplete(index)
+		end
     end)
 
     Monomyth:Register("MERCHANT_SHOW", function()
@@ -299,40 +380,44 @@ local function LoadFunc()
         atMail = false
     end)
 
-    local ignoredItems = {
-        -- Inscription weapons
-        [31690] = true, -- Inscribed Tiger Staff
-        [31691] = true, -- Inscribed Crane Staff
-        [31692] = true, -- Inscribed Serpent Staff
+	local questTip = CreateFrame("GameTooltip", "MonomythTip", UIParent)
+	local questLevel = string.gsub(ITEM_MIN_LEVEL, "%%d", "(%%d+)")
 
-        -- Darkmoon Faire artifacts
-        [29443] = true, -- Imbued Crystal
-        [29444] = true, -- Monstrous Egg
-        [29445] = true, -- Mysterious Grimoire
-        [29446] = true, -- Ornate Weapon
-        [29451] = true, -- A Treatise on Strategy
-        [29456] = true, -- Banner of the Fallen
-        [29457] = true, -- Captured Insignia
-        [29458] = true, -- Fallen Adventurer's Journal
-        [29464] = true, -- Soothsayer's Runes
-    }
+	local function GetQuestItemLevel()
+		for index = 1, questTip:NumLines() do
+			local level = string.match(_G["MonomythTipTextLeft" .. index]:GetText(), questLevel)
+			if(level and tonumber(level)) then
+				return tonumber(level)
+			end
+		end
+	end
 
-    Monomyth:Register("BAG_UPDATE", function(bag)
-        if(atBank or atMail or atMerchant) then return end
+	local function BagUpdate(bag)
+		if(atBank or atMail or atMerchant) then return end
 
         for slot = 1, GetContainerNumSlots(bag) do
             local _, id, active = GetContainerItemQuestInfo(bag, slot)
             if(id and not active and not IsQuestFlaggedCompleted(id) and not ignoredItems[id]) then
-                UseContainerItem(bag, slot)
+                questTip:SetBagItem(bag, slot)
+				questTip:Show()
+
+				local level = GetQuestItemLevel()
+				if(not level or level <= UnitLevel("player")) then
+					UseContainerItem(bag, slot)
+				end
             end
         end
-    end)
+	end
+
+    Monomyth:Register("PLAYER_LOGIN", function()
+		Monomyth:Register("BAG_UPDATE", BagUpdate)
+	end)
 
     local errors = {
         [ERR_QUEST_ALREADY_DONE] = true,
         [ERR_QUEST_FAILED_LOW_LEVEL] = true,
         [ERR_QUEST_NEED_PREREQS] = true,
-    }   
+    }
 
     ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", function(self, event, message)
         if M.db.automation then
@@ -340,7 +425,7 @@ local function LoadFunc()
         end
     end)
 
-    QuestInfoDescriptionText.SetAlphaGradient=function() return false end
+    QuestInfoDescriptionText.SetAlphaGradient = function() return false end
 end
 
 M:RegisterMiscModule("Quest", LoadFunc)

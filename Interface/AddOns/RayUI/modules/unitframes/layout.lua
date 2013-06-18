@@ -662,31 +662,31 @@ function UF:DPSLayout(frame, unit)
         frame.Trinket = trinkets
 	end
 
-    local leader = frame:CreateTexture(nil, "OVERLAY")
+    local leader = frame:CreateTexture(nil, "BORDER")
     leader:Size(16, 16)
     leader:Point("TOPLEFT", frame, "TOPLEFT", 7, 10)
     frame.Leader = leader
 
 	-- Assistant Icon
-	local assistant = frame:CreateTexture(nil, "OVERLAY")
+	local assistant = frame:CreateTexture(nil, "BORDER")
     assistant:Point("TOPLEFT", frame, "TOPLEFT", 7, 10)
     assistant:Size(16, 16)
     frame.Assistant = assistant
 
-    local masterlooter = frame:CreateTexture(nil, "OVERLAY")
+    local masterlooter = frame:CreateTexture(nil, "BORDER")
     masterlooter:Size(16, 16)
     masterlooter:Point("TOPLEFT", frame, "TOPLEFT", 20, 10)
     frame.MasterLooter = masterlooter
 	frame.MasterLooter:SetTexture("Interface\\AddOns\\RayUI\\media\\looter")
 	frame.MasterLooter:SetVertexColor(0.8, 0.8, 0.8)
 
-    local LFDRole = frame:CreateTexture(nil, "OVERLAY")
+    local LFDRole = frame:CreateTexture(nil, "BORDER")
     LFDRole:Size(16, 16)
     LFDRole:Point("TOPLEFT", frame, -10, 10)
 	frame.LFDRole = LFDRole
 	frame.LFDRole:SetTexture("Interface\\AddOns\\RayUI\\media\\lfd_role")
 
-    local PvP = frame:CreateTexture(nil, "OVERLAY")
+    local PvP = frame:CreateTexture(nil, "BORDER")
     PvP:Size(35, 35)
     PvP:Point("TOPRIGHT", frame, 22, 8)
     frame.PvP = PvP
@@ -712,14 +712,14 @@ function UF:DPSLayout(frame, unit)
         end
 	end
 
-    local QuestIcon = frame:CreateTexture(nil, "OVERLAY")
+    local QuestIcon = frame:CreateTexture(nil, "BORDER")
     QuestIcon:Size(24, 24)
     QuestIcon:Point("BOTTOMRIGHT", frame, 15, -2)
     frame.QuestIcon = QuestIcon
 	frame.QuestIcon:SetTexture("Interface\\AddOns\\RayUI\\media\\quest")
 	frame.QuestIcon:SetVertexColor(0.8, 0.8, 0.8)
 
-    local ricon = frame:CreateTexture(nil, "OVERLAY")
+    local ricon = frame:CreateTexture(nil, "BORDER")
     ricon:Point("BOTTOM", frame, "TOP", 0, -7)
     ricon:Size(24, 24)
 	ricon:SetTexture("Interface\\AddOns\\RayUI\\media\\raidicons.blp")
