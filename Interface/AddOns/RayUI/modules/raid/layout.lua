@@ -24,6 +24,44 @@ local function menu(self)
     return ToggleDropDownMenu(1, nil, dropdown, "cursor", 0, 0)
 end
 
+local init = function(self)
+    if RA.db.hidemenu and InCombatLockdown() then
+        return
+    end
+
+    local unit = self:GetParent().unit
+    local menu, name, id
+
+    if(not unit) then
+        return
+    end
+
+    if(UnitIsUnit(unit, "player")) then
+        menu = "SELF"
+    elseif(UnitIsUnit(unit, "vehicle")) then
+        menu = "VEHICLE"
+    elseif(UnitIsUnit(unit, "pet")) then
+        menu = "PET"
+    elseif(UnitIsPlayer(unit)) then
+        id = UnitInRaid(unit)
+        if(id) then
+            menu = "RAID_PLAYER"
+            name = GetRaidRosterInfo(id)
+        elseif(UnitInParty(unit)) then
+            menu = "PARTY"
+        else
+            menu = "PLAYER"
+        end
+    else
+        menu = "TARGET"
+        name = RAID_TARGET_ICON
+    end
+
+    if(menu) then
+        UnitPopup_ShowMenu(self, menu, unit, name, id)
+    end
+end
+
 local function ColorGradient(perc, color1, color2, color3)
 	local r1,g1,b1 = 1, 0, 0
 	local r2,g2,b2 = .85, .8, .45
@@ -399,7 +437,7 @@ function UpdateAuraWatch(frame)
 end
 
 local function style(self)
-    -- self.menu = menu
+    self.menu = menu
 
     self.BG = CreateFrame("Frame", nil, self)
     self.BG:SetFrameStrata("BACKGROUND")
@@ -760,6 +798,7 @@ function RA:SpawnHeader(name, group, layout)
 end
 
 function RA:SpawnRaid()
+	UIDropDownMenu_Initialize(dropdown, init, "MENU")
 	backdrop = {
 		bgFile = R["media"].blank,
 		insets = {top = -R.mult, left = -R.mult, bottom = -R.mult, right = -R.mult},
