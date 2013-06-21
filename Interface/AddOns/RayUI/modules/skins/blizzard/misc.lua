@@ -67,7 +67,7 @@ local function LoadSkin()
 		"BankItemSearchBox"
 	}
 	for i = 1, #inputs do
-		input = _G[inputs[i]]
+		local input = _G[inputs[i]]
 		S:ReskinInput(input)
 	end
 
@@ -144,13 +144,26 @@ local function LoadSkin()
 			"ChannelFrameDaughterFrame",
 			"LFDRoleCheckPopup",
 			"LFGDungeonReadyStatus",
-			"LFGDungeonReadyDialog"
+			"LFGDungeonReadyDialog",
+			"PVPReadyDialog"
 		}
 	for i = 1, #FrameBDs do
-		FrameBD = _G[FrameBDs[i]]
+		local FrameBD = _G[FrameBDs[i]]
 		S:CreateBD(FrameBD)
 		S:CreateSD(FrameBD)
 	end
+
+	PVPReadyDialogBackground:Hide()
+	PVPReadyDialogBottomArt:Hide()
+	PVPReadyDialogFiligree:Hide()
+
+	S:CreateBD(PVPReadyDialog)
+	PVPReadyDialog.SetBackdrop = R.dummy
+	S:CreateSD(PVPReadyDialog)
+
+	S:Reskin(PVPReadyDialog.enterButton)
+	S:Reskin(PVPReadyDialog.leaveButton)
+	S:ReskinClose(PVPReadyDialogCloseButton)
 
 	for i = 1, 10 do
 		select(i, GuildInviteFrame:GetRegions()):Hide()
@@ -166,7 +179,7 @@ local function LoadSkin()
 		"ColorPickerFrame"
 	}
 	for i = 1, #header do
-	local title = _G[header[i].."Header"]
+		local title = _G[header[i].."Header"]
 		if title then
 			title:SetTexture("")
 			title:ClearAllPoints()
