@@ -1,4 +1,5 @@
 local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+local RC = LibStub("LibRangeCheck-2.0")
 local UF = R:GetModule("UnitFrames")
 local oUF = RayUF or oUF
 
@@ -124,8 +125,8 @@ function UF:ConstructPortrait(frame)
     local portrait = CreateFrame("PlayerModel", nil, frame)
     portrait:SetFrameStrata("LOW")
     portrait:SetFrameLevel(frame.Health:GetFrameLevel() + 1)
-    portrait:Point("TOPLEFT", frame.Health, "TOPLEFT", 1, -1)
-    portrait:Point("BOTTOMRIGHT", frame.Health, "BOTTOMRIGHT", -1, 1)
+    portrait:Point("TOPLEFT", frame.Health, "TOPLEFT", 0, 0)
+    portrait:Point("BOTTOMRIGHT", frame.Health, "BOTTOMRIGHT", 0, 1)
     portrait:SetAlpha(.2)
     portrait.PostUpdate = function(frame)
         if frame:GetModel() and frame:GetModel().find and frame:GetModel():find("worgenmale") then
@@ -1347,6 +1348,59 @@ function UF:AuraBarFilter(unit, name, rank, icon, count, debuffType, duration, e
     end
 
     return returnValue
+end
+
+local RangeColors = {
+	[5] = RayUF.colors.reaction[5],
+	[30] = RayUF.colors.reaction[4],
+	[35] = RayUF.colors.reaction[3],
+	[40] = {1.00, 0.38, 0.08, 1},
+	[100] = RayUF.colors.reaction[1],
+}
+
+function UF:Construct_RangeText(frame)
+	local text = frame.textframe:CreateFontString(nil, "OVERLAY")
+	text:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
+	-- text:SetFont(R["media"].font, R["media"].fontsize - 2, R["media"].fontflag)
+	text:SetJustifyH("RIGHT")
+	text:SetParent(frame.textframe)
+	text:Point("TOPRIGHT", frame.textframe, "TOPLEFT", -2, 3)
+	return text
+end
+
+function UF:RangeDisplayUpdate(frame)
+	if ( not UnitExists("target") ) or ( not frame.RangeText ) then return end
+	
+	-- Get range
+	local section
+	local minRange, maxRange = RC:GetRange("target")
+	
+	-- No change? Skip
+	if ((minRange == frame.RangeText.lastMinRange) and (maxRange == frame.RangeText.lastMaxRange)) then return end
+
+	frame.RangeText.lastMinRange = minRange
+	frame.RangeText.lastMaxRange = maxRange
+
+	-- Get Range section
+	if UnitIsUnit("player", "target") then maxRange = nil end
+	if minRange > 80 then maxRange = nil end
+	if maxRange then
+		if maxRange <= 5 then
+			section = 5
+		elseif maxRange <= 30 then
+			section = 30
+		elseif maxRange <= 35 then
+			section = 35
+		elseif maxRange <= 40 then
+			section = 40
+		else
+			section = 100
+		end
+		frame.RangeText:SetFormattedText("%d", maxRange)
+		frame.RangeText:SetTextColor(RangeColors[section][1], RangeColors[section][2], RangeColors[section][3])
+	else
+		frame.RangeText:SetText("")
+	end
 end
 
 function UF:Construct_AuraBars()

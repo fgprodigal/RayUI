@@ -438,6 +438,8 @@ function UF:DPSLayout(frame, unit)
             frame.AuraBars:SetPoint("BOTTOMLEFT", frame, "TOPLEFT", 0, 33)
             frame.AuraBars:SetPoint("BOTTOMRIGHT", frame, "TOPRIGHT", 0, 33)
         end
+
+		frame.RangeText = self:Construct_RangeText(frame)
 	end
 
 	if unit == "party" or unit == "focus" then
@@ -733,6 +735,8 @@ function UF:DPSLayout(frame, unit)
 			tinsert(frame.mouseovers, frame.Power)
 		end
 	end
+
+	self:ScheduleRepeatingTimer("RangeDisplayUpdate", 0.25, frame)
 end
 
 function UF:LoadUnitFrames()

@@ -1,5 +1,5 @@
 local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
-local UF = R:NewModule("UnitFrames", "AceEvent-3.0")
+local UF = R:NewModule("UnitFrames", "AceEvent-3.0", "AceTimer-3.0")
 local oUF = RayUF or oUF
 
 UF.modName = L["头像"]
