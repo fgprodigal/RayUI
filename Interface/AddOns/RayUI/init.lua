@@ -94,7 +94,7 @@ function AddOn:OnInitialize()
 	end
 
 	self:InitializeModules()
-
+	self.initialized = true
     self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	self:RegisterEvent("PLAYER_LOGIN", "Initialize")
 	self:RegisterChatCommand("RayUI", "OpenConfig")
