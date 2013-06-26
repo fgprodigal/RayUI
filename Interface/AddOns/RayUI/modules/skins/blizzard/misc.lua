@@ -218,6 +218,7 @@ local function LoadSkin()
 			if not backdrop.reskinned then
 				S:CreateBD(menu)
 				S:CreateBD(backdrop)
+				S:CreateStripesThin(menu)
 				backdrop.reskinned = true
 			end
 		end
@@ -755,9 +756,9 @@ local function LoadSkin()
 	BNToastFrame:HookScript("OnShow", function(self)
 		self:ClearAllPoints()
 		if TempEnchant1:IsShown() or TempEnchant2:IsShown() then
-			self:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", -3, -40)
+			self:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", -3, -51)
 		else
-			self:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", -3, -6)
+			self:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", -3, -17)
 		end
 	end)
 

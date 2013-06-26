@@ -2,10 +2,9 @@ local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, loc
 local IF = R:GetModule("InfoBar")
 
 local function LoadMemory()
-	local infobar = _G["RayUITopInfoBar3"]
-	local Status = infobar.Status
+	local infobar = IF:CreateInfoPanel("RayUI_InfoPanel_Memory", 80)
+	infobar:SetPoint("LEFT", RayUI_InfoPanel_Latency, "RIGHT", 0, 0)
 	local scriptProfile = GetCVar("scriptProfile") == "1"
-	infobar.Text:SetText("0 MB")
 
     local maxMemorySize = 35
 	local int, int2 = 6, 5
@@ -16,7 +15,7 @@ local function LoadMemory()
 	local megaByteString = "%.2f MB"
 	local enteredFrame = false
 
-    Status:SetMinMaxValues(0, maxMemorySize * 1024)
+	infobar.Text:SetText(string.format(megaByteString, 0))
 
 	local function formatMem(memory)
 		local mult = 10^1
@@ -32,7 +31,7 @@ local function LoadMemory()
 	local memoryTable = {}
 	local cpuTable = {}
 
-	local function RebuildAddonList(self)
+	local function RebuildAddonList()
 		local addOnCount = GetNumAddOns()
 		if (addOnCount == #memoryTable) then return end
 		memoryTable = {}
@@ -41,7 +40,6 @@ local function LoadMemory()
 			memoryTable[i] = { i, select(2, GetAddOnInfo(i)), 0, IsAddOnLoaded(i) }
 			cpuTable[i] = { i, select(2, GetAddOnInfo(i)), 0, IsAddOnLoaded(i) }
 		end
-		self:SetAllPoints(infobar)
 	end
 
 	local function UpdateMemory()
@@ -82,7 +80,8 @@ local function LoadMemory()
 		enteredFrame = true
 		local bandwidth = GetAvailableBandwidth()
 		local home_latency = select(3, GetNetStats())
-		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT", 0, 0)
+		GameTooltip:SetOwner(infobar, "ANCHOR_NONE")
+		GameTooltip:SetPoint("BOTTOMLEFT", infobar, "TOPLEFT", 0, 0)
 		GameTooltip:ClearLines()
 
 		if bandwidth ~= 0 then
@@ -126,14 +125,13 @@ local function LoadMemory()
 		int2 = int2 - t
 
 		if int < 0 then
-			RebuildAddonList(self)
+			RebuildAddonList()
 			local total = UpdateMemory()
 			infobar.Text:SetText(formatMem(total))
-			Status:SetValue(total)
-			local r, g, b = R:ColorGradient(total/select(2, self:GetMinMaxValues()), IF.InfoBarStatusColor[3][1], IF.InfoBarStatusColor[3][2], IF.InfoBarStatusColor[3][3], 
+			local r, g, b = R:ColorGradient(total/(maxMemorySize * 1024), IF.InfoBarStatusColor[3][1], IF.InfoBarStatusColor[3][2], IF.InfoBarStatusColor[3][3], 
 																	IF.InfoBarStatusColor[2][1], IF.InfoBarStatusColor[2][2], IF.InfoBarStatusColor[2][3],
 																	IF.InfoBarStatusColor[1][1], IF.InfoBarStatusColor[1][2], IF.InfoBarStatusColor[1][3])
-			Status:SetStatusBarColor(r, g, b)
+			infobar.Square:SetVertexColor(r, g, b)
 			int = 10
 		end
 		if int2 < 0 then
@@ -144,16 +142,16 @@ local function LoadMemory()
 		end
 	end
 
-	Status:SetScript("OnMouseDown", function(self)
+	infobar:HookScript("OnMouseDown", function(self)
 		UpdateAddOnMemoryUsage()
 		local before = gcinfo()
 		collectgarbage()
 		UpdateAddOnMemoryUsage()
 		R:Print(L["共释放内存"], formatMem(before - gcinfo()))
 	end)
-	Status:SetScript("OnUpdate", OnUpdate)
-	Status:SetScript("OnEnter", OnEnter)
-	Status:SetScript("OnLeave", OnLeave)
+	infobar:HookScript("OnUpdate", OnUpdate)
+	infobar:HookScript("OnEnter", OnEnter)
+	infobar:HookScript("OnLeave", OnLeave)
 
 	hooksecurefunc("collectgarbage", function() OnUpdate(Status, 10) end)
 end

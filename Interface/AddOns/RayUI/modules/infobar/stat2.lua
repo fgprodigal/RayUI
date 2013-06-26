@@ -2,7 +2,7 @@ local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, loc
 local IF = R:GetModule("InfoBar")
 
 local function LoadStatus()
-	local infobar = _G["RayUIBottomInfoBar"]
+	local infobar = _G["RayUI_ExpBar"]
 	local Status = CreateFrame("Frame", nil, infobar)
 	Status:EnableMouse(true)
 	Status:SetFrameStrata("MEDIUM")

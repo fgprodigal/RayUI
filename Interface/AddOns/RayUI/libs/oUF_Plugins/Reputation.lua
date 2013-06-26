@@ -3,7 +3,7 @@ local oUF = RayUF or oUF
 
 local function tooltip(self)
 	local name, id, min, max, value = GetWatchedFactionInfo()
-	GameTooltip:SetOwner(self, 'ANCHOR_TOP', 0, 10)
+	GameTooltip:SetOwner(self, 'ANCHOR_BOTTOM', 0, -10)
 	GameTooltip:AddLine(string.format('%s (%s)', name, _G['FACTION_STANDING_LABEL'..id]))
 	GameTooltip:AddLine(string.format('%d / %d (%d%%)', value - min, max - min, (value - min) / (max - min) * 100))
 	GameTooltip:Show()

@@ -32,7 +32,7 @@ local function tooltip(self)
 	local min, max = xp(unit)
 	local bars = unit == 'pet' and 6 or 20
 
-	GameTooltip:SetOwner(self, 'ANCHOR_TOP', 0, 10)
+	GameTooltip:SetOwner(self, 'ANCHOR_BOTTOM', 0, -10)
 	GameTooltip:AddLine(format('经验: %d / %d (%d%% - %d 格)', min, max, min / max * 100, bars))
 	GameTooltip:AddLine(format('剩余: %d (%d%% - %d 格)', max - min, (max - min) / max * 100, bars * (max - min) / max))
 

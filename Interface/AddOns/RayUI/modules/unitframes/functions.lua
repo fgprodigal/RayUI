@@ -217,8 +217,8 @@ function UF:ConstructThreatBar()
         [3] = {1, 0, 0},
     }
     -- create the bar
-    local RayUIThreatBar = CreateFrame("StatusBar", "RayUIThreatBar", RayUIBottomInfoBar)
-    RayUIThreatBar:SetAllPoints(RayUIBottomInfoBar)
+    local RayUIThreatBar = CreateFrame("StatusBar", "RayUIThreatBar", RayUI_ExpBar)
+    RayUIThreatBar:SetAllPoints(RayUI_ExpBar)
     RayUIThreatBar:SetFrameStrata("BACKGROUND")
     RayUIThreatBar:SetFrameLevel(1)
 

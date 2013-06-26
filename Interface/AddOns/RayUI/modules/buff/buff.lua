@@ -287,7 +287,7 @@ function A:Initialize()
 	AurasHolder:SetFrameStrata("BACKGROUND")
 	AurasHolder:SetClampedToScreen(true)
 	AurasHolder:SetAlpha(0)
-	AurasHolder:Point("TOPRIGHT", UIParent, "TOPRIGHT", -14, -73)
+	AurasHolder:Point("TOPRIGHT", UIParent, "TOPRIGHT", -14, -53)
 	R:CreateMover(AurasHolder, "AurasMover", L["Buff锚点"], true, A.PostDrag)
 
 	self.BuffFrame = self:CreateAuraHeader("HELPFUL")
@@ -301,7 +301,7 @@ function A:Initialize()
 
 	self.EnchantHeader = CreateFrame("Frame", "RayUITemporaryEnchantFrame", UIParent, "SecureHandlerStateTemplate");
 	self.EnchantHeader:Size(buttonsize * 2 + spacing, buttonsize)
-	self.EnchantHeader:Point("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -5)
+	self.EnchantHeader:Point("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -16)
 	self.EnchantHeader:SetAttribute("_onstate-show", [[
 			if newstate == "hide" then
 				self:Hide();

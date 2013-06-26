@@ -2,13 +2,12 @@ local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, loc
 local IF = R:GetModule("InfoBar")
 
 local function LoadCurrency()
-	local infobar = _G["RayUITopInfoBar7"]
-	local Status = infobar.Status
+	local infobar = IF:CreateInfoPanel("RayUI_InfoPanel_Currency", 120)
+	infobar:SetPoint("TOPRIGHT", 10, 0)
 	local db = R.global
 	local Profit = 0
 	local Spent = 0
 	infobar.Text:SetText(CURRENCY)
-	Status:SetValue(0)
 
 	local function formatMoney(money, icon)
 		local gold = floor(math.abs(money) / 10000)
@@ -36,12 +35,14 @@ local function LoadCurrency()
 	end
 
 	local function ShowCurrency(self)
-		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 		local total = 0
 		local realmlist = db.Gold[R.myrealm]
 		for k, v in pairs(realmlist) do
 			total = total + v
 		end
+		GameTooltip:SetOwner(infobar, "ANCHOR_NONE")
+		GameTooltip:SetPoint("BOTTOMRIGHT", infobar, "TOPRIGHT", 0, 0)
+		GameTooltip:ClearLines()
 		GameTooltip:AddLine(GOLD_AMOUNT:gsub("%%d",""), 0.69, 0.31, 0.31)
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddDoubleLine(R.myrealm, formatMoney(total, true), nil, nil, nil, 1, 1, 1)
@@ -124,7 +125,6 @@ local function LoadCurrency()
 			end
 
 			infobar.Text:SetText(formatMoney(NewMoney))
-			self:SetAllPoints(infobar)
 			db.Gold[R.myrealm][R.myname] = NewMoney
 
 			local total = 0
@@ -132,24 +132,19 @@ local function LoadCurrency()
 			for k, v in pairs(realmlist) do
 				total = total + v
 			end
-			if total > 0 then
-				Status:SetMinMaxValues(0, total)
-				Status:SetValue(money)
-				Status:SetStatusBarColor(unpack(IF.InfoBarStatusColor[3]))
-			end
 		end
 	end
 
-	Status:RegisterEvent("PLAYER_MONEY")
-	Status:RegisterEvent("SEND_MAIL_MONEY_CHANGED")
-	Status:RegisterEvent("SEND_MAIL_COD_CHANGED")
-	Status:RegisterEvent("PLAYER_TRADE_MONEY")
-	Status:RegisterEvent("TRADE_MONEY_CHANGED")
-	Status:RegisterEvent("PLAYER_ENTERING_WORLD")
-	Status:SetScript("OnEnter", ShowCurrency)
-	Status:SetScript("OnMouseDown", function() ToggleBackpack() end)
-	Status:SetScript("OnLeave", GameTooltip_Hide)
-	Status:SetScript("OnEvent", OnEvent)
+	infobar:RegisterEvent("PLAYER_MONEY")
+	infobar:RegisterEvent("SEND_MAIL_MONEY_CHANGED")
+	infobar:RegisterEvent("SEND_MAIL_COD_CHANGED")
+	infobar:RegisterEvent("PLAYER_TRADE_MONEY")
+	infobar:RegisterEvent("TRADE_MONEY_CHANGED")
+	infobar:RegisterEvent("PLAYER_ENTERING_WORLD")
+	infobar:HookScript("OnEnter", ShowCurrency)
+	infobar:HookScript("OnMouseDown", function() ToggleBackpack() end)
+	infobar:HookScript("OnLeave", GameTooltip_Hide)
+	infobar:HookScript("OnEvent", OnEvent)
 end
 
 IF:RegisterInfoText("Currency", LoadCurrency)

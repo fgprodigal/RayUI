@@ -1,19 +1,9 @@
 local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local IF = R:GetModule("InfoBar")
 
-local function LoadStatus()
-	local infobar = _G["RayUIBottomInfoBar"]
-	local Status = CreateFrame("Frame", nil, infobar)
-	Status:EnableMouse(true)
-	Status:SetFrameStrata("MEDIUM")
-	Status:SetFrameLevel(3)
-
-	local Text  = infobar:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
-	Text:SetShadowOffset(1.25, -1.25)
-	Text:SetShadowColor(0, 0, 0, 0.4)
-	Text:SetPoint("BOTTOMRIGHT", infobar, "TOPRIGHT", -10, -3)
-	Status:SetAllPoints(Text)
+local function LoadCallToArms()
+	local infobar = IF:CreateInfoPanel("RayUI_InfoPanel_CallToArms", 130)
+	infobar:SetPoint("RIGHT", RayUI_InfoPanel_Talent, "LEFT", 0, 0)
 
 	local TANK_ICON = "|TInterface\\AddOns\\RayUI\\media\\tank.tga:14:14|t"
 	local HEALER_ICON = "|TInterface\\AddOns\\RayUI\\media\\healer.tga:14:14|t"
@@ -36,7 +26,8 @@ local function LoadStatus()
 	end
 
 	local function OnEnter(self)
-		GameTooltip:SetOwner(self, "ANCHOR_TOP")
+		GameTooltip:SetOwner(infobar, "ANCHOR_NONE")
+		GameTooltip:SetPoint("BOTTOMRIGHT", infobar, "TOPRIGHT", 0, 0)
 		GameTooltip:ClearLines()
 
 		local allUnavailable = true
@@ -84,18 +75,18 @@ local function LoadStatus()
 		end	
 
 		if unavailable then
-			Text:SetText(NOBONUSREWARDS)
+			infobar.Text:SetText(NOBONUSREWARDS)
 		else
-			Text:SetText(BATTLEGROUND_HOLIDAY..": "..MakeIconString(tankReward, healerReward, dpsReward))
+			infobar.Text:SetText(BATTLEGROUND_HOLIDAY..": "..MakeIconString(tankReward, healerReward, dpsReward))
 		end
 	end
 
-	Status:SetScript("OnEnter", OnEnter)
-	Status:SetScript("OnLeave", GameTooltip_Hide)
-	Status:SetScript("OnEvent", OnEvent)
-	Status:SetScript("OnMouseDown", function() PVEFrame_ToggleFrame("GroupFinderFrame", LFDParentFrame) end)
-	Status:RegisterEvent("PLAYER_ENTERING_WORLD")
-	Status:RegisterEvent("LFG_UPDATE_RANDOM_INFO")
+	infobar:HookScript("OnEnter", OnEnter)
+	infobar:HookScript("OnLeave", GameTooltip_Hide)
+	infobar:HookScript("OnEvent", OnEvent)
+	infobar:HookScript("OnMouseDown", function() PVEFrame_ToggleFrame("GroupFinderFrame", LFDParentFrame) end)
+	infobar:RegisterEvent("PLAYER_ENTERING_WORLD")
+	infobar:RegisterEvent("LFG_UPDATE_RANDOM_INFO")
 end
 
-IF:RegisterInfoText("CallToArms", LoadStatus)
+IF:RegisterInfoText("CallToArms", LoadCallToArms)

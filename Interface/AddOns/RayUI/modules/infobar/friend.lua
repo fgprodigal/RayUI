@@ -2,12 +2,11 @@ local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, loc
 local IF = R:GetModule("InfoBar")
 
 local function LoadFriend()
-	local infobar = _G["RayUITopInfoBar5"]
-	local Status = infobar.Status
+	local infobar = IF:CreateInfoPanel("RayUI_InfoPanel_Friend", 80)
+	infobar:SetPoint("LEFT", RayUI_InfoPanel_Durability, "RIGHT", 0, 0)
 	infobar.Text:SetText(FRIEND)
-	Status:SetValue(0)
 
-	Status.updateElapsed = 0
+	infobar.updateElapsed = 0
 
 	local friendsTablets = LibStub("Tablet-2.0")
 	local FriendsTabletData = {}
@@ -212,7 +211,9 @@ local function LoadFriend()
 	end
 
 	local function Friends_OnEnter(self)
-		if InCombatLockdown() then return end
+		local totalFriends, onlineFriends = GetNumFriends()
+		local totalBN, numBNetOnline = BNGetNumFriends()
+		if InCombatLockdown() or onlineFriends + numBNetOnline == 0 then return end
 
 		-- Register friendsTablets
 		if not friendsTablets:IsRegistered(self) then
@@ -221,8 +222,8 @@ local function LoadFriend()
 					Friends_BuildTablet()
 					Friends_UpdateTablet()
 				end,
-				"point", "TOPLEFT",
-				"relativePoint", "BOTTOMLEFT",
+				"point", "BOTTOMLEFT",
+				"relativePoint", "TOPLEFT",
 				"maxHeight", 500,
 				"clickable", true,
 				"hideWhenEmpty", true
@@ -247,14 +248,6 @@ local function LoadFriend()
 		local totalFriends, onlineFriends = GetNumFriends()
 		local totalBN, numBNetOnline = BNGetNumFriends()
 		infobar.Text:SetFormattedText(displayString, FRIENDS, onlineFriends + numBNetOnline)
-		self:SetMinMaxValues(0, totalFriends + totalBN)
-		self:SetValue(onlineFriends + numBNetOnline)
-
-		if onlineFriends + numBNetOnline > 0 then
-			self:SetScript("OnEnter", Friends_OnEnter)
-		else
-			self:SetScript("OnEnter", nil)
-		end
 	end
 
 	function Friends_OnMouseDown(self)
@@ -263,19 +256,19 @@ local function LoadFriend()
 		end
 	end
 
-	Status:SetScript("OnMouseDown", Friends_OnMouseDown)
-	Status:SetScript("OnEnter", Friends_OnEnter)
+	infobar:HookScript("OnMouseDown", Friends_OnMouseDown)
+	infobar:HookScript("OnEnter", Friends_OnEnter)
 
-	Status:RegisterEvent("FRIENDLIST_UPDATE")
-	Status:RegisterEvent("BN_FRIEND_ACCOUNT_ONLINE")
-	Status:RegisterEvent("BN_FRIEND_ACCOUNT_OFFLINE")
-	Status:RegisterEvent("PLAYER_ENTERING_WORLD")
+	infobar:RegisterEvent("FRIENDLIST_UPDATE")
+	infobar:RegisterEvent("BN_FRIEND_ACCOUNT_ONLINE")
+	infobar:RegisterEvent("BN_FRIEND_ACCOUNT_OFFLINE")
+	infobar:RegisterEvent("PLAYER_ENTERING_WORLD")
 
-	Status:SetScript("OnEvent", function(self, event)
+	infobar:HookScript("OnEvent", function(self, event)
 		self.needrefreshed = true
 		self.updateElapsed = 0
 	end)
-	Status:SetScript("OnUpdate", function(self, elapsed)
+	infobar:HookScript("OnUpdate", function(self, elapsed)
 		self.updateElapsed = self.updateElapsed + elapsed
 		if self.updateElapsed > 1 then
 			self.updateElapsed = 0
@@ -286,7 +279,7 @@ local function LoadFriend()
 			end
 		end
 	end)
-	Friends_OnEnter(Status)
+	Friends_OnEnter(infobar)
 end
 
 IF:RegisterInfoText("Friend", LoadFriend)

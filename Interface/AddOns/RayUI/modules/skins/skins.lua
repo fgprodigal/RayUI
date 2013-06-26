@@ -157,7 +157,18 @@ function S:GetOptions()
 	return options
 end
 
+function S:CreateStripesThin(f)
+	if not f then return end
+	f.stripesthin = f:CreateTexture(nil, "BACKGROUND", nil, 1)
+	f.stripesthin:SetAllPoints()
+	f.stripesthin:SetTexture([[Interface\AddOns\RayUI\media\StripesThin]], true)
+	f.stripesthin:SetHorizTile(true)
+	f.stripesthin:SetVertTile(true)
+	f.stripesthin:SetBlendMode("ADD")
+end
+
 function S:CreateBackdropTexture(f)
+	if not f then return end
 	local tex = f:CreateTexture(nil, "BACKGROUND")
     tex:SetDrawLayer("BACKGROUND", 1)
 	tex:SetInside(f, 1, 1)
@@ -194,7 +205,10 @@ function S:CreateBG(frame)
 end
 
 function S:CreateSD(parent, size, r, g, b, alpha, offset)
-	if not parent or R.global.general.theme~="Shadow" then return end
+	if not parent then return end
+	S:CreateStripesThin(parent)
+
+	if R.global.general.theme~="Shadow" then return end
 	local sd = CreateFrame("Frame", nil, parent)
 	sd.size = size or 5
 	sd.size = sd.size - 5

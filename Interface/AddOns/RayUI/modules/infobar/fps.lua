@@ -2,10 +2,10 @@ local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, loc
 local IF = R:GetModule("InfoBar")
 
 local function LoadFPS()
-	local infobar = _G["RayUITopInfoBar1"]
-	local Status = infobar.Status
-	infobar.Text:SetText("FPS: 0")
-	Status:SetValue(0)
+	local stringText = "FPS: %d"
+	local infobar = IF:CreateInfoPanel("RayUI_InfoPanel_FPS", 70)
+	infobar:SetPoint("TOPLEFT", 10, 0)
+	infobar.Text:SetText(string.format(stringText, 0))
 
 	---- SysInfo
 	local sysinfo = LibStub("Tablet-2.0")
@@ -102,8 +102,8 @@ local function LoadFPS()
 				"children", function()
 					SysInfo_UpdateTablet()
 				end,
-				"point", "TOPLEFT",
-				"relativePoint", "BOTTOMLEFT",
+				"point", "BOTTOMLEFT",
+				"relativePoint", "TOPLEFT",
 				"maxHeight", 500,
 				"clickable", true,
 				"hideWhenEmpty", true
@@ -166,26 +166,24 @@ local function LoadFPS()
 		end
 	end
 
-	Status:SetScript("OnUpdate", function(self, elapsed)
+	infobar:SetScript("OnUpdate", function(self, elapsed)
 		self.LastUpdate = (self.LastUpdate or 0) - elapsed
 
 		if self.LastUpdate < 0 then
-			self:SetMinMaxValues(0, 60)
 			local value = floor(GetFramerate())
 			local max = GetCVar("MaxFPS")
-			self:SetValue(value)
-			infobar.Text:SetText("FPS: "..value)
 			local r, g, b = R:ColorGradient(value/60, IF.InfoBarStatusColor[1][1], IF.InfoBarStatusColor[1][2], IF.InfoBarStatusColor[1][3], 
 																			IF.InfoBarStatusColor[2][1], IF.InfoBarStatusColor[2][2], IF.InfoBarStatusColor[2][3],
 																			IF.InfoBarStatusColor[3][1], IF.InfoBarStatusColor[3][2], IF.InfoBarStatusColor[3][3])
-			self:SetStatusBarColor(r, g, b)
+			infobar.Square:SetVertexColor(r, g, b)
+			infobar.Text:SetText(string.format(stringText, value))
 			self.LastUpdate = 1
 			SysInfo_Update(self)
 		end
 	end)
 
-	Status:SetScript("OnEnter", SysInfo_OnEnter)
-	Status:SetScript("OnLeave", SysInfo_OnLeave)
+	infobar:HookScript("OnEnter", SysInfo_OnEnter)
+	infobar:HookScript("OnLeave", SysInfo_OnLeave)
 end
 
 IF:RegisterInfoText("FPS", LoadFPS)

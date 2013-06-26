@@ -241,7 +241,10 @@ end
 
 function M:Initialize()
 	for module, func in pairs(self.Modules) do
-		func()
+		local _, catch = pcall(func)
+		if catch then
+			error(catch, 2)
+		end
 	end
 end
 

@@ -2,18 +2,8 @@ local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, loc
 local IF = R:GetModule("InfoBar")
 
 local function LoadStat()
-	local infobar = _G["RayUIBottomInfoBar"]
-	local Status = CreateFrame("Frame", nil, infobar)
-	Status:EnableMouse(true)
-	Status:SetFrameStrata("MEDIUM")
-	Status:SetFrameLevel(3)
-
-	local Text  = infobar:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
-	Text:SetShadowOffset(1.25, -1.25)
-	Text:SetShadowColor(0, 0, 0, 0.4)
-	Text:SetPoint("BOTTOM", infobar, "TOP", 0, -3)
-	Status:SetAllPoints(Text)
+	local infobar = IF:CreateInfoPanel("RayUI_InfoPanel_Stat1", 120)
+	infobar:SetPoint("RIGHT", RayUI_InfoPanel_Currency, "LEFT", 0, 0)
 
 	local format = string.format
 	local targetlv, playerlv
@@ -36,7 +26,8 @@ local function LoadStat()
 	end
 
 	local function ShowTooltip(self)
-		GameTooltip:SetOwner(self, "ANCHOR_TOP")
+		GameTooltip:SetOwner(infobar, "ANCHOR_NONE")
+		GameTooltip:SetPoint("BOTTOMRIGHT", infobar, "TOPRIGHT", 0, 0)
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(STATS_LABEL)
 
@@ -183,9 +174,7 @@ local function LoadStat()
 		avoidance = (avoided+blocked)
 		unhittable = avoidance - unhittableMax
 
-		Text:SetFormattedText(displayFloatString, L["免伤"]..": ", avoidance)
-		--Setup Tooltip
-		self:SetAllPoints(Text)
+		infobar.Text:SetFormattedText(displayFloatString, L["免伤"]..": ", avoidance)
 	end
 
 	local function UpdateCaster(self)
@@ -195,9 +184,7 @@ local function LoadStat()
 			spellpwr = GetSpellBonusDamage(7)
 		end
 
-		Text:SetFormattedText(displayNumberString, STAT_SPELLPOWER..": ", spellpwr)
-		--Setup Tooltip
-		self:SetAllPoints(Text)
+		infobar.Text:SetFormattedText(displayNumberString, STAT_SPELLPOWER..": ", spellpwr)
 	end
 
 	local function UpdateMelee(self)
@@ -212,9 +199,7 @@ local function LoadStat()
 			pwr = effective
 		end
 
-		Text:SetFormattedText(displayNumberString, STAT_ATTACK_POWER..": ", pwr)
-		--Setup Tooltip
-		self:SetAllPoints(Text)
+		infobar.Text:SetFormattedText(displayNumberString, STAT_ATTACK_POWER..": ", pwr)
 	end
 
 	local function UpdateBattlefieldScore(self)
@@ -222,9 +207,9 @@ local function LoadStat()
 			local name, _, _, _, _, _, _, _, _, damageDone, healingDone = GetBattlefieldScore(index)
 			if name and name == R.myname then
 				if R.isHealer then
-					Text:SetFormattedText(displayNumberString, SCORE_HEALING_DONE..": ", healingDone)
+					infobar.Text:SetFormattedText(displayNumberString, SCORE_HEALING_DONE..": ", healingDone)
 				else
-					Text:SetFormattedText(displayNumberString, SCORE_DAMAGE_DONE..": ", damageDone)
+					infobar.Text:SetFormattedText(displayNumberString, SCORE_DAMAGE_DONE..": ", damageDone)
 				end
 				self.index = index
 			end
@@ -247,26 +232,26 @@ local function LoadStat()
 		end
 	end
 
-	Status:SetScript("OnEnter", function() ShowTooltip(Status) end)
-	Status:SetScript("OnLeave", GameTooltip_Hide)
-	Status:SetScript("OnMouseDown", function()
+	infobar:HookScript("OnEnter", ShowTooltip)
+	infobar:HookScript("OnLeave", GameTooltip_Hide)
+	infobar:HookScript("OnMouseDown", function()
 		local inInstance, instanceType = IsInInstance()
 		if inInstance and instanceType == "pvp" then
 			ToggleFrame(WorldStateScoreFrame)
 		end
 	end)
-	Status:RegisterEvent("UNIT_STATS")
-	Status:RegisterEvent("UNIT_AURA")
-	Status:RegisterEvent("UNIT_TARGET")
-	Status:RegisterEvent("FORGE_MASTER_ITEM_CHANGED")
-	Status:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-	Status:RegisterEvent("PLAYER_TALENT_UPDATE")
-	Status:RegisterEvent("UNIT_ATTACK_POWER")
-	Status:RegisterEvent("UNIT_RANGED_ATTACK_POWER")
-	Status:RegisterEvent("UPDATE_BATTLEFIELD_SCORE")
-	Status:RegisterEvent("PLAYER_ENTERING_WORLD")
-	Status:SetScript("OnEvent", Update)
-	Update(Status)
+	infobar:RegisterEvent("UNIT_STATS")
+	infobar:RegisterEvent("UNIT_AURA")
+	infobar:RegisterEvent("UNIT_TARGET")
+	infobar:RegisterEvent("FORGE_MASTER_ITEM_CHANGED")
+	infobar:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+	infobar:RegisterEvent("PLAYER_TALENT_UPDATE")
+	infobar:RegisterEvent("UNIT_ATTACK_POWER")
+	infobar:RegisterEvent("UNIT_RANGED_ATTACK_POWER")
+	infobar:RegisterEvent("UPDATE_BATTLEFIELD_SCORE")
+	infobar:RegisterEvent("PLAYER_ENTERING_WORLD")
+	infobar:HookScript("OnEvent", Update)
+	Update(infobar)
 end
 
 IF:RegisterInfoText("Stat1", LoadStat)

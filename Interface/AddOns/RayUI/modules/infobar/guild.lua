@@ -2,13 +2,12 @@ local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, loc
 local IF = R:GetModule("InfoBar")
 
 local function LoadGuild()
-	local infobar = _G["RayUITopInfoBar6"]
-	local Status = infobar.Status
+	local infobar = IF:CreateInfoPanel("RayUI_InfoPanel_Guild", 80)
+	infobar:SetPoint("LEFT", RayUI_InfoPanel_Friend, "RIGHT", 0, 0)
 	infobar.Text:SetText(GUILD)
-	Status:SetValue(0)
 
-	Status.updateElapsed = 0
-	Status.updateElapsed2 = 0
+	infobar.updateElapsed = 0
+	infobar.updateElapsed2 = 0
 
 	local GuildTabletData = {}
 	local GuildOnline = 0
@@ -180,7 +179,7 @@ local function LoadGuild()
 	end
 
 	local function Guild_OnEnter(self)
-		if InCombatLockdown() then return end
+		if InCombatLockdown() or not IsInGuild() then return end
 		-- Register guildTablet
 		if not guildTablet:IsRegistered(self) then
 			guildTablet:Register(self,
@@ -188,9 +187,9 @@ local function LoadGuild()
 					Guild_BuidTablet()
 					Guild_UpdateTablet()
 				end,
-				"point", "TOPLEFT",
-				"relativePoint", "BOTTOMLEFT",
-				"maxHeight", 500,
+				"point", "BOTTOMLEFT",
+				"relativePoint", "TOPLEFT",
+				"maxHeight", 700,
 				"clickable", true,
 				"hideWhenEmpty", true
 			)
@@ -213,7 +212,6 @@ local function LoadGuild()
 	local function Guild_Update(self)
 		if not IsInGuild() then
 			self.hidden = true
-			self:SetScript("OnEnter", nil)
 			infobar.Text:SetText(noGuildString)
 			return
 		end
@@ -221,9 +219,6 @@ local function LoadGuild()
 		-- GuildRoster()
 		local total, online = GetNumGuildMembers()
 		infobar.Text:SetFormattedText(displayString, online)
-		self:SetMinMaxValues(0, total)
-		self:SetValue(online)
-		self:SetScript("OnEnter", Guild_OnEnter)
 
 		self.hidden = false
 	end
@@ -245,13 +240,13 @@ local function LoadGuild()
 		end
 	end
 
-	Status:RegisterEvent("PLAYER_ENTERING_WORLD")
-	Status:RegisterEvent("GUILD_ROSTER_UPDATE")
-	Status:RegisterEvent("GUILD_PERK_UPDATE")
-	Status:RegisterEvent("GUILD_MOTD")
-	Status:SetScript("OnEnter", Guild_OnEnter)
-	Status:SetScript("OnMouseDown", Guild_OnMouseDown)
-	Status:SetScript("OnEvent", function(self, event, ...)
+	infobar:RegisterEvent("PLAYER_ENTERING_WORLD")
+	infobar:RegisterEvent("GUILD_ROSTER_UPDATE")
+	infobar:RegisterEvent("GUILD_PERK_UPDATE")
+	infobar:RegisterEvent("GUILD_MOTD")
+	infobar:HookScript("OnEnter", Guild_OnEnter)
+	infobar:HookScript("OnMouseDown", Guild_OnMouseDown)
+	infobar:HookScript("OnEvent", function(self, event, ...)
 		if event == "GUILD_MOTD" then
 			if not self.hidden then return end
 			self.needrefreshed = true
@@ -261,7 +256,7 @@ local function LoadGuild()
 			self.updateElapsed = 0
 		end
 	end)
-	Status:SetScript("OnUpdate", function(self, elapsed)
+	infobar:HookScript("OnUpdate", function(self, elapsed)
 		self.updateElapsed = self.updateElapsed + elapsed
 		self.updateElapsed2 = self.updateElapsed2 + elapsed
 
@@ -279,7 +274,7 @@ local function LoadGuild()
 			end
 		end
 	end)
-	Guild_OnEnter(Status)
+	Guild_OnEnter(infobar)
 end
 
 IF:RegisterInfoText("Guild", LoadGuild)

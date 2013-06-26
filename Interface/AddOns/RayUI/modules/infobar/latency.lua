@@ -2,10 +2,10 @@ local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, loc
 local IF = R:GetModule("InfoBar")
 
 local function LoadLatency()
-	local infobar = _G["RayUITopInfoBar2"]
-	local Status = infobar.Status
-	infobar.Text:SetText("MS: 0")
-	Status:SetValue(0)
+	local stringText = "MS: %d"
+	local infobar = IF:CreateInfoPanel("RayUI_InfoPanel_Latency", 80)
+	infobar:SetPoint("LEFT", RayUI_InfoPanel_FPS, "RIGHT", 0, 0)
+	infobar.Text:SetText(string.format(stringText, 0))
 
 	---- SysInfo
 	local sysinfo = LibStub("Tablet-2.0")
@@ -105,12 +105,8 @@ local function LoadLatency()
 				"children", function()
 					SysInfo_UpdateTablet()
 				end,
-				"point", function()
-					return "TOPLEFT"
-				end,
-				"relativePoint", function()
-					return "BOTTOMLEFT"
-				end,
+				"point", "BOTTOMLEFT",
+				"relativePoint", "TOPLEFT",
 				"maxHeight", 500,
 				"clickable", true,
 				"hideWhenEmpty", true
@@ -184,20 +180,18 @@ local function LoadLatency()
 		end
 	end
 
-	Status:SetScript("OnUpdate", function(self, elapsed)
+	infobar:SetScript("OnUpdate", function(self, elapsed)
 		self.LastUpdate = (self.LastUpdate or 0) - elapsed
 		self.LastUpdate2 = (self.LastUpdate2 or 0) - elapsed
 
 		if self.LastUpdate < 0 then
-			self:SetMinMaxValues(0, 1000)
 			local value = (select(3, GetNetStats()))
 			local max = 1000
-			self:SetValue(value)
-			infobar.Text:SetText("MS: "..value)
+			infobar.Text:SetText(string.format(stringText, value))
 			local r, g, b = R:ColorGradient(value/1000, IF.InfoBarStatusColor[3][1], IF.InfoBarStatusColor[3][2], IF.InfoBarStatusColor[3][3], 
 																			IF.InfoBarStatusColor[2][1], IF.InfoBarStatusColor[2][2], IF.InfoBarStatusColor[2][3],
 																			IF.InfoBarStatusColor[1][1], IF.InfoBarStatusColor[1][2], IF.InfoBarStatusColor[1][3])
-			self:SetStatusBarColor(r, g, b)
+			infobar.Square:SetVertexColor(r, g, b)
 			self.LastUpdate = 1
 		end
 		if self.LastUpdate2 < 0 then
@@ -206,8 +200,8 @@ local function LoadLatency()
 		end
 	end)
 
-	Status:SetScript("OnEnter", SysInfo_OnEnter)
-	Status:SetScript("OnLeave", SysInfo_OnLeave)
+	infobar:HookScript("OnEnter", SysInfo_OnEnter)
+	infobar:HookScript("OnLeave", SysInfo_OnLeave)
 end
 
 IF:RegisterInfoText("Latency", LoadLatency)

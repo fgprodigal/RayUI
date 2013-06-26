@@ -106,7 +106,7 @@ end
 
 function CH:AutoHide()
 	if not self.db.autoshow then
-		self:SetUpAnimGroup(RayUIBottomInfoBar.shadow)
+		self:SetUpAnimGroup(RayUI_ExpBar.shadow)
 		local function CheckWhisperWindows(self, event)
 			local chat = self:GetName()
 			if chat == "ChatFrame1" and CH.ChatIn == false then

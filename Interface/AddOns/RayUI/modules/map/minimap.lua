@@ -157,7 +157,7 @@ function MM:CheckMail()
 end
 
 function MM:CreateMenu()
-	local menuFrame = CreateFrame("Frame", "m_MinimapRightClickMenu", UIParent, "UIDropDownMenuTemplate")
+	local menuFrame = CreateFrame("Frame", "RayUI_MinimapRightClickMenu", UIParent, "UIDropDownMenuTemplate")
 	local menuList = {
 		{text = CHARACTER_BUTTON, notCheckable = true,
 		func = function() ToggleCharacter("PaperDollFrame") end},
@@ -254,7 +254,7 @@ function MM:Initialize()
 	self:ButtonCollector()
 	self:RawHook("TimeManagerClockButton_UpdateTooltip", true)
 	Minimap:ClearAllPoints()
-	Minimap:Point("TOPLEFT", "UIParent", "TOPLEFT", 10, -40)
+	Minimap:Point("TOPLEFT", "UIParent", "TOPLEFT", 10, -20)
 	Minimap:SetFrameLevel(10)
 	local clockFrame, clockTime = TimeManagerClockButton:GetRegions()
 	clockFrame:Hide()

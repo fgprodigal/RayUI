@@ -1196,6 +1196,7 @@ local detachedTooltips = {}
 local AcquireDetachedFrame, ReleaseDetachedFrame
 local function AcquireFrame(self, registration, data, detachedData)
 	local R, L = unpack(RayUI)
+	local S = R:GetModule("Skins")
 	if not detachedData then
 		detachedData = data
 	end
@@ -1238,6 +1239,7 @@ local function AcquireFrame(self, registration, data, detachedData)
 		tooltip:SetBackdropColor(unpack(R["media"].backdropfadecolor))
 		tooltip.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 		tooltip.shadow:SetBackdropBorderColor(unpack(R["media"].bordercolor))
+		S:CreateStripesThin(tooltip)
 
 		tooltip:SetScript("OnUpdate", function(this, elapsed)
 			if not tooltip.updating and (not tooltip.enteredFrame or (overFrame and not MouseIsOver(overFrame))) then

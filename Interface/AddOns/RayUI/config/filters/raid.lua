@@ -144,6 +144,7 @@ G.Raid.RaidDebuffs = {
 			[SpellName(137440)] = Defaults(7), --Icy Shadows
 			[SpellName(137408)] = Defaults(7), --Fan of Flames
 			[SpellName(137360)] = Defaults(7), --Corrupted Healing
+			[SpellName(137341)] = Defaults(8), --Corrupted Healing
 
 			--Lei Shen
 			[SpellName(135000)] = Defaults(7), --Decapitate

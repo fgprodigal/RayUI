@@ -2,10 +2,10 @@ local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, loc
 local IF = R:GetModule("InfoBar")
 
 local function LoadDurability()
-	local infobar = _G["RayUITopInfoBar4"]
-	local Status = infobar.Status
-	infobar.Text:SetText(DURABILITY)
-	Status:SetValue(0)
+	local stringText = DURABILITY..": %d%%"
+	local infobar = IF:CreateInfoPanel("RayUI_InfoPanel_Durability", 100)
+	infobar:SetPoint("LEFT", RayUI_InfoPanel_Memory, "RIGHT", 0, 0)
+	infobar.Text:SetText(string.format(stringText, 100))
 
 	local Slots = {
 			[1] = {1, INVTYPE_HEAD, 1000},
@@ -22,7 +22,7 @@ local function LoadDurability()
 		}
 	local tooltipString = "%d %%"
 
-	Status:SetScript("OnEvent", function(self)
+	infobar:SetScript("OnEvent", function(self)
 		local Total = 0
 		local current, max
 
@@ -38,24 +38,16 @@ local function LoadDurability()
 		table.sort(Slots, function(a, b) return a[3] < b[3] end)
 		local value = floor(Slots[1][3]*100)
 
-		self:SetMinMaxValues(0, 100)
-		self:SetValue(value)
-		infobar.Text:SetText(DURABILITY..": "..value.."%")
-		if value<10 then
-			self:SetStatusBarColor(unpack(IF.InfoBarStatusColor[3]))
-		elseif value<30 then
-			self:SetStatusBarColor(unpack(IF.InfoBarStatusColor[2]))
-		else
-			self:SetStatusBarColor(unpack(IF.InfoBarStatusColor[1]))
-		end
-		local r, g, b = R:ColorGradient(value/60, IF.InfoBarStatusColor[1][1], IF.InfoBarStatusColor[1][2], IF.InfoBarStatusColor[1][3], 
+		infobar.Text:SetText(string.format(stringText, value))
+		local r, g, b = R:ColorGradient(value/100, IF.InfoBarStatusColor[1][1], IF.InfoBarStatusColor[1][2], IF.InfoBarStatusColor[1][3], 
 																	IF.InfoBarStatusColor[2][1], IF.InfoBarStatusColor[2][2], IF.InfoBarStatusColor[2][3],
 																	IF.InfoBarStatusColor[3][1], IF.InfoBarStatusColor[3][2], IF.InfoBarStatusColor[3][3])
-		self:SetStatusBarColor(r, g, b)
+		infobar.Square:SetVertexColor(r, g, b)
 	end)
-	Status:SetScript("OnEnter", function(self)
+	infobar:HookScript("OnEnter", function(self)
 		if not InCombatLockdown() then
-			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT", 0, 0)
+			GameTooltip:SetOwner(infobar, "ANCHOR_NONE")
+			GameTooltip:SetPoint("BOTTOMLEFT", infobar, "TOPLEFT", 0, 0)
 			GameTooltip:ClearLines()
 			GameTooltip:AddLine(DURABILITY..":")
 			for i = 1, 11 do
@@ -68,11 +60,11 @@ local function LoadDurability()
 			GameTooltip:Show()
 		end
 	end)
-	Status:SetScript("OnLeave", GameTooltip_Hide)
-	Status:SetScript("OnMouseDown", function() GameTooltip_Hide() ToggleCharacter("PaperDollFrame") end)
-	Status:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
-	Status:RegisterEvent("MERCHANT_SHOW")
-	Status:RegisterEvent("PLAYER_ENTERING_WORLD")
+	infobar:HookScript("OnLeave", GameTooltip_Hide)
+	infobar:HookScript("OnMouseDown", function() GameTooltip_Hide() ToggleCharacter("PaperDollFrame") end)
+	infobar:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
+	infobar:RegisterEvent("MERCHANT_SHOW")
+	infobar:RegisterEvent("PLAYER_ENTERING_WORLD")
 end
 
 IF:RegisterInfoText("Durability", LoadDurability)

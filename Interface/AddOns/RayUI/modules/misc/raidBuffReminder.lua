@@ -347,7 +347,7 @@ local function LoadFunc()
 
 	local frame = CreateFrame("Frame", "RaidBuffReminder", Minimap)
 	frame:SetSize((bsize + 8)*8 - 8, bsize)
-	frame:Point("TOPRIGHT", UIParent, "TOPRIGHT", -14, -35)
+	frame:Point("TOPRIGHT", UIParent, "TOPRIGHT", -14, -15)
 
 	for i = 1, 8 do
 		if i == 1 then

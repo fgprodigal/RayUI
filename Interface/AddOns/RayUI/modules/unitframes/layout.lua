@@ -39,7 +39,7 @@ end
 local function Fader(frame)
 	frame.Fader = true
 	frame.FadeSmooth = 0.5
-	frame.FadeMinAlpha = 0
+	frame.FadeMinAlpha = 0.15
 	frame.FadeMaxAlpha = 1
 end
 
@@ -232,9 +232,9 @@ function UF:DPSLayout(frame, unit)
 		experience:SetStatusBarColor(0.58, 0.0, 0.55)
 		experience:GetStatusBarTexture():SetHorizTile(false)
 
-		experience:Point("TOPLEFT", RayUIBottomInfoBar, "TOPLEFT", 0, 0)
-		experience:Point("BOTTOMRIGHT", RayUIBottomInfoBar, "BOTTOMRIGHT", 0, 0)
-		experience:SetParent(RayUIBottomInfoBar)
+		experience:Point("TOPLEFT", RayUI_ExpBar, "TOPLEFT", 0, 0)
+		experience:Point("BOTTOMRIGHT", RayUI_ExpBar, "BOTTOMRIGHT", 0, 0)
+		experience:SetParent(RayUI_ExpBar)
 		experience:SetFrameStrata("BACKGROUND")
 		experience:SetFrameLevel(1)
 
@@ -253,9 +253,9 @@ function UF:DPSLayout(frame, unit)
 		reputation:SetStatusBarColor(0, .7, 1)
 		reputation:GetStatusBarTexture():SetHorizTile(false)
 
-		reputation:Point("TOPLEFT", RayUIBottomInfoBar, "TOPLEFT", 0, 0)
-		reputation:Point("BOTTOMRIGHT", RayUIBottomInfoBar, "BOTTOMRIGHT", 0, 0)
-		reputation:SetParent(RayUIBottomInfoBar)
+		reputation:Point("TOPLEFT", RayUI_ExpBar, "TOPLEFT", 0, 0)
+		reputation:Point("BOTTOMRIGHT", RayUI_ExpBar, "BOTTOMRIGHT", 0, 0)
+		reputation:SetParent(RayUI_ExpBar)
 		reputation:SetFrameStrata("BACKGROUND")
 		reputation:SetFrameLevel(1)
 
@@ -526,7 +526,7 @@ function UF:DPSLayout(frame, unit)
 		frame.Castbar = castbar
 
 		-- Fader
-		Fader(frame)
+		-- Fader(frame)
 	end
 
 	if unit == "targettarget" then

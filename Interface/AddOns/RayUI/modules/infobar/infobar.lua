@@ -1,48 +1,119 @@
 ﻿local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
-local IF = R:NewModule("InfoBar", "AceEvent-3.0")
+local IF = R:NewModule("InfoBar", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0", "AceTimer-3.0")
 
 local bars = {}
 IF.InfoBarStatusColor = {{1, 0, 0}, {1, 1, 0}, {0, 0.4, 1}}
 
-function IF:CreateInfoBar(name, width, height, p1, rel, p2, x, y, noStatus)
-	local bar = CreateFrame("Frame", name, UIParent)
-	bar:CreatePanel("Default", width, height, p1, rel, p2, x, y)
+local height = 15
+local speed = 135
 
-	if noStatus then return end
-	bar.Status = CreateFrame("StatusBar", name.."Status", bar)
-	bar.Status:SetFrameLevel(12)
-	bar.Status:SetStatusBarTexture(R["media"].normal)
-	bar.Status:SetMinMaxValues(0, 100)
-	bar.Status:SetStatusBarColor(unpack(IF.InfoBarStatusColor[3]))
-	bar.Status:SetAllPoints()
-	bar.Status:SetValue(100)
-	R:SmoothBar(bar.Status)
+function IF:CreateInfoPanel(name, width)
+	local panel = CreateFrame("Frame", name, RayUI_BottomInfoBar)
+	panel:SetSize(width, height - 1)
+	panel.Text = panel:CreateFontString(nil, "OVERLAY")
+	panel.Text:SetJustifyH("LEFT")
+	panel.Text:SetJustifyV("CENTER")
+	panel.Text:SetFont(R["media"].font, R["media"].fontsize - 1, R["media"].fontflag)
+	panel.Text:Point("LEFT", panel, "LEFT", 13, 0)
+	panel.Text:SetShadowColor(0, 0, 0, 0.4)
+	panel.Text:SetShadowOffset(R.mult, -R.mult)
 
-	bar.Text = bar.Status:CreateFontString(nil, "OVERLAY")
-	bar.Text:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
-	bar.Text:Point("CENTER", bar, "CENTER", 0, -4)
-	bar.Text:SetShadowColor(0, 0, 0, 0.4)
-	bar.Text:SetShadowOffset(R.mult, -R.mult)
+	local r, g, b = unpack(RayUF.colors.class[R.myclass])
+	panel.Indicator = panel:CreateTexture(nil, "OVERLAY")
+	panel.Indicator:SetAllPoints()
+	panel.Indicator:SetTexture("Interface\\AddOns\\RayUI\\media\\threat")
+	panel.Indicator:SetBlendMode("ADD")
+	panel.Indicator:SetVertexColor(r, g, b, .6)
+	panel.Indicator:Hide()
 
-	bar:SetAlpha(0)
+	panel.Square = panel:CreateTexture(nil, "OVERLAY")
+	panel.Square:SetTexture(R.media.blank)
+	panel.Square:SetVertexColor(unpack(IF.InfoBarStatusColor[3]))
+	panel.Square:SetPoint("LEFT", 5, 0)
+	panel.Square:Size(5, 5)
+	panel.Square.Bg = panel:CreateTexture(nil, "BORDER")
+	panel.Square.Bg:SetTexture(0, 0, 0)
+	panel.Square.Bg:SetPoint("LEFT", 4, 0)
+	panel.Square.Bg:Size(7, 7)
 
-	tinsert(bars, bar)
+	panel:SetScript("OnEnter", function(self)
+		IF:CancelTimer(IF.Anim)
+		self.Indicator:Show()
+	end)
+	panel:SetScript("OnLeave", function(self)
+		self.Indicator:Hide()
+		IF:ReadyToSlideDown()
+	end)
+
+	return panel
+end
+
+function IF:ReadyToSlideDown()
+	self:CancelTimer(self.Anim)
+	self.Anim = self:ScheduleTimer("SlideDown", 3)
+end
+
+function IF:SlideDown()
+	local bottom = tonumber(R:Round(RayUI_BottomInfoBar:GetBottom()))
+	if bottom <= -height then return end
+	RayUI_BottomInfoBar:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 0)
+	R:Slide(RayUI_BottomInfoBar, "DOWN", height, speed)
+end
+
+function IF:SlideUp()
+	local bottom = tonumber(R:Round(RayUI_BottomInfoBar:GetBottom()))
+	if bottom >= 0 then return end
+	RayUI_BottomInfoBar:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, -height)
+	R:Slide(RayUI_BottomInfoBar, "UP", height, speed)
 end
 
 function IF:Initialize()
-	self:CreateInfoBar("RayUIBottomInfoBar", 400, 6, "BOTTOM", UIParent, "BOTTOM", 0, 10, true)
-	for i = 1, 7 do
-		if i == 1 then
-			self:CreateInfoBar("RayUITopInfoBar"..i, 80, 6, "TOPLEFT", UIParent, "TOPLEFT", 10, -10)
-		else
-			self:CreateInfoBar("RayUITopInfoBar"..i, 80, 6, "LEFT", _G["RayUITopInfoBar"..i-1], "RIGHT", 9, 0)
+	local menuFrame = CreateFrame("Frame", "RayUI_InfobarRightClickMenu", UIParent, "UIDropDownMenuTemplate")
+	local menuList = {
+		{text = "未来的自动隐藏开关",
+		func = function() end},
+	}
+
+	local bottombar = CreateFrame("Frame", "RayUI_BottomInfoBar", UIParent)
+	bottombar:SetWidth(UIParent:GetWidth())
+	bottombar:SetHeight(height)
+	bottombar:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 0)
+	bottombar:CreateShadow("Background")
+
+	local trigger = CreateFrame("Frame", nil, UIParent)
+	trigger:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 0)
+	trigger:SetPoint("TOPRIGHT", UIParent, "BOTTOMRIGHT", 0, 5)
+	trigger:SetScript("OnEnter", function()
+		self:SlideUp()
+		self:CancelTimer(self.Anim)
+	end)
+
+	bottombar:SetScript("OnEnter", function()
+		self:CancelTimer(self.Anim)
+	end)
+
+	bottombar:SetScript("OnLeave", function()
+		self:ReadyToSlideDown()
+	end)
+
+	local function PopupMenu(_, btn)
+		if btn=="RightButton" then
+			EasyMenu(menuList, menuFrame, "cursor", 0, 50, "MENU", 1)
 		end
 	end
-	for i=1,#bars do
-		R:Delay((2+i*0.6),function()
-			UIFrameFadeIn(bars[i], 1, 0, 1)
-		end)
-	end
+
+	bottombar:SetScript("OnMouseUp", PopupMenu)
+	trigger:SetScript("OnMouseUp", PopupMenu)
+
+	UIParent:HookScript("OnSizeChanged", function(self) bottombar:SetWidth(UIParent:GetWidth()) end)
+
+	self.Anim = self:ScheduleTimer("SlideDown", 10)
+
+	local RayUI_ExpBar = CreateFrame("Frame", "RayUI_ExpBar", UIParent)
+	RayUI_ExpBar:CreateShadow("Background")
+	RayUI_ExpBar:SetFrameStrata("BACKGROUND")
+	RayUI_ExpBar:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -5)
+	RayUI_ExpBar:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMRIGHT", 0, -11)
 	self:LoadInfoText()
 end
 

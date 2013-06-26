@@ -98,13 +98,13 @@ end
 function R:Slide(frame, direction, length, speed)
 	local p1, rel, p2, x, y = frame:GetPoint()
 	frame.mod = ( direction == "LEFT" or direction == "DOWN" ) and -1 or 1
-	frame.limit = x + frame.mod * length
+	frame.hor = ( direction == "LEFT" or direction == "RIGHT" ) and true or false
+	frame.pos = frame.hor and x or y
+	frame.alt = frame.hor and y or x
+	frame.limit = ( frame.hor and x or y ) + frame.mod * length
 	frame.speed = frame.mod * speed
 	frame.point_1 = p1
 	frame.point_2 = p2
-	frame.pos = x
-	frame.hor = ( direction == "LEFT" or direction == "RIGHT" ) and true or false
-	frame.alt = y
 	frame:SetScript("OnUpdate",R.simple_move)
 end
 

@@ -432,6 +432,7 @@ function TT:SetStyle(tooltip)
 			insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
 		})]]
         tooltip:SetBackdrop(nil)
+		R:GetModule("Skins"):CreateStripesThin(tooltip)
         tooltip:CreateShadow("Background")
         tooltip.border:SetInside(tooltip)
 		tooltip.styled=true

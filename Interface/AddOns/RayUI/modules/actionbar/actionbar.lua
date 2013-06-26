@@ -280,7 +280,7 @@ function AB:HideBlizz()
 	hooksecurefunc("TalentFrame_LoadUI", function()
 		PlayerTalentFrame:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 		TalentMicroButtonAlert:ClearAllPoints()
-		TalentMicroButtonAlert:SetPoint("BOTTOM", RayUIBottomInfoBar, "TOPLEFT", 30, 30)
+		TalentMicroButtonAlert:SetPoint("BOTTOM", RayUI_ExpBar, "TOPLEFT", 30, 30)
 	end)
 end
 

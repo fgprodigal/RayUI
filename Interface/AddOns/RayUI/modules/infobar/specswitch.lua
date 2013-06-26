@@ -2,19 +2,9 @@ local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, loc
 local IF = R:GetModule("InfoBar")
 
 local function LoadTalent()
-	local infobar = _G["RayUIBottomInfoBar"]
-	local Status = CreateFrame("Frame")
-	Status:EnableMouse(true)
-	Status:SetFrameStrata("BACKGROUND")
-	Status:SetFrameLevel(3)
-
-	local Text  = infobar:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
-	Text:SetShadowOffset(1.25, -1.25)
-	Text:SetShadowColor(0, 0, 0, 0.4)
-	Text:SetPoint("BOTTOMLEFT", infobar, "TOPLEFT", 10, -3)
-	Text:SetText(NONE..TALENTS)
-	Status:SetParent(Text:GetParent())
+	local infobar = IF:CreateInfoPanel("RayUI_InfoPanel_Talent", 70)
+	infobar:SetPoint("RIGHT", RayUI_InfoPanel_Stat1, "LEFT", 0, 0)
+	infobar.Text:SetText(NONE..TALENTS)
 
 	local spec = LibStub("Tablet-2.0")
 
@@ -197,15 +187,16 @@ local function LoadTalent()
 	end
 
 	local function Spec_OnEnter(self)
-		if InCombatLockdown() then return end
+		local active = GetActiveSpecGroup(false, false)
+		if InCombatLockdown() or not GetSpecialization(false, false, active) or not select(2, GetSpecializationInfo(GetSpecialization(false, false, active))) then return end
 		-- Register spec
 		if not spec:IsRegistered(self) then
 			spec:Register(self,
 				"children", function()
 					Spec_UpdateTablet(self)
 				end,
-				"point", "BOTTOM",
-				"relativePoint", "TOP",
+				"point", "BOTTOMRIGHT",
+				"relativePoint", "TOPRIGHT",
 				"maxHeight", 500,
 				"clickable", true,
 				"hideWhenEmpty", true
@@ -240,25 +231,17 @@ local function LoadTalent()
 				}
 			end
 		end
-		-- if R.db.specgear.primary > numEquipSets then
-			-- R.db.specgear.primary = -1
-		-- end
-		-- if R.db.specgear.secondary > numEquipSets then
-			-- R.db.specgear.secondary = -1
-		-- end
 
 		local active = GetActiveSpecGroup(false, false)
 		if GetSpecialization(false, false, active) and select(2, GetSpecializationInfo(GetSpecialization(false, false, active))) then
-			Text:SetText(select(2, GetSpecializationInfo(GetSpecialization(false, false, active))))
-			self:SetScript("OnEnter", Spec_OnEnter)
+			infobar.Text:SetText(select(2, GetSpecializationInfo(GetSpecialization(false, false, active))))
 		else
-            Text:SetText(NONE..TALENTS)
-			self:SetScript("OnEnter", nil)
+            infobar.Text:SetText(NONE..TALENTS)
 		end
 	end
 
-	Status:SetScript("OnEnter", Spec_OnEnter)
-	local manager = CreateFrame("Frame")
+	infobar:HookScript("OnEnter", Spec_OnEnter)
+	local manager = CreateFrame("Frame", nil, UIParent)
 
 	local function OnEvent(self, event, ...)
 		if event == "PLAYER_LOGIN" then
@@ -275,16 +258,13 @@ local function LoadTalent()
 			manager:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 		end
 
-		-- Setup Talents Tooltip
-		self:SetAllPoints(Text)
-
 		Spec_Update(self)
 	end
 
-	Status:RegisterEvent("PLAYER_LOGIN")
-	Status:SetScript("OnEvent", OnEvent)
+	infobar:RegisterEvent("PLAYER_LOGIN")
+	infobar:HookScript("OnEvent", OnEvent)
 
-	Status:SetScript("OnMouseDown", function()
+	infobar:HookScript("OnMouseDown", function()
 		local active = GetActiveSpecGroup(false, false)
 		SetActiveSpecGroup(active == 1 and 2 or 1)
 	end)
