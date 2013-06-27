@@ -70,6 +70,14 @@ function IF:SlideUp()
 	R:Slide(RayUI_BottomInfoBar, "UP", height, speed)
 end
 
+function IF:CheckAutoHide()
+    if not self.db.autoHide then return end
+    local x, y = GetCursorPosition()
+    if y > height and self:TimeLeft(self.Anim) <= 0 then
+        self:ReadyToSlideDown()
+    end
+end
+
 function IF:Initialize()
 	local menuFrame = CreateFrame("Frame", "RayUI_InfobarRightClickMenu", UIParent, "UIDropDownMenuTemplate")
 	local menuList = {
@@ -122,6 +130,7 @@ function IF:Initialize()
 	UIParent:HookScript("OnSizeChanged", function(self) bottombar:SetWidth(UIParent:GetWidth()) end)
 
 	self.Anim = self:ScheduleTimer("SlideDown", 10)
+	self:ScheduleRepeatingTimer("CheckAutoHide", 1)
 
 	local RayUI_ExpBar = CreateFrame("Frame", "RayUI_ExpBar", UIParent)
 	RayUI_ExpBar:CreateShadow("Background")
