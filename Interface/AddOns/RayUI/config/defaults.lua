@@ -24,6 +24,10 @@ G["general"]={
 	theme = "Shadow",
 }
 
+P["InfoBar"]={
+    autoHide = true,
+}
+
 P["WorldMap"]={
 	enable = true,
 	lock = false,

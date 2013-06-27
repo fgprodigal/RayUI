@@ -48,6 +48,7 @@ L["该按键的绑定已全部取消"] = "All keybindings of this button cleared
 L["储存"] = "Save"
 L["放弃"] = "Discard"
 
+L["自动隐藏信息条"] = "Auto hide infobar"
 L["没有工会"] = "No guild"
 L["免伤分析"] = "Avoidance Breakdown"
 L["免伤"] = "AVD"
