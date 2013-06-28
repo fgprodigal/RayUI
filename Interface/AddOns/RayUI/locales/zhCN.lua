@@ -150,6 +150,9 @@ L["最后页"] = true
 L["没有本地变量转存"] = true
 L['|cFFE30000接收到Lua错误. 可以通过点击小地图的"E"按钮查看错误.'] = true
 L["%s: %s 尝试调用保护函数 '%s'."] = true
+
+L["剩余"] = true
+L["双倍"] = true
 end
 do
 L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r设置"] = true

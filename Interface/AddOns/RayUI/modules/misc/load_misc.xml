@@ -9,6 +9,7 @@
 	<Script file="bubbles.lua"/>
 	<Script file="debugTools.lua"/>
 	<Script file="durability.lua"/>
+	<Script file="exprepbar.lua"/>
 	<Script file="hattrick.lua"/>
 	<Script file="invite.lua"/>
 	<Script file="loot_roll.lua"/>
