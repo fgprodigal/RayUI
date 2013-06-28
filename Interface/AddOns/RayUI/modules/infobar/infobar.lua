@@ -129,14 +129,10 @@ function IF:Initialize()
 
 	UIParent:HookScript("OnSizeChanged", function(self) bottombar:SetWidth(UIParent:GetWidth()) end)
 
-	self.Anim = self:ScheduleTimer("SlideDown", 10)
+	if self.db.autoHide then
+		self.Anim = self:ScheduleTimer("SlideDown", 10)
+	end
 	self:ScheduleRepeatingTimer("CheckAutoHide", 1)
-
-	-- local RayUI_ExpBar = CreateFrame("Frame", "RayUI_ExpBar", UIParent)
-	-- RayUI_ExpBar:CreateShadow("Background")
-	-- RayUI_ExpBar:SetFrameStrata("BACKGROUND")
-	-- RayUI_ExpBar:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -5)
-	-- RayUI_ExpBar:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMRIGHT", 0, -11)
 	self:LoadInfoText()
 end
 
