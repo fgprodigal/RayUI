@@ -70,7 +70,7 @@ function UF:DPSLayout(frame, unit)
 	frame.Name = name
 
 	-- mouseover highlight
-    local mouseover = health:CreateTexture(nil, "OVERLAY")
+	local mouseover = health:CreateTexture(nil, "OVERLAY")
 	mouseover:SetAllPoints(health)
 	mouseover:SetTexture("Interface\\AddOns\\RayUI\\media\\mouseover")
 	mouseover:SetVertexColor(1,1,1,.36)
@@ -93,7 +93,7 @@ function UF:DPSLayout(frame, unit)
 	frame:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", UF.UpdateThreatStatus)
 
 	-- SpellRange
-	if unit ~= "player" then
+	if unit ~= "player" and unit ~= "pet" then
 		frame.Range = {
 			insideAlpha = 1,
 			outsideAlpha = 0.4
@@ -101,7 +101,7 @@ function UF:DPSLayout(frame, unit)
 	end
 
 	-- Heal Prediction
-	self:EnableHealPredictionAndAbsorb(frame)	
+	self:EnableHealPredictionAndAbsorb(frame)
 
 	if unit == "player" then
 		health:Size(PLAYER_WIDTH, PLAYER_HEIGHT * (1 - self.db.powerheight) - 1)
@@ -131,7 +131,7 @@ function UF:DPSLayout(frame, unit)
 			EnergyBar.text = EnergyBar:CreateFontString(nil, "OVERLAY")
 			EnergyBar.text:SetPoint("CENTER")
 			EnergyBar.text:SetFont(R["media"].font, R["media"].fontsize + 2, R["media"].fontflag)
-            EnergyBar:RegisterEvent("UNIT_POWER_FREQUENT")
+			EnergyBar:RegisterEvent("UNIT_POWER_FREQUENT")
 			EnergyBar:SetScript("OnEvent", function(frame)
 				frame:SetMinMaxValues(0, UnitPowerMax("player"))
 				frame:SetValue(UnitPower("player"))
@@ -150,8 +150,8 @@ function UF:DPSLayout(frame, unit)
 			frame.Power = power
 		end
 		if self.db.showPortrait then
-        	frame.Portrait = self:ConstructPortrait(frame)
-        end
+			frame.Portrait = self:ConstructPortrait(frame)
+		end
 
 		-- Vengeance Bar
 		if self.db.vengeance then
@@ -173,19 +173,19 @@ function UF:DPSLayout(frame, unit)
 		end
 
 		-- CastBar
-        local castbar = self:ConstructCastBar(frame)
-        castbar:ClearAllPoints()
-        castbar:Point("BOTTOM",UIParent,"BOTTOM",0,305)
-        castbar:Width(350)
-        castbar:Height(7)
-        castbar.Text:ClearAllPoints()
-        castbar.Text:SetPoint("BOTTOMLEFT", castbar, "TOPLEFT", 5, -2)
-        castbar.Time:ClearAllPoints()
-        castbar.Time:SetPoint("BOTTOMRIGHT", castbar, "TOPRIGHT", -5, -2)
-        castbar.Icon:Hide()
-        castbar.Iconbg:Hide()
-        R:CreateMover(castbar, "PlayerCastBarMover", L["施法条锚点"], true, nil, "ALL,RAID15,RAID25,RAID40")
-        frame.Castbar = castbar
+		local castbar = self:ConstructCastBar(frame)
+		castbar:ClearAllPoints()
+		castbar:Point("BOTTOM",UIParent,"BOTTOM",0,305)
+		castbar:Width(350)
+		castbar:Height(7)
+		castbar.Text:ClearAllPoints()
+		castbar.Text:SetPoint("BOTTOMLEFT", castbar, "TOPLEFT", 5, -2)
+		castbar.Time:ClearAllPoints()
+		castbar.Time:SetPoint("BOTTOMRIGHT", castbar, "TOPRIGHT", -5, -2)
+		castbar.Icon:Hide()
+		castbar.Iconbg:Hide()
+		R:CreateMover(castbar, "PlayerCastBarMover", L["施法条锚点"], true, nil, "ALL,RAID15,RAID25,RAID40")
+		frame.Castbar = castbar
 
 		-- Debuffs
 		local debuffs = CreateFrame("Frame", nil, frame)
@@ -241,10 +241,10 @@ function UF:DPSLayout(frame, unit)
 		frame.Resting:SetVertexColor(0.8, 0.8, 0.8)
 
 		if UF.db.aurabar then
-            frame.AuraBars = self:Construct_AuraBarHeader(frame)
-            frame.AuraBars:SetPoint("BOTTOMLEFT", frame, "TOPLEFT", 0, 33)
-            frame.AuraBars:SetPoint("BOTTOMRIGHT", frame, "TOPRIGHT", 0, 33)
-        end
+			frame.AuraBars = self:Construct_AuraBarHeader(frame)
+			frame.AuraBars:SetPoint("BOTTOMLEFT", frame, "TOPLEFT", 0, 33)
+			frame.AuraBars:SetPoint("BOTTOMRIGHT", frame, "TOPRIGHT", 0, 33)
+		end
 	end
 
 	if unit == "target" then
@@ -268,9 +268,9 @@ function UF:DPSLayout(frame, unit)
 		power:CreateShadow("Background")
 		frame.Power = power
 
-        if self.db.showPortrait then
-        	frame.Portrait = self:ConstructPortrait(frame)
-        end
+		if self.db.showPortrait then
+			frame.Portrait = self:ConstructPortrait(frame)
+		end
 
 		local castbar = self:ConstructCastBar(frame)
 		castbar:ClearAllPoints()
@@ -367,10 +367,10 @@ function UF:DPSLayout(frame, unit)
 		end
 
 		if UF.db.aurabar then
-            frame.AuraBars = self:Construct_AuraBarHeader(frame)
-            frame.AuraBars:SetPoint("BOTTOMLEFT", frame, "TOPLEFT", 0, 33)
-            frame.AuraBars:SetPoint("BOTTOMRIGHT", frame, "TOPRIGHT", 0, 33)
-        end
+			frame.AuraBars = self:Construct_AuraBarHeader(frame)
+			frame.AuraBars:SetPoint("BOTTOMLEFT", frame, "TOPLEFT", 0, 33)
+			frame.AuraBars:SetPoint("BOTTOMRIGHT", frame, "TOPRIGHT", 0, 33)
+		end
 
 		frame.RangeText = self:Construct_RangeText(frame)
 	end
@@ -396,9 +396,9 @@ function UF:DPSLayout(frame, unit)
 		power:CreateShadow("Background")
 		frame.Power = power
 
-        if self.db.showPortrait then
-        	frame.Portrait = self:ConstructPortrait(frame)
-        end
+		if self.db.showPortrait then
+			frame.Portrait = self:ConstructPortrait(frame)
+		end
 	end
 
 	if unit == "focus" then
@@ -459,7 +459,7 @@ function UF:DPSLayout(frame, unit)
 		frame.Castbar = castbar
 
 		-- Fader
-		-- Fader(frame)
+		Fader(frame)
 	end
 
 	if unit == "targettarget" then
@@ -519,9 +519,9 @@ function UF:DPSLayout(frame, unit)
 		power:CreateShadow("Background")
 		frame.Power = power
 
-        if self.db.showPortrait then
-        	frame.Portrait = self:ConstructPortrait(frame)
-        end
+		if self.db.showPortrait then
+			frame.Portrait = self:ConstructPortrait(frame)
+		end
 
 		local debuffs = CreateFrame("Frame", nil, frame)
 		debuffs:SetHeight(BOSS_HEIGHT)
@@ -548,43 +548,43 @@ function UF:DPSLayout(frame, unit)
 		castbar.Text:Point("LEFT", frame.Health, "LEFT", 2, 0)
 		castbar.Iconbg:ClearAllPoints()
 		castbar.Iconbg:Point("RIGHT", frame, "LEFT", -2, 1)
-        castbar.border:Hide()
+		castbar.border:Hide()
 		castbar.shadow:Hide()
 		castbar.bg:Hide()
 		frame.Castbar = castbar
 	end
 
 	if (unit and unit:find("arena%d") and self.db.showArenaFrames == true) then
-        if not frame.prepFrame then
-            frame.prepFrame = CreateFrame("Frame", frame:GetName().."PrepFrame", UIParent)
-            frame.prepFrame:SetFrameStrata("BACKGROUND")
-            frame.prepFrame:SetAllPoints(frame)
-            frame.prepFrame.Health = CreateFrame("StatusBar", nil, frame.prepFrame)
-            frame.prepFrame.Health:SetStatusBarTexture(R["media"].normal)
-            frame.prepFrame.Health:SetAllPoints()
-            frame.prepFrame.Health:CreateShadow("Background")
+		if not frame.prepFrame then
+			frame.prepFrame = CreateFrame("Frame", frame:GetName().."PrepFrame", UIParent)
+			frame.prepFrame:SetFrameStrata("BACKGROUND")
+			frame.prepFrame:SetAllPoints(frame)
+			frame.prepFrame.Health = CreateFrame("StatusBar", nil, frame.prepFrame)
+			frame.prepFrame.Health:SetStatusBarTexture(R["media"].normal)
+			frame.prepFrame.Health:SetAllPoints()
+			frame.prepFrame.Health:CreateShadow("Background")
 
-            frame.prepFrame.Icon = frame.prepFrame:CreateTexture(nil, "OVERLAY")
-            frame.prepFrame.Icon.bg = CreateFrame("Frame", nil, frame.prepFrame)
-            frame.prepFrame.Icon.bg:SetHeight(BOSS_HEIGHT)
-            frame.prepFrame.Icon.bg:SetWidth(BOSS_HEIGHT)
-            frame.prepFrame.Icon.bg:SetPoint("LEFT", frame.prepFrame, "RIGHT", 5, 0)
-            frame.prepFrame.Icon.bg:CreateShadow("Background")
-            frame.prepFrame.Icon:SetParent(frame.prepFrame.Icon.bg)
-            frame.prepFrame.Icon:SetTexCoord(.08, .92, .08, .92)
-            frame.prepFrame.Icon:SetAllPoints(frame.prepFrame.Icon.bg)
+			frame.prepFrame.Icon = frame.prepFrame:CreateTexture(nil, "OVERLAY")
+			frame.prepFrame.Icon.bg = CreateFrame("Frame", nil, frame.prepFrame)
+			frame.prepFrame.Icon.bg:SetHeight(BOSS_HEIGHT)
+			frame.prepFrame.Icon.bg:SetWidth(BOSS_HEIGHT)
+			frame.prepFrame.Icon.bg:SetPoint("LEFT", frame.prepFrame, "RIGHT", 5, 0)
+			frame.prepFrame.Icon.bg:CreateShadow("Background")
+			frame.prepFrame.Icon:SetParent(frame.prepFrame.Icon.bg)
+			frame.prepFrame.Icon:SetTexCoord(.08, .92, .08, .92)
+			frame.prepFrame.Icon:SetAllPoints(frame.prepFrame.Icon.bg)
 
-            frame.prepFrame.SpecClass = frame.prepFrame.Health:CreateFontString(nil, "OVERLAY")
-            frame.prepFrame.SpecClass:SetPoint("CENTER")
-            frame.prepFrame.SpecClass:SetFont(R["media"].font, 12, R["media"].fontflag)
-        end
+			frame.prepFrame.SpecClass = frame.prepFrame.Health:CreateFontString(nil, "OVERLAY")
+			frame.prepFrame.SpecClass:SetPoint("CENTER")
+			frame.prepFrame.SpecClass:SetFont(R["media"].font, 12, R["media"].fontflag)
+		end
 
-        local specIcon = CreateFrame("Frame", nil, frame)
+		local specIcon = CreateFrame("Frame", nil, frame)
 		specIcon:SetHeight(BOSS_HEIGHT)
 		specIcon:SetWidth(BOSS_HEIGHT)
 		specIcon:SetPoint("LEFT", frame, "RIGHT", 5, 0)
-        specIcon:CreateShadow("Background")
-        frame.PVPSpecIcon = specIcon
+		specIcon:CreateShadow("Background")
+		frame.PVPSpecIcon = specIcon
 
 		local trinkets = CreateFrame("Frame", nil, frame)
 		trinkets:SetHeight(BOSS_HEIGHT)
@@ -592,73 +592,73 @@ function UF:DPSLayout(frame, unit)
 		trinkets:SetPoint("LEFT", specIcon, "RIGHT", 5, 0)
 		trinkets:CreateShadow("Background")
 		trinkets.shadow:SetFrameStrata("BACKGROUND")
-        trinkets.trinketUseAnnounce = true
-        trinkets.trinketUpAnnounce = true
-        frame.Trinket = trinkets
+		trinkets.trinketUseAnnounce = true
+		trinkets.trinketUpAnnounce = true
+		frame.Trinket = trinkets
 	end
 
-    local leader = frame:CreateTexture(nil, "BORDER")
-    leader:Size(16, 16)
-    leader:Point("TOPLEFT", frame, "TOPLEFT", 7, 10)
-    frame.Leader = leader
+	local leader = frame:CreateTexture(nil, "BORDER")
+	leader:Size(16, 16)
+	leader:Point("TOPLEFT", frame, "TOPLEFT", 7, 10)
+	frame.Leader = leader
 
 	-- Assistant Icon
 	local assistant = frame:CreateTexture(nil, "BORDER")
-    assistant:Point("TOPLEFT", frame, "TOPLEFT", 7, 10)
-    assistant:Size(16, 16)
-    frame.Assistant = assistant
+	assistant:Point("TOPLEFT", frame, "TOPLEFT", 7, 10)
+	assistant:Size(16, 16)
+	frame.Assistant = assistant
 
-    local masterlooter = frame:CreateTexture(nil, "BORDER")
-    masterlooter:Size(16, 16)
-    masterlooter:Point("TOPLEFT", frame, "TOPLEFT", 20, 10)
-    frame.MasterLooter = masterlooter
+	local masterlooter = frame:CreateTexture(nil, "BORDER")
+	masterlooter:Size(16, 16)
+	masterlooter:Point("TOPLEFT", frame, "TOPLEFT", 20, 10)
+	frame.MasterLooter = masterlooter
 	frame.MasterLooter:SetTexture("Interface\\AddOns\\RayUI\\media\\looter")
 	frame.MasterLooter:SetVertexColor(0.8, 0.8, 0.8)
 
-    local LFDRole = frame:CreateTexture(nil, "BORDER")
-    LFDRole:Size(16, 16)
-    LFDRole:Point("TOPLEFT", frame, -10, 10)
+	local LFDRole = frame:CreateTexture(nil, "BORDER")
+	LFDRole:Size(16, 16)
+	LFDRole:Point("TOPLEFT", frame, -10, 10)
 	frame.LFDRole = LFDRole
 	frame.LFDRole:SetTexture("Interface\\AddOns\\RayUI\\media\\lfd_role")
 
-    local PvP = frame:CreateTexture(nil, "BORDER")
-    PvP:Size(35, 35)
-    PvP:Point("TOPRIGHT", frame, 22, 8)
-    frame.PvP = PvP
+	local PvP = frame:CreateTexture(nil, "BORDER")
+	PvP:Size(35, 35)
+	PvP:Point("TOPRIGHT", frame, 22, 8)
+	frame.PvP = PvP
 	frame.PvP.Override = function(frame, event, unit)
 		if(unit ~= frame.unit) then return end
 
 		if(frame.PvP) then
 			local factionGroup = UnitFactionGroup(unit)
-            if factionGroup == "Neutral" then
-                frame.PvP:SetTexture(nil)
-                frame.PvP:Hide()
-            else
-                if(UnitIsPVPFreeForAll(unit)) then
-                    frame.PvP:SetTexture[[Interface\TargetingFrame\UI-PVP-FFA]]
-                    frame.PvP:Show()
-                elseif(factionGroup and UnitIsPVP(unit)) then
-                    frame.PvP:SetTexture([[Interface\AddOns\RayUI\media\UI-PVP-]]..factionGroup)
-                    frame.PvP:Show()
-                else
-                    frame.PvP:Hide()
-                end
-            end
-        end
+			if factionGroup == "Neutral" then
+				frame.PvP:SetTexture(nil)
+				frame.PvP:Hide()
+			else
+				if(UnitIsPVPFreeForAll(unit)) then
+					frame.PvP:SetTexture[[Interface\TargetingFrame\UI-PVP-FFA]]
+					frame.PvP:Show()
+				elseif(factionGroup and UnitIsPVP(unit)) then
+					frame.PvP:SetTexture([[Interface\AddOns\RayUI\media\UI-PVP-]]..factionGroup)
+					frame.PvP:Show()
+				else
+					frame.PvP:Hide()
+				end
+			end
+		end
 	end
 
-    local QuestIcon = frame:CreateTexture(nil, "BORDER")
-    QuestIcon:Size(24, 24)
-    QuestIcon:Point("BOTTOMRIGHT", frame, 15, -2)
-    frame.QuestIcon = QuestIcon
+	local QuestIcon = frame:CreateTexture(nil, "BORDER")
+	QuestIcon:Size(24, 24)
+	QuestIcon:Point("BOTTOMRIGHT", frame, 15, -2)
+	frame.QuestIcon = QuestIcon
 	frame.QuestIcon:SetTexture("Interface\\AddOns\\RayUI\\media\\quest")
 	frame.QuestIcon:SetVertexColor(0.8, 0.8, 0.8)
 
-    local ricon = frame:CreateTexture(nil, "BORDER")
-    ricon:Point("BOTTOM", frame, "TOP", 0, -7)
-    ricon:Size(24, 24)
+	local ricon = frame:CreateTexture(nil, "BORDER")
+	ricon:Point("BOTTOM", frame, "TOP", 0, -7)
+	ricon:Size(24, 24)
 	ricon:SetTexture("Interface\\AddOns\\RayUI\\media\\raidicons.blp")
-    frame.RaidIcon = ricon
+	frame.RaidIcon = ricon
 
 	frame.mouseovers = {}
 	tinsert(frame.mouseovers, frame.Health)
@@ -683,48 +683,48 @@ function UF:LoadUnitFrames()
 	player:Point("BOTTOMRIGHT", UIParent, "BOTTOM", -80, 390)
 	player:Size(PLAYER_WIDTH, PLAYER_HEIGHT)
 	player:Show()
-    R:CreateMover(player, player:GetName().."Mover", "Player Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
+	R:CreateMover(player, player:GetName().."Mover", "Player Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	-- Target
 	local target = oUF:Spawn("target", "RayUF_target")
 	target:Point("BOTTOMLEFT", UIParent, "BOTTOM", 80, 390)
 	target:Size(TARGET_WIDTH, TARGET_HEIGHT)
 	target:Show()
-    R:CreateMover(target, target:GetName().."Mover", "Target Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
+	R:CreateMover(target, target:GetName().."Mover", "Target Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	-- Focus
 	local focus = oUF:Spawn("focus", "RayUF_focus")
 	focus:Point("BOTTOMRIGHT", RayUF_player, "TOPLEFT", -20, 20)
 	focus:Size(PARTY_WIDTH, PARTY_HEIGHT)
 	focus:Show()
-    R:CreateMover(focus, focus:GetName().."Mover", "Focus Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
+	R:CreateMover(focus, focus:GetName().."Mover", "Focus Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	-- Target's Target
 	local tot = oUF:Spawn("targettarget", "RayUF_targettarget")
 	tot:Point("BOTTOMLEFT", RayUF_target, "TOPRIGHT", 5, 30)
 	tot:Size(SMALL_WIDTH, SMALL_HEIGHT)
 	tot:Show()
-    R:CreateMover(tot, tot:GetName().."Mover", "ToT Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
+	R:CreateMover(tot, tot:GetName().."Mover", "ToT Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	-- Player's Pet
 	local pet = oUF:Spawn("pet", "RayUF_pet")
 	pet:Point("BOTTOM", RayUIPetBar, "TOP", 0, 3)
 	pet:Size(SMALL_WIDTH, PET_HEIGHT)
 	pet:Show()
-    R:CreateMover(pet, pet:GetName().."Mover", "Pet Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
+	R:CreateMover(pet, pet:GetName().."Mover", "Pet Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	-- Focus's target
 	local focustarget = oUF:Spawn("focustarget", "RayUF_focustarget")
 	focustarget:Point("BOTTOMRIGHT", RayUF_focus, "BOTTOMLEFT", -10, 1)
 	focustarget:Size(SMALL_WIDTH, SMALL_HEIGHT)
 	focustarget:Show()
-    R:CreateMover(focustarget, focustarget:GetName().."Mover", "Focus Target Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
+	R:CreateMover(focustarget, focustarget:GetName().."Mover", "Focus Target Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	if self.db.showArenaFrames and not IsAddOnLoaded("Gladius") then
-        local ArenaHeader = CreateFrame("Frame", nil, UIParent)
-        ArenaHeader:Point("TOPRIGHT", UIParent, "RIGHT", -110, 200)
-        ArenaHeader:Width(BOSS_WIDTH)
-        ArenaHeader:Height(R:Scale(BOSS_HEIGHT)*5 + R:Scale(36)*4)
+		local ArenaHeader = CreateFrame("Frame", nil, UIParent)
+		ArenaHeader:Point("TOPRIGHT", UIParent, "RIGHT", -110, 200)
+		ArenaHeader:Width(BOSS_WIDTH)
+		ArenaHeader:Height(R:Scale(BOSS_HEIGHT)*5 + R:Scale(36)*4)
 		local arena = {}
 		for i = 1, 5 do
 			arena[i] = oUF:Spawn("arena"..i, "RayUFArena"..i)
@@ -736,14 +736,14 @@ function UF:LoadUnitFrames()
 			arena[i]:Size(BOSS_WIDTH, BOSS_HEIGHT)
 			arena[i]:Show()
 		end
-        R:CreateMover(ArenaHeader, "ArenaHeaderMover", "Arena Frames", nil, nil, "ALL,ARENA")
+		R:CreateMover(ArenaHeader, "ArenaHeaderMover", "Arena Frames", nil, nil, "ALL,ARENA")
 	end
 
 	if self.db.showBossFrames then
-        local BossHeader = CreateFrame("Frame", nil, UIParent)
-        BossHeader:Point("TOPRIGHT", UIParent, "RIGHT", -80, 200)
-        BossHeader:Width(BOSS_WIDTH)
-        BossHeader:Height(R:Scale(BOSS_HEIGHT)*MAX_BOSS_FRAMES + R:Scale(36)*(MAX_BOSS_FRAMES-1))
+		local BossHeader = CreateFrame("Frame", nil, UIParent)
+		BossHeader:Point("TOPRIGHT", UIParent, "RIGHT", -80, 200)
+		BossHeader:Width(BOSS_WIDTH)
+		BossHeader:Height(R:Scale(BOSS_HEIGHT)*MAX_BOSS_FRAMES + R:Scale(36)*(MAX_BOSS_FRAMES-1))
 		local boss = {}
 		for i = 1, MAX_BOSS_FRAMES do
 			boss[i] = oUF:Spawn("boss"..i, "RayUFBoss"..i)
@@ -755,9 +755,9 @@ function UF:LoadUnitFrames()
 			boss[i]:Size(BOSS_WIDTH, BOSS_HEIGHT)
 			boss[i]:Show()
 		end
-        R:CreateMover(BossHeader, "BossHeaderMover", "Boss Frames", nil, nil, "ALL,RAID15,RAID25,RAID40")
+		R:CreateMover(BossHeader, "BossHeaderMover", "Boss Frames", nil, nil, "ALL,RAID15,RAID25,RAID40")
 	end
-    self:RegisterEvent("ARENA_PREP_OPPONENT_SPECIALIZATIONS", "UpdatePrep")
-    self:RegisterEvent("ARENA_OPPONENT_UPDATE", "UpdatePrep")
-    self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdatePrep")
+	self:RegisterEvent("ARENA_PREP_OPPONENT_SPECIALIZATIONS", "UpdatePrep")
+	self:RegisterEvent("ARENA_OPPONENT_UPDATE", "UpdatePrep")
+	self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdatePrep")
 end

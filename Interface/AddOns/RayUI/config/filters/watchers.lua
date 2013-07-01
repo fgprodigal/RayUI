@@ -1,15 +1,15 @@
 ﻿local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 
 local positions = {
-    player_buff_icon = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 80 },	-- "玩家buff&debuff"
-    target_buff_icon = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 80 },	-- "目标buff&debuff"
-    player_proc_icon = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 33 },	-- "玩家重要buff&debuff"
-    target_proc_icon = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 33 },	-- "目标重要buff&debuff"
-    focus_buff_icon = { "BOTTOMLEFT", "RayUF_focus", "TOPLEFT", 0, 10 },	-- "焦点buff&debuff"
-    cd_icon = function() return R:IsDeveloper() and { "TOPLEFT", "RayUIActionBar1", "BOTTOMLEFT", 0, -6 } or { "TOPLEFT", "RayUIActionBar3", "BOTTOMRIGHT", -28, -6 } end,	-- "cd"
+    player_buff_icon    = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 80 },	-- "玩家buff&debuff"
+    target_buff_icon    = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 80 },	-- "目标buff&debuff"
+    player_proc_icon    = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 33 },	-- "玩家重要buff&debuff"
+    target_proc_icon    = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 33 },	-- "目标重要buff&debuff"
+    focus_buff_icon     = { "BOTTOMLEFT", "RayUF_focus", "TOPLEFT", 0, 10 },	-- "焦点buff&debuff"
+    cd_icon             = function() return R:IsDeveloper() and { "TOPLEFT", "RayUIActionBar1", "BOTTOMLEFT", 0, -6 } or { "TOPLEFT", "RayUIActionBar3", "BOTTOMRIGHT", -28, -6 } end,	-- "cd"
     player_special_icon = { "TOPRIGHT", "RayUF_player", "BOTTOMRIGHT", 0, -9 }, -- "玩家特殊buff&debuff"
-    pve_player_icon = { "BOTTOM", UIParent, "BOTTOM", -35, 350 }, -- "PVE/PVP玩家buff&debuff"
-    pve_target_icon = { "BOTTOM", UIParent, "BOTTOM", 35, 350 }, -- "PVE/PVP目标buff&debuff"
+    pve_player_icon     = { "BOTTOM", UIParent, "BOTTOM", -35, 350 }, -- "PVE/PVP玩家buff&debuff"
+    pve_target_icon     = { "BOTTOM", UIParent, "BOTTOM", 35, 350 }, -- "PVE/PVP目标buff&debuff"
 }
 
 R["Watcher"] = {
@@ -1304,6 +1304,8 @@ R["Watcher"] = {
                 { spellID = 114851, unitId = "player", caster = "player", filter = "BUFF" },
                 --黑暗救贖
                 { spellID = 101568, unitId = "player", caster = "player", filter = "BUFF" },
+                --邪惡狂熱
+                { spellID = 49016, unitId = "player", caster = "player", filter = "BUFF" },
                 --寶寶能量
                 { spellID = 91342, unitId = "pet", caster = "player", filter = "BUFF" },
                 --黑暗變身

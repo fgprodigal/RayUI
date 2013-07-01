@@ -37,21 +37,21 @@ function IF:CreateInfoPanel(name, width)
 	panel.Square.Bg:Size(7, 7)
 
 	panel:SetScript("OnEnter", function(self)
-        if not IF.db.autoHide then return end
-		IF:CancelTimer(IF.Anim)
-		self.Indicator:Show()
-	end)
+			self.Indicator:Show()
+			if not IF.db.autoHide then return end
+			IF:CancelTimer(IF.Anim)
+		end)
 	panel:SetScript("OnLeave", function(self)
-        if not IF.db.autoHide then return end
-		self.Indicator:Hide()
-		IF:ReadyToSlideDown()
-	end)
+			self.Indicator:Hide()
+			if not IF.db.autoHide then return end
+			IF:ReadyToSlideDown()
+		end)
 
 	return panel
 end
 
 function IF:ReadyToSlideDown()
-    if not self.db.autoHide then return end
+	if not self.db.autoHide then return end
 	self:CancelTimer(self.Anim)
 	self.Anim = self:ScheduleTimer("SlideDown", 3)
 end
@@ -71,29 +71,29 @@ function IF:SlideUp()
 end
 
 function IF:CheckAutoHide()
-    if not self.db.autoHide then return end
-    local x, y = GetCursorPosition()
-    if y > height and self:TimeLeft(self.Anim) <= 0 then
-        self:ReadyToSlideDown()
-    end
+	if not self.db.autoHide then return end
+	local x, y = GetCursorPosition()
+	if y > height and self:TimeLeft(self.Anim) <= 0 then
+		self:ReadyToSlideDown()
+	end
 end
 
 function IF:Initialize()
 	local menuFrame = CreateFrame("Frame", "RayUI_InfobarRightClickMenu", UIParent, "UIDropDownMenuTemplate")
 	local menuList = {
 		{
-            text = L["自动隐藏信息条"],
-            checked = function() return self.db.autoHide end,
-		    func = function()
-                    self.db.autoHide = not self.db.autoHide
-                    if not self.db.autoHide then
-                        self:CancelTimer(self.Anim)
-                        self:SlideUp()
-                    else
-                        self:SlideDown()
-                    end
-                end,
-        },
+			text = L["自动隐藏信息条"],
+			checked = function() return self.db.autoHide end,
+			func = function()
+				self.db.autoHide = not self.db.autoHide
+				if not self.db.autoHide then
+					self:CancelTimer(self.Anim)
+					self:SlideUp()
+				else
+					self:SlideDown()
+				end
+			end,
+		},
 	}
 
 	local bottombar = CreateFrame("Frame", "RayUI_BottomInfoBar", UIParent)
@@ -108,15 +108,15 @@ function IF:Initialize()
 	trigger:SetScript("OnEnter", function()
 		self:SlideUp()
 		self:CancelTimer(self.Anim)
-	end)
+		end)
 
 	bottombar:SetScript("OnEnter", function()
 		self:CancelTimer(self.Anim)
-	end)
+		end)
 
 	bottombar:SetScript("OnLeave", function()
 		self:ReadyToSlideDown()
-	end)
+		end)
 
 	local function PopupMenu(_, btn)
 		if btn=="RightButton" then

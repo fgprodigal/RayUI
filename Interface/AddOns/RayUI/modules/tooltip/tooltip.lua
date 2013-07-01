@@ -184,6 +184,10 @@ function TT:GameTooltip_SetDefaultAnchor(tooltip, parent)
 			tooltip:SetOwner(parent, "ANCHOR_CURSOR")
 		end
 	else
+		if parent then
+			tooltip:SetOwner(parent, "ANCHOR_NONE")
+		end
+
 		local owner
 		if tooltip:GetOwner() then
 			owner = tooltip:GetOwner():GetName()

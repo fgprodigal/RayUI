@@ -62,10 +62,10 @@ function AddOn:OnInitialize()
 			}
 			if self.db[k] and self.db[k].enable ~= nil then
 				t.toggle = {
-					type = "toggle", 
-					name = v.toggleLabel or (Locale["启用"] .. (v.modName or k)), 
+					type = "toggle",
+					name = v.toggleLabel or (Locale["启用"] .. (v.modName or k)),
 					width = "double",
-					desc = v.Info and v:Info() or (Locale["启用"] .. (v.modName or k)), 
+					desc = v.Info and v:Info() or (Locale["启用"] .. (v.modName or k)),
 					order = 3,
 					get = function()
 						return AddOn.db[k].enable ~= false or false
@@ -95,7 +95,7 @@ function AddOn:OnInitialize()
 
 	self:InitializeModules()
 	self.initialized = true
-    self:RegisterEvent("PLAYER_REGEN_DISABLED")
+	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	self:RegisterEvent("PLAYER_LOGIN", "Initialize")
 	self:RegisterChatCommand("RayUI", "OpenConfig")
 	self:RegisterChatCommand("RC", "OpenConfig")
@@ -122,16 +122,16 @@ function AddOn:PLAYER_REGEN_DISABLED()
 	end
 	if err == true then
 		self:Print(ERR_NOT_IN_COMBAT)
-        self:ToggleConfigMode(true)
+		self:ToggleConfigMode(true)
 	end
 end
 
 function AddOn:OpenConfig()
-    if InCombatLockdown() then
+	if InCombatLockdown() then
 		self:Print(ERR_NOT_IN_COMBAT)
 		self:RegisterEvent("PLAYER_REGEN_ENABLED")
 		return
-    end
+	end
 	AceConfigDialog:SetDefaultSize("RayUI", 850, 650)
 	AceConfigDialog:Open("RayUI")
 	local f = AceConfigDialog.OpenFrames["RayUI"].frame

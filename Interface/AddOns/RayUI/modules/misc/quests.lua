@@ -96,7 +96,7 @@ local function LoadFunc()
 		local currentInfo = {}
 
 		local Delayer = Monomyth:CreateAnimationGroup()
-		Delayer:CreateAnimation():SetDuration(.25)
+		Delayer:CreateAnimation():SetDuration(.5)
 		Delayer:SetLooping("NONE")
 		Delayer:SetScript("OnFinished", function()
 			DelayHandler(unpack(currentInfo))

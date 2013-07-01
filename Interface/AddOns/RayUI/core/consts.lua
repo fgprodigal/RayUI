@@ -1,26 +1,26 @@
 local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local AddOnName = ...
 
-R.myclass = select(2, UnitClass("player"))
-R.myname = UnitName("player")
-R.myrealm = GetRealmName()
-R.version = GetAddOnMetadata(AddOnName, "Version")
+R.myclass            = select(2, UnitClass("player"))
+R.myname             = UnitName("player")
+R.myrealm            = GetRealmName()
+R.version            = GetAddOnMetadata(AddOnName, "Version")
 BINDING_HEADER_RAYUI = GetAddOnMetadata(AddOnName, "Title")
 
 RayUF.colors.power["MANA"] = {0, 0.8, 1}
 
 RayUF["colors"].class = {
-	["DEATHKNIGHT"]	= { 0.77,	0.12,		0.23 },
-	["DRUID"]				= { 1,		0.49,		0.04 },
-	["HUNTER"]			= { 0.58,	0.86,		0.49 },
-	["MAGE"]				= { 0.2,		0.76,		1 },
-	["PALADIN"]			= { 1,		0.42,		0.62 },
-	["PRIEST"]				= { 1,		1,			1 },
-	["ROGUE"]			= { 1,		0.91,		0.3 },
-	["SHAMAN"]			= { 0.16,	0.31,		0.61 },
-	["WARLOCK"]		= { 0.6,		0.47,		0.85 },
-	["WARRIOR"]		= { 0.9,		0.65,		0.45 },
-	["MONK"]				= { 0,		1,			0.59 },
+	["DEATHKNIGHT"] = { 0.77,	0.12,		0.23 },
+	["DRUID"]       = { 1,		0.49,		0.04 },
+	["HUNTER"]      = { 0.58,	0.86,		0.49 },
+	["MAGE"]        = { 0.2,	0.76,		1 },
+	["PALADIN"]     = { 1,		0.42,		0.62 },
+	["PRIEST"]      = { 1,		1,			1 },
+	["ROGUE"]       = { 1,		0.91,		0.3 },
+	["SHAMAN"]      = { 0.16,	0.31,		0.61 },
+	["WARLOCK"]     = { 0.6,	0.47,		0.85 },
+	["WARRIOR"]     = { 0.9,	0.65,		0.45 },
+	["MONK"]        = { 0,		1,			0.59 },
 }
 
 RayUF["colors"].reaction = {

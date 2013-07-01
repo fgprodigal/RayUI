@@ -311,10 +311,10 @@ end
 function UF:CustomCastDelayText(duration)
     -- self.Time:SetText(("%.1f |cffff0000%s %.1f|r"):format(self.channeling and duration or self.max - duration, self.channeling and "- " or "+", self.delay))
     if self.channeling then
-		self.Time:SetText(("%.1f | %.1f |cffff0000%.1f|r"):format(duration, self.max, self.delay))
-	else
-		self.Time:SetText(("%.1f | %.1f |cffff0000%s %.1f|r"):format(abs(duration - self.max), self.max, "+", self.delay))
-	end
+      self.Time:SetText(("%.1f | %.1f |cffff0000%.1f|r"):format(duration, self.max, self.delay))
+  else
+      self.Time:SetText(("%.1f | %.1f |cffff0000%s %.1f|r"):format(abs(duration - self.max), self.max, "+", self.delay))
+  end
 end
 
 function UF:PostCastStop(unit, name, castid)
@@ -329,16 +329,16 @@ function UF:PostChannelUpdate(unit, name)
     local baseTicks = unitframe.ChannelTicks[name]
 
     if baseTicks then
-		local extraTick = 0
-        if self.chainChannel then
-            extraTick = 1
-            self.chainChannel = nil
-        end
-
-        UF:SetCastTicks(self, baseTicks, extraTick)
-    else
-        UF:HideTicks(self)
+      local extraTick = 0
+      if self.chainChannel then
+        extraTick = 1
+        self.chainChannel = nil
     end
+
+    UF:SetCastTicks(self, baseTicks, extraTick)
+else
+    UF:HideTicks(self)
+end
 end
 
 function UF:PostCastInterruptible(unit)
@@ -407,9 +407,9 @@ function UF:OnCastbarUpdate(elapsed)
 
         if(self.Time) then
             if(self.delay ~= 0) then
-				self:CustomDelayText(duration)
+                self:CustomDelayText(duration)
             else
-				self:CustomTimeText(duration)
+                self:CustomTimeText(duration)
             end
         end
 
@@ -442,9 +442,9 @@ function UF:OnCastbarUpdate(elapsed)
 
         if(self.Time) then
             if(self.delay ~= 0) then
-				self:CustomDelayText(duration)
+                self:CustomDelayText(duration)
             else
-				self:CustomTimeText(duration)
+                self:CustomTimeText(duration)
             end
         end
 
@@ -1086,12 +1086,12 @@ function UF:ConstructMageResourceBar(frame)
         bars[i]:CreateShadow("Background")
         bars[i].shadow:SetFrameStrata("BACKGROUND")
         bars[i].shadow:SetFrameLevel(0)
-		bars[i].__parent = bars
+        bars[i].__parent = bars
     end
 
-	bars.Colors = RayUF.colors.class["MAGE"]
-	bars.ExpColors = { 1, 0, 0 }
-	bars.BgColors = { 0, 0, 0 }
+    bars.Colors = RayUF.colors.class["MAGE"]
+    bars.ExpColors = { 1, 0, 0 }
+    bars.BgColors = { 0, 0, 0 }
 
     return bars
 end
@@ -1272,11 +1272,11 @@ end
 
 function UF:RangeDisplayUpdate(frame)
 	if ( not UnitExists("target") ) or ( not frame.RangeText ) then return end
-	
+
 	-- Get range
 	local section
 	local minRange, maxRange = RC:GetRange("target")
-	
+
 	-- No change? Skip
 	if ((minRange == frame.RangeText.lastMinRange) and (maxRange == frame.RangeText.lastMaxRange)) then return end
 
