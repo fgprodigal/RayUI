@@ -380,7 +380,7 @@ local function LoadFunc()
         atMail = false
     end)
 
-	local questTip = CreateFrame("GameTooltip", "MonomythTip", UIParent)
+	local questTip = CreateFrame("GameTooltip", "MonomythTip", UIParent, "GameTooltipTemplate")
 	local questLevel = string.gsub(ITEM_MIN_LEVEL, "%%d", "(%%d+)")
 
 	local function GetQuestItemLevel()
@@ -398,10 +398,13 @@ local function LoadFunc()
         for slot = 1, GetContainerNumSlots(bag) do
             local _, id, active = GetContainerItemQuestInfo(bag, slot)
             if(id and not active and not IsQuestFlaggedCompleted(id) and not ignoredItems[id]) then
+                questTip:SetOwner(UIParent, "ANCHOR_NONE")
+                questTip:ClearLines()
                 questTip:SetBagItem(bag, slot)
 				questTip:Show()
 
 				local level = GetQuestItemLevel()
+				questTip:Hide()
 				if(not level or level <= UnitLevel("player")) then
 					UseContainerItem(bag, slot)
 				end

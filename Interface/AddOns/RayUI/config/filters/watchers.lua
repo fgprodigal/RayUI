@@ -170,15 +170,15 @@ R["Watcher"] = {
                 { spellID = 112071, filter = "CD" },
 
                 -- 物品
-				-- 手套
-				{slotID = 10, filter = "CD" },
-				-- 腰带
-				{slotID = 6, filter = "CD" },
-				-- 披风
-				{slotID = 15, filter = "CD" },
-				-- 饰品
-				{slotID = 13, filter = "CD" },
-				{slotID = 14, filter = "CD" },
+                -- 手套
+                {slotID = 10, filter = "CD" },
+                -- 腰带
+                {slotID = 6, filter = "CD" },
+                -- 披风
+                {slotID = 15, filter = "CD" },
+                -- 饰品
+                {slotID = 13, filter = "CD" },
+                {slotID = 14, filter = "CD" },
             },
         },
         ["HUNTER"] = {
@@ -316,15 +316,15 @@ R["Watcher"] = {
                 { spellID = 120697, filter = "CD" },
 
                 -- 物品
-				-- 手套
-				{slotID = 10, filter = "CD" },
-				-- 腰带
-				{slotID = 6, filter = "CD" },
-				-- 披风
-				{slotID = 15, filter = "CD" },
-				-- 饰品
-				{slotID = 13, filter = "CD" },
-				{slotID = 14, filter = "CD" },
+                -- 手套
+                {slotID = 10, filter = "CD" },
+                -- 腰带
+                {slotID = 6, filter = "CD" },
+                -- 披风
+                {slotID = 15, filter = "CD" },
+                -- 饰品
+                {slotID = 13, filter = "CD" },
+                {slotID = 14, filter = "CD" },
             },
         },
         ["MAGE"] = {
@@ -334,38 +334,38 @@ R["Watcher"] = {
                 setpoint = positions.player_proc_icon,
                 size = 38,
 
-				--冰霜之指
-				{ spellID = 44544, unitId = "player", caster = "player", filter = "BUFF" },
-				--焦炎之痕
-				{ spellID = 48108, unitId = "player", caster = "player", filter = "BUFF" },
-				--飛彈彈幕
-				{ spellID = 79683, unitId = "player", caster = "player", filter = "BUFF" },
-				--秘法強化
-				{ spellID = 12042, unitId = "player", caster = "player", filter = "BUFF" },
-				--秘法衝擊
-				{ spellID = 36032, unitId = "player", caster = "player", filter = "DEBUFF" },
-				--寒冰護體
-				{ spellID = 11426, unitId = "player", caster = "player", filter = "BUFF" },
-				--腦部凍結
-				{ spellID = 57761, unitId = "player", caster = "player", filter = "BUFF" },
-				--升溫
-				{ spellID = 48107, unitId = "player", caster = "player", filter = "BUFF" },
-				--咒法結界
-				{ spellID = 1463, unitId = "player", caster = "player", filter = "BUFF" },
-				--塑能師之能
-				{ spellID = 116257, unitId = "player", caster = "player", filter = "BUFF" },
-				--力之符文
-				{ spellID = 116014, unitId = "player", caster = "player", filter = "BUFF" },
-				--咒法轉移
-				{ spellID = 116267, unitId = "player", caster = "player", filter = "BUFF" },
-				--冰寒脈動
-				{ spellID = 12472, unitId = "player", caster = "player", filter = "BUFF" },
-				--氣定神閒
-				{ spellID = 12043, unitId = "player", caster = "player", filter = "BUFF" },
-				--時光倒轉
-				{ spellID = 110909, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 燒灼
-				{ spellID = 87023, unitId = "player", caster = "player", filter = "DEBUFF" },
+                --冰霜之指
+                { spellID = 44544, unitId = "player", caster = "player", filter = "BUFF" },
+                --焦炎之痕
+                { spellID = 48108, unitId = "player", caster = "player", filter = "BUFF" },
+                --飛彈彈幕
+                { spellID = 79683, unitId = "player", caster = "player", filter = "BUFF" },
+                --秘法強化
+                { spellID = 12042, unitId = "player", caster = "player", filter = "BUFF" },
+                --秘法衝擊
+                { spellID = 36032, unitId = "player", caster = "player", filter = "DEBUFF" },
+                --寒冰護體
+                { spellID = 11426, unitId = "player", caster = "player", filter = "BUFF" },
+                --腦部凍結
+                { spellID = 57761, unitId = "player", caster = "player", filter = "BUFF" },
+                --升溫
+                { spellID = 48107, unitId = "player", caster = "player", filter = "BUFF" },
+                --咒法結界
+                { spellID = 1463, unitId = "player", caster = "player", filter = "BUFF" },
+                --塑能師之能
+                { spellID = 116257, unitId = "player", caster = "player", filter = "BUFF" },
+                --力之符文
+                { spellID = 116014, unitId = "player", caster = "player", filter = "BUFF" },
+                --咒法轉移
+                { spellID = 116267, unitId = "player", caster = "player", filter = "BUFF" },
+                --冰寒脈動
+                { spellID = 12472, unitId = "player", caster = "player", filter = "BUFF" },
+                --氣定神閒
+                { spellID = 12043, unitId = "player", caster = "player", filter = "BUFF" },
+                --時光倒轉
+                { spellID = 110909, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 燒灼
+                { spellID = 87023, unitId = "player", caster = "player", filter = "DEBUFF" },
                 --冰霜炸彈
                 { spellID = 112948, filter = "CD" },
 
@@ -446,19 +446,19 @@ R["Watcher"] = {
                 { spellID = 84714, filter = "CD" },
 
                 -- 物品
-				-- 手套
-				{slotID = 10, filter = "CD" },
-				-- 腰带
-				{slotID = 6, filter = "CD" },
-				-- 披风
-				{slotID = 15, filter = "CD" },
-				-- 饰品
-				{slotID = 13, filter = "CD" },
-				{slotID = 14, filter = "CD" },
+                -- 手套
+                {slotID = 10, filter = "CD" },
+                -- 腰带
+                {slotID = 6, filter = "CD" },
+                -- 披风
+                {slotID = 15, filter = "CD" },
+                -- 饰品
+                {slotID = 13, filter = "CD" },
+                {slotID = 14, filter = "CD" },
             },
         },
         ["WARRIOR"] = {
-			{
+            {
                 name = "玩家buff&debuff",
                 direction = "LEFT",
                 setpoint = positions.player_buff_icon,
@@ -665,7 +665,7 @@ R["Watcher"] = {
                 { spellID = 76780, unitId = "focus", caster = "all", filter = "DEBUFF" },
 
             },
-			{
+            {
                 name = "CD",
                 iconSide = "LEFT",
                 size = 28,
@@ -680,15 +680,15 @@ R["Watcher"] = {
                 { spellID = 2062, filter = "CD" },
 
                 -- 物品
-				-- 手套
-				{slotID = 10, filter = "CD" },
-				-- 腰带
-				{slotID = 6, filter = "CD" },
-				-- 披风
-				{slotID = 15, filter = "CD" },
-				-- 饰品
-				{slotID = 13, filter = "CD" },
-				{slotID = 14, filter = "CD" },
+                -- 手套
+                {slotID = 10, filter = "CD" },
+                -- 腰带
+                {slotID = 6, filter = "CD" },
+                -- 披风
+                {slotID = 15, filter = "CD" },
+                -- 饰品
+                {slotID = 13, filter = "CD" },
+                {slotID = 14, filter = "CD" },
             },
         },
         ["PALADIN"] = {
@@ -702,10 +702,10 @@ R["Watcher"] = {
                 { spellID = 53563, unitId = "player", caster = "player", filter = "BUFF" },
                 --純潔審判
                 { spellID = 53657, unitId = "player", caster = "player", filter = "BUFF" },
-				--永恆之火
-				{ spellID = 114163, unitId = "player", caster = "player", filter = "BUFF" },
-				--無私治療者
-				{ spellID = 114250, unitId = "player", caster = "player", filter = "BUFF" },
+                --永恆之火
+                { spellID = 114163, unitId = "player", caster = "player", filter = "BUFF" },
+                --無私治療者
+                { spellID = 114250, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标buff&debuff",
@@ -723,10 +723,10 @@ R["Watcher"] = {
                 { spellID = 114157, unitId = "target", caster = "player", filter = "BUFF" },
                 --圣洁护盾
                 { spellID = 20925, unitId = "target", caster = "player", filter = "BUFF" },
-				--譴責
-				{ spellID = 31803, unitId = "target", caster = "player", filter = "DEBUFF" },
-				--弱化攻擊
-				{ spellID = 115798, unitId = "target", caster = "all", filter = "DEBUFF" },
+                --譴責
+                { spellID = 31803, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --弱化攻擊
+                { spellID = 115798, unitId = "target", caster = "all", filter = "DEBUFF" },
             },
             {
                 name = "玩家重要buff&debuff",
@@ -762,24 +762,24 @@ R["Watcher"] = {
                 { spellID = 31884, unitId = "player", caster = "player", filter = "BUFF" },
                 --精通光環
                 { spellID = 31821, unitId = "player", caster = "player", filter = "BUFF" },
-				--圣盾術
-				{ spellID = 642, unitId = "player", caster = "player", filter = "BUFF" },
-				--遠古諸王守護者
-				{ spellID = 86698, unitId = "player", caster = "player", filter = "BUFF" },
-				--忠誠防衛者
-				{ spellID = 31850, unitId = "player", caster = "player", filter = "BUFF" },
-				--光速
-				{ spellID = 85499, unitId = "player", caster = "player", filter = "BUFF" },
-				--公正之盾
-				{ spellID = 132403, unitId = "player", caster = "player", filter = "BUFF" },
-				--榮耀壁壘
-				{ spellID = 114637, unitId = "player", caster = "player", filter = "BUFF" },
-				--大十字軍
-				{ spellID = 85416, unitId = "player", caster = "player", filter = "BUFF" },
-				--遠古諸王之光
-				{ spellID = 86678, unitId = "player", caster = "all", filter = "BUFF" },
-				--道高一丈
-				{ spellID = 87173, unitId = "player", caster = "player", filter = "BUFF" },
+                --圣盾術
+                { spellID = 642, unitId = "player", caster = "player", filter = "BUFF" },
+                --遠古諸王守護者
+                { spellID = 86698, unitId = "player", caster = "player", filter = "BUFF" },
+                --忠誠防衛者
+                { spellID = 31850, unitId = "player", caster = "player", filter = "BUFF" },
+                --光速
+                { spellID = 85499, unitId = "player", caster = "player", filter = "BUFF" },
+                --公正之盾
+                { spellID = 132403, unitId = "player", caster = "player", filter = "BUFF" },
+                --榮耀壁壘
+                { spellID = 114637, unitId = "player", caster = "player", filter = "BUFF" },
+                --大十字軍
+                { spellID = 85416, unitId = "player", caster = "player", filter = "BUFF" },
+                --遠古諸王之光
+                { spellID = 86678, unitId = "player", caster = "all", filter = "BUFF" },
+                --道高一丈
+                { spellID = 87173, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -791,14 +791,14 @@ R["Watcher"] = {
                 { spellID = 853, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --制裁之拳
                 { spellID = 105593, unitId = "target", caster = "all", filter = "DEBUFF" },
-				--自律
-				{ spellID = 25771, unitId = "target", caster = "all", filter = "DEBUFF" },
-				--罪之重擔
-				{ spellID = 110300, unitId = "target", caster = "player", filter = "DEBUFF" },
-				--公正聖印
-				{ spellID = 20170, unitId = "target", caster = "player", filter = "DEBUFF" },
-				--問罪
-				{ spellID = 2812, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --自律
+                { spellID = 25771, unitId = "target", caster = "all", filter = "DEBUFF" },
+                --罪之重擔
+                { spellID = 110300, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --公正聖印
+                { spellID = 20170, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --問罪
+                { spellID = 2812, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
             {
                 name = "焦点buff&debuff",
@@ -830,16 +830,16 @@ R["Watcher"] = {
                 --聖佑術
                 { spellID = 498, filter = "CD" },
 
-				-- 物品
-				-- 手套
-				{slotID = 10, filter = "CD" },
-				-- 腰带
-				{slotID = 6, filter = "CD" },
-				-- 披风
-				{slotID = 15, filter = "CD" },
-				-- 饰品
-				{slotID = 13, filter = "CD" },
-				{slotID = 14, filter = "CD" },
+                -- 物品
+                -- 手套
+                {slotID = 10, filter = "CD" },
+                -- 腰带
+                {slotID = 6, filter = "CD" },
+                -- 披风
+                {slotID = 15, filter = "CD" },
+                -- 饰品
+                {slotID = 13, filter = "CD" },
+                {slotID = 14, filter = "CD" },
             },
         },
         ["PRIEST"] = {
@@ -978,15 +978,15 @@ R["Watcher"] = {
                 { spellID = 81700, filter = "CD" },
 
                 -- 物品
-				-- 手套
-				{slotID = 10, filter = "CD" },
-				-- 腰带
-				{slotID = 6, filter = "CD" },
-				-- 披风
-				{slotID = 15, filter = "CD" },
-				-- 饰品
-				{slotID = 13, filter = "CD" },
-				{slotID = 14, filter = "CD" },
+                -- 手套
+                {slotID = 10, filter = "CD" },
+                -- 腰带
+                {slotID = 6, filter = "CD" },
+                -- 披风
+                {slotID = 15, filter = "CD" },
+                -- 饰品
+                {slotID = 13, filter = "CD" },
+                {slotID = 14, filter = "CD" },
             },
         },
         ["WARLOCK"]={
@@ -1055,7 +1055,7 @@ R["Watcher"] = {
                 --爆燃
                 { spellID = 117828, unitId = "player", caster = "player", filter = "BUFF" },
             },
-			 {
+            {
                 name = "CD",
                 iconSide = "LEFT",
                 size = 28,
@@ -1065,15 +1065,15 @@ R["Watcher"] = {
                 setpoint = positions.cd_icon,
 
                 -- 物品
-				-- 手套
-				{slotID = 10, filter = "CD" },
-				-- 腰带
-				{slotID = 6, filter = "CD" },
-				-- 披风
-				{slotID = 15, filter = "CD" },
-				-- 饰品
-				{slotID = 13, filter = "CD" },
-				{slotID = 14, filter = "CD" },
+                -- 手套
+                {slotID = 10, filter = "CD" },
+                -- 腰带
+                {slotID = 6, filter = "CD" },
+                -- 披风
+                {slotID = 15, filter = "CD" },
+                -- 饰品
+                {slotID = 13, filter = "CD" },
+                {slotID = 14, filter = "CD" },
             },
         },
         ["ROGUE"] = {
@@ -1258,15 +1258,15 @@ R["Watcher"] = {
                 { spellID = 25046, filter = "CD" },
 
                 -- 物品
-				-- 手套
-				{slotID = 10, filter = "CD" },
-				-- 腰带
-				{slotID = 6, filter = "CD" },
-				-- 披风
-				{slotID = 15, filter = "CD" },
-				-- 饰品
-				{slotID = 13, filter = "CD" },
-				{slotID = 14, filter = "CD" },
+                -- 手套
+                {slotID = 10, filter = "CD" },
+                -- 腰带
+                {slotID = 6, filter = "CD" },
+                -- 披风
+                {slotID = 15, filter = "CD" },
+                -- 饰品
+                {slotID = 13, filter = "CD" },
+                {slotID = 14, filter = "CD" },
             },
         },
         ["DEATHKNIGHT"] = {
@@ -1330,31 +1330,31 @@ R["Watcher"] = {
             },
         },
         ["MONK"] = {
-			{
-				name = "玩家buff&debuff",
-				direction = "LEFT",
-				setpoint = positions.player_buff_icon,
-				size = 28,
+            {
+                name = "玩家buff&debuff",
+                direction = "LEFT",
+                setpoint = positions.player_buff_icon,
+                size = 28,
 
-				--飄渺絕釀
-				{ spellID = 128939, unitId = "player", caster = "player", filter = "BUFF" },
-				--虎眼絕釀
-				{ spellID = 125195, unitId = "player", caster = "player", filter = "BUFF" },
+                --飄渺絕釀
+                { spellID = 128939, unitId = "player", caster = "player", filter = "BUFF" },
+                --虎眼絕釀
+                { spellID = 125195, unitId = "player", caster = "player", filter = "BUFF" },
                 --回生迷霧
                 { spellID = 119611, unitId = "player", caster = "player", filter = "BUFF" },
                 --迷霧繚繞
                 { spellID = 132120, unitId = "player", caster = "player", filter = "BUFF" },
                 --舒和之霧
                 { spellID = 115175, unitId = "player", caster = "player", filter = "BUFF" },
-				--酒仙小緩勁
-				{ spellID = 124275, unitId = "player", caster = "all", filter = "DEBUFF" },
-				--酒仙中緩勁
-				{ spellID = 124274, unitId = "player", caster = "all", filter = "DEBUFF" },
-				--酒仙大緩勁
-				{ spellID = 124273, unitId = "player", caster = "all", filter = "DEBUFF" },
-				--法力茶
-				{ spellID = 115867, unitId = "player", caster = "player", filter = "BUFF" },
-			},
+                --酒仙小緩勁
+                { spellID = 124275, unitId = "player", caster = "all", filter = "DEBUFF" },
+                --酒仙中緩勁
+                { spellID = 124274, unitId = "player", caster = "all", filter = "DEBUFF" },
+                --酒仙大緩勁
+                { spellID = 124273, unitId = "player", caster = "all", filter = "DEBUFF" },
+                --法力茶
+                { spellID = 115867, unitId = "player", caster = "player", filter = "BUFF" },
+            },
             {
                 name = "目标buff&debuff",
                 direction = "RIGHT",
@@ -1374,38 +1374,38 @@ R["Watcher"] = {
                 setpoint = positions.player_proc_icon,
                 size = 38,
 
-				--虎掌
-				{ spellID = 125359, unitId = "player", caster = "player", filter = "BUFF" },
-				--禪心玉
-				{ spellID = 124081, unitId = "player", caster = "player", filter = "BUFF" },
-				--護身氣勁
-				{ spellID = 118636, unitId = "player", caster = "player", filter = "BUFF" },
-				--石形絕釀
-				{ spellID = 120954, unitId = "player", caster = "player", filter = "BUFF" },
-				--醉拳
-				{ spellID = 115307, unitId = "player", caster = "player", filter = "BUFF" },
-				--護身氣勁
-				{ spellID = 115295, unitId = "player", caster = "player", filter = "BUFF" },
-				--飄渺絕釀
-				{ spellID = 115308, unitId = "player", caster = "player", filter = "BUFF" },
-				--繳械傷害提升5%
-				{ spellID = 123231, unitId = "player", caster = "player", filter = "BUFF" },
-				--繳械坦克提升5%
-				{ spellID = 123232, unitId = "player", caster = "player", filter = "BUFF" },
-				--繳械治療提升5%
-				{ spellID = 123234, unitId = "player", caster = "player", filter = "BUFF" },
-				--虎眼絕釀
-				{ spellID = 116740, unitId = "player", caster = "player", filter = "BUFF" },
-				--乾坤挪移
-				{ spellID = 125174, unitId = "player", caster = "player", filter = "BUFF" },
-				--蛟龍之誠
-				{ spellID = 127722, unitId = "player", caster = "player", filter = "BUFF" },
-				--精活迷霧
-				{ spellID = 118674, unitId = "player", caster = "player", filter = "BUFF" },
-				--連段破:滅寂腿
-				{ spellID = 116768, unitId = "player", caster = "player", filter = "BUFF" },
-				--連段破:虎掌
-				{ spellID = 118864, unitId = "player", caster = "player", filter = "BUFF" },
+                --虎掌
+                { spellID = 125359, unitId = "player", caster = "player", filter = "BUFF" },
+                --禪心玉
+                { spellID = 124081, unitId = "player", caster = "player", filter = "BUFF" },
+                --護身氣勁
+                { spellID = 118636, unitId = "player", caster = "player", filter = "BUFF" },
+                --石形絕釀
+                { spellID = 120954, unitId = "player", caster = "player", filter = "BUFF" },
+                --醉拳
+                { spellID = 115307, unitId = "player", caster = "player", filter = "BUFF" },
+                --護身氣勁
+                { spellID = 115295, unitId = "player", caster = "player", filter = "BUFF" },
+                --飄渺絕釀
+                { spellID = 115308, unitId = "player", caster = "player", filter = "BUFF" },
+                --繳械傷害提升5%
+                { spellID = 123231, unitId = "player", caster = "player", filter = "BUFF" },
+                --繳械坦克提升5%
+                { spellID = 123232, unitId = "player", caster = "player", filter = "BUFF" },
+                --繳械治療提升5%
+                { spellID = 123234, unitId = "player", caster = "player", filter = "BUFF" },
+                --虎眼絕釀
+                { spellID = 116740, unitId = "player", caster = "player", filter = "BUFF" },
+                --乾坤挪移
+                { spellID = 125174, unitId = "player", caster = "player", filter = "BUFF" },
+                --蛟龍之誠
+                { spellID = 127722, unitId = "player", caster = "player", filter = "BUFF" },
+                --精活迷霧
+                { spellID = 118674, unitId = "player", caster = "player", filter = "BUFF" },
+                --連段破:滅寂腿
+                { spellID = 116768, unitId = "player", caster = "player", filter = "BUFF" },
+                --連段破:虎掌
+                { spellID = 118864, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -1413,17 +1413,17 @@ R["Watcher"] = {
                 setpoint = positions.target_proc_icon,
                 size = 38,
 
-				--弱化攻擊
-				{ spellID = 115798, unitId = "target", caster = "player", filter = "DEBUFF" },
-				--掃葉腿
-				{ spellID = 119381, unitId = "target", caster = "player", filter = "DEBUFF" },
-				--天矛鎖喉手
-				{ spellID = 116709, unitId = "target", caster = "player", filter = "DEBUFF" },
-				--微醺醉氣
-				{ spellID = 123727, unitId = "target", caster = "player", filter = "DEBUFF" },
-				{ spellID = 116330, unitId = "target", caster = "player", filter = "DEBUFF" },
-				--奪刃繩矛
-				{ spellID = 117368, unitId = "player", caster = "player", filter = "DEBUFF" },
+                --弱化攻擊
+                { spellID = 115798, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --掃葉腿
+                { spellID = 119381, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --天矛鎖喉手
+                { spellID = 116709, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --微醺醉氣
+                { spellID = 123727, unitId = "target", caster = "player", filter = "DEBUFF" },
+                { spellID = 116330, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --奪刃繩矛
+                { spellID = 117368, unitId = "player", caster = "player", filter = "DEBUFF" },
                 --旭日东升踢
                 { spellID = 130320, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
@@ -1446,35 +1446,35 @@ R["Watcher"] = {
                 mode = function() return R:IsDeveloper() and "ICON" or "BAR" end,
                 setpoint = positions.cd_icon,
 
-				--冥思禪功
-				{ spellID = 115176, filter = "CD" },
-				-- 乾坤挪移
-				{ spellID = 122470, filter = "CD" },
-				-- 召喚白虎雪怒
-				{ spellID = 123904, filter = "CD" },
-				-- 凝神絕釀
-				{ spellID = 115288, filter = "CD" },
-				-- 石形絕釀
-				{ spellID = 115203, filter = "CD" },
-				-- 召喚玄牛雕像
-				{ spellID = 115315, filter = "CD" },
-				-- 移傷氣勁
-				{ spellID = 115213, filter = "CD" },
-				-- 氣繭護體
-				{ spellID = 116849, filter = "CD" },
-				-- 五氣歸元
-				{ spellID = 115310, filter = "CD" },
+                --冥思禪功
+                { spellID = 115176, filter = "CD" },
+                -- 乾坤挪移
+                { spellID = 122470, filter = "CD" },
+                -- 召喚白虎雪怒
+                { spellID = 123904, filter = "CD" },
+                -- 凝神絕釀
+                { spellID = 115288, filter = "CD" },
+                -- 石形絕釀
+                { spellID = 115203, filter = "CD" },
+                -- 召喚玄牛雕像
+                { spellID = 115315, filter = "CD" },
+                -- 移傷氣勁
+                { spellID = 115213, filter = "CD" },
+                -- 氣繭護體
+                { spellID = 116849, filter = "CD" },
+                -- 五氣歸元
+                { spellID = 115310, filter = "CD" },
 
                 -- 物品
-				-- 手套
-				{slotID = 10, filter = "CD" },
-				-- 腰带
-				{slotID = 6, filter = "CD" },
-				-- 披风
-				{slotID = 15, filter = "CD" },
-				-- 饰品
-				{slotID = 13, filter = "CD" },
-				{slotID = 14, filter = "CD" },
+                -- 手套
+                {slotID = 10, filter = "CD" },
+                -- 腰带
+                {slotID = 6, filter = "CD" },
+                -- 披风
+                {slotID = 15, filter = "CD" },
+                -- 饰品
+                {slotID = 13, filter = "CD" },
+                {slotID = 14, filter = "CD" },
             },
         },
         ["ALL"]={
@@ -1485,118 +1485,118 @@ R["Watcher"] = {
                 size = 41,
 
                 --飾品
-				-- PvP 飾品
-				{ spellID = 126697, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 暗月卡牌(觸發)
-				{ spellID = 128985, unitId = "player", caster = "player", filter = "BUFF", fuzzy = true },
-				-- 坦
-				-- 影潘之襲的堅定咒符 (躲閃, 使用)
-				{ spellID = 138728, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 贊達拉之韌 (生命, 使用)
-				{ spellID = 126697, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 兇殘玲瓏瓶 (精通, 觸發)
-				{ spellID = 138864, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 夢魘之物 (躲閃, 觸發)
-				{ spellID = 126646, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 龍血之瓶 (躲閃, 觸發)
-				{ spellID = 126533, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 翠玉督軍刻像 (精通, 使用)
-				{ spellID = 126597, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 物理敏捷DPS
-				-- 影潘之襲的兇惡咒符 (敏捷, 觸發)
-				{ spellID = 138699, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 邪惡魂能 (敏捷, 觸發)
-				{ spellID = 138938, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 嗜血咒符 (急速, 觸發)
-				{ spellID = 138895, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 重新分配之符文 (轉換, 觸發)
-				{ spellID = 139120, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 雷納塔基的靈魂符咒 (敏捷, 觸發)
-				{ spellID = 138756, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 箭翔勳章 (暴擊, 使用)
-				{ spellID = 136086, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 霧中之懼 (暴擊, 觸發)
-				{ spellID = 126649, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 翠玉強盜刻像 (急速, 使用)
-				{ spellID = 126599, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 無垠星辰之瓶 (敏捷, 觸發)
-				{ spellID = 126554, unitId = "player", caster = "player", filter = "BUFF" },
-				-- PvP飾品 (敏捷, 使用)
-				{ spellID = 126690, unitId = "player", caster = "player", filter = "BUFF" },
-				-- PvP飾品 (敏捷, 觸發)
-				{ spellID = 126707, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 物理力量DPS
-				-- 影潘之襲的野蠻咒符 (力量, 觸發)
-				{ spellID = 138702, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 稷坤的傳說之羽 (力量, 觸發)
-				{ spellID = 138759, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 贊達拉火花 (力量, 觸發)
-				{ spellID = 138960, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 普莫迪斯的狂怒咒符 (力量, 觸發)
-				{ spellID = 138870, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 雙妃之凝視 (暴擊, 觸發)
-				{ spellID = 139170, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 盔碎勳章 (暴擊, 使用)
-				{ spellID = 136084, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 暗霧漩渦 (急速, 觸發)
-				{ spellID = 126657, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 雷神的最後命令 (力量, 觸發)
-				{ spellID = 126582, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 翠玉車駕刻像 (力量, 使用)
-				{ spellID = 126599, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 鐵肚皮炒鍋 (急速, 使用)
-				{ spellID = 129812, unitId = "player", caster = "player", filter = "BUFF" },
-				-- PvP飾品 (力量, 使用)
-				{ spellID = 126679, unitId = "player", caster = "player", filter = "BUFF" },
-				-- PvP飾品 (力量, 觸發)
-				{ spellID = 126700, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 法系通用
-				-- 雷衝勳章 (智力, 使用)
-				{ spellID = 136082, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 翠玉執政官刻像 (暴擊, 使用)
-				{ spellID = 126605, unitId = "player", caster = "player", filter = "BUFF" },
-				-- PvP飾品 (法術強度, 使用)
-				{ spellID = 126683, unitId = "player", caster = "player", filter = "BUFF" },
-				-- PvP飾品 (法術強度, 觸發)
-				{ spellID = 126705, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 法系DPS
-				-- 影潘之襲的烈性咒符 (急速, 觸發)
-				{ spellID = 138703, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 洽耶的光輝精華 (智力, 觸發)
-				{ spellID = 139133, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 多頭蛇之息 (智力, 觸發)
-				{ spellID = 138898, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 烏蘇雷的最後抉擇 (智力, 觸發)
-				{ spellID = 138786, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 恐懼精華 (急速, 觸發)
-				{ spellID = 126659, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 宇宙之光 (智力, 觸發)
-				{ spellID = 126577, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 完美瞄準 (智力, 觸發)
-				{ spellID = 138963, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 治療
-				-- 秦璽的極化徽印 (智力, 觸發)
-				{ spellID = 126588, unitId = "player", caster = "player", filter = "BUFF" },
+                -- PvP 飾品
+                { spellID = 126697, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 暗月卡牌(觸發)
+                { spellID = 128985, unitId = "player", caster = "player", filter = "BUFF", fuzzy = true },
+                -- 坦
+                -- 影潘之襲的堅定咒符 (躲閃, 使用)
+                { spellID = 138728, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 贊達拉之韌 (生命, 使用)
+                { spellID = 126697, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 兇殘玲瓏瓶 (精通, 觸發)
+                { spellID = 138864, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 夢魘之物 (躲閃, 觸發)
+                { spellID = 126646, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 龍血之瓶 (躲閃, 觸發)
+                { spellID = 126533, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 翠玉督軍刻像 (精通, 使用)
+                { spellID = 126597, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 物理敏捷DPS
+                -- 影潘之襲的兇惡咒符 (敏捷, 觸發)
+                { spellID = 138699, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 邪惡魂能 (敏捷, 觸發)
+                { spellID = 138938, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 嗜血咒符 (急速, 觸發)
+                { spellID = 138895, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 重新分配之符文 (轉換, 觸發)
+                { spellID = 139121, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 雷納塔基的靈魂符咒 (敏捷, 觸發)
+                { spellID = 138756, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 箭翔勳章 (暴擊, 使用)
+                { spellID = 136086, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 霧中之懼 (暴擊, 觸發)
+                { spellID = 126649, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 翠玉強盜刻像 (急速, 使用)
+                { spellID = 126599, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 無垠星辰之瓶 (敏捷, 觸發)
+                { spellID = 126554, unitId = "player", caster = "player", filter = "BUFF" },
+                -- PvP飾品 (敏捷, 使用)
+                { spellID = 126690, unitId = "player", caster = "player", filter = "BUFF" },
+                -- PvP飾品 (敏捷, 觸發)
+                { spellID = 126707, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 物理力量DPS
+                -- 影潘之襲的野蠻咒符 (力量, 觸發)
+                { spellID = 138702, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 稷坤的傳說之羽 (力量, 觸發)
+                { spellID = 138759, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 贊達拉火花 (力量, 觸發)
+                { spellID = 138960, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 普莫迪斯的狂怒咒符 (力量, 觸發)
+                { spellID = 138870, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 雙妃之凝視 (暴擊, 觸發)
+                { spellID = 139170, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 盔碎勳章 (暴擊, 使用)
+                { spellID = 136084, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 暗霧漩渦 (急速, 觸發)
+                { spellID = 126657, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 雷神的最後命令 (力量, 觸發)
+                { spellID = 126582, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 翠玉車駕刻像 (力量, 使用)
+                { spellID = 126599, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 鐵肚皮炒鍋 (急速, 使用)
+                { spellID = 129812, unitId = "player", caster = "player", filter = "BUFF" },
+                -- PvP飾品 (力量, 使用)
+                { spellID = 126679, unitId = "player", caster = "player", filter = "BUFF" },
+                -- PvP飾品 (力量, 觸發)
+                { spellID = 126700, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 法系通用
+                -- 雷衝勳章 (智力, 使用)
+                { spellID = 136082, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 翠玉執政官刻像 (暴擊, 使用)
+                { spellID = 126605, unitId = "player", caster = "player", filter = "BUFF" },
+                -- PvP飾品 (法術強度, 使用)
+                { spellID = 126683, unitId = "player", caster = "player", filter = "BUFF" },
+                -- PvP飾品 (法術強度, 觸發)
+                { spellID = 126705, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 法系DPS
+                -- 影潘之襲的烈性咒符 (急速, 觸發)
+                { spellID = 138703, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 洽耶的光輝精華 (智力, 觸發)
+                { spellID = 139133, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 多頭蛇之息 (智力, 觸發)
+                { spellID = 138898, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 烏蘇雷的最後抉擇 (智力, 觸發)
+                { spellID = 138786, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 恐懼精華 (急速, 觸發)
+                { spellID = 126659, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 宇宙之光 (智力, 觸發)
+                { spellID = 126577, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 完美瞄準 (智力, 觸發)
+                { spellID = 138963, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 治療
+                -- 秦璽的極化徽印 (智力, 觸發)
+                { spellID = 126588, unitId = "player", caster = "player", filter = "BUFF" },
 
                 --專業技能
                 -- 神經突觸彈簧
                 { spellID = 126734, unitId = "player", caster = "player", filter = "BUFF", fuzzy = true },
-				-- 相移指套
-				{ spellID = 108788, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 硝基推進器
-				{ spellID = 54861, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 降落傘
-				{ spellID = 55001, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 生命之血
-				{ spellID = 74497, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 相移指套
+                { spellID = 108788, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 硝基推進器
+                { spellID = 54861, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 降落傘
+                { spellID = 55001, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 生命之血
+                { spellID = 74497, unitId = "player", caster = "player", filter = "BUFF" },
                 -- 迅轉偏斜甲
                 { spellID = 82176, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 光紋
-				{ spellID = 125487, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 光紋
+                { spellID = 125487, unitId = "player", caster = "player", filter = "BUFF" },
 
                 --武器附魔
-				--玉魂
-				{ spellID = 104993, unitId = "player", caster = "all", filter = "BUFF" },
+                --玉魂
+                { spellID = 104993, unitId = "player", caster = "all", filter = "BUFF" },
 
                 --藥水
                 --玉蛟
@@ -1650,7 +1650,7 @@ R["Watcher"] = {
                 -- 狂暴
                 { spellID = 26297, unitId = "player", caster = "player", filter = "BUFF" },
 
-				--套裝
+                --套裝
                 { spellID = 138317, unitId = "player", caster = "player", filter = "BUFF" },
 
             },
@@ -1682,314 +1682,314 @@ R["Watcher"] = {
 
                 --德魯伊
                 -- 颶風術
-				{ spellID = 33786, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 休眠
-				{ spellID = 2637, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 破膽咆哮 (共生)
-				{ spellID = 113004, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 猛力重擊
-				{ spellID = 5211, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 熊抱
-				{ spellID = 102795, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 傷殘術
-				{ spellID = 22570, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 突襲
-				{ spellID = 9005, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 掠魂咆哮
-				{ spellID = 99, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 太陽光束
-				{ spellID = 78675, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 精靈沉默
-				{ spellID = 114238, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 糾纏根鬚
-				{ spellID = 339, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 無法移動
-				{ spellID = 45334, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 感染之傷
-				{ spellID = 58180, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 颱風
-				{ spellID = 61391, unitId = "player", caster = "all", filter = "DEBUFF" },
+                { spellID = 33786, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 休眠
+                { spellID = 2637, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 破膽咆哮 (共生)
+                { spellID = 113004, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 猛力重擊
+                { spellID = 5211, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 熊抱
+                { spellID = 102795, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 傷殘術
+                { spellID = 22570, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 突襲
+                { spellID = 9005, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 掠魂咆哮
+                { spellID = 99, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 太陽光束
+                { spellID = 78675, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 精靈沉默
+                { spellID = 114238, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 糾纏根鬚
+                { spellID = 339, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 無法移動
+                { spellID = 45334, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 感染之傷
+                { spellID = 58180, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 颱風
+                { spellID = 61391, unitId = "player", caster = "all", filter = "DEBUFF" },
 
                 --獵人
                 -- 豹群守護
-				{ spellID = 13159, unitId = "player", caster = "all", filter = "BUFF" },
-				-- 脅迫
-				{ spellID = 24394, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 禁錮射擊
-				{ spellID = 117526, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 冰凍陷阱
-				{ spellID = 3355, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 恐嚇野獸
-				{ spellID = 1513, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 驅散射擊
-				{ spellID = 19503, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 翼龍釘刺
-				{ spellID = 19386, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 沉默射擊
-				{ spellID = 34490, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 險裡逃生
-				{ spellID = 136634, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 誘捕
-				{ spellID = 19185, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 震盪射擊
-				{ spellID = 5116, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 震盪轟擊
-				{ spellID = 35101, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 凍痕
-				{ spellID = 61394, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 寒冰陷阱
-				{ spellID = 135382, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 壞風度 (猴子)
-				{ spellID = 90337, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 催眠曲 (鶴)
-				{ spellID = 126246, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 蛛網纏繞 (岩蛛)
-				{ spellID = 96201, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 噴灑毒網 (奇特異種蟲)
-				{ spellID = 54706, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 蛛網 (蜘蛛)
-				{ spellID = 4167, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 釘刺 (螃蟹)
-				{ spellID = 50245, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 虛空震擊 (虛空鰭刺)
-				{ spellID = 44957, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 奪械 (蠍子)
-				{ spellID = 50541, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 霜雷之息 (奇特奇美拉)
-				{ spellID = 54644, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 腳踝粉碎 (鱷魚)
-				{ spellID = 50433, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 時間扭曲 (扭曲巡者)
-				{ spellID = 35346, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 釘刺 (黃蜂)
-				{ spellID = 56626, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 音波衝擊 (蝙蝠)
-				{ spellID = 50519, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 麻痺刺針 (豪豬)
-				{ spellID = 126355, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 石化凝視 (石化蜥蜴)
-				{ spellID = 126423, unitId = "player", caster = "all", filter = "DEBUFF" },
+                { spellID = 13159, unitId = "player", caster = "all", filter = "BUFF" },
+                -- 脅迫
+                { spellID = 24394, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 禁錮射擊
+                { spellID = 117526, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 冰凍陷阱
+                { spellID = 3355, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 恐嚇野獸
+                { spellID = 1513, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 驅散射擊
+                { spellID = 19503, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 翼龍釘刺
+                { spellID = 19386, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 沉默射擊
+                { spellID = 34490, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 險裡逃生
+                { spellID = 136634, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 誘捕
+                { spellID = 19185, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 震盪射擊
+                { spellID = 5116, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 震盪轟擊
+                { spellID = 35101, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 凍痕
+                { spellID = 61394, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 寒冰陷阱
+                { spellID = 135382, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 壞風度 (猴子)
+                { spellID = 90337, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 催眠曲 (鶴)
+                { spellID = 126246, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 蛛網纏繞 (岩蛛)
+                { spellID = 96201, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 噴灑毒網 (奇特異種蟲)
+                { spellID = 54706, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 蛛網 (蜘蛛)
+                { spellID = 4167, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 釘刺 (螃蟹)
+                { spellID = 50245, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 虛空震擊 (虛空鰭刺)
+                { spellID = 44957, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 奪械 (蠍子)
+                { spellID = 50541, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 霜雷之息 (奇特奇美拉)
+                { spellID = 54644, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 腳踝粉碎 (鱷魚)
+                { spellID = 50433, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 時間扭曲 (扭曲巡者)
+                { spellID = 35346, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 釘刺 (黃蜂)
+                { spellID = 56626, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 音波衝擊 (蝙蝠)
+                { spellID = 50519, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 麻痺刺針 (豪豬)
+                { spellID = 126355, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 石化凝視 (石化蜥蜴)
+                { spellID = 126423, unitId = "player", caster = "all", filter = "DEBUFF" },
 
-				--法師
-				-- 極度冰凍
-				{ spellID = 44572, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 變形術
-				{ spellID = 118, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 霜之環
-				{ spellID = 82691, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 龍之吐息
-				{ spellID = 31661, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 燃火衝擊
-				{ spellID = 118271, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 霜顎
-				{ spellID = 102051, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 沉默 - 強化法術反制
-				{ spellID = 55021, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 冰凍術 (水元素)
-				{ spellID = 33395, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 冰霜新星
-				{ spellID = 122, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 寒冰結界
-				{ spellID = 111340, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 冰錐術
-				{ spellID = 120, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 減速術
-				{ spellID = 31589, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 寒冰箭
-				{ spellID = 116, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 霜火箭
-				{ spellID = 44614, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 冰凍
-				{ spellID = 7321, unitId = "player", caster = "all", filter = "DEBUFF" },
+                --法師
+                -- 極度冰凍
+                { spellID = 44572, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 變形術
+                { spellID = 118, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 霜之環
+                { spellID = 82691, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 龍之吐息
+                { spellID = 31661, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 燃火衝擊
+                { spellID = 118271, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 霜顎
+                { spellID = 102051, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 沉默 - 強化法術反制
+                { spellID = 55021, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 冰凍術 (水元素)
+                { spellID = 33395, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 冰霜新星
+                { spellID = 122, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 寒冰結界
+                { spellID = 111340, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 冰錐術
+                { spellID = 120, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 減速術
+                { spellID = 31589, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 寒冰箭
+                { spellID = 116, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 霜火箭
+                { spellID = 44614, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 冰凍
+                { spellID = 7321, unitId = "player", caster = "all", filter = "DEBUFF" },
 
-				--武僧
-				-- 點穴
-				{ spellID = 115078, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 掃葉腿
-				{ spellID = 119381, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 狂拳連打
-				{ spellID = 120086, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 天引躍擊
-				{ spellID = 122242, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 鐵牛衝鋒波
-				{ spellID = 119392, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 傷筋斷骨
-				{ spellID = 116706, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 天矛鎖喉手
-				{ spellID = 116709, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 奪刃繩矛
-				{ spellID = 117368, unitId = "player", caster = "all", filter = "DEBUFF" },
+                --武僧
+                -- 點穴
+                { spellID = 115078, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 掃葉腿
+                { spellID = 119381, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 狂拳連打
+                { spellID = 120086, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 天引躍擊
+                { spellID = 122242, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 鐵牛衝鋒波
+                { spellID = 119392, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 傷筋斷骨
+                { spellID = 116706, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 天矛鎖喉手
+                { spellID = 116709, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 奪刃繩矛
+                { spellID = 117368, unitId = "player", caster = "all", filter = "DEBUFF" },
 
-				--聖騎士
-				-- 制裁之錘
-				{ spellID = 853, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 制裁之拳
-				{ spellID = 105593, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 懺悔
-				{ spellID = 20066, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 盲目之光
-				{ spellID = 105421, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 復仇之盾
-				{ spellID = 31935, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 暈眩 - 復仇之盾
-				{ spellID = 63529, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 公正聖印
-				{ spellID = 20170, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 罪之重擔
-				{ spellID = 110300, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 問罪
-				{ spellID = 2812, unitId = "player", caster = "all", filter = "DEBUFF" },
+                --聖騎士
+                -- 制裁之錘
+                { spellID = 853, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 制裁之拳
+                { spellID = 105593, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 懺悔
+                { spellID = 20066, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 盲目之光
+                { spellID = 105421, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 復仇之盾
+                { spellID = 31935, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 暈眩 - 復仇之盾
+                { spellID = 63529, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 公正聖印
+                { spellID = 20170, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 罪之重擔
+                { spellID = 110300, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 問罪
+                { spellID = 2812, unitId = "player", caster = "all", filter = "DEBUFF" },
 
-				--牧師
-				-- 支配心智
-				{ spellID = 605, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 心靈尖嘯
-				{ spellID = 8122, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 心靈恐懼
-				{ spellID = 113792, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 心靈恐慌
-				{ spellID = 64044, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 罪與罰
-				{ spellID = 87204, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 沉默
-				{ spellID = 15487, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 虛無觸鬚之握
-				{ spellID = 114404, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 心靈震爆雕紋
-				{ spellID = 87194, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 精神鞭笞
-				{ spellID = 15407, unitId = "player", caster = "all", filter = "DEBUFF" },
+                --牧師
+                -- 支配心智
+                { spellID = 605, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 心靈尖嘯
+                { spellID = 8122, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 心靈恐懼
+                { spellID = 113792, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 心靈恐慌
+                { spellID = 64044, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 罪與罰
+                { spellID = 87204, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 沉默
+                { spellID = 15487, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 虛無觸鬚之握
+                { spellID = 114404, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 心靈震爆雕紋
+                { spellID = 87194, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 精神鞭笞
+                { spellID = 15407, unitId = "player", caster = "all", filter = "DEBUFF" },
 
-				--盜賊
-				-- 腎擊
-				{ spellID = 408, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 偷襲
-				{ spellID = 1833, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 悶棍
-				{ spellID = 6770, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 致盲
-				{ spellID = 2094, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 鑿擊
-				{ spellID = 1776, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 絞喉 - 沉默
-				{ spellID = 1330, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 卸除武裝
-				{ spellID = 51722, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 煙霧彈
-				{ spellID = 76577, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 擲殺
-				{ spellID = 26679, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 致殘毒藥
-				{ spellID = 3409, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 麻痺毒藥
-				{ spellID = 5760, unitId = "player", caster = "all", filter = "DEBUFF" },
+                --盜賊
+                -- 腎擊
+                { spellID = 408, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 偷襲
+                { spellID = 1833, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 悶棍
+                { spellID = 6770, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 致盲
+                { spellID = 2094, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 鑿擊
+                { spellID = 1776, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 絞喉 - 沉默
+                { spellID = 1330, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 卸除武裝
+                { spellID = 51722, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 煙霧彈
+                { spellID = 76577, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 擲殺
+                { spellID = 26679, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 致殘毒藥
+                { spellID = 3409, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 麻痺毒藥
+                { spellID = 5760, unitId = "player", caster = "all", filter = "DEBUFF" },
 
-				--薩滿
-				-- 妖術
-				{ spellID = 51514, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 靜電衝擊
-				{ spellID = 118905, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 粉碎
-				{ spellID = 118345, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 地震術
-				{ spellID = 77505, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 陷地
-				{ spellID = 64695, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 地縛術
-				{ spellID = 3600, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 冰霜震擊
-				{ spellID = 8056, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 冰封攻擊
-				{ spellID = 8034, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 雷霆風暴
-				{ spellID = 51490, unitId = "player", caster = "all", filter = "DEBUFF" },
+                --薩滿
+                -- 妖術
+                { spellID = 51514, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 靜電衝擊
+                { spellID = 118905, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 粉碎
+                { spellID = 118345, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 地震術
+                { spellID = 77505, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 陷地
+                { spellID = 64695, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 地縛術
+                { spellID = 3600, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 冰霜震擊
+                { spellID = 8056, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 冰封攻擊
+                { spellID = 8034, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 雷霆風暴
+                { spellID = 51490, unitId = "player", caster = "all", filter = "DEBUFF" },
 
-				--術士
-				-- 暗影之怒
-				{ spellID = 30283, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 投擲利斧 (惡魔守衛)
-				{ spellID = 89766, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 恐懼術
-				{ spellID = 118699, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 恐懼嚎叫
-				{ spellID = 5484, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 血性恐懼
-				{ spellID = 137143, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 死影纏繞
-				{ spellID = 6789, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 催眠術
-				{ spellID = 104045, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 誘惑 (魅魔)
-				{ spellID = 6358, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 迷惑 (Shivarra)
-				{ spellID = 115268, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 痛苦動盪
-				{ spellID = 31117, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 法術封鎖 (地獄犬)
-				{ spellID = 24259, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 目光衝擊 (Observer)
-				{ spellID = 115782, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 疲勞詛咒
-				{ spellID = 18223, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 焚燒
-				{ spellID = 17962, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 暗影之焰
-				{ spellID = 47960, unitId = "player", caster = "all", filter = "DEBUFF" },
+                --術士
+                -- 暗影之怒
+                { spellID = 30283, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 投擲利斧 (惡魔守衛)
+                { spellID = 89766, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 恐懼術
+                { spellID = 118699, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 恐懼嚎叫
+                { spellID = 5484, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 血性恐懼
+                { spellID = 137143, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 死影纏繞
+                { spellID = 6789, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 催眠術
+                { spellID = 104045, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 誘惑 (魅魔)
+                { spellID = 6358, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 迷惑 (Shivarra)
+                { spellID = 115268, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 痛苦動盪
+                { spellID = 31117, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 法術封鎖 (地獄犬)
+                { spellID = 24259, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 目光衝擊 (Observer)
+                { spellID = 115782, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 疲勞詛咒
+                { spellID = 18223, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 焚燒
+                { spellID = 17962, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 暗影之焰
+                { spellID = 47960, unitId = "player", caster = "all", filter = "DEBUFF" },
 
-				--戰士
-				-- 暴風怒擲
-				{ spellID = 132169, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 震懾波
-				{ spellID = 132168, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 戰爭使者
-				{ spellID = 105771, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 破膽怒吼
-				{ spellID = 20511, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 繳械
-				{ spellID = 676, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 震地怒吼
-				{ spellID = 107566, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 斷筋
-				{ spellID = 1715, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 刺耳怒吼
-				{ spellID = 12323, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 巨像碎擊
-				{ spellID = 86346, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 衝鋒昏迷
-				{ spellID = 7922, unitId = "player", caster = "all", filter = "DEBUFF" },
+                --戰士
+                -- 暴風怒擲
+                { spellID = 132169, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 震懾波
+                { spellID = 132168, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 戰爭使者
+                { spellID = 105771, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 破膽怒吼
+                { spellID = 20511, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 繳械
+                { spellID = 676, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 震地怒吼
+                { spellID = 107566, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 斷筋
+                { spellID = 1715, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 刺耳怒吼
+                { spellID = 12323, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 巨像碎擊
+                { spellID = 86346, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 衝鋒昏迷
+                { spellID = 7922, unitId = "player", caster = "all", filter = "DEBUFF" },
 
                 --種族天賦
                 -- 戰爭踐踏
                 { spellID = 20549, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 震動掌
-				{ spellID = 107079, unitId = "player", caster = "all", filter = "DEBUFF" },
-				-- 奧流之術
-				{ spellID = 28730, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 震動掌
+                { spellID = 107079, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 奧流之術
+                { spellID = 28730, unitId = "player", caster = "all", filter = "DEBUFF" },
 
                 --副本
-				--雷霆王座
-				-- 电离反应
-				{ spellID = 138732, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
-				-- 聚能閃電
-				{ spellID = 137422, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
-				-- 魂靈標記
-				{ spellID = 137359, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
-				-- 霜寒刺骨
-				{ spellID = 136922, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
-				-- 幽暗之魂
-				{ spellID = 137650, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
-				-- 寒冰洪流
-				{ spellID = 139857, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
-				-- 燼火
-				{ spellID = 134391, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
-				-- 飛行
-				{ spellID = 133755, unitId = "player", caster = "all", filter = "BUFF", fuzzy = true },
-				-- 主要營養
-				{ spellID = 140741, unitId = "player", caster = "all", filter = "BUFF", fuzzy = true },
-				-- 靜電震擊
-				{ spellID = 135695, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
-				-- 動盪生命
-				{ spellID = 138297, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
+                --雷霆王座
+                -- 电离反应
+                { spellID = 138732, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
+                -- 聚能閃電
+                { spellID = 137422, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
+                -- 魂靈標記
+                { spellID = 137359, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
+                -- 霜寒刺骨
+                { spellID = 136922, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
+                -- 幽暗之魂
+                { spellID = 137650, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
+                -- 寒冰洪流
+                { spellID = 139857, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
+                -- 燼火
+                { spellID = 134391, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
+                -- 飛行
+                { spellID = 133755, unitId = "player", caster = "all", filter = "BUFF", fuzzy = true },
+                -- 主要營養
+                { spellID = 140741, unitId = "player", caster = "all", filter = "BUFF", fuzzy = true },
+                -- 靜電震擊
+                { spellID = 135695, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
+                -- 動盪生命
+                { spellID = 138297, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
 
                 --魔古山寶庫
                 --石衛士
@@ -2004,21 +2004,21 @@ R["Watcher"] = {
                 -- 無效屏障
                 { spellID = 115856, unitId = "player", caster = "all", filter = "BUFF", fuzzy = true },
 
-				--卡拉賈
+                --卡拉賈
                 -- 靈魂經絡
                 { spellID = 117549, unitId = "player", caster = "all", filter = "BUFF", fuzzy = true },
 
                 --恐懼之心
                 --刀鋒領主塔亞克
-				-- 無形打擊
+                -- 無形打擊
                 { spellID = 123017, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
 
                 --加拉隆
-				-- 費洛蒙
+                -- 費洛蒙
                 { spellID = 122835, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
 
                 --風領主瑪爾加拉克
-				-- 琥珀監獄
+                -- 琥珀監獄
                 { spellID = 121885, unitId = "player", caster = "all", filter = "DEBUFF", fuzzy = true },
 
                 --豐泉臺

@@ -11,16 +11,16 @@ local function LoadSkin()
 	AvailableServicesText:SetShadowColor(0, 0, 0)
 
 	local BlizzardMenuButtons = {
-		"Options", 
-		"SoundOptions", 
-		"UIOptions", 
-		"Keybindings", 
+		"Options",
+		"SoundOptions",
+		"UIOptions",
+		"Keybindings",
 		"Macros",
 		"Ratings",
-		"AddOns", 
-		"Logout", 
-		"Quit", 
-		"Continue", 
+		"AddOns",
+		"Logout",
+		"Quit",
+		"Continue",
 		"MacOptions",
 		"Help"
 	}
@@ -125,28 +125,28 @@ local function LoadSkin()
 	S:ReskinClose(FloatingBattlePetTooltip.CloseButton)
 
 	local FrameBDs = {
-			"StaticPopup1",
-			"StaticPopup2",
-			"StaticPopup3",
-			"StaticPopup4",
-			"GameMenuFrame",
-			"InterfaceOptionsFrame",
-			"VideoOptionsFrame",
-			"AudioOptionsFrame",
-			"ChatConfigFrame",
-			"StackSplitFrame",
-			"AddFriendFrame",
-			"FriendsFriendsFrame",
-			"ColorPickerFrame",
-			"ReadyCheckFrame",
-			"RolePollPopup",
-			"GuildInviteFrame",
-			"ChannelFrameDaughterFrame",
-			"LFDRoleCheckPopup",
-			"LFGDungeonReadyStatus",
-			"LFGDungeonReadyDialog",
-			"PVPReadyDialog"
-		}
+		"StaticPopup1",
+		"StaticPopup2",
+		"StaticPopup3",
+		"StaticPopup4",
+		"GameMenuFrame",
+		"InterfaceOptionsFrame",
+		"VideoOptionsFrame",
+		"AudioOptionsFrame",
+		"ChatConfigFrame",
+		"StackSplitFrame",
+		"AddFriendFrame",
+		"FriendsFriendsFrame",
+		"ColorPickerFrame",
+		"ReadyCheckFrame",
+		"RolePollPopup",
+		"GuildInviteFrame",
+		"ChannelFrameDaughterFrame",
+		"LFDRoleCheckPopup",
+		"LFGDungeonReadyStatus",
+		"LFGDungeonReadyDialog",
+		"PVPReadyDialog"
+	}
 	for i = 1, #FrameBDs do
 		local FrameBD = _G[FrameBDs[i]]
 		S:CreateBD(FrameBD)
@@ -433,7 +433,7 @@ local function LoadSkin()
 		"AudioOptionsVoicePanelChatModeDropDown",
 		"AudioOptionsVoicePanelOutputDeviceDropDown",
 		"InterfaceOptionsStatusTextPanelDisplayDropDown"
-		}
+	}
 	for i = 1, #dropdowns do
 		S:ReskinDropDown(_G[dropdowns[i]])
 	end
@@ -572,7 +572,7 @@ local function LoadSkin()
 		"InterfaceOptionsNamesPanelUnitNameplatesEnemyPets",
 		"InterfaceOptionsNamesPanelUnitNameplatesEnemyGuardians",
 		"InterfaceOptionsNamesPanelUnitNameplatesEnemyTotems",
-        "InterfaceOptionsNamesPanelUnitNameplatesNameplateClassColors",
+		"InterfaceOptionsNamesPanelUnitNameplatesNameplateClassColors",
 		"InterfaceOptionsCombatTextPanelTargetDamage",
 		"InterfaceOptionsCombatTextPanelPeriodicDamage",
 		"InterfaceOptionsCombatTextPanelPetDamage",
@@ -771,7 +771,7 @@ local function LoadSkin()
 		MacOptionsFrameHeader:SetTexture("")
 		MacOptionsFrameHeader:ClearAllPoints()
 		MacOptionsFrameHeader:SetPoint("TOP", MacOptionsFrame, 0, 0)
-	 
+
 		S:CreateBD(MacOptionsFrameMovieRecording, .25)
 		S:CreateBD(MacOptionsITunesRemote, .25)
 
@@ -790,24 +790,24 @@ local function LoadSkin()
 			end
 		end
 		S:ReskinSlider(MacOptionsFrameQualitySlider)
-	 
+
 		MacOptionsButtonCompress:SetWidth(136)
-	 
+
 		MacOptionsFrameCancel:SetWidth(96)
 		MacOptionsFrameCancel:SetHeight(22)
 		MacOptionsFrameCancel:ClearAllPoints()
 		MacOptionsFrameCancel:SetPoint("LEFT", MacOptionsButtonKeybindings, "RIGHT", 107, 0)
-	 
+
 		MacOptionsFrameOkay:SetWidth(96)
 		MacOptionsFrameOkay:SetHeight(22)
 		MacOptionsFrameOkay:ClearAllPoints()
 		MacOptionsFrameOkay:SetPoint("LEFT", MacOptionsButtonKeybindings, "RIGHT", 5, 0)
-	 
+
 		MacOptionsButtonKeybindings:SetWidth(96)
 		MacOptionsButtonKeybindings:SetHeight(22)
 		MacOptionsButtonKeybindings:ClearAllPoints()
 		MacOptionsButtonKeybindings:SetPoint("LEFT", MacOptionsFrameDefaults, "RIGHT", 5, 0)
-	 
+
 		MacOptionsFrameDefaults:SetWidth(96)
 		MacOptionsFrameDefaults:SetHeight(22)
 	end

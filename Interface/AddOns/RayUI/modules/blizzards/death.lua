@@ -1,10 +1,16 @@
 local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local B = R:GetModule("Blizzards")
 
+function B:PLAYER_ENTERING_WORLD()
+	if UnitIsDead("player") then
+		StaticPopup_Show("DEATH")
+	end
+end
+
 function B:StaticPopup_Show(which, text_arg1, text_arg2, data)
-	if which == "DEATH" and not UnitIsDead("player") then 
-      StaticPopup_Hide("DEATH") 
-   end 
+	if which == "DEATH" and not UnitIsDead("player") then
+      StaticPopup_Hide("DEATH")
+   end
 end
 
 function B:FixDeathPopup()

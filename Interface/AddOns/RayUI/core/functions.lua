@@ -5,10 +5,10 @@ SlashCmdList["RELOAD"] = function() ReloadUI() end
 SLASH_RELOAD1 = "/rl"
 
 R["RegisteredModules"] = {}
-R.resolution = GetCVar("gxResolution")
-R.screenheight = tonumber(string.match(R.resolution, "%d+x(%d+)"))
-R.screenwidth = tonumber(string.match(R.resolution, "(%d+)x+%d"))
-R.mult = 1
+R.resolution           = GetCVar("gxResolution")
+R.screenheight         = tonumber(string.match(R.resolution, "%d+x(%d+)"))
+R.screenwidth          = tonumber(string.match(R.resolution, "(%d+)x+%d"))
+R.mult                 = 1
 
 R.HiddenFrame = CreateFrame("Frame")
 R.HiddenFrame:Hide()
@@ -18,53 +18,53 @@ local BlackList = {"bigfoot", "duowan", "163ui", "neavo", "sora"}
 local demoFrame
 
 local ItemUpgrade = setmetatable ({
-	[1]   = 8, 
-	[373] = 4, 
-	[374] = 8, 
-	[375] = 4, 
-	[376] = 4, 
-	[377] = 4, 
-	[379] = 4, 
-	[380] = 4, 
-	[445] = 0, 
-	[446] = 4, 
-	[447] = 8, 
-	[451] = 0, 
-	[452] = 8, 
-	[453] = 0, 
-	[454] = 4, 
-	[455] = 8, 
-	[456] = 0, 
-	[457] = 8, 
-	[458] = 0, 
-	[459] = 4, 
-	[460] = 8, 
-	[461] = 12, 
-	[462] = 16, 
-	[465] = 0, 
-	[466] = 4, 
-	[467] = 8, 
-	[468] = 0, 
-	[469] = 4, 
-	[470] = 8, 
-	[471] = 12, 
-	[472] = 16, 
-	[476] = 0, 
-	[477] = 4, 
-	[478] = 8, 
-	[479] = 0, 
-	[480] = 8, 
+	[1]   = 8,
+	[373] = 4,
+	[374] = 8,
+	[375] = 4,
+	[376] = 4,
+	[377] = 4,
+	[379] = 4,
+	[380] = 4,
+	[445] = 0,
+	[446] = 4,
+	[447] = 8,
+	[451] = 0,
+	[452] = 8,
+	[453] = 0,
+	[454] = 4,
+	[455] = 8,
+	[456] = 0,
+	[457] = 8,
+	[458] = 0,
+	[459] = 4,
+	[460] = 8,
+	[461] = 12,
+	[462] = 16,
+	[465] = 0,
+	[466] = 4,
+	[467] = 8,
+	[468] = 0,
+	[469] = 4,
+	[470] = 8,
+	[471] = 12,
+	[472] = 16,
+	[476] = 0,
+	[477] = 4,
+	[478] = 8,
+	[479] = 0,
+	[480] = 8,
 },{__index=function() return 0 end})
 
 function R.dummy()
-    return
+	return
 end
 
 function R:UIScale()
 	R.lowversion = false
 
 	if R.screenwidth < 1600 then
-			R.lowversion = true
+		R.lowversion = true
 	elseif R.screenwidth >= 3840 or (UIParent:GetWidth() + 1 > R.screenwidth) then
 		local width = R.screenwidth
 		local height = R.screenheight
@@ -128,7 +128,7 @@ function R:RegisterModule(name)
 end
 
 function R:TableIsEmpty(t)
-	if type(t) ~= "table" then 
+	if type(t) ~= "table" then
 		return true
 	else
 		return next(t) == nil
@@ -173,7 +173,7 @@ local function CreateWarningFrame()
 	local messageFrame = CreateFrame("EditBox", nil, frame)
 	messageFrame:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
 	messageFrame:EnableMouse(false)
-	messageFrame:EnableKeyboard(false) 
+	messageFrame:EnableKeyboard(false)
 	messageFrame:SetMultiLine(true)
 	messageFrame:SetMaxLetters(99999)
 	messageFrame:Size(400, 400)
@@ -326,40 +326,40 @@ local roles = {
 	WARRIOR = {
 		[1] = "Melee",
 		[2] = "Melee",
-		[3] = "Tank",	
+		[3] = "Tank",
 	},
 	HUNTER = "Melee",
 	SHAMAN = {
 		[1] = "Caster",
 		[2] = "Melee",
-		[3] = "Caster",	
+		[3] = "Caster",
 	},
 	ROGUE = "Melee",
 	MAGE = "Caster",
 	DEATHKNIGHT = {
 		[1] = "Tank",
 		[2] = "Melee",
-		[3] = "Melee",	
+		[3] = "Melee",
 	},
 	DRUID = {
 		[1] = "Caster",
 		[2] = "Melee",
-		[3] = "Tank",	
+		[3] = "Tank",
 		[4] = "Caster"
 	},
 	MONK = {
 		[1] = "Tank",
 		[2] = "Caster",
-		[3] = "Melee",	
+		[3] = "Melee",
 	},
 }
 
 local healingClasses = {
-    PALADIN = 1,
-    SHAMAN = 3,
-    DRUID = 4,
-    MONK = 2,
-    PRIEST = {1, 2}
+	PALADIN = 1,
+	SHAMAN = 3,
+	DRUID = 4,
+	MONK = 2,
+	PRIEST = {1, 2}
 }
 
 function R:CheckRole()
@@ -369,19 +369,19 @@ function R:CheckRole()
 	if resilperc > GetDodgeChance() and resilperc > GetParryChance() and UnitLevel("player") == MAX_PLAYER_LEVEL then
 		IsInPvPGear = true;
 	end
-	
+
 	self.Role = nil;
-	
+
 	if type(roles[self.myclass]) == "string" then
 		self.Role = roles[self.myclass]
 	elseif talentTree then
 		self.Role = roles[self.myclass][talentTree]
 	end
-	
+
 	if self.Role == "Tank" and IsInPvPGear then
 		self.Role = "Melee"
 	end
-	
+
 	if not self.Role then
 		local playerint = select(2, UnitStat("player", 4));
 		local playeragi	= select(2, UnitStat("player", 2));
@@ -392,26 +392,26 @@ function R:CheckRole()
 			self.Role = "Melee";
 		else
 			self.Role = "Caster";
-		end		
+		end
 	end
 
-    if healingClasses[self.myclass] then
-        local tree = healingClasses[self.myclass]
-        if type(tree) == "number" then
-            if talentTree == tree then
-                self.isHealer = true
-                return
-            end
-        elseif type(tree) == "table" then
-            for _, index in pairs(tree) do
-                if index == talentTree then
-                    self.isHealer = true
-                    return
-                end     
-            end
-        end
-    end
-    self.isHealer = false
+	if healingClasses[self.myclass] then
+		local tree = healingClasses[self.myclass]
+		if type(tree) == "number" then
+			if talentTree == tree then
+				self.isHealer = true
+				return
+			end
+		elseif type(tree) == "table" then
+			for _, index in pairs(tree) do
+				if index == talentTree then
+					self.isHealer = true
+					return
+				end
+			end
+		end
+	end
+	self.isHealer = false
 end
 
 local tmp={}
@@ -452,7 +452,7 @@ end
 
 function R:Round(v, decimals)
 	if not decimals then decimals = 0 end
-    return (("%%.%df"):format(decimals)):format(v)
+	return (("%%.%df"):format(decimals)):format(v)
 end
 
 local waitTable = {}
@@ -472,11 +472,11 @@ function R:Delay(delay, func, ...)
 				local f = tremove(waitRecord,1)
 				local p = tremove(waitRecord,1)
 				if(d>elapse) then
-				  tinsert(waitTable,i,{d-elapse,f,p})
-				  i = i + 1
+					tinsert(waitTable,i,{d-elapse,f,p})
+					i = i + 1
 				else
-				  count = count - 1
-				  f(unpack(p))
+					count = count - 1
+					f(unpack(p))
 				end
 			end
 		end)
@@ -502,7 +502,7 @@ function R:ShortValue(v)
 	end
 end
 
-function R:ShortenString(string, numChars, dots)	
+function R:ShortenString(string, numChars, dots)
 	local bytes = string:len()
 	if (bytes <= numChars) then
 		return string
@@ -569,9 +569,9 @@ end
 local Unusable
 
 if R.myclass == "DEATHKNIGHT" then
-	Unusable = {{3, 4, 10, 11, 13, 14, 15, 16}, {6}}
+	Unusable = {{3, 4, 10, 11, 13, 14, 15, 16}, {6, 7}}
 elseif R.myclass == "DRUID" then
-	Unusable = {{1, 2, 3, 4, 8, 9, 14, 15, 16}, {4, 5, 6}, true}
+	Unusable = {{1, 2, 3, 4, 8, 9, 14, 15, 16}, {4, 5, 6, 7}, true}
 elseif R.myclass == "HUNTER" then
 	Unusable = {{5, 6, 16}, {5, 6, 7}}
 elseif R.myclass == "MAGE" then
@@ -694,59 +694,59 @@ function R:UpdateMedia()
 end
 
 function R:CreateDemoFrame()
-    local S = R:GetModule("Skins")
-    demoFrame = CreateFrame("Frame", "RayUIDemoFrame", LibStub("AceConfigDialog-3.0").OpenFrames["RayUI"].frame)
-    demoFrame:Size(300, 200)
-    demoFrame:Point("LEFT", LibStub("AceConfigDialog-3.0").OpenFrames["RayUI"].frame, "RIGHT", 20, 0)
-    demoFrame:SetTemplate("Transparent")
-    demoFrame.outBorder = CreateFrame("Frame", nil, demoFrame)
-    demoFrame.outBorder:SetOutside(demoFrame, 1, 1)
-    demoFrame.outBorder:CreateShadow()
-    demoFrame.title = demoFrame:CreateFontString(nil, "OVERLAY")
-    demoFrame.title:FontTemplate()
-    demoFrame.title:SetText("Demo Frame")
-    demoFrame.title:Point("TOPLEFT", 10, -5)
-    demoFrame.inlineFrame1 = CreateFrame("Frame", nil, demoFrame)
-    demoFrame.inlineFrame1:SetFrameLevel(demoFrame:GetFrameLevel() + 1)
-    demoFrame.inlineFrame1:Size(150, 150)
-    demoFrame.inlineFrame1:Point("TOPLEFT", 10, -30)
-    demoFrame.inlineFrame1:SetTemplate("Transparent")
-    demoFrame.button1 = CreateFrame("Button", nil, demoFrame, "UIPanelButtonTemplate")
-    demoFrame.button1:Point("BOTTOMLEFT", 30, 40)
-    demoFrame.button1:SetText("Test")
-    demoFrame.button1:Size(100, 20)
-    S:Reskin(demoFrame.button1)
-    demoFrame.button2 = CreateFrame("Button", nil, demoFrame, "UIPanelButtonTemplate")
-    demoFrame.button2:Point("BOTTOMRIGHT", -10, 10)
-    demoFrame.button2:SetText("Close")
-    demoFrame.button2:Size(100, 20)
-    demoFrame.button2:SetScript("OnClick", function() demoFrame:Hide() end)
-    S:Reskin(demoFrame.button2)
+	local S = R:GetModule("Skins")
+	demoFrame = CreateFrame("Frame", "RayUIDemoFrame", LibStub("AceConfigDialog-3.0").OpenFrames["RayUI"].frame)
+	demoFrame:Size(300, 200)
+	demoFrame:Point("LEFT", LibStub("AceConfigDialog-3.0").OpenFrames["RayUI"].frame, "RIGHT", 20, 0)
+	demoFrame:SetTemplate("Transparent")
+	demoFrame.outBorder = CreateFrame("Frame", nil, demoFrame)
+	demoFrame.outBorder:SetOutside(demoFrame, 1, 1)
+	demoFrame.outBorder:CreateShadow()
+	demoFrame.title = demoFrame:CreateFontString(nil, "OVERLAY")
+	demoFrame.title:FontTemplate()
+	demoFrame.title:SetText("Demo Frame")
+	demoFrame.title:Point("TOPLEFT", 10, -5)
+	demoFrame.inlineFrame1 = CreateFrame("Frame", nil, demoFrame)
+	demoFrame.inlineFrame1:SetFrameLevel(demoFrame:GetFrameLevel() + 1)
+	demoFrame.inlineFrame1:Size(150, 150)
+	demoFrame.inlineFrame1:Point("TOPLEFT", 10, -30)
+	demoFrame.inlineFrame1:SetTemplate("Transparent")
+	demoFrame.button1 = CreateFrame("Button", nil, demoFrame, "UIPanelButtonTemplate")
+	demoFrame.button1:Point("BOTTOMLEFT", 30, 40)
+	demoFrame.button1:SetText("Test")
+	demoFrame.button1:Size(100, 20)
+	S:Reskin(demoFrame.button1)
+	demoFrame.button2 = CreateFrame("Button", nil, demoFrame, "UIPanelButtonTemplate")
+	demoFrame.button2:Point("BOTTOMRIGHT", -10, 10)
+	demoFrame.button2:SetText("Close")
+	demoFrame.button2:Size(100, 20)
+	demoFrame.button2:SetScript("OnClick", function() demoFrame:Hide() end)
+	S:Reskin(demoFrame.button2)
 
-    tinsert(UISpecialFrames, demoFrame:GetName())
+	tinsert(UISpecialFrames, demoFrame:GetName())
 end
 
 function R:UpdateDemoFrame()
-    local borderr, borderg, borderb = unpack(R.global.media.bordercolor)
-    local backdropr, backdropg, backdropb = unpack(R.global.media.backdropcolor)
-    local backdropfader, backdropfadeg, backdropfadeb, backdropfadea = unpack(R.global.media.backdropfadecolor)
-    if not demoFrame then
-        self:CreateDemoFrame()
-    end
-    if not demoFrame:IsShown() then
-        demoFrame:Show()
-    end
-    demoFrame:SetBackdropColor(backdropfader, backdropfadeg, backdropfadeb, backdropfadea)
-    demoFrame:SetBackdropBorderColor(borderr, borderg, borderb)
-    demoFrame.outBorder.border:SetBackdropBorderColor(borderr, borderg, borderb)
-    demoFrame.inlineFrame1:SetBackdropColor(backdropfader, backdropfadeg, backdropfadeb, backdropfadea)
-    demoFrame.inlineFrame1:SetBackdropBorderColor(borderr, borderg, borderb)
-    demoFrame.button1:SetBackdropColor(backdropfader, backdropfadeg, backdropfadeb, backdropfadea)
-    demoFrame.button1:SetBackdropBorderColor(borderr, borderg, borderb)
-    demoFrame.button1.backdropTexture:SetVertexColor(backdropr, backdropg, backdropb)
-    demoFrame.button2:SetBackdropColor(backdropfader, backdropfadeg, backdropfadeb, backdropfadea)
-    demoFrame.button2:SetBackdropBorderColor(borderr, borderg, borderb)
-    demoFrame.button2.backdropTexture:SetVertexColor(backdropr, backdropg, backdropb)
+	local borderr, borderg, borderb = unpack(R.global.media.bordercolor)
+	local backdropr, backdropg, backdropb = unpack(R.global.media.backdropcolor)
+	local backdropfader, backdropfadeg, backdropfadeb, backdropfadea = unpack(R.global.media.backdropfadecolor)
+	if not demoFrame then
+		self:CreateDemoFrame()
+	end
+	if not demoFrame:IsShown() then
+		demoFrame:Show()
+	end
+	demoFrame:SetBackdropColor(backdropfader, backdropfadeg, backdropfadeb, backdropfadea)
+	demoFrame:SetBackdropBorderColor(borderr, borderg, borderb)
+	demoFrame.outBorder.border:SetBackdropBorderColor(borderr, borderg, borderb)
+	demoFrame.inlineFrame1:SetBackdropColor(backdropfader, backdropfadeg, backdropfadeb, backdropfadea)
+	demoFrame.inlineFrame1:SetBackdropBorderColor(borderr, borderg, borderb)
+	demoFrame.button1:SetBackdropColor(backdropfader, backdropfadeg, backdropfadeb, backdropfadea)
+	demoFrame.button1:SetBackdropBorderColor(borderr, borderg, borderb)
+	demoFrame.button1.backdropTexture:SetVertexColor(backdropr, backdropg, backdropb)
+	demoFrame.button2:SetBackdropColor(backdropfader, backdropfadeg, backdropfadeb, backdropfadea)
+	demoFrame.button2:SetBackdropBorderColor(borderr, borderg, borderb)
+	demoFrame.button2.backdropTexture:SetVertexColor(backdropr, backdropg, backdropb)
 end
 
 R.Developer = { "夏琉君", "鏡婲水月", "Divineseraph", "水月君", "夏翎", }
@@ -761,6 +761,6 @@ function R:IsDeveloper()
 end
 
 function R:ADDON_LOADED(event, addon)
-    self:UnregisterEvent("ADDON_LOADED")
+	self:UnregisterEvent("ADDON_LOADED")
 end
 R:RegisterEvent("ADDON_LOADED")
