@@ -387,7 +387,7 @@ function T:InitTutorial()
 	R:GetModule("Skins"):Reskin(btnClose)
 end
 
-function TestTutorial()
+function T:ShowTutorial()
 	if RayUITutorialButton then
 		RayUITutorialButtonOpen:Show()
 		RayUITutorialBG:SetAlpha(1)

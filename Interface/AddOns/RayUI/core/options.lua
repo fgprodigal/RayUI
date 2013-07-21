@@ -76,10 +76,10 @@ R.Options = {
 				ToggleTutorial = {
 					order = 6,
 					type = "execute",
-					name = L["显示小提示"],
+					name = L["显示教程"],
 					func = function()
 						AceConfigDialog["Close"](AceConfigDialog,"RayUI")
-						R:GetModule("Tutorial"):Tutorials(true)
+						R:GetModule("Tutorial"):ShowTutorial()
 						GameTooltip_Hide()
 					end,
 				},
@@ -168,7 +168,7 @@ R.Options = {
 							order = 2,
 							name = L["空白材质"],
 							values = AceGUIWidgetLSMlists.statusbar,
-						},		
+						},
 						gloss = {
 							type = "select", dialogControl = "LSM30_Statusbar",
 							order = 3,
@@ -195,7 +195,7 @@ R.Options = {
 							name = L["报警声音"],
 							values = AceGUIWidgetLSMlists.sound,
 						},
-					},						
+					},
 				},
 				colorGroup = {
 					order = 4,
@@ -258,14 +258,14 @@ R.Options = {
                             type = "execute",
                             order = 5,
                             name = L["恢复默认"],
-                            func = function() 
+                            func = function()
                                 R.global.media.backdropcolor = G.media.backdropcolor
                                 R.global.media.backdropfadecolor = G.media.backdropfadecolor
                                 R.global.media.bordercolor = G.media.bordercolor
                                 ReloadUI()
                             end,
                         },
-					},						
+					},
 				},
 			},
 		},

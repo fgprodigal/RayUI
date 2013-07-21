@@ -1054,6 +1054,8 @@ R["Watcher"] = {
                 { spellID = 122351, unitId = "player", caster = "player", filter = "BUFF" },
                 --爆燃
                 { spellID = 117828, unitId = "player", caster = "player", filter = "BUFF" },
+                --火焰之雨
+                { spellID = 104232, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "CD",
@@ -1310,6 +1312,8 @@ R["Watcher"] = {
                 { spellID = 91342, unitId = "pet", caster = "player", filter = "BUFF" },
                 --黑暗變身
                 { spellID = 63560, unitId = "pet", caster = "player", filter = "BUFF" },
+                --鮮血氣息
+                { spellID = 50421, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -1327,6 +1331,9 @@ R["Watcher"] = {
                 { spellID = 49206, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --死亡凋零
                 { spellID = 43265, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --靈魂收割者
+                { spellID = 130736, unitId = "target", caster = "player", filter = "DEBUFF" },
+                { spellID = 114866, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
         },
         ["MONK"] = {
@@ -1577,6 +1584,8 @@ R["Watcher"] = {
                 -- 治療
                 -- 秦璽的極化徽印 (智力, 觸發)
                 { spellID = 126588, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 雲爆
+                { spellID = 138856, unitId = "player", caster = "player", filter = "BUFF" },
 
                 --專業技能
                 -- 神經突觸彈簧
@@ -1652,7 +1661,6 @@ R["Watcher"] = {
 
                 --套裝
                 { spellID = 138317, unitId = "player", caster = "player", filter = "BUFF" },
-
             },
             {
                 name = "PVE/PVP玩家buff&debuff",

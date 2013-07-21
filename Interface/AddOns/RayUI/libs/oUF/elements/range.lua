@@ -36,11 +36,8 @@ local friendlySpells, resSpells, longEnemySpells, enemySpells, petSpells = {}, {
 
 local function AddSpell(table, spellID)
 	local name = GetSpellInfo(spellID)
-	if name then
-		local usable, nomana = IsUsableSpell(name)
-		if usable or nomana then
-			table[#table + 1] = name
-		end
+	if IsSpellKnown(spellID) then
+		table[#table + 1] = name
 	end
 end
 
@@ -247,8 +244,8 @@ local Enable = function(self)
 
 		if(not OnRangeFrame) then
 			OnRangeFrame = CreateFrame"Frame"
-			OnRangeFrame:RegisterEvent("LEARNED_SPELL_IN_TAB");
-			OnRangeFrame:RegisterEvent("PLAYER_ENTERING_WORLD");
+			OnRangeFrame:RegisterEvent("LEARNED_SPELL_IN_TAB")
+			OnRangeFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 			OnRangeFrame:SetScript("OnUpdate", OnRangeUpdate)
 			OnRangeFrame:SetScript("OnEvent", UpdateSpellList)
 		end
