@@ -1,4 +1,4 @@
-## Interface: 50300
+## Interface: 50400
 ## Title: Foglight
 ## Notes: Toggles visibility of unexplored areas on the world map.
 ## Author: Semlar

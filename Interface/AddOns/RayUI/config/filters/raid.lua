@@ -79,27 +79,77 @@ G.Raid.AuraWatch = {
 }
 
 G.Raid.RaidDebuffs = {
-    -- Ascending aura timer
-    -- Add spells to this list to have the aura time count up from 0
-    -- NOTE: This does not show the aura, it needs to be in one of the other list too.
-    ascending = {
+	-- Ascending aura timer
+	-- Add spells to this list to have the aura time count up from 0
+	-- NOTE: This does not show the aura, it needs to be in one of the other list too.
+	ascending = {
 		[SpellName(89435)] = Defaults(),
 		[SpellName(89421)] = Defaults(),
-    },
+	},
 
-    -- Any Zone
-    debuffs = {
-        [SpellName(15007)] = Defaults(16), -- Resurrection Sickness
-        [SpellName(39171)] = Defaults(9), -- Mortal Strike
-        [SpellName(76622)] = Defaults(9), -- Sunder Armor
-    },
+	-- Any Zone
+	debuffs = {
+		[SpellName(15007)] = Defaults(16), -- Resurrection Sickness
+		[SpellName(39171)] = Defaults(9), -- Mortal Strike
+		[SpellName(76622)] = Defaults(9), -- Sunder Armor
+	},
 
-    buffs = {
-        --[SpellName(871)] = Defaults(15), -- Shield Wall
-    },
+	buffs = {
+		--[SpellName(871)] = Defaults(15), -- Shield Wall
+	},
 
-    -- Raid Debuffs
-    instances = {
+	-- Raid Debuffs
+	instances = {
+		[953] = {
+			--Siege of Orgrimmar
+			--Immerseus
+			[SpellName(143436)] = Defaults(), -- Corrosive Blast
+			[SpellName(143579)] = Defaults(), --Sha Corruption(Heroic)
+
+			--Fallen Protectors
+			[SpellName(147383)] = Defaults(), --Debilitation
+
+			--Norushen
+			[SpellName(146124)] = Defaults(), --Self Doubt
+			[SpellName(144851)] = Defaults(), --Test of Confidence
+
+			--Sha of Pride
+			[SpellName(144358)] = Defaults(), --Wounded Pride
+			[SpellName(144774)] = Defaults(), --Reaching Attacks
+			[SpellName(147207)] = Defaults(), --Weakened Resolve(Heroic)
+
+			--Galakras
+
+			--Iron Juggernaut
+
+			--Kor'kron Dark Shaman
+			[SpellName(144215)] = Defaults(), --Froststorm Strike
+			[SpellName(143990)] = Defaults(), --Foul Geyser
+			[SpellName(144330)] = Defaults(), --Iron Prison(Heroic)
+
+			--General Nazgrim
+			[SpellName(143494)] = Defaults(), --Sundering Blow
+
+			--Malkorok
+			[SpellName(142990)] = Defaults(), --Fatal Strike
+			[SpellName(143919)] = Defaults(), --Languish(Heroic)
+
+			--Thok the Bloodthirsty
+			[SpellName(143766)] = Defaults(), --Panic
+			[SpellName(143773)] = Defaults(), --Freezing Breath
+			[SpellName(146589)] = Defaults(), --Skeleton Key
+			[SpellName(143777)] = Defaults(), --Frozen Solid
+
+			--Siegecrafter Blackfuse
+			[SpellName(143385)] = Defaults(), --Electrostatic Charge
+
+			--Paragons of the Klaxxi
+			[SpellName(143974)] = Defaults(), --Shield Bash
+
+			--Garrosh Hellscream
+			[SpellName(145183)] = Defaults(), --Gripping Despair
+
+		},
 		[930] = {
 			-- Throne of Thunder
 			--Trash
@@ -153,8 +203,8 @@ G.Raid.RaidDebuffs = {
 			--Ra-den
 
 		},
-        [897] = {
-            -- Heart of Fear
+		[897] = {
+			-- Heart of Fear
 			-- Imperial Vizier Zor'lok
 			[SpellName(122761)] = Defaults(7), -- Exhale
 			[SpellName(122760)] = Defaults(7), -- Exhale			
@@ -192,10 +242,10 @@ G.Raid.RaidDebuffs = {
 			[SpellName(123845)] = Defaults(7), --Heart of Fear: Chosen
 			[SpellName(123846)] = Defaults(7), --Heart of Fear: Lure
 			[SpellName(125283)] = Defaults(7), --Sha Corruption
-        },
-        [896] = {
-            -- Mogu'shan Vaults
-            -- The Stone Guard
+		},
+		[896] = {
+			-- Mogu'shan Vaults
+			-- The Stone Guard
 			[SpellName(116281)] = Defaults(7), --Cobalt Mine Blast
 			-- Feng the Accursed
 			[SpellName(116784)] = Defaults(9), --Wildfire Spark
@@ -231,9 +281,9 @@ G.Raid.RaidDebuffs = {
 			[SpellName(116550)] = Defaults(7), --Energizing Smash (knock down)
 			-- Titan Spark (Heroic)
 			[SpellName(116829)] = Defaults(7), --Focused Energy (fixate)
-        },
+		},
 		[886] = {
-            -- Terrace of Endless Spring
+			-- Terrace of Endless Spring
 			-- Protectors of the Endless
 			[SpellName(118091)] = Defaults(6), --Defiled Ground
 			[SpellName(117519)] = Defaults(6), --Touch of Sha
@@ -265,44 +315,44 @@ G.Raid.RaidDebuffs = {
 			[SpellName(129189)] = Defaults(7), --Sha Globe
 			[SpellName(119086)] = Defaults(7), --Penetrating Bolt
 			[SpellName(119775)] = Defaults(7), --Reaching Attack
-        },
-        [824] = {
-            -- Dragon Soul
-            -- Morchok
-            [SpellName(103687)] = Defaults(7),  -- RA.dbush Armor(擊碎護甲)
+		},
+		[824] = {
+			-- Dragon Soul
+			-- Morchok
+			[SpellName(103687)] = Defaults(7),  -- RA.dbush Armor(擊碎護甲)
 
-            -- Zon'ozz
-            [SpellName(103434)] = Defaults(7), -- Disrupting Shadows(崩解之影)
+			-- Zon'ozz
+			[SpellName(103434)] = Defaults(7), -- Disrupting Shadows(崩解之影)
 
-            -- Yor'sahj
-            [105171] = Defaults(8), -- Deep Corruption(深度腐化)
-            [109389] = Defaults(8), -- Deep Corruption(深度腐化)
-            [SpellName(105171)] = Defaults(7), -- Deep Corruption(深度腐化)
-            [SpellName(104849)] = Defaults(9),  -- Void Bolt(虛無箭)
+			-- Yor'sahj
+			[105171] = Defaults(8), -- Deep Corruption(深度腐化)
+			[109389] = Defaults(8), -- Deep Corruption(深度腐化)
+			[SpellName(105171)] = Defaults(7), -- Deep Corruption(深度腐化)
+			[SpellName(104849)] = Defaults(9),  -- Void Bolt(虛無箭)
 
-            -- Hagara
-            [SpellName(104451)] = Defaults(7),  --寒冰之墓
+			-- Hagara
+			[SpellName(104451)] = Defaults(7),  --寒冰之墓
 
-            -- Ultraxion
-            [SpellName(109075)] = Defaults(7), --凋零之光
+			-- Ultraxion
+			[SpellName(109075)] = Defaults(7), --凋零之光
 
-            -- Blackhorn
-            [SpellName(107567)] = Defaults(7),  --蠻橫打擊
-            [SpellName(108043)] = Defaults(8),  --破甲攻擊
-            [SpellName(107558)] = Defaults(9),  --衰亡
+			-- Blackhorn
+			[SpellName(107567)] = Defaults(7),  --蠻橫打擊
+			[SpellName(108043)] = Defaults(8),  --破甲攻擊
+			[SpellName(107558)] = Defaults(9),  --衰亡
 
-            -- Spine
-            [SpellName(105479)] = Defaults(7), --燃燒血漿
-            [SpellName(105490)] = Defaults(8),  --熾熱之握
-            [SpellName(106200)] = Defaults(9),  --血液腐化:大地
-            [SpellName(106199)] = Defaults(10),  --血液腐化:死亡
+			-- Spine
+			[SpellName(105479)] = Defaults(7), --燃燒血漿
+			[SpellName(105490)] = Defaults(8),  --熾熱之握
+			[SpellName(106200)] = Defaults(9),  --血液腐化:大地
+			[SpellName(106199)] = Defaults(10),  --血液腐化:死亡
 
-            -- Madness
-            [SpellName(105841)] = Defaults(7),  --退化咬擊
-            [SpellName(105445)] = Defaults(8),  --極熾高熱
-            [SpellName(106444)] = Defaults(9),  --刺穿
-        },
-        [800] = {
+			-- Madness
+			[SpellName(105841)] = Defaults(7),  --退化咬擊
+			[SpellName(105445)] = Defaults(8),  --極熾高熱
+			[SpellName(106444)] = Defaults(9),  --刺穿
+		},
+		[800] = {
 			-- Firelands
 			-- Rageface
 			[SpellName(99947)] = Defaults(6), -- Face Rage
@@ -317,10 +367,10 @@ G.Raid.RaidDebuffs = {
 
 			--Burning Orbs
 			[SpellName(98451)] = Defaults(6), -- Burning Orb
-        },
-        [752] = {
+		},
+		[752] = {
 			-- Baradin Hold
-            [SpellName(88954)] = Defaults(6), -- Consuming Darkness
-        },
-    },
+			[SpellName(88954)] = Defaults(6), -- Consuming Darkness
+		},
+	},
 }

@@ -73,6 +73,7 @@ function MM:SkinMiniMap()
 	end
 	Minimap:Size(175, 175)
 	Minimap:CreateShadow("Background")
+	Minimap:SetPlayerTexture("Interface\\AddOns\\RayUI\\media\\MinimapArrow")
 	MinimapCluster:EnableMouse(false)
 	MiniMapTrackingBackground:SetAlpha(0)
 	MiniMapTrackingButton:SetAlpha(0)
@@ -183,6 +184,8 @@ function MM:CreateMenu()
 		func = function() PVEFrame_ToggleFrame("GroupFinderFrame", LFDParentFrame) end},
 		{text = RAID_FINDER, notCheckable = true,
 		func = function() PVEFrame_ToggleFrame("GroupFinderFrame", RaidFinderFrame) end},
+		{text = BLIZZARD_STORE, notCheckable = true,
+		func = function() StoreMicroButton:Click() end},
 		{text = HELP_BUTTON, notCheckable = true,
 		func = function() ToggleHelpFrame() end},
 		{text = CALENDAR, notCheckable = true,

@@ -23,9 +23,9 @@ local function LoadSkin()
     S:ReskinDropDown(TimeManagerAlarmMinuteDropDown)
     S:ReskinDropDown(TimeManagerAlarmAMPMDropDown)
     S:ReskinInput(TimeManagerAlarmMessageEditBox)
-    S:ReskinCheck(TimeManagerAlarmEnabledButton)
     S:ReskinCheck(TimeManagerMilitaryTimeCheck)
     S:ReskinCheck(TimeManagerLocalTimeCheck)
+    S:ReskinCheck(TimeManagerAlarmEnabledButton)
     S:ReskinClose(StopwatchCloseButton, "TOPRIGHT", StopwatchFrame, "TOPRIGHT", -2, -2)
 end
 

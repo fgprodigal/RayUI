@@ -11,9 +11,9 @@ local function LoadSkin()
 	InspectTalentFrame:DisableDrawLayer("BACKGROUND")
 	InspectTalentFrame:DisableDrawLayer("BORDER")
 
-	InspectPVPTeam1:DisableDrawLayer("BACKGROUND")
-	InspectPVPTeam2:DisableDrawLayer("BACKGROUND")
-	InspectPVPTeam3:DisableDrawLayer("BACKGROUND")
+	-- InspectPVPTeam1:DisableDrawLayer("BACKGROUND")
+	-- InspectPVPTeam2:DisableDrawLayer("BACKGROUND")
+	-- InspectPVPTeam3:DisableDrawLayer("BACKGROUND")
 	InspectFramePortrait:Hide()
 	InspectGuildFrameBG:Hide()
 	for i = 1, 5 do
@@ -22,8 +22,8 @@ local function LoadSkin()
 	InspectFramePortraitFrame:Hide()
 	InspectFrameTopBorder:Hide()
 	InspectFrameTopRightCorner:Hide()
-	InspectPVPFrameBG:SetAlpha(0)
-	InspectPVPFrameBottom:SetAlpha(0)
+	-- InspectPVPFrameBG:SetAlpha(0)
+	-- InspectPVPFrameBottom:SetAlpha(0)
 	for i = 1, 4 do
 		local tab = _G["InspectFrameTab"..i]
 		S:CreateTab(tab)

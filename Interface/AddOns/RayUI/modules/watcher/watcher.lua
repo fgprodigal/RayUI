@@ -132,13 +132,20 @@ function watcherPrototype:CreateButton(mode)
 	button.count:SetFont(R["media"].font, R["media"].fontsize * (R:Round(self.size) / 30), R["media"].fontflag)
 	button.count:SetPoint("BOTTOMRIGHT", button , "BOTTOMRIGHT", 4, -4)
 	button.count:SetJustifyH("RIGHT")
+
+	button.value = button:CreateFontString(nil, "OVERLAY")
+	button.value:SetFont(R["media"].font, ( R["media"].fontsize - 3 ) * (R:Round(self.size) / 30), R["media"].fontflag)
+	button.value:SetPoint("CENTER", button , "TOP", 0, 1)
+	button.value:SetJustifyH("RIGHT")
+
 	button.owner = self
 	return button
 end
 
-function watcherPrototype:UpdateButton(button, index, icon, count, duration, expires, spellID, unitID, filter)
+function watcherPrototype:UpdateButton(button, index, icon, count, duration, expires, spellID, unitID, filter, value)
 	button.icon:SetTexture(icon)
 	button.count:SetText(count > 1 and count or "")
+	button.value:SetText((value and value > 1) and value or "")
 	if button.cooldown then
 		if filter:find("CD") then
 			button.cooldown:SetReverse(false)
@@ -229,14 +236,14 @@ function watcherPrototype:CheckAura()
 		for unitID in pairs(self.BUFF.unitIDs) do
 			local index = 1
 			while UnitBuff(unitID, index) and not ( index > 40 ) do
-				local spellName, _, icon, count, _, duration, expires, caster, _, _, spellID = UnitBuff(unitID,index)
+				local spellName, _, icon, count, _, duration, expires, caster, _, _, spellID, _, _, _, value = UnitBuff(unitID,index)
 				if (self.BUFF[spellID] and self.BUFF[spellID].unitID == unitID and ( caster == self.BUFF[spellID].caster or self.BUFF[spellID].caster:lower() == "all" )) or
 					(self.BUFF[spellName] and self.BUFF[spellName].unitID == unitID and ( caster == self.BUFF[spellName].caster or self.BUFF[spellName].caster:lower() == "all" )) then
 					if not self.button[self.current] then
 						self.button[self.current] = self:CreateButton(self.mode)
 						self:SetPosition(self.current)
 					end
-					self:UpdateButton(self.button[self.current], index, icon, count, duration, expires, spellID, unitID, "BUFF")
+					self:UpdateButton(self.button[self.current], index, icon, count, duration, expires, spellID, unitID, "BUFF", value)
 					if self.mode == "BAR" then
 						self.button[self.current]:SetScript("OnUpdate", OnUpdate)
 					else
@@ -252,14 +259,14 @@ function watcherPrototype:CheckAura()
 		for unitID in pairs(self.DEBUFF.unitIDs) do
 			local index = 1
 			while UnitDebuff(unitID, index) and not ( index > 1024 ) do
-				local spellName, _, icon, count, _, duration, expires, caster, _, _, spellID = UnitDebuff(unitID,index)
+				local spellName, _, icon, count, _, duration, expires, caster, _, _, spellID, _, _, _, value = UnitDebuff(unitID,index)
 				if (self.DEBUFF[spellID] and self.DEBUFF[spellID].unitID == unitID and ( caster == self.DEBUFF[spellID].caster or self.DEBUFF[spellID].caster:lower() == "all" )) or
 					(self.DEBUFF[spellName] and self.DEBUFF[spellName].unitID == unitID and ( caster == self.DEBUFF[spellName].caster or self.DEBUFF[spellName].caster:lower() == "all" )) then
 					if not self.button[self.current] then
 						self.button[self.current] = self:CreateButton(self.mode)
 						self:SetPosition(self.current)
 					end
-					self:UpdateButton(self.button[self.current], index, icon, count, duration, expires, spellID, unitID, "DEBUFF")
+					self:UpdateButton(self.button[self.current], index, icon, count, duration, expires, spellID, unitID, "DEBUFF", value)
 					if self.mode == "BAR" then
 						self.button[self.current]:SetScript("OnUpdate", OnUpdate)
 					else

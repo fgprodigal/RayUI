@@ -1,5 +1,6 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB
-local RA = R:NewModule("Raid", "AceEvent-3.0")
+local RA = R:NewModule("Raid", "AceEvent-3.0")
+
 local _, ns = ...
 local oUF = RayUF or oUF
 

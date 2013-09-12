@@ -31,7 +31,7 @@ function B:GetOptions()
 			type = "range",
 			name = L["背包面板宽度"],
 			min = 150, max = 700, step = 1,
-			set = function(info, value) R.db.Bags[ info[#info] ] = value B:Layout()end,
+			set = function(info, value) R.db.Bags[ info[#info] ] = value B:Layout() end,
 		},
 		bankWidth = {
 			order = 9,
@@ -206,6 +206,13 @@ function B:UpdateSlot(bagID, slotID)
 		slot:SetBackdropColor(0, 0, 0, 0)
 		slot.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 	end
+
+	if(C_NewItems.IsNewItem(bagID, slotID)) then
+		ActionButton_ShowOverlayGlow(slot)
+	else
+		ActionButton_HideOverlayGlow(slot)
+	end
+
 	SetItemButtonTexture(slot, texture)
 	SetItemButtonCount(slot, count)
 	SetItemButtonDesaturated(slot, locked, 0.5, 0.5, 0.5)
@@ -223,12 +230,12 @@ end
 
 function B:UpdateCooldowns()
 	for _, bagID in ipairs(self.BagIDs) do
-         if self.Bags[bagID] then
+		if self.Bags[bagID] then
 			for slotID = 1, GetContainerNumSlots(bagID) do
 				local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
 				CooldownFrame_SetTimer(self.Bags[bagID][slotID].cooldown, start, duration, enable)
 			end
-         end
+		end
 	end
 end
 
@@ -383,6 +390,11 @@ function B:Layout(isBank)
 					f.Bags[bagID][slotID]:StyleButton()
 					f.Bags[bagID][slotID]:SetNormalTexture(nil)
 					f.Bags[bagID][slotID]:SetCheckedTexture(nil)
+
+					if(_G[f.Bags[bagID][slotID]:GetName().."NewItemTexture"]) then
+						_G[f.Bags[bagID][slotID]:GetName().."NewItemTexture"]:Hide()
+					end
+
 					f.Bags[bagID][slotID].count:ClearAllPoints()
 					f.Bags[bagID][slotID].count:Point("BOTTOMRIGHT", 0, 2)
 					--f.Bags[bagID][slotID].count:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
@@ -626,7 +638,7 @@ function B:ContructContainerFrame(name, isBank)
 		f.bagsButton:SetScript("OnEnter", self.Tooltip_Show)
 		f.bagsButton:SetScript("OnLeave", self.Tooltip_Hide)
 		f.bagsButton:SetScript("OnClick", function()
-		local numSlots, full = GetNumBankSlots()
+			local numSlots, full = GetNumBankSlots()
 			if numSlots >= 1 then
 				ToggleFrame(f.ContainerHolder)
 			else

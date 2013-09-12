@@ -569,27 +569,27 @@ end
 local Unusable
 
 if R.myclass == "DEATHKNIGHT" then
-	Unusable = {{3, 4, 10, 11, 13, 14, 15, 16}, {6, 7}}
+	Unusable = {{3, 4, 10, 11, 13, 14, 15, 16}, {7}}
 elseif R.myclass == "DRUID" then
-	Unusable = {{1, 2, 3, 4, 8, 9, 14, 15, 16}, {4, 5, 6, 7}, true}
+	Unusable = {{1, 2, 3, 4, 8, 9, 14, 15, 16}, {4, 5, 7}, true}
 elseif R.myclass == "HUNTER" then
 	Unusable = {{5, 6, 16}, {5, 6, 7}}
 elseif R.myclass == "MAGE" then
-	Unusable = {{1, 2, 3, 4, 5, 6, 7, 9, 11, 14, 15}, {3, 4, 5, 6, 7}, true}
+	Unusable = {{1, 2, 3, 4, 5, 6, 7, 9, 11, 14, 15}, {3, 4, 5, 7}, true}
 elseif R.myclass == "PALADIN" then
 	Unusable = {{3, 4, 10, 11, 13, 14, 15, 16}, {}, true}
 elseif R.myclass == "PRIEST" then
-	Unusable = {{1, 2, 3, 4, 6, 7, 8, 9, 11, 14, 15}, {3, 4, 5, 6, 7}, true}
+	Unusable = {{1, 2, 3, 4, 6, 7, 8, 9, 11, 14, 15}, {3, 4, 5, 7}, true}
 elseif R.myclass == "ROGUE" then
 	Unusable = {{2, 6, 7, 9, 10, 16}, {4, 5, 6, 7}}
 elseif R.myclass == "SHAMAN" then
 	Unusable = {{3, 4, 7, 8, 9, 14, 15, 16}, {5}}
 elseif R.myclass == "WARLOCK" then
-	Unusable = {{1, 2, 3, 4, 5, 6, 7, 9, 11, 14, 15}, {3, 4, 5, 6, 7}, true}
+	Unusable = {{1, 2, 3, 4, 5, 6, 7, 9, 11, 14, 15}, {3, 4, 5, 7}, true}
 elseif R.myclass == "WARRIOR" then
 	Unusable = {{16}, {7}}
 elseif R.myclass == "MONK" then
-	Unusable = {{2, 3, 4, 6, 9, 13, 14, 15, 16}, {4, 5, 6, 7}}
+	Unusable = {{2, 3, 4, 6, 9, 13, 14, 15, 16}, {4, 5, 7}}
 end
 
 for class = 1, 2 do

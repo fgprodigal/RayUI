@@ -24,7 +24,7 @@ local function LoadSkin()
 		self:SetBackdropColor(0, 0, 0, 0)
 	end
 
-	for i = 1, 3 do
+	for i = 1, 4 do
 		local bu = GroupFinderFrame["groupButton"..i]
 
 		bu.ring:Hide()
@@ -46,7 +46,7 @@ local function LoadSkin()
 	
 	hooksecurefunc("GroupFinderFrame_SelectGroupButton", function(index)
 		local self = GroupFinderFrame
-		for i = 1, 3 do
+		for i = 1, 4 do
 			local button = self["groupButton"..i]
 			if i == index then
 				button.bg:Show()
@@ -76,8 +76,8 @@ local function LoadSkin()
 	S:ReskinCheck(LFGInvitePopupRoleButtonDPS:GetChildren())
 	S:CreateBD(LFGInvitePopup)
 	S:CreateSD(LFGInvitePopup)
-    S:Reskin(LFGInvitePopupAcceptButton)
-    S:Reskin(LFGInvitePopupDeclineButton)
+	S:Reskin(LFGInvitePopupAcceptButton)
+	S:Reskin(LFGInvitePopupDeclineButton)
 	S:ReskinCheck(LFDQueueFrameRoleButtonTank:GetChildren())
 	S:ReskinCheck(LFDQueueFrameRoleButtonHealer:GetChildren())
 	S:ReskinCheck(LFDQueueFrameRoleButtonDPS:GetChildren())
@@ -91,6 +91,7 @@ local function LoadSkin()
 	S:ReskinCheck(LFDRoleCheckPopupRoleButtonDPS:GetChildren())
 	S:ReskinScroll(LFDQueueFrameSpecificListScrollFrameScrollBar)
 	S:ReskinScroll(LFDQueueFrameRandomScrollFrameScrollBar)
+	S:ReskinScroll(ScenarioQueueFrameRandomScrollFrameScrollBar)
 	S:ReskinDropDown(LFDQueueFrameTypeDropDown)
 
 	LFDParentFrame:DisableDrawLayer("BACKGROUND")
@@ -232,6 +233,16 @@ local function LoadSkin()
 		S:CreateSD(tab, 5, 0, 0, 0, 1, 1)
 		select(2, tab:GetRegions()):SetTexCoord(.08, .92, .08, .92)
 	end
+
+	--Flex Raid
+	FlexRaidFrameScrollFrame:StripTextures()
+	FlexRaidFrameBottomInset:StripTextures()
+	hooksecurefunc("FlexRaidFrame_Update", function()
+		FlexRaidFrame.ScrollFrame.Background:SetTexture(nil)
+	end)
+
+	S:ReskinDropDown(FlexRaidFrameSelectionDropDown)
+	S:Reskin(FlexRaidFrameStartRaidButton)
 end
 
 S:RegisterSkin("RayUI", LoadSkin)

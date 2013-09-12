@@ -268,9 +268,18 @@ local function Update(self, event, unit)
 		end
 		
 		--priority = debuff_data[addon.MatchBySpellName and name or spellId]
-        priority = debuff_data[name] or debuff_data[spellId]
-		if priority and not blackList[spellId] and (priority > _priority) then
-			_priority, _name, _icon, _count, _dtype, _duration, _endTime, _spellId = priority, name, icon, count, debuffType, duration, expirationTime, spellId
+		if next(debuff_data) then
+			priority = debuff_data[name] or debuff_data[spellId]
+			if priority and not blackList[spellId] and (priority > _priority) then
+				_priority, _name, _icon, _count, _dtype, _duration, _endTime, _spellId = priority, name, icon, count, debuffType, duration, expirationTime, spellId
+			end
+		else
+			if ( CompactUnitFrame_UtilIsBossAura(unit, i, 'HARMFUL', false) ) then
+				priority = 10
+				if priority and not blackList[spellId] and (priority > _priority) then
+					_priority, _name, _icon, _count, _dtype, _duration, _endTime, _spellId = priority, name, icon, count, debuffType, duration, expirationTime, spellId
+				end
+			end
 		end
 	end
 	
