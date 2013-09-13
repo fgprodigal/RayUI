@@ -29,6 +29,8 @@ local function LoadSkin()
 		select(i, EncounterJournalInstanceSelectDungeonTab:GetRegions()):SetAlpha(0)
 		select(i, EncounterJournalInstanceSelectRaidTab:GetRegions()):SetAlpha(0)
 	end
+	EncounterJournalEncounterFrameInfoModelFrameShadow:Hide()
+	EncounterJournalEncounterFrameInfoModelFrame.dungeonBG:Hide()
 	EncounterJournalEncounterFrameInfoDifficultyUpLeft:SetAlpha(0)
 	EncounterJournalEncounterFrameInfoDifficultyUpRIGHT:SetAlpha(0)
 	EncounterJournalEncounterFrameInfoDifficultyDownLeft:SetAlpha(0)
@@ -50,8 +52,10 @@ local function LoadSkin()
 	EncounterJournalEncounterFrameInfoBossTab:SetPoint("TOPRIGHT", EncounterJournalEncounterFrame, "TOPRIGHT", 75, 20)
 	EncounterJournalEncounterFrameInfoLootTab:ClearAllPoints()
 	EncounterJournalEncounterFrameInfoLootTab:SetPoint("TOP", EncounterJournalEncounterFrameInfoBossTab, "BOTTOM", 0, -4)
+	EncounterJournalEncounterFrameInfoModelTab:ClearAllPoints()
+	EncounterJournalEncounterFrameInfoModelTab:SetPoint("TOP", EncounterJournalEncounterFrameInfoLootTab, "BOTTOM", 0, -4)
 
-	local tabs = {EncounterJournalEncounterFrameInfoBossTab, EncounterJournalEncounterFrameInfoLootTab}
+	local tabs = {EncounterJournalEncounterFrameInfoBossTab, EncounterJournalEncounterFrameInfoLootTab, EncounterJournalEncounterFrameInfoModelTab}
 	for _, tab in pairs(tabs) do
 		tab:SetScale(.75)
 
@@ -105,6 +109,8 @@ local function LoadSkin()
 	EncounterJournalEncounterFrameInfoDetailsScrollFrameScrollChildDescription:SetTextColor(1, 1, 1)
 	EncounterJournalEncounterFrameInfoDetailsScrollFrameScrollChildDescription:SetShadowOffset(1, -1)
 	EncounterJournalEncounterFrameInfoEncounterTitle:SetTextColor(1, 1, 1)
+
+	S:CreateBDFrame(EncounterJournalEncounterFrameInfoModelFrame, .25)
 
 	hooksecurefunc("EncounterJournal_DisplayInstance", function()
 		local bossIndex = 1;

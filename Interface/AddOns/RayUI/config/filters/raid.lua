@@ -103,52 +103,158 @@ G.Raid.RaidDebuffs = {
 		[953] = {
 			--Siege of Orgrimmar
 			--Immerseus
-			[SpellName(143436)] = Defaults(), -- Corrosive Blast
-			[SpellName(143579)] = Defaults(), --Sha Corruption(Heroic)
+			[SpellName(143297)] = Defaults(5), --Sha Splash
+			[SpellName(143459)] = Defaults(4), --Sha Residue
+			[SpellName(143524)] = Defaults(4), --Purified Residue
+			[SpellName(143286)] = Defaults(4), --Seeping Sha
+			[SpellName(143413)] = Defaults(3), --Swirl
+			[SpellName(143411)] = Defaults(3), --Swirl
+			[SpellName(143436)] = Defaults(2), --Corrosive Blast (tanks)
+			[SpellName(143579)] = Defaults(3), --Sha Corruption (Heroic Only)
 
 			--Fallen Protectors
-			[SpellName(147383)] = Defaults(), --Debilitation
+			[SpellName(143239)] = Defaults(4), --Noxious Poison
+			[SpellName(144176)] = Defaults(2), --Lingering Anguish
+			[SpellName(143023)] = Defaults(3), --Corrupted Brew
+			[SpellName(143301)] = Defaults(2), --Gouge
+			[SpellName(143564)] = Defaults(3), --Meditative Field
+			[SpellName(143010)] = Defaults(3), --Corruptive Kick
+			[SpellName(143434)] = Defaults(6), --Shadow Word:Bane (Dispell)
+			[SpellName(143840)] = Defaults(6), --Mark of Anguish
+			[SpellName(143959)] = Defaults(4), --Defiled Ground
+			[SpellName(143423)] = Defaults(6), --Sha Sear
+			[SpellName(143292)] = Defaults(5), --Fixate
+			[SpellName(144176)] = Defaults(5), --Shadow Weakness
+			[SpellName(147383)] = Defaults(4), --Debilitation (Heroic Only)
 
 			--Norushen
-			[SpellName(146124)] = Defaults(), --Self Doubt
-			[SpellName(144851)] = Defaults(), --Test of Confidence
+			[SpellName(146124)] = Defaults(2), --Self Doubt (tanks)
+			[SpellName(146324)] = Defaults(4), --Jealousy
+			[SpellName(144639)] = Defaults(6), --Corruption
+			[SpellName(144850)] = Defaults(5), --Test of Reliance
+			[SpellName(145861)] = Defaults(6), --Self-Absorbed (Dispell)
+			[SpellName(144851)] = Defaults(2), --Test of Confiidence (tanks)
+			[SpellName(146703)] = Defaults(3), --Bottomless Pit
+			[SpellName(144514)] = Defaults(6), --Lingering Corruption
+			[SpellName(144849)] = Defaults(4), --Test of Serenity
 
 			--Sha of Pride
-			[SpellName(144358)] = Defaults(), --Wounded Pride
-			[SpellName(144774)] = Defaults(), --Reaching Attacks
-			[SpellName(147207)] = Defaults(), --Weakened Resolve(Heroic)
+			[SpellName(144358)] = Defaults(2), --Wounded Pride (tanks)
+			[SpellName(144843)] = Defaults(3), --Overcome
+			[SpellName(146594)] = Defaults(4), --Gift of the Titans
+			[SpellName(144351)] = Defaults(6), --Mark of Arrogance
+			[SpellName(144364)] = Defaults(4), --Power of the Titans
+			[SpellName(146822)] = Defaults(6), --Projection
+			[SpellName(146817)] = Defaults(5), --Aura of Pride
+			[SpellName(144774)] = Defaults(2), --Reaching Attacks (tanks)
+			[SpellName(144636)] = Defaults(5), --Corrupted Prison
+			[SpellName(144574)] = Defaults(6), --Corrupted Prison
+			[SpellName(145215)] = Defaults(4), --Banishment (Heroic)
+			[SpellName(147207)] = Defaults(4), --Weakened Resolve (Heroic)
+			[SpellName(144574)] = Defaults(6), --Corrupted Prison
+			[SpellName(144574)] = Defaults(6), --Corrupted Prison
 
 			--Galakras
+			[SpellName(146765)] = Defaults(5), --Flame Arrows
+			[SpellName(147705)] = Defaults(5), --Poison Cloud
+			[SpellName(146902)] = Defaults(2), --Poison Tipped blades
 
 			--Iron Juggernaut
+			[SpellName(144467)] = Defaults(2), --Ignite Armor
+			[SpellName(144459)] = Defaults(5), --Laser Burn
+			[SpellName(144498)] = Defaults(5), --Napalm Oil
+			[SpellName(144918)] = Defaults(5), --Cutter Laser
+			[SpellName(146325)] = Defaults(6), --Cutter Laser Target
 
 			--Kor'kron Dark Shaman
-			[SpellName(144215)] = Defaults(), --Froststorm Strike
-			[SpellName(143990)] = Defaults(), --Foul Geyser
-			[SpellName(144330)] = Defaults(), --Iron Prison(Heroic)
+			[SpellName(144089)] = Defaults(6), --Toxic Mist
+			[SpellName(144215)] = Defaults(2), --Froststorm Strike (Tank only)
+			[SpellName(143990)] = Defaults(2), --Foul Geyser (Tank only)
+			[SpellName(144304)] = Defaults(2), --Rend
+			[SpellName(144330)] = Defaults(6), --Iron Prison (Heroic)
 
 			--General Nazgrim
-			[SpellName(143494)] = Defaults(), --Sundering Blow
+			[SpellName(143638)] = Defaults(6), --Bonecracker
+			[SpellName(143480)] = Defaults(5), --Assassin's Mark
+			[SpellName(143431)] = Defaults(6), --Magistrike (Dispell)
+			[SpellName(143494)] = Defaults(2), --Sundering Blow (Tanks)
+			[SpellName(143882)] = Defaults(5), --Hunter's Mark
 
 			--Malkorok
-			[SpellName(142990)] = Defaults(), --Fatal Strike
-			[SpellName(143919)] = Defaults(), --Languish(Heroic)
+			[SpellName(142990)] = Defaults(2), --Fatal Strike (Tank debuff)
+			[SpellName(142913)] = Defaults(6), --Displaced Energy (Dispell)
+			[SpellName(143919)] = Defaults(5), --Languish (Heroic)
+
+			--Spoils of Pandaria
+			[SpellName(145685)] = Defaults(2), --Unstable Defensive System
+			[SpellName(144853)] = Defaults(3), --Carnivorous Bite
+			[SpellName(145987)] = Defaults(5), --Set to Blow
+			[SpellName(145218)] = Defaults(4), --Harden Flesh
+			[SpellName(145230)] = Defaults(1), --Forbidden Magic
+			[SpellName(146217)] = Defaults(4), --Keg Toss
+			[SpellName(146235)] = Defaults(4), --Breath of Fire
+			[SpellName(145523)] = Defaults(4), --Animated Strike
+			[SpellName(142983)] = Defaults(6), --Torment (the new Wrack)
+			[SpellName(145715)] = Defaults(3), --Blazing Charge
+			[SpellName(145747)] = Defaults(5), --Bubbling Amber
+			[SpellName(146289)] = Defaults(4), --Mass Paralysis
 
 			--Thok the Bloodthirsty
-			[SpellName(143766)] = Defaults(), --Panic
-			[SpellName(143773)] = Defaults(), --Freezing Breath
-			[SpellName(146589)] = Defaults(), --Skeleton Key
-			[SpellName(143777)] = Defaults(), --Frozen Solid
+			[SpellName(143766)] = Defaults(2), --Panic (tanks)
+			[SpellName(143773)] = Defaults(2), --Freezing Breath (tanks)
+			[SpellName(143452)] = Defaults(1), --Bloodied
+			[SpellName(146589)] = Defaults(5), --Skeleton Key (tanks)
+			[SpellName(143445)] = Defaults(6), --Fixate
+			[SpellName(143791)] = Defaults(5), --Corrosive Blood
+			[SpellName(143777)] = Defaults(3), --Frozen Solid (tanks)
+			[SpellName(143780)] = Defaults(4), --Acid Breath
+			[SpellName(143800)] = Defaults(5), --Icy Blood
+			[SpellName(143428)] = Defaults(4), --Tail Lash
 
 			--Siegecrafter Blackfuse
-			[SpellName(143385)] = Defaults(), --Electrostatic Charge
+			[SpellName(144236)] = Defaults(4), --Pattern Recognition
+			[SpellName(144466)] = Defaults(5), --Magnetic Crush
+			[SpellName(143385)] = Defaults(2), --Electrostatic Charge (tank)
+			[SpellName(143856)] = Defaults(6), --Superheated
 
 			--Paragons of the Klaxxi
-			[SpellName(143974)] = Defaults(), --Shield Bash
+			[SpellName(143617)] = Defaults(5), --Blue Bomb
+			[SpellName(143701)] = Defaults(5), --Whirling (stun)
+			[SpellName(143702)] = Defaults(5), --Whirling
+			[SpellName(142808)] = Defaults(6), --Fiery Edge
+			[SpellName(143609)] = Defaults(5), --Yellow Sword
+			[SpellName(143610)] = Defaults(5), --Red Drum
+			[SpellName(142931)] = Defaults(2), --Exposed Veins
+			[SpellName(143619)] = Defaults(5), --Yellow Bomb
+			[SpellName(143735)] = Defaults(6), --Caustic Amber
+			[SpellName(146452)] = Defaults(5), --Resonating Amber
+			[SpellName(142929)] = Defaults(2), --Tenderizing Strikes
+			[SpellName(142797)] = Defaults(5), --Noxious Vapors
+			[SpellName(143939)] = Defaults(5), --Gouge
+			[SpellName(143275)] = Defaults(2), --Hewn
+			[SpellName(143768)] = Defaults(2), --Sonic Projection
+			[SpellName(142532)] = Defaults(6), --Toxin: Blue
+			[SpellName(142534)] = Defaults(6), --Toxin: Yellow
+			[SpellName(143279)] = Defaults(2), --Genetic Alteration
+			[SpellName(143339)] = Defaults(6), --Injection
+			[SpellName(142649)] = Defaults(4), --Devour
+			[SpellName(146556)] = Defaults(6), --Pierce
+			[SpellName(142671)] = Defaults(6), --Mesmerize
+			[SpellName(143979)] = Defaults(2), --Vicious Assault
+			[SpellName(143607)] = Defaults(5), --Blue Sword
+			[SpellName(143614)] = Defaults(5), --Yellow Drum
+			[SpellName(143612)] = Defaults(5), --Blue Drum
+			[SpellName(142533)] = Defaults(6), --Toxin: Red
+			[SpellName(143615)] = Defaults(5), --Red Bomb
+			[SpellName(143974)] = Defaults(2), --Shield Bash (tanks)
 
 			--Garrosh Hellscream
-			[SpellName(145183)] = Defaults(), --Gripping Despair
-
+			[SpellName(144582)] = Defaults(4), --Hamstring
+			[SpellName(144954)] = Defaults(4), --Realm of Y'Shaarj
+			[SpellName(145183)] = Defaults(2), --Gripping Despair (tanks)
+			[SpellName(144762)] = Defaults(4), --Desecrated
+			[SpellName(145071)] = Defaults(5), --Touch of Y'Sharrj
+			[SpellName(148718)] = Defaults(4), --Fire Pit
 		},
 		[930] = {
 			-- Throne of Thunder

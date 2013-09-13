@@ -116,12 +116,12 @@ end
 local function HookStartRoll()
 	-- local specID = GetLootSpecialization()
 	-- if(not specID or specID == 0) then
-		-- SetLootSpecialization(GetSpecializationInfo(GetSpecialization()))
+	-- SetLootSpecialization(GetSpecializationInfo(GetSpecialization()))
 	-- end
 end
 
 local function ItemButtonUpdate(self, elapsed)
-	if(IsModifiedClick("COMPAREITEMS")) then
+	if(IsModifiedClick("COMPAREITEMS") or (GetCVarBool("alwaysCompareItems") and not IsEquippedItem(self.itemID))) then
 		GameTooltip_ShowCompareItem()
 	else
 		ShoppingTooltip1:Hide()

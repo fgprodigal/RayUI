@@ -1161,6 +1161,36 @@ local BossIDs = {
    [56427]	= true,	-- Warmaster Blackhorn
    [53879]	= true,	-- Spine Deathwing
    [56173]	= true,	-- Madness Deathwing
+   
+	-------------------------------------------------------------------------------
+	-- Siege of Orgrimmar
+	-------------------------------------------------------------------------------
+	[71543] = true,	-- Immerseus
+	[71475] = true,	-- Rook Stonetoe
+	[71479] = true,	-- He Softfoot
+	[71480] = true,	-- Sun Tenderheart
+	[71967] = true,	-- Norushen
+	[71734] = true,	-- Sha of Pride
+	[72249] = true,	-- Galakras
+	[71466] = true,	-- Iron Juggernaut
+	[71859] = true,	-- Earthbreaker Haromm
+	[71858] = true,	-- Wavebinder Kardris
+	[71515] = true,	-- General Nazgrim
+	[71454] = true,	-- Malkorok
+	[71512] = true,	-- Mantid Spoils
+	[73720] = true,	-- Mogu Spoils
+	[71529] = true,	-- Thok the Bloodthirsty
+	[71504] = true,	-- Siegecrafter Blackfuse
+	[71153] = true,	-- Hisek the Swarmkeeper
+	[71158] = true,	-- Rik'kal the Dissector
+	[71152] = true,	-- Skeer the Bloodseeker
+	[71154] = true,	-- Ka'roz the Locust
+	[71160] = true,	-- Iyyokuk the Lucid
+	[71155] = true,	-- Korven the Prime
+	[71156] = true,	-- Kaz'tik the Manipulator
+	[71157] = true,	-- Xaril the Poisoned Mind
+	[71161] = true,	-- Kil'ruk the Wind-Reaver
+	[71865] = true,	-- Garrosh Hellscream
 
    -------------------------------------------------------------------------------
    -- The Eye of Eternity
