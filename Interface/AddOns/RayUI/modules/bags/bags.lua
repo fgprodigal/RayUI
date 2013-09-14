@@ -211,6 +211,7 @@ function B:UpdateSlot(bagID, slotID)
 		ActionButton_ShowOverlayGlow(slot)
 	else
 		ActionButton_HideOverlayGlow(slot)
+		-- ActionButton_ShowOverlayGlow(slot)
 	end
 
 	SetItemButtonTexture(slot, texture)
@@ -392,7 +393,7 @@ function B:Layout(isBank)
 					f.Bags[bagID][slotID]:SetCheckedTexture(nil)
 
 					if(_G[f.Bags[bagID][slotID]:GetName().."NewItemTexture"]) then
-						_G[f.Bags[bagID][slotID]:GetName().."NewItemTexture"]:Hide()
+						_G[f.Bags[bagID][slotID]:GetName().."NewItemTexture"]:SetTexture(nil)
 					end
 
 					f.Bags[bagID][slotID].count:ClearAllPoints()

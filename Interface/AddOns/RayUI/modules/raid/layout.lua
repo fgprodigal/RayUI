@@ -644,16 +644,16 @@ end
 
 function RA:Raid15SmartVisibility(event)
 	local inInstance, instanceType = IsInInstance()
-	local _, _, _, _, maxPlayers, _, _ = GetInstanceInfo()
+	local _, _, _, _, maxPlayers, _, _, _, instanceGroupSize = GetInstanceInfo()
 	if event == "PLAYER_REGEN_ENABLED" then self:UnregisterEvent("PLAYER_REGEN_ENABLED") end
 	if not InCombatLockdown() then
 		self:SetAttribute("showPlayer", RA.db.showplayerinparty)
 		self:SetAttribute("showSolo", RA.db.showwhensolo)
-		if inInstance and instanceType == "raid" and maxPlayers > 15 then
+		if inInstance and instanceType == "raid" and instanceGroupSize > 15 then
 			RegisterAttributeDriver(self, "state-visibility", "hide")
 			self:SetAttribute("showRaid", false)
 			self:SetAttribute("showParty", false)
-		elseif inInstance and instanceType == "raid" and maxPlayers <= 15 then
+		elseif inInstance and instanceType == "raid" and instanceGroupSize <= 15 then
 			RegisterAttributeDriver(self, "state-visibility", "[group:party,nogroup:raid][group:raid] show;hide")
 			self:SetAttribute("showRaid", true)
 			self:SetAttribute("showParty", true)
@@ -670,16 +670,16 @@ end
 
 function RA:Raid25SmartVisibility(event)
 	local inInstance, instanceType = IsInInstance()
-	local _, _, _, _, maxPlayers, _, _ = GetInstanceInfo()
+	local _, _, _, _, maxPlayers, _, _, _, instanceGroupSize = GetInstanceInfo()
 	if event == "PLAYER_REGEN_ENABLED" then self:UnregisterEvent("PLAYER_REGEN_ENABLED") end
 	if not InCombatLockdown() then
 		self:SetAttribute("showPlayer", RA.db.showplayerinparty)
 		self:SetAttribute("showSolo", RA.db.showwhensolo)
-		if inInstance and instanceType == "raid" and maxPlayers <= 15 then
+		if inInstance and instanceType == "raid" and instanceGroupSize <= 15 then
 			RegisterAttributeDriver(self, "state-visibility", "hide")
 			self:SetAttribute("showRaid", false)
 			self:SetAttribute("showParty", false)
-		elseif inInstance and instanceType == "raid" and maxPlayers > 15 then
+		elseif inInstance and instanceType == "raid" and instanceGroupSize > 15 then
 			RegisterAttributeDriver(self, "state-visibility", "[group:party,nogroup:raid][group:raid] show;hide")
 			self:SetAttribute("showRaid", true)
 			self:SetAttribute("showParty", true)
@@ -696,14 +696,14 @@ end
 
 function RA:Raid40SmartVisibility(event)
 	local inInstance, instanceType = IsInInstance()
-	local _, _, _, _, maxPlayers, _, _ = GetInstanceInfo()
+	local _, _, _, _, maxPlayers, _, _, _, instanceGroupSize = GetInstanceInfo()
 	if event == "PLAYER_REGEN_ENABLED" then self:UnregisterEvent("PLAYER_REGEN_ENABLED") end
 	if not InCombatLockdown() then
 		self:SetAttribute("showPlayer", RA.db.showplayerinparty)
 		self:SetAttribute("showSolo", RA.db.showwhensolo)
 		self:SetAttribute("showRaid", true)
 		self:SetAttribute("showParty", true)
-		if inInstance and instanceType == "pvp" and maxPlayers == 40 then
+		if inInstance and instanceType == "pvp" and instanceGroupSize == 40 then
 			RegisterAttributeDriver(self, "state-visibility", "[group:party,nogroup:raid][group:raid] show;hide")
 		elseif inInstance then
 			RegisterAttributeDriver(self, "state-visibility", "hide")
@@ -786,6 +786,7 @@ function RA:SpawnHeader(name, group, layout)
 
 	header:RegisterEvent("PLAYER_ENTERING_WORLD")
 	header:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+	header:RegisterEvent("INSTANCE_GROUP_SIZE_CHANGED")
 	if layout == 15 then
 		header:HookScript("OnEvent", RA.Raid15SmartVisibility)
 	elseif layout == 25 then

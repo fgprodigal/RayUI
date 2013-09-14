@@ -183,6 +183,9 @@ G.Raid.RaidDebuffs = {
 			--Malkorok
 			[SpellName(142990)] = Defaults(2), --Fatal Strike (Tank debuff)
 			[SpellName(142913)] = Defaults(6), --Displaced Energy (Dispell)
+			[SpellName(142863)] = Defaults(1), --Strong Ancient Barrier
+			[SpellName(142864)] = Defaults(1), --Strong Ancient Barrier
+			[SpellName(142865)] = Defaults(1), --Strong Ancient Barrier
 			[SpellName(143919)] = Defaults(5), --Languish (Heroic)
 
 			--Spoils of Pandaria
