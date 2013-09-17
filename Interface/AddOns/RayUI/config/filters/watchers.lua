@@ -1014,7 +1014,7 @@ R["Watcher"] = {
                 --疲勞詛咒
                 { spellID = 18223, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --腐蝕術
-                { spellID = 172, unitId = "target", caster = "player", filter = "DEBUFF" },
+                { spellID = 146739, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --獻祭
                 { spellID = 348, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --痛苦災厄
@@ -1220,6 +1220,8 @@ R["Watcher"] = {
                 mode = function() return R:IsDeveloper() and "ICON" or "BAR" end,
                 setpoint = positions.cd_icon,
 
+                --死亡標記
+                { spellID = 137619, filter = "CD" },
                 --暗影步
                 { spellID = 36554, filter = "CD" },
                 --预备

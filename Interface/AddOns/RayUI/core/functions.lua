@@ -757,6 +757,51 @@ function R:UpdateDemoFrame()
 	demoFrame.button2.backdropTexture:SetVertexColor(backdropr, backdropg, backdropb)
 end
 
+local CPU_USAGE = {}
+local function CompareCPUDiff(module)
+	local greatestUsage, greatestCalls, greatestName
+	local greatestDiff = 0
+	local mod = R:GetModule(module, true) or R
+
+	for name, oldUsage in pairs(CPU_USAGE) do
+		local newUsage, calls = GetFunctionCPUUsage(mod[name], true)
+		local differance = newUsage - oldUsage
+
+		if differance > greatestDiff then
+			greatestName = name
+			greatestUsage = newUsage
+			greatestCalls = calls
+			greatestDiff = differance
+		end
+	end
+
+	if(greatestName) then
+		R:Print(greatestName.. " 为CPU占用最多的函数, 用时: "..greatestUsage.."ms. 共执行 ".. greatestCalls.." 次.")
+	else
+		R:Print("nothing happened.")
+	end
+end
+
+function R:GetTopCPUFunc(msg)
+	if GetCVar("scriptProfile") ~= "1" then return end
+
+	local module, delay = string.split(",",msg)
+
+	module = module == "nil" and nil or module
+	delay = delay == "nil" and nil or tonumber(delay)
+
+	wipe(CPU_USAGE)
+	local mod = self:GetModule(module, true) or self
+	for name, func in pairs(mod) do
+		if type(mod[name]) == "function" and name ~= "GetModule" then
+			CPU_USAGE[name] = GetFunctionCPUUsage(mod[name], true)
+		end
+	end
+
+	self:Delay(delay or 5, CompareCPUDiff, module)
+	self:Print("Calculating CPU Usage..")
+end
+
 R.Developer = { "夏琉君", "鏡婲水月", "Divineseraph", "水月君", "夏翎", }
 
 function R:IsDeveloper()

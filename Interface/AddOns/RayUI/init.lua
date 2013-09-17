@@ -99,6 +99,7 @@ function AddOn:OnInitialize()
 	self:RegisterEvent("PLAYER_LOGIN", "Initialize")
 	self:RegisterChatCommand("RayUI", "OpenConfig")
 	self:RegisterChatCommand("RC", "OpenConfig")
+	self:RegisterChatCommand("cpuusage", "GetTopCPUFunc")
 	self:RegisterChatCommand("gm", ToggleHelpFrame)
 end
 

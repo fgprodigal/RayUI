@@ -142,7 +142,7 @@ end
 
 local function ItemButtonEnter(self)
 	GameTooltip:SetOwner(Container, "ANCHOR_NONE")
-	GameTooltip:Point("TOPLEFT", Container, "TOPRIGHT", 0, 2)
+	GameTooltip:Point("TOPRIGHT", Container, "BOTTOMRIGHT", 0, -2)
 	GameTooltip:SetItemByID(self.itemID)
 
 	self:SetScript("OnUpdate", ItemButtonUpdate)
@@ -167,12 +167,6 @@ local function GetItemLine(index)
 		Icon:SetSize(36, 36)
 		Icon.b = S:CreateBG(Icon)
 		ItemButton.Icon = Icon
-
-		local Background = ItemButton:CreateTexture(nil, "BORDER")
-		Background:SetAllPoints()
-		Background:SetTexture([[Interface\EncounterJournal\UI-EncounterJournalTextures]])
-		Background:SetTexCoord(0.00195313, 0.62890625, 0.61816406, 0.66210938)
-		Background:SetDesaturated(true)
 
 		local Name = ItemButton:CreateFontString(nil, "ARTWORK", "GameFontNormalMed3")
 		Name:Point("TOPLEFT", Icon, "TOPRIGHT", 7, -4)

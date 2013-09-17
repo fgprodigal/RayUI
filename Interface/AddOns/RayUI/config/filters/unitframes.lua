@@ -18,7 +18,7 @@ G.UnitFrames.InvalidSpells = {
 
 G.UnitFrames.aurafilters["Blacklist"] = {
     [SpellName(36032)] = true, -- Arcane Charge
-    [SpellName(76691)] = true, -- Vengeance
+    [SpellName(132365)] = true, -- Vengeance
     [SpellName(8733)] = true, --Blessing of Blackfathom
     [SpellName(57724)] = true, --Sated
     [SpellName(25771)] = true, --forbearance
