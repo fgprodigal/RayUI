@@ -242,7 +242,8 @@ function Container:Update()
 	end
 
 	local _, _, difficulty = GetInstanceInfo()
-	EJ_SetDifficulty(difficulty > 2 and (difficulty - 2) or 1)
+	-- EJ_SetDifficulty(difficulty > 2 and (difficulty - 2) or 1)
+	EJ_SetDifficulty(difficulty)
 
 	local currentInstance = EJ_GetCurrentInstance()
 	EJ_SelectInstance(currentInstance > 0 and currentInstance or 322)
@@ -385,7 +386,7 @@ end
 Container:RegisterEvent("PLAYER_LOGIN")
 Container:SetScript("OnEvent", function(self, event, ...) self[event](self, event, ...) end)
 
-SLASH_TestHabeebIt1 = "/test"
+SLASH_TestHabeebIt1 = "/testhabeebit"
 SlashCmdList.TestHabeebIt = function()
 	BonusRollFrame_StartBonusRoll(123, "123", 120)
 	-- Container:SPELL_CONFIRMATION_PROMPT("SPELL_CONFIRMATION_PROMPT", 139691, CONFIRMATION_PROMPT_BONUS_ROLL)

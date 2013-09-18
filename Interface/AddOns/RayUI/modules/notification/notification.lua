@@ -170,10 +170,10 @@ local function testCallback()
 	print("Banner clicked!")
 end
 
-SlashCmdList.TESTALERT = function(b)
+SlashCmdList.TESTNOTIFICATION = function(b)
 	NF:Show("RayUI", "This is an example of a notification.", testCallback, b == "true" and "INTERFACE\\ICONS\\SPELL_FROST_ARCTICWINDS" or nil, .08, .92, .08, .92)
 end
-SLASH_TESTALERT1 = "/testalert"
+SLASH_TESTNOTIFICATION1 = "/testnotification"
 
 function NF:Initialize()
 	local S = R:GetModule("Skins")
@@ -296,7 +296,7 @@ function NF:PLAYER_REGEN_ENABLED()
 	if showRepair and value < 20 then
 		showRepair = false
 		R:Delay(30, ResetRepairNotification)
-		self:Show(MINIMAP_TRACKING_REPAIR, format("你的%s栏位需要修理, 当前耐久为%d",Slots[1][2],value))
+		self:Show(MINIMAP_TRACKING_REPAIR, format(L["你的%s栏位需要修理, 当前耐久为%d."],Slots[1][2],value))
 	end
 end
 
@@ -331,9 +331,9 @@ local function alertEvents()
 	local num = CalendarGetNumPendingInvites()
 	if num ~= numInvites then
 		if num > 1 then
-			NF:Show(CALENDAR, format("你有 %s 个未处理的活动邀请.", num), toggleCalendar)
+			NF:Show(CALENDAR, format(L["你有%s个未处理的活动邀请."], num), toggleCalendar)
 		elseif num > 0 then
-			NF:Show(CALENDAR, format("你有 %s 个未处理的活动邀请.", 1), toggleCalendar)
+			NF:Show(CALENDAR, format(L["你有%s个未处理的活动邀请."], 1), toggleCalendar)
 		end
 		numInvites = num
 	end
@@ -343,9 +343,9 @@ local function alertGuildEvents()
 	if CalendarFrame and CalendarFrame:IsShown() then return end
 	local num = GetGuildInvites()
 	if num > 1 then
-		NF:Show(CALENDAR, format("你有 %s 个未处理的公会活动邀请.", num), toggleCalendar)
+		NF:Show(CALENDAR, format(L["你有%s个未处理的公会活动邀请."], num), toggleCalendar)
 	elseif num > 0 then
-		NF:Show(CALENDAR, format("你有 %s 个未处理的公会活动邀请.", 1), toggleCalendar)
+		NF:Show(CALENDAR, format(L["你有%s个未处理的公会活动邀请."], 1), toggleCalendar)
 	end
 end
 
@@ -359,12 +359,15 @@ function NF:CALENDAR_UPDATE_GUILD_EVENTS()
 end
 
 function NF:PLAYER_ENTERING_WORLD()
+	self:UPDATE_PENDING_MAIL()
+	alertEvents()
+	alertGuildEvents()
 	local day = select(3, CalendarGetDate())
 	local numDayEvents = CalendarGetNumDayEvents(0, day)
 	for i = 1, numDayEvents do
 		local title, hour, minute, calendarType, sequenceType, eventType, texture, modStatus, inviteStatus, invitedBy, difficulty, inviteType = CalendarGetDayEvent(0, day, i)
 		if calendarType == "HOLIDAY" and ( sequenceType == "END" or sequenceType == "" ) then
-			NF:Show(CALENDAR, format("活动 \"%s\" 今天结束.", title), toggleCalendar)
+			self:Show(CALENDAR, format(L["活动\"%s\"今天结束."], title), toggleCalendar)
 		end
 	end
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")

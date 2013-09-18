@@ -458,9 +458,12 @@ function R:ColorGradient(perc, ...)
 	return r1 + (r2-r1)*relperc, g1 + (g2-g1)*relperc, b1 + (b2-b1)*relperc
 end
 
-function R:Round(v, decimals)
-	if not decimals then decimals = 0 end
-	return (("%%.%df"):format(decimals)):format(v)
+function R:Round(num, idp)
+	if(idp and idp > 0) then
+		local mult = 10 ^ idp
+		return floor(num * mult + 0.5) / mult
+	end
+	return floor(num + 0.5)
 end
 
 local waitTable = {}

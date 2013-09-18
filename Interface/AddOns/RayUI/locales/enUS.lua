@@ -438,3 +438,9 @@ L["治疗"] = "Healer"
 L["(未完成)"] = "(Soon)"
 L["设置完成"] = "Completed"
 end
+do
+L["你的%s栏位需要修理, 当前耐久为%d."] = "%s slot needs to repair, current durability is %d."
+L["你有%s个未处理的活动邀请."] = "You have %s pending calendar invite(s)."
+L["你有%s个未处理的公会活动邀请."] = "You have %s pending guild event(s)."
+L["活动\"%s\"今天结束."] = "event \"%s\" will end today."
+end

@@ -4,21 +4,32 @@ local MBCF
 local buttons = {}
 
 function MM:PositionButtonCollector(self, screenQuadrant)
-    MBCF.bg:SetTexture(0, 0, 0, 1)
-    MBCF:SetAlpha(0)
-    MBCF:ClearAllPoints()
-    screenQuadrant = screenQuadrant or R:GetScreenQuadrant(self)
-    for i =1, #buttons do
-        buttons[i]:ClearAllPoints()
-        buttons[i]:SetPoint("TOP", MinimapButtonCollectFrame, "TOP", 0,  - (i - 1) * 30)
-        buttons[i].ClearAllPoints = R.dummy
-        buttons[i].SetPoint = R.dummy
-    end
-    if screenQuadrant:find("RIGHT") then
-        MBCF:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -5, 2)
-    else
-        MBCF:SetPoint("TOPLEFT", Minimap, "TOPRIGHT", 5, 2)
-    end
+	local line = math.ceil(Minimap:GetWidth() / 20)
+	-- MBCF.bg:SetTexture(0, 0, 0, 1)
+	MBCF:SetAlpha(0)
+	MBCF:ClearAllPoints()
+	screenQuadrant = screenQuadrant or R:GetScreenQuadrant(self)
+	for i =1, #buttons do
+		buttons[i]:ClearAllPoints()
+		if i == 1 then
+			buttons[i]:SetPoint("TOP", MBCF, "TOP", 0, 0)
+		elseif i%line == 1 then
+			if strfind(screenQuadrant, "RIGHT") then
+				buttons[i]:SetPoint("TOPRIGHT", buttons[i-line], "TOPLEFT", -1, 0)
+			else
+				buttons[i]:SetPoint("TOPLEFT", buttons[i-line], "TOPRIGHT", 1, 0)
+			end
+		else
+			buttons[i]:SetPoint("TOP", buttons[i-1], "BOTTOM", 0, -1)
+		end
+		buttons[i].ClearAllPoints = R.dummy
+		buttons[i].SetPoint = R.dummy
+	end
+	if strfind(screenQuadrant, "RIGHT") then
+		MBCF:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -5, 2)
+	else
+		MBCF:SetPoint("TOPLEFT", Minimap, "TOPRIGHT", 5, 2)
+	end
 end
 
 function MM:ButtonCollector()
@@ -45,12 +56,12 @@ function MM:ButtonCollector()
 	else
 		MBCF:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -5)
 	end
-    MBCF:SetSize(20, 150)
+	MBCF:SetSize(20, 150)
 	MBCF:SetFrameStrata("BACKGROUND")
 	MBCF:SetFrameLevel(1)
-	MBCF.bg = MBCF:CreateTexture(nil, "BACKGROUND")
-	MBCF.bg:SetAllPoints(MBCF)
-    MBCF.bg:SetGradientAlpha("VERTICAL", 0, 0, 0, 0, 0, 0, 0, .6)
+	-- MBCF.bg = MBCF:CreateTexture(nil, "BACKGROUND")
+	-- MBCF.bg:SetAllPoints(MBCF)
+	-- MBCF.bg:SetGradientAlpha("VERTICAL", 0, 0, 0, 0, 0, 0, 0, .6)
 
 
 	local MinimapButtonCollect = CreateFrame("Frame")

@@ -253,12 +253,6 @@ oUF.Tags.Events["RayUIRaid:forbearance"] = "UNIT_AURA"
 
 -- Warlock
 oUF.Tags.Methods["RayUIRaid:di"] = function(u)
-    -- local name, _,_,_,_,_,_, fromwho = UnitAura(u, GetSpellInfo(109773))
-    -- if fromwho == "player" then
-        -- return "|cff6600FF"..x.."|r"
-    -- elseif name then
-        -- return "|cffCC00FF"..x.."|r"
-    -- end
 	if not ((UnitAura(u, GetSpellInfo(21562)) or UnitAura(u, GetSpellInfo(6307)) or UnitAura(u, GetSpellInfo(469)) or UnitAura(u, GetSpellInfo(109773)))
 			and (UnitAura(u, GetSpellInfo(1459)) or UnitAura(u, GetSpellInfo(61316))))
 			and not UnitAura(u, GetSpellInfo(109773)) then
