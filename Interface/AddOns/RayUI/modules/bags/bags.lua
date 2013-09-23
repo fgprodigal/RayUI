@@ -76,15 +76,15 @@ function B:Initialize()
 
 	local f = {}
 	function RayUI_ContainerFrame:OnInit()
-		local comsumable = select(4, GetAuctionItemClasses())
+		local consumable = select(4, GetAuctionItemClasses())
 		-- The filters control which items go into which container
 		local INVERTED = -1 -- with inverted filters (using -1), everything goes into this bag when the filter returns false
-		local onlyBags = function(item) return item.bagID >= 0 and item.bagID <= 4 and not cargBags.itemKeys["setID"](item) and item.type ~= comsumable end
-		local onlyBank =		function(item) return item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11 and not cargBags.itemKeys["setID"](item) and item.type ~= comsumable end
+		local onlyBags = function(item) return item.bagID >= 0 and item.bagID <= 4 and not cargBags.itemKeys["setID"](item) and item.type ~= consumable end
+		local onlyBank =		function(item) return item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11 and not cargBags.itemKeys["setID"](item) and item.type ~= consumable end
 		local onlyBagSets =		function(item) return cargBags.itemKeys["setID"](item) and not (item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11) end
-		local onlyBagComsumables =		function(item) return item.type == comsumable and not (item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11) end
+		local onlyBagConsumables =		function(item) return item.type == consumable and not (item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11) end
 		local onlyBankSets =	function(item) return cargBags.itemKeys["setID"](item) and not (item.bagID >= 0 and item.bagID <= 4) end
-		local onlyBankComsumables =		function(item) return item.type == comsumable and not (item.bagID >= 0 and item.bagID <= 4) end
+		local onlyBankConsumables =		function(item) return item.type == consumable and not (item.bagID >= 0 and item.bagID <= 4) end
 		local onlyRareEpics =	function(item) return item.rarity and item.rarity > 3 end
 		local onlyEpics =		function(item) return item.rarity and item.rarity > 3 end
 		local hideJunk =		function(item) return not item.rarity or item.rarity > 0 end
@@ -109,21 +109,21 @@ function B:Initialize()
 		f.bank:SetPoint("BOTTOMRIGHT", "RayUI_ContainerFrameMain", "BOTTOMLEFT", -25, 0) -- bank frame position
 		f.bank:Hide() -- Hide at the beginning
 
-		f.comsumables = MyContainer:New("Comsumables", {Columns = B.db.bagWidth, Bags = "backpack+bags"})
-		f.comsumables:SetFilter(onlyBagComsumables, true)
-		f.comsumables:SetPoint("BOTTOMLEFT", f.main,"TOPLEFT", 0, 3)
+		f.consumables = MyContainer:New("Consumables", {Columns = B.db.bagWidth, Bags = "backpack+bags"})
+		f.consumables:SetFilter(onlyBagConsumables, true)
+		f.consumables:SetPoint("BOTTOMLEFT", f.main,"TOPLEFT", 0, 3)
 
 		f.sets = MyContainer:New("ItemSets", {Columns = B.db.bagWidth, Bags = "backpack+bags"})
 		f.sets:SetFilter(onlyBagSets, true)
-		f.sets:SetPoint("BOTTOMLEFT", f.comsumables,"TOPLEFT", 0, 3)
+		f.sets:SetPoint("BOTTOMLEFT", f.consumables,"TOPLEFT", 0, 3)
 
-		f.bankcomsumables = MyContainer:New("BankComsumables", {Columns = B.db.bankWidth, Bags = "backpack+bags"})
-		f.bankcomsumables:SetFilter(onlyBankComsumables, true)
-		f.bankcomsumables:SetPoint("BOTTOMLEFT", f.bank,"TOPLEFT", 0, 3)
+		f.bankconsumables = MyContainer:New("BankConsumables", {Columns = B.db.bankWidth, Bags = "backpack+bags"})
+		f.bankconsumables:SetFilter(onlyBankConsumables, true)
+		f.bankconsumables:SetPoint("BOTTOMLEFT", f.bank,"TOPLEFT", 0, 3)
 
 		f.banksets = MyContainer:New("BankItemSets", {Columns = B.db.bankWidth, Bags = "bankframe+bank"})
 		f.banksets:SetFilter(onlyBankSets, true)
-		f.banksets:SetPoint("BOTTOMLEFT", f.bankcomsumables,"TOPLEFT", 0, 3)
+		f.banksets:SetPoint("BOTTOMLEFT", f.bankconsumables,"TOPLEFT", 0, 3)
 	end
 
 	-- Bank frame toggling
@@ -181,12 +181,12 @@ function B:Initialize()
 		local width, height = self:LayoutButtons("grid", self.Settings.Columns, 3, 6, -45)
 		self:SetSize(width + 12, height + 12)
 		if (self.UpdateDimensions) then self:UpdateDimensions() end -- Update the bag's height
-		if self.name == "ItemSets" or self.name == "Comsumables" then
+		if self.name == "ItemSets" or self.name == "Consumables" then
 			local width, height = self:LayoutButtons("grid", self.Settings.Columns, 3, 6, -25)
 			self:SetSize(width + 12, height + 32)
 		end
 
-		if self.name == "BankItemSets" or self.name == "BankComsumables" then
+		if self.name == "BankItemSets" or self.name == "BankConsumables" then
 			local width, height = self:LayoutButtons("grid", self.Settings.Columns, 3, 6, -25)
 			self:SetSize(width + 12, height + 32)
 		end
@@ -197,10 +197,10 @@ function B:Initialize()
 			f.sets:Show()
 		end
 
-		if RayUI_ContainerFrameComsumables:GetHeight()<33 then
-			f.comsumables:Hide()
+		if RayUI_ContainerFrameConsumables:GetHeight()<33 then
+			f.consumables:Hide()
 		else
-			f.comsumables:Show()
+			f.consumables:Show()
 		end
 
 		if RayUI_ContainerFrameBankItemSets:GetHeight()<33 then
@@ -209,10 +209,10 @@ function B:Initialize()
 			f.banksets:Show()
 		end
 
-		if RayUI_ContainerFrameBankComsumables:GetHeight()<33 then
-			f.bankcomsumables:Hide()
+		if RayUI_ContainerFrameBankConsumables:GetHeight()<33 then
+			f.bankconsumables:Hide()
 		else
-			f.bankcomsumables:Show()
+			f.bankconsumables:Show()
 		end
 	end
 
@@ -338,12 +338,21 @@ function B:Initialize()
 			setname:SetPoint("TOPLEFT", self, "TOPLEFT",5,-5)
 			setname:SetFont(R["media"].font, R["media"].fontsize, "THINOUTLINE")
 			setname:SetText(string.format(EQUIPMENT_SETS,' '))
-		elseif name == "Comsumables" or name == "BankComsumables" then
-			local comsumable = select(4, GetAuctionItemClasses())
+		elseif name == "Consumables" or name == "BankConsumables" then
+			local consumable = select(4, GetAuctionItemClasses())
 			local setname = self:CreateFontString(nil,"OVERLAY")
 			setname:SetPoint("TOPLEFT", self, "TOPLEFT",5,-5)
 			setname:SetFont(R["media"].font, R["media"].fontsize, "THINOUTLINE")
-			setname:SetText(comsumable)
+			setname:SetText(consumable)
+		end
+
+		if name == "Main" or name == "ItemSets" or name == "Consumables" then
+			self:HookScript("OnShow", function()
+				R:GetModule("Tooltip"):GameTooltip_SetDefaultAnchor(GameTooltip)
+			end)
+			self:HookScript("OnHide", function()
+				R:GetModule("Tooltip"):GameTooltip_SetDefaultAnchor(GameTooltip)
+			end)
 		end
 	end
 

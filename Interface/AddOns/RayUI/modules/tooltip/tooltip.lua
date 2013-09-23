@@ -208,7 +208,9 @@ function TT:GameTooltip_SetDefaultAnchor(tooltip, parent)
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, RayUFRaid40_8:GetBottom() + RayUFRaid40_8:GetHeight() + 30)
 		elseif RayUI_ContainerFrame and RayUI_ContainerFrame:IsVisible() and (GetScreenWidth() - RayUI_ContainerFrame:GetRight()) < 250 then
 			-- tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, RayUI_ContainerFrame:GetBottom() + RayUI_ContainerFrame:GetHeight() + 30)
-			local parent = RayUI_ContainerFrameItemSets:IsVisible() and RayUI_ContainerFrameItemSets or RayUI_ContainerFrameMain
+			local parent = RayUI_ContainerFrameItemSets:IsVisible() and RayUI_ContainerFrameItemSets
+						or RayUI_ContainerFrameConsumables:IsVisible() and RayUI_ContainerFrameConsumables
+						or RayUI_ContainerFrameMain
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, parent:GetBottom() + parent:GetHeight() + 30)
 		elseif RayUFRaid15_1UnitButton1 and RayUFRaid15_1UnitButton1:IsVisible() and (GetScreenWidth() - RayUFRaid15_3:GetRight()) < 250 then
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, RayUFRaid15_3:GetBottom() + RayUFRaid15_3:GetHeight() + 30)
