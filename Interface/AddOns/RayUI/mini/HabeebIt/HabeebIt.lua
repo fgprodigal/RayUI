@@ -51,10 +51,7 @@ local function HotspotEnter()
 				Icon:SetAllPoints()
 				Icon:SetTexture(texture)
 
-				local Ring = SpecButton:CreateTexture(nil, "OVERLAY", nil, 2)
-				Ring:Point("TOPLEFT", -6, 6)
-				Ring:SetSize(58, 58)
-				Ring:SetTexture([=[Interface\Minimap\Minimap-TrackingBorder]=])
+				local Bg = RayUI[1]:GetModule("Skins"):CreateBG(SpecButton)
 			end
 
 			Buttons:SetSize(numSpecs * 28 + 34, 38)
@@ -114,10 +111,10 @@ function Container:HandleUpdate()
 end
 
 local function HookStartRoll()
-	-- local specID = GetLootSpecialization()
-	-- if(not specID or specID == 0) then
-	-- SetLootSpecialization(GetSpecializationInfo(GetSpecialization()))
-	-- end
+	local specID = GetLootSpecialization()
+	if(not specID or specID == 0) then
+		SetLootSpecialization(GetSpecializationInfo(GetSpecialization()))
+	end
 end
 
 local function ItemButtonUpdate(self, elapsed)

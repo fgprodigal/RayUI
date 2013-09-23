@@ -1291,7 +1291,7 @@ R["Watcher"] = {
                 --穢邪之力
                 { spellID = 67117, unitId = "player", caster = "player", filter = "BUFF" },
                 --符文武器幻舞
-                { spellID = 49028, unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 81256, unitId = "player", caster = "player", filter = "BUFF" },
                 --冰錮堅韌
                 { spellID = 48792, unitId = "player", caster = "player", filter = "BUFF" },
                 --反魔法護罩

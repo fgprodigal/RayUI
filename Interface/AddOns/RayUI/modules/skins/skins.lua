@@ -170,7 +170,7 @@ end
 function S:CreateBackdropTexture(f)
 	if not f then return end
 	local tex = f:CreateTexture(nil, "BACKGROUND")
-    tex:SetDrawLayer("BACKGROUND", 1)
+	tex:SetDrawLayer("BACKGROUND", 1)
 	tex:SetInside(f, 1, 1)
 	tex:SetTexture(R["media"].gloss)
 	--tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
@@ -228,7 +228,7 @@ function S:CreatePulse(frame, speed, alpha, mult)
 	frame.alpha = alpha or 1
 	frame.tslu = 0
 	frame:SetScript("OnUpdate", function(self, elapsed)
-        elapsed = elapsed * ( speed or 5/4 )
+		elapsed = elapsed * ( speed or 5/4 )
 		self.tslu = self.tslu + elapsed
 		if self.tslu > self.speed then
 			self.tslu = 0
@@ -258,8 +258,8 @@ local function StopGlow(f)
 	if not f then return end
 	f:SetBackdropColor(0, 0, 0, 0)
 	f:SetBackdropBorderColor(bordercolorr, bordercolorg, bordercolorb)
-    f.glow:SetScript("OnUpdate", nil)
-    f.glow:SetAlpha(0)
+	f.glow:SetScript("OnUpdate", nil)
+	f.glow:SetAlpha(0)
 end
 
 function S:Reskin(f, noGlow)
@@ -275,7 +275,7 @@ function S:Reskin(f, noGlow)
 	if f.LeftSeparator then f.LeftSeparator:Hide() end
 	if f.RightSeparator then f.RightSeparator:Hide() end
 
-    f:SetTemplate("Default", true)
+	f:SetTemplate("Default", true)
 
 	if not noGlow then
 		f.glow = CreateFrame("Frame", nil, f)
@@ -283,7 +283,7 @@ function S:Reskin(f, noGlow)
 			edgeFile = R["media"].glow,
 			edgeSize = R:Scale(4),
 		})
-        f.glow:SetOutside(f, 4, 4)
+		f.glow:SetOutside(f, 4, 4)
 		f.glow:SetBackdropBorderColor(r, g, b)
 		f.glow:SetAlpha(0)
 
@@ -461,7 +461,7 @@ function S:ReskinClose(f, a1, p, a2, x, y)
 	end
 
 	f:HookScript("OnEnter", colourClose)
- 	f:HookScript("OnLeave", clearClose)
+	f:HookScript("OnLeave", clearClose)
 
 	-- local text = f:CreateFontString(nil, "OVERLAY")
 	-- text:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
@@ -469,16 +469,18 @@ function S:ReskinClose(f, a1, p, a2, x, y)
 	-- text:SetText("x")
 
 	-- f:HookScript("OnEnter", function(self) text:SetTextColor(1, .1, .1) end)
- 	-- f:HookScript("OnLeave", function(self) text:SetTextColor(1, 1, 1) end)
+	-- f:HookScript("OnLeave", function(self) text:SetTextColor(1, 1, 1) end)
 end
 
 function S:ReskinInput(f, height, width)
 	if not f then return end
 	local frame = f:GetName()
-    if _G[frame.."Left"] then _G[frame.."Left"]:Hide() end
-    if _G[frame.."Right"] then _G[frame.."Right"]:Hide() end
-	if _G[frame.."Middle"] then _G[frame.."Middle"]:Hide() end
-	if _G[frame.."Mid"] then _G[frame.."Mid"]:Hide() end
+	if frame then
+		if _G[frame.."Left"] then _G[frame.."Left"]:Hide() end
+		if _G[frame.."Right"] then _G[frame.."Right"]:Hide() end
+		if _G[frame.."Middle"] then _G[frame.."Middle"]:Hide() end
+		if _G[frame.."Mid"] then _G[frame.."Mid"]:Hide() end
+	end
 	S:CreateBD(f, 0)
 	S:CreateBackdropTexture(f)
 
@@ -513,10 +515,10 @@ function S:ReskinCheck(f)
 	hl:SetVertexColor(r, g, b, .2)
 
 	S:CreateBackdropTexture(f)
-    f.backdropTexture:SetInside(f, 5, 5)
+	f.backdropTexture:SetInside(f, 5, 5)
 
 	local bd = CreateFrame("Frame", nil, f)
-    bd:SetInside(f, 4, 4)
+	bd:SetInside(f, 4, 4)
 	bd:SetFrameLevel(f:GetFrameLevel())
 	S:CreateBD(bd, 0)
 

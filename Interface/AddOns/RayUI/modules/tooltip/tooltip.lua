@@ -207,7 +207,9 @@ function TT:GameTooltip_SetDefaultAnchor(tooltip, parent)
 		elseif RayUFRaid40_6UnitButton1 and RayUFRaid40_6UnitButton1:IsVisible() and (GetScreenWidth() - RayUFRaid40_8:GetRight()) < 250 then
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, RayUFRaid40_8:GetBottom() + RayUFRaid40_8:GetHeight() + 30)
 		elseif RayUI_ContainerFrame and RayUI_ContainerFrame:IsVisible() and (GetScreenWidth() - RayUI_ContainerFrame:GetRight()) < 250 then
-			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, RayUI_ContainerFrame:GetBottom() + RayUI_ContainerFrame:GetHeight() + 30)
+			-- tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, RayUI_ContainerFrame:GetBottom() + RayUI_ContainerFrame:GetHeight() + 30)
+			local parent = RayUI_ContainerFrameItemSets:IsVisible() and RayUI_ContainerFrameItemSets or RayUI_ContainerFrameMain
+			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, parent:GetBottom() + parent:GetHeight() + 30)
 		elseif RayUFRaid15_1UnitButton1 and RayUFRaid15_1UnitButton1:IsVisible() and (GetScreenWidth() - RayUFRaid15_3:GetRight()) < 250 then
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, RayUFRaid15_3:GetBottom() + RayUFRaid15_3:GetHeight() + 30)
 		elseif RayUFRaid25_1UnitButton1 and RayUFRaid25_1UnitButton1:IsVisible() and (GetScreenWidth() - RayUFRaid25_5:GetRight()) < 250 then
@@ -429,16 +431,10 @@ function TT:SetStyle(tooltip)
         return tooltip:Hide()
     end
 	if not tooltip.styled then
-		--[[tooltip:SetBackdrop({
-			edgeFile = R["media"].glow,
-			bgFile = R["media"].blank,
-			edgeSize = R:Scale(4),
-			insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
-		})]]
         tooltip:SetBackdrop(nil)
 		R:GetModule("Skins"):CreateStripesThin(tooltip)
         tooltip:CreateShadow("Background")
-        tooltip.border:SetInside(tooltip)
+        tooltip.border:SetInside(tooltip, 0, 0)
 		tooltip.styled=true
 
 		local getBackdrop = function()
@@ -589,16 +585,6 @@ function TT:OnTooltipSetUnit(tooltip)
 end
 
 function TT:Initialize()
-	local truncate = function(value)
-		if value >= 1e6 then
-			return string.format("%.2fm", value / 1e6)
-		elseif value >= 1e4 then
-			return string.format("%.1fk", value / 1e3)
-		else
-			return string.format("%.0f", value)
-		end
-	end
-
 	self:RawHook("GameTooltip_UnitColor", true)
 
     self:HookScript(GameTooltip, "OnTooltipSetUnit")
@@ -643,7 +629,7 @@ function TT:Initialize()
 				-- self.text:SetShadowOffset(R.mult, -R.mult)
 			end
 			self.text:Show()
-			local hp = truncate(min).." / "..truncate(max)
+			local hp = R:ShortValue(min).." / "..R:ShortValue(max)
 			self.text:SetText(hp)
 		else
 			if self.text then

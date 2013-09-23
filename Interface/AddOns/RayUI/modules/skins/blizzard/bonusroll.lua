@@ -68,6 +68,7 @@ local function LoadSkin()
 	BonusRollLootWonFrame.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	BonusRollLootWonFrame.IconBorder:Kill()
 	BonusRollFrame.SpecIcon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+	S:CreateBG(BonusRollFrame.SpecIcon)
 end
 
 S:RegisterSkin("RayUI", LoadSkin)

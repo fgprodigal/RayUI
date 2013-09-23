@@ -248,8 +248,8 @@ P["Bags"]={
 	bagSize = 32,
 	bankSize = 32,
 	sortInverted = true,
-	bagWidth = 385,
-	bankWidth = 600,
+	bagWidth = 10,
+	bankWidth = 12,
 }
 
 P["CooldownFlash"]={

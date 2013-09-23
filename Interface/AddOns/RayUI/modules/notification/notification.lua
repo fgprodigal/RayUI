@@ -31,6 +31,7 @@ local function hideBanner()
 		f:Hide()
 		f:SetScale(0.1)
 		f:SetAlpha(0.1)
+		f.button:Hide()
 		bannerShown = false
 	end
 end
@@ -213,6 +214,13 @@ function NF:Initialize()
 	text:SetJustifyH("LEFT")
 	f.text = text
 
+	local button = CreateFrame("Button", nil, f, "SecureActionButtonTemplate")
+	button:SetAllPoints(f)
+	button:SetAttribute("type", "macro")
+	button:SetAttribute("macrotext", "/run print(1)")
+	button:Hide()
+	f.button = button
+
 	f:SetScript("OnEnter", function(self)
 		self:SetScript("OnUpdate", nil)
 		self:SetScale(1)
@@ -246,6 +254,7 @@ function NF:Initialize()
 	self:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES")
 	self:RegisterEvent("CALENDAR_UPDATE_GUILD_EVENTS")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
+	self:RegisterEvent("VIGNETTE_ADDED")
 end
 
 local hasMail = false
@@ -371,6 +380,30 @@ function NF:PLAYER_ENTERING_WORLD()
 		end
 	end
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+end
+
+local kukuru = "Kukuru's Treasure Cache"
+
+if GetLocale() == "ruRU" then
+	kukuru = "Клад Кукуру"
+elseif GetLocale() == "zhTW" then
+end
+
+function NF:VIGNETTE_ADDED(event, vignetteInstanceID)
+	local name
+	if vignetteInstanceID then
+		name = select(3, C_Vignettes.GetVignetteInfoFromInstanceID(vignetteInstanceID))
+
+		if name and name == kukuru then
+			return
+		end
+	end
+	if not InCombatLockdown() then
+		f.button:Show()
+		f.button:SetAttribute("macrotext", "/targetexact "..(name or ""))
+	end
+	PlaySoundFile("Sound\\Spells\\PVPFlagTaken.wav")
+	self:Show("发现稀有", name or "", selectTarget)
 end
 
 R:RegisterModule(NF:GetName())

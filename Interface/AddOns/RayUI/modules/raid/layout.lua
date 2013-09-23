@@ -480,7 +480,7 @@ local function style(self)
 
     -- Name
     local name = self:CreateFontString(nil, "ARTKWORK")
-    name:SetPoint("CENTER", self.Health)
+    name:SetPoint("CENTER", self.Health, 0, 2)
     name:SetJustifyH("CENTER")
     name:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
     name:SetWidth(RA.db.width)
@@ -591,12 +591,12 @@ local function style(self)
     -- Auras
 	self.RaidDebuffs = CreateFrame("Frame", nil, self)
 	self.RaidDebuffs:SetFrameLevel(10)
-	self.RaidDebuffs:SetPoint("CENTER", self.Health)
+	self.RaidDebuffs:SetPoint("BOTTOM", self)
 	self.RaidDebuffs:CreateShadow("Background")
-	self.RaidDebuffs:Size(RA.db.aurasize, RA.db.aurasize)
+	self.RaidDebuffs:Size(RA.db.aurasize, RA.db.aurasize-4)
 	
 	self.RaidDebuffs.icon = self.RaidDebuffs:CreateTexture(nil, "OVERLAY")
-	self.RaidDebuffs.icon:SetTexCoord(.08, .92, .08, .92)
+	self.RaidDebuffs.icon:SetTexCoord(.08, .92, .28, .72)
 	self.RaidDebuffs.icon:SetInside(nil, 1, 1)
 	
 	self.RaidDebuffs.count = self.RaidDebuffs:CreateFontString(nil, "OVERLAY")

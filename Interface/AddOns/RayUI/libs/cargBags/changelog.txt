@@ -1,0 +1,237 @@
+cargBags Changelog
+==================
+
+Releases are normally not backwards-compatible, although changes are kept to a
+minimum!
+In most cases the version tagging follows the scheme Rewrite.Feature.Bugfix
+
+2.1.2
+* bank now updates correctly again (sorry for that!)
+* mostly bagBar changes and equipSets bugfixes
+
+- .HighlightFunction changed to .highlightFunction (small 'H', consistency FTW)
+- bagBar now supports highlightFunctions
+- bagBar can be global for all containers (.isGlobal = true)
+- new function: Implementation:GetBagButton()
+- fixed bagButton onClick not toggling its bag
+- fixed typo in equipSets-itemkey
+- equipSets now update all open bags when changed
+- introducing cargBags:FireEvent(force, event, ...)
+
+2.1.1
+* bugfix update, you need this if you have 2.1!
+* fixed searchbar, extended filters and bags-sieve
+
+- item.bindOn now supports soulbound items ("soul")
+- new itemKey: item.bagType
+- removed item.clink
+- .toc bumped to Cataclysm
+
+2.1
+* The wiki was updated! http://github.com/xconstruct/cargBags/wiki
+* Sieves! Replace the filters with another system
+* Scaffolds! Provide your own templates for item buttons
+* Extended filters: pass arguments to them!
+* Localization tables for auction house item classes
+
+- File structure overhaul
+- new Sieve: by bagID - lightweight enthusiasts, get rid of this filter
+clutter :P
+- Moved the ItemButton-UpdateX functions to their own scaffold, "Default"
+- Callbacks are now correctly named events (RegisterCallback -> RegisterEvent,
+HasCallback -> IsEventRegistered)
+- the SearchBar now needs a .HighlightFunction to work
+
+2.0-beta
+* COMPLETE REWRITE
+* Don't ever think about fixing your old layout, build a new one =)
+* Beta-version, please note the "Planned features"- / ToDo-List
+* and please write a comment for bug-reports, feedback, thank-you's and flaming
+
+- object-oriented approach
+- bags initialize on first open instead of in loading screen
+- new plugin: TagDisplay
+- a lot more modular than before!
+
+1.3
+* licensed as GPL 3
+* fixed background texture of empty bag buttons
+* hovering over a bag button can now fade different bag objects
+* fixed tooltip-parsing not working correctly
+* and now the usual developer-stuff:
+
+- BagBar new property: BagBar.BackgroundTexture - texture path if no icon was found
+- new function: object:Fire(callback, ...) - fires a callback with the defined arguments
+- new function cargBags.C2I(id) - translates a ContainerID into an InventoryID
+- new function cargBags.I2C(id) - translates an InventoryID into a ContainerID
+- function changed: cargBags.ParseBags(bagString or bagID or table) - now returns a table every time
+- new property: cargBags.BagStrings[] - holds tables of the bagID's for the different bagStrings
+- :PreCheckFilters() now also fires on :GetItemInfo()
+
+1.2
+* first tooltip-scanning code, if you have wishes for more parsed infos than bindOn,
+* please let me know =)
+* updated for 3.2
+
+- fixed item.id not working properly
+- new item data: item.bindOn - returns "equip", "pickup", "account", "quest", "use"
+- 3.2 only: new item data: item.stats - returns a table of all stats of the item (see GetItemStats() for info)
+- 3.2 only: new item data: item.sellValue - returns the sellValue in copper of an item
+- new plugin: DataBroker - displays a databroker-object, the addon cargoShip is needed for that
+
+1.1
+* completely rewritten item-data fetching (should go faster now)
+* handlers before version 1.1 are not compatible
+
+- new item data: item.id - returns the item id extracted from the link
+- new item data: item.bagType - returns the type of the item's bag
+- you can now add your own data to the item-table by adding a function in cargBags.ItemKeys["keyName"]
+- new function: object:GetItemInfo(bagID, slotID) - returns the item table for the specified slot
+- debug-mode included, see top of core.lua for details
+
+1.0.8
+- new property: object.PositionEveryTime - set to true to call UpdateButtonPositions every update
+- new pipe function: handler.GetContainerItemLink(bagID, slotID)
+- new pipe function: handler.GetContainerItemInfo(bagID, slotID)
+
+1.0.7
+* fixed keyring not initializing
+
+- rewritten iterator-function, you can now supplement a table-sort-function in cargBags:IterateBags()
+- object's buttons are now available as table-keys in object.Buttons
+- fixed a typo when using the bagstring "backpack+bags"
+- plugins can now be spawned outside of objects by using cargBags.SpawnPlugin(...)
+
+1.0.6
+* fixed the button.bagID-errors
+
+1.0.5
+* fixed problem with hidden bags
+* fixed plugins not updating on login
+
+- lots of comments in the files added
+- fixed bagType not being stored in cargBags.Bags[bagID]
+
+1.0.4
+* timed events to reduce updating
+
+- pass arguments to Update-callbacks
+- new callback function: cargBags:PreCheckFilters(item, updateType)
+
+1.0.3
+- silent mode for setting active handler and style (set #arg2 to 'true'), returns true on success
+- update bags only after init
+- new callback function: object:PreUpdateBags() - fired before an object is updated
+- new callback function: object:PostUpdateBags() - fired after an object is updated
+
+1.0.2
+- space indicator can now fetch information of defined bags (like BagBar)
+- new function: cargBags:ParseBags(bags) - returns id's of bag-strings like "bags" or "bank"
+- some changes on showing/hiding buttons (hopefully fixes the appearing of unused buttons)
+- style-arguments changed: style(settings, self, name, ...)
+
+1.0.1
+- updated .toc for patch 3.1
+- removed property: cargBags.FreezeButtons - don't think it's really needed
+- fixed cooldowns not updating on item move
+- new callback function: object:PostCreateBag(bag, bagID) - fired after a bag was created in  the object
+
+1.0
+* COMPLETE REWRITE
+* your old layout won't work with this new version without major changes!
+* be aware that most previous callback functions for the layout are removed / modified due to the changes
+- cargBags now supports filters for item-based placing!
+- unused buttons are now recycled to save memory and cpu time
+- item quality glow removed, it is now handled by the layout
+- additional elements are now spawned with the new plugin system
+   - see object:RegisterPlugin(name, func)
+   - and object:SpawnPlugin(name, ...)
+- new callback function: object:UpdateButton(button, item)
+- new callback function: object:UpdateButtonLock(button, item)
+- new callback function: object:UpdateButtonCooldown(button, item)
+
+0.4.4
+- removed oGlow optional dependancy, glow by default enabled
+- set 'object.NoGlow = true' to disable glow (default = nil)
+- new callback function: object:UpdateButtonGlow(button, quality) - for writing custom glow functions
+
+0.4.3
+- button positioning is now handled by the layout, please update yours!
+- new callback function object.UpdateButtonPositions() - fired if the buttons' position need to be updated
+- item buttons should now be placed in "object" rather than "object.Container",
+  object.Container is still supported for backwards compatibility
+
+0.4.2
+- corrected bag button positioning
+- new callback function: object:PostCreateBagButton(button, i) - fired after a bag button was created
+- new callback function: object:PostUpdateBagButton(button, i) - fired after a bag button was updated
+- reimplemented callback: object:PostUpdateButton(button) - called after an item button was updated
+- new callback function: object:PostUpdateBankStatus() - fired after a bank status update
+- new callback function: object:PostHandlerInit(handler, ...) - fired after the handler was changed
+- removed old TBC code
+
+0.4.1
+- fixed bug which disabled bag switching
+- bag buttons are draggable once again
+- close bank frame after all bank objects are closed
+
+0.4
+- Almost complete code rewrite
+  - elements are now really independent from each other
+  - let the layout handle more things
+- WotLK ready (probably)
+- Handlers implemented (experimental)
+  - new sub-routine: object.Handler("function" [, arguments]) - this will fetch all inventory information based on the selected handler
+  - new handler: cargBags.Handler.Standard - Fetches data from player's bags
+  - changed function: object:Spawn(name, bags [, handler]) - arg #3 sets the handler for the object
+- updating is less CPU intensive and there is a different way to handle it
+  - included cargBags.bagUpdaters: an array ( [attrName] = func ) for updating the subframes of the object on BAG_UPDATE
+- more callbacks
+  - new callback function: object:PostCreateButton(button, bag) - called after an item button was created
+  - new callback function: object:PostUpdateButton(button, bag) - called after an item button was updated
+  - new callback function: object:UpdateDimensions() - called after the height of object.Container was changed
+
+0.3.4
+- made function getBagPosition() member of cargBags
+- fixed object:BAG_UPDATE creating slots if unnecessary
+- added slot border coloring by bag type (ammo bag / professions bag)
+- new property function: self:OverrideColorSlotBorder(button, bagType)
+
+0.3.3
+- new property: object.space.countAll = false (true counts also not used slots of the defined bags)
+- changed function: object:UpdateSpace(free, total) - returns number of free instead of used slots
+
+0.3.2b
+- bug fixed that appeared when changing bags
+- not purchased bank slots are now colored red and display their slot icon properly
+- when hovering a bagslot, the inventory slots of other bags are faded out
+  - new property: object.FadeAlpha = 0.2 (the alpha of the faded slots)
+  - new property: object.NoFading = nil (true = disables fading)
+- removed the two placeholder lua files "search" and "sell" from the .toc and the elements-directory
+- Closes bank frame when cargBags-bank frame is hidden
+- add "Purchase Slots"-button in bank, display cost
+- initial version (bug-fixing beta :P )
+
+0.3.1b
+- object:BAG_UPDATE moved from elements/bags.lua to core.lua
+- new function: object:updateFrameSize() (updates the object-size based on
+  size of object.Container and object.Width / object.Height)
+- reaching semi-open beta status (main features are added)
+
+0.3a
+- elements/bagbuttons.lua added
+- you can now create the buttons for the bag slots by adding a self.BagButtons-frame
+
+0.2.1a
+- elements/space.lua removed, calculations are done in bags.lua
+- object initializes correctly on PLAYER_ENTERING_WORLD
+- cooldowns added
+- new property: object.noGlow = nil (true disables oGlow support)
+
+0.2a
+- bank functionality added
+- allowing use of "X-Y" to add mutiple bags in the Spawn()-function
+- oGlow supported
+
+0.1a
+- initial alpha version
