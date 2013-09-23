@@ -32,6 +32,19 @@ local function addLine(self,id,isItem)
 	self:Show()
 end
 
+hooksecurefunc(GameTooltip, "SetUnitConsolidatedBuff", function(self, unit, index)
+	local name = GetRaidBuffTrayAuraInfo(index)
+	local _, _, _, _, _, _, _, caster, _, _, id = UnitAura(unit, name)
+	if id then
+		self:AddLine(" ")
+		if caster then
+			self:AddLine(UnitName(caster))
+		end
+		self:AddDoubleLine("|cFFCA3C3C技能ID:|r","|cffffffff"..id)
+		self:Show()
+	end	
+end)
+
 hooksecurefunc(GameTooltip, "SetUnitAura", function(self,...)
 	local id = select(11, UnitAura(...))
 	local caster = select (8, UnitAura(...))

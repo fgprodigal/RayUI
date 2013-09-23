@@ -269,35 +269,40 @@ local function LoadFunc()
 
 		local id = self:GetParent():GetID() - 2
 
-		IndexTable[7] = CriticalStrike
-		IndexTable[8] = Mastery
-
-		if (id == 3 or id == 4) and R.Role == "Caster" then
-			IndexTable[5] = SpellPower
-			IndexTable[6] = SpellHaste
-
-			GameTooltip:AddLine(_G["RAID_BUFF_"..id+2])
-		elseif id >= 5 then
-			GameTooltip:AddLine(_G["RAID_BUFF_"..id+2])
+		if IsModifierKeyDown() and self:GetParent().hasBuff then
+			if (id == 3 or id == 4) and R.Role == "Caster" then id = id + 2 end
+			GameTooltip:SetUnitConsolidatedBuff("player", id)
 		else
-			if R.Role ~= "Caster" then
-				IndexTable[5] = AttackPower
-				IndexTable[6] = AttackSpeed
+			IndexTable[7] = CriticalStrike
+			IndexTable[8] = Mastery
+
+			if (id == 3 or id == 4) and R.Role == "Caster" then
+				IndexTable[5] = SpellPower
+				IndexTable[6] = SpellHaste
+
+				GameTooltip:AddLine(_G["RAID_BUFF_"..id+2])
+			elseif id >= 5 then
+				GameTooltip:AddLine(_G["RAID_BUFF_"..id+2])
+			else
+				if R.Role ~= "Caster" then
+					IndexTable[5] = AttackPower
+					IndexTable[6] = AttackSpeed
+				end
+
+				GameTooltip:AddLine(_G["RAID_BUFF_"..id])
 			end
 
-			GameTooltip:AddLine(_G["RAID_BUFF_"..id])
-		end
+			GameTooltip:AddLine(" ")
+			for spellID, buffProvider in pairs(IndexTable[id+2]) do
+				if spellID ~= "DEFAULT" then
+					local spellName = GetSpellInfo(spellID)
+					local color = R.colors.class[buffProvider]
 
-		GameTooltip:AddLine(" ")
-		for spellID, buffProvider in pairs(IndexTable[id+2]) do
-			if spellID ~= "DEFAULT" then
-				local spellName = GetSpellInfo(spellID)
-				local color = R.colors.class[buffProvider]
-
-				if self:GetParent().hasBuff == spellName then
-					GameTooltip:AddLine(spellName.." - "..ACTIVE_PETS, color.r, color.g, color.b)
-				else
-					GameTooltip:AddLine(spellName, color.r, color.g, color.b)
+					if self:GetParent().hasBuff == spellName then
+						GameTooltip:AddLine(spellName.." - "..ACTIVE_PETS, color.r, color.g, color.b)
+					else
+						GameTooltip:AddLine(spellName, color.r, color.g, color.b)
+					end
 				end
 			end
 		end
