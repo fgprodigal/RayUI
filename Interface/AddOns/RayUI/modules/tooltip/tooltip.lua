@@ -22,10 +22,10 @@ local gcol = {.35, 1, .6}										-- Guild Color
 local pgcol = {1, .12, .8} 									-- Player's Guild Color
 
 local types = {
-    rare = " R ",
-    elite = " + ",
-    worldboss = " B ",
-    rareelite = " R+ ",
+	rare = " R ",
+	elite = " + ",
+	worldboss = " B ",
+	rareelite = " R+ ",
 }
 
 local symbiosis = {
@@ -80,11 +80,11 @@ local function GatherTalents(isInspect)
 	if (spec) and (spec > 0) then
 		if isInspect then
 			local _, specName, _, icon = GetSpecializationInfoByID(spec)
-            icon = icon and "|T"..icon..":12:12:0:0:64:64:5:59:5:59|t " or ""
+			icon = icon and "|T"..icon..":12:12:0:0:64:64:5:59:5:59|t " or ""
 			talentcurrent.format = specName and icon..specName or "n/a"
 		else
 			local _, specName, _, icon = GetSpecializationInfo(spec)
-            icon = icon and "|T"..icon..":12:12:0:0:64:64:5:59:5:59|t " or ""
+			icon = icon and "|T"..icon..":12:12:0:0:64:64:5:59:5:59|t " or ""
 			talentcurrent.format = specName and icon..specName or "n/a"
 		end
 	else
@@ -122,12 +122,12 @@ end
 
 function TT:TalentSetUnit()
 	TalentFrame:Hide()
-    local GMF = GetMouseFocus()
-    local unit = (select(2, GameTooltip:GetUnit())) or (GMF and GMF:GetAttribute("unit"))
+	local GMF = GetMouseFocus()
+	local unit = (select(2, GameTooltip:GetUnit())) or (GMF and GMF:GetAttribute("unit"))
 
-    if (not unit) and (UnitExists("mouseover")) then
-        unit = "mouseover"
-    end
+	if (not unit) and (UnitExists("mouseover")) then
+		unit = "mouseover"
+	end
 	if (not unit) or (not UnitIsPlayer(unit)) then
 		return
 	end
@@ -209,8 +209,8 @@ function TT:GameTooltip_SetDefaultAnchor(tooltip, parent)
 		elseif RayUI_ContainerFrame and RayUI_ContainerFrame:IsVisible() and (GetScreenWidth() - RayUI_ContainerFrame:GetRight()) < 250 then
 			-- tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, RayUI_ContainerFrame:GetBottom() + RayUI_ContainerFrame:GetHeight() + 30)
 			local parent = RayUI_ContainerFrameItemSets:IsVisible() and RayUI_ContainerFrameItemSets
-						or RayUI_ContainerFrameConsumables:IsVisible() and RayUI_ContainerFrameConsumables
-						or RayUI_ContainerFrameMain
+			or RayUI_ContainerFrameConsumables:IsVisible() and RayUI_ContainerFrameConsumables
+			or RayUI_ContainerFrameMain
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, parent:GetBottom() + parent:GetHeight() + 30)
 		elseif RayUFRaid15_1UnitButton1 and RayUFRaid15_1UnitButton1:IsVisible() and (GetScreenWidth() - RayUFRaid15_3:GetRight()) < 250 then
 			tooltip:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, RayUFRaid15_3:GetBottom() + RayUFRaid15_3:GetHeight() + 30)
@@ -332,20 +332,20 @@ function TT:SetiLV()
 end
 
 function TT:GetQuality(ItemScore)
-    if ItemScore < 500 then
-        return 1, 1, 0.1
-    else
-        return R:ColorGradient((ItemScore - 500)/100, 1, 1, 0.1, 1, 0.1, 0.1)
-    end
+	if ItemScore < 500 then
+		return 1, 1, 0.1
+	else
+		return R:ColorGradient((ItemScore - 500)/100, 1, 1, 0.1, 1, 0.1, 0.1)
+	end
 end
 
 function TT:iLVSetUnit()
-    local GMF = GetMouseFocus()
-    local unit = (select(2, GameTooltip:GetUnit())) or (GMF and GMF:GetAttribute("unit"))
+	local GMF = GetMouseFocus()
+	local unit = (select(2, GameTooltip:GetUnit())) or (GMF and GMF:GetAttribute("unit"))
 
-    if (not unit) and (UnitExists("mouseover")) then
-        unit = "mouseover"
-    end
+	if (not unit) and (UnitExists("mouseover")) then
+		unit = "mouseover"
+	end
 	if not (unit) or not (UnitIsPlayer(unit)) or not (CanInspect(unit)) then
 		return
 	end
@@ -382,11 +382,11 @@ function TT:INSPECT_READY(event, guid)
 end
 
 function TT:MODIFIER_STATE_CHANGED()
-    if arg1 == "LCTRL" or arg1 == "RCTRL" then
-        if self.line and UnitName("mouseover") == self.unit then
-            self:UPDATE_MOUSEOVER_UNIT(true)
-        end
-    end
+	if arg1 == "LCTRL" or arg1 == "RCTRL" then
+		if self.line and UnitName("mouseover") == self.unit then
+			self:UPDATE_MOUSEOVER_UNIT(true)
+		end
+	end
 end
 
 function TT:PLAYER_ENTERING_WORLD(event)
@@ -419,24 +419,25 @@ function TT:PLAYER_ENTERING_WORLD(event)
 end
 
 function TT:GetItemScore(iLink)
-    local _, _, itemRarity, itemLevel, _, _, _, _, itemEquip = GetItemInfo(iLink)
-    if (IsEquippableItem(iLink)) then
-        if not   (itemLevel > 1) and (itemRarity > 1) then
-            return 0
-        end
-    end
-    return R:GetItemUpgradeLevel(iLink)
+	local _, _, itemRarity, itemLevel, _, _, _, _, itemEquip = GetItemInfo(iLink)
+	if (IsEquippableItem(iLink)) then
+		if not   (itemLevel > 1) and (itemRarity > 1) then
+			return 0
+		end
+	end
+	return R:GetItemUpgradeLevel(iLink)
 end
 
 function TT:SetStyle(tooltip)
-    if self.db.hideincombat and InCombatLockdown() then
-        return tooltip:Hide()
-    end
+	if self.db.hideincombat and InCombatLockdown() then
+		return tooltip:Hide()
+	end
 	if not tooltip.styled then
-        tooltip:SetBackdrop(nil)
+		tooltip:SetBackdrop(nil)
 		R:GetModule("Skins"):CreateStripesThin(tooltip)
-        tooltip:CreateShadow("Background")
-        tooltip.border:SetInside(tooltip, 0, 0)
+		tooltip:CreateShadow("Background")
+		tooltip.stripesthin:SetInside(tooltip)
+		tooltip.border:SetInside(tooltip)
 		tooltip.styled=true
 
 		local getBackdrop = function()
@@ -483,57 +484,57 @@ function TT:SetStyle(tooltip)
 end
 
 function TT:OnTooltipSetUnit(tooltip)
-    local GMF = GetMouseFocus()
-    local unit = (select(2, tooltip:GetUnit())) or (GMF and GMF:GetAttribute("unit"))
+	local GMF = GetMouseFocus()
+	local unit = (select(2, tooltip:GetUnit())) or (GMF and GMF:GetAttribute("unit"))
 
-    if (not unit) and (UnitExists("mouseover")) then
-        unit = "mouseover"
-    end
+	if (not unit) and (UnitExists("mouseover")) then
+		unit = "mouseover"
+	end
 
-    if not unit then tooltip:Hide() return end
+	if not unit then tooltip:Hide() return end
 
-    if self.db.hideincombat and InCombatLockdown() then
-        return tooltip:Hide()
-    end
-    local unitClassification = types[UnitClassification(unit)] or " "
-    local creatureType = UnitCreatureType(unit) or ""
-    local unitName = UnitName(unit)
-    local unitLevel = UnitLevel(unit)
-    local diffColor = unitLevel > 0 and GetQuestDifficultyColor(UnitLevel(unit)) or QuestDifficultyColors["impossible"]
-    if unitLevel < 0 then unitLevel = "??" end
-    if UnitExists(unit.."target") then
-        local r, g, b = GameTooltip_UnitColor(unit.."target")
-        if UnitName(unit.."target") == UnitName("player") then
-            text = R:RGBToHex(1, 0, 0)..">>"..YOU.."<<|r"
-        else
-            text = R:RGBToHex(r, g, b)..UnitName(unit.."target").."|r"
-        end
-        tooltip:AddDoubleLine(TARGET, text)
-    end
-    if UnitIsPlayer(unit) then
-        local unitRace = UnitRace(unit)
-        local unitClass, unitClassEn = UnitClass(unit)
-        local guild, rank = GetGuildInfo(unit)
-        local playerGuild = GetGuildInfo("player")
+	if self.db.hideincombat and InCombatLockdown() then
+		return tooltip:Hide()
+	end
+	local unitClassification = types[UnitClassification(unit)] or " "
+	local creatureType = UnitCreatureType(unit) or ""
+	local unitName = UnitName(unit)
+	local unitLevel = UnitLevel(unit)
+	local diffColor = unitLevel > 0 and GetQuestDifficultyColor(UnitLevel(unit)) or QuestDifficultyColors["impossible"]
+	if unitLevel < 0 then unitLevel = "??" end
+	if UnitExists(unit.."target") then
+		local r, g, b = GameTooltip_UnitColor(unit.."target")
+		if UnitName(unit.."target") == UnitName("player") then
+			text = R:RGBToHex(1, 0, 0)..">>"..YOU.."<<|r"
+		else
+			text = R:RGBToHex(r, g, b)..UnitName(unit.."target").."|r"
+		end
+		tooltip:AddDoubleLine(TARGET, text)
+	end
+	if UnitIsPlayer(unit) then
+		local unitRace = UnitRace(unit)
+		local unitClass, unitClassEn = UnitClass(unit)
+		local guild, rank = GetGuildInfo(unit)
+		local playerGuild = GetGuildInfo("player")
 		local unitSpec = GetSpecialization()
-        GameTooltipStatusBar:SetStatusBarColor(unpack({GameTooltip_UnitColor(unit)}))
-        if guild then
-            GameTooltipTextLeft2:SetFormattedText("<%s>"..R:RGBToHex(1, 1, 1).." %s|r", guild, rank)
-            if IsInGuild() and guild == playerGuild then
-                GameTooltipTextLeft2:SetTextColor(pgcol[1], pgcol[2], pgcol[3])
-            else
-                GameTooltipTextLeft2:SetTextColor(gcol[1], gcol[2], gcol[3])
-            end
-        end
-        for i=2, tooltip:NumLines() do
-            if _G["GameTooltipTextLeft" .. i]:GetText():find(("%%(%s%%)"):format(PLAYER)) then
-                _G["GameTooltipTextLeft" .. i]:SetText(string.format(R:RGBToHex(diffColor.r, diffColor.g, diffColor.b).."%s|r ", unitLevel) .. unitRace .. " ".. unitClass)
-                break
-            end
-        end
-        if UnitFactionGroup(unit) and UnitFactionGroup(unit) ~= "Neutral" then
-            GameTooltipTextLeft1:SetText("|TInterface\\Addons\\RayUI\\media\\UI-PVP-"..select(1, UnitFactionGroup(unit))..".blp:16:16:0:0:64:64:5:40:0:35|t "..GameTooltipTextLeft1:GetText())
-        end
+		GameTooltipStatusBar:SetStatusBarColor(unpack({GameTooltip_UnitColor(unit)}))
+		if guild then
+			GameTooltipTextLeft2:SetFormattedText("<%s>"..R:RGBToHex(1, 1, 1).." %s|r", guild, rank)
+			if IsInGuild() and guild == playerGuild then
+				GameTooltipTextLeft2:SetTextColor(pgcol[1], pgcol[2], pgcol[3])
+			else
+				GameTooltipTextLeft2:SetTextColor(gcol[1], gcol[2], gcol[3])
+			end
+		end
+		for i=2, tooltip:NumLines() do
+			if _G["GameTooltipTextLeft" .. i]:GetText():find(("%%(%s%%)"):format(PLAYER)) then
+				_G["GameTooltipTextLeft" .. i]:SetText(string.format(R:RGBToHex(diffColor.r, diffColor.g, diffColor.b).."%s|r ", unitLevel) .. unitRace .. " ".. unitClass)
+				break
+			end
+		end
+		if UnitFactionGroup(unit) and UnitFactionGroup(unit) ~= "Neutral" then
+			GameTooltipTextLeft1:SetText("|TInterface\\Addons\\RayUI\\media\\UI-PVP-"..select(1, UnitFactionGroup(unit))..".blp:16:16:0:0:64:64:5:40:0:35|t "..GameTooltipTextLeft1:GetText())
+		end
 		if UnitIsAFK(unit) then
 			tooltip:AppendText((" %s"):format(("|cffFFFFFF<|r|cffFF3333%s|r|cffFFFFFF>|r"):format(AFK)))
 		elseif UnitIsDND(unit) then 
@@ -558,38 +559,38 @@ function TT:OnTooltipSetUnit(tooltip)
 				tooltip:AddDoubleLine(select(1, GetSpellInfo(110309))..": ", icon.."|cffffffff"..name)
 			end
 		end
-    elseif ( UnitIsWildBattlePet(unit) or UnitIsBattlePetCompanion(unit) ) then
-        local petLevel = UnitBattlePetLevel(unit)
-        local petType = _G["BATTLE_PET_DAMAGE_NAME_"..UnitBattlePetType(unit)]
-        for i=2, tooltip:NumLines() do
-            local text = _G["GameTooltipTextLeft" .. i]:GetText()
-            if text:find(LEVEL) then
-                _G["GameTooltipTextLeft" .. i]:SetText(petLevel .. unitClassification .. petType)
-                break
-            end
-        end
-    else
-        for i=2, tooltip:NumLines() do
-            local text = _G["GameTooltipTextLeft" .. i]:GetText()
-            if text:find(LEVEL) or text:find(creatureType) then
-                _G["GameTooltipTextLeft" .. i]:SetText(string.format(R:RGBToHex(diffColor.r, diffColor.g, diffColor.b).."%s|r", unitLevel) .. unitClassification .. creatureType)
-                break
-            end
-        end
-    end
-    for i = 1, tooltip:NumLines() do
-        local line = _G["GameTooltipTextLeft"..i]
-        while line and line:GetText() and (line:GetText() == PVP_ENABLED or line:GetText() == FACTION_HORDE or line:GetText() == FACTION_ALLIANCE) do
-            line:SetText()
-            break
-        end
-    end
+	elseif ( UnitIsWildBattlePet(unit) or UnitIsBattlePetCompanion(unit) ) then
+		local petLevel = UnitBattlePetLevel(unit)
+		local petType = _G["BATTLE_PET_DAMAGE_NAME_"..UnitBattlePetType(unit)]
+		for i=2, tooltip:NumLines() do
+			local text = _G["GameTooltipTextLeft" .. i]:GetText()
+			if text:find(LEVEL) then
+				_G["GameTooltipTextLeft" .. i]:SetText(petLevel .. unitClassification .. petType)
+				break
+			end
+		end
+	else
+		for i=2, tooltip:NumLines() do
+			local text = _G["GameTooltipTextLeft" .. i]:GetText()
+			if text:find(LEVEL) or text:find(creatureType) then
+				_G["GameTooltipTextLeft" .. i]:SetText(string.format(R:RGBToHex(diffColor.r, diffColor.g, diffColor.b).."%s|r", unitLevel) .. unitClassification .. creatureType)
+				break
+			end
+		end
+	end
+	for i = 1, tooltip:NumLines() do
+		local line = _G["GameTooltipTextLeft"..i]
+		while line and line:GetText() and (line:GetText() == PVP_ENABLED or line:GetText() == FACTION_HORDE or line:GetText() == FACTION_ALLIANCE) do
+			line:SetText()
+			break
+		end
+	end
 end
 
 function TT:Initialize()
 	self:RawHook("GameTooltip_UnitColor", true)
 
-    self:HookScript(GameTooltip, "OnTooltipSetUnit")
+	self:HookScript(GameTooltip, "OnTooltipSetUnit")
 
 	--GameTooltipStatusBar.bg = CreateFrame("Frame", nil, GameTooltipStatusBar)
 	--GameTooltipStatusBar.bg:Point("TOPLEFT", GameTooltipStatusBar, "TOPLEFT", -4, 4)
@@ -601,66 +602,66 @@ function TT:Initialize()
 		--bgFile = R["media"].blank,
 		--edgeSize = R:Scale(4),
 		--insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
-	--})
-	--GameTooltipStatusBar.bg:SetBackdropColor(0, 0, 0, 0.5)
-	--GameTooltipStatusBar.bg:SetBackdropBorderColor(0, 0, 0, 0.8)
-    GameTooltipStatusBar:CreateShadow("Background")
-	GameTooltipStatusBar:SetHeight(8)
-	GameTooltipStatusBar:SetStatusBarTexture(R["media"].normal)
-	GameTooltipStatusBar:ClearAllPoints()
-	GameTooltipStatusBar:SetPoint("TOPLEFT", GameTooltip, "BOTTOMLEFT", 3, -2)
-	GameTooltipStatusBar:SetPoint("TOPRIGHT", GameTooltip, "BOTTOMRIGHT", -3, -2)
-	GameTooltipStatusBar:HookScript("OnValueChanged", function(self, value)
-		if not value then
-			return
-		end
-		local min, max = self:GetMinMaxValues()
-		if value < min or value > max then
-			return
-		end
-		local unit  = select(2, GameTooltip:GetUnit())
-		if unit then
-			if UnitIsPlayer(unit) then
-				GameTooltipStatusBar:SetStatusBarColor(unpack({GameTooltip_UnitColor(unit)}))
+		--})
+		--GameTooltipStatusBar.bg:SetBackdropColor(0, 0, 0, 0.5)
+		--GameTooltipStatusBar.bg:SetBackdropBorderColor(0, 0, 0, 0.8)
+		GameTooltipStatusBar:CreateShadow("Background")
+		GameTooltipStatusBar:SetHeight(8)
+		GameTooltipStatusBar:SetStatusBarTexture(R["media"].normal)
+		GameTooltipStatusBar:ClearAllPoints()
+		GameTooltipStatusBar:SetPoint("TOPLEFT", GameTooltip, "BOTTOMLEFT", 3, -2)
+		GameTooltipStatusBar:SetPoint("TOPRIGHT", GameTooltip, "BOTTOMRIGHT", -3, -2)
+		GameTooltipStatusBar:HookScript("OnValueChanged", function(self, value)
+			if not value then
+				return
 			end
-			min, max = UnitHealth(unit), UnitHealthMax(unit)
-			if not self.text then
-				self.text = self:CreateFontString(nil, "OVERLAY")
-				self.text:SetPoint("CENTER", GameTooltipStatusBar, 0, -4)
-				self.text:SetFont(R["media"].font, 12, "THINOUTLINE")
-				-- self.text:SetShadowOffset(R.mult, -R.mult)
+			local min, max = self:GetMinMaxValues()
+			if value < min or value > max then
+				return
 			end
-			self.text:Show()
-			local hp = R:ShortValue(min).." / "..R:ShortValue(max)
-			self.text:SetText(hp)
-		else
-			if self.text then
-				self.text:Hide()
+			local unit  = select(2, GameTooltip:GetUnit())
+			if unit then
+				if UnitIsPlayer(unit) then
+					GameTooltipStatusBar:SetStatusBarColor(unpack({GameTooltip_UnitColor(unit)}))
+				end
+				min, max = UnitHealth(unit), UnitHealthMax(unit)
+				if not self.text then
+					self.text = self:CreateFontString(nil, "OVERLAY")
+					self.text:SetPoint("CENTER", GameTooltipStatusBar, 0, -4)
+					self.text:SetFont(R["media"].font, 12, "THINOUTLINE")
+					-- self.text:SetShadowOffset(R.mult, -R.mult)
+				end
+				self.text:Show()
+				local hp = R:ShortValue(min).." / "..R:ShortValue(max)
+				self.text:SetText(hp)
+			else
+				if self.text then
+					self.text:Hide()
+				end
 			end
-		end
-	end)
+		end)
 
-	self:SecureHook("GameTooltip_SetDefaultAnchor")
-	self:HookScript(GameTooltip, "OnUpdate", "GameTooltip_OnUpdate")
+		self:SecureHook("GameTooltip_SetDefaultAnchor")
+		self:HookScript(GameTooltip, "OnUpdate", "GameTooltip_OnUpdate")
 
-	GameTooltip:HookScript("OnUpdate", function(self, elapsed)
-		if self:GetAnchorType() == "ANCHOR_CURSOR" then
-			local x, y = GetCursorPosition()
-			local effScale = self:GetEffectiveScale()
-			local width = self:GetWidth() or 0
-			self:ClearAllPoints()
-			self:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", x / effScale - width / 2, y / effScale + 15)
-		end
-	end)
+		GameTooltip:HookScript("OnUpdate", function(self, elapsed)
+			if self:GetAnchorType() == "ANCHOR_CURSOR" then
+				local x, y = GetCursorPosition()
+				local effScale = self:GetEffectiveScale()
+				local width = self:GetWidth() or 0
+				self:ClearAllPoints()
+				self:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", x / effScale - width / 2, y / effScale + 15)
+			end
+		end)
 
-	self:RegisterEvent("MODIFIER_STATE_CHANGED")
-	self:RegisterEvent("PLAYER_ENTERING_WORLD")
+		self:RegisterEvent("MODIFIER_STATE_CHANGED")
+		self:RegisterEvent("PLAYER_ENTERING_WORLD")
 
-	SetCVar("alwaysCompareItems", 1)
-end
+		SetCVar("alwaysCompareItems", 1)
+	end
 
-function TT:Info()
-	return L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r鼠标提示模块."]
-end
+	function TT:Info()
+		return L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r鼠标提示模块."]
+	end
 
-R:RegisterModule(TT:GetName())
+	R:RegisterModule(TT:GetName())

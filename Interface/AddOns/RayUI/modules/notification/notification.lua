@@ -368,7 +368,7 @@ function NF:CALENDAR_UPDATE_GUILD_EVENTS()
 end
 
 function NF:PLAYER_ENTERING_WORLD()
-	self:UPDATE_PENDING_MAIL()
+	-- self:UPDATE_PENDING_MAIL()
 	alertEvents()
 	alertGuildEvents()
 	local day = select(3, CalendarGetDate())

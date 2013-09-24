@@ -230,6 +230,7 @@ function AB:HideBlizz()
         EJMicroButton,
         MainMenuMicroButton,
         HelpMicroButton,
+        StoreMicroButton,
         MainMenuBarBackpackButton,
         CharacterBag0Slot,
         CharacterBag1Slot,

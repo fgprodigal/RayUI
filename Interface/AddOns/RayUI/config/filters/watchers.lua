@@ -1499,6 +1499,10 @@ R["Watcher"] = {
                 -- 暗月卡牌(觸發)
                 { spellID = 128985, unitId = "player", caster = "player", filter = "BUFF", fuzzy = true },
                 -- 坦
+                -- Rook's Unlucky Talisman (減傷, 使用)
+                { spellID = 146343, unitId = "player", caster = "player", filter = "BUFF" },
+                -- Resolve of Niuzao (躲閃, 使用)
+                { spellID = 146344, unitId = "player", caster = "player", filter = "BUFF" },
                 -- 影潘之襲的堅定咒符 (躲閃, 使用)
                 { spellID = 138728, unitId = "player", caster = "player", filter = "BUFF" },
                 -- 贊達拉之韌 (生命, 使用)
@@ -1512,6 +1516,16 @@ R["Watcher"] = {
                 -- 翠玉督軍刻像 (精通, 使用)
                 { spellID = 126597, unitId = "player", caster = "player", filter = "BUFF" },
                 -- 物理敏捷DPS
+                -- Assurance of Consequence (敏捷, 觸發)
+                { spellID = 146308, unitId = "player", caster = "player", filter = "BUFF" },
+                -- Haromm's Talisman (敏捷, 觸發)
+                { spellID = 148903, unitId = "player", caster = "player", filter = "BUFF" },
+                -- Sigil of Rampage (敏捷, 觸發)
+                { spellID = 148896, unitId = "player", caster = "player", filter = "BUFF" },
+                -- Ticking Ebon Detonator (敏捷, 觸發)
+                { spellID = 146310, unitId = "player", caster = "player", filter = "BUFF" },
+                -- Discipline of Xuen (暴擊, 觸發)
+                { spellID = 146312, unitId = "player", caster = "player", filter = "BUFF" },
                 -- 影潘之襲的兇惡咒符 (敏捷, 觸發)
                 { spellID = 138699, unitId = "player", caster = "player", filter = "BUFF" },
                 -- 邪惡魂能 (敏捷, 觸發)
@@ -1535,6 +1549,16 @@ R["Watcher"] = {
                 -- PvP飾品 (敏捷, 觸發)
                 { spellID = 126707, unitId = "player", caster = "player", filter = "BUFF" },
                 -- 物理力量DPS
+                -- Assurance of Consequence (力量, 觸發)
+                { spellID = 146245, unitId = "player", caster = "player", filter = "BUFF" },
+                -- Thok's Tail Tip (力量, 觸發)
+                { spellID = 146250, unitId = "player", caster = "player", filter = "BUFF" },
+                -- Skeer's Bloodsoaked Talisman (力量, 觸發)
+                { spellID = 146285, unitId = "player", caster = "player", filter = "BUFF" },
+                -- Fusion-Fire Core (力量, 觸發)
+                { spellID = 148899, unitId = "player", caster = "player", filter = "BUFF" },
+                -- Alacrity of Xuen (急速, 觸發)
+                { spellID = 146296, unitId = "player", caster = "player", filter = "BUFF" },
                 -- 影潘之襲的野蠻咒符 (力量, 觸發)
                 { spellID = 138702, unitId = "player", caster = "player", filter = "BUFF" },
                 -- 稷坤的傳說之羽 (力量, 觸發)
@@ -1569,6 +1593,16 @@ R["Watcher"] = {
                 -- PvP飾品 (法術強度, 觸發)
                 { spellID = 126705, unitId = "player", caster = "player", filter = "BUFF" },
                 -- 法系DPS
+                -- Purified Bindings of Immerseus (智力, 觸發)
+                { spellID = 146046, unitId = "player", caster = "player", filter = "BUFF" },
+                -- Kardris' Toxic Totem (智力, 觸發)
+                { spellID = 148906, unitId = "player", caster = "player", filter = "BUFF" },
+                -- Frenzied Crystal of Rage (智力, 觸發)
+                { spellID = 148897, unitId = "player", caster = "player", filter = "BUFF" },
+                -- Black Blood of Y'Shaarj (智力, 觸發)
+                { spellID = 146184, unitId = "player", caster = "player", filter = "BUFF" },
+                -- Yu'lon's Bite (暴擊, 觸發)
+                { spellID = 146218, unitId = "player", caster = "player", filter = "BUFF" },
                 -- 影潘之襲的烈性咒符 (急速, 觸發)
                 { spellID = 138703, unitId = "player", caster = "player", filter = "BUFF" },
                 -- 洽耶的光輝精華 (智力, 觸發)
