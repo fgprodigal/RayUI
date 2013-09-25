@@ -156,13 +156,13 @@ local function SkinDBM()
 		local anchor = DBMBossHealthDropdown:GetParent()
 		if not anchor.styled then
 			local header = {anchor:GetRegions()}
-            if header[1]:IsObjectType("FontString") then
-                header[1]:SetFont(R["media"].font, 12, "OUTLINE")
-                header[1]:SetTextColor(1,1,1,1)
-                header[1]:SetShadowColor(0, 0, 0, 0)
-                anchor.styled = true
-            end
-            header=nil
+			if header[1]:IsObjectType("FontString") then
+				header[1]:SetFont(R["media"].font, 12, "OUTLINE")
+				header[1]:SetTextColor(1,1,1,1)
+				header[1]:SetShadowColor(0, 0, 0, 0)
+				anchor.styled = true
+			end
+			header=nil
 		end
 		anchor=nil
 	end
@@ -236,46 +236,71 @@ local function SkinDBM()
 	hooksecurefunc(DBM.BossHealth,"Show",SkinBossTitle)
 	hooksecurefunc(DBM.BossHealth,"AddBoss",SkinBoss)
 	hooksecurefunc(DBM.BossHealth,"UpdateSettings",SkinBoss)
-    DBM.RangeCheck:Show()
+	DBM.RangeCheck:Show()
 	DBM.RangeCheck:Hide()
 	DBMRangeCheck:HookScript("OnShow",function(self)
 		self:SetBackdrop(nil)
 		self:CreateShadow("Background")
 	end)
+
 	DBMRangeCheckRadar:HookScript("OnShow",function(self)
-        if not self.styled then
-            self:CreateShadow("Background")
-            self.text:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
-            self.text:SetShadowColor(0, 0, 0)
-            self.text:SetShadowOffset(R.mult, -R.mult)
-            self.styled = true
-        end
-        if S.db.dbmposition then
-            self:ClearAllPoints()
-            self:Point("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -70)
-        end
+		if not self.styled then
+			self:CreateShadow("Background")
+			self.text:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
+			self.text:SetShadowColor(0, 0, 0)
+			self.text:SetShadowOffset(R.mult, -R.mult)
+			self.styled = true
+		end
+		if S.db.dbmposition then
+			self:ClearAllPoints()
+			self:Point("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -70)
+		end
 	end)
-    if DBM.InfoFrame then
-        DBM.InfoFrame:Show(5, "test")
-        DBM.InfoFrame:Hide()
-        DBMInfoFrame:HookScript("OnShow",function(self)
-            self:SetBackdrop(nil)
-            self:CreateShadow("Background")
-        end)
-    end
+
+	hooksecurefunc(DBM, "ShowUpdateReminder", function()
+		for i = UIParent:GetNumChildren(), 1, -1 do
+			local frame = select(i, UIParent:GetChildren())
+
+			local editBox = frame:GetChildren()
+			if editBox and editBox:GetObjectType() == "EditBox" and editBox:GetText() == "http://www.deadlybossmods.com" and not frame.styled then
+				S:CreateBD(frame)
+
+				select(6, editBox:GetRegions()):Hide()
+				select(7, editBox:GetRegions()):Hide()
+				select(8, editBox:GetRegions()):Hide()
+
+				local bg = S:CreateBDFrame(editBox, .25)
+				bg:SetPoint("TOPLEFT", -2, -6)
+				bg:SetPoint("BOTTOMRIGHT", 2, 8)
+
+				S:Reskin(select(2, frame:GetChildren()))
+
+				frame.styled = true
+			end
+		end
+	end)
+
+	if DBM.InfoFrame then
+		DBM.InfoFrame:Show(5, "test")
+		DBM.InfoFrame:Hide()
+		DBMInfoFrame:HookScript("OnShow",function(self)
+			self:SetBackdrop(nil)
+			self:CreateShadow("Background")
+		end)
+	end
 
 	local RaidNotice_AddMessage_ = RaidNotice_AddMessage
 	RaidNotice_AddMessage = function(noticeFrame, textString, colorInfo)
 		if textString:find("|T") then
-            if textString:match(":(%d+):(%d+)") then
-                local size1, size2 = textString:match(":(%d+):(%d+)")
-                size1, size2 = size1 + 6, size2 + 6
-                textString = string.gsub(textString,":(%d+):(%d+)",":"..size1..":"..size2..":0:0:64:64:5:59:5:59")
-            elseif textString:match(":(%d+)|t") then
-                local size = textString:match(":(%d+)|t")
-                size = size + 6
-                textString = string.gsub(textString,":(%d+)|t",":"..size..":"..size..":0:0:64:64:5:59:5:59|t")
-            end
+			if textString:match(":(%d+):(%d+)") then
+				local size1, size2 = textString:match(":(%d+):(%d+)")
+				size1, size2 = size1 + 6, size2 + 6
+				textString = string.gsub(textString,":(%d+):(%d+)",":"..size1..":"..size2..":0:0:64:64:5:59:5:59")
+			elseif textString:match(":(%d+)|t") then
+				local size = textString:match(":(%d+)|t")
+				size = size + 6
+				textString = string.gsub(textString,":(%d+)|t",":"..size..":"..size..":0:0:64:64:5:59:5:59|t")
+			end
 		end
 		return RaidNotice_AddMessage_(noticeFrame, textString, colorInfo)
 	end
@@ -299,22 +324,70 @@ end
 S:RegisterSkin("DBM-Core", SkinDBM)
 
 local function SkinGUI()
-    local skinned = false
-	DBM_GUI_OptionsFrame:HookScript("OnShow", function()
-        if skinned then return end
-		DBM_GUI_OptionsFrame:StripTextures()
-		DBM_GUI_OptionsFrameBossMods:StripTextures()
-		DBM_GUI_OptionsFrameDBMOptions:StripTextures()
-		S:SetBD(DBM_GUI_OptionsFrame)
-		S:CreateBD(DBM_GUI_OptionsFrameBossMods)
-		S:CreateBD(DBM_GUI_OptionsFrameDBMOptions)
-		S:CreateBD(DBM_GUI_OptionsFramePanelContainer)
-        skinned = true
+	DBM_GUI_OptionsFrameHeader:SetTexture(nil)
+	DBM_GUI_OptionsFramePanelContainer:SetBackdrop(nil)
+	DBM_GUI_OptionsFrameBossModsList:SetBackdrop(nil)
+	DBM_GUI_OptionsFrameBossMods:DisableDrawLayer("BACKGROUND")
+	DBM_GUI_OptionsFrameDBMOptions:DisableDrawLayer("BACKGROUND")
+
+	if DBM_GUI_OptionsFramecheck then
+		S:Reskin(DBM_GUI_OptionsFramecheck)
+		S:Reskin(DBM_GUI_OptionsFramecheck2)
+		DBM_GUI_OptionsFrameSoundMM:Kill()
+		DBM_GUI_OptionsFrameWebsite:Kill()
+		DBM_GUI_OptionsFrameWebsiteButton:Kill()
+		DBM_GUI_OptionsFrameTranslation:Kill()
+	end
+
+	for i = 1, 2 do
+		_G["DBM_GUI_OptionsFrameTab"..i.."Left"]:SetAlpha(0)
+		_G["DBM_GUI_OptionsFrameTab"..i.."Middle"]:SetAlpha(0)
+		_G["DBM_GUI_OptionsFrameTab"..i.."Right"]:SetAlpha(0)
+		_G["DBM_GUI_OptionsFrameTab"..i.."LeftDisabled"]:SetAlpha(0)
+		_G["DBM_GUI_OptionsFrameTab"..i.."MiddleDisabled"]:SetAlpha(0)
+		_G["DBM_GUI_OptionsFrameTab"..i.."RightDisabled"]:SetAlpha(0)
+	end
+
+	local count = 1
+
+	local function styleDBM()
+		local option = _G["DBM_GUI_Option_"..count]
+		while option do
+			local objType = option:GetObjectType()
+			if objType == "CheckButton" then
+				S:ReskinCheck(option)
+			elseif objType == "Slider" then
+				S:ReskinSlider(option)
+			elseif objType == "EditBox" then
+				S:ReskinInput(option)
+			elseif option:GetName():find("DropDown") then
+				S:ReskinDropDown(option)
+			elseif objType == "Button" then
+				S:Reskin(option)
+			elseif objType == "Frame" then
+				option:SetBackdrop(nil)
+			end
+
+			count = count + 1
+			option = _G["DBM_GUI_Option_"..count]
+			if not option then
+				option = _G["DBM_GUI_DropDown"..count]
+			end
+		end
+	end
+
+	DBM:RegisterOnGuiLoadCallback(function()
+		styleDBM()
+		hooksecurefunc(DBM_GUI, "UpdateModList", styleDBM)
+		DBM_GUI_OptionsFrameBossMods:HookScript("OnShow", styleDBM)
 	end)
-	-- U.SkinTab(DBM_GUI_OptionsFrameTab1)
-	-- U.SkinTab(DBM_GUI_OptionsFrameTab2)
+
+	DBM_GUI_OptionsFrame:StripTextures()
+	S:SetBD(DBM_GUI_OptionsFrame)
 	S:Reskin(DBM_GUI_OptionsFrameOkay)
+	S:Reskin(DBM_GUI_OptionsFrameWebsiteButton)
 	S:ReskinScroll(DBM_GUI_OptionsFramePanelContainerFOVScrollBar)
+	S:ReskinScroll(DBM_GUI_OptionsFrameBossModsListScrollBar)
 end
 
 S:RegisterSkin("DBM-GUI", SkinGUI)
