@@ -270,7 +270,11 @@ local function LoadFunc()
 		local id = self:GetParent():GetID() - 2
 
 		if IsModifierKeyDown() and self:GetParent().hasBuff then
-			if (id == 3 or id == 4) and R.Role == "Caster" then id = id + 2 end
+			if (id == 5 or id == 6) and R.Role ~= "Caster" then
+				id = id + 2
+			elseif (id == 3 or id == 4) and R.Role == "Caster" then
+				id = id + 2
+			end
 			GameTooltip:SetUnitConsolidatedBuff("player", id)
 		else
 			IndexTable[7] = CriticalStrike
