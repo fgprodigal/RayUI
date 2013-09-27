@@ -73,7 +73,8 @@ end
 function IF:CheckAutoHide()
 	if not self.db.autoHide then return end
 	local x, y = GetCursorPosition()
-	if y > height and self:TimeLeft(self.Anim) <= 0 then
+	local timeleft = self:TimeLeft(self.Anim)
+	if y > height and timeleft and timeleft <= 0 then
 		self:ReadyToSlideDown()
 	end
 end
