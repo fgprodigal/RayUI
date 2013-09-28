@@ -11,6 +11,12 @@ function AB:CreateStanceBar()
 	bar:SetPoint("BOTTOMLEFT", "UIParent", "BOTTOMLEFT", 15, 202)
 	bar:SetScale(AB.db.barscale)
 
+	if self.db.stancebarfade then
+		bar:SetParent(RayUIActionBarHider)
+	else
+		bar:SetParent(UIParent)
+	end
+
 	R:CreateMover(bar, "StanceBarMover", L["职业条锚点"], true, nil, "ALL,ACTIONBARS")  
 
 	StanceBarFrame:SetParent(bar)

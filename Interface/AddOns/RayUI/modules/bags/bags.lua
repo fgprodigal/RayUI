@@ -111,18 +111,22 @@ function B:Initialize()
 
 		f.consumables = MyContainer:New("Consumables", {Columns = B.db.bagWidth, Bags = "backpack+bags"})
 		f.consumables:SetFilter(onlyBagConsumables, true)
+		f.consumables:SetParent(f.main)
 		f.consumables:SetPoint("BOTTOMLEFT", f.main,"TOPLEFT", 0, 3)
 
 		f.sets = MyContainer:New("ItemSets", {Columns = B.db.bagWidth, Bags = "backpack+bags"})
 		f.sets:SetFilter(onlyBagSets, true)
+		f.sets:SetParent(f.main)
 		f.sets:SetPoint("BOTTOMLEFT", f.consumables,"TOPLEFT", 0, 3)
 
 		f.bankconsumables = MyContainer:New("BankConsumables", {Columns = B.db.bankWidth, Bags = "backpack+bags"})
 		f.bankconsumables:SetFilter(onlyBankConsumables, true)
+		f.bankconsumables:SetParent(f.bank)
 		f.bankconsumables:SetPoint("BOTTOMLEFT", f.bank,"TOPLEFT", 0, 3)
 
 		f.banksets = MyContainer:New("BankItemSets", {Columns = B.db.bankWidth, Bags = "bankframe+bank"})
 		f.banksets:SetFilter(onlyBankSets, true)
+		f.banksets:SetParent(f.bank)
 		f.banksets:SetPoint("BOTTOMLEFT", f.bankconsumables,"TOPLEFT", 0, 3)
 	end
 

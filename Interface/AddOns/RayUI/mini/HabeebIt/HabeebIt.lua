@@ -239,8 +239,7 @@ function Container:Update()
 	end
 
 	local _, _, difficulty = GetInstanceInfo()
-	-- EJ_SetDifficulty(difficulty > 2 and (difficulty - 2) or 1)
-	EJ_SetDifficulty(difficulty)
+	EJ_SetDifficulty(difficulty > 0 and difficulty or 4)
 
 	local currentInstance = EJ_GetCurrentInstance()
 	EJ_SelectInstance(currentInstance > 0 and currentInstance or 322)

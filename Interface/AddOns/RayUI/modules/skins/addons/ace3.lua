@@ -12,7 +12,11 @@ local function SkinAce3()
 	AceGUI.RegisterAsWidget = function(self, widget)
 		local TYPE = widget.type
 		--print(TYPE)
-		if TYPE == "CheckBox" then
+		if TYPE == "MultiLineEditBox" then
+			local frame = widget.frame
+			S:Reskin(widget.button)
+			S:ReskinScroll(widget.scrollBar)
+		elseif TYPE == "CheckBox" then
 			widget.checkbg:Kill()
 			widget.highlight:Kill()
 			widget.frame:SetHighlightTexture(S["media"].backdrop)
@@ -176,10 +180,17 @@ local function SkinAce3()
 			hightext:SetPoint("TOPRIGHT", frame, "BOTTOMRIGHT", -2, -2)
 
 
-		--[[elseif TYPE == "ColorPicker" then
+			--[[elseif TYPE == "ColorPicker" then
 			local frame = widget.frame
 			local colorSwatch = widget.colorSwatch
-		]]
+			]]
+		elseif TYPE == "Heading" then
+			widget.left:Height(1)
+			widget.left:SetTexture(.4, .4, .4)
+			widget.left:SetGradientAlpha("HORIZONTAL", .8, .8, .8, 0, .8, .8, .8, 1)
+			widget.right:Height(1)
+			widget.right:SetTexture(.4, .4, .4)
+			widget.right:SetGradientAlpha("HORIZONTAL", .8, .8, .8, 1, .8, .8, .8, 0)
 		end
 		return oldRegisterAsWidget(self, widget)
 	end
@@ -194,7 +205,8 @@ local function SkinAce3()
 			S:ReskinScroll(frame)
 		elseif TYPE == "InlineGroup" or TYPE == "TreeGroup" or TYPE == "TabGroup" or TYPE == "SimpleGroup" or TYPE == "Frame" or TYPE == "DropdownGroup" then
 			local frame = widget.content:GetParent()
-			S:CreateBD(frame, .3)
+			frame:SetBackdrop(nil)
+			-- S:CreateBD(frame, .3)
 			if TYPE == "Frame" then
 				frame:StripTextures()
 				for i=1, frame:GetNumChildren() do
@@ -205,12 +217,12 @@ local function SkinAce3()
 						child:StripTextures()
 					end
 				end
-				S:CreateSD(frame)
-				S:CreateBD(frame)
+				S:SetBD(frame)
 			end
 
 			if widget.treeframe then
-				S:CreateBD(widget.treeframe, .3)
+				widget.treeframe:SetBackdrop(nil)
+				-- S:CreateBD(widget.treeframe, .3)
 				frame:Point("TOPLEFT", widget.treeframe, "TOPRIGHT", 1, 0)
 			end
 
@@ -221,6 +233,10 @@ local function SkinAce3()
 					tab:StripTextures()
 					return tab
 				end
+			end
+
+			if widget.scrollbar then
+				S:ReskinScroll(widget.scrollbar)
 			end
 		end
 		return oldRegisterAsContainer(self, widget)

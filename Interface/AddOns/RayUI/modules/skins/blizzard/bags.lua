@@ -6,11 +6,14 @@ local function LoadSkin()
 	S:ReskinCheck(TokenFramePopupInactiveCheckBox)
 	S:ReskinCheck(TokenFramePopupBackpackCheckBox)
 	S:ReskinClose(TokenFramePopupCloseButton)
+	S:ReskinScroll(TokenFrameContainerScrollBar)
 	TokenFramePopupCorner:Hide()
 	TokenFramePopup:SetPoint("TOPLEFT", TokenFrame, "TOPRIGHT", 1, -28)
-	TokenFrame:HookScript("OnShow", function()
-		for i=1, GetCurrencyListSize() do
-			local button = _G["TokenFrameContainerButton"..i]
+	local function updateButtons()
+		local buttons = TokenFrameContainer.buttons
+		for i = 1, #buttons do
+
+			local button = buttons[i]
 
 			if button and not button.reskinned then
 				button.highlight:SetPoint("TOPLEFT", 1, 0)
@@ -22,14 +25,20 @@ local function LoadSkin()
 				button.categoryLeft:SetAlpha(0)
 				button.categoryRight:SetAlpha(0)
 
-				if button.icon and button.icon:GetTexture() then
-					button.icon:SetTexCoord(.08, .92, .08, .92)
-					S:CreateBG(button.icon)
-				end
+				button.icon:SetTexCoord(.08, .92, .08, .92)
+				button.bg = S:CreateBG(button.icon)
 				button.reskinned = true
 			end
+
+			if button.isHeader then
+				button.bg:Hide()
+			else
+				button.bg:Show()
+			end
 		end
-	end)
+	end
+	TokenFrame:HookScript("OnShow", updateButtons)
+	hooksecurefunc(TokenFrameContainer, "update", updateButtons)
 end
 
 S:RegisterSkin("RayUI", LoadSkin)

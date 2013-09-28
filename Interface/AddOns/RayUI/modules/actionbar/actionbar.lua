@@ -29,13 +29,13 @@ function AB:GetOptions()
 			min = 0.5, max = 1.5, step = 0.01,
 			isPercent = true,
 		},
-		petbarscale = {
-			order = 6,
-			name = L["宠物动作条缩放"],
-			type = "range",
-			min = 0.5, max = 1.5, step = 0.01,
-			isPercent = true,
-		},
+		-- petbarscale = {
+		-- 	order = 6,
+		-- 	name = L["宠物动作条缩放"],
+		-- 	type = "range",
+		-- 	min = 0.5, max = 1.5, step = 0.01,
+		-- 	isPercent = true,
+		-- },
 		macroname = {
 			order = 9,
 			name = L["显示宏名称"],

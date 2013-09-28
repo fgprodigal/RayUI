@@ -387,6 +387,7 @@ local kukuru = "Kukuru's Treasure Cache"
 if GetLocale() == "ruRU" then
 	kukuru = "Клад Кукуру"
 elseif GetLocale() == "zhTW" then
+	kukuru = "庫庫魯的寶箱"
 end
 
 function NF:VIGNETTE_ADDED(event, vignetteInstanceID)
