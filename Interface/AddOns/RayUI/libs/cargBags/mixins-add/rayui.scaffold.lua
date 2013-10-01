@@ -81,9 +81,9 @@ local function ItemButton_Update(self, item)
 	end
 
 	if(C_NewItems.IsNewItem(item.bagID, item.slotID)) then
-		ActionButton_ShowOverlayGlow(item)
+		ActionButton_ShowOverlayGlow(self)
 	else
-		ActionButton_HideOverlayGlow(item)
+		ActionButton_HideOverlayGlow(self)
 	end
 
 	if(self.OnUpdate) then self:OnUpdate(item) end

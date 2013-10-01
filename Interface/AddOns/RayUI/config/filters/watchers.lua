@@ -1157,6 +1157,8 @@ R["Watcher"] = {
                 { spellID = 121153, unitId = "player", caster = "player", filter = "BUFF" },
                 --暗影之刃
                 { spellID = 121471, unitId = "player", caster = "player", filter = "BUFF" },
+                --狂舞殘殺
+                { spellID = 51690, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
