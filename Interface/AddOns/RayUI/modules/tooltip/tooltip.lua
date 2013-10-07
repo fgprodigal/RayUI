@@ -200,7 +200,7 @@ function TT:GameTooltip_SetDefaultAnchor(tooltip, parent)
 		if owner and owner:match("RayUFRaid") then
 			local parent = _G[owner:match("RayUFRaid%d%d_%d")]
 			if R.db.Raid.horizontal then
-				tooltip:Point("BOTTOMRIGHT", parent, "BOTTOMLEFT", -23, 0)
+				tooltip:Point("TOPRIGHT", parent, "TOPLEFT", -23, 0)
 			else
 				tooltip:Point("BOTTOMRIGHT", parent, "TOPRIGHT", 0, 23)
 			end
@@ -537,7 +537,7 @@ function TT:OnTooltipSetUnit(tooltip)
 		end
 		if UnitIsAFK(unit) then
 			tooltip:AppendText((" %s"):format(("|cffFFFFFF<|r|cffFF3333%s|r|cffFFFFFF>|r"):format(AFK)))
-		elseif UnitIsDND(unit) then 
+		elseif UnitIsDND(unit) then
 			tooltip:AppendText((" %s"):format(("|cffFFFFFF<|r|cffE7E716%s|r|cffFFFFFF>|r"):format(DND)))
 		end
 		self:iLVSetUnit()
