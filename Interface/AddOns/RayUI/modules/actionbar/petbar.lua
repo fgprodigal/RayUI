@@ -141,10 +141,14 @@ function AB:UpdatePetBar()
     local button, lastButton, lastColumnButton
     for i = 1, NUM_PET_ACTION_SLOTS do
 		button = _G["PetActionButton"..i]
+		local petAutoCastableTexture = _G["PetActionButton"..i.."AutoCastable"]
+		local petAutoCastShine = _G["PetActionButton"..i.."Shine"]
 		lastButton = _G["PetActionButton"..(i-1)]
 		lastColumnButton = _G["PetActionButton"..(i-buttonsPerRow)]
         button:SetParent(RayUIPetBar)
 		button:SetSize(buttonsize, buttonsize)
+		petAutoCastableTexture:SetOutside(button, 12, 12)
+		petAutoCastShine:SetAllPoints(button)
 		button:ClearAllPoints()
         button.noResize = true
 

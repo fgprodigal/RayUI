@@ -587,81 +587,82 @@ function TT:OnTooltipSetUnit(tooltip)
 	end
 end
 
+function TT:GameTooltip_ShowStatusBar(tooltip, min, max, value, text)
+	local statusBar = _G[tooltip:GetName().."StatusBar"..tooltip.shownStatusBars]
+	if statusBar and not statusBar.styled then
+		statusBar:StripTextures()
+		statusBar:SetStatusBarTexture(R["media"].normal)
+		statusBar.border = CreateFrame("Frame", nil, statusBar)
+		statusBar.border:SetFrameLevel(0)
+		statusBar.border:SetOutside(statusBar, 1, 1)
+		R:GetModule("Skins"):CreateBD(statusBar.border)
+		statusBar.styled=true
+	end
+end
+
 function TT:Initialize()
 	self:RawHook("GameTooltip_UnitColor", true)
 
 	self:HookScript(GameTooltip, "OnTooltipSetUnit")
 
-	--GameTooltipStatusBar.bg = CreateFrame("Frame", nil, GameTooltipStatusBar)
-	--GameTooltipStatusBar.bg:Point("TOPLEFT", GameTooltipStatusBar, "TOPLEFT", -4, 4)
-	--GameTooltipStatusBar.bg:Point("BOTTOMRIGHT", GameTooltipStatusBar, "BOTTOMRIGHT", 4, -4)
-	--GameTooltipStatusBar.bg:SetFrameStrata(GameTooltipStatusBar:GetFrameStrata())
-	--GameTooltipStatusBar.bg:SetFrameLevel(GameTooltipStatusBar:GetFrameLevel() - 1)
-	--GameTooltipStatusBar.bg:SetBackdrop( {
-		--edgeFile = R["media"].glow,
-		--bgFile = R["media"].blank,
-		--edgeSize = R:Scale(4),
-		--insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
-		--})
-		--GameTooltipStatusBar.bg:SetBackdropColor(0, 0, 0, 0.5)
-		--GameTooltipStatusBar.bg:SetBackdropBorderColor(0, 0, 0, 0.8)
-		GameTooltipStatusBar:CreateShadow("Background")
-		GameTooltipStatusBar:SetHeight(8)
-		GameTooltipStatusBar:SetStatusBarTexture(R["media"].normal)
-		GameTooltipStatusBar:ClearAllPoints()
-		GameTooltipStatusBar:SetPoint("TOPLEFT", GameTooltip, "BOTTOMLEFT", 3, -2)
-		GameTooltipStatusBar:SetPoint("TOPRIGHT", GameTooltip, "BOTTOMRIGHT", -3, -2)
-		GameTooltipStatusBar:HookScript("OnValueChanged", function(self, value)
-			if not value then
-				return
+	GameTooltipStatusBar:CreateShadow("Background")
+	GameTooltipStatusBar:SetHeight(8)
+	GameTooltipStatusBar:SetStatusBarTexture(R["media"].normal)
+	GameTooltipStatusBar:ClearAllPoints()
+	GameTooltipStatusBar:SetPoint("TOPLEFT", GameTooltip, "BOTTOMLEFT", 3, -2)
+	GameTooltipStatusBar:SetPoint("TOPRIGHT", GameTooltip, "BOTTOMRIGHT", -3, -2)
+	GameTooltipStatusBar:HookScript("OnValueChanged", function(self, value)
+		if not value then
+			return
+		end
+		local min, max = self:GetMinMaxValues()
+		if value < min or value > max then
+			return
+		end
+		local unit  = select(2, GameTooltip:GetUnit())
+		if unit then
+			if UnitIsPlayer(unit) then
+				GameTooltipStatusBar:SetStatusBarColor(unpack({GameTooltip_UnitColor(unit)}))
 			end
-			local min, max = self:GetMinMaxValues()
-			if value < min or value > max then
-				return
+			min, max = UnitHealth(unit), UnitHealthMax(unit)
+			if not self.text then
+				self.text = self:CreateFontString(nil, "OVERLAY")
+				self.text:SetPoint("CENTER", GameTooltipStatusBar, 0, -4)
+				self.text:SetFont(R["media"].font, 12, "THINOUTLINE")
+				-- self.text:SetShadowOffset(R.mult, -R.mult)
 			end
-			local unit  = select(2, GameTooltip:GetUnit())
-			if unit then
-				if UnitIsPlayer(unit) then
-					GameTooltipStatusBar:SetStatusBarColor(unpack({GameTooltip_UnitColor(unit)}))
-				end
-				min, max = UnitHealth(unit), UnitHealthMax(unit)
-				if not self.text then
-					self.text = self:CreateFontString(nil, "OVERLAY")
-					self.text:SetPoint("CENTER", GameTooltipStatusBar, 0, -4)
-					self.text:SetFont(R["media"].font, 12, "THINOUTLINE")
-					-- self.text:SetShadowOffset(R.mult, -R.mult)
-				end
-				self.text:Show()
-				local hp = R:ShortValue(min).." / "..R:ShortValue(max)
-				self.text:SetText(hp)
-			else
-				if self.text then
-					self.text:Hide()
-				end
+			self.text:Show()
+			local hp = R:ShortValue(min).." / "..R:ShortValue(max)
+			self.text:SetText(hp)
+		else
+			if self.text then
+				self.text:Hide()
 			end
-		end)
+		end
+	end)
 
-		self:SecureHook("GameTooltip_SetDefaultAnchor")
-		self:HookScript(GameTooltip, "OnUpdate", "GameTooltip_OnUpdate")
+	self:SecureHook("GameTooltip_SetDefaultAnchor")
+	self:SecureHook("GameTooltip_ShowStatusBar")
+	self:HookScript(GameTooltip, "OnUpdate", "GameTooltip_OnUpdate")
 
-		GameTooltip:HookScript("OnUpdate", function(self, elapsed)
-			if self:GetAnchorType() == "ANCHOR_CURSOR" then
-				local x, y = GetCursorPosition()
-				local effScale = self:GetEffectiveScale()
-				local width = self:GetWidth() or 0
-				self:ClearAllPoints()
-				self:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", x / effScale - width / 2, y / effScale + 15)
-			end
-		end)
+	GameTooltip:HookScript("OnUpdate", function(self, elapsed)
+		if self:GetAnchorType() == "ANCHOR_CURSOR" then
+			local x, y = GetCursorPosition()
+			local effScale = self:GetEffectiveScale()
+			local width = self:GetWidth() or 0
+			self:ClearAllPoints()
+			self:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", x / effScale - width / 2, y / effScale + 15)
+		end
+	end)
 
-		self:RegisterEvent("MODIFIER_STATE_CHANGED")
-		self:RegisterEvent("PLAYER_ENTERING_WORLD")
+	self:RegisterEvent("MODIFIER_STATE_CHANGED")
+	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 
-		SetCVar("alwaysCompareItems", 1)
-	end
+	SetCVar("alwaysCompareItems", 1)
+end
 
-	function TT:Info()
-		return L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r鼠标提示模块."]
-	end
+function TT:Info()
+	return L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r鼠标提示模块."]
+end
 
-	R:RegisterModule(TT:GetName())
+R:RegisterModule(TT:GetName())

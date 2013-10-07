@@ -364,6 +364,8 @@ R["Watcher"] = {
                 { spellID = 12043, unitId = "player", caster = "player", filter = "BUFF" },
                 --時光倒轉
                 { spellID = 110909, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 時光護盾
+                { spellID = 115610, unitId = "player", caster = "player", filter = "BUFF" },
                 -- 燒灼
                 { spellID = 87023, unitId = "player", caster = "player", filter = "DEBUFF" },
                 --冰霜炸彈
@@ -1095,6 +1097,8 @@ R["Watcher"] = {
                 { spellID = 115189, unitId = "player", caster = "player", filter = "BUFF" },
                 --手裏劍
                 { spellID = 137586, unitId = "player", caster = "player", filter = "BUFF" },
+                --無聲之刃
+                { spellID = 145193, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标buff&debuff",
@@ -1159,6 +1163,8 @@ R["Watcher"] = {
                 { spellID = 121471, unitId = "player", caster = "player", filter = "BUFF" },
                 --狂舞殘殺
                 { spellID = 51690, unitId = "player", caster = "player", filter = "BUFF" },
+                --毒藥師
+                { spellID = 145249, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -1699,6 +1705,8 @@ R["Watcher"] = {
 
                 --套裝
                 { spellID = 138317, unitId = "player", caster = "player", filter = "BUFF" },
+                --法師T16, 冰凍意念
+                { spellID = 146557, unitId = "player", caster = "all", filter = "BUFF" },
             },
             {
                 name = "PVE/PVP玩家buff&debuff",
