@@ -54,9 +54,20 @@ function UF:GetOptions()
 				},
 				showPortrait = {
 					order = 3,
-					name = L["启用头像覆盖血条"],
+					name = L["启用3D头像"],
 					type = "toggle",
 				},
+				showHealthValue = {
+					order = 4,
+					name = L["默认显示血量数值"],
+					desc = L["鼠标悬浮时显示血量百分比"],
+					type = "toggle",
+				},
+				alwaysShowHealth = {
+					order = 5,
+					name = L["总是显示血量"],
+					type = "toggle",
+				}
 			},
 		},
 		others = {

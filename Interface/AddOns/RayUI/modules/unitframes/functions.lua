@@ -531,14 +531,20 @@ function UF:PostUpdateHealth(unit, cur, max)
     else
         color = oUF.colors.reaction[UnitReaction(unit, "player") or 5]
     end
-    if cur < max then
-        if self.__owner.isMouseOver then
-            self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(UnitHealth(unit)))
+    -- 如果是hover状态，总是显示
+    if self.__owner.isMouseOver then
+        if UF.db.showHealthValue then
+            self.value:SetFormattedText("|cff%02x%02x%02x%.1f%%|r", color[1] * 255, color[2] * 255, color[3] * 255, cur / max * 100)
         else
-            self.value:SetFormattedText("|cff%02x%02x%02x%.1f%%|r", color[1] * 255, color[2] * 255, color[3] * 255, UnitHealth(unit) / UnitHealthMax(unit) * 100)
+            self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(max))
         end
-    elseif self.__owner.isMouseOver then
-        self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(UnitHealthMax(unit)))
+    -- 否则当血量不满或者设置了总是显示时显示
+    elseif UF.db.alwaysShowHealth or cur < max then
+        if UF.db.showHealthValue then
+            self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(max))
+        else
+            self.value:SetFormattedText("|cff%02x%02x%02x%.1f%%|r", color[1] * 255, color[2] * 255, color[3] * 255, cur / max * 100)
+        end
     else
         self.value:SetText(nil)
     end
