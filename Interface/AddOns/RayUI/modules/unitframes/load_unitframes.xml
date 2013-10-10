@@ -2,7 +2,6 @@
 	<Script file="unitframes.lua"/>
 	<Script file="tags.lua"/>
 	<Script file="filter.lua"/>
-	<Script file="focuser.lua"/>
 	<Script file="functions.lua"/>
 	<Script file="layout.lua"/>
 </Ui>
