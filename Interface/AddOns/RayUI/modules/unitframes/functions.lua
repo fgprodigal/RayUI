@@ -537,12 +537,12 @@ function UF:PostUpdateHealth(unit, cur, max)
         if UF.db.showHealthValue then
             self.value:SetFormattedText("|cff%02x%02x%02x%.1f%%|r", color[1] * 255, color[2] * 255, color[3] * 255, cur / max * 100)
         else
-            self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(max))
+            self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(cur))
         end
     -- 否则当血量不满或者设置了总是显示时显示
     elseif UF.db.alwaysShowHealth or cur < max then
         if UF.db.showHealthValue then
-            self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(max))
+            self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(cur))
         else
             self.value:SetFormattedText("|cff%02x%02x%02x%.1f%%|r", color[1] * 255, color[2] * 255, color[3] * 255, cur / max * 100)
         end
