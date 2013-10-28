@@ -10,56 +10,56 @@ RA._Objects = {}
 local colors = RayUF.colors
 
 function RA:Hex(r, g, b)
-    if(type(r) == "table") then
-        if(r.r) then r, g, b = r.r, r.g, r.b else r, g, b = unpack(r) end
-    end
-    return ("|cff%02x%02x%02x"):format(r * 255, g * 255, b * 255)
+	if(type(r) == "table") then
+		if(r.r) then r, g, b = r.r, r.g, r.b else r, g, b = unpack(r) end
+	end
+	return ("|cff%02x%02x%02x"):format(r * 255, g * 255, b * 255)
 end
 
 -- Unit Menu
 local dropdown = CreateFrame("Frame", "RayUFRaidDropDown", UIParent, "UIDropDownMenuTemplate")
 
 local function menu(self)
-    dropdown:SetParent(self)
-    return ToggleDropDownMenu(1, nil, dropdown, "cursor", 0, 0)
+	dropdown:SetParent(self)
+	return ToggleDropDownMenu(1, nil, dropdown, "cursor", 0, 0)
 end
 
 local init = function(self)
-    if RA.db.hidemenu and InCombatLockdown() then
-        return
-    end
+	if RA.db.hidemenu and InCombatLockdown() then
+		return
+	end
 
-    local unit = self:GetParent().unit
-    local menu, name, id
+	local unit = self:GetParent().unit
+	local menu, name, id
 
-    if(not unit) then
-        return
-    end
+	if(not unit) then
+		return
+	end
 
-    if(UnitIsUnit(unit, "player")) then
-        menu = "SELF"
-    elseif(UnitIsUnit(unit, "vehicle")) then
-        menu = "VEHICLE"
-    elseif(UnitIsUnit(unit, "pet")) then
-        menu = "PET"
-    elseif(UnitIsPlayer(unit)) then
-        id = UnitInRaid(unit)
-        if(id) then
-            menu = "RAID_PLAYER"
-            name = GetRaidRosterInfo(id)
-        elseif(UnitInParty(unit)) then
-            menu = "PARTY"
-        else
-            menu = "PLAYER"
-        end
-    else
-        menu = "TARGET"
-        name = RAID_TARGET_ICON
-    end
+	if(UnitIsUnit(unit, "player")) then
+		menu = "SELF"
+	elseif(UnitIsUnit(unit, "vehicle")) then
+		menu = "VEHICLE"
+	elseif(UnitIsUnit(unit, "pet")) then
+		menu = "PET"
+	elseif(UnitIsPlayer(unit)) then
+		id = UnitInRaid(unit)
+		if(id) then
+			menu = "RAID_PLAYER"
+			name = GetRaidRosterInfo(id)
+		elseif(UnitInParty(unit)) then
+			menu = "PARTY"
+		else
+			menu = "PLAYER"
+		end
+	else
+		menu = "TARGET"
+		name = RAID_TARGET_ICON
+	end
 
-    if(menu) then
-        UnitPopup_ShowMenu(self, menu, unit, name, id)
-    end
+	if(menu) then
+		UnitPopup_ShowMenu(self, menu, unit, name, id)
+	end
 end
 
 local function ColorGradient(perc, color1, color2, color3)
@@ -86,58 +86,58 @@ end
 
 -- Show Target Border
 local function ChangedTarget(self)
-    if UnitIsUnit("target", self.unit) then
-        self.TargetBorder:Show()
-    else
+	if UnitIsUnit("target", self.unit) then
+		self.TargetBorder:Show()
+	else
 		self.TargetBorder:Hide()
 	end
 end
 
 -- Show Focus Border
 local function FocusTarget(self)
-    if UnitIsUnit("focus", self.unit) then
-        self.FocusHighlight:Show()
-    else
+	if UnitIsUnit("focus", self.unit) then
+		self.FocusHighlight:Show()
+	else
 		self.FocusHighlight:Hide()
 	end
 end
 
 local function updateThreat(self, event, unit)
-    if(unit ~= self.unit) then return end
+	if(unit ~= self.unit) then return end
 
-    local status = UnitThreatSituation(unit)
+	local status = UnitThreatSituation(unit)
 
-    if(status and status > 1) then
-        local r, g, b = GetThreatStatusColor(status)
-        self.Threat:SetBackdropBorderColor(r, g, b, 1)
-    else
+	if(status and status > 1) then
+		local r, g, b = GetThreatStatusColor(status)
+		self.Threat:SetBackdropBorderColor(r, g, b, 1)
+	else
 		if R.global.general.theme == "Shadow" then
 			self.Threat:SetBackdropBorderColor(0, 0, 0, 1)
 		else
 			self.Threat:SetBackdropBorderColor(0, 0, 0, 0)
 		end
-    end
-    self.Threat:Show()
+	end
+	self.Threat:Show()
 end
 
 oUF.Tags.Methods["RayUFRaid:name"] = function(u, r)
-    local name = UnitName(u)
-	local _, class = UnitClass(u)
-	local unitReaction = UnitReaction(u, "player")
-	local colorString
+local name = UnitName(u)
+local _, class = UnitClass(u)
+local unitReaction = UnitReaction(u, "player")
+local colorString
 
-	if (UnitIsPlayer(u)) then
-		local class = RayUF.colors.class[class]
-		if not class then return "" end
-		colorString = R:RGBToHex(class[1], class[2], class[3])
-	elseif (unitReaction) then
-		local reaction = RayUF["colors"].reaction[unitReaction]
-		colorString = R:RGBToHex(reaction[1], reaction[2], reaction[3])
-	else
-		colorString = "|cFFC2C2C2"
-	end
+if (UnitIsPlayer(u)) then
+	local class = RayUF.colors.class[class]
+	if not class then return "" end
+	colorString = R:RGBToHex(class[1], class[2], class[3])
+elseif (unitReaction) then
+	local reaction = RayUF["colors"].reaction[unitReaction]
+	colorString = R:RGBToHex(reaction[1], reaction[2], reaction[3])
+else
+	colorString = "|cFFC2C2C2"
+end
 
-	return colorString..R:ShortenString(name, 8)
+return colorString..R:ShortenString(name, 8)
 end
 oUF.Tags.Events["RayUFRaid:name"] = "UNIT_NAME_UPDATE"
 
@@ -146,8 +146,8 @@ RA.debuffColor = {} -- hex debuff colors for tags
 
 local function PostHealth(hp, unit)
 	local curhealth, maxhealth
-    local self = hp.__owner
-    local name = UnitName(unit)
+	local self = hp.__owner
+	local name = UnitName(unit)
 
 	if self.isForced then
 		maxhealth = UnitHealthMax(unit)
@@ -155,10 +155,10 @@ local function PostHealth(hp, unit)
 		hp:SetValue(curhealth)
 	end
 
-    local suffix = self:GetAttribute"unitsuffix"
-    if suffix == "pet" or unit == "vehicle" or unit == "pet" then
-        return
-    end
+	local suffix = self:GetAttribute"unitsuffix"
+	if suffix == "pet" or unit == "vehicle" or unit == "pet" then
+		return
+	end
 
 	if UF.db.healthColorClass then
 		hp.colorClass=true
@@ -187,16 +187,16 @@ local function PostHealth(hp, unit)
 		end
 	end
 
-    if not self:IsElementEnabled("ReadyCheck") then
-        self:EnableElement("ReadyCheck")
-    end
+	if not self:IsElementEnabled("ReadyCheck") then
+		self:EnableElement("ReadyCheck")
+	end
 end
 
 function RA:UpdateHealth(hp)
-    hp:SetStatusBarTexture(R["media"].normal)
-    hp:SetOrientation("HORIZONTAL")
-    hp.bg:SetTexture(R["media"].normal)
-    hp.freebSmooth = UF.db.smooth
+	hp:SetStatusBarTexture(R["media"].normal)
+	hp:SetOrientation("HORIZONTAL")
+	hp.bg:SetTexture(R["media"].normal)
+	hp.freebSmooth = UF.db.smooth
 	hp.colorReaction = nil	
 	hp.colorClass = nil
 	if UF.db.healthColorClass then
@@ -215,16 +215,16 @@ function RA:UpdateHealth(hp)
 end
 
 local function PostPower(power, unit)
-    local self = power.__owner
-    local _, ptype = UnitPowerType(unit)
-    local _, class = UnitClass(unit)
+	local self = power.__owner
+	local _, ptype = UnitPowerType(unit)
+	local _, class = UnitClass(unit)
 
 	power:Height(RA.db.height*RA.db.powerbarsize)
 	-- self.Health:SetHeight((1 - RA.db.powerbarsize)*self:GetHeight()-1)
 	self.Health:Point("BOTTOM", self.Power, "TOP", 0, 1)
 
-    local perc = oUF.Tags.Methods["perpp"](unit)
-    -- This kinda conflicts with the threat module, but I don't really care
+	local perc = oUF.Tags.Methods["perpp"](unit)
+	-- This kinda conflicts with the threat module, but I don't really care
 
 	if self.isForced then
 		local max = UnitPowerMax(unit)
@@ -234,12 +234,12 @@ local function PostPower(power, unit)
 		perc = math.floor(min/max*100+.5)
 	end
 
-    if (perc < 10 and UnitIsConnected(unit) and ptype == "MANA" and not UnitIsDeadOrGhost(unit)) then
-        self.Threat:SetBackdropBorderColor(0, 0, 1, 1)
-    else
-        -- pass the coloring back to the threat func
-        updateThreat(self, nil, unit)
-    end
+	if (perc < 10 and UnitIsConnected(unit) and ptype == "MANA" and not UnitIsDeadOrGhost(unit)) then
+		self.Threat:SetBackdropBorderColor(0, 0, 1, 1)
+	else
+		-- pass the coloring back to the threat func
+		updateThreat(self, nil, unit)
+	end
 
 	if UF.db.powerColorClass then
 		power.colorClass=true
@@ -253,9 +253,9 @@ end
 function RA:UpdatePower(power)
 	power:Show()
 	power.PostUpdate = PostPower
-    power:SetStatusBarTexture(R["media"].normal)
-    power:SetOrientation("HORIZONTAL")
-    power.bg:SetTexture(R["media"].normal)
+	power:SetStatusBarTexture(R["media"].normal)
+	power:SetOrientation("HORIZONTAL")
+	power.bg:SetTexture(R["media"].normal)
 	power.colorClass = nil
 	power.colorReaction = nil	
 	power.colorPower = nil
@@ -270,7 +270,7 @@ function RA:UpdatePower(power)
 		power.bg:SetVertexColor(.12, .12, .12)
 	end
 
-    power:ClearAllPoints()
+	power:ClearAllPoints()
 	power:SetPoint"LEFT"
 	power:SetPoint"RIGHT"
 	power:SetPoint"BOTTOM"
@@ -278,30 +278,30 @@ end
 
 -- Show Mouseover highlight
 local function OnEnter(self)
-    if RA.db.tooltip then
-        UnitFrame_OnEnter(self)
-    else
-        GameTooltip:Hide()
-    end
+	if RA.db.tooltip then
+		UnitFrame_OnEnter(self)
+	else
+		GameTooltip:Hide()
+	end
 
-    if RA.db.highlight then
-        self.Highlight:Show()
-    end
+	if RA.db.highlight then
+		self.Highlight:Show()
+	end
 
-    if RA.db.arrow and RA.db.arrowmouseover then
-        RA:arrow(self, self.unit)
-    end
+	if RA.db.arrow and RA.db.arrowmouseover then
+		RA:arrow(self, self.unit)
+	end
 end
 
 local function OnLeave(self)
-    if RA.db.tooltip then
-        UnitFrame_OnLeave(self)
-    end
-    self.Highlight:Hide()
+	if RA.db.tooltip then
+		UnitFrame_OnLeave(self)
+	end
+	self.Highlight:Hide()
 
-    if(self.freebarrow and self.freebarrow:IsShown()) and RA.db.arrowmouseover then
-        self.freebarrow:Hide()
-    end
+	if(self.freebarrow and self.freebarrow:IsShown()) and RA.db.arrowmouseover then
+		self.freebarrow:Hide()
+	end
 end
 
 
@@ -319,7 +319,7 @@ local counterOffsets = {
 function UpdateAuraWatch(frame)
 	local buffs = {}
 	local auras = frame.AuraWatch
-    auras:Show()
+	auras:Show()
 	
 	if not R.global["Raid"].AuraWatch[R.myclass] then R.global["Raid"].AuraWatch[R.myclass] = {} end
 	
@@ -383,13 +383,13 @@ function UpdateAuraWatch(frame)
 					icon.icon:SetAllPoints(icon);
 				end
 				
-                icon.icon:SetTexture(R["media"].blank);
+				icon.icon:SetTexture(R["media"].blank);
 
-                if (spell["color"]) then
-                    icon.icon:SetVertexColor(spell["color"].r, spell["color"].g, spell["color"].b);
-                else
-                    icon.icon:SetVertexColor(0.8, 0.8, 0.8);
-                end			
+				if (spell["color"]) then
+					icon.icon:SetVertexColor(spell["color"].r, spell["color"].g, spell["color"].b);
+				else
+					icon.icon:SetVertexColor(0.8, 0.8, 0.8);
+				end			
 				
 				if not icon.cd then
 					icon.cd = CreateFrame("Cooldown", nil, icon)
@@ -409,8 +409,8 @@ function UpdateAuraWatch(frame)
 					icon.count = icon:CreateFontString(nil, "OVERLAY")
 					icon.count:Point("CENTER", unpack(counterOffsets[spell["point"]]))
 				end
-                icon.count:SetFont(R["media"].font, RA.db.indicatorsize + 4, "THINOUTLINE")
-                --icon.count:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
+				icon.count:SetFont(R["media"].font, RA.db.indicatorsize + 4, "THINOUTLINE")
+				--icon.count:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
 				
 				if spell["enabled"] then
 					auras.icons[spell.id] = icon
@@ -432,61 +432,61 @@ function UpdateAuraWatch(frame)
 	if frame.AuraWatch.Update then
 		frame.AuraWatch.Update(frame)
 	end
-		
+
 	buffs = nil
 end
 
 local function style(self)
-    self.menu = menu
+	self.menu = menu
 
-    self.BG = CreateFrame("Frame", nil, self)
-    self.BG:SetFrameStrata("BACKGROUND")
-    self.BG:SetPoint("TOPLEFT", self, "TOPLEFT")
-    self.BG:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT")
-    self.BG:SetFrameLevel(3)
-    self.BG:SetBackdrop(backdrop)
-    self.BG:SetBackdropColor(0, 0, 0)
+	self.BG = CreateFrame("Frame", nil, self)
+	self.BG:SetFrameStrata("BACKGROUND")
+	self.BG:SetPoint("TOPLEFT", self, "TOPLEFT")
+	self.BG:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT")
+	self.BG:SetFrameLevel(3)
+	self.BG:SetBackdrop(backdrop)
+	self.BG:SetBackdropColor(0, 0, 0)
 
-    -- Mouseover script
-    self:SetScript("OnEnter", OnEnter)
-    self:SetScript("OnLeave", OnLeave)
-    self:RegisterForClicks("AnyUp")
+	-- Mouseover script
+	self:SetScript("OnEnter", OnEnter)
+	self:SetScript("OnLeave", OnLeave)
+	self:RegisterForClicks("AnyUp")
 
-    self.Health = CreateFrame("StatusBar", nil, self)
-    self.Health:SetFrameStrata("LOW")
-    self.Health.frequentUpdates = true
+	self.Health = CreateFrame("StatusBar", nil, self)
+	self.Health:SetFrameStrata("LOW")
+	self.Health.frequentUpdates = true
 
-    self.Health.bg = self.Health:CreateTexture(nil, "BORDER")
-    self.Health.bg:SetAllPoints(self.Health)
+	self.Health.bg = self.Health:CreateTexture(nil, "BORDER")
+	self.Health.bg:SetAllPoints(self.Health)
 
-    self.Health.PostUpdate = PostHealth
-    RA:UpdateHealth(self.Health)
+	self.Health.PostUpdate = PostHealth
+	RA:UpdateHealth(self.Health)
 
-    -- Threat
-    local threat = CreateFrame("Frame", nil, self)
+	-- Threat
+	local threat = CreateFrame("Frame", nil, self)
 	threat:SetFrameStrata("BACKGROUND")
-    threat:Point("TOPLEFT", self, "TOPLEFT", -5, 5)
-    threat:Point("BOTTOMRIGHT", self, "BOTTOMRIGHT", 5, -5)
-    threat:SetFrameLevel(0)
-    threat:SetBackdrop(glowBorder)
-    threat:SetBackdropColor(0, 0, 0, 0)
+	threat:Point("TOPLEFT", self, "TOPLEFT", -5, 5)
+	threat:Point("BOTTOMRIGHT", self, "BOTTOMRIGHT", 5, -5)
+	threat:SetFrameLevel(0)
+	threat:SetBackdrop(glowBorder)
+	threat:SetBackdropColor(0, 0, 0, 0)
 	if R.global.general.theme == "Shadow" then
 		threat:SetBackdropBorderColor(0, 0, 0, 1)
 	else
 		threat:SetBackdropBorderColor(0, 0, 0, 0)
 	end
-    threat.Override = updateThreat
-    self.Threat = threat
+	threat.Override = updateThreat
+	self.Threat = threat
 
-    -- Name
-    local name = self:CreateFontString(nil, "ARTKWORK")
-    name:SetPoint("CENTER", self.Health, 0, 2)
-    name:SetJustifyH("CENTER")
-    name:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
-    name:SetWidth(RA.db.width)
-    name.overrideUnit = true
-    self.Name = name
-    self:Tag(self.Name, "[RayUFRaid:name]")
+	-- Name
+	local name = self:CreateFontString(nil, "ARTKWORK")
+	name:SetPoint("CENTER", self.Health, 0, 2)
+	name:SetJustifyH("CENTER")
+	name:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
+	name:SetWidth(RA.db.width)
+	name.overrideUnit = true
+	self.Name = name
+	self:Tag(self.Name, "[RayUFRaid:name]")
 
 	-- Name
 	local healtext = self:CreateFontString(nil, "ARTKWORK")
@@ -498,97 +498,97 @@ local function style(self)
 	self.Healtext = healtext
 	self:Tag(healtext, "[RayUIRaid:def]")
 
-    -- Power
-    self.Power = CreateFrame("StatusBar", nil, self)
-    self.Power:SetFrameStrata("LOW")
-    self.Power.bg = self.Power:CreateTexture(nil, "BORDER")
-    self.Power.bg:SetAllPoints(self.Power)
+	-- Power
+	self.Power = CreateFrame("StatusBar", nil, self)
+	self.Power:SetFrameStrata("LOW")
+	self.Power.bg = self.Power:CreateTexture(nil, "BORDER")
+	self.Power.bg:SetAllPoints(self.Power)
 	self.Power.frequentUpdates = false
-    RA:UpdatePower(self.Power)
+	RA:UpdatePower(self.Power)
 
-    -- Highlight tex
-    local hl = self.Health:CreateTexture(nil, "OVERLAY")
-    hl:SetAllPoints(self)
-    hl:SetTexture(R["media"].blank)
-    hl:SetVertexColor(1,1,1,.1)
-    hl:SetBlendMode("ADD")
-    hl:Hide()
-    self.Highlight = hl
+	-- Highlight tex
+	local hl = self.Health:CreateTexture(nil, "OVERLAY")
+	hl:SetAllPoints(self)
+	hl:SetTexture(R["media"].blank)
+	hl:SetVertexColor(1,1,1,.1)
+	hl:SetBlendMode("ADD")
+	hl:Hide()
+	self.Highlight = hl
 
-    -- Target tex
-    local tBorder = CreateFrame("Frame", nil, self)
+	-- Target tex
+	local tBorder = CreateFrame("Frame", nil, self)
 	tBorder:SetFrameStrata("BACKGROUND")
-    tBorder:SetPoint("TOPLEFT", self, "TOPLEFT")
-    tBorder:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT")
-    tBorder:SetBackdrop(border)
-    tBorder:SetBackdropColor(.8, .8, .8, 1)
-    tBorder:SetFrameLevel(2)
-    tBorder:Hide()
-    self.TargetBorder = tBorder
+	tBorder:SetPoint("TOPLEFT", self, "TOPLEFT")
+	tBorder:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT")
+	tBorder:SetBackdrop(border)
+	tBorder:SetBackdropColor(.8, .8, .8, 1)
+	tBorder:SetFrameLevel(2)
+	tBorder:Hide()
+	self.TargetBorder = tBorder
 
-    -- Focus tex
-    local fBorder = CreateFrame("Frame", nil, self)
+	-- Focus tex
+	local fBorder = CreateFrame("Frame", nil, self)
 	fBorder:SetFrameStrata("BACKGROUND")
-    fBorder:SetPoint("TOPLEFT", self, "TOPLEFT")
-    fBorder:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT")
-    fBorder:SetBackdrop(border)
-    fBorder:SetBackdropColor(.6, .8, 0, 1)
-    fBorder:SetFrameLevel(2)
-    fBorder:Hide()
-    self.FocusHighlight = fBorder
+	fBorder:SetPoint("TOPLEFT", self, "TOPLEFT")
+	fBorder:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT")
+	fBorder:SetBackdrop(border)
+	fBorder:SetBackdropColor(.6, .8, 0, 1)
+	fBorder:SetFrameLevel(2)
+	fBorder:Hide()
+	self.FocusHighlight = fBorder
 
-    -- Raid Icons
-    local ricon = self.Health:CreateTexture(nil, "OVERLAY")
-    ricon:SetPoint("TOP", self, 0, 5)
-    ricon:SetSize(RA.db.leadersize+2, RA.db.leadersize+2)
+	-- Raid Icons
+	local ricon = self.Health:CreateTexture(nil, "OVERLAY")
+	ricon:SetPoint("TOP", self, 0, 5)
+	ricon:SetSize(RA.db.leadersize+2, RA.db.leadersize+2)
 	ricon:SetTexture("Interface\\AddOns\\RayUI\\media\\raidicons.blp")
-    self.RaidIcon = ricon
+	self.RaidIcon = ricon
 
-    -- Leader Icon
-    self.Leader = self.Health:CreateTexture(nil, "OVERLAY")
-    self.Leader:SetPoint("TOPLEFT", self, 0, 8)
-    self.Leader:SetSize(RA.db.leadersize, RA.db.leadersize)
+	-- Leader Icon
+	self.Leader = self.Health:CreateTexture(nil, "OVERLAY")
+	self.Leader:SetPoint("TOPLEFT", self, 0, 8)
+	self.Leader:SetSize(RA.db.leadersize, RA.db.leadersize)
 
-    -- Assistant Icon
-    self.Assistant = self.Health:CreateTexture(nil, "OVERLAY")
-    self.Assistant:SetPoint("TOPLEFT", self, 0, 8)
-    self.Assistant:SetSize(RA.db.leadersize, RA.db.leadersize)
+	-- Assistant Icon
+	self.Assistant = self.Health:CreateTexture(nil, "OVERLAY")
+	self.Assistant:SetPoint("TOPLEFT", self, 0, 8)
+	self.Assistant:SetSize(RA.db.leadersize, RA.db.leadersize)
 
-    local masterlooter = self.Health:CreateTexture(nil, "OVERLAY")
-    masterlooter:SetSize(RA.db.leadersize, RA.db.leadersize)
-    masterlooter:SetPoint("LEFT", self.Leader, "RIGHT")
-    self.MasterLooter = masterlooter
+	local masterlooter = self.Health:CreateTexture(nil, "OVERLAY")
+	masterlooter:SetSize(RA.db.leadersize, RA.db.leadersize)
+	masterlooter:SetPoint("LEFT", self.Leader, "RIGHT")
+	self.MasterLooter = masterlooter
 
-    -- Role Icon
-    if RA.db.roleicon then
-        self.LFDRole = self.Health:CreateTexture(nil, "OVERLAY")
-        self.LFDRole:SetSize(RA.db.leadersize, RA.db.leadersize)
-        self.LFDRole:SetPoint("RIGHT", self, "LEFT", RA.db.leadersize/2, 0)
+	-- Role Icon
+	if RA.db.roleicon then
+		self.LFDRole = self.Health:CreateTexture(nil, "OVERLAY")
+		self.LFDRole:SetSize(RA.db.leadersize, RA.db.leadersize)
+		self.LFDRole:SetPoint("RIGHT", self, "LEFT", RA.db.leadersize/2, 0)
 		self.LFDRole:SetTexture("Interface\\AddOns\\RayUI\\media\\lfd_role")
-    end
+	end
 
-    self.freebIndicators = true
-    self.freebAfk = true
+	self.freebIndicators = true
+	self.freebAfk = true
 
-    self.ResurrectIcon = self.Health:CreateTexture(nil, "OVERLAY")
-    self.ResurrectIcon:SetPoint("TOP", self, 0, -2)
-    self.ResurrectIcon:SetSize(16, 16)
+	self.ResurrectIcon = self.Health:CreateTexture(nil, "OVERLAY")
+	self.ResurrectIcon:SetPoint("TOP", self, 0, -2)
+	self.ResurrectIcon:SetSize(16, 16)
 
-    -- Range
-    local range = {
-        insideAlpha = 1,
-        outsideAlpha = RA.db.outsideRange,
-    }
+	-- Range
+	local range = {
+		insideAlpha = 1,
+		outsideAlpha = RA.db.outsideRange,
+	}
 
-    self.freebRange = RA.db.arrow and range
-    self.Range = range
+	self.freebRange = RA.db.arrow and range
+	self.Range = range
 
-    -- ReadyCheck
-    self.ReadyCheck = self.Health:CreateTexture(nil, "OVERLAY")
-    self.ReadyCheck:SetPoint("BOTTOM", self)
-    self.ReadyCheck:SetSize(RA.db.leadersize + 4, RA.db.leadersize+ 4)
+	-- ReadyCheck
+	self.ReadyCheck = self.Health:CreateTexture(nil, "OVERLAY")
+	self.ReadyCheck:SetPoint("BOTTOM", self)
+	self.ReadyCheck:SetSize(RA.db.leadersize + 4, RA.db.leadersize+ 4)
 
-    -- Auras
+	-- Auras
 	self.RaidDebuffs = CreateFrame("Frame", nil, self)
 	self.RaidDebuffs:SetFrameLevel(10)
 	self.RaidDebuffs:SetPoint("BOTTOM", self)
@@ -610,36 +610,42 @@ local function style(self)
 	self.RaidDebuffs.time:SetPoint("CENTER", 1, 0)
 	self.RaidDebuffs.time:SetTextColor(1, .9, 0)
 
-    local auraWatch = CreateFrame("Frame", nil, self)
-    auraWatch:SetFrameLevel(self:GetFrameLevel() + 25)
-    auraWatch:SetInside(self.Health)
-    auraWatch.presentAlpha = 1
-    auraWatch.missingAlpha = 0
-    auraWatch.strictMatching = true
-    auraWatch.icons = {}
-    self.AuraWatch = auraWatch
-    UpdateAuraWatch(self)
+	local auraWatch = CreateFrame("Frame", nil, self)
+	auraWatch:SetFrameLevel(self:GetFrameLevel() + 25)
+	auraWatch:SetInside(self.Health)
+	auraWatch.presentAlpha = 1
+	auraWatch.missingAlpha = 0
+	auraWatch.strictMatching = true
+	auraWatch.icons = {}
+	self.AuraWatch = auraWatch
+	UpdateAuraWatch(self)
 
 	-- Heal Prediction
 	UF:EnableHealPredictionAndAbsorb(self)
 
-    -- Add events
-    self:RegisterEvent("PLAYER_FOCUS_CHANGED", FocusTarget)
-    self:RegisterEvent("GROUP_ROSTER_UPDATE", FocusTarget)
-    self:RegisterEvent("PLAYER_TARGET_CHANGED", ChangedTarget)
-    self:RegisterEvent("GROUP_ROSTER_UPDATE", ChangedTarget)
+	-- Add events
+	self:RegisterEvent("PLAYER_FOCUS_CHANGED", FocusTarget)
+	self:RegisterEvent("GROUP_ROSTER_UPDATE", FocusTarget)
+	self:RegisterEvent("PLAYER_TARGET_CHANGED", ChangedTarget)
+	self:RegisterEvent("GROUP_ROSTER_UPDATE", ChangedTarget)
 
-    table.insert(RA._Objects, self)
+	table.insert(RA._Objects, self)
 end
 
 function RA:Colors()
-    for class, color in next, colors.class do
+	for class, color in next, colors.class do
 		RA.colorCache[class] = RA:Hex(color)
-    end
+	end
 
-    for dtype, color in next, DebuffTypeColor do
-        RA.debuffColor[dtype] = RA:Hex(color)
-    end
+	for dtype, color in next, DebuffTypeColor do
+		RA.debuffColor[dtype] = RA:Hex(color)
+	end
+end
+
+function RA:UpdateVisibility()
+	for header, func in pairs(self.headers) do
+		func(header)
+	end
 end
 
 function RA:Raid15SmartVisibility(event)
@@ -649,11 +655,13 @@ function RA:Raid15SmartVisibility(event)
 	if not InCombatLockdown() then
 		self:SetAttribute("showPlayer", RA.db.showplayerinparty)
 		self:SetAttribute("showSolo", RA.db.showwhensolo)
-		if inInstance and instanceType == "raid" and instanceGroupSize > 15 then
+		self:SetAttribute("showRaid", true)
+		self:SetAttribute("showParty", true)
+		if ( inInstance and instanceType == "raid" and instanceGroupSize > 15 ) or RA.db.alwaysshow40 then
 			RegisterAttributeDriver(self, "state-visibility", "hide")
 			self:SetAttribute("showRaid", false)
 			self:SetAttribute("showParty", false)
-		elseif inInstance and instanceType == "raid" and instanceGroupSize <= 15 then
+		elseif inInstance and instanceType == "raid" and instanceGroupSize <= 15 and not RA.db.showwhensolo then
 			RegisterAttributeDriver(self, "state-visibility", "[group:party,nogroup:raid][group:raid] show;hide")
 			self:SetAttribute("showRaid", true)
 			self:SetAttribute("showParty", true)
@@ -675,12 +683,18 @@ function RA:Raid25SmartVisibility(event)
 	if not InCombatLockdown() then
 		self:SetAttribute("showPlayer", RA.db.showplayerinparty)
 		self:SetAttribute("showSolo", RA.db.showwhensolo)
-		if inInstance and instanceType == "raid" and instanceGroupSize <= 15 then
+		self:SetAttribute("showRaid", true)
+		self:SetAttribute("showParty", true)
+		if inInstance and instanceType == "raid" and instanceGroupSize <= 15 and not RA.db.alwaysshow40 then
 			RegisterAttributeDriver(self, "state-visibility", "hide")
 			self:SetAttribute("showRaid", false)
 			self:SetAttribute("showParty", false)
-		elseif inInstance and instanceType == "raid" and instanceGroupSize > 15 then
-			RegisterAttributeDriver(self, "state-visibility", "[group:party,nogroup:raid][group:raid] show;hide")
+		elseif ( inInstance and instanceType == "raid" and instanceGroupSize > 15 ) or RA.db.alwaysshow40 then
+			if RA.db.showwhensolo then
+				RegisterAttributeDriver(self, "state-visibility", "show")
+			else
+				RegisterAttributeDriver(self, "state-visibility", "[group:party,nogroup:raid][group:raid] show;hide")
+			end
 			self:SetAttribute("showRaid", true)
 			self:SetAttribute("showParty", true)
 		else
@@ -703,11 +717,11 @@ function RA:Raid40SmartVisibility(event)
 		self:SetAttribute("showSolo", RA.db.showwhensolo)
 		self:SetAttribute("showRaid", true)
 		self:SetAttribute("showParty", true)
-		if inInstance and instanceType == "pvp" and maxPlayers == 40 then
+		if ( inInstance and instanceType == "pvp" and maxPlayers == 40 ) or RA.db.alwaysshow40 then
 			RegisterAttributeDriver(self, "state-visibility", "[group:party,nogroup:raid][group:raid] show;hide")
 		elseif inInstance then
 			RegisterAttributeDriver(self, "state-visibility", "hide")
-        else
+		else
 			RegisterAttributeDriver(self, "state-visibility", "[@raid26,exists] show;hide")
 		end
 	else
@@ -718,7 +732,7 @@ end
 
 local pos, posRel, colX, colY
 function RA:SpawnHeader(name, group, layout)
-    local horiz, grow = RA.db.horizontal, RA.db.growth
+	local horiz, grow = RA.db.horizontal, RA.db.growth
 	local width, height = RA.db.width, RA.db.height
 	local visibility = "custom [@raid16,noexists] hide;show"
 
@@ -727,54 +741,54 @@ function RA:SpawnHeader(name, group, layout)
 		visibility = "custom [@raid16,exists] hide;show"
 	end
 
-    local point, growth, xoff, yoff
-    if horiz then
-        point = "LEFT"
-        xoff = RA.db.spacing
-        yoff = 0
-        if grow == "UP" then
-            growth = "BOTTOM"
-            pos = "BOTTOMLEFT"
-            posRel = "TOPLEFT"
-            colY = RA.db.spacing
-        else
-            growth = "TOP"
-            pos = "TOPLEFT"
-            posRel = "BOTTOMLEFT"
-            colY = -RA.db.spacing
-        end
-    else
-        point = "TOP"
-        xoff = 0
-        yoff = -RA.db.spacing
-        if grow == "RIGHT" then
-            growth = "LEFT"
-            pos = "TOPLEFT"
-            posRel = "TOPRIGHT"
-            colX = RA.db.spacing
-        else
-            growth = "RIGHT"
-            pos = "TOPRIGHT"
-            posRel = "TOPLEFT"
-            colX = -RA.db.spacing
-        end
-    end
+	local point, growth, xoff, yoff
+	if horiz then
+		point = "LEFT"
+		xoff = RA.db.spacing
+		yoff = 0
+		if grow == "UP" then
+			growth = "BOTTOM"
+			pos = "BOTTOMLEFT"
+			posRel = "TOPLEFT"
+			colY = RA.db.spacing
+		else
+			growth = "TOP"
+			pos = "TOPLEFT"
+			posRel = "BOTTOMLEFT"
+			colY = -RA.db.spacing
+		end
+	else
+		point = "TOP"
+		xoff = 0
+		yoff = -RA.db.spacing
+		if grow == "RIGHT" then
+			growth = "LEFT"
+			pos = "TOPLEFT"
+			posRel = "TOPRIGHT"
+			colX = RA.db.spacing
+		else
+			growth = "RIGHT"
+			pos = "TOPRIGHT"
+			posRel = "TOPLEFT"
+			colX = -RA.db.spacing
+		end
+	end
 
-    local header = oUF:SpawnHeader(name, nil, "raid",
-    "oUF-initialConfigFunction", ([[self:SetWidth(%d); self:SetHeight(%d);]]):format(R:Scale(width), R:Scale(height)), 
-    "xOffset", xoff,
-    "yOffset", yoff,
-    "point", point,
-    "sortMethod", "INDEX",
-    "groupFilter", group,
-    "groupingOrder", "1,2,3,4,5,6,7,8",
-    "groupBy", "GROUP",
-    "maxColumns", 1,
-    "unitsPerColumn", 5,
-    "columnSpacing", RA.db.spacing,
-    "columnAnchorPoint", growth)
+	local header = oUF:SpawnHeader(name, nil, "raid",
+	"oUF-initialConfigFunction", ([[self:SetWidth(%d); self:SetHeight(%d);]]):format(R:Scale(width), R:Scale(height)), 
+	"xOffset", xoff,
+	"yOffset", yoff,
+	"point", point,
+	"sortMethod", "INDEX",
+	"groupFilter", group,
+	"groupingOrder", "1,2,3,4,5,6,7,8",
+	"groupBy", "GROUP",
+	"maxColumns", 1,
+	"unitsPerColumn", 5,
+	"columnSpacing", RA.db.spacing,
+	"columnAnchorPoint", growth)
 
-    RegisterAttributeDriver(header, "state-visibility", "show")
+	RegisterAttributeDriver(header, "state-visibility", "show")
 	if RA.db.horizontal then
 		header:SetAttribute("minHeight", R:Scale(height))
 		header:SetAttribute("minWidth", R:Scale(width)*5 + R:Scale(RA.db.spacing)*4)
@@ -782,23 +796,20 @@ function RA:SpawnHeader(name, group, layout)
 		header:SetAttribute("minHeight", R:Scale(height)*5 + R:Scale(RA.db.spacing)*4)
 		header:SetAttribute("minWidth", R:Scale(width))
 	end
-    RegisterAttributeDriver(header, "state-visibility", "hide")	
+	RegisterAttributeDriver(header, "state-visibility", "hide")	
 
 	header:RegisterEvent("PLAYER_ENTERING_WORLD")
 	header:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	header:RegisterEvent("INSTANCE_GROUP_SIZE_CHANGED")
-	if layout == 15 then
-		header:HookScript("OnEvent", RA.Raid15SmartVisibility)
-	elseif layout == 25 then
-		header:HookScript("OnEvent", RA.Raid25SmartVisibility)
-	elseif layout == 40 then
-		header:HookScript("OnEvent", RA.Raid40SmartVisibility)
-	end
 
-    return header
+	header:HookScript("OnEvent", RA["Raid"..layout.."SmartVisibility"])
+	self.headers[header] = RA["Raid"..layout.."SmartVisibility"]
+
+	return header
 end
 
 function RA:SpawnRaid()
+	self.headers = {}
 	UIDropDownMenu_Initialize(dropdown, init, "MENU")
 	backdrop = {
 		bgFile = R["media"].blank,
@@ -818,8 +829,8 @@ function RA:SpawnRaid()
 	RA:Colors()
 	CompactRaidFrameContainer:Kill()
 	CompactRaidFrameManager:Kill()
-    for i = 1, 4 do
-        local frame = _G["PartyMemberFrame"..i]
+	for i = 1, 4 do
+		local frame = _G["PartyMemberFrame"..i]
 		frame:UnregisterAllEvents()
 		frame:Kill()
 
@@ -842,7 +853,7 @@ function RA:SpawnRaid()
 		if(altpowerbar) then
 			altpowerbar:UnregisterAllEvents()
 		end
-    end
+	end
 	local raid15 = {}
 	for i=1, 3 do
 		local group = self:SpawnHeader("RayUFRaid15_"..i, i, 15)
@@ -853,8 +864,8 @@ function RA:SpawnRaid()
 		end
 		raid15[i] = group
 		group:Show()
-        R:CreateMover(group, group:GetName().."Mover", "Raid1-15 Group"..i, nil, nil, "ALL,RAID15", true)
-        RA.Raid15SmartVisibility(group)
+		R:CreateMover(group, group:GetName().."Mover", "Raid1-15 Group"..i, nil, nil, "ALL,RAID15", true)
+		RA.Raid15SmartVisibility(group)
 	end
 	local raid25 = {}
 	for i=1, 5 do
@@ -866,8 +877,8 @@ function RA:SpawnRaid()
 		end
 		raid25[i] = group
 		group:Show()
-        R:CreateMover(group, group:GetName().."Mover", "Raid1-25 Group"..i, nil, nil, "ALL,RAID25,RAID40", true)
-        RA.Raid25SmartVisibility(group)
+		R:CreateMover(group, group:GetName().."Mover", "Raid1-25 Group"..i, nil, nil, "ALL,RAID25,RAID40", true)
+		RA.Raid25SmartVisibility(group)
 	end
 	if RA.db.raid40 then
 		local raid40 = {}
@@ -880,8 +891,8 @@ function RA:SpawnRaid()
 			end
 			raid40[i] = group
 			group:Show()
-            R:CreateMover(group, group:GetName().."Mover", "Raid1-40 Group"..i, nil, nil, "ALL,RAID40", true)
-            RA.Raid40SmartVisibility(group)
+			R:CreateMover(group, group:GetName().."Mover", "Raid1-40 Group"..i, nil, nil, "ALL,RAID40", true)
+			RA.Raid40SmartVisibility(group)
 		end
 	end
 end

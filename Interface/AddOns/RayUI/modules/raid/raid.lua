@@ -109,6 +109,10 @@ function RA:GetOptions()
 			type = "group",
 			name = L["显示"],
 			guiInline = true,
+			set = function(info, value)
+						R.db.Raid[ info[#info] ] = value
+						RA:UpdateVisibility()
+					end,
 			args = {
 				showwhensolo = {
 					order = 1,
@@ -125,6 +129,11 @@ function RA:GetOptions()
 					name = L["显示6~8队"],
 					type = "toggle",
 				},
+				alwaysshow40 = {
+					order = 4,
+					name = L["始终显示1~8队"],
+					type = "toggle",
+				}
 			},
 		},
 		direction = {

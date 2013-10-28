@@ -133,6 +133,7 @@ P["Raid"]={
     hidemenu = false,
 	autorez = true,
 	raid40 = true,
+	alwaysshow40 = false,
 }
 
 P["ActionBar"]={

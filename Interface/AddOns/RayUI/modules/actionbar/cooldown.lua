@@ -194,7 +194,7 @@ function AB:UpdateCDAlpha(self)
 end
 
 function AB:UpdateShapeshiftCDAlpha()
-	for i=1, NUM_SHAPESHIFT_SLOTS do
+	for i=1, NUM_STANCE_SLOTS do
 		button = _G["ShapeshiftButton"..i]
 		local start, duration, enable = GetShapeshiftFormCooldown(i)
 		if start>0 and duration > 1.5 then
