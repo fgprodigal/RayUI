@@ -1713,6 +1713,7 @@ R["Watcher"] = {
                 { spellID = 138317, unitId = "player", caster = "player", filter = "BUFF" },
                 --法師T16, 冰凍意念
                 { spellID = 146557, unitId = "player", caster = "all", filter = "BUFF" },
+                { spellID = 145252, unitId = "player", caster = "all", filter = "BUFF" },
             },
             {
                 name = "PVE/PVP玩家buff&debuff",
