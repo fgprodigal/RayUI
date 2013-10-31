@@ -171,9 +171,9 @@ function MM:CreateMenu()
 		{text = QUESTLOG_BUTTON, notCheckable = true,
 		func = function() ToggleFrame(QuestLogFrame) end},
 		{text = SOCIAL_BUTTON, notCheckable = true,
-		func = function() ToggleFriendsFrame(1) end},
+		func = function() ToggleFriendsFrame() end},
 		{text = GUILD, notCheckable = true,
-		func = function() ToggleGuildFrame(1) end},
+		func = function() ToggleGuildFrame() end},
 		{text = PLAYER_V_PLAYER, notCheckable = true,
 		func = function() if not PVPUIFrame then PVP_LoadUI() end ToggleFrame(PVPUIFrame) end},
 		{text = ENCOUNTER_JOURNAL, notCheckable = true,
@@ -196,6 +196,9 @@ function MM:CreateMenu()
 		{text = LOOT_ROLLS, notCheckable = true,
 		func = function() ToggleFrame(LootHistoryFrame) end},
 	}
+	if(C_StorePublic.IsEnabled()) then
+		tinsert(menuList, {text = BLIZZARD_STORE, notCheckable = true, func = function() StoreMicroButton:Click() end})
+	end
 	Minimap:SetScript("OnMouseUp", function(_, btn)
 		if(btn=="RightButton" and not IsShiftKeyDown()) then
 			ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, "cursor", 0, 0)

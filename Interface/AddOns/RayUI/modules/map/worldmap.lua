@@ -395,6 +395,9 @@ function WM:Initialize()
 	self:RegisterEvent("WORLD_MAP_UPDATE")
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
+
+	--fucking blz
+	setfenv(WorldMapFrame_OnShow, setmetatable({UpdateMicroButtons=function() end }, { __index = _G}))
 end
 
 function WM:Info()
