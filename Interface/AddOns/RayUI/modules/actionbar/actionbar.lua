@@ -381,15 +381,15 @@ function AB:UpdatePositionAndSize(barName)
 end
 
 function AB:PLAYER_ENTERING_WORLD()
-	SHOW_MULTI_ACTIONBAR_1 = true
-	SHOW_MULTI_ACTIONBAR_2 = true
-	SHOW_MULTI_ACTIONBAR_3 = true
-	SHOW_MULTI_ACTIONBAR_4 = true
-	InterfaceOptions_UpdateMultiActionBars()
+	-- SHOW_MULTI_ACTIONBAR_1 = true
+	-- SHOW_MULTI_ACTIONBAR_2 = true
+	-- SHOW_MULTI_ACTIONBAR_3 = true
+	-- SHOW_MULTI_ACTIONBAR_4 = true
+	-- InterfaceOptions_UpdateMultiActionBars()
 
-	SetActionBarToggles(SHOW_MULTI_ACTIONBAR_1, SHOW_MULTI_ACTIONBAR_2, SHOW_MULTI_ACTIONBAR_3, SHOW_MULTI_ACTIONBAR_4)
-	MultiActionBar_Update()
-	UIParent_ManageFramePositions()
+	SetActionBarToggles(true, true, true, true)
+	-- MultiActionBar_Update()
+	-- UIParent_ManageFramePositions()
 end
 
 function AB:Initialize()
@@ -511,6 +511,7 @@ function AB:Initialize()
 	self:HookScript(SpellFlyout, "OnShow", "SetupFlyoutButton")
 
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
+	self:PLAYER_ENTERING_WORLD()
 
 	for i = 1, NUM_ACTIONBAR_BUTTONS do
 		self:Style(_G["ActionButton"..i])

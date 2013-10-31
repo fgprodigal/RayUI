@@ -2,4 +2,5 @@
 	<Script file="blizzards.lua"/>
 	<Script file="talenttaint.lua"/>
 	<Script file="death.lua"/>
+	<Script file="fix.lua"/>
 </Ui>
