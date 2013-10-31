@@ -820,6 +820,3 @@ function R:ADDON_LOADED(event, addon)
 	self:UnregisterEvent("ADDON_LOADED")
 end
 R:RegisterEvent("ADDON_LOADED")
-
-
-C_StorePublic.IsDisabledByParentalControls=function () return false end  --fix for 5.4
