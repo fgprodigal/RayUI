@@ -5,7 +5,6 @@ function B:Initialize()
 	self:TalentTaint()
 	self:FixDeathPopup()
 	self:FixBlizzardBugs()
-	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 end
 
 R:RegisterModule(B:GetName())
