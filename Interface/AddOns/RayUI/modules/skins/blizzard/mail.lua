@@ -23,7 +23,7 @@ local function LoadSkin()
 	end
 
 	select(18, MailFrame:GetRegions()):Hide()
-	select(26, OpenMailFrame:GetRegions()):Hide()
+	select(25, OpenMailFrame:GetRegions()):Hide()
 
 	S:ReskinClose(MailFrameCloseButton)
 
@@ -93,7 +93,6 @@ local function LoadSkin()
 	S:ReskinArrow(InboxNextPageButton, "right")
 	S:ReskinScroll(SendMailScrollFrameScrollBar)
 	S:ReskinScroll(OpenMailScrollFrameScrollBar)
-	OpenMailFrame:DisableDrawLayer("BORDER")
 
 	local bg = CreateFrame("Frame", nil, OpenMailLetterButton)
 	bg:Point("TOPLEFT", -1, 1)

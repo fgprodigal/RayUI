@@ -255,6 +255,7 @@ function NF:Initialize()
 	self:RegisterEvent("CALENDAR_UPDATE_GUILD_EVENTS")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:RegisterEvent("VIGNETTE_ADDED")
+	self:RegisterEvent("RESURRECT_REQUEST")
 end
 
 local hasMail = false
@@ -395,4 +396,7 @@ function NF:VIGNETTE_ADDED(event, vignetteInstanceID)
 	self:Show("发现稀有", name or "", selectTarget)
 end
 
+function NF:RESURRECT_REQUEST(name)
+	PlaySound("ReadyCheck")
+end
 R:RegisterModule(NF:GetName())
