@@ -286,6 +286,20 @@ function R:PLAYER_ENTERING_WORLD()
 	end)
 end
 
+function R:ToggleGameMenu()
+	if GameMenuButtonAddOns then
+		GameMenuFrame:SetHeight(GameMenuFrame:GetHeight()+GameMenuButtonMacros:GetHeight() * 2)
+		GameMenuButtonAddOns:ClearAllPoints()
+		GameMenuButtonAddOns:SetPoint("TOP", RayUIConfigButton, "BOTTOM", 0, -2)
+		GameMenuButtonOptions:ClearAllPoints()
+		GameMenuButtonOptions:SetPoint("TOP", GameMenuButtonAddOns, "BOTTOM", 0, -2)
+	else
+		GameMenuFrame:SetHeight(GameMenuFrame:GetHeight()+GameMenuButtonMacros:GetHeight())
+		GameMenuButtonOptions:ClearAllPoints()
+		GameMenuButtonOptions:SetPoint("TOP", RayUIConfigButton, "BOTTOM", 0, -2)
+	end
+end
+
 function R:Initialize()
 	self:LoadMovers()
 
@@ -305,9 +319,7 @@ function R:Initialize()
 
 	local configButton = CreateFrame("Button", "RayUIConfigButton", GameMenuFrame, "GameMenuButtonTemplate")
 	configButton:SetSize(GameMenuButtonMacros:GetWidth(), GameMenuButtonMacros:GetHeight())
-	GameMenuFrame:SetHeight(GameMenuFrame:GetHeight()+GameMenuButtonMacros:GetHeight());
-	GameMenuButtonOptions:SetPoint("TOP", configButton, "BOTTOM", 0, -2)
-	configButton:SetPoint("TOP", GameMenuButtonHelp, "BOTTOM", 0, -2)
+	configButton:SetPoint("TOP", GameMenuButtonStore, "BOTTOM", 0, -2)
 	configButton:SetText(L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r设置"])
 	configButton:SetScript("OnClick", function()
 		if RayUIConfigTutorial then
@@ -317,6 +329,7 @@ function R:Initialize()
 		HideUIPanel(GameMenuFrame)
 		self:OpenConfig()
 	end)
+	R:SecureHook("ToggleGameMenu")
 
 	local S = self:GetModule("Skins")
 	S:Reskin(configButton)

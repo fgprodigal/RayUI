@@ -1,5 +1,5 @@
 ﻿local AddOnName, Engine = ...
-local AddOn = LibStub("AceAddon-3.0"):NewAddon(AddOnName, "AceConsole-3.0", "AceEvent-3.0")
+local AddOn = LibStub("AceAddon-3.0"):NewAddon(AddOnName, "AceConsole-3.0", "AceEvent-3.0", "AceHook-3.0")
 local Locale = LibStub("AceLocale-3.0"):GetLocale(AddOnName, false)
 local AceConfig = LibStub("AceConfig-3.0")
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")

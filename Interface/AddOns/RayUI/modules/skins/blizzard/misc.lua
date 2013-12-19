@@ -97,6 +97,7 @@ local function LoadSkin()
 		"StackSplitOkayButton",
 		"StackSplitCancelButton",
 		"GameMenuButtonHelp",
+		"GameMenuButtonStore",
 		"GameMenuButtonOptions",
 		"GameMenuButtonUIOptions",
 		"GameMenuButtonKeybindings",

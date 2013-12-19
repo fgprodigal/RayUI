@@ -28,6 +28,7 @@ local function LoadFunc()
             if not inGroup then
                 for guildIndex = 1, GetNumGuildMembers() do
                     local guildMemberName = GetGuildRosterInfo(guildIndex)
+					guildMemberName = guildMemberName:match("(.+)%-.+") or guildMemberName
                     if guildMemberName == leaderName then
                         AcceptGroup()
                         inGroup = true
