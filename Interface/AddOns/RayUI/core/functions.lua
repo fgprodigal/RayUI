@@ -18,12 +18,13 @@ local BlackList = {"bigfoot", "duowan", "163ui", "neavo", "sora"}
 local demoFrame
 
 local ItemUpgrade = setmetatable ({
-	[1]   = 8,
+	[1] = 8,
 	[373] = 4,
 	[374] = 8,
 	[375] = 4,
 	[376] = 4,
 	[377] = 4,
+	[378] = 7,
 	[379] = 4,
 	[380] = 4,
 	[445] = 0,
@@ -49,11 +50,6 @@ local ItemUpgrade = setmetatable ({
 	[470] = 8,
 	[471] = 12,
 	[472] = 16,
-	[476] = 0,
-	[477] = 4,
-	[478] = 8,
-	[479] = 0,
-	[480] = 8,
 	[491] = 0,
 	[492] = 4,
 	[493] = 8,
@@ -61,7 +57,11 @@ local ItemUpgrade = setmetatable ({
 	[495] = 4,
 	[496] = 8,
 	[497] = 12,
-	[498] = 16
+	[498] = 16,
+	[504] = 12,
+	[505] = 16,
+	[506] = 20,
+	[507] = 24
 },{__index=function() return 0 end})
 
 function R.dummy()

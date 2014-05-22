@@ -1171,6 +1171,8 @@ R["Watcher"] = {
                 { spellID = 51690, unitId = "player", caster = "player", filter = "BUFF" },
                 --毒藥師
                 { spellID = 145249, unitId = "player", caster = "player", filter = "BUFF" },
+                --欺敵
+                { spellID = 115192, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
