@@ -474,6 +474,10 @@ R["Watcher"] = {
 
                 --勝利
                 { spellID = 32216, unitId = "player", caster = "player", filter = "BUFF" },
+				--嗜血
+                { spellID = 23881, filter = "CD" },
+				--巨人打击
+                { spellID = 86346, filter = "CD" },
             },
             {
                 name = "玩家重要buff&debuff",
@@ -515,6 +519,14 @@ R["Watcher"] = {
                 { spellID = 131116, unitId = "player", caster = "player", filter = "BUFF" },
                 --浴血
                 { spellID = 12292, unitId = "player", caster = "player", filter = "BUFF" },
+				--怒击！
+                { spellID = 131116, unitId = "player", caster = "player", filter = "BUFF" },
+				--剑刃风暴
+                { spellID = 46924, unitId = "player", caster = "player", filter = "BUFF" },
+				--激怒
+                { spellID = 12880, unitId = "player", caster = "player", filter = "BUFF" },
+				--死亡裁决
+                { spellID = 144442, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -925,6 +937,8 @@ R["Watcher"] = {
                 { spellID = 114214,  unitId = "player", caster = "player", filter = "BUFF" },
                 --精神護罩
                 { spellID = 109964,  unitId = "player", caster = "player", filter = "BUFF" },
+				--暗影强化
+                { spellID = 145180,  unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -1686,6 +1700,8 @@ R["Watcher"] = {
                 { spellID = 97463, unitId = "player", caster = "all", filter = "BUFF" },
                 -- 犧牲聖禦
                 { spellID = 6940, unitId = "player", caster = "all", filter = "BUFF" },
+                -- 警戒
+                { spellID = 114030, unitId = "player", caster = "all", filter = "BUFF" },
                 -- 保護聖禦
                 { spellID = 1022, unitId = "player", caster = "all", filter = "BUFF" },
                 -- 守护之魂

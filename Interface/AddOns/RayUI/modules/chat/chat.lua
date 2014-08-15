@@ -1116,8 +1116,8 @@ function CH:Initialize()
 		GeneralDockManager:SetParent(ChatBG)
 	end
 
-	CHAT_INSTANCE_CHAT_GET = "|Hchannel:INSTANCE_CHAT|h".."[I]".."|h %s:\32"
-	CHAT_INSTANCE_CHAT_LEADER_GET = "|Hchannel:INSTANCE_CHAT|h".."[IL]".."|h %s:\32"
+	CHAT_INSTANCE_CHAT_GET = "|Hchannel:INSTANCE|h".."[I]".."|h %s:\32"
+	CHAT_INSTANCE_CHAT_LEADER_GET = "|Hchannel:INSTANCE|h".."[IL]".."|h %s:\32"
 	--CHAT_BATTLEGROUND_GET = "|Hchannel:Battleground|h".."[BG]".."|h %s:\32"
 	--CHAT_BATTLEGROUND_LEADER_GET = "|Hchannel:Battleground|h".."[BG]".."|h %s:\32"
 	CHAT_BN_WHISPER_GET = "%s:\32"
