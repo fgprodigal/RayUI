@@ -77,13 +77,9 @@ function A:UpdateTime(elapsed)
 				self.time:SetText("|cffff0000"..time.."|r")
 				if A.AlphaFrame then
 					self:SetAlpha(A.AlphaFrame.BuffAlphaValue)
-				else
-					self:SetAlpha(1)
 				end
 			end
 		end
-	else
-		self:SetAlpha(1)
 	end
 end
 
@@ -138,7 +134,7 @@ function A:UpdateAura(button, index)
 		else
 			button.timeLeft = nil
 			button.time:SetText("")
-			button:SetScript("OnUpdate", nil)	
+			button:SetScript("OnUpdate", nil)
 			button:SetAlpha(1)
 		end
 
