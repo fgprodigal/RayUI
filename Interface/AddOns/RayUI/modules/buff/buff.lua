@@ -51,121 +51,147 @@ function A:UpdateAlpha(elapsed)
 end
 
 function A:UpdateTime(elapsed)
-	if(self.expiration) then
-		self.expiration = math.max(self.expiration - elapsed, 0)
-		if(self.expiration <= 0) then
+	if(self.offset) then
+		local expiration = select(self.offset, GetWeaponEnchantInfo())
+		if(expiration) then
+			self.timeLeft = expiration / 1e3
+		else
+			self.timeLeft = 0
+		end
+	end
+
+	if(self.timeLeft) then
+		self.timeLeft = math.max(self.timeLeft - elapsed, 0)
+		if(self.timeLeft <= 0) then
 			self:SetAlpha(1)
 			self.time:SetText("")
 		else
-			local time = formatTime(self.expiration)
-			if self.expiration <= 86400.5 and self.expiration > 3600.5 then
+			local time = formatTime(self.timeLeft)
+			if self.timeLeft <= 86400.5 and self.timeLeft > 3600.5 then
 				self.time:SetText(NORMAL_FONT_COLOR_CODE..time.."|r")
 				self:SetAlpha(1)
-			elseif self.expiration <= 3600.5 and self.expiration > 60.5 then
+			elseif self.timeLeft <= 3600.5 and self.timeLeft > 60.5 then
 				self.time:SetText(NORMAL_FONT_COLOR_CODE..time.."|r")
 				self:SetAlpha(1)
-			elseif self.expiration <= 60.5 then
+			elseif self.timeLeft <= 60.5 then
 				self.time:SetText("|cffff0000"..time.."|r")
-				self:SetAlpha(A.AlphaFrame.BuffAlphaValue)
+				if A.AlphaFrame then
+					self:SetAlpha(A.AlphaFrame.BuffAlphaValue)
+				end
 			end
 		end
 	end
 end
 
-function A:UpdateWeapon(button)
-	if not button.shadow then
-		button:Size(buttonsize, buttonsize)
-		button:CreateShadow("Background")
-		button.shadow:SetBackdropColor(0, 0, 0)
-		button.border:SetBackdropBorderColor(137/255, 0, 191/255)
+function A:CreateIcon(button)
+	button.texture = button:CreateTexture(nil, "BORDER")
+	button.texture:SetTexCoord(.08, .92, .08, .92)
+	button.texture:SetAllPoints()
 
-		button.time = _G[button:GetName().."Duration"]
-		button.icon = _G[button:GetName().."Icon"]
+	button.count = button:CreateFontString(nil, "ARTWORK")
+	button.count:Point("TOPRIGHT", 2, 2)
+	button.count:SetFont(R["media"].cdfont, 14, "OUTLINE")
 
-		_G[button:GetName().."Border"]:Hide()
-		button.icon:SetTexCoord(.08, .92, .08, .92)
-		button.icon:SetInside(button, 1, 1)
-		button.time:ClearAllPoints()
-		button.time:Point("CENTER", button, "BOTTOM", 2, -1)
-		button.time:SetFont(R["media"].cdfont, 11, "OUTLINE")
-		button.time:SetShadowOffset(0, 0)
+	button.time = button:CreateFontString(nil, "ARTWORK")
+	button.time:Point("CENTER", button, "BOTTOM", 2, -1)
+	button.time:SetFont(R["media"].cdfont, 14, "OUTLINE")
 
-		button.highlight = button:CreateTexture(nil, "HIGHLIGHT")
-		button.highlight:SetTexture(1,1,1,0.45)
-		button.highlight:SetAllPoints(button.icon)
-	end
+	button:SetScript("OnUpdate", A.UpdateTime)
+	button:HookScript("OnClick", function(self, button)
+		if button == "LeftButton" and IsShiftKeyDown() then
+			local name, _, _, _, _, _, _, _, _, _, spellID = UnitAura(SecureButton_GetUnit(self:GetParent()), self:GetID(), self:GetParent():GetAttribute("filter"))
+			R:Print(self:GetParent():GetAttribute("filter") == "HELPFUL" and "BUFF" or "DEBUFF", name, spellID)
+		end
+	end)
+
+	button:CreateShadow("Background")
+	button.shadow:SetBackdropColor(0, 0, 0)
+
+	button.highlight = button:CreateTexture(nil, "HIGHLIGHT")
+	button.highlight:SetTexture(1,1,1,0.45)
+	button.highlight:SetAllPoints(button.texture)
+
+	button:SetScript("OnAttributeChanged", A.OnAttributeChanged)
 end
 
-function A:UpdateAuras(header, button)
-	if(not button.texture) then
-		button.texture = button:CreateTexture(nil, "BORDER")
-		button.texture:SetAllPoints()
-
-		button.count = button:CreateFontString(nil, "ARTWORK")
-		button.count:Point("TOPRIGHT", 2, 2)
-		button.count:SetFont(R["media"].cdfont, 14, "OUTLINE")
-
-		button.time = button:CreateFontString(nil, "ARTWORK")
-		button.time:Point("CENTER", button, "BOTTOM", 2, -1)
-		button.time:SetFont(R["media"].cdfont, 14, "OUTLINE")
-
-		button:SetScript("OnUpdate", A.UpdateTime)
-		button:HookScript("OnClick", function(self, button)
-			if button == "LeftButton" and IsShiftKeyDown() then
-				local name, _, _, _, _, _, _, _, _, _, spellID = UnitAura(SecureButton_GetUnit(self:GetParent()), self:GetID(), self:GetParent():GetAttribute("filter"))
-				R:Print(self:GetParent():GetAttribute("filter") == "HELPFUL" and "BUFF" or "DEBUFF", name, spellID)
-			end
-		end)
-
-		button:CreateShadow("Background")
-		button.shadow:SetBackdropColor(0, 0, 0)
-
-		button.highlight = button:CreateTexture(nil, "HIGHLIGHT")
-		button.highlight:SetTexture(1,1,1,0.45)
-		button.highlight:SetAllPoints(button.texture)
-	end
-
-	local name, _, texture, count, dtype, duration, expiration = UnitAura(header:GetAttribute("unit"), button:GetID(), header:GetAttribute("filter"))
+function A:UpdateAura(button, index)
+	local filter = button:GetParent():GetAttribute("filter")
+	local unit = button:GetParent():GetAttribute("unit")
+	local name, rank, texture, count, dtype, duration, expirationTime, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossDebuff = UnitAura(unit, index, filter)
 
 	if(name) then
-		button.texture:SetTexture(texture)
-		button.texture:SetTexCoord(.08, .92, .08, .92)
-		button.count:SetText(count > 1 and count or "")
-		button.expiration = expiration - GetTime()
+		if(duration > 0 and expirationTime) then
+			local timeLeft = expirationTime - GetTime()
+			if(not button.timeLeft) then
+				button.timeLeft = timeLeft
+				button:SetScript("OnUpdate", A.UpdateTime)
+			else
+				button.timeLeft = timeLeft
+			end
 
-		if(header:GetAttribute("filter") == "HARMFUL") then
+			button.nextUpdate = -1
+			A.UpdateTime(button, 0)
+		else
+			button.timeLeft = nil
+			button.time:SetText("")
+			button:SetScript("OnUpdate", nil)			
+		end
+
+		if(count > 1) then
+			button.count:SetText(count)
+		else
+			button.count:SetText("")
+		end		
+
+		if filter == "HARMFUL" then
 			local color = DebuffTypeColor[dtype] or DebuffTypeColor.none
 			button.border:SetBackdropBorderColor(color.r, color.g, color.b)
 			button.texture:SetInside(button, 1, 1)
 		end
+		
+		button.texture:SetTexture(texture)
+		button.offset = nil
 	end
 end
 
-function A:ScanAuras(event, unit)
-	if InCombatLockdown() then
-		self:RegisterEvent("PLAYER_REGEN_ENABLED")
-	end
-	if(unit) then
-		if(unit ~= PlayerFrame.unit) then return end
-		if(unit ~= self:GetAttribute("unit")) and not InCombatLockdown() then
-			self:SetAttribute("unit", unit)
-		end
-	end
+function A:UpdateTempEnchant(button, index)
+	local quality = GetInventoryItemQuality("player", index)
+	button.texture:SetTexture(GetInventoryItemTexture("player", index))
 
-	for index = 1, 32 do
-		local child = self:GetAttribute("child" .. index)
-		if(child) then
-			A:UpdateAuras(self, child)
-		end
+	-- time left
+	local offset = 2
+	local weapon = button:GetName():sub(-1)
+	if weapon:match("2") then
+		offset = 5
 	end
+	
+	if(quality) then
+		button:SetBackdropBorderColor(GetItemQualityColor(quality))
+	end
+	
+	local expirationTime = select(offset, GetWeaponEnchantInfo())
+	if(expirationTime) then
+		button.offset = offset
+		button:SetScript("OnUpdate", A.UpdateTime)
+		button.nextUpdate = -1
+		A.UpdateTime(button, 0)
+	else
+		button.timeLeft = nil
+		button.offset = nil
+		button:SetScript("OnUpdate", nil)
+		button.time:SetText("")
+	end
+end
 
-	if event == "PLAYER_REGEN_ENABLED" then
-		self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+function A:OnAttributeChanged(attribute, value)
+	if(attribute == "index") then
+		A:UpdateAura(self, value)
+	elseif(attribute == "target-slot") then
+		A:UpdateTempEnchant(self, value)
 	end
 end
 
 function A:UpdateHeader(header)
-	header:SetAttribute("consolidateDuration", -1)
 	header:SetAttribute("consolidateTo", (R.db.Misc.raidbuffreminder == true and R.db.Misc.consolidate == true) and 1 or 0)
 	header:SetAttribute("maxWraps", 1)
 	header:SetAttribute("sortMethod", "TIME")
@@ -181,10 +207,10 @@ function A:UpdateHeader(header)
 		header:SetAttribute("separateOwn", 1)
 		header:SetAttribute("maxWraps", 3)
 		header:SetAttribute("minHeight", buttonsize*3 + spacing*2)
+		header:SetAttribute("weaponTemplate", ("RayUIAuraTemplate%d"):format(buttonsize))
 	end
 
-	self.ScanAuras(header)
-
+	header:SetAttribute("template", ("RayUIAuraTemplate%d"):format(buttonsize))
 	A:PostDrag()
 end
 
@@ -195,10 +221,14 @@ function A:CreateAuraHeader(filter)
 	local header = CreateFrame("Frame", name, UIParent, "SecureAuraHeaderTemplate")
 	header:SetClampedToScreen(true)
 	header:SetAttribute("template", "RayUIAuraTemplate30")
-	header:HookScript("OnEvent", A.ScanAuras)
 	header:SetAttribute("unit", "player")
 	header:SetAttribute("filter", filter)
 	RegisterStateDriver(header, "visibility", "[petbattle] hide; show")
+
+	if filter == "HELPFUL" then
+		header:SetAttribute('consolidateDuration', -1)
+		header:SetAttribute("includeWeapons", 1)
+	end
 
 	A:UpdateHeader(header)
 	header:Show()
@@ -239,46 +269,10 @@ function A:PostDrag(position)
 	end
 end
 
-function A:WeaponPostDrag(point)
-	if not point then point = R:GetScreenQuadrant(self) end
-	if string.find(point, "LEFT") then
-		TempEnchant1:ClearAllPoints()
-		TempEnchant2:ClearAllPoints()
-		TempEnchant1:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
-		TempEnchant2:SetPoint("LEFT", TempEnchant1, "RIGHT", spacing, 0)
-	else
-		TempEnchant1:ClearAllPoints()
-		TempEnchant2:ClearAllPoints()
-		TempEnchant1:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 0)
-		TempEnchant2:SetPoint("RIGHT", TempEnchant1, "LEFT", -spacing, 0)
-	end
-end
-
-function A:UpdateWeaponText(auraButton, timeLeft)
-	local duration = auraButton.duration
-	if(timeLeft) then
-		if(timeLeft <= 0) then
-			auraButton:SetAlpha(1)
-			duration:SetText("")
-		else
-			local time = formatTime(timeLeft)
-			if timeLeft <= 86400.5 and timeLeft > 3600.5 then
-				duration:SetText(NORMAL_FONT_COLOR_CODE..time.."|r")
-				auraButton:SetAlpha(1)
-			elseif timeLeft <= 3600.5 and timeLeft > 60.5 then
-				duration:SetText(NORMAL_FONT_COLOR_CODE..time.."|r")
-				auraButton:SetAlpha(1)
-			elseif timeLeft <= 60.5 then
-				duration:SetText("|cffff0000"..time.."|r")
-				auraButton:SetAlpha(A.AlphaFrame.BuffAlphaValue)
-			end
-		end
-	end
-end
-
 function A:Initialize()
 	BuffFrame:Kill()
 	ConsolidatedBuffs:Kill()
+	TemporaryEnchantFrame:Kill()
 	InterfaceOptionsFrameCategoriesButton12:SetScale(0.0001)
 
 	local AurasHolder = CreateFrame("Frame", "AurasHolder", UIParent)
@@ -298,26 +292,6 @@ function A:Initialize()
 	self.AlphaFrame.BuffFrameFlashState = 1
 	self.AlphaFrame.BuffFrameFlashTime = 0
 	self.AlphaFrame:SetScript("OnUpdate", A.UpdateAlpha)
-
-	self.EnchantHeader = CreateFrame("Frame", "RayUITemporaryEnchantFrame", UIParent, "SecureHandlerStateTemplate");
-	self.EnchantHeader:Size(buttonsize * 2 + spacing, buttonsize)
-	self.EnchantHeader:Point("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -16)
-	self.EnchantHeader:SetAttribute("_onstate-show", [[
-			if newstate == "hide" then
-				self:Hide();
-			else
-				self:Show();
-			end
-		]]);
-
-	RegisterStateDriver(self.EnchantHeader, "show", "[petbattle] hide;show");
-	self:SecureHook("AuraButton_UpdateDuration", "UpdateWeaponText")
-	TemporaryEnchantFrame:SetParent(self.EnchantHeader)
-	R:CreateMover(self.EnchantHeader, "WeaponEnchantMover", L["武器附魔锚点"], true, A.WeaponPostDrag)
-
-	for i = 1, 2 do
-		A:UpdateWeapon(_G["TempEnchant"..i])
-	end
 end
 
 R:RegisterModule(A:GetName())
