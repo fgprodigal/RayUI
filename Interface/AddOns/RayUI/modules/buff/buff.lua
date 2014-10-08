@@ -80,6 +80,8 @@ function A:UpdateTime(elapsed)
 				end
 			end
 		end
+	else
+		self:SetAlpha(1)
 	end
 end
 
