@@ -143,28 +143,41 @@ local function LoadSkin()
 			else
 				lootSlot.count:Hide()
 			end
-			if isActive == false then
-				lootSlot.quest:Show()
-			else
-				lootSlot.quest:Hide()
-			end
+			-- if isActive == false then
+				-- lootSlot.quest:Show()
+			-- else
+				-- lootSlot.quest:Hide()
+			-- end
 			local glow = lootSlot.glow
 			if quality and quality > 1 then
 				lootSlot.texture:SetInside()
 				lootSlot:StyleButton()
 				glow:SetBackdropBorderColor(color.r, color.g, color.b)
 				lootSlot:SetBackdropColor(0, 0, 0)
+				ActionButton_HideOverlayGlow(lootSlot)
 			elseif questId then
 				lootSlot.texture:SetInside()
 				lootSlot:StyleButton()
 				glow:SetBackdropBorderColor(1.0, 0.2, 0.2)
 				lootSlot:SetBackdropColor(0, 0, 0)
+				ActionButton_ShowOverlayGlow(lootSlot)
             else
 				lootSlot.texture:SetAllPoints()
 				glow:SetBackdropBorderColor(0, 0, 0)
 				lootSlot:SetBackdropColor(0, 0, 0, 0)
 				lootSlot:StyleButton(true)
+				ActionButton_HideOverlayGlow(lootSlot)
 			end
+			if ( questId and not isActive ) then
+				lootSlot.quest:Show()
+				ActionButton_ShowOverlayGlow(lootSlot)
+			elseif ( questId or isQuestItem ) then
+				lootSlot.quest:Hide()	
+				ActionButton_ShowOverlayGlow(lootSlot)
+			else
+				lootSlot.quest:Hide()
+				ActionButton_HideOverlayGlow(lootSlot)
+			end		
 			if R:IsItemUnusable(GetLootSlotLink(id)) or locked then
 				lootSlot.texture:SetVertexColor(RED_FONT_COLOR.r, RED_FONT_COLOR.g, RED_FONT_COLOR.b)
 			else

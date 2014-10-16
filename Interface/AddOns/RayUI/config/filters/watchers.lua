@@ -527,6 +527,12 @@ R["Watcher"] = {
                 { spellID = 12880, unitId = "player", caster = "player", filter = "BUFF" },
 				--死亡裁决
                 { spellID = 144442, unitId = "player", caster = "player", filter = "BUFF" },
+				--血之气息
+                { spellID = 60503, unitId = "player", caster = "player", filter = "BUFF" },
+				--盾牌屏障
+                { spellID = 112048, unitId = "player", caster = "player", filter = "BUFF" },
+				--最后通牒
+                { spellID = 122510, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -646,6 +652,8 @@ R["Watcher"] = {
                 { spellID = 114052, unitId = "player", caster = "player", filter = "BUFF" },
                 --星界轉移
                 { spellID = 108271, unitId = "player", caster = "player", filter = "BUFF" },
+				--升腾
+                { spellID = 114050, unitId = "player", caster = "player", filter = "BUFF" },
 
             },
             {

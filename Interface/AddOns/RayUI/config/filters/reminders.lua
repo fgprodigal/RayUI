@@ -13,6 +13,7 @@ P["Reminder"]["filters"] = {
 			["combat"] = true,
 			["pvp"] = true,
 			["enable"] = true,
+			["strictFilter"] = true,
 		},
 	},
 	HUNTER = {
@@ -25,6 +26,7 @@ P["Reminder"]["filters"] = {
 			["combat"] = true,
 			["personal"] = true,
 			["enable"] = true,
+			["strictFilter"] = true,
 		},
 	},
 	MAGE = {
@@ -38,9 +40,25 @@ P["Reminder"]["filters"] = {
 			["combat"] = true,
 			["pvp"] = true,
 			["enable"] = true,
+			["strictFilter"] = true,
 		},
 	},
 	WARLOCK = {
+		["黑暗意图"] = {	-- Dark Intent group
+			["spellGroup"] = {
+				[109773] = true,	-- Dark Intent
+			},
+			["negateGroup"] = {
+				[1459] = true,	-- Arcane Brilliance
+				[61316] = true,	-- Dalaran Brilliance
+				[77747] = true,	-- Burning Wrath
+			},
+			["combat"] = true,
+			["instance"] = true,
+			["pvp"] = true,
+			["enable"] = true,
+			["strictFilter"] = true,
+		},
 	},
 	PALADIN = {
 		["正义之怒"] = { -- righteous fury group
@@ -61,6 +79,7 @@ P["Reminder"]["filters"] = {
 			["pvp"] = true,
 			["minLevel"] = 3,
 			["enable"] = true,
+			["strictFilter"] = true,
 		},
 	},
 	SHAMAN = {
@@ -73,6 +92,7 @@ P["Reminder"]["filters"] = {
 			["combat"] = true,
 			["pvp"] = true,
 			["enable"] = true,
+			["strictFilter"] = true,
 		},
 		["武器附魔"] = { --check weapons for enchants
 			["weaponCheck"] = true,
@@ -81,6 +101,7 @@ P["Reminder"]["filters"] = {
 			["pvp"] = true,
 			["minLevel"] = 10,
 			["enable"] = true,
+			["strictFilter"] = true,
 		},
 	},
 	WARRIOR = {
@@ -92,12 +113,14 @@ P["Reminder"]["filters"] = {
 				[21562] = true,
 				[90364] = true,
 				[109773] = true,
+				[6673] = true,
 			},
 			["role"] = "Tank",
 			["instance"] = true,
 			["combat"] = true,
 			["pvp"] = true,
 			["enable"] = true,
+			["strictFilter"] = true,
 		},
 		["战斗怒吼"] = { -- battle Shout group
 			["spellGroup"] = {
@@ -106,12 +129,14 @@ P["Reminder"]["filters"] = {
 			["negateGroup"] = {
 				[57330] = true, -- horn of Winter
 				[19506] = true, -- trueshot aura
+				[469] = true, -- Commanding Shout
 			},
 			["instance"] = true,
 			["combat"] = true,
 			["pvp"] = true,
 			["role"] = "Melee",
 			["enable"] = true,
+			["strictFilter"] = true,
 		},
 	},
 	DEATHKNIGHT = {
@@ -127,6 +152,7 @@ P["Reminder"]["filters"] = {
 			["combat"] = true,
 			["pvp"] = true,
 			["enable"] = true,
+			["strictFilter"] = true,
 		},
 		["鲜血灵气"] = { -- blood presence group
 			["spellGroup"] = {
@@ -137,6 +163,7 @@ P["Reminder"]["filters"] = {
 			["combat"] = true,
 			["reverseCheck"] = true,
 			["enable"] = true,
+			["strictFilter"] = true,
 		},
 	},
 	ROGUE = {
@@ -149,6 +176,7 @@ P["Reminder"]["filters"] = {
 			["combat"] = true,
 			["pvp"] = true,
 			["enable"] = true,
+			["strictFilter"] = true,
 		},
 		-- ["非伤害性毒药"] = {
 			-- ["spellGroup"] = {

@@ -229,7 +229,14 @@ P["Misc"]={
         autoInviteKeywords = "111 123",
     raidcd = false,
         raidcdwidth = 170,
-        raidcdgrowth = "UP"
+        raidcdgrowth = "UP",
+	totembar = {
+		enable = true,
+		size = 35,
+		growthDirection = "VERTICAL",
+		sortDirection = "ASCENDING",
+		spacing = 4
+	}
 }
 
 P["Skins"]={

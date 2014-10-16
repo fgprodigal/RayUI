@@ -26,9 +26,9 @@ function MM:PositionButtonCollector(self, screenQuadrant)
 		buttons[i].SetPoint = R.dummy
 	end
 	if strfind(screenQuadrant, "RIGHT") then
-		MBCF:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -5, 2)
+		MBCF:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -5, 0)
 	else
-		MBCF:SetPoint("TOPLEFT", Minimap, "TOPRIGHT", 5, 2)
+		MBCF:SetPoint("TOPLEFT", Minimap, "TOPRIGHT", 5, 0)
 	end
 end
 

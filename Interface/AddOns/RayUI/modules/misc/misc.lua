@@ -231,6 +231,52 @@ function M:GetOptions()
 				},
 			},
 		},
+		totembar = {
+			order = 15,
+			type = "group",
+			name = L["图腾条"],
+			guiInline = true,
+			get = function(info) return R.db.Misc.totembar[ info[#info] ] end,
+			set = function(info, value) R.db.Misc.totembar[ info[#info] ] = value; R:GetModule("Misc"):PositionAndSizeTotem() end,
+			args = {
+				enable = {
+					order = 1,
+					type = "toggle",
+					name = L["启用"],
+					set = function(info, value) R.db.Misc.totembar[ info[#info] ] = value; R:GetModule("Misc"):ToggleTotemEnable() end,
+				},					
+				size = {
+					order = 2,
+					type = "range",
+					name = L["按键大小"],
+					min = 24, max = 60, step = 1,
+				},
+				spacing = {
+					order = 3,
+					type = "range",
+					name = L["按键间距"],
+					min = 1, max = 10, step = 1,			
+				},
+				sortDirection = {
+					order = 4,
+					type = "select",
+					name = L["排序方向"],
+					values = {
+						["ASCENDING"] = L["正向"],
+						["DESCENDING"] = L["逆向"],
+					},
+				},
+				growthDirection = {
+					order = 5,
+					type = "select",
+					name = L["排列方向"],
+					values = {
+						["VERTICAL"] = L["垂直"],
+						["HORIZONTAL"] = L["水平"],
+					},
+				},
+			},
+		},
 	}
 	return options
 end

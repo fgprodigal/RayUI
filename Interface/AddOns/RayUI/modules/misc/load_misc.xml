@@ -25,6 +25,7 @@
 	<Script file="raidUtility.lua"/>
 	<Script file="setrole.lua"/>
 	<Script file="timerTracker.lua"/>
+	<Script file="totemBar.lua"/>
 	<Script file="vehicle.lua"/>
 	<Script file="watchframe.lua"/>
 </Ui>
