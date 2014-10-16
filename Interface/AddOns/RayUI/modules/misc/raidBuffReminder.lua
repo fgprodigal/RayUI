@@ -6,77 +6,24 @@ local function LoadFunc()
 
 	-- local bsize = (Minimap:GetWidth() +3) / 8 - 3
 	local bsize = 30
+	local ignoreIcons = {}
 
-	local Stats = {
-		[90363] = "HUNTER", -- Embrace of the Shale Spider
-		[117667] = "MONK", --Legacy of The Emperor
-		[1126] = "DRUID", -- Mark of The Wild
-		[20217] = "PALADIN", -- Blessing Of Kings
-		[72586] = R.myclass, -- Blessing of Forgotten Kings
-		["DEFAULT"] = 20217
-	}
+	if R.Role == "Caster" then
+		ignoreIcons[3] = 2
+	else
+		ignoreIcons[5] = 4
+	end
 
-	local Stamina = {
-		[90364] = "HUNTER", -- Qiraji Fortitude
-		[469] = "WARRIOR", -- Commanding Shout
-		[109773] = "WARLOCK", -- Dark Intent
-		[21562] = "PRIEST", -- Power Word: Fortitude
-		[111923] = R.myclass, -- Fortitude
-		["DEFAULT"] = 21562
-	}
-
-	local AttackPower = {
-		[19506] = "HUNTER", -- Trueshot Aura
-		[6673] = "WARRIOR", -- Battle Shout
-		[57330] = "DEATHKNIGHT", -- Horn of Winter
-		["DEFAULT"] = 57330
-	}
-
-	local SpellPower = {
-		[126309] = "HUNTER", -- Still Water
-		[77747] = "SHAMAN", -- Burning Wrath
-		[109773] = "WARLOCK", -- Dark Intent
-		[61316] = "MAGE", -- Dalaran Brilliance
-		[1459] = "MAGE", -- Arcane Brilliance
-		["DEFAULT"] = 1459
-	}
-
-	local AttackSpeed = {
-		[128432] = "HUNTER", -- Cackling Howl
-		[128433] = "HUNTER", -- Serpent"s Swiftness
-		[30809] = "SHAMAN", -- Unleashed Rage
-		[113742] = "ROGUE", -- Swiftblade"s Cunning
-		[55610] = "DEATHKNIGHT", -- Improved Icy Talons
-		["DEFAULT"] = 55610
-	}
-
-	local SpellHaste = {
-		[135678] = "HUNTER", -- Energizing Spores
-		[24907] = "DRUID", -- Moonkin Aura
-		[51470] = "SHAMAN", -- Elemental Oath
-		[49868] = "PRIEST", -- Mind Quickening
-		["DEFAULT"] = 49868
-	}
-
-	local CriticalStrike = {
-		[126309] = "HUNTER", -- Still Water
-		[24604] = "HUNTER", -- Furious Howl
-		[90309] = "HUNTER", -- Terrifying Roar
-		[126373] = 'HUNTER', -- Fearless Roar
-		[97229] = 'HUNTER', -- Bellowing Roar
-		[1459] = "MAGE", -- Arcane Brilliance
-		[61316] = "MAGE", -- Dalaran Brilliance
-		[24932] = "DRUID", -- Leader of The Pact
-		[116781] = "MONK", -- Legacy of the White Tiger
-		["DEFAULT"] = 1459
-	}
-
-	local Mastery = {
-		[93435] = "HUNTER", --Roar of Courage
-		[128997] = "HUNTER", --Spirit Beast Blessing
-		[116956] = "SHAMAN", --Grace of Air
-		[19740] = "PALADIN", -- Blessing of Might
-		["DEFAULT"] = 19740
+	local DefaultIcons = {
+		[1] = "Interface\\Icons\\Spell_Magic_GreaterBlessingofKings", -- Stats
+		[2] = "Interface\\Icons\\Spell_Holy_WordFortitude", -- Stamina
+		[3] = "Interface\\Icons\\INV_Misc_Horn_02", --Attack Power
+		[4] = "Interface\\Icons\\INV_Helmet_08", --Haste
+		[5] = "Interface\\Icons\\Spell_Holy_MagicalSentry", --Spell Power
+		[6] = "Interface\\Icons\\ability_monk_prideofthetiger", -- Critical Strike
+		[7] = "Interface\\Icons\\Spell_Holy_GreaterBlessingofKings", --Mastery
+		[8] = "Interface\\ICONS\\spell_warlock_focusshadow", --Multistrike
+		[9] = "Interface\\Icons\\Spell_Holy_MindVision" --Versatility
 	}
 
 	local Food = {
@@ -175,72 +122,44 @@ local function LoadFunc()
 	local function UpdateReminder(event, unit)
 		if (event == "UNIT_AURA" and unit ~= "player") then return end
 		local frame = RaidBuffReminder
-
+		
 		if M.db.raidbuffreminderparty and GetNumGroupMembers() == 0 then
 			return frame:Hide()
 		elseif M.db.raidbuffreminderparty and GetNumGroupMembers() > 0 then
 			frame:Show()
 		end
 
-		if event ~= "UNIT_AURA" and not InCombatLockdown() then
-			if R.Role == "Caster" then
-				ConsolidatedBuffsTooltipBuff3:Hide()
-				ConsolidatedBuffsTooltipBuff4:Hide()
-				ConsolidatedBuffsTooltipBuff5:Show()
-				ConsolidatedBuffsTooltipBuff6:Show()
-			else
-				ConsolidatedBuffsTooltipBuff3:Show()
-				ConsolidatedBuffsTooltipBuff4:Show()
-				ConsolidatedBuffsTooltipBuff5:Hide()
-				ConsolidatedBuffsTooltipBuff6:Hide()
-			end
-		end
-
-		if R.Role == "Caster" then
-			IndexTable[5] = SpellPower
-			IndexTable[6] = SpellHaste
-		else
-			IndexTable[5] = AttackPower
-			IndexTable[6] = AttackSpeed
-		end
-
-
-		for i = 1, 8 do
-			local hasBuff, texture = CheckFilterForActiveBuff(IndexTable[i])
-			frame["spell"..i].t:SetTexture(texture)
-			if hasBuff then
-				local spellName, duration, expirationTime, _
-				for i=1, 32 do
-					spellName, _, _, _, _, duration, expirationTime = UnitBuff("player", i)
-					if spellName == hasBuff then
-						break;
-					end
-				end
-
-				frame["spell"..i].expiration = expirationTime - GetTime()
-				frame["spell"..i].duration = duration
+		for i = 1, NUM_LE_RAID_BUFF_TYPES do
+		local spellName, rank, texture, duration, expirationTime, spellId, slot = GetRaidBuffTrayAuraInfo(i)
+			local button = frame["spell"..i]
+			
+			if(spellName) then
+				button.expiration = expirationTime - GetTime()
+				button.duration = duration
+				button.t:SetTexture(texture)
 
 				if duration == 0 and expirationTime == 0 then
-					frame["spell"..i].t:SetDesaturated(false)
-					frame["spell"..i].timerbar:SetMinMaxValues(0, 1)
-					frame["spell"..i].timerbar:SetValue(1)
-					frame["spell"..i].timerbar:Show()
-					frame["spell"..i]:SetScript("OnUpdate", nil)
+					button.t:SetDesaturated(false)
+					button.timerbar:SetMinMaxValues(0, 1)
+					button.timerbar:SetValue(1)
+					button.timerbar:Show()
+					button:SetScript("OnUpdate", nil)
 				else
-					frame["spell"..i].t:SetDesaturated(false)
+					button.t:SetDesaturated(false)
 					if M.db.raidbuffreminderduration == true then
-						frame["spell"..i].timerbar:SetMinMaxValues(0, duration)
-						frame["spell"..i].timerbar:SetValue(0)
-						frame["spell"..i].timerbar:Show()
-						frame["spell"..i]:SetScript("OnUpdate", UpdateRaidBuffReminderTime)
+						button.timerbar:SetMinMaxValues(0, duration)
+						button.timerbar:SetValue(0)
+						button.timerbar:Show()
+						button:SetScript("OnUpdate", UpdateRaidBuffReminderTime)
 					end
 				end
-				frame["spell"..i].hasBuff = hasBuff
+				button.hasBuff = true
 			else
-				frame["spell"..i].t:SetDesaturated(true)
-				frame["spell"..i].timerbar:Hide()
-				frame["spell"..i].hasBuff = nil
-				frame["spell"..i]:SetScript("OnUpdate", nil)
+				button.t:SetTexture(DefaultIcons[i])
+				button.t:SetDesaturated(true)
+				button.timerbar:Hide()
+				button.hasBuff = nil
+				button:SetScript("OnUpdate", nil)
 			end
 		end
 	end
@@ -249,16 +168,14 @@ local function LoadFunc()
 		GameTooltip:Hide()
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMLEFT", -5, -5)
 		GameTooltip:ClearLines()
-
+		
 		local id = self:GetID()
-
-		if id == 1 then
-			local text = select(7, GetItemInfo(76084))
-			GameTooltip:AddLine(text)
-		elseif id == 2 then
-			local text = select(7, GetItemInfo(74648))
-			GameTooltip:AddLine(text)
+		if(self.hasBuff) then
+			GameTooltip:SetUnitConsolidatedBuff("player", id)
+		else
+			GameTooltip:AddLine(_G[("RAID_BUFF_%d"):format(id)])
 		end
+		
 		GameTooltip:Show()
 	end
 
@@ -358,31 +275,34 @@ local function LoadFunc()
 	frame:SetSize((bsize + 8)*8 - 8, bsize)
 	frame:Point("TOPRIGHT", UIParent, "TOPRIGHT", -14, -15)
 
-	for i = 1, 8 do
+	for i = 1, NUM_LE_RAID_BUFF_TYPES do
 		if i == 1 then
 			frame["spell"..i] = CreateButton(frame, true)
 		else
 			frame["spell"..i] = CreateButton(frame["spell"..i-1])
 		end
 		frame["spell"..i]:SetID(i)
-
-		if i <= 2 then
-			frame["spell"..i]:SetScript("OnEnter", Button_OnEnter)
-			frame["spell"..i]:SetScript("OnLeave", GameTooltip_Hide)
-		end
+		frame["spell"..i]:SetScript("OnEnter", Button_OnEnter)
+		frame["spell"..i]:SetScript("OnLeave", GameTooltip_Hide)
 	end
 
-	for i = 1, 8 do
-		local id = i
-		if i > 4 then
-			id = i - 2
+	for i = 1, NUM_LE_RAID_BUFF_TYPES do
+		local button = frame["spell"..i]
+		button.t:SetAlpha(1)
+		button:ClearAllPoints()
+
+		if i == 1 then
+			button:SetPoint("LEFT", frame, "LEFT", 0, 0)
+		else
+			local index = ignoreIcons[i - 1] or (i - 1)
+			button:SetPoint("LEFT", frame["spell"..index], "RIGHT", 8, 0)
 		end
-		_G["ConsolidatedBuffsTooltipBuff"..i]:ClearAllPoints()
-		_G["ConsolidatedBuffsTooltipBuff"..i]:SetAllPoints(frame["spell"..id+2])
-		_G["ConsolidatedBuffsTooltipBuff"..i]:SetParent(frame["spell"..id+2])
-		_G["ConsolidatedBuffsTooltipBuff"..i]:SetAlpha(0)
-		_G["ConsolidatedBuffsTooltipBuff"..i]:SetScript("OnEnter", ConsolidatedBuffsTooltip_OnEnter)
-		_G["ConsolidatedBuffsTooltipBuff"..i]:SetScript("OnLeave", GameTooltip_Hide)
+
+		if(ignoreIcons[i]) then
+			button:Hide()
+		else
+			button:Show()
+		end
 	end
 
 	R:CreateMover(frame, "RaidBuffReminderMover", L["团队buff提醒锚点"], true)

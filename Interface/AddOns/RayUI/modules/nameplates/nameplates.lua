@@ -38,16 +38,10 @@ local DebuffWhiteList = {
 	[GetSpellInfo(47476)] = true, --strangulate
 	-- Druid
 	[GetSpellInfo(33786)] = true, --Cyclone
-	[GetSpellInfo(2637)] = true, --Hibernate
 	[GetSpellInfo(339)] = true, --Entangling Roots
-	[GetSpellInfo(80964)] = true, --Skull Bash
 	[GetSpellInfo(78675)] = true, --Solar Beam
 	-- Hunter
 	[GetSpellInfo(3355)] = true, --Freezing Trap Effect
-	--[GetSpellInfo(60210)] = true, --Freezing Arrow Effect
-	[GetSpellInfo(1513)] = true, --scare beast
-	[GetSpellInfo(19503)] = true, --scatter shot
-	[GetSpellInfo(34490)] = true, --silence shot
 	-- Mage
 	[GetSpellInfo(31661)] = true, --Dragon's Breath
 	[GetSpellInfo(61305)] = true, --Polymorph
@@ -79,8 +73,6 @@ local DebuffWhiteList = {
 	[GetSpellInfo(5484)] = true, --Howl of Terror
 	[GetSpellInfo(6358)] = true, --Seduction
 	[GetSpellInfo(30283)] = true, --Shadowfury
-	-- Warrior
-	[GetSpellInfo(20511)] = true, --Intimidating Shout
 	-- Racial
 	[GetSpellInfo(25046)] = true, --Arcane Torrent
 	[GetSpellInfo(20549)] = true, --War Stomp

@@ -233,16 +233,6 @@ local function LoadSkin()
 		S:CreateSD(tab, 5, 0, 0, 0, 1, 1)
 		select(2, tab:GetRegions()):SetTexCoord(.08, .92, .08, .92)
 	end
-
-	--Flex Raid
-	FlexRaidFrameScrollFrame:StripTextures()
-	FlexRaidFrameBottomInset:StripTextures()
-	hooksecurefunc("FlexRaidFrame_Update", function()
-		FlexRaidFrame.ScrollFrame.Background:SetTexture(nil)
-	end)
-
-	S:ReskinDropDown(FlexRaidFrameSelectionDropDown)
-	S:Reskin(FlexRaidFrameStartRaidButton)
 end
 
 S:RegisterSkin("RayUI", LoadSkin)

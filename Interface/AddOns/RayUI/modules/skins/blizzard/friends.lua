@@ -192,13 +192,13 @@ local function LoadSkin()
 	S:ReskinDropDown(FriendsFrameStatusDropDown)
 
 	-- Battletag invite frame
-	for i = 1, 9 do
-		select(i, BattleTagInviteFrame.NoteFrame:GetRegions()):Hide()
-	end
+	-- for i = 1, 9 do
+		-- select(i, BattleTagInviteFrame.NoteFrame:GetRegions()):Hide()
+	-- end
 
 	S:CreateBD(BattleTagInviteFrame)
 	S:CreateSD(BattleTagInviteFrame)
-	S:CreateBD(BattleTagInviteFrame.NoteFrame, .25)
+	-- S:CreateBD(BattleTagInviteFrame.NoteFrame, .25)
 
 	local _, send, cancel = BattleTagInviteFrame:GetChildren()
 	S:Reskin(send)

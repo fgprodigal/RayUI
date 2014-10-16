@@ -3,6 +3,11 @@ local S = R:GetModule("Skins")
 
 local function LoadSkin()
 	local r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b
+	-- [[ Mounts and pets ]]
+
+	local PetJournal = PetJournal
+	local MountJournal = MountJournal
+
 	for i = 1, 14 do
 		if i ~= 8 then
 			select(i, PetJournalParent:GetRegions()):Hide()
@@ -13,24 +18,18 @@ local function LoadSkin()
 		select(i, PetJournal.PetCount:GetRegions()):Hide()
 	end
 
-	MountJournalMountButton_RightSeparator:Hide()
 	MountJournal.LeftInset:Hide()
 	MountJournal.RightInset:Hide()
 	PetJournal.LeftInset:Hide()
 	PetJournal.RightInset:Hide()
 	PetJournal.PetCardInset:Hide()
 	PetJournal.loadoutBorder:Hide()
-	MountJournal.MountDisplay:GetRegions():Hide()
 	MountJournal.MountDisplay.YesMountsTex:SetAlpha(0)
 	MountJournal.MountDisplay.NoMountsTex:SetAlpha(0)
 	MountJournal.MountDisplay.ShadowOverlay:Hide()
-	PetJournalFilterButtonLeft:Hide()
-	PetJournalFilterButtonRight:Hide()
-	PetJournalFilterButtonMiddle:Hide()
 	PetJournalTutorialButton.Ring:Hide()
 
 	S:CreateBD(PetJournalParent)
-	S:CreateSD(PetJournalParent)
 	S:CreateBD(MountJournal.MountCount, .25)
 	S:CreateBD(PetJournal.PetCount, .25)
 	S:CreateBD(MountJournal.MountDisplay.ModelFrame, .25)
@@ -38,84 +37,140 @@ local function LoadSkin()
 	S:Reskin(MountJournalMountButton)
 	S:Reskin(PetJournalSummonButton)
 	S:Reskin(PetJournalFindBattle)
-	S:Reskin(PetJournalFilterButton)
 	S:CreateTab(PetJournalParentTab1)
 	S:CreateTab(PetJournalParentTab2)
+	S:CreateTab(PetJournalParentTab3)
 	S:ReskinClose(PetJournalParentCloseButton)
 	S:ReskinScroll(MountJournalListScrollFrameScrollBar)
 	S:ReskinScroll(PetJournalListScrollFrameScrollBar)
-	S:ReskinInput(PetJournalSearchBox)
 	S:ReskinInput(MountJournalSearchBox)
+	S:ReskinInput(PetJournalSearchBox)
 	S:ReskinArrow(MountJournal.MountDisplay.ModelFrame.RotateLeftButton, "left")
 	S:ReskinArrow(MountJournal.MountDisplay.ModelFrame.RotateRightButton, "right")
+	S:ReskinFilterButton(PetJournalFilterButton)
+	S:ReskinFilterButton(MountJournalFilterButton)
+
+	MountJournalFilterButton:SetPoint("TOPRIGHT", MountJournal.LeftInset, -5, -8)
+	PetJournalFilterButton:SetPoint("TOPRIGHT", PetJournalLeftInset, -5, -8)
 
 	PetJournalTutorialButton:SetPoint("TOPLEFT", PetJournal, "TOPLEFT", -14, 14)
 
 	PetJournalParentTab2:SetPoint("LEFT", PetJournalParentTab1, "RIGHT", -15, 0)
-
-	PetJournalHealPetButtonBorder:Hide()
-	PetJournalHealPetButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
-	PetJournal.HealPetButton:StyleButton(true)
-	S:CreateBG(PetJournal.HealPetButton)
+	PetJournalParentTab3:SetPoint("LEFT", PetJournalParentTab2, "RIGHT", -15, 0)
 
 	local scrollFrames = {MountJournal.ListScrollFrame.buttons, PetJournal.listScroll.buttons}
 	for _, scrollFrame in pairs(scrollFrames) do
 		for i = 1, #scrollFrame do
 			local bu = scrollFrame[i]
+			local ic = bu.icon
 
 			bu:GetRegions():Hide()
 			bu:SetHighlightTexture("")
-
-			bu.selectedTexture:Point("TOPLEFT", 1, -1)
-			bu.selectedTexture:Point("BOTTOMRIGHT", -1, 1)
-			bu.selectedTexture:SetTexture(S["media"].backdrop)
-			bu.selectedTexture:SetVertexColor(r, g, b, .2)
+			bu.iconBorder:SetTexture("")
+			bu.selectedTexture:SetTexture("")
 
 			local bg = CreateFrame("Frame", nil, bu)
-			bg:Point("TOPLEFT", 1, -1)
-			bg:Point("BOTTOMRIGHT", -1, 1)
+			bg:SetPoint("TOPLEFT", 0, -1)
+			bg:SetPoint("BOTTOMRIGHT", 0, 1)
 			bg:SetFrameLevel(bu:GetFrameLevel()-1)
 			S:CreateBD(bg, .25)
 			bu.bg = bg
 
-			bu.icon:SetTexCoord(.08, .92, .08, .92)
-			bu.icon:SetDrawLayer("OVERLAY")
-			S:CreateBG(bu.icon)
+			ic:SetTexCoord(.08, .92, .08, .92)
+			ic.bg = S:CreateBG(ic)
 
 			bu.name:SetParent(bg)
-			bu:StyleButton()
 
 			if bu.DragButton then
-				bu.DragButton:StyleButton(1)
 				bu.DragButton.ActiveTexture:SetTexture(S["media"].checked)
 			else
-				bu.dragButton:StyleButton(1)
 				bu.dragButton.ActiveTexture:SetTexture(S["media"].checked)
 				bu.dragButton.levelBG:SetAlpha(0)
-				bu.dragButton.level:SetFont(R["media"].font, 12, "OUTLINE")
+				bu.dragButton.level:SetFontObject(GameFontNormal)
 				bu.dragButton.level:SetTextColor(1, 1, 1)
 			end
 		end
 	end
 
-	local function updateScroll()
+	local function updateMountScroll()
 		local buttons = MountJournal.ListScrollFrame.buttons
 		for i = 1, #buttons do
 			local bu = buttons[i]
-			if i == 2 then
-				bu:Point("TOPLEFT", buttons[i-1], "BOTTOMLEFT", 0, -1)
-			elseif i > 2 then
-				bu:SetPoint("TOPLEFT", buttons[i-1], "BOTTOMLEFT", 0, 0)
+			if bu.index ~= nil then
+				bu.bg:Show()
+				bu.icon:Show()
+				bu.icon.bg:Show()
+
+				if bu.selectedTexture:IsShown() then
+					bu.bg:SetBackdropColor(r, g, b, .25)
+				else
+					bu.bg:SetBackdropColor(0, 0, 0, .25)
+				end
+			else
+				bu.bg:Hide()
+				bu.icon:Hide()
+				bu.icon.bg:Hide()
 			end
 		end
 	end
 
-	hooksecurefunc("MountJournal_UpdateMountList", updateScroll)
-	MountJournalListScrollFrame:HookScript("OnVerticalScroll", updateScroll)
-	MountJournalListScrollFrame:HookScript("OnMouseWheel", updateScroll)
+	hooksecurefunc("MountJournal_UpdateMountList", updateMountScroll)
+	hooksecurefunc(MountJournalListScrollFrame, "update", updateMountScroll)
 
-	local tooltips = {PetJournalPrimaryAbilityTooltip, PetJournalSecondaryAbilityTooltip}
-	for _, f in pairs(tooltips) do
+	local function updatePetScroll()
+		local petButtons = PetJournal.listScroll.buttons
+		if petButtons then
+			for i = 1, #petButtons do
+				local bu = petButtons[i]
+
+				local index = bu.index
+				if index then
+					local petID, _, isOwned = C_PetJournal.GetPetInfoByIndex(index)
+
+					if petID and isOwned then
+						local _, _, _, _, rarity = C_PetJournal.GetPetStats(petID)
+
+						if rarity then
+							local color = ITEM_QUALITY_COLORS[rarity-1]
+							bu.name:SetTextColor(color.r, color.g, color.b)
+						else
+							bu.name:SetTextColor(1, 1, 1)
+						end
+					else
+						bu.name:SetTextColor(.5, .5, .5)
+					end
+
+					if bu.selectedTexture:IsShown() then
+						bu.bg:SetBackdropColor(r, g, b, .25)
+					else
+						bu.bg:SetBackdropColor(0, 0, 0, .25)
+					end
+				end
+			end
+		end
+	end
+
+	hooksecurefunc("PetJournal_UpdatePetList", updatePetScroll)
+	hooksecurefunc(PetJournalListScrollFrame, "update", updatePetScroll)
+
+	PetJournalHealPetButtonBorder:Hide()
+	PetJournalHealPetButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
+	PetJournal.HealPetButton:SetPushedTexture("")
+	S:CreateBG(PetJournal.HealPetButton)
+
+	MountJournalSummonRandomFavoriteButton:SetPoint("TOPRIGHT", -7, -32)
+	MountJournalSummonRandomFavoriteButtonBorder:Hide()
+	MountJournalSummonRandomFavoriteButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
+	MountJournalSummonRandomFavoriteButton:SetPushedTexture("")
+	S:CreateBG(MountJournalSummonRandomFavoriteButton)
+
+	do
+		local ic = MountJournal.MountDisplay.InfoButton.Icon
+		ic:SetTexCoord(.08, .92, .08, .92)
+		S:CreateBG(ic)
+	end
+
+	for _, f in pairs({PetJournalPrimaryAbilityTooltip, PetJournalSecondaryAbilityTooltip}) do
 		f:DisableDrawLayer("BACKGROUND")
 		local bg = CreateFrame("Frame", nil, f)
 		bg:SetAllPoints()
@@ -124,24 +179,24 @@ local function LoadSkin()
 	end
 
 	PetJournalLoadoutBorderSlotHeaderText:SetParent(PetJournal)
-	PetJournalLoadoutBorderSlotHeaderText:Point("CENTER", PetJournalLoadoutBorderTop, "TOP", 0, 4)
+	PetJournalLoadoutBorderSlotHeaderText:SetPoint("CENTER", PetJournalLoadoutBorderTop, "TOP", 0, 4)
+
+	-- Pet card
 
 	local card = PetJournalPetCard
 
 	PetJournalPetCardBG:Hide()
-	card.AbilitiesBG:SetAlpha(0)
 	card.PetInfo.levelBG:SetAlpha(0)
 	card.PetInfo.qualityBorder:SetAlpha(0)
+	card.AbilitiesBG1:SetAlpha(0)
+	card.AbilitiesBG2:SetAlpha(0)
+	card.AbilitiesBG3:SetAlpha(0)
 
-	card.PetInfo.level:SetFont(R["media"].font, 12, "OUTLINE")
+	card.PetInfo.level:SetFontObject(GameFontNormal)
 	card.PetInfo.level:SetTextColor(1, 1, 1)
 
 	card.PetInfo.icon:SetTexCoord(.08, .92, .08, .92)
-	card.PetInfo.icon.bg = CreateFrame("Frame", nil, card.PetInfo)
-	card.PetInfo.icon.bg:Point("TOPLEFT", card.PetInfo.icon, -2, 2)
-	card.PetInfo.icon.bg:Point("BOTTOMRIGHT", card.PetInfo.icon, 2, -2)
-	card.PetInfo.icon.bg:SetFrameLevel(card.PetInfo:GetFrameLevel()-1)
-	S:CreateBD(card.PetInfo.icon.bg)
+	card.PetInfo.icon.bg = S:CreateBG(card.PetInfo.icon)
 
 	S:CreateBD(card, .25)
 
@@ -149,7 +204,7 @@ local function LoadSkin()
 		select(i, card.xpBar:GetRegions()):Hide()
 	end
 
-	card.xpBar:SetStatusBarTexture(S["media"].backdrop)
+	-- card.xpBar:SetStatusBarTexture(S["media"].backdrop)
 	S:CreateBDFrame(card.xpBar, .25)
 
 	PetJournalPetCardHealthFramehealthStatusBarLeft:Hide()
@@ -157,7 +212,7 @@ local function LoadSkin()
 	PetJournalPetCardHealthFramehealthStatusBarMiddle:Hide()
 	PetJournalPetCardHealthFramehealthStatusBarBGMiddle:Hide()
 
-	card.HealthFrame.healthBar:SetStatusBarTexture(S["media"].backdrop)
+	-- card.HealthFrame.healthBar:SetStatusBarTexture(S["media"].backdrop)
 	S:CreateBDFrame(card.HealthFrame.healthBar, .25)
 
 	for i = 1, 6 do
@@ -167,29 +222,39 @@ local function LoadSkin()
 		S:CreateBG(bu.icon)
 	end
 
+	hooksecurefunc("PetJournal_UpdatePetCard", function(self)
+		local border = self.PetInfo.qualityBorder
+		local r, g, b
+
+		if border:IsShown() then
+			r, g, b = self.PetInfo.qualityBorder:GetVertexColor()
+		else
+			r, g, b = 0, 0, 0
+		end
+
+		self.PetInfo.icon.bg:SetVertexColor(r, g, b)
+	end)
+
+	-- Pet loadout
+
 	for i = 1, 3 do
 		local bu = PetJournal.Loadout["Pet"..i]
 
 		_G["PetJournalLoadoutPet"..i.."BG"]:Hide()
 
 		bu.iconBorder:SetAlpha(0)
-		bu.qualityBorder:SetAlpha(0)
+		bu.qualityBorder:SetTexture("")
 		bu.levelBG:SetAlpha(0)
 		bu.helpFrame:GetRegions():Hide()
 
-		bu.level:SetFont(R["media"].font, 12, "OUTLINE")
+		bu.level:SetFontObject(GameFontNormal)
 		bu.level:SetTextColor(1, 1, 1)
 
 		bu.icon:SetTexCoord(.08, .92, .08, .92)
-		bu.icon.bg = CreateFrame("Frame", nil, bu)
-		bu.icon.bg:Point("TOPLEFT", bu.icon, -2, 2)
-		bu.icon.bg:Point("BOTTOMRIGHT", bu.icon, 2, -2)
-		bu.icon.bg:SetFrameLevel(bu:GetFrameLevel()-1)
-		S:CreateBD(bu.icon.bg)
+		bu.icon.bg = S:CreateBDFrame(bu.icon, .25)
 
-		bu.setButton:GetRegions():Point("TOPLEFT", bu.icon, -5, 5)
-		bu.setButton:GetRegions():Point("BOTTOMRIGHT", bu.icon, 5, -5)
-		bu.dragButton:StyleButton(true)
+		bu.setButton:GetRegions():SetPoint("TOPLEFT", bu.icon, -5, 5)
+		bu.setButton:GetRegions():SetPoint("BOTTOMRIGHT", bu.icon, 5, -5)
 
 		S:CreateBD(bu, .25)
 
@@ -197,7 +262,7 @@ local function LoadSkin()
 			select(i, bu.xpBar:GetRegions()):Hide()
 		end
 
-		bu.xpBar:SetStatusBarTexture(S["media"].backdrop)
+		-- bu.xpBar:SetStatusBarTexture(S["media"].backdrop)
 		S:CreateBDFrame(bu.xpBar, .25)
 
 		_G["PetJournalLoadoutPet"..i.."HealthFramehealthStatusBarLeft"]:Hide()
@@ -205,15 +270,16 @@ local function LoadSkin()
 		_G["PetJournalLoadoutPet"..i.."HealthFramehealthStatusBarMiddle"]:Hide()
 		_G["PetJournalLoadoutPet"..i.."HealthFramehealthStatusBarBGMiddle"]:Hide()
 
-		bu.healthFrame.healthBar:SetStatusBarTexture(S["media"].backdrop)
+		-- bu.healthFrame.healthBar:SetStatusBarTexture(S["media"].backdrop)
 		S:CreateBDFrame(bu.healthFrame.healthBar, .25)
 
 		for j = 1, 3 do
 			local spell = bu["spell"..j]
 
-			spell:StyleButton(true)
+			spell:SetPushedTexture("")
 
-			spell.selected:SetTexture(nil)
+			spell.selected:SetTexture(S["media"].checked)
+
 			spell:GetRegions():Hide()
 
 			spell.FlyoutArrow:SetTexture(S["media"].arrowDown)
@@ -225,42 +291,15 @@ local function LoadSkin()
 		end
 	end
 
- 	hooksecurefunc("PetJournal_UpdatePetLoadOut", function()
+	hooksecurefunc("PetJournal_UpdatePetLoadOut", function()
 		for i = 1, 3 do
-			local petID, _, _, _, locked =  C_PetJournal.GetPetLoadOutInfo(i)
 			local bu = PetJournal.Loadout["Pet"..i]
+
 			bu.icon.bg:SetShown(not bu.helpFrame:IsShown())
-			local r, g, b = bu.qualityBorder:GetVertexColor()
-			if r == 1 and g == 1 then r, g, b = 0, 0, 0 end
+			bu.icon.bg:SetBackdropBorderColor(bu.qualityBorder:GetVertexColor())
 
-			bu.icon.bg:SetBackdropBorderColor(r, g, b)
 			bu.dragButton:SetEnabled(not bu.helpFrame:IsShown())
-			if not locked and petID then
-				local _, customName, _, _, _, _, _, name = C_PetJournal.GetPetInfoByPetID(petID)
-				local rarity = select(5,C_PetJournal.GetPetStats(petID))
-				local hex  = select(4,GetItemQualityColor(rarity-1))
-                name = customName or name
-                bu.name:SetText("|c"..hex..name.."|r")
-            end
 		end
-	end)
-
-	hooksecurefunc("PetJournal_UpdatePetCard", function(self)
-		local r, g, b = self.PetInfo.qualityBorder:GetVertexColor()
-		if r == 1 and g == 1 then r, g, b = 0, 0, 0 end
-
-		self.PetInfo.icon.bg:SetBackdropBorderColor(r, g, b)
-		if PetJournalPetCard.petID  then
-            local speciesID, customName, _, _, _, _, _, name, icon, petType, creatureID, sourceText, description, isWild, canBattle, tradable = C_PetJournal.GetPetInfoByPetID(PetJournalPetCard.petID)
-            if canBattle then
-                local health, maxHealth, power, speed, rarity = C_PetJournal.GetPetStats(PetJournalPetCard.petID)
-                PetJournalPetCard.QualityFrame.quality:SetText(_G["BATTLE_PET_BREED_QUALITY"..rarity])
-                local r,g,b,hex  = GetItemQualityColor(rarity-1)
-
-                name = customName or name
-                PetJournalPetCard.PetInfo.name:SetText("|c"..hex..name.."|r")
-            end
-        end
 	end)
 
 	PetJournal.SpellSelect.BgEnd:Hide()
@@ -269,234 +308,72 @@ local function LoadSkin()
 	for i = 1, 2 do
 		local bu = PetJournal.SpellSelect["Spell"..i]
 
-		bu:StyleButton(true)
+		bu:SetCheckedTexture(S["media"].checked)
+		bu:SetPushedTexture("")
 
 		bu.icon:SetDrawLayer("ARTWORK")
 		bu.icon:SetTexCoord(.08, .92, .08, .92)
 		S:CreateBG(bu.icon)
 	end
 
-     local function UpdatePetList()
-        local scrollFrame = PetJournal.listScroll
-        local offset = HybridScrollFrame_GetOffset(scrollFrame)
-        local petButtons = scrollFrame.buttons
-        for i = 1,#petButtons do
-            pet = petButtons[i]
-            index = offset + i
-            local petID, speciesID, isOwned, customName, level, favorite, isRevoked, name, icon, petType, creatureID, sourceText, description, isWildPet, canBattle = C_PetJournal.GetPetInfoByIndex(index)
-            if petID then
-                local health, maxHealth, attack, speed, rarity = C_PetJournal.GetPetStats(petID)
-                if rarity then
-                    local r, g, b, hex  = GetItemQualityColor(rarity - 1)
-                    name = customName or name
-                    pet.name:SetText("|c"..hex..name.."|r")
-                end
-            end
-        end
-    end
+	-- [[ Toy box ]]
 
-    hooksecurefunc("PetJournal_UpdatePetList", UpdatePetList)
-    hooksecurefunc(PetJournal.listScroll, "update", UpdatePetList)
+	ToyBoxIconsFrame.Bg:Hide()
+	ToyBoxIconsFrameBackgroundTile:Hide()
+	ToyBoxIconsFrame:DisableDrawLayer("BORDER")
+	ToyBoxIconsFrame:DisableDrawLayer("ARTWORK")
+	ToyBoxIconsFrame:DisableDrawLayer("OVERLAY")
 
-    -- local filter = ""
-    -- local filterTable = {}
-    -- local filterFlags = {
-        -- ["swimming"] = true,
-        -- ["flying"] = true,
-        -- ["ground"] = true,
-        -- ["combined"] = true,
-        -- ["unknown"] = true,
-    -- }
+	S:ReskinInput(ToyBox.searchBox)
+	S:ReskinFilterButton(ToyBoxFilterButton)
+	S:ReskinArrow(ToyBoxPrevPageButton, "left")
+	S:ReskinArrow(ToyBoxNextPageButton, "right")
 
-    -- local Search = CreateFrame("EditBox", "MountSearch", MountJournal, "SearchBoxTemplate")
-    -- Search:SetSize(145, 20)
-    -- Search:SetPoint("TOPLEFT", MountJournal.LeftInset, 15, -9)
-    -- Search:SetMaxLetters(40)
-    -- Search:SetScript("OnTextChanged", function(self)
-        -- local text = self:GetText()
-        -- if(text == SEARCH) then
-            -- filter = ""
-        -- else
-            -- filter = text
-        -- end
+	ToyBoxPrevPageButton:SetPoint("BOTTOMRIGHT", -320, 51)
+	ToyBoxNextPageButton:SetPoint("BOTTOMRIGHT", -285, 51)
 
-        -- MountJournal_UpdateMountList()
-    -- end)
-    -- S:ReskinInput(Search)
+	-- Progress bar
 
-    -- local mounts = {}
-    -- local function BuildMounts(self, event)
-        -- if(event and event ~= "COMPANION_LEARNED") then return end
+	ToyBoxProgressBarBorder:Hide()
+	ToyBoxProgressBarBackground:Hide()
 
-        -- for index = 1, GetNumCompanions("MOUNT") do
-            -- local id, name, _, _, _, flag = GetCompanionInfo("MOUNT", index)
-            -- if(flag == 12) then
-                -- mounts[index] = "swimming"
-            -- elseif(flag == 7 or flag == 15) then
-                -- mounts[index] = "flying"
-            -- elseif(flag == 29) then
-                -- mounts[index] = "ground"
-            -- elseif(flag == 31) then
-                -- mounts[index] = "combined"
-            -- else
-                -- mounts[index] = "unknown"
-            -- end
+	ToyBoxProgressBar.text:SetPoint("CENTER", 0, 1)
+	-- ToyBoxProgressBarBar:SetTexture(S["media"].backdrop)
 
-            -- if(id == 34187) then
-                -- mounts[index] = "swimming"
-            -- end
-        -- end
-    -- end
+	S:CreateBDFrame(ToyBoxProgressBar, .25)
 
-    -- MountJournal:HookScript("OnEvent", BuildMounts)
-    -- BuildMounts()
+	-- Toys!
 
-    -- function MountJournal_UpdateMountList()
-        -- local scroll = MountJournal.ListScrollFrame
-        -- local offset = HybridScrollFrame_GetOffset(scroll)
-        -- local total = GetNumCompanions("MOUNT")
+	for i = 1, 18 do
+		local bu = _G["ToySpellButton"..i]
+		local ic = _G["ToySpellButton"..i.."IconTexture"]
 
-        -- local lowbie = UnitLevel("player") < 20
-        -- if(lowbie or total < 1) then
-            -- MountJournal.MountDisplay.NoMounts:Show()
-            -- MountJournal.selectedSpellID = 0
-            -- MountJournal_UpdateMountDisplay()
-            -- MountJournal.MountButton:SetEnabled(false)
-        -- else
-            -- MountJournal.MountDisplay.NoMounts:Hide()
-            -- MountJournal.MountButton:SetEnabled(true)
-        -- end
+		bu:SetPushedTexture("")
+		bu:SetHighlightTexture("")
 
-        -- table.wipe(filterTable)
+		bu.cooldown:SetAllPoints(ic)
 
-        -- for index = 1, total do
-            -- local id, name, spell, icon, active, flag = GetCompanionInfo("MOUNT", index)
-            -- if(name:lower():find(filter) and filterFlags[mounts[index]]) then
-                -- table.insert(filterTable, index)
-            -- end
-        -- end
+		_G["ToySpellButton"..i.."SlotFrameCollected"]:SetTexture("")
+		_G["ToySpellButton"..i.."SlotFrameUncollected"]:SetTexture("")
 
-        -- local buttons = scroll.buttons
-        -- for j = 1, #buttons do
-            -- local button = buttons[j]
-            -- local index = j + offset
-            -- if(index <= #filterTable) then
-                -- local _, name, spell, icon, active = GetCompanionInfo("MOUNT", filterTable[index])
-                -- button.name:SetText(name)
-                -- button.icon:SetTexture(icon)
-                -- button.index = filterTable[index]
-                -- button.spellID = spell
-                -- button.active = active
+		ic:SetTexCoord(.08, .92, .08, .92)
+		S:CreateBG(ic)
+	end
 
-                -- if(active) then
-                    -- button.DragButton.ActiveTexture:Show()
-                -- else
-                    -- button.DragButton.ActiveTexture:Hide()
-                -- end
+	hooksecurefunc("ToySpellButton_UpdateButton", function(self)
+		local toyString = _G[self:GetName().."ToyName"]
 
-                -- button:Show()
-
-                -- if(MountJournal.selectedSpellID == spell) then
-                    -- button.selected = true
-                    -- button.selectedTexture:Show()
-                -- else
-                    -- button.selected = false
-                    -- button.selectedTexture:Hide()
-                -- end
-
-                -- button:SetEnabled(not lowbie)
-                -- button.DragButton:SetEnabled(not lowbie)
-
-                -- button.additionalText = nil
-                -- button.icon:SetDesaturated(lowbie)
-                -- button.icon:SetAlpha(1)
-                -- button.name:SetFontObject("GameFontNormal")
-
-                -- if(button.showingTooltip) then
-                    -- MountJournalMountButton_UpdateTooltip(button)
-                -- end
-            -- else
-                -- button:Hide()
-            -- end
-        -- end
-
-        -- HybridScrollFrame_Update(scroll, #filterTable * 46, scroll:GetHeight())
-        -- MountJournal.MountCount.Count:SetText(total)
-    -- end
-
-    -- local scroll = MountJournal.ListScrollFrame
-    -- scroll.update = MountJournal_UpdateMountList
-    -- scroll:SetPoint("TOPLEFT", MountJournal.LeftInset, 3, -36)
-    -- scroll.scrollBar:SetPoint("TOPLEFT", scroll, "TOPRIGHT", 4, 20)
-
-    -- local function CreateDropDown()
-        -- local info = UIDropDownMenu_CreateInfo()
-        -- info.keepShownOnClick = true
-        -- info.isNotRadio = true
-
-        -- info.text = L["飞行"]
-        -- info.checked = filterFlags.flying
-        -- info.func = function(...)
-            -- local _, _, _, enabled = ...
-            -- filterFlags.flying = enabled
-            -- MountJournal_UpdateMountList()
-        -- end
-        -- UIDropDownMenu_AddButton(info)
-
-        -- info.text = L["地面"]
-        -- info.checked = filterFlags.ground
-        -- info.func = function(...)
-            -- local _, _, _, enabled = ...
-            -- filterFlags.ground = enabled
-            -- MountJournal_UpdateMountList()
-        -- end
-        -- UIDropDownMenu_AddButton(info)
-
-        -- info.text = L["飞行 & 地面"]
-        -- info.checked = filterFlags.combined
-        -- info.func = function(...)
-            -- local _, _, _, enabled = ...
-            -- filterFlags.combined = enabled
-            -- MountJournal_UpdateMountList()
-        -- end
-        -- UIDropDownMenu_AddButton(info)
-
-        -- info.text = L["游泳"]
-        -- info.checked = filterFlags.swimming
-        -- info.func = function(...)
-            -- local _, _, _, enabled = ...
-            -- filterFlags.swimming = enabled
-            -- MountJournal_UpdateMountList()
-        -- end
-        -- UIDropDownMenu_AddButton(info)
-
-        -- info.text = L["未知"]
-        -- info.checked = filterFlags.unknown
-        -- info.func = function(...)
-            -- local _, _, _, enabled = ...
-            -- filterFlags.unknown = enabled
-            -- MountJournal_UpdateMountList()
-        -- end
-        -- UIDropDownMenu_AddButton(info)
-    -- end
-
-    -- local FilterDropDown = CreateFrame("Frame")
-    -- FilterDropDown.initialize = CreateDropDown
-    -- FilterDropDown.displayMode = "MENU"
-
-    -- local Filter = CreateFrame("Button", "MountFilter", MountJournal, "UIMenuButtonStretchTemplate")
-    -- Filter:SetSize(93, 22)
-    -- Filter:SetPoint("TOPRIGHT", MountJournal.LeftInset, -5, -9)
-    -- Filter:SetText(FILTER)
-    -- Filter.rightArrow:Show()
-    -- Filter:SetScript("OnClick", function()
-        -- PlaySound("igMainMenuOptionCheckBoxOn")
-        -- ToggleDropDownMenu(1, nil, FilterDropDown, MountFilter, 74, 15)
-    -- end)
-	-- MountFilterLeft:Hide()
-	-- MountFilterRight:Hide()
-	-- MountFilterMiddle:Hide()
-    -- S:Reskin(Filter)
+		if PlayerHasToy(self.itemID) then
+			local _, _, quality = GetItemInfo(self.itemID)
+			if quality then
+				toyString:SetTextColor(GetItemQualityColor(quality))
+			else
+				toyString:SetTextColor(1, 1, 1)
+			end
+		else
+			toyString:SetTextColor(.5, .5, .5)
+		end
+	end)
 end
 
 S:RegisterSkin("Blizzard_PetJournal", LoadSkin)

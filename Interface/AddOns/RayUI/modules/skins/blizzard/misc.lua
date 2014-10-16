@@ -106,6 +106,8 @@ local function LoadSkin()
 		"GameMenuButtonQuit",
 		"GameMenuButtonContinue",
 		"GameMenuButtonMacOptions",
+		"GameMenuButtonAddons",
+		"GameMenuButtonWhatsNew",
 		"ColorPickerOkayButton",
 		"ColorPickerCancelButton",
 		"GuildInviteFrameJoinButton",
@@ -839,6 +841,21 @@ local function LoadSkin()
 	select(5, SideDressUpModelCloseButton:GetRegions()):Hide()
 	for i = 1, 4 do
 		select(i, SideDressUpFrame:GetRegions()):Hide()
+	end
+
+	S:ReskinPortraitFrame(AddonList, true)
+	S:Reskin(AddonListEnableAllButton)
+	S:Reskin(AddonListDisableAllButton)
+	S:Reskin(AddonListCancelButton)
+	S:Reskin(AddonListOkayButton)
+	S:ReskinCheck(AddonListForceLoad)
+	S:ReskinDropDown(AddonCharacterDropDown)
+	S:ReskinScroll(AddonListScrollFrameScrollBar)
+
+	AddonCharacterDropDown:SetWidth(170)
+
+	for i = 1, MAX_ADDONS_DISPLAYED do
+		S:ReskinCheck(_G["AddonListEntry"..i.."Enabled"])
 	end
 end
 

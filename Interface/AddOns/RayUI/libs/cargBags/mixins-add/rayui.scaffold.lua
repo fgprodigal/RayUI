@@ -14,9 +14,9 @@ local function ItemButton_Scaffold(self)
 	self.Border = _G[name.."NormalTexture"]
 
 	self.Icon:SetTexCoord(.08, .92, .08, .92)
-	self.Quest:SetTexture(TEXTURE_ITEM_QUEST_BANG)
-	self.Quest:SetInside(self)
-	self.Quest:SetTexCoord(.08, .92, .08, .92)
+	-- self.Quest:SetTexture(TEXTURE_ITEM_QUEST_BANG)
+	-- self.Quest:SetInside(self)
+	-- self.Quest:SetTexCoord(.08, .92, .08, .92)
 
 	if not self.border then
 		local border = CreateFrame("Frame", nil, self)
@@ -39,7 +39,7 @@ local function ItemButton_Update(self, item)
 	end
 	self.count = item.count -- Thank you Blizz for not using local variables >.> (BankFrame.lua @ 234 )
 
-	self.Quest:Hide()
+	-- self.Quest:Hide()
 	self:UpdateCooldown(item)
 	self:UpdateLock(item)
 
@@ -55,7 +55,7 @@ local function ItemButton_Update(self, item)
 			self:StyleButton()
 			self:SetBackdropColor(0, 0, 0)
 			self.border:SetBackdropBorderColor(1.0, 0.2, 0.2)
-			self.Quest:Show()
+			-- self.Quest:Show()
 		elseif item.questID or item.isQuestItem then
 			self.Icon:SetInside()
 			self:StyleButton()

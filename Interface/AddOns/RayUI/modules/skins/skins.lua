@@ -481,6 +481,9 @@ function S:ReskinInput(f, height, width)
 		if _G[frame.."Middle"] then _G[frame.."Middle"]:Hide() end
 		if _G[frame.."Mid"] then _G[frame.."Mid"]:Hide() end
 	end
+	if f.Left then f.Left:Hide() end
+	if f.Middle then f.Middle:Hide() end
+	if f.Right then f.Right:Hide() end
 	S:CreateBD(f, 0)
 	S:CreateBackdropTexture(f)
 
@@ -595,11 +598,40 @@ function S:ReskinPortraitFrame(f, isButtonFrame)
 end
 
 function S:CreateBDFrame(f, a)
-	local bg = CreateFrame("Frame", nil, f)
-	bg:Point("TOPLEFT", -1, 1)
-	bg:Point("BOTTOMRIGHT", 1, -1)
-	bg:SetFrameLevel(f:GetFrameLevel()-1)
+	local frame
+	if f:GetObjectType() == "Texture" then
+		frame = f:GetParent()
+	else
+		frame = f
+	end
+
+	local lvl = frame:GetFrameLevel()
+
+	local bg = CreateFrame("Frame", nil, frame)
+	bg:Point("TOPLEFT", f, -1, 1)
+	bg:Point("BOTTOMRIGHT", f, 1, -1)
+	bg:SetFrameLevel(lvl == 0 and 1 or lvl - 1)
 	S:CreateBD(bg, a or alpha)
+	return bg
+end
+
+function S:ReskinFilterButton(f)
+	f.TopLeft:Hide()
+	f.TopRight:Hide()
+	f.BottomLeft:Hide()
+	f.BottomRight:Hide()
+	f.TopMiddle:Hide()
+	f.MiddleLeft:Hide()
+	f.MiddleRight:Hide()
+	f.BottomMiddle:Hide()
+	f.MiddleMiddle:Hide()
+
+	S:Reskin(f)
+	f.Icon:SetTexture(S["media"].arrowRight)
+
+	f.Text:SetPoint("CENTER")
+	f.Icon:SetPoint("RIGHT", f, "RIGHT", -5, 0)
+	f.Icon:SetSize(8, 8)
 end
 
 function S:RegisterSkin(name, loadFunc)

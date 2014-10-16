@@ -753,41 +753,41 @@ function AB:StyleFlyout(button)
 		return
 	end
 
-	if button:GetAttribute("flyoutDirection") ~= nil then
-        local layout = "HORIZONTAL"
-        if button:GetParent() and button:GetParent():GetParent() then
-            if button:GetParent():GetParent():GetHeight() > button:GetParent():GetParent():GetWidth() then
-                layout = "VERTICAL"
-            end
-        end
-		local point = R:GetScreenQuadrant(button)
+	-- if button:GetAttribute("flyoutDirection") ~= nil then
+        -- local layout = "HORIZONTAL"
+        -- if button:GetParent() and button:GetParent():GetParent() then
+            -- if button:GetParent():GetParent():GetHeight() > button:GetParent():GetParent():GetWidth() then
+                -- layout = "VERTICAL"
+            -- end
+        -- end
+		-- local point = R:GetScreenQuadrant(button)
 
-        if layout == "HORIZONTAL" then
-            if point:find("TOP") then
-                button.FlyoutArrow:ClearAllPoints()
-                button.FlyoutArrow:SetPoint("BOTTOM", button, "BOTTOM", 0, -arrowDistance)
-                SetClampedTextureRotation(button.FlyoutArrow, 180)
-                if not InCombatLockdown() then button:SetAttribute("flyoutDirection", "BOTTOM") end
-            else
-                button.FlyoutArrow:ClearAllPoints()
-                button.FlyoutArrow:SetPoint("TOP", button, "TOP", 0,arrowDistance)
-                SetClampedTextureRotation(button.FlyoutArrow, 0)
-                if not InCombatLockdown() then button:SetAttribute("flyoutDirection", "TOP") end
-            end
-        else
-            if point:find("LEFT") then
-                button.FlyoutArrow:ClearAllPoints()
-                button.FlyoutArrow:SetPoint("RIGHT", button, "RIGHT", arrowDistance, 0)
-                SetClampedTextureRotation(button.FlyoutArrow, 90)
-                if not InCombatLockdown() then button:SetAttribute("flyoutDirection", "RIGHT") end
-            else
-                button.FlyoutArrow:ClearAllPoints()
-                button.FlyoutArrow:SetPoint("LEFT", button, "LEFT", -arrowDistance, 0)
-                SetClampedTextureRotation(button.FlyoutArrow, 270)
-                if not InCombatLockdown() then button:SetAttribute("flyoutDirection", "LEFT") end
-            end
-        end
-	end
+        -- if layout == "HORIZONTAL" then
+            -- if point:find("TOP") then
+                -- button.FlyoutArrow:ClearAllPoints()
+                -- button.FlyoutArrow:SetPoint("BOTTOM", button, "BOTTOM", 0, -arrowDistance)
+                -- SetClampedTextureRotation(button.FlyoutArrow, 180)
+                -- if not InCombatLockdown() then button:SetAttribute("flyoutDirection", "BOTTOM") end
+            -- else
+                -- button.FlyoutArrow:ClearAllPoints()
+                -- button.FlyoutArrow:SetPoint("TOP", button, "TOP", 0,arrowDistance)
+                -- SetClampedTextureRotation(button.FlyoutArrow, 0)
+                -- if not InCombatLockdown() then button:SetAttribute("flyoutDirection", "TOP") end
+            -- end
+        -- else
+            -- if point:find("LEFT") then
+                -- button.FlyoutArrow:ClearAllPoints()
+                -- button.FlyoutArrow:SetPoint("RIGHT", button, "RIGHT", arrowDistance, 0)
+                -- SetClampedTextureRotation(button.FlyoutArrow, 90)
+                -- if not InCombatLockdown() then button:SetAttribute("flyoutDirection", "RIGHT") end
+            -- else
+                -- button.FlyoutArrow:ClearAllPoints()
+                -- button.FlyoutArrow:SetPoint("LEFT", button, "LEFT", -arrowDistance, 0)
+                -- SetClampedTextureRotation(button.FlyoutArrow, 270)
+                -- if not InCombatLockdown() then button:SetAttribute("flyoutDirection", "LEFT") end
+            -- end
+        -- end
+	-- end
 end
 
 function AB:UpdateOverlayGlow(button)
