@@ -33,7 +33,8 @@ local ItemButton = cargBags:NewClass("ItemButton", nil, "Button")
 ]]
 function ItemButton:GetTemplate(bagID)
 	bagID = bagID or self.bagID
-	return (bagID == -1 and "BankItemButtonGenericTemplate") or (bagID and "ContainerFrameItemButtonTemplate") or "ItemButtonTemplate"
+	return (bagID == -3 and "ReagentBankItemButtonGenericTemplate") or (bagID == -1 and "BankItemButtonGenericTemplate") or (bagID and "ContainerFrameItemButtonTemplate") or "ItemButtonTemplate",
+      (bagID == -3 and ReagentBankFrame) or (bagID == -1 and BankFrame) or (bagID and _G["ContainerFrame"..bagID + 1]) or "ItemButtonTemplate";
 end
 
 local mt_gen_key = {__index = function(self,k) self[k] = {}; return self[k]; end}
@@ -47,8 +48,8 @@ local mt_gen_key = {__index = function(self,k) self[k] = {}; return self[k]; end
 function ItemButton:New(bagID, slotID)
 	self.recycled = self.recycled or setmetatable({}, mt_gen_key)
 
-	local tpl = self:GetTemplate(bagID)
-	local button = table.remove(self.recycled[tpl]) or self:Create(tpl)
+	local tpl, parent = self:GetTemplate(bagID)
+	local button = table.remove(self.recycled[tpl]) or self:Create(tpl, parent)
 
 	button.bagID = bagID
 	button.slotID = slotID
@@ -64,18 +65,22 @@ end
 	@return button <ItemButton>
 	@callback button:OnCreate(tpl)
 ]]
-function ItemButton:Create(tpl)
+function ItemButton:Create(tpl, parent)
 	local impl = self.implementation
 	impl.numSlots = (impl.numSlots or 0) + 1
 	local name = ("%sSlot%d"):format(impl.name, impl.numSlots)
 
-	local button = setmetatable(CreateFrame("Button", name, nil, tpl), self.__index)
-	
-	local tex = _G[button:GetName().."NewItemTexture"] -- 5.4 fix
-	if tex then tex:SetAlpha(0) end
+	local button = setmetatable(CreateFrame("Button", name, parent, tpl), self.__index)
 
 	if(button.Scaffold) then button:Scaffold(tpl) end
 	if(button.OnCreate) then button:OnCreate(tpl) end
+
+	local btnNT = _G[button:GetName().."NormalTexture"]
+	local btnNIT = button.NewItemTexture
+	local btnBIT = button.BattlepayItemTexture
+	if btnNT then btnNT:SetTexture("") end
+	if btnNIT then btnNIT:SetTexture("") end
+	if btnBIT then btnBIT:SetTexture("") end
 
 	return button
 end
@@ -96,4 +101,3 @@ end
 function ItemButton:GetItemInfo(item)
 	return self.implementation:GetItemInfo(self.bagID, self.slotID, item)
 end
-
