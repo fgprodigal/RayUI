@@ -200,7 +200,7 @@ local function LoadSkin()
 	S:CreateSD(BattleTagInviteFrame)
 	-- S:CreateBD(BattleTagInviteFrame.NoteFrame, .25)
 
-	local _, send, cancel = BattleTagInviteFrame:GetChildren()
+	local send, cancel = BattleTagInviteFrame:GetChildren()
 	S:Reskin(send)
 	S:Reskin(cancel)
 

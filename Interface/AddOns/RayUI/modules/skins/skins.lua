@@ -182,9 +182,9 @@ end
 function S:CreateBD(f, a)
 	if not f then return end
 	f:SetBackdrop({
-		bgFile = R["media"].blank, 
-		edgeFile = R["media"].blank, 
-		edgeSize = R.mult, 
+		bgFile = R["media"].blank,
+		edgeFile = R["media"].blank,
+		edgeSize = R.mult,
 	})
 	f:SetBackdropColor(backdropfadecolorr, backdropfadecolorg, backdropfadecolorb, a or alpha)
 	f:SetBackdropBorderColor(bordercolorr, bordercolorg, bordercolorb)
@@ -568,7 +568,7 @@ end
 
 function S:ReskinPortraitFrame(f, isButtonFrame)
 	local name = f:GetName()
-	
+
 	_G[name.."Bg"]:Hide()
 	_G[name.."TitleBg"]:Hide()
 	_G[name.."Portrait"]:Hide()
@@ -582,12 +582,12 @@ function S:ReskinPortraitFrame(f, isButtonFrame)
 	_G[name.."BottomBorder"]:Hide()
 	_G[name.."LeftBorder"]:Hide()
 	_G[name.."RightBorder"]:Hide()
-	
+
 	if isButtonFrame then
 		_G[name.."BtnCornerLeft"]:SetTexture("")
 		_G[name.."BtnCornerRight"]:SetTexture("")
 		_G[name.."ButtonBottomBorder"]:SetTexture("")
-		
+
 		f.Inset.Bg:Hide()
 		f.Inset:DisableDrawLayer("BORDER")
 	end
