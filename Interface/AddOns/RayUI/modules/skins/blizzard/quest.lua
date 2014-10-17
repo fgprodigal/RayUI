@@ -5,7 +5,10 @@ local function LoadSkin()
 	local r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b
 	S:ReskinPortraitFrame(QuestFrame, true)
 
+	QuestTitleFont:SetTextColor(1, 1, 1)
+	QuestTitleFont:SetShadowColor(0, 0, 0)
 	QuestFont:SetTextColor(1, 1, 1)
+
 	QuestFrameDetailPanel:DisableDrawLayer("BACKGROUND")
 	QuestFrameProgressPanel:DisableDrawLayer("BACKGROUND")
 	QuestFrameRewardPanel:DisableDrawLayer("BACKGROUND")
@@ -86,10 +89,6 @@ local function LoadSkin()
 
 	QuestProgressRequiredItemsText:SetTextColor(1, 1, 1)
 	QuestProgressRequiredItemsText:SetShadowColor(0, 0, 0)
-	QuestProgressTitleText:SetTextColor(1, 1, 1)
-	QuestProgressTitleText:SetShadowColor(0, 0, 0)
-	QuestProgressTitleText.SetTextColor = R.dummy
-	QuestProgressText:SetTextColor(1, 1, 1)
 	QuestProgressText.SetTextColor = R.dummy
 	GreetingText:SetTextColor(1, 1, 1)
 	GreetingText.SetTextColor = R.dummy
