@@ -3,7 +3,7 @@ local oUF = ns.oUF
 local Private = oUF.Private
 
 local frame_metatable = Private.frame_metatable
-
+local modf = math.modf
 local colors = {
 	smooth = {
 		1, 0, 0,
@@ -18,37 +18,23 @@ local colors = {
 
 -- We do this because people edit the vars directly, and changing the default
 -- globals makes SPICE FLOW!
-local customClassColors = function()
-	if(CUSTOM_CLASS_COLORS) then
-		local updateColors = function()
-			for eclass, color in next, CUSTOM_CLASS_COLORS do
-				colors.class[eclass] = {color.r, color.g, color.b}
-			end
-
-			for _, obj in next, oUF.objects do
-				obj:UpdateAllElements("CUSTOM_CLASS_COLORS")
-			end
+if(IsAddOnLoaded'!ClassColors' and CUSTOM_CLASS_COLORS) then
+	local updateColors = function()
+		for eclass, color in next, CUSTOM_CLASS_COLORS do
+			colors.class[eclass] = {color.r, color.g, color.b}
 		end
 
-		updateColors()
-		CUSTOM_CLASS_COLORS:RegisterCallback(updateColors)
-
-		return true
+		for _, obj in next, oUF.objects do
+			obj:UpdateAllElements("CUSTOM_CLASS_COLORS")
+		end
 	end
-end
-if not customClassColors() then
+
+	updateColors()
+	CUSTOM_CLASS_COLORS:RegisterCallback(updateColors)
+else
 	for eclass, color in next, RAID_CLASS_COLORS do
 		colors.class[eclass] = {color.r, color.g, color.b}
 	end
-
-	local f = CreateFrame("Frame")
-	f:RegisterEvent("ADDON_LOADED")
-	f:SetScript("OnEvent", function()
-		if customClassColors() then
-			f:UnregisterEvent("ADDON_LOADED")
-			f:SetScript("OnEvent", nil)
-		end
-	end)
 end
 
 for eclass, color in next, FACTION_BAR_COLORS do
@@ -73,7 +59,7 @@ local ColorGradient = function(a, b, ...)
 	end
 
 	local num = select('#', ...) / 3
-	local segment, relperc = math.modf(perc*(num-1))
+	local segment, relperc = modf(perc*(num-1))
 	local r1, g1, b1, r2, g2, b2 = select((segment*3)+1, ...)
 
 	return r1 + (r2-r1)*relperc, g1 + (g2-g1)*relperc, b1 + (b2-b1)*relperc

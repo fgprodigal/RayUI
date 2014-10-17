@@ -30,18 +30,18 @@ P["Reminder"]["filters"] = {
 		},
 	},
 	MAGE = {
-		["护甲"] = { --armors group
-			["spellGroup"] = {
-				[7302] = true, -- frost armor
-				[6117] = true, -- mage armor
-				[30482] = true, -- molten armor
-			},
-			["instance"] = true,
-			["combat"] = true,
-			["pvp"] = true,
-			["enable"] = true,
-			["strictFilter"] = true,
-		},
+		-- ["护甲"] = { --armors group
+			-- ["spellGroup"] = {
+				-- [7302] = true, -- frost armor
+				-- [6117] = true, -- mage armor
+				-- [30482] = true, -- molten armor
+			-- },
+			-- ["instance"] = true,
+			-- ["combat"] = true,
+			-- ["pvp"] = true,
+			-- ["enable"] = true,
+			-- ["strictFilter"] = true,
+		-- },
 	},
 	WARLOCK = {
 		["黑暗意图"] = {	-- Dark Intent group
@@ -94,15 +94,15 @@ P["Reminder"]["filters"] = {
 			["enable"] = true,
 			["strictFilter"] = true,
 		},
-		["武器附魔"] = { --check weapons for enchants
-			["weaponCheck"] = true,
-			["instance"] = true,
-			["combat"] = true,
-			["pvp"] = true,
-			["minLevel"] = 10,
-			["enable"] = true,
-			["strictFilter"] = true,
-		},
+		-- ["武器附魔"] = { --check weapons for enchants
+			-- ["weaponCheck"] = true,
+			-- ["instance"] = true,
+			-- ["combat"] = true,
+			-- ["pvp"] = true,
+			-- ["minLevel"] = 10,
+			-- ["enable"] = true,
+			-- ["strictFilter"] = true,
+		-- },
 	},
 	WARRIOR = {
 		["命令怒吼"] = { -- commanding Shout group

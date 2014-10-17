@@ -6,6 +6,8 @@ local argcheck = Private.argcheck
 local error = Private.error
 local frame_metatable = Private.frame_metatable
 
+local tinsert, tremove = table.insert, table.remove
+
 -- Events
 local RegisterEvent, UnregisterEvent, IsEventRegistered
 
@@ -13,7 +15,15 @@ do
 	local eventFrame = CreateFrame("Frame")
 	local registry = {}
 	local framesForUnit = {}
-
+	local alternativeUnits = {
+		['player'] = 'vehicle',
+		['pet'] = 'player',
+		['party1'] = 'partypet1',
+		['party2'] = 'partypet2',
+		['party3'] = 'partypet3',
+		['party4'] = 'partypet4',
+	}
+	
 	local RegisterFrameForUnit = function(frame, unit)
 		if not unit then return end
 		if framesForUnit[unit] then
@@ -45,6 +55,8 @@ do
 				RegisterFrameForUnit(frame, unit)
 				RegisterFrameForUnit(frame, realUnit)
 			end
+
+			frame.alternativeUnit = alternativeUnits[unit]
 			frame.unit = unit
 			frame.realUnit = realUnit
 			frame.id = unit:match'^.-(%d+)'
@@ -135,7 +147,7 @@ function frame_metatable.__index:RegisterEvent(event, func, unitless)
 				if(infunc == func) then return end
 			end
 
-			table.insert(curev, func)
+			tinsert(curev, func)
 		end
 	elseif(IsEventRegistered(self, event)) then
 		return
@@ -157,7 +169,7 @@ function frame_metatable.__index:UnregisterEvent(event, func)
 	if(type(curev) == 'table' and func) then
 		for k, infunc in next, curev do
 			if(infunc == func) then
-				table.remove(curev, k)
+				tremove(curev, k)
 
 				local n = #curev
 				if(n == 1) then

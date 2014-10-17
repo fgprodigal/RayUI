@@ -1,65 +1,17 @@
---[[ Element: Heal Prediction Bar
- Handle updating and visibility of the heal prediction status bars.
-
- Widget
-
- HealPrediction - A table containing `myBar` and `otherBar`.
-
- Sub-Widgets
-
- myBar    - A StatusBar used to represent your incoming heals.
- otherBar - A StatusBar used to represent other peoples incoming heals.
-
- Notes
-
- The default StatusBar texture will be applied if the UI widget doesn't have a
- status bar texture or color defined.
-
- Options
-
- .maxOverflow - Defines the maximum amount of overflow past the end of the
-                health bar.
-
- Examples
-
-   -- Position and size
-   local myBar = CreateFrame('StatusBar', nil, self.Health)
-   myBar:SetPoint('TOP')
-   myBar:SetPoint('BOTTOM')
-   myBar:SetPoint('LEFT', self.Health:GetStatusBarTexture(), 'RIGHT')
-   myBar:SetWidth(200)
-   
-   local otherBar = CreateFrame('StatusBar', nil, self.Health)
-   otherBar:SetPoint('TOP')
-   otherBar:SetPoint('BOTTOM')
-   otherBar:SetPoint('LEFT', self.Health:GetStatusBarTexture(), 'RIGHT')
-   otherBar:SetWidth(200)
-   
-   -- Register with oUF
-   self.HealPrediction = {
-      myBar = myBar,
-      otherBar = otherBar,
-      maxOverflow = 1.05,
-   }
-
- Hooks
-
- Override(self) - Used to completely override the internal update function.
-                  Removing the table key entry will make the element fall-back
-                  to its internal function again.
-]]
-
 local _, ns = ...
 local oUF = ns.oUF
 
 local function Update(self, event, unit)
-	if(self.unit ~= unit) then return end
+	if(self.unit ~= unit) or not unit then return end
 
 	local hp = self.HealPrediction
+	hp.parent = self
+	
 	if(hp.PreUpdate) then hp:PreUpdate(unit) end
 
 	local myIncomingHeal = UnitGetIncomingHeals(unit, 'player') or 0
 	local allIncomingHeal = UnitGetIncomingHeals(unit) or 0
+	local totalAbsorb = UnitGetTotalAbsorbs(unit) or 0;
 	local health, maxHealth = UnitHealth(unit), UnitHealthMax(unit)
 
 	if(health + allIncomingHeal > maxHealth * hp.maxOverflow) then
@@ -71,6 +23,23 @@ local function Update(self, event, unit)
 		allIncomingHeal = 0
 	else
 		allIncomingHeal = allIncomingHeal - myIncomingHeal
+	end
+	
+	local overAbsorb = false;
+	--We don't overfill the absorb bar
+	if ( health + myIncomingHeal + allIncomingHeal + totalAbsorb >= maxHealth ) then
+		if ( totalAbsorb > 0 ) then
+			overAbsorb = true;
+		end
+		totalAbsorb = max(0,maxHealth - (health + myIncomingHeal + allIncomingHeal));
+	end
+
+	if(hp.overAbsorbGlow) then
+		if ( overAbsorb ) then
+			hp.overAbsorbGlow:Show();
+		else
+			hp.overAbsorbGlow:Hide();
+		end	
 	end
 
 	if(hp.myBar) then
@@ -84,9 +53,15 @@ local function Update(self, event, unit)
 		hp.otherBar:SetValue(allIncomingHeal)
 		hp.otherBar:Show()
 	end
+	
+	if(hp.absorbBar) then
+		hp.absorbBar:SetMinMaxValues(0, maxHealth)
+		hp.absorbBar:SetValue(totalAbsorb)
+		hp.absorbBar:Show()	
+	end
 
 	if(hp.PostUpdate) then
-		return hp:PostUpdate(unit)
+		return hp:PostUpdate(unit, myIncomingHeal, allIncomingHeal, totalAbsorb)
 	end
 end
 
@@ -104,6 +79,7 @@ local function Enable(self)
 		hp.__owner = self
 		hp.ForceUpdate = ForceUpdate
 
+		self:RegisterEvent('UNIT_ABSORB_AMOUNT_CHANGED', Path)
 		self:RegisterEvent('UNIT_HEAL_PREDICTION', Path)
 		self:RegisterEvent('UNIT_MAXHEALTH', Path)
 		self:RegisterEvent('UNIT_HEALTH', Path)
@@ -118,6 +94,9 @@ local function Enable(self)
 		if(hp.otherBar and hp.otherBar:IsObjectType'StatusBar' and not hp.otherBar:GetStatusBarTexture()) then
 			hp.otherBar:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
 		end
+		if(hp.absorbBar and hp.absorbBar:IsObjectType'StatusBar' and not hp.absorbBar:GetStatusBarTexture()) then
+			hp.absorbBar:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
+		end		
 
 		return true
 	end
@@ -129,6 +108,17 @@ local function Disable(self)
 		self:UnregisterEvent('UNIT_HEAL_PREDICTION', Path)
 		self:UnregisterEvent('UNIT_MAXHEALTH', Path)
 		self:UnregisterEvent('UNIT_HEALTH', Path)
+		self:UnregisterEvent('UNIT_ABSORB_AMOUNT_CHANGED', Path)
+
+		if hp.myBar then
+			hp.myBar:Hide()
+		end
+		if hp.otherBar then
+			hp.otherBar:Hide()
+		end
+		if hp.absorbBar then
+			hp.absorbBar:Hide()
+		end				
 	end
 end
 
