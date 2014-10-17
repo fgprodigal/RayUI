@@ -33,20 +33,11 @@ local function LoadSkin()
         select(i, GuildNewsFiltersFrame:GetRegions()):Hide()
         select(i, GuildTextEditFrame:GetRegions()):Hide()
     end
-    select(2, GuildNewPerksFrame:GetRegions()):Hide()
-    select(3, GuildNewPerksFrame:GetRegions()):Hide()
     GuildAllPerksFrame:GetRegions():Hide()
     GuildNewsFrame:GetRegions():Hide()
     GuildRewardsFrame:GetRegions():Hide()
     GuildNewsBossModelShadowOverlay:Hide()
-    GuildPerksToggleButtonLeft:Hide()
-    GuildPerksToggleButtonMiddle:Hide()
-    GuildPerksToggleButtonRight:Hide()
-    GuildPerksToggleButtonHighlightLeft:Hide()
-    GuildPerksToggleButtonHighlightMiddle:Hide()
-    GuildPerksToggleButtonHighlightRight:Hide()
     GuildPerksContainerScrollBarTrack:Hide()
-    GuildNewPerksFrameHeader1:Hide()
     GuildNewsContainerScrollBarTrack:Hide()
     GuildInfoDetailsFrameScrollBarTrack:Hide()
     GuildInfoFrameInfoHeader1:SetAlpha(0)
@@ -169,68 +160,6 @@ local function LoadSkin()
     GuildFactionBar.bg:SetFrameLevel(0)
     S:CreateBD(GuildFactionBar.bg, .25)
 
-    GuildXPFrame:ClearAllPoints()
-    GuildXPFrame:SetPoint("TOP", GuildFrame, "TOP", 0, -40)
-    GuildXPBarProgress:SetTexture(S["media"].backdrop)
-    GuildXPBarLeft:Hide()
-    GuildXPBarRight:Hide()
-    GuildXPBarMiddle:Hide()
-    GuildXPBarBG:Hide()
-    GuildXPBarShadow:SetAlpha(0)
-    GuildXPBarCap:SetAlpha(0)
-    GuildXPBarDivider1:Hide()
-    GuildXPBarDivider2:Hide()
-    GuildXPBarDivider3:Hide()
-    GuildXPBarDivider4:Hide()
-    GuildXPBar.bg = CreateFrame("Frame", nil, GuildXPBar)
-    GuildXPBar.bg:Point("TOPLEFT", GuildXPFrame, -1, -3)
-    GuildXPBar.bg:Point("BOTTOMRIGHT", GuildXPFrame, 0, 1)
-    GuildXPBar.bg:SetFrameLevel(0)
-    S:CreateBD(GuildXPBar.bg, .25)
-
-    local perkbuttons = {"GuildLatestPerkButton", "GuildNextPerkButton"}
-    for _, button in pairs(perkbuttons) do
-        local bu = _G[button]
-        local ic = _G[button.."IconTexture"]
-        local na = _G[button.."NameFrame"]
-
-        na:Hide()
-        ic:SetTexCoord(.08, .92, .08, .92)
-        ic:SetDrawLayer("OVERLAY")
-        S:CreateBG(ic)
-
-        bu.bg = CreateFrame("Frame", nil, bu)
-        bu.bg:SetPoint("TOPLEFT", 0, -1)
-        bu.bg:SetPoint("BOTTOMRIGHT", 0, 2)
-        bu.bg:SetFrameLevel(0)
-        S:CreateBD(bu.bg, .25)
-    end
-
-    select(5, GuildLatestPerkButton:GetRegions()):Hide()
-    select(6, GuildLatestPerkButton:GetRegions()):Hide()
-
-    local reskinnedperks = false
-    GuildPerksToggleButton:HookScript("OnClick", function()
-        if not reskinnedperks == true then
-            for i = 1, 8 do
-                local button = "GuildPerksContainerButton"..i
-                local bu = _G[button]
-                local ic = _G[button.."IconTexture"]
-
-                bu:DisableDrawLayer("BACKGROUND")
-                bu:DisableDrawLayer("BORDER")
-                bu.EnableDrawLayer = R.dummy
-                ic:SetTexCoord(.08, .92, .08, .92)
-
-                ic.bg = CreateFrame("Frame", nil, bu)
-                ic.bg:SetPoint("TOPLEFT", ic, -1, 1)
-                ic.bg:SetPoint("BOTTOMRIGHT", ic, 1, -1)
-                S:CreateBD(ic.bg, 0)
-            end
-            reskinnedperks = true
-        end
-    end)
-
     local reskinnedrewards = false
     GuildFrameTab4:HookScript("OnClick", function()
         if not reskinnedrewards == true then
@@ -326,7 +255,6 @@ local function LoadSkin()
     GuildRosterContainer:HookScript("OnMouseWheel", UpdateIcons)
     GuildRosterContainer:HookScript("OnVerticalScroll", UpdateIcons)
 
-    GuildLevelFrame:SetAlpha(0)
     local closebutton = select(4, GuildTextEditFrame:GetChildren())
     S:Reskin(closebutton)
     local logbutton = select(3, GuildLogFrame:GetChildren())
