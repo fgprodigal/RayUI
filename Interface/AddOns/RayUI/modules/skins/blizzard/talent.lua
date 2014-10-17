@@ -1,6 +1,5 @@
 local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local S = R:GetModule("Skins")
-local talentTiersNum = MAX_NUM_TALENT_TIERS or 7
 
 local function LoadSkin()
 	local r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b
@@ -145,7 +144,7 @@ local function LoadSkin()
 		end
 	end
 
-	for i = 1, talentTiersNum do
+	for i = 1, MAX_TALENT_TIERS do
 		local row = _G["PlayerTalentFrameTalentsTalentRow"..i]
 		_G["PlayerTalentFrameTalentsTalentRow"..i.."Bg"]:Hide()
 		row:DisableDrawLayer("BORDER")
@@ -172,7 +171,7 @@ local function LoadSkin()
 	end
 
 	hooksecurefunc("TalentFrame_Update", function()
-		for i = 1, talentTiersNum do
+		for i = 1, MAX_TALENT_TIERS do
 			for j = 1, NUM_TALENT_COLUMNS do
 				local bu = _G["PlayerTalentFrameTalentsTalentRow"..i.."Talent"..j]
 				if bu.knownSelection:IsShown() then
