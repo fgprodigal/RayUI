@@ -9,17 +9,18 @@ local function LoadSkin()
 	PVEFrame.shadows:Hide()
 	select(24, PVEFrame:GetRegions()):Hide()
 	select(25, PVEFrame:GetRegions()):Hide()
-	
+
 	PVEFrameTab2:SetPoint("LEFT", PVEFrameTab1, "RIGHT", -15, 0)
-	
+	PVEFrameTab3:SetPoint("LEFT", PVEFrameTab2, "RIGHT", -15, 0)
+
 	GroupFinderFrameGroupButton1.icon:SetTexture("Interface\\Icons\\INV_Helmet_08")
 	GroupFinderFrameGroupButton2.icon:SetTexture("Interface\\Icons\\inv_helmet_06")
 	GroupFinderFrameGroupButton3.icon:SetTexture("Interface\\Icons\\Icon_Scenarios")
-	
+
 	local function onEnter(self)
 		self:SetBackdropColor(r, g, b, .4)
 	end
-	
+
 	local function onLeave(self)
 		self:SetBackdropColor(0, 0, 0, 0)
 	end
@@ -32,8 +33,8 @@ local function LoadSkin()
 		bu.bg:SetVertexColor(r, g, b, .2)
 		bu.bg:SetAllPoints()
 
-		
-		S:Reskin(bu, true)			
+
+		S:Reskin(bu, true)
 		bu:SetScript("OnEnter", onEnter)
 		bu:SetScript("OnLeave", onLeave)
 
@@ -43,7 +44,7 @@ local function LoadSkin()
 		bu.icon.bg = S:CreateBG(bu.icon)
 		bu.icon.bg:SetDrawLayer("ARTWORK")
 	end
-	
+
 	hooksecurefunc("GroupFinderFrame_SelectGroupButton", function(index)
 		local self = GroupFinderFrame
 		for i = 1, 4 do
@@ -59,6 +60,7 @@ local function LoadSkin()
 	S:ReskinPortraitFrame(PVEFrame)
 	S:CreateTab(PVEFrameTab1)
 	S:CreateTab(PVEFrameTab2)
+	S:CreateTab(PVEFrameTab3)
 
 	S:Reskin(LFDQueueFrameFindGroupButton)
 	S:Reskin(LFDQueueFrameCancelButton)
@@ -207,7 +209,7 @@ local function LoadSkin()
 
 	S:Reskin(ScenarioQueueFrameFindGroupButton)
 	S:ReskinDropDown(ScenarioQueueFrameTypeDropDown)
-	
+
 	-- Raid frame (social frame)
 	S:Reskin(RaidFrameRaidBrowserButton)
 
@@ -216,11 +218,11 @@ local function LoadSkin()
 	LFRQueueFrameSpecificListScrollFrameScrollBackgroundTopLeft:Hide()
 	LFRQueueFrameSpecificListScrollFrameScrollBackgroundBottomRight:Hide()
 	LFRBrowseFrameRoleInsetBg:Hide()
-	
+
 	S:ReskinPortraitFrame(RaidBrowserFrame)
 	S:ReskinScroll(LFRQueueFrameSpecificListScrollFrameScrollBar)
 	S:ReskinScroll(LFRQueueFrameCommentScrollFrameScrollBar)
-	
+
 	for i = 1, 2 do
 		local tab = _G["LFRParentFrameSideTab"..i]
 		tab:GetRegions():Hide()
