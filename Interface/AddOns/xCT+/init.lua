@@ -12,10 +12,21 @@
  [  ©2012. All Rights Reserved.        ]
  [====================================]]
 
+-- No locals for NOOP
+local noop = function() end
+
 local AddonName, addon = ...
 addon.engine = LibStub("AceAddon-3.0"):NewAddon(AddonName, "AceConsole-3.0")
 
 xCT_Plus = addon.engine
 
 -- No Operation
-addon.noop = function(...) return end
+addon.noop = noop
+
+-- Fixed in 5.4.2
+-- Work around for http://us.battle.net/wow/en/forum/topic/10388639018
+--[[hooksecurefunc("StaticPopup_Show", function(popup)
+  if(popup == "ADDON_ACTION_FORBIDDEN") then
+    StaticPopup_Hide(popup);
+  end
+end)]]

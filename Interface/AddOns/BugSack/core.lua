@@ -1,3 +1,4 @@
+
 local addonName, addon = ...
 
 -----------------------------------------------------------------------
@@ -10,20 +11,7 @@ if not LibStub then
 	return
 end
 
-local L = nil
-local AL = LibStub:GetLibrary("AceLocale-3.0", true)
-if AL then
-	if type(addon.LoadTranslations) == "function" then
-		addon:LoadTranslations(AL)
-		addon.LoadTranslations = nil
-	end
-	L = AL:GetLocale(addonName)
-	AL = nil
-else
-	L = setmetatable({}, {__index = function(t,k) t[k] = k return k end })
-end
-addon.L = L
-
+local L = addon.L
 local BugGrabber = BugGrabber
 if not BugGrabber then
 	local msg = L["|cffff4411BugSack requires the |r|cff44ff44!BugGrabber|r|cffff4411 addon, which you can download from the same place you got BugSack. Happy bug hunting!|r"]
@@ -167,7 +155,10 @@ function eventFrame:PLAYER_LOGIN()
 	-- Set up our error event handler
 	BugGrabber.RegisterCallback(addon, "BugGrabber_BugGrabbed", onError)
 
-	SlashCmdList.BugSack = function() InterfaceOptionsFrame_OpenToCategory(addonName) end
+	SlashCmdList.BugSack = function()
+		InterfaceOptionsFrame_OpenToCategory(addonName)
+		InterfaceOptionsFrame_OpenToCategory(addonName)
+	end
 	SLASH_BugSack1 = "/bugsack"
 
 	self.PLAYER_LOGIN = nil
@@ -203,9 +194,12 @@ end
 
 do
 	local function colorStack(ret)
-		ret = tostring(ret) or ""	-- yes, it gets called with nonstring from somewhere /mikk
+		ret = tostring(ret) or "" -- Yes, it gets called with nonstring from somewhere /mikk
+		ret = ret:gsub("[%.I][%.n][%.t][%.e][%.r]face\\", "")
+		ret = ret:gsub("%.?%.?%.?\\?AddOns\\", "")
 		ret = ret:gsub("|([^chHr])", "||%1"):gsub("|$", "||") -- Pipes
 		ret = ret:gsub("<(.-)>", "|cffffea00<%1>|r") -- Things wrapped in <>
+		ret = ret:gsub("%[(.-)%]", "|cffffea00[%1]|r") -- Things wrapped in []
 		ret = ret:gsub("([\"`'])(.-)([\"`'])", "|cff8888ff%1%2%3|r") -- Quotes
 		ret = ret:gsub(":(%d+)([%S\n])", ":|cff00ff00%1|r%2") -- Line numbers
 		ret = ret:gsub("([^\\]+%.lua)", "|cffffffff%1|r") -- Lua files
@@ -214,7 +208,9 @@ do
 	addon.ColorStack = colorStack
 
 	local function colorLocals(ret)
-		ret = tostring(ret) or ""   -- yes, it gets called with nonstring from somewhere /mikk
+		ret = tostring(ret) or "" -- Yes, it gets called with nonstring from somewhere /mikk
+		ret = ret:gsub("[%.I][%.n][%.t][%.e][%.r]face\\", "")
+		ret = ret:gsub("%.?%.?%.?\\?AddOns\\", "")
 		ret = ret:gsub("|(%a)", "||%1"):gsub("|$", "||") -- Pipes
 		ret = ret:gsub("> %@(.-):(%d+)", "> @|cffeda55f%1|r:|cff00ff00%2|r") -- Files/Line Numbers of locals
 		ret = ret:gsub("(%s-)([%a_%(][%a_%d%*%)]+) = ", "%1|cffffff80%2|r = ") -- Table keys

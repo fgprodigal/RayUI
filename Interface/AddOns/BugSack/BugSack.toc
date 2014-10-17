@@ -1,21 +1,20 @@
-﻿## Interface: 50400
+## Interface: 60000
 ## Title: BugSack
-## Version: 5.0
 ## Notes: Toss those bugs inna sack.
-## Notes-zhCN: 错误信息收集器。
+## Notes-deDE: Werft den Fehler in einen Sack.
 ## Notes-esES: Mete esos errores en un saco.
-## Notes-zhTW: 集中顯示錯誤訊息，避免中斷遊戲。
 ## Notes-ruRU: Аддон ловит текущие ошибки в мешок.
-## Author: Rabbit
-## X-Credits: Archarodim, Zidomo, Rowne, Ramble, kergoth, ckknight, Gamefaq, thomasmo, damjau, Fritti
+## Notes-zhCN: 错误信息收集器。
+## Notes-zhTW: 集中顯示錯誤訊息，避免中斷遊戲。
+## Author: Funkydude
+## X-Credits: Archarodim, Zidomo, Rowne, Ramble, kergoth, ckknight, Gamefaq, thomasmo, damjau, Fritti, Rabbit
 ## SavedVariables: BugSackDB, BugSackLDBIconDB
 ## OptionalDeps: Ace3, LibSharedMedia-3.0, LibDBIcon-1.0, !BugGrabber
 ## X-Category: Development Tools
-## X-RelSite-WoWI: 5995
-## X-License: GPL v2 or later.
-## X-Email: rabbit.magtheridon@gmail.com
+## X-License: All Rights Reserved
 ## X-BugGrabber-Display: BugSack
-## X-Curse-Packaged-Version: r261
+## X-WoWI-ID: 5995
+## X-Curse-Packaged-Version: r281-release
 ## X-Curse-Project-Name: BugSack
 ## X-Curse-Project-ID: bugsack
 ## X-Curse-Repository-ID: wow/bugsack/mainline
@@ -28,7 +27,6 @@ Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
 Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
 
 #@no-lib-strip@
-Libs\AceLocale-3.0\AceLocale-3.0.xml
 Libs\AceComm-3.0\AceComm-3.0.xml
 Libs\AceSerializer-3.0\AceSerializer-3.0.xml
 Libs\LibDBIcon-1.0\LibDBIcon-1.0.lua
@@ -39,4 +37,3 @@ core.lua
 sack.lua
 config.lua
 ldb.lua
-

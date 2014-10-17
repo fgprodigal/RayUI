@@ -42,8 +42,8 @@ function x:LoadAlignmentGrid()
     else
         tt1:SetTexture(.4, .4, .4, .4) 
     end
-    tt1:SetPoint('TOP', AlignGrid, 'TOP', -i * boxSize, 0)
-    tt1:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', -i * boxSize, 0)
+    tt1:SetPoint('TOP', AlignGrid, 'TOP', -i * boxSize + 1, 0)
+    tt1:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', -i * boxSize + 1, 0)
     tt1:SetWidth(1)
     
     -- Vertical Bars to the Right of the Center
@@ -71,8 +71,8 @@ function x:LoadAlignmentGrid()
     else
         tt3:SetTexture(.4, .4, .4, .4) 
     end
-    tt3:SetPoint('LEFT', AlignGrid, 'LEFT', 0, -i * boxSize + 1)
-    tt3:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, -i * boxSize + 1)
+    tt3:SetPoint('LEFT', AlignGrid, 'LEFT', 0, -i * boxSize - 1)
+    tt3:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, -i * boxSize - 1)
     tt3:SetHeight(1)
     
     -- Horizontal Bars to the Above of the Center
@@ -84,8 +84,8 @@ function x:LoadAlignmentGrid()
     else
         tt4:SetTexture(.4, .4, .4, .4) 
     end
-    tt4:SetPoint('LEFT', AlignGrid, 'LEFT', 0, i * boxSize)
-    tt4:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, i * boxSize)
+    tt4:SetPoint('LEFT', AlignGrid, 'LEFT', 0, i * boxSize - 1)
+    tt4:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, i * boxSize - 1)
     tt4:SetHeight(1)
   end
   

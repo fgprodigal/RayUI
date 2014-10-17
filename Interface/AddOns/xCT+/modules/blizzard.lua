@@ -61,6 +61,7 @@ InterfaceOptionsCombatTextPanelEnergyGains:Hide()
 InterfaceOptionsCombatTextPanelPeriodicEnergyGains:Hide()
 InterfaceOptionsCombatTextPanelHonorGains:Hide()
 InterfaceOptionsCombatTextPanelAuras:Hide()
+InterfaceOptionsCombatTextPanelHealingAbsorbSelf:Hide()
 
 -- Direction does NOT work with xCT+ at all
 InterfaceOptionsCombatTextPanelFCTDropDown:Hide()
@@ -70,13 +71,14 @@ InterfaceOptionsCombatTextPanelTargetDamage:Hide()
 InterfaceOptionsCombatTextPanelPeriodicDamage:Hide()
 InterfaceOptionsCombatTextPanelPetDamage:Hide()
 InterfaceOptionsCombatTextPanelHealing:Hide()
-
+InterfaceOptionsCombatTextPanelHealingAbsorbTarget:Hide()
 
 function x:UpdateBlizzardFCT()
   if self.db.profile.blizzardFCT.enabled then
-    DAMAGE_TEXT_FONT = LSM:Fetch("font", self.db.profile.blizzardFCT.font)
-    
+    DAMAGE_TEXT_FONT = self.db.profile.blizzardFCT.fontName
+		
     -- Not working
+		--  LSM:Fetch("font", self.db.profile.blizzardFCT.font)
     --COMBAT_TEXT_HEIGHT = self.db.profile.blizzardFCT.fontSize
     --CombatTextFont:SetFont(self.db.profile.blizzardFCT.font, self.db.profile.blizzardFCT.fontSize, self.db.profile.blizzardFCT.fontOutline)
   end
