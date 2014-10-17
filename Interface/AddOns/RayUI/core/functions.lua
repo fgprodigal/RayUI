@@ -294,9 +294,7 @@ end
 function R:ToggleGameMenu()
 	GameMenuFrame:SetHeight(GameMenuFrame:GetHeight()+GameMenuButtonMacros:GetHeight())
 	GameMenuButtonOptions:ClearAllPoints()
-	GameMenuButtonOptions:SetPoint("TOP", RayUIConfigButton, "BOTTOM", 0, -2)
-	GameMenuButtonUIOptions:ClearAllPoints()
-	GameMenuButtonUIOptions:SetPoint("TOP", GameMenuButtonOptions, "BOTTOM", 0, -2)
+	GameMenuButtonOptions:SetPoint("TOP", RayUIConfigButton, "BOTTOM", 0, -1)
 end
 
 function R:Initialize()
@@ -318,7 +316,7 @@ function R:Initialize()
 
 	local configButton = CreateFrame("Button", "RayUIConfigButton", GameMenuFrame, "GameMenuButtonTemplate")
 	configButton:SetSize(GameMenuButtonMacros:GetWidth(), GameMenuButtonMacros:GetHeight())
-	configButton:SetPoint("TOP", GameMenuButtonWhatsNew, "BOTTOM", 0, -2)
+	configButton:SetPoint("TOP", GameMenuButtonWhatsNew, "BOTTOM", 0, -1)
 	configButton:SetText(L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r设置"])
 	configButton:SetScript("OnClick", function()
 		if RayUIConfigTutorial then
