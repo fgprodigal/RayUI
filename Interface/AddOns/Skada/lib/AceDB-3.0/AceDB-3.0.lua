@@ -39,8 +39,8 @@
 -- end
 -- @class file
 -- @name AceDB-3.0.lua
--- @release $Id: AceDB-3.0.lua 1035 2011-07-09 03:20:13Z kaelten $
-local ACEDB_MAJOR, ACEDB_MINOR = "AceDB-3.0", 22
+-- @release $Id: AceDB-3.0.lua 1123 2014-10-14 19:48:04Z nevcairiel $
+local ACEDB_MAJOR, ACEDB_MINOR = "AceDB-3.0", 25
 local AceDB, oldminor = LibStub:NewLibrary(ACEDB_MAJOR, ACEDB_MINOR)
 
 if not AceDB then return end -- No upgrade needed
@@ -260,8 +260,11 @@ local _, classKey = UnitClass("player")
 local _, raceKey = UnitRace("player")
 local factionKey = UnitFactionGroup("player")
 local factionrealmKey = factionKey .. " - " .. realmKey
-local factionrealmregionKey = factionrealmKey .. " - " .. string.sub(GetCVar("realmList"), 1, 2):upper()
 local localeKey = GetLocale():lower()
+
+local regionTable = { "US", "KR", "EU", "TW", "CN" }
+local regionKey = _G["GetCurrentRegion"] and regionTable[GetCurrentRegion()] or string.sub(GetCVar("realmList"), 1, 2):upper()
+local factionrealmregionKey = factionrealmKey .. " - " .. regionKey
 
 -- Actual database initialization function
 local function initdb(sv, defaults, defaultProfile, olddb, parent)
@@ -300,7 +303,7 @@ local function initdb(sv, defaults, defaultProfile, olddb, parent)
 		["factionrealm"] = factionrealmKey,
 		["factionrealmregion"] = factionrealmregionKey,
 		["profile"] = profileKey,
-        ["locale"] = localeKey,
+		["locale"] = localeKey,
 		["global"] = true,
 		["profiles"] = true,
 	}
@@ -522,6 +525,15 @@ function DBObjectLib:DeleteProfile(name, silent)
 	if self.children then
 		for _, db in pairs(self.children) do
 			DBObjectLib.DeleteProfile(db, name, true)
+		end
+	end
+
+	-- switch all characters that use this profile back to the default
+	if self.sv.profileKeys then
+		for key, profile in pairs(self.sv.profileKeys) do
+			if profile == name then
+				self.sv.profileKeys[key] = nil
+			end
 		end
 	end
 
