@@ -6,8 +6,6 @@ local function LoadSkin()
 
 	PVPUIFrame:StripTextures()
 	S:SetBD(PVPUIFrame)
-	PVPUIFrame.LeftInset:StripTextures()
-	PVPUIFrame.Shadows:StripTextures()
 
 	S:ReskinClose(PVPUIFrameCloseButton)
 
@@ -15,7 +13,7 @@ local function LoadSkin()
 		S:CreateTab(_G["PVPUIFrameTab"..i])
 	end
 
-	for i=1, 3 do
+	for i=1, 4 do
 		local button = _G["PVPQueueFrameCategoryButton"..i]
 		button:SetTemplate('Default')
 		button.Background:Kill()
