@@ -4,17 +4,17 @@ P["Reminder"] = {}
 
 P["Reminder"]["filters"] = {
 	PRIEST = {
-		["护甲"] = { --inner fire/will group
-			["spellGroup"] = {
-				[588] = true, -- inner fire
-				[73413] = true, -- inner will
-			},
-			["instance"] = true,
-			["combat"] = true,
-			["pvp"] = true,
-			["enable"] = true,
-			["strictFilter"] = true,
-		},
+		-- ["护甲"] = { --inner fire/will group
+			-- ["spellGroup"] = {
+				-- [588] = true, -- inner fire
+				-- [73413] = true, -- inner will
+			-- },
+			-- ["instance"] = true,
+			-- ["combat"] = true,
+			-- ["pvp"] = true,
+			-- ["enable"] = true,
+			-- ["strictFilter"] = true,
+		-- },
 	},
 	HUNTER = {
 		["守护"] = { --aspects group

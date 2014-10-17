@@ -951,7 +951,7 @@ function UF:ConstructPriestResourceBar(frame)
     bars:SetSize(200, 5)
     bars:SetFrameLevel(5)
     bars:Point("BOTTOM", frame, "TOP", 0, 1)
-    local count = 3
+    local count = 5
 
     for i = 1, count do
         bars[i] = CreateFrame("StatusBar", nil, bars)
@@ -978,6 +978,8 @@ function UF:ConstructPriestResourceBar(frame)
         bars[i].shadow:SetFrameStrata("BACKGROUND")
         bars[i].shadow:SetFrameLevel(0)
     end
+
+	bars.PostUpdate = UF.UpdateShadowOrbs
 
     return bars
 end
@@ -1214,6 +1216,13 @@ function UF:UpdateShardBar(spec)
         else
             self[i]:SetWidth((200 - (maxBars - 1)*5)/maxBars)
         end
+    end
+end
+
+function UF:UpdateShadowOrbs()
+	local totalOrbs = IsSpellKnown(SHADOW_ORB_MINOR_TALENT_ID) and 5 or 3
+	for i = 1,totalOrbs do
+		self[i]:SetWidth((200 - (totalOrbs - 1)*5)/totalOrbs)
     end
 end
 

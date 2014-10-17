@@ -8,7 +8,6 @@ local PRIEST_BAR_NUM_LARGE_ORBS = PRIEST_BAR_NUM_LARGE_ORBS
 local PRIEST_BAR_NUM_SMALL_ORBS = PRIEST_BAR_NUM_SMALL_ORBS
 local SPELL_POWER_SHADOW_ORBS = SPELL_POWER_SHADOW_ORBS
 local SHADOW_ORB_MINOR_TALENT_ID = SHADOW_ORB_MINOR_TALENT_ID
-local SHADOW_ORBS_SHOW_LEVEL = SHADOW_ORBS_SHOW_LEVEL
 
 oUF.colors.shadowOrbs = {1, 1, 1}
 
@@ -24,9 +23,10 @@ local function Update(self, event, unit)
 
 	for i = 1, totalOrbs do
 		if i <= numOrbs then
+			pb[i]:Show()
 			pb[i]:SetAlpha(1)
 		else
-			pb[i]:SetAlpha(.2)
+			pb[i]:Hide()
 		end
 	end
 	
@@ -75,13 +75,13 @@ local function Enable(self, unit)
 		self:RegisterEvent("UNIT_POWER", Update)
 
 		for i = 1, 5 do
-			if not pb[i]:GetStatusBarTexture() then
-				pb[i]:SetStatusBarTexture([=[Interface\TargetingFrame\UI-StatusBar]=])
-			end
+			-- if not pb[i]:GetStatusBarTexture() then
+				-- pb[i]:SetStatusBarTexture([=[Interface\TargetingFrame\UI-StatusBar]=])
+			-- end
 			
-			pb[i]:SetStatusBarColor(unpack(oUF.colors.shadowOrbs))
-			pb[i]:SetFrameLevel(pb:GetFrameLevel() + 1)
-			pb[i]:GetStatusBarTexture():SetHorizTile(false)
+			-- pb[i]:SetStatusBarColor(unpack(oUF.colors.shadowOrbs))
+			-- pb[i]:SetFrameLevel(pb:GetFrameLevel() + 1)
+			-- pb[i]:GetStatusBarTexture():SetHorizTile(false)
 		end
 		
 		return true
