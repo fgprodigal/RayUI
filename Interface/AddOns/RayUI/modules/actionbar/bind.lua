@@ -2,7 +2,6 @@ local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, loc
 local AB = R:GetModule("ActionBar")
 
 local bind = CreateFrame("Frame", "HoverBind", UIParent)
-local SecureActionButton_OnClick = SecureActionButton_OnClick
 
 function AB:ActivateBindMode()
 	bind.active = true
@@ -208,7 +207,7 @@ end
 function AB:RegisterButtonBind(b, override)
 	local stance = StanceButton1:GetScript("OnClick")
 	local pet = PetActionButton1:GetScript("OnClick")
-	local button = SecureActionButton_OnClick
+	local button = ActionButton1:GetScript("OnClick")
 	if b.IsProtected and b.GetObjectType and b.GetScript and b:GetObjectType()=="CheckButton" and b:IsProtected() then
 		local script = b:GetScript("OnClick")
 		if script==button or override then
@@ -247,6 +246,7 @@ end
 
 function AB:LoadKeyBinder()
 	bind:SetFrameStrata("DIALOG")
+	bind:SetFrameLevel(99)
 	bind:EnableMouse(true)
 	bind:EnableKeyboard(true)
 	bind:EnableMouseWheel(true)

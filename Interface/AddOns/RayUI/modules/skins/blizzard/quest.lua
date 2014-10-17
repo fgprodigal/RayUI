@@ -5,6 +5,7 @@ local function LoadSkin()
 	local r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b
 	S:ReskinPortraitFrame(QuestFrame, true)
 
+	QuestFont:SetTextColor(1, 1, 1)
 	QuestFrameDetailPanel:DisableDrawLayer("BACKGROUND")
 	QuestFrameProgressPanel:DisableDrawLayer("BACKGROUND")
 	QuestFrameRewardPanel:DisableDrawLayer("BACKGROUND")
