@@ -198,7 +198,7 @@ local function LoadSkin()
 		end
 	end)
 
-	for i = 1, 10 do
+	for i = 1, 12 do
 		local bu = _G["AchievementFrameSummaryCategoriesCategory"..i]
 		local bar = bu:GetStatusBarTexture()
 		local label = _G["AchievementFrameSummaryCategoriesCategory"..i.."Label"]

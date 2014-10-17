@@ -48,14 +48,10 @@ local function LoadSkin()
 	S:SetBD(EncounterJournal)
 	S:CreateBD(EncounterJournalSearchResults, .75)
 
-	EncounterJournalEncounterFrameInfoBossTab:ClearAllPoints()
-	EncounterJournalEncounterFrameInfoBossTab:SetPoint("TOPRIGHT", EncounterJournalEncounterFrame, "TOPRIGHT", 75, 20)
-	EncounterJournalEncounterFrameInfoLootTab:ClearAllPoints()
-	EncounterJournalEncounterFrameInfoLootTab:SetPoint("TOP", EncounterJournalEncounterFrameInfoBossTab, "BOTTOM", 0, -4)
-	EncounterJournalEncounterFrameInfoModelTab:ClearAllPoints()
-	EncounterJournalEncounterFrameInfoModelTab:SetPoint("TOP", EncounterJournalEncounterFrameInfoLootTab, "BOTTOM", 0, -4)
+	EncounterJournalEncounterFrameInfoOverviewTab:ClearAllPoints()
+	EncounterJournalEncounterFrameInfoOverviewTab:SetPoint("TOPRIGHT", EncounterJournalEncounterFrame, "TOPRIGHT", 75, 20)
 
-	local tabs = {EncounterJournalEncounterFrameInfoBossTab, EncounterJournalEncounterFrameInfoLootTab, EncounterJournalEncounterFrameInfoModelTab}
+	local tabs = {EncounterJournalEncounterFrameInfoBossTab, EncounterJournalEncounterFrameInfoLootTab, EncounterJournalEncounterFrameInfoModelTab, EncounterJournalEncounterFrameInfoOverviewTab}
 	for _, tab in pairs(tabs) do
 		tab:SetScale(.75)
 
