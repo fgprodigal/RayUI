@@ -160,7 +160,7 @@ function AB.UpdateButtonUsable(button)
 	--usable
 	if isUsable then
 		--but out of range
-		if IsActionInRange(action) == 0 then
+		if IsActionInRange(action) == false then
 			AB.SetButtonColor(button, 'oor')
 		--a holy power abilty, and we're less than 3 Holy Power
 		elseif PLAYER_IS_PALADIN and isHolyPowerAbility(action) and not(UnitPower('player', SPELL_POWER_HOLY_POWER) >= AB:GetHolyPowerThreshold() or UnitBuff('player', HAND_OF_LIGHT)) then

@@ -26,9 +26,10 @@ local function Update(self, event, unit)
 
 	for i = 1, numPoints do
 		if i <= light then
+			hb[i]:Show()
 			hb[i]:SetAlpha(1)
 		else
-			hb[i]:SetAlpha(.2)
+			hb[i]:Hide()
 		end
 	end
 
