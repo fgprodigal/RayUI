@@ -7,10 +7,13 @@ local function LoadSkin()
 
 	QuestTitleFont:SetTextColor(1, 1, 1)
 	QuestTitleFont:SetShadowColor(0, 0, 0)
-	QuestTitleFont.SetTextColor = R.dummy
-	QuestTitleFont.SetShadowColor = R.dummy
 	QuestFont:SetTextColor(1, 1, 1)
-	QuestFont.SetTextColor = R.dummy
+
+	hooksecurefunc("QuestFrameProgressItems_Update", function()
+		QuestProgressTitleText:SetTextColor(1, 1, 1)
+		QuestProgressTitleText:SetShadowColor(0, 0, 0)
+		QuestProgressText:SetTextColor(1, 1, 1)
+	end)
 
 	QuestFrameDetailPanel:DisableDrawLayer("BACKGROUND")
 	QuestFrameProgressPanel:DisableDrawLayer("BACKGROUND")
@@ -92,7 +95,6 @@ local function LoadSkin()
 
 	QuestProgressRequiredItemsText:SetTextColor(1, 1, 1)
 	QuestProgressRequiredItemsText:SetShadowColor(0, 0, 0)
-	QuestProgressText.SetTextColor = R.dummy
 	GreetingText:SetTextColor(1, 1, 1)
 	GreetingText.SetTextColor = R.dummy
 	AvailableQuestsText:SetTextColor(1, 1, 1)
