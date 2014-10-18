@@ -20,7 +20,7 @@ local function SkinDBM()
 		self.options.ExpandUpwards = false
 		if self.mainAnchor then
 			self.mainAnchor:ClearAllPoints()
-			self.mainAnchor:SetPoint("TOPLEFT", Minimap, "TOPRIGHT", self.options.Width/2 + 10 + buttonsize, self.options.BarYOffset)
+			self.mainAnchor:SetPoint("TOPLEFT", Minimap, "TOPRIGHT", self.options.Width/2 + 35 + buttonsize, self.options.BarYOffset)
 		end
 		if self.secAnchor then
 			self.secAnchor:ClearAllPoints()
@@ -238,24 +238,24 @@ local function SkinDBM()
 	hooksecurefunc(DBM.BossHealth,"UpdateSettings",SkinBoss)
 	DBM.RangeCheck:Show()
 	DBM.RangeCheck:Hide()
-	DBMRangeCheck:HookScript("OnShow",function(self)
-		self:SetBackdrop(nil)
-		self:CreateShadow("Background")
-	end)
 
-	DBMRangeCheckRadar:HookScript("OnShow",function(self)
+	local function SkinRange(self, range, filter, forceshow, redCircleNumPlayers)
+		DBMRangeCheck:SetBackdrop(nil)
+		DBMRangeCheck:CreateShadow("Background")
+
 		if not self.styled then
-			self:CreateShadow("Background")
-			self.text:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
-			self.text:SetShadowColor(0, 0, 0)
-			self.text:SetShadowOffset(R.mult, -R.mult)
-			self.styled = true
+			DBMRangeCheckRadar:CreateShadow("Background")
+			DBMRangeCheckRadar.text:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
+			DBMRangeCheckRadar.text:SetShadowColor(0, 0, 0)
+			DBMRangeCheckRadar.text:SetShadowOffset(R.mult, -R.mult)
+			DBMRangeCheckRadar.styled = true
 		end
 		if S.db.dbmposition then
-			self:ClearAllPoints()
-			self:Point("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -70)
+			DBMRangeCheckRadar:ClearAllPoints()
+			DBMRangeCheckRadar:Point("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -70)
 		end
-	end)
+	end
+	hooksecurefunc(DBM.RangeCheck, "Show", SkinRange)
 
 	hooksecurefunc(DBM, "ShowUpdateReminder", function()
 		for i = UIParent:GetNumChildren(), 1, -1 do
@@ -306,14 +306,12 @@ local function SkinDBM()
 	end
 
 	local ForceOptions = function()
-		DBM_SavedOptions.Enabled=true
-
-		DBT_SavedOptions["DBM"].Scale = 1
-		DBT_SavedOptions["DBM"].HugeScale = 1
-		DBT_SavedOptions["DBM"].BarXOffset = 0
-		DBT_SavedOptions["DBM"].BarYOffset = 9
-		DBT_SavedOptions["DBM"].Texture = "RayUI Normal"
-		DBT_SavedOptions["DBM"].Font = "RayUI Font"
+		DBT_PersistentOptions["DBM"].Scale = 1
+		DBT_PersistentOptions["DBM"].HugeScale = 1
+		DBT_PersistentOptions["DBM"].BarXOffset = 0
+		DBT_PersistentOptions["DBM"].BarYOffset = 9
+		DBT_PersistentOptions["DBM"].Texture = "RayUI Normal"
+		DBT_PersistentOptions["DBM"].Font = "RayUI Font"
 	end
 
 	local loadOptions = CreateFrame("Frame")

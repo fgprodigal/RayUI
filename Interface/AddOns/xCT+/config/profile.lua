@@ -9,7 +9,7 @@
  [=====================================]
  [  Author: Dandruff @ Whisperwind-US  ]
  [  xCT+ Version 3.x.x                 ]
- [  ©2012. All Rights Reserved.        ]
+ [  ?012. All Rights Reserved.        ]
  [====================================]]
 
  -- This file is a static default profile.  After your first profile is created, editing this file will do nothing.
@@ -40,7 +40,7 @@ addon.defaults = {
       blizzardHeadNumbers = true,
       enabled = true,
       font = "RayUI Normal",
-      fontName = [[Interface\AddOns\]] .. ADDON_NAME .. [[\media\HOOGE.TTF]],
+      fontName = [[Fonts\ARHei.TTF]],
       fontSize = 32,
       fontOutline = "2OUTLINE",
       
@@ -395,7 +395,7 @@ addon.defaults = {
         ["Height"] = 64,
         
       -- fonts
-        ["font"] = "HOOGE (xCT)",
+        ["font"] = "RayUI Normal",
         ["fontSize"] = 32,
         ["fontOutline"] = "2OUTLINE",
         
