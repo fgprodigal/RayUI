@@ -51,7 +51,6 @@ P["Reminder"]["filters"] = {
 			["negateGroup"] = {
 				[1459] = true,	-- Arcane Brilliance
 				[61316] = true,	-- Dalaran Brilliance
-				[77747] = true,	-- Burning Wrath
 			},
 			["combat"] = true,
 			["instance"] = true,

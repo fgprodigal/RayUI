@@ -225,6 +225,58 @@ function UF:DPSLayout(frame, unit)
 			frame.RunePower = self:ConstructMageResourceBar(frame)
 		end
 
+		-- Combo Bar
+		local bars = CreateFrame("Frame", nil, frame)
+		bars:SetWidth(35)
+		bars:SetHeight(5)
+		bars:Point("BOTTOMLEFT", frame, "TOP", - bars:GetWidth()*2.5 - 10, 1)
+
+		bars:SetBackdropBorderColor(0,0,0,0)
+		bars:SetBackdropColor(0,0,0,0)
+
+		for i = 1, 5 do
+			bars[i] = CreateFrame("StatusBar", frame:GetName().."_Combo"..i, bars)
+			bars[i]:SetHeight(5)
+			bars[i]:SetStatusBarTexture(R["media"].normal)
+			bars[i]:GetStatusBarTexture():SetHorizTile(false)
+
+			if i == 1 then
+				bars[i]:SetPoint("LEFT", bars)
+			else
+				bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
+			end
+			bars[i]:SetAlpha(0.15)
+			bars[i]:SetWidth(35)
+			bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
+			bars[i].bg:SetAllPoints(bars[i])
+			bars[i].bg:SetTexture(R["media"].normal)
+			bars[i].bg.multiplier = .2
+
+			bars[i]:CreateShadow("Background")
+			bars[i].shadow:SetFrameStrata("BACKGROUND")
+			bars[i].shadow:SetFrameLevel(0)
+		end
+
+		bars[1]:SetStatusBarColor(255/255, 0/255, 0)
+		bars[2]:SetStatusBarColor(255/255, 0/255, 0)
+		bars[3]:SetStatusBarColor(255/255, 255/255, 0)
+		bars[4]:SetStatusBarColor(255/255, 255/255, 0)
+		bars[5]:SetStatusBarColor(0, 1, 0)
+
+		frame.CPoints = bars
+		frame.CPoints.Override = self.ComboDisplay
+
+		if self.db.separateEnergy and R.myclass == "ROGUE" then
+			bars:SetParent(RayUF_EnergyBar)
+			bars:ClearAllPoints()
+			bars:Point("BOTTOMLEFT", RayUF_EnergyBar, "TOPLEFT", 0, 3)
+			for i = 1, 5 do
+				bars[i]:SetHeight(3)
+				bars[i]:SetWidth((ENERGY_WIDTH- 20)/5)
+				bars[i]:SetAlpha(0)
+			end
+		end
+
 		local Combat = frame:CreateTexture(nil, "OVERLAY")
 		Combat:Size(20, 20)
 		Combat:ClearAllPoints()
@@ -313,58 +365,6 @@ function UF:DPSLayout(frame, unit)
 
 		frame.Buffs = buffs
 		frame.Debuffs = debuffs
-
-		-- Combo Bar
-		local bars = CreateFrame("Frame", nil, frame)
-		bars:SetWidth(35)
-		bars:SetHeight(5)
-		bars:Point("BOTTOMLEFT", frame, "TOP", - bars:GetWidth()*2.5 - 10, 1)
-
-		bars:SetBackdropBorderColor(0,0,0,0)
-		bars:SetBackdropColor(0,0,0,0)
-
-		for i = 1, 5 do
-			bars[i] = CreateFrame("StatusBar", frame:GetName().."_Combo"..i, bars)
-			bars[i]:SetHeight(5)
-			bars[i]:SetStatusBarTexture(R["media"].normal)
-			bars[i]:GetStatusBarTexture():SetHorizTile(false)
-
-			if i == 1 then
-				bars[i]:SetPoint("LEFT", bars)
-			else
-				bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
-			end
-			bars[i]:SetAlpha(0.15)
-			bars[i]:SetWidth(35)
-			bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
-			bars[i].bg:SetAllPoints(bars[i])
-			bars[i].bg:SetTexture(R["media"].normal)
-			bars[i].bg.multiplier = .2
-
-			bars[i]:CreateShadow("Background")
-			bars[i].shadow:SetFrameStrata("BACKGROUND")
-			bars[i].shadow:SetFrameLevel(0)
-		end
-
-		bars[1]:SetStatusBarColor(255/255, 0/255, 0)
-		bars[2]:SetStatusBarColor(255/255, 0/255, 0)
-		bars[3]:SetStatusBarColor(255/255, 255/255, 0)
-		bars[4]:SetStatusBarColor(255/255, 255/255, 0)
-		bars[5]:SetStatusBarColor(0, 1, 0)
-
-		frame.CPoints = bars
-		frame.CPoints.Override = self.ComboDisplay
-
-		if self.db.separateEnergy and R.myclass == "ROGUE" then
-			bars:SetParent(RayUF_EnergyBar)
-			bars:ClearAllPoints()
-			bars:Point("BOTTOMLEFT", RayUF_EnergyBar, "TOPLEFT", 0, 3)
-			for i = 1, 5 do
-				bars[i]:SetHeight(3)
-				bars[i]:SetWidth((ENERGY_WIDTH- 20)/5)
-				bars[i]:SetAlpha(0)
-			end
-		end
 
 		if UF.db.aurabar then
 			frame.AuraBars = self:Construct_AuraBarHeader(frame)
