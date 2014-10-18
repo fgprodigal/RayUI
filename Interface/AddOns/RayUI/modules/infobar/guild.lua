@@ -101,7 +101,7 @@ local function LoadGuild()
 			GuildSection.headerCat:AddLine("isLine", true, "text", "")
 
 			-- Guild Level
-			GuildSection.headerCat:AddLine("text", (GetGuildFactionGroup() == 0) and string.format(GUILD_LEVEL_AND_FACTION, GetGuildLevel(), FACTION_HORDE) or string.format(GUILD_LEVEL_AND_FACTION, GetGuildLevel(), FACTION_ALLIANCE), "size", 10 + resSizeExtra, "textR", 0.7, "textG", 0.7, "textB", 0.7)
+			GuildSection.headerCat:AddLine("text", (GetGuildFactionGroup() == 0) and FACTION_HORDE..GUILD or FACTION_ALLIANCE..GUILD, "size", 10 + resSizeExtra, "textR", 0.7, "textG", 0.7, "textB", 0.7)
 
 			-- Reputation
 			GuildSection.headerCat:AddLine("text", GetText("FACTION_STANDING_LABEL"..GetGuildFactionInfo(), UnitSex("player")), "size", 11 + resSizeExtra, "textR", 0.7, "textG", 0.7, "textB", 0.7)

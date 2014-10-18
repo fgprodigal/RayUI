@@ -151,4 +151,4 @@ local function LoadFunc()
 	end)
 end
 
-M:RegisterMiscModule("WatchFrame", LoadFunc)
+-- M:RegisterMiscModule("WatchFrame", LoadFunc)

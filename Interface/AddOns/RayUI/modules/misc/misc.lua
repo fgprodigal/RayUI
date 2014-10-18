@@ -289,7 +289,8 @@ function M:Initialize()
 	for module, func in pairs(self.Modules) do
 		local _, catch = pcall(func)
 		if catch then
-			error(catch, 2)
+			R:Print(catch)
+			-- error(catch, 2)
 		end
 	end
 end

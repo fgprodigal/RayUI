@@ -3,91 +3,6 @@ local M = R:GetModule("Misc")
 
 local function LoadFunc()
 	if not M.db.quest then return end
-
-	--显示任务等级
-	local function questlevel()
-		local buttons = QuestLogScrollFrame.buttons
-		local numButtons = #buttons
-		local scrollOffset = HybridScrollFrame_GetOffset(QuestLogScrollFrame)
-		local numEntries, numQuests = GetNumQuestLogEntries()
-
-		for i = 1, numButtons do
-			local questIndex = i + scrollOffset
-			local questLogTitle = buttons[i]
-			if questIndex <= numEntries then
-				local title, level, questTag, suggestedGroup, isHeader, isCollapsed, isComplete, isDaily = GetQuestLogTitle(questIndex)
-				if not isHeader then
-					questLogTitle:SetText("[" .. level .. "] " .. title)
-					QuestLogTitleButton_Resize(questLogTitle)
-				end
-			end
-		end
-	end
-	hooksecurefunc("QuestLog_Update", questlevel)
-	QuestLogScrollFrameScrollBar:HookScript("OnValueChanged", questlevel)
-
-	local QuestLogExpandButtonFrame = CreateFrame("Frame", "QuestLogExpandButtonFrame", QuestLogFrame)
-	QuestLogExpandButtonFrame:SetSize(54, 32)
-	QuestLogExpandButtonFrame:SetPoint("TOPLEFT", 40, -48)
-
-	local QuestLogCollapseAllButton = CreateFrame("Button", "QuestLogCollapseAllButton", QuestLogExpandButtonFrame, "QuestLogTitleButtonTemplate")
-	QuestLogCollapseAllButton:SetSize(40, 22)
-	QuestLogCollapseAllButton:SetPoint("TOPLEFT", 0, -2)
-	QuestLogCollapseAllButton:SetScript("OnEnter", nil)
-	QuestLogCollapseAllButtonNormalText:SetText(L["全部"])
-	QuestLogCollapseAllButtonNormalText:SetWidth(0)
-
-	-- AllButton click behavior
-	QuestLogCollapseAllButton:SetScript("OnClick", function(self)
-		if (self.collapsed) then
-			self.collapsed = nil
-			ExpandQuestHeader(0)
-		else
-			self.collapsed = 1
-			CollapseQuestHeader(0)
-		end
-	end)
-
-	-- Move QuestLogCount position
-	hooksecurefunc("QuestLog_UpdateQuestCount", function(self)
-		local dailyQuestsComplete = GetDailyQuestsCompleted()
-		local parent = QuestLogCount:GetParent()
-
-		if ( dailyQuestsComplete > 0 ) then
-			QuestLogCount:SetPoint("TOPLEFT", parent, "TOPLEFT", 140, -38)
-		else
-			QuestLogCount:SetPoint("TOPLEFT", parent, "TOPLEFT", 140, -41)
-		end
-	end)
-
-	-- display + when collapsed all and display - when expanded all
-	hooksecurefunc("QuestLog_Update", function(self)
-		local numEntries, numQuests = GetNumQuestLogEntries()
-
-		-- Set the expand/collapse all button texture
-		local numHeaders = 0
-		local notExpanded = 0
-		-- Somewhat redundant loop, but cleaner than the alternatives
-		for i=1, numEntries, 1 do
-			local index = i
-			local questLogTitleText, level, questTag, suggestedGroup, isHeader, isCollapsed = GetQuestLogTitle(i)
-			if ( questLogTitleText and isHeader ) then
-				numHeaders = numHeaders + 1
-				if ( isCollapsed ) then
-					notExpanded = notExpanded + 1
-				end
-			end
-		end
-		-- If all headers are not expanded then show collapse button, otherwise show the expand button
-		if ( notExpanded ~= numHeaders ) then
-			QuestLogCollapseAllButton.collapsed = nil
-			QuestLogCollapseAllButton:SetNormalTexture("Interface\\Buttons\\UI-MinusButton-Up")
-		else
-			QuestLogCollapseAllButton.collapsed = 1
-			QuestLogCollapseAllButton:SetNormalTexture("Interface\\Buttons\\UI-PlusButton-Up")
-		end
-	end)
-
     local Monomyth = CreateFrame("Frame")
     Monomyth:SetScript("OnEvent", function(self, event, ...) self[event](...) end)
 
@@ -95,12 +10,9 @@ local function LoadFunc()
 	do
 		local currentInfo = {}
 
-		local Delayer = Monomyth:CreateAnimationGroup()
-		Delayer:CreateAnimation():SetDuration(.3)
-		Delayer:SetLooping("NONE")
-		Delayer:SetScript("OnFinished", function()
+		local function TimerCallback()
 			DelayHandler(unpack(currentInfo))
-		end)
+		end
 
 		local delayed = true
 		function DelayHandler(func, ...)
@@ -115,7 +27,7 @@ local function LoadFunc()
 					table.insert(currentInfo, argument)
 				end
 
-				Delayer:Play()
+				C_Timer.After(1, TimerCallback)
 			else
 				delayed = true
 				func(...)
@@ -243,8 +155,7 @@ local function LoadFunc()
     }
 
     Monomyth:Register("GOSSIP_CONFIRM", function(index)
-        local GUID = UnitGUID("target") or ""
-        local creatureID = tonumber(string.sub(GUID, -12, -9), 16)
+		local creatureID = tonumber(string.match(UnitGUID("npc") or "", "Creature%-.-%-.-%-.-%-.-%-(.-)%-"))
 
         if(creatureID and darkmoonNPC[creatureID]) then
             SelectGossipOption(index, "", true)
@@ -331,7 +242,7 @@ local function LoadFunc()
 			end
 
 			if(bestIndex) then
-				_G["QuestInfoItem" .. bestIndex]:Click()
+				QuestInfoRewardsFrame.RewardButton[bestIndex]:Click()
 			end
 		end
 	end)
@@ -385,8 +296,8 @@ local function LoadFunc()
 
 	local function GetQuestItemLevel()
 		for index = 1, questTip:NumLines() do
-			local level = string.match(_G["MonomythTipTextLeft" .. index]:GetText(), questLevel)
-			if(level and tonumber(level)) then
+			local level = tonumber(string.match(_G["QuickQuestTipTextLeft" .. index]:GetText(), questLevel))
+			if(level) then
 				return tonumber(level)
 			end
 		end
