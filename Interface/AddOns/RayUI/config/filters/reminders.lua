@@ -68,7 +68,6 @@ P["Reminder"]["filters"] = {
 			["role"] = "Tank",
 			["instance"] = true,
 			["combat"] = true,
-			["reverseCheck"] = true,
 			["talentTreeException"] = 1, --Holy paladins use RF sometimes
 			["enable"] = true,
 		},
@@ -161,7 +160,6 @@ P["Reminder"]["filters"] = {
 			["role"] = "Tank",
 			["instance"] = true,
 			["combat"] = true,
-			["reverseCheck"] = true,
 			["enable"] = true,
 			["strictFilter"] = true,
 		},

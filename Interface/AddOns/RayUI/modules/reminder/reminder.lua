@@ -118,7 +118,7 @@ function RM:FilterCheck(frame, isReverse)
 	else
 		roleCheck = true
 	end
-	
+
 	if db.tree then
 		if db.tree == GetSpecialization() or db.tree == "ANY" then
 			treeCheck = true
