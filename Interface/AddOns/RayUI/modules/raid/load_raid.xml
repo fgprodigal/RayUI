@@ -1,10 +1,9 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
     <Script file="raid.lua" />
     <Script file="layout.lua" />
-    <Script file="tags.lua" /> 
+    <Script file="tags.lua" />
     <Script file="elements\afk.lua" />
-    <Script file="elements\auras.lua" /> 
-    <Script file="elements\autorez.lua" /> 
+    <Script file="elements\autorez.lua" />
     <Script file="elements\heals.lua" />
     <Script file="elements\indicators.lua" />
     <Script file="elements\range.lua" />

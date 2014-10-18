@@ -93,8 +93,8 @@ local function LoadSkin()
 	BidBidButton:Point("RIGHT", BidBuyoutButton, "LEFT", -1, 0)
 	AuctionsCancelAuctionButton:ClearAllPoints()
 	AuctionsCancelAuctionButton:Point("RIGHT", AuctionsCloseButton, "LEFT", -1, 0)
-	BrowseSearchButton:ClearAllPoints()
-	BrowseSearchButton:SetPoint("TOPRIGHT", AuctionFrameBrowse, "TOPRIGHT", 25, -30)
+	-- BrowseSearchButton:ClearAllPoints()
+	-- BrowseSearchButton:SetPoint("TOPRIGHT", AuctionFrameBrowse, "TOPRIGHT", 25, -30)
 
 	-- Blizz needs to be more consistent
 
