@@ -142,9 +142,24 @@ local function SkinAce3()
 			local frame = widget.editbox
 			local button = widget.button
 			-- frame:StripTextures()
-			_G[frame:GetName()..'Left']:Kill()
-			_G[frame:GetName()..'Middle']:Kill()
-			_G[frame:GetName()..'Right']:Kill()
+			if _G[frame:GetName()..'Left'] then
+				_G[frame:GetName()..'Left']:Kill()
+			end
+			if _G[frame:GetName()].Left then
+				_G[frame:GetName()].Left:Kill()
+			end
+			if _G[frame:GetName()..'Middle'] then
+				_G[frame:GetName()..'Middle']:Kill()
+			end
+			if _G[frame:GetName()].Middle then
+				_G[frame:GetName()].Middle:Kill()
+			end
+			if _G[frame:GetName()..'Right'] then
+				_G[frame:GetName()..'Right']:Kill()
+			end
+			if _G[frame:GetName()].Right then
+				_G[frame:GetName()].Right:Kill()
+			end
 			S:ReskinInput(frame)
 			button:ClearAllPoints()
 			button:SetPoint("RIGHT", frame, "RIGHT", -7, 0)

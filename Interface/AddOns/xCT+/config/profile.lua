@@ -33,23 +33,23 @@ end
 
 addon.defaults = {
   profile = {
-    showStartupText = true,
+    showStartupText = false,
     hideConfig = true,
     
     blizzardFCT = {
-      blizzardHeadNumbers = false,
-      enabled = false,
-      font = "Homespun (xCT+)",
+      blizzardHeadNumbers = true,
+      enabled = true,
+      font = "RayUI Normal",
       fontName = [[Interface\AddOns\]] .. ADDON_NAME .. [[\media\HOOGE.TTF]],
       fontSize = 32,
-      fontOutline = "4MONOCHROMEOUTLINE",
+      fontOutline = "2OUTLINE",
       
       -- CVars
-      ["CombatThreatChanges"] = false,
-      ["CombatDamage"] = false,
-      ["CombatHealing"] = false,
-      ["PetMeleeDamage"] = false,
-      ["CombatLogPeriodicSpells"] = false,
+      ["CombatThreatChanges"] = true,
+      ["CombatDamage"] = true,
+      ["CombatHealing"] = true,
+      ["PetMeleeDamage"] = true,
+      ["CombatLogPeriodicSpells"] = true,
       ["CombatHealingAbsorbTarget"] = false,
       ["fctSpellMechanics"] = false,
       ["fctSpellMechanicsOther"] = false,
@@ -79,13 +79,13 @@ addon.defaults = {
       -- position
         ["X"] = 0,
         ["Y"] = 224,
-        ["Width"] = 512,
+        ["Width"] = 256,
         ["Height"] = 128,
         
       -- fonts
-        ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 20,
-        ["fontOutline"] = "4MONOCHROMEOUTLINE",
+        ["font"] = "RayUI Normal",
+        ["fontSize"] = 18,
+        ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "CENTER",
 
       -- font colors
@@ -164,15 +164,15 @@ addon.defaults = {
         ["megaDamage"] = false,
         
       -- position
-        ["X"] = 480,
-        ["Y"] = 0,
-        ["Width"] = 192,
-        ["Height"] = 320,
+        ["X"] = 382,
+        ["Y"] = 58,
+        ["Width"] = 128,
+        ["Height"] = 260,
         
       -- fonts
-        ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 20,
-        ["fontOutline"] = "4MONOCHROMEOUTLINE",
+        ["font"] = "RayUI Normal",
+        ["fontSize"] = 15,
+        ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "RIGHT",
         
       -- font colors
@@ -204,7 +204,7 @@ addon.defaults = {
 
       -- icons
         ["iconsEnabled"] = true,
-        ["iconsSize"] = 16,
+        ["iconsSize"] = 28,
         
       -- scrollable
         ["enableScrollable"] = false,
@@ -228,8 +228,8 @@ addon.defaults = {
       },
       
       critical = {
-        ["enabledFrame"] = true,
-        ["secondaryFrame"] = 0,
+        ["enabledFrame"] = false,
+        ["secondaryFrame"] = 2,
         ["insertText"] = "bottom",
         ["alpha"] = 100,
         ["megaDamage"] = false,
@@ -241,9 +241,9 @@ addon.defaults = {
         ["Height"] = 128,
         
       -- fonts
-        ["font"] = "Homespun (xCT+)",
+        ["font"] = "RayUI Normal",
         ["fontSize"] = 30,
-        ["fontOutline"] = "4MONOCHROMEOUTLINE",
+        ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "RIGHT",
         
       -- font colors
@@ -264,7 +264,7 @@ addon.defaults = {
         
       -- icons
         ["iconsEnabled"] = true,
-        ["iconsSize"] = 16,
+        ["iconsSize"] = 28,
         
       -- scrollable
         ["enableScrollable"] = false,
@@ -284,20 +284,20 @@ addon.defaults = {
       damage = {
         ["enabledFrame"] = true,
         ["secondaryFrame"] = 0,
-        ["insertText"] = "top",
+        ["insertText"] = "bottom",
         ["alpha"] = 100,
         ["megaDamage"] = false,
         
       -- position
-        ["X"] = -448,
-        ["Y"] = -88,
-        ["Width"] = 128,
+        ["X"] = -325,
+        ["Y"] = -30,
+        ["Width"] = 190,
         ["Height"] = 144,
         
       -- fonts
-        ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 20,
-        ["fontOutline"] = "4MONOCHROMEOUTLINE",
+        ["font"] = "RayUI Normal",
+        ["fontSize"] = 15,
+        ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "LEFT",
 
       -- font colors
@@ -347,15 +347,15 @@ addon.defaults = {
         ["megaDamage"] = false,
       
       -- positioon
-        ["X"] = -288,
-        ["Y"] = 88,
-        ["Width"] = 448,
-        ["Height"] = 144,
+        ["X"] = -415,
+        ["Y"] = 5,
+        ["Width"] = 128,
+        ["Height"] = 260,
         
       -- fonts
-        ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 20,
-        ["fontOutline"] = "4MONOCHROMEOUTLINE",
+        ["font"] = "RayUI Normal",
+        ["fontSize"] = 15,
+        ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "LEFT",
         
       -- font colors
@@ -377,15 +377,15 @@ addon.defaults = {
         ["visibilityTime"] = 5,
         
       -- special tweaks
-        ["showFriendlyHealers"] = true,
+        ["showFriendlyHealers"] = false,
         ["enableClassNames"] = true,
-        ["enableRealmNames"] = true,
-        ["enableOverHeal"] = true,
+        ["enableRealmNames"] = false,
+        ["enableOverHeal"] = false,
         ["enableSelfAbsorbs"] = true,
       },
       
       class = {
-        ["enabledFrame"] = true,
+        ["enabledFrame"] = false,
         ["alpha"] = 100,
         
       -- position
@@ -397,7 +397,7 @@ addon.defaults = {
       -- fonts
         ["font"] = "HOOGE (xCT)",
         ["fontSize"] = 32,
-        ["fontOutline"] = "4MONOCHROMEOUTLINE",
+        ["fontOutline"] = "2OUTLINE",
         
       -- font colors
         colors = {
@@ -415,14 +415,14 @@ addon.defaults = {
         
       -- position
         ["X"] = 0,
-        ["Y"] = -64,
+        ["Y"] = -95,
         ["Width"] = 256,
         ["Height"] = 128,
         
       -- fonts
-        ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 20,
-        ["fontOutline"] = "4MONOCHROMEOUTLINE",
+        ["font"] = "RayUI Normal",
+        ["fontSize"] = 15,
+        ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "CENTER",
         
       -- font colors
@@ -445,8 +445,8 @@ addon.defaults = {
       },
       
       procs = {
-        ["enabledFrame"] = true,
-        ["secondaryFrame"] = 0,
+        ["enabledFrame"] = false,
+        ["secondaryFrame"] = 1,
         ["insertText"] = "top",
         ["alpha"] = 100,
         
@@ -457,9 +457,9 @@ addon.defaults = {
         ["Height"] = 128,
         
       -- fonts
-        ["font"] = "Homespun (xCT+)",
+        ["font"] = "RayUI Normal",
         ["fontSize"] = 20,
-        ["fontOutline"] = "4MONOCHROMEOUTLINE",
+        ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "CENTER",
         
       -- font colors
@@ -491,14 +491,14 @@ addon.defaults = {
         
       -- position 
         ["X"] = 0,
-        ["Y"] = -224,
-        ["Width"] = 512,
+        ["Y"] = -245,
+        ["Width"] = 325,
         ["Height"] = 128,
         
       -- fonts
-        ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 20,
-        ["fontOutline"] = "4MONOCHROMEOUTLINE",
+        ["font"] = "RayUI Normal",
+        ["fontSize"] = 15,
+        ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "CENTER",
         
       -- icons
