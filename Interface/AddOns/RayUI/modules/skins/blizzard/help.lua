@@ -116,36 +116,36 @@ local function LoadSkin()
 	end
 
 	-- Nav Bar
-	local function navButtonFrameLevel(self)
-		for i=1, #self.navList do
-			local navButton = self.navList[i]
-			local lastNav = self.navList[i-1]
-			if navButton and lastNav then
-				navButton:SetFrameLevel(lastNav:GetFrameLevel() - 2)
-				navButton:ClearAllPoints()
-				navButton:SetPoint("LEFT", lastNav, "RIGHT", 1, 0)
-			end
-		end
-	end
+	-- local function navButtonFrameLevel(self)
+		-- for i=1, #self.navList do
+			-- local navButton = self.navList[i]
+			-- local lastNav = self.navList[i-1]
+			-- if navButton and lastNav then
+				-- navButton:SetFrameLevel(lastNav:GetFrameLevel() - 2)
+				-- navButton:ClearAllPoints()
+				-- navButton:SetPoint("LEFT", lastNav, "RIGHT", 1, 0)
+			-- end
+		-- end
+	-- end
 
-	hooksecurefunc("NavBar_AddButton", function(self, buttonData)
-		local navButton = self.navList[#self.navList]
+	-- hooksecurefunc("NavBar_AddButton", function(self, buttonData)
+		-- local navButton = self.navList[#self.navList]
 
-		if not navButton.skinned then
-			S:Reskin(navButton)
-			navButton:GetRegions():SetAlpha(0)
-			select(2, navButton:GetRegions()):SetAlpha(0)
-			select(3, navButton:GetRegions()):SetAlpha(0)
+		-- if not navButton.skinned then
+			-- S:Reskin(navButton)
+			-- navButton:GetRegions():SetAlpha(0)
+			-- select(2, navButton:GetRegions()):SetAlpha(0)
+			-- select(3, navButton:GetRegions()):SetAlpha(0)
 
-			navButton.skinned = true
+			-- navButton.skinned = true
 
-			navButton:HookScript("OnClick", function()
-				navButtonFrameLevel(self)
-			end)
-		end
+			-- navButton:HookScript("OnClick", function()
+				-- navButtonFrameLevel(self)
+			-- end)
+		-- end
 
-		navButtonFrameLevel(self)
-	end)
+		-- navButtonFrameLevel(self)
+	-- end)
 end
 
 S:RegisterSkin("RayUI", LoadSkin)

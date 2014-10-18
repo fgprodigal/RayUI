@@ -634,6 +634,40 @@ function S:ReskinFilterButton(f)
 	f.Icon:SetSize(8, 8)
 end
 
+local function colourArrow(f)
+	if f:IsEnabled() then
+		f.tex:SetVertexColor(r, g, b)
+	end
+end
+
+local function clearArrow(f)
+	f.tex:SetVertexColor(1, 1, 1)
+end
+
+S.colourArrow = colourArrow
+S.clearArrow = clearArrow
+
+function S:ReskinNavBar(f)
+	local overflowButton = f.overflowButton
+
+	f:GetRegions():Hide()
+	f:DisableDrawLayer("BORDER")
+	f.overlay:Hide()
+	f.homeButton:GetRegions():Hide()
+
+	S:Reskin(f.homeButton)
+	S:Reskin(overflowButton, true)
+
+	local tex = overflowButton:CreateTexture(nil, "ARTWORK")
+	tex:SetTexture(S["media"].arrowLeft)
+	tex:SetSize(8, 8)
+	tex:SetPoint("CENTER")
+	overflowButton.tex = tex
+
+	overflowButton:HookScript("OnEnter", colourArrow)
+	overflowButton:HookScript("OnLeave", clearArrow)
+end
+
 function S:RegisterSkin(name, loadFunc)
 	if name == 'RayUI' then
 		tinsert(self.SkinFuncs["RayUI"], loadFunc)

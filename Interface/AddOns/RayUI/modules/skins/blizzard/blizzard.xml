@@ -45,6 +45,8 @@
 	<Script file='pvp.lua'/>
 	<Script file='quest.lua'/>
 	<Script file='questchoice.lua'/>
+	<Script file='questinfo.lua'/>
+	<Script file='questmap.lua'/>
 	<Script file='raid.lua'/>
 	<Script file='reforging.lua'/>
 	<Script file='spellbook.lua'/>
@@ -56,4 +58,5 @@
 	<Script file='tradeskill.lua'/>
 	<Script file='trainer.lua'/>
 	<Script file='voidstorage.lua'/>
+	<Script file='worldmap.lua'/>
 </Ui>
