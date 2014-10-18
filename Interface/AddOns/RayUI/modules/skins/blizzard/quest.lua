@@ -7,7 +7,10 @@ local function LoadSkin()
 
 	QuestTitleFont:SetTextColor(1, 1, 1)
 	QuestTitleFont:SetShadowColor(0, 0, 0)
+	QuestTitleFont.SetTextColor = R.dummy
+	QuestTitleFont.SetShadowColor = R.dummy
 	QuestFont:SetTextColor(1, 1, 1)
+	QuestFont.SetTextColor = R.dummy
 
 	QuestFrameDetailPanel:DisableDrawLayer("BACKGROUND")
 	QuestFrameProgressPanel:DisableDrawLayer("BACKGROUND")

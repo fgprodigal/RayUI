@@ -29,7 +29,7 @@ local function LoadSkin()
 		for i=1, NUMGOSSIPBUTTONS do
 			local text = _G["GossipTitleButton" .. i]:GetText()
 			if text then
-				text = string.sub(text, 11) -- remove the color prefix
+				text = string.gsub(text, "|cff......", "|cffffffff")
 				_G["GossipTitleButton" .. i]:SetText(text)
 			end
 		end
