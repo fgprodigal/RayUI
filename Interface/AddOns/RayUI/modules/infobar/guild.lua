@@ -78,7 +78,7 @@ local function LoadGuild()
 				end
 				guildonline = guildonline + 1
 			end
-			
+
 			for i = guildonline+1, #GuildTabletData do
 				GuildTabletData[i] = nil
 			end
@@ -99,9 +99,6 @@ local function LoadGuild()
 			GuildSection.headerCat = guildTablet:AddCategory()
 			GuildSection.headerCat:AddLine("text", gname, "size", 13 + resSizeExtra, "textR", ttheader[1], "textG", ttheader[2], "textB", ttheader[3])
 			GuildSection.headerCat:AddLine("isLine", true, "text", "")
-
-			-- Guild Level
-			GuildSection.headerCat:AddLine("text", (GetGuildFactionGroup() == 0) and string.format(GUILD_LEVEL_AND_FACTION, GetGuildLevel(), FACTION_HORDE) or string.format(GUILD_LEVEL_AND_FACTION, GetGuildLevel(), FACTION_ALLIANCE), "size", 10 + resSizeExtra, "textR", 0.7, "textG", 0.7, "textB", 0.7)
 
 			-- Reputation
 			GuildSection.headerCat:AddLine("text", GetText("FACTION_STANDING_LABEL"..GetGuildFactionInfo(), UnitSex("player")), "size", 11 + resSizeExtra, "textR", 0.7, "textG", 0.7, "textB", 0.7)
@@ -142,8 +139,8 @@ local function LoadGuild()
 					isFriend = (not isPlayer) and FriendsTabletDataNames[val[7]] or false
 				end
 				isGM = val[4] == GUILD_RANK0_DESC
-				normColor = 	isPlayer and {0.3, 1, 0.3} or 
-								isFriend and {0, 0.8, 0.8} or 
+				normColor = 	isPlayer and {0.3, 1, 0.3} or
+								isFriend and {0, 0.8, 0.8} or
 								isGM and {1, 0.65, 0.2} or
 								{0.8, 0.8, 0.8}
 				wipe(line)
