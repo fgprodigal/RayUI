@@ -32,24 +32,24 @@ local function LoadSkin()
 		end
 	end
 
-	for i = 1, MAX_NUM_TALENT_TIERS do
-			local row = _G["TalentsTalentRow"..i]
-			row:DisableDrawLayer("BORDER")
+	for i = 1, MAX_TALENT_TIERS do
+		local row = _G["TalentsTalentRow"..i]
+		row:DisableDrawLayer("BORDER")
 
-			for j = 1, NUM_TALENT_COLUMNS do
-				local bu = _G["TalentsTalentRow"..i.."Talent"..j]
-				local border = _G["TalentsTalentRow"..i.."Talent"..j.."Border"]
-				local ic = _G["TalentsTalentRow"..i.."Talent"..j.."IconTexture"]
+		for j = 1, NUM_TALENT_COLUMNS do
+			local bu = _G["TalentsTalentRow"..i.."Talent"..j]
+			local border = _G["TalentsTalentRow"..i.."Talent"..j.."Border"]
+			local ic = _G["TalentsTalentRow"..i.."Talent"..j.."IconTexture"]
 
-				border:Kill()
-				bu:SetHighlightTexture("")
-				bu.Slot:SetAlpha(0)
+			border:Kill()
+			bu:SetHighlightTexture("")
+			bu.Slot:SetAlpha(0)
 
-				ic:SetDrawLayer("ARTWORK")
-				ic:SetTexCoord(.08, .92, .08, .92)
-				S:CreateBG(ic)
-			end
+			ic:SetDrawLayer("ARTWORK")
+			ic:SetTexCoord(.08, .92, .08, .92)
+			S:CreateBG(ic)
 		end
+	end
 
 	local slots = {
 		"Head",
@@ -77,6 +77,7 @@ local function LoadSkin()
 		local icon = _G["Inspect"..slots[i].."SlotIconTexture"]
 		_G["Inspect"..slots[i].."SlotFrame"]:Hide()
 		slot:SetNormalTexture("")
+		slot:StripTextures()
 		slot.backgroundTextureName = ""
 		slot.checkRelic = nil
 		slot:SetNormalTexture("")
@@ -88,7 +89,7 @@ local function LoadSkin()
 		slot.glow:SetAllPoints()
 		slot.glow:CreateBorder()
 	end
-	select(7, InspectMainHandSlot:GetRegions()):Kill()
+	select(8, InspectMainHandSlot:GetRegions()):Kill()
 
 	S:ReskinClose(InspectFrameCloseButton)
 
@@ -181,26 +182,26 @@ local function LoadSkin()
 	InspectFrame:HookScript("OnShow", update)
 	hooksecurefunc("InspectPaperDollItemSlotButton_Update", SlotUpdate)
 
-	for i = 1, MAX_NUM_TALENTS do
-		local bu = _G["InspectTalentFrameTalent"..i]
-		local ic = _G["InspectTalentFrameTalent"..i.."IconTexture"]
-		if bu then
-			bu:StyleButton()
-			bu:GetPushedTexture():StyleButton(1)
-			bu.SetHighlightTexture = R.dummy
-			bu.SetPushedTexture = R.dummy
+	-- for i = 1, MAX_NUM_TALENTS do
+		-- local bu = _G["InspectTalentFrameTalent"..i]
+		-- local ic = _G["InspectTalentFrameTalent"..i.."IconTexture"]
+		-- if bu then
+			-- bu:StyleButton()
+			-- bu:GetPushedTexture():StyleButton(1)
+			-- bu.SetHighlightTexture = R.dummy
+			-- bu.SetPushedTexture = R.dummy
 
-			_G["InspectTalentFrameTalent"..i.."Slot"]:SetAlpha(0)
-			_G["InspectTalentFrameTalent"..i.."SlotShadow"]:SetAlpha(0)
-			_G["InspectTalentFrameTalent"..i.."GoldBorder"]:SetAlpha(0)
+			-- _G["InspectTalentFrameTalent"..i.."Slot"]:SetAlpha(0)
+			-- _G["InspectTalentFrameTalent"..i.."SlotShadow"]:SetAlpha(0)
+			-- _G["InspectTalentFrameTalent"..i.."GoldBorder"]:SetAlpha(0)
 
-			ic:SetTexCoord(.08, .92, .08, .92)
-			ic:SetPoint("TOPLEFT", 1, -1)
-			ic:SetPoint("BOTTOMRIGHT", -1, 1)
+			-- ic:SetTexCoord(.08, .92, .08, .92)
+			-- ic:SetPoint("TOPLEFT", 1, -1)
+			-- ic:SetPoint("BOTTOMRIGHT", -1, 1)
 
-			S:CreateBD(bu)
-		end
-	end
+			-- S:CreateBD(bu)
+		-- end
+	-- end
 end
 
 S:RegisterSkin("Blizzard_InspectUI", LoadSkin)
