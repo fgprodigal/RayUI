@@ -1,6 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
     <Script file="raid.lua" />
-    <Script file="aura_list.lua" />
     <Script file="layout.lua" />
     <Script file="tags.lua" /> 
     <Script file="elements\afk.lua" />

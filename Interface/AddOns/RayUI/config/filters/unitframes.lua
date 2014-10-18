@@ -3,7 +3,7 @@
 local function SpellName(id)
     local name = GetSpellInfo(id)
     if not name then
-        R:Print("SpellID is not valid in raid aura list: "..id..".")
+        R:Print("SpellID is not valid in unitframe aura list: "..id..".")
         return "Unknown"
     else
         return name
@@ -18,7 +18,6 @@ G.UnitFrames.InvalidSpells = {
 
 G.UnitFrames.aurafilters["Blacklist"] = {
     [SpellName(36032)] = true, -- Arcane Charge
-    [SpellName(132365)] = true, -- Vengeance
     [SpellName(8733)] = true, --Blessing of Blackfathom
     [SpellName(57724)] = true, --Sated
     [SpellName(25771)] = true, --forbearance
@@ -52,7 +51,6 @@ G.UnitFrames.ChannelTicks = {
 	[SpellName(32000)] = 5, -- mind sear
 	[SpellName(47540)] = 3, -- penance, first tick instant
 	[SpellName(64843)] = 4, -- divine hymn
-	[SpellName(64901)] = 4, -- hymn of hope
 
 	-- mage
 	[SpellName(10)] = 8, -- blizzard
@@ -60,7 +58,6 @@ G.UnitFrames.ChannelTicks = {
 	[SpellName(12051)] = 4, -- evocation
 
 	-- warlock
-	[SpellName(1120)] = 5, -- drain soul
 	[SpellName(689)] = 3, -- drain life
 	[SpellName(4629)] = 4, -- rain of fire
 	[SpellName(1949)] = 15, -- hellfire
