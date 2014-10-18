@@ -3,8 +3,8 @@ if(select(2, UnitClass('player')) ~= 'DRUID') then return end
 local parent, ns = ...
 local oUF = ns.oUF
 
-local ECLIPSE_BAR_SOLAR_BUFF_ID = ECLIPSE_BAR_SOLAR_BUFF_ID
-local ECLIPSE_BAR_LUNAR_BUFF_ID = ECLIPSE_BAR_LUNAR_BUFF_ID
+local ECLIPSE_BAR_SOLAR_BUFF_ID = 171744 -- 171744
+local ECLIPSE_BAR_LUNAR_BUFF_ID = 171743 -- 171743
 local SPELL_POWER_ECLIPSE = SPELL_POWER_ECLIPSE
 local MOONKIN_FORM = MOONKIN_FORM
 
@@ -18,12 +18,12 @@ local UNIT_POWER_FREQUENT = function(self, event, unit, powerType)
 
 	if(eb.LunarBar) then
 		eb.LunarBar:SetMinMaxValues(-maxPower, maxPower)
-		eb.LunarBar:SetValue(power)
+		-- eb.LunarBar:SetValue(power * -1)
 	end
 
 	if(eb.SolarBar) then
 		eb.SolarBar:SetMinMaxValues(-maxPower, maxPower)
-		eb.SolarBar:SetValue(power * -1)
+		-- eb.SolarBar:SetValue(power)
 	end
 
 	if(eb.PostUpdatePower) then

@@ -1028,7 +1028,7 @@ function UF:ConstructDruidResourceBar(frame)
     local lbar = CreateFrame("StatusBar", nil, ebar)
     lbar:SetStatusBarTexture(R["media"].normal)
     lbar:SetStatusBarColor(0, .4, 1)
-    lbar:SetWidth(200)
+    lbar:SetWidth(100)
     lbar:SetHeight(5)
     lbar:SetFrameLevel(5)
     lbar:GetStatusBarTexture():SetHorizTile(false)
@@ -1038,7 +1038,7 @@ function UF:ConstructDruidResourceBar(frame)
     local sbar = CreateFrame("StatusBar", nil, ebar)
     sbar:SetStatusBarTexture(R["media"].normal)
     sbar:SetStatusBarColor(1, .6, 0)
-    sbar:SetWidth(200)
+    sbar:SetWidth(100)
     sbar:SetHeight(5)
     sbar:SetFrameLevel(5)
     sbar:GetStatusBarTexture():SetHorizTile(false)
@@ -1055,7 +1055,7 @@ function UF:ConstructDruidResourceBar(frame)
 
     ebar.Text = sbar:CreateFontString(nil, "OVERLAY")
     ebar.Text:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
-    ebar.Text:SetPoint("CENTER", sbar:GetStatusBarTexture(), "LEFT", 0, 1)
+    ebar.Text:SetPoint("CENTER", ebar, "CENTER", 0, 1)
 
     ebar.PostUpdatePower = self.UpdateEclipse
     ebar.PostUnitAura = self.UpdateEclipse
@@ -1146,17 +1146,22 @@ end
 function UF:UpdateEclipse(unit)
     local direction = GetEclipseDirection()
     local power = UnitPower("player", SPELL_POWER_ECLIPSE)
-    power = power < 0 and -power or power
+    local absolutePower = math.abs(power)
+
+    if power < 0 then
+        self.Text:SetTextColor(0, .4, 1)
+    else
+        self.Text:SetTextColor(1, .6, 0)
+    end
 
     if direction == "sun" then
-        self.Text:SetText(power.. ">")
-        self.Text:SetTextColor(0,.4,1)
+        self.Text:SetText(absolutePower.. ">")
     elseif direction == "moon" then
-        self.Text:SetText("<".. power)
-        self.Text:SetTextColor(1,.6,0)
+        self.Text:SetText("<".. absolutePower)
     else
         self.Text:SetText("")
     end
+    self.Text:SetPoint("CENTER", self, "CENTER", power, 1)
 
     if self.hasSolarEclipse then
         self.border:SetBackdropBorderColor(1, .6, 0)
