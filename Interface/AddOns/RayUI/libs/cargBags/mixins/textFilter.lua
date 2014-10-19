@@ -25,7 +25,6 @@ DESCRIPTION
 DEPENDENCIES:
 	base-add/filters.sieve.lua
 ]]
-
 local addon, ns = ...
 local cargBags = ns.cargBags
 local Container = cargBags.classes.Container

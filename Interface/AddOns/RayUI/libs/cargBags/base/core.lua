@@ -18,7 +18,6 @@
 	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	class-generation, helper-functions and the Blizzard-replacement.
 ]]
-
 local parent, ns = ...
 local global = GetAddOnMetadata(parent, 'X-cargBags')
 
@@ -81,29 +80,15 @@ function cargBags:ReplaceBlizzard(name)
 	local impl = arg1 and cargBags:GetImplementation(name) or self.blizzard
 	self.blizzard = impl
 
- 	ToggleBag = toggleNoForce
- 	ToggleAllBags = toggleNoForce
- 	ToggleBackpack = toggleNoForce
---	ToggleBackpack = toggleNoForce
---	ToggleAllBags
-	OpenBag = openBag -- due to changes in WoW patch 4.1, we need to grab this one as well - Lars Norberg
+	-- Can we maybe live without hooking ToggleBag(id)?
+	ToggleAllBags = toggleNoForce
+	ToggleBag = toggleNoForce
+	ToggleBackpack = toggleNoForce
+
 	OpenAllBags = toggleBag	-- Name is misleading, Blizz-function actually toggles bags
-	OpenBackpack = openBag -- Blizz does not provide toggling here
+	OpenBackpack = toggleBag -- Blizz does not provide toggling here
 	CloseAllBags = closeBag
-	CloseBackpack = closeBag 
-	
---[[ 	hooksecurefunc("ToggleBag", toggleNoForce)
-	hooksecurefunc("OpenAllBags", toggleBag)
-	hooksecurefunc("OpenBackpack", openBag)
-	hooksecurefunc("OpenBag", openBag)
-	hooksecurefunc("CloseAllBags", closeBag)
-	hooksecurefunc("CloseBackpack", closeBag) ]]
-	
---[[ 	for i = 1, 5 do
-		local bag = _G["ContainerFrame" .. i]
-		bag:Hide()
-		bag.Show = bag.Hide
-	end ]]
+	CloseBackpack = closeBag
 
 	BankFrame:UnregisterAllEvents()
 end
@@ -113,12 +98,11 @@ end
 function cargBags:RegisterBlizzard(implementation)
 	self.blizzard = implementation
 
-	--if(IsLoggedIn()) then
+	if(IsLoggedIn()) then
 		self:ReplaceBlizzard(self.blizzard)
-	--else
-		--self:RegisterEvent("PLAYER_LOGIN")
-	--end
-		
+	else
+		self:RegisterEvent("PLAYER_LOGIN")
+	end
 end
 
 --- Fires an event for all implementations
@@ -135,18 +119,14 @@ end
 
 cargBags:RegisterEvent("BANKFRAME_OPENED")
 cargBags:RegisterEvent("BANKFRAME_CLOSED")
-cargBags:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 cargBags:SetScript("OnEvent", function(self, event)
 	if(not self.blizzard) then return end
 
 	local impl = self.blizzard
 
-	if(event == "PLAYER_ENTERING_WORLD") then
+	if(event == "PLAYER_LOGIN") then
 		self:ReplaceBlizzard(impl)
-		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-		ToggleBackpack()
-		ToggleBackpack()
 	elseif(event == "BANKFRAME_OPENED") then
 		self.atBank = true
 

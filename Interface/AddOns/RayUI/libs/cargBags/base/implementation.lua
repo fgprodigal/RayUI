@@ -17,7 +17,6 @@
 	along with cargBags; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 ]]
-local _
 local addon, ns = ...
 local cargBags = ns.cargBags
 
@@ -258,6 +257,7 @@ function Implementation:Init()
 	self:RegisterEvent("BAG_UPDATE_COOLDOWN", self, self.BAG_UPDATE_COOLDOWN)
 	self:RegisterEvent("ITEM_LOCK_CHANGED", self, self.ITEM_LOCK_CHANGED)
 	self:RegisterEvent("PLAYERBANKSLOTS_CHANGED", self, self.PLAYERBANKSLOTS_CHANGED)
+	self:RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED", self, self.PLAYERREAGENTBANKSLOTS_CHANGED)
 	self:RegisterEvent("UNIT_QUEST_LOG_CHANGED", self, self.UNIT_QUEST_LOG_CHANGED)
 	self:RegisterEvent("BAG_CLOSED", self, self.BAG_CLOSED)
 end
@@ -312,26 +312,28 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 		i.texture, i.count, i.locked, i.quality, i.readable = GetContainerItemInfo(bagID, slotID)
 		i.cdStart, i.cdFinish, i.cdEnable = GetContainerItemCooldown(bagID, slotID)
 		i.isQuestItem, i.questID, i.questActive = GetContainerItemQuestInfo(bagID, slotID)
-		
+		i.isInSet, i.setName = GetContainerItemEquipmentSetInfo(bagID, slotID)
+
 		-- *edits by Lars "Goldpaw" Norberg for WoW 5.0.4 (MoP)
 		-- last return value here, "texture", doesn't show for battle pets
 		local texture
-		i.name, i.link, i.rarity, i.level, i.minLevel, i.type, i.subType, i.stackCount, i.equipLoc, texture = GetItemInfo(clink)
+		i.name, i.link, i.rarity, i.level, i.minLevel, i.type, i.subType, i.stackCount, i.equipLoc, texture, i.sellPrice  = GetItemInfo(clink)
 		i.texture = i.texture or texture
-		
 		-- battle pet info must be extracted from the itemlink
 		if (clink:find("battlepet")) then
 			if not(L) then
 				L = cargBags:GetLocalizedTypes()
 			end
 			local data, name = strmatch(clink, "|H(.-)|h(.-)|h")
-			local  _, _, level, rarity = strmatch(data, "(%w+):(%d+):(%d+):(%d+)")
+			local  _, _, level, rarity, _, _, _, id = strmatch(data, "(%w+):(%d+):(%d+):(%d+):(%d+):(%d+):(%d+):(%d+)")
 			i.type = L["Battle Pets"]
 			i.rarity = tonumber(rarity) or 0
+			i.id = tonumber(id) or 0
 			i.name = name
 			i.minLevel = level
 			i.link = clink
 		end
+		--print("GetItemInfo:", i.isInSet, i.setName, i.name)
 	end
 	return i
 end
@@ -407,7 +409,7 @@ function Implementation:BAG_UPDATE(event, bagID, slotID)
 	elseif(bagID) then
 		self:UpdateBag(bagID)
 	else
-		for bagID = -2, 11 do
+		for bagID = -3, 11 do
 			self:UpdateBag(bagID)
 		end
 	end
@@ -472,6 +474,17 @@ function Implementation:PLAYERBANKSLOTS_CHANGED(event, bagID, slotID)
 	else
 		bagID = bagID - NUM_BANKGENERIC_SLOTS
 	end
+
+	self:BAG_UPDATE(event, bagID, slotID)
+end
+
+--[[!
+	Fired when reagent bank slots need to be updated
+	@param bagID <number>
+	@param slotID <number> [optional]
+]]
+function Implementation:PLAYERREAGENTBANKSLOTS_CHANGED(event, slotID)
+	local bagID = -3
 
 	self:BAG_UPDATE(event, bagID, slotID)
 end

@@ -20,6 +20,8 @@
 local addon, ns = ...
 local cargBags = ns.cargBags
 
+local _G = _G
+
 --[[!
 	@class ItemButton
 		This class serves as the basis for all itemSlots in a container
@@ -35,7 +37,7 @@ function ItemButton:GetTemplate(bagID)
 	bagID = bagID or self.bagID
 	return (bagID == -3 and "ReagentBankItemButtonGenericTemplate") or (bagID == -1 and "BankItemButtonGenericTemplate") or (bagID and "ContainerFrameItemButtonTemplate") or "ItemButtonTemplate",
       (bagID == -3 and ReagentBankFrame) or (bagID == -1 and BankFrame) or (bagID and _G["ContainerFrame"..bagID + 1]) or "ItemButtonTemplate";
-end
+end 
 
 local mt_gen_key = {__index = function(self,k) self[k] = {}; return self[k]; end}
 
@@ -54,8 +56,9 @@ function ItemButton:New(bagID, slotID)
 	button.bagID = bagID
 	button.slotID = slotID
 	button:SetID(slotID)
+	
 	button:Show()
-
+	
 	return button
 end
 
@@ -65,6 +68,7 @@ end
 	@return button <ItemButton>
 	@callback button:OnCreate(tpl)
 ]]
+local bFS
 function ItemButton:Create(tpl, parent)
 	local impl = self.implementation
 	impl.numSlots = (impl.numSlots or 0) + 1
@@ -74,7 +78,6 @@ function ItemButton:Create(tpl, parent)
 
 	if(button.Scaffold) then button:Scaffold(tpl) end
 	if(button.OnCreate) then button:OnCreate(tpl) end
-
 	local btnNT = _G[button:GetName().."NormalTexture"]
 	local btnNIT = button.NewItemTexture
 	local btnBIT = button.BattlepayItemTexture
@@ -101,3 +104,4 @@ end
 function ItemButton:GetItemInfo(item)
 	return self.implementation:GetItemInfo(self.bagID, self.slotID, item)
 end
+

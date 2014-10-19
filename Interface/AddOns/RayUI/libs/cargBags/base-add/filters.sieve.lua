@@ -70,7 +70,6 @@ function FilterSet:SetExtended(filter, param, flag)
 	if(not flag and param) then
 		flag = true
 	end
-
 	self:Set(filter, flag)
 	self.params[filter] = param
 end

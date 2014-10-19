@@ -23,7 +23,6 @@ DESCRIPTION
 DEPENDENCIES
 	mixins/api-common.lua
 ]]
-
 local addon, ns = ...
 local sorts = ns.cargBags.classes.Container.sorts
 

@@ -81,6 +81,7 @@ function B:Initialize()
 		local INVERTED = -1 -- with inverted filters (using -1), everything goes into this bag when the filter returns false
 		local onlyBags = function(item) return item.bagID >= 0 and item.bagID <= 4 and not cargBags.itemKeys["setID"](item) and item.type ~= consumable end
 		local onlyBank =		function(item) return item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11 and not cargBags.itemKeys["setID"](item) and item.type ~= consumable end
+		local onlyReagent =		function(item) return item.bagID == -3 end
 		local onlyBagSets =		function(item) return cargBags.itemKeys["setID"](item) and not (item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11) end
 		local onlyBagConsumables =		function(item) return item.type == consumable and not (item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11) end
 		local onlyBankSets =	function(item) return cargBags.itemKeys["setID"](item) and not (item.bagID >= 0 and item.bagID <= 4) end
@@ -108,6 +109,12 @@ function B:Initialize()
 		f.bank:SetFilter(onlyBank, true) -- Take only items from the bank frame
 		f.bank:SetPoint("BOTTOMRIGHT", "RayUI_ContainerFrameMain", "BOTTOMLEFT", -25, 0) -- bank frame position
 		f.bank:Hide() -- Hide at the beginning
+
+		-- Reagent frame and bank bags
+		f.reagent = MyContainer:New("Reagent", {Columns = B.db.bankWidth, Bags = "bankreagent"})
+		f.reagent:SetFilter(onlyReagent, true)
+		f.reagent:SetParent(f.bank)
+		f.reagent:SetPoint("BOTTOMRIGHT", "RayUI_ContainerFrameBank", "BOTTOMLEFT", -25, 0)
 
 		f.consumables = MyContainer:New("Consumables", {Columns = B.db.bagWidth, Bags = "backpack+bags"})
 		f.consumables:SetFilter(onlyBagConsumables, true)
@@ -348,6 +355,45 @@ function B:Initialize()
 			setname:SetPoint("TOPLEFT", self, "TOPLEFT",5,-5)
 			setname:SetFont(R["media"].font, R["media"].fontsize, "THINOUTLINE")
 			setname:SetText(consumable)
+		elseif name == "Reagent" then
+			local setname = self:CreateFontString(nil,"OVERLAY")
+			setname:SetPoint("TOPLEFT", self, "TOPLEFT",5,-5)
+			setname:SetFont(R["media"].font, R["media"].fontsize, "THINOUTLINE")
+			setname:SetText(REAGENT_BANK)
+			
+			--Sort Button
+			self.sortButton = CreateFrame("Button", nil, self)
+			self.sortButton:Point("TOPLEFT", self, "TOPLEFT", 5, -24)
+			self.sortButton:Size(55, 10)
+			self.sortButton.ttText = L["整理背包"]
+			self.sortButton:SetScript("OnEnter", B.Tooltip_Show)
+			self.sortButton:SetScript("OnLeave", B.Tooltip_Hide)
+			self.sortButton:SetScript("OnClick", SortReagentBankBags)
+			S:Reskin(self.sortButton)
+
+			if not IsReagentBankUnlocked() then
+				local buyReagent = CreateFrame("Button", nil, self, "UIPanelButtonTemplate")
+				buyReagent:SetText(BANKSLOTPURCHASE)
+				buyReagent:SetWidth(buyReagent:GetTextWidth() + 20)
+				buyReagent:Point("TOPRIGHT", self, "TOPRIGHT", -5, -14)
+				buyReagent:SetScript("OnEnter", function(self)
+					GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+					GameTooltip:AddLine(REAGENT_BANK_HELP, 1, 1, 1, true)
+					GameTooltip:Show()
+				end)
+				buyReagent:SetScript("OnLeave", function()
+					GameTooltip:Hide()
+				end)
+				buyReagent:SetScript("OnClick", function()
+					StaticPopup_Show("CONFIRM_BUY_REAGENTBANK_TAB")
+				end)
+				buyReagent:SetScript("OnEvent", function(...)
+					buyReagent:UnregisterEvent("REAGENTBANK_PURCHASED")
+					buyReagent:Hide()
+				end)
+				S:Reskin(buyReagent)
+				buyReagent:RegisterEvent("REAGENTBANK_PURCHASED")
+			end
 		end
 
 		if name == "Main" or name == "ItemSets" or name == "Consumables" then

@@ -23,7 +23,6 @@ DESCRIPTION
 DEPENDENCIES
 	mixins-add/itemkeys/basic.lua
 ]]
-
 local parent, ns = ...
 local cargBags = ns.cargBags
 

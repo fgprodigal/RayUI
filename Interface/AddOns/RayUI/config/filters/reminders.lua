@@ -17,17 +17,17 @@ P["Reminder"]["filters"] = {
 		-- },
 	},
 	HUNTER = {
-		["守护"] = { --aspects group
-			["spellGroup"] = {
-				[13165] = true, -- hawk
-                [109260] = true,
-			},
-			["instance"] = true,
-			["combat"] = true,
-			["personal"] = true,
-			["enable"] = true,
-			["strictFilter"] = true,
-		},
+		-- ["守护"] = { --aspects group
+			-- ["spellGroup"] = {
+				-- [13165] = true, -- hawk
+                -- [109260] = true,
+			-- },
+			-- ["instance"] = true,
+			-- ["combat"] = true,
+			-- ["personal"] = true,
+			-- ["enable"] = true,
+			-- ["strictFilter"] = true,
+		-- },
 	},
 	MAGE = {
 		-- ["护甲"] = { --armors group

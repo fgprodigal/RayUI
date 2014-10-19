@@ -43,45 +43,49 @@ end
 local BagButton = cargBags:NewClass("BagButton", nil, "CheckButton")
 
 -- Default attributes
-BagButton.bgTex = [[Interface\Paperdoll\UI-PaperDoll-Slot-Bag]]
-BagButton.itemFadeAlpha = 0.1
+BagButton.checkedTex = [[Interface\AddOns\cargBags_Nivaya\media\BagHighlight]]
+BagButton.bgTex = [[Interface\AddOns\cargBags_Nivaya\media\BagSlot]]
+BagButton.itemFadeAlpha = 0.2
 
 local buttonNum = 0
 function BagButton:Create(bagID)
+
 	buttonNum = buttonNum+1
 	local name = addon.."BagButton"..buttonNum
+	local isBankBag = (bagID>=5 and bagID<=11)
+	local button = setmetatable(CreateFrame("CheckButton", name, nil, (isBankBag and "BankItemButtonBagTemplate") or "ItemButtonTemplate"), self.__index)
 
-	local button = setmetatable(CreateFrame("CheckButton", name, nil, "ItemButtonTemplate"), self.__index)
-
-	local invID = ContainerIDToInventoryID(bagID)
+	local invID = (isBankBag and (bagID-4)) or ContainerIDToInventoryID(bagID)
 	button.invID = invID
 	button:SetID(invID)
 	button.bagID = bagID
+	button.isBankBag = isBankBag
 
 	button:RegisterForDrag("LeftButton", "RightButton")
 	button:RegisterForClicks("anyUp")
+	button:SetCheckedTexture(self.checkedTex, "ADD")
 
-	button:SetSize(RayUI[1].db.Bags.bagSize, RayUI[1].db.Bags.bagSize)
+	button:SetSize(32, 32)
 
 	button.Icon = 		_G[name.."IconTexture"]
 	button.Count = 		_G[name.."Count"]
 	button.Cooldown = 	_G[name.."Cooldown"]
 	button.Quest = 		_G[name.."IconQuestTexture"]
 	button.Border =		_G[name.."NormalTexture"]
-
+	
+	button.bg = CreateFrame("Frame", nil, button)
+	button.bg:SetAllPoints(button)
+	button.bg:SetBackdrop({
+		bgFile = "Interface\\ChatFrame\\ChatFrameBackground",
+		edgeFile = "Interface\\Buttons\\WHITE8x8",
+		tile = false, tileSize = 16, edgeSize = 1,
+	})
+	button.bg:SetBackdropColor(1, 1, 1, 0)
+	button.bg:SetBackdropBorderColor(0, 0, 0, 1)
+	
 	button.Icon:SetTexCoord(.08, .92, .08, .92)
-	button.Icon:SetInside(button, 1, 1)
-	button.Border:Hide()
-	button:StyleButton(1)
-
-	if not button.border then
-		local border = CreateFrame("Frame", nil, button)
-		border:SetAllPoints()
-		border:SetFrameLevel(button:GetFrameLevel()+1)
-		button.border = border
-		button.border:CreateBorder()
-		RayUI[1]:GetModule("Skins"):CreateBackdropTexture(button, 0.6)
-	end
+	button.Icon:SetVertexColor(0.8, 0.8, 0.8)
+	button.Border:SetAlpha(0)
 
 	cargBags.SetScriptHandlers(button, "OnClick", "OnReceiveDrag", "OnEnter", "OnLeave", "OnDragStart")
 
@@ -91,17 +95,17 @@ function BagButton:Create(bagID)
 end
 
 function BagButton:Update()
-	local icon = GetInventoryItemTexture("player", self.invID)
+	local icon = GetInventoryItemTexture("player", (self.GetInventorySlot and self:GetInventorySlot()) or self.invID)
 	self.Icon:SetTexture(icon or self.bgTex)
 	self.Icon:SetDesaturated(IsInventoryItemLocked(self.invID))
 
 	if(self.bagID > NUM_BAG_SLOTS) then
 		if(self.bagID-NUM_BAG_SLOTS <= GetNumBankSlots()) then
-			-- self.Icon:SetVertexColor(1, 1, 1)
+			self.Icon:SetVertexColor(1, 1, 1)
 			self.notBought = nil
 		else
 			self.notBought = true
-			-- self.Icon:SetVertexColor(1, 0, 0)
+			self.Icon:SetVertexColor(1, 0, 0)
 		end
 	end
 
@@ -127,7 +131,11 @@ function BagButton:OnEnter()
 		end
 	end
 
-	BagSlotButton_OnEnter(self)
+	if self.isBankBag then
+		BankFrameItemButton_OnEnter(self)
+	else
+		BagSlotButton_OnEnter(self)
+	end
 end
 
 function BagButton:OnLeave()
@@ -153,29 +161,25 @@ function BagButton:OnClick()
 		return StaticPopup_Show("CONFIRM_BUY_BANK_SLOT")
 	end
 
-	if(PutItemInBag(self.invID)) then return end
+	if(PutItemInBag((self.GetInventorySlot and self:GetInventorySlot()) or self.invID)) then return end
 
-	if not IsShiftKeyDown() then
-		PickupBagFromSlot(self.invID)
-	else
-		-- Somehow we need to disconnect this from the filter-sieve
-		local container = self.bar.container
-		if(container and container.SetFilter) then
-			if(not self.filter) then
-				local bagID = self.bagID
-				self.filter = function(i) return i.bagID ~= bagID end
-			end
-			self.hidden = not self.hidden
+	-- Somehow we need to disconnect this from the filter-sieve
+	local container = self.bar.container
+	if(container and container.SetFilter) then
+		if(not self.filter) then
+			local bagID = self.bagID
+			self.filter = function(i) return i.bagID ~= bagID end
+		end
+		self.hidden = not self.hidden
 
-			if(self.bar.isGlobal) then
-				for i, container in pairs(container.implementation.contByID) do
-					container:SetFilter(self.filter, self.hidden)
-					container.implementation:OnEvent("BAG_UPDATE", self.bagID)
-				end
-			else
+		if(self.bar.isGlobal) then
+			for i, container in pairs(container.implementation.contByID) do
 				container:SetFilter(self.filter, self.hidden)
 				container.implementation:OnEvent("BAG_UPDATE", self.bagID)
 			end
+		else
+			container:SetFilter(self.filter, self.hidden)
+			container.implementation:OnEvent("BAG_UPDATE", self.bagID)
 		end
 	end
 end
