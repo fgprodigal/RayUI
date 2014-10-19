@@ -242,7 +242,7 @@ local function LoadFunc()
 			end
 
 			if(bestIndex) then
-				QuestInfoRewardsFrame.RewardButton[bestIndex]:Click()
+				QuestInfoRewardsFrame.RewardButtons[bestIndex]:Click()
 			end
 		end
 	end)
