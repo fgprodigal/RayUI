@@ -88,19 +88,20 @@ local function LoadSkin()
 		bu:SetFrameStrata("HIGH")
 	end
 
-	--[[hooksecurefunc("VoidStorage_ItemsFilteredUpdate", function()
-		local button, isFiltered, _
-		for i = 1, 80 do
-			_, _, _, _, isFiltered = GetVoidItemInfo(i)
-			button = _G["VoidStorageStorageButton"..i]
+	for i = 1, 2 do
+		local tab = VoidStorageFrame["Page"..i]
 
-			if isFiltered then
-				button.glow:SetAlpha(0)
-			else
-				button.glow:SetAlpha(1)
-			end
-		end
-	end)]]
+		tab:GetRegions():Hide()
+		tab:SetCheckedTexture(S["media"].checked)
+
+		S:CreateBG(tab)
+		S:CreateSD(tab, 5, 0, 0, 0, 1, 1)
+
+		tab:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
+	end
+
+	VoidStorageFrame.Page1:ClearAllPoints()
+	VoidStorageFrame.Page1:SetPoint("LEFT", VoidStorageFrame, "TOPRIGHT", 13, -60)
 
 	S:Reskin(VoidStoragePurchaseButton)
 	S:Reskin(VoidStorageHelpBoxButton)
