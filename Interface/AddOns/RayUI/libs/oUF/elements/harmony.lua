@@ -39,13 +39,13 @@ local function Update(self, event, unit)
 		hb:Show()
 	end
 
-	for i=1, #hb do
-		if numPoints >= i then
-			hb[i]:Show()
-		else
-			hb[i]:Hide()
-		end
-	end
+	-- for i=1, #hb do
+		-- if numPoints >= i then
+			-- hb[i]:Show()
+		-- else
+			-- hb[i]:Hide()
+		-- end
+	-- end
 
 	hb.numPoints = numPoints
 
@@ -60,12 +60,12 @@ local function Enable(self, unit)
 		self:RegisterEvent("UNIT_DISPLAYPOWER", Update)
 		self:RegisterEvent("PLAYER_LEVEL_UP", Update)
 
-		for i = 1, 5 do
+		for i = 1, 6 do
 			if not hb[i]:GetStatusBarTexture() then
 				hb[i]:SetStatusBarTexture([=[Interface\TargetingFrame\UI-StatusBar]=])
 			end
 
-			hb[i]:SetStatusBarColor(unpack(oUF.colors.Harmony[i]))
+			-- hb[i]:SetStatusBarColor(unpack(oUF.colors.Harmony[i]))
 			hb[i]:SetFrameLevel(hb:GetFrameLevel() + 1)
 			hb[i]:GetStatusBarTexture():SetHorizTile(false)
 		end

@@ -807,7 +807,7 @@ function UF:ConstructMonkResourceBar(frame)
     bars:SetSize(200, 5)
     bars:SetFrameLevel(5)
     bars:Point("BOTTOM", frame, "TOP", 0, 1)
-    local count = 5
+    local count = 6
     bars.number = count
 
     for i = 1, count do
@@ -1196,18 +1196,13 @@ end
 
 function UF:UpdateHarmony()
     local maxChi = UnitPowerMax("player", SPELL_POWER_CHI)
-    if maxChi < self.number then
-        for i = 1, 4 do
-            self[i]:SetWidth(185/4)
+
+	for i = 1, 6 do
+        if i > maxChi then
+            self[i]:Hide()
+        else
+            self[i]:SetWidth((200 - (maxChi - 1)*5)/maxChi)
         end
-        self[5]:Hide()
-        self.number = maxChi
-    elseif maxChi > self.number then
-        for i = 1, 4 do
-            self[i]:SetWidth(180/5)
-        end
-        self[5]:Show()
-        self.number = maxChi
     end
 end
 
