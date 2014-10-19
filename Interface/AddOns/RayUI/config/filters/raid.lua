@@ -48,7 +48,7 @@ G.Raid.AuraWatch = {
 	},
 	SHAMAN = {
 		ClassBuff(61295, "TOPRIGHT", {0.7, 0.3, 0.7}),	 -- Riptide
-		ClassBuff(974, "BOTTOMLEFT", {0.2, 0.7, 0.2}, true),	 -- Earth Shield
+		ClassBuff(974, "BOTTOMLEFT", {0.2, 0.7, 0.2}),	 -- Earth Shield
 		ClassBuff(51945, "BOTTOMRIGHT", {0.7, 0.4, 0}),	 -- Earthliving
 	},
 	MONK = {

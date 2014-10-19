@@ -529,6 +529,7 @@ end
 function AB:UpdateHotkey(button, actionButtonType)
 	local hotkey = _G[button:GetName() .. "HotKey"]
 	local text = hotkey:GetText()
+	if not text then return end
 
 	text = string.gsub(text, "(s%-)", "S")
 	text = string.gsub(text, "(a%-)", "A")
@@ -660,7 +661,7 @@ function AB:Style(button)
 	end
 
 	button:StyleButton(true)
-
+	self:UpdateHotkey(button)
 	button.styled = true
 end
 
