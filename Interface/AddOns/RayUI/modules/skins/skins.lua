@@ -649,6 +649,7 @@ S.clearArrow = clearArrow
 
 function S:ReskinNavBar(f)
 	local overflowButton = f.overflowButton
+	if not f.GetRegions then return end
 
 	f:GetRegions():Hide()
 	f:DisableDrawLayer("BORDER")

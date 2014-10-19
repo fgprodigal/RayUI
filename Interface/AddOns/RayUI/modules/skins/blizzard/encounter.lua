@@ -100,11 +100,17 @@ local function LoadSkin()
 	hooksecurefunc("EncounterJournal_ListInstances", listInstances)
 	listInstances()
 
+	EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChildHeader:Hide()
+	EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChildTitle:SetFontObject("GameFontNormalLarge")
+
 	EncounterJournalEncounterFrameInstanceFrameLoreScrollFrameScrollChildLore:SetTextColor(1, 1, 1)
 	EncounterJournalEncounterFrameInstanceFrameLoreScrollFrameScrollChildLore:SetShadowOffset(1, -1)
 	EncounterJournalEncounterFrameInfoDetailsScrollFrameScrollChildDescription:SetTextColor(1, 1, 1)
 	EncounterJournalEncounterFrameInfoDetailsScrollFrameScrollChildDescription:SetShadowOffset(1, -1)
+	EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChildLoreDescription:SetTextColor(1, 1, 1)
 	EncounterJournalEncounterFrameInfoEncounterTitle:SetTextColor(1, 1, 1)
+	EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChildTitle:SetTextColor(1, 1, 1)
+	EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChild.overviewDescription.Text:SetTextColor(1, 1, 1)
 
 	S:CreateBDFrame(EncounterJournalEncounterFrameInfoModelFrame, .25)
 
@@ -128,50 +134,31 @@ local function LoadSkin()
 		end
 	end)
 
-	hooksecurefunc("EncounterJournal_ToggleHeaders", function()
+	hooksecurefunc("EncounterJournal_ToggleHeaders", function(self)
 		local index = 1
-		local name = "EncounterJournalInfoHeader"..index
-		local header = _G[name]
+		local header = _G["EncounterJournalInfoHeader"..index]
 		while header do
-			if not header.reskinned then
-				header.reskinned = true
-
+			if not header.styled then
 				header.flashAnim.Play = R.dummy
 
+				header.descriptionBG:SetAlpha(0)
+				header.descriptionBGBottom:SetAlpha(0)
+				for i = 4, 18 do
+					select(i, header.button:GetRegions()):SetTexture("")
+				end
+
 				header.description:SetTextColor(1, 1, 1)
-				header.description:SetShadowOffset(1, -1)
 				header.button.title:SetTextColor(1, 1, 1)
 				header.button.title.SetTextColor = R.dummy
 				header.button.expandedIcon:SetTextColor(1, 1, 1)
 				header.button.expandedIcon.SetTextColor = R.dummy
-				header.descriptionBG:SetAlpha(0)
-				header.descriptionBGBottom:SetAlpha(0)
 
-				S:Reskin(header.button, true)
+				S:Reskin(header.button)
 
 				header.button.abilityIcon:SetTexCoord(.08, .92, .08, .92)
+				header.button.bg = S:CreateBG(header.button.abilityIcon)
 
-				_G[name.."HeaderButtonELeftUp"]:SetAlpha(0)
-				_G[name.."HeaderButtonERightUp"]:SetAlpha(0)
-				_G[name.."HeaderButtonEMidUp"]:SetAlpha(0)
-				_G[name.."HeaderButtonCLeftUp"]:SetAlpha(0)
-				_G[name.."HeaderButtonCRightUp"]:SetAlpha(0)
-				_G[name.."HeaderButtonCMidUp"]:SetAlpha(0)
-				_G[name.."HeaderButtonELeftDown"]:SetAlpha(0)
-				_G[name.."HeaderButtonERightDown"]:SetAlpha(0)
-				_G[name.."HeaderButtonEMidDown"]:SetAlpha(0)
-				_G[name.."HeaderButtonCLeftDown"]:SetAlpha(0)
-				_G[name.."HeaderButtonCRightDown"]:SetAlpha(0)
-				_G[name.."HeaderButtonCMidDown"]:SetAlpha(0)
-				_G[name.."HeaderButtonHighlightLeft"]:Hide()
-				_G[name.."HeaderButtonHighlightMid"]:Hide()
-				_G[name.."HeaderButtonHighlightRight"]:Hide()
-
-				header.button.bg = header.button:CreateTexture(nil, "BACKGROUND")
-				header.button.bg:Point("TOPLEFT", header.button.abilityIcon, -1, 1)
-				header.button.bg:Point("BOTTOMRIGHT", header.button.abilityIcon, 1, -1)
-				header.button.bg:SetTexture(S["media"].backdrop)
-				header.button.bg:SetVertexColor(0, 0, 0)
+				header.styled = true
 			end
 
 			if header.button.abilityIcon:IsShown() then
@@ -181,8 +168,42 @@ local function LoadSkin()
 			end
 
 			index = index + 1
-			name = "EncounterJournalInfoHeader"..index
-			header = _G[name]
+			header = _G["EncounterJournalInfoHeader"..index]
+		end
+	end)
+
+	hooksecurefunc("EncounterJournal_SetUpOverview", function(self, role, index)
+		local header = self.overviews[index]
+		if not header.styled then
+			header.flashAnim.Play = R.dummy
+
+			header.descriptionBG:SetAlpha(0)
+			header.descriptionBGBottom:SetAlpha(0)
+			for i = 4, 18 do
+				select(i, header.button:GetRegions()):SetTexture("")
+			end
+
+			header.button.title:SetTextColor(1, 1, 1)
+			header.button.title.SetTextColor = R.dummy
+			header.button.expandedIcon:SetTextColor(1, 1, 1)
+			header.button.expandedIcon.SetTextColor = R.dummy
+
+			S:Reskin(header.button)
+
+			header.styled = true
+		end
+	end)
+
+	hooksecurefunc("EncounterJournal_SetBullets", function(object, description)
+		local parent = object:GetParent()
+
+		if parent.Bullets then
+			for _, bullet in pairs(parent.Bullets) do
+				if not bullet.styled then
+					bullet.Text:SetTextColor(1, 1, 1)
+					bullet.styled = true
+				end
+			end
 		end
 	end)
 
