@@ -26,7 +26,7 @@ function R:UpdateBlizzardFonts()
 	-- Base fonts
 	SetFont(GameFontNormal,                  NORMAL, self.global.media.fontsize)
 	SetFont(GameFontNormalSmall,                NORMAL, self.global.media.fontsize)
-	SetFont(STATFRAME_STATTEXT_FONT_OVERRIDE,                NORMAL, self.global.media.fontsize)
+	SetFont(TextStatusBarText,                NORMAL, self.global.media.fontsize)
 	SetFont(GameTooltipHeader,                  NORMAL, self.global.media.fontsize)
 	SetFont(NumberFont_OutlineThick_Mono_Small, NUMBER, self.global.media.fontsize, "OUTLINE")
 	SetFont(NumberFont_Outline_Huge,            NUMBER, 28, "THICKOUTLINE")
