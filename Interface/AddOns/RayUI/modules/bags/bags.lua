@@ -370,6 +370,16 @@ function B:Initialize()
 			self.sortButton:SetScript("OnLeave", B.Tooltip_Hide)
 			self.sortButton:SetScript("OnClick", SortReagentBankBags)
 			S:Reskin(self.sortButton)
+	
+			--Deposit Button
+			self.depositButton = CreateFrame("Button", nil, self)
+			self.depositButton:Point("LEFT", self.sortButton, "RIGHT", 3, 0)
+			self.depositButton:Size(55, 10)
+			self.depositButton.ttText = REAGENTBANK_DEPOSIT
+			self.depositButton:SetScript("OnEnter", B.Tooltip_Show)
+			self.depositButton:SetScript("OnLeave", B.Tooltip_Hide)
+			self.depositButton:SetScript("OnClick", DepositReagentBank)
+			S:Reskin(self.depositButton)
 
 			if not IsReagentBankUnlocked() then
 				local buyReagent = CreateFrame("Button", nil, self, "UIPanelButtonTemplate")
