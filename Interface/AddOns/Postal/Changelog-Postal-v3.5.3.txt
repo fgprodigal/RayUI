@@ -1,0 +1,20 @@
+------------------------------------------------------------------------
+r379 | stanzilla | 2014-10-14 15:50:47 +0000 (Tue, 14 Oct 2014) | 1 line
+Changed paths:
+   A /tags/v3.5.3 (from /trunk:378)
+
+Tagging as v3.5.3
+------------------------------------------------------------------------
+r378 | stanzilla | 2014-10-14 15:13:35 +0000 (Tue, 14 Oct 2014) | 1 line
+Changed paths:
+   M /trunk/Postal.toc
+
+Toc update for Patch 6.0
+------------------------------------------------------------------------
+r376 | oscarucb | 2014-07-06 17:09:54 +0000 (Sun, 06 Jul 2014) | 2 lines
+Changed paths:
+   M /trunk/Modules/BlackBook.lua
+
+include the realm name when auto-completing a cross-realm alt
+
+------------------------------------------------------------------------

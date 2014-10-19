@@ -14,6 +14,7 @@ local ignoresortlocale = {
 	["zhTW"] = true,
 }
 local enableAltsMenu = true
+local enableAllAltsMenu = true
 local Postal_BlackBook_Autocomplete_Flags = {
 	include = AUTOCOMPLETE_FLAG_ALL,
 	exclude = AUTOCOMPLETE_FLAG_BNET,
@@ -104,22 +105,23 @@ function Postal_BlackBook:AddAlt()
 	local _, class = UnitClass("player")
 	if not realm or not faction or not player or not level or not class then return end
 	local namestring = ("%s|%s|%s|%s|%s"):format(player, realm, faction, level, class)
-	local flag = true
 	local db = Postal.db.global.BlackBook.alts
 	enableAltsMenu = false
+	enableAllAltsMenu = false
 	for i = #db, 1, -1 do
 		local p, r, f, l, c = strsplit("|", db[i])
 		if p == player and r == realm and f == faction then
 			tremove(db, i)
 		end
 		if p ~= player and r == realm and f == faction then
-			enableAltsMenu = true
+			enableAltsMenu = true			
 		end
+		if p ~= player and r ~= realm then
+			enableAllAltsMenu = true		
+		end		
 	end
-	if flag then
-		tinsert(db, namestring)
-		table.sort(db)
-	end
+	tinsert(db, namestring)
+	table.sort(db)
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	self.AddAlt = nil -- Kill ourselves so we only run it once
 end
@@ -130,6 +132,7 @@ function Postal_BlackBook.DeleteAlt(dropdownbutton, arg1, arg2, checked)
 	local player = UnitName("player")
 	local db = Postal.db.global.BlackBook.alts
 	enableAltsMenu = false
+	enableAllAltsMenu  = false
 	for i = #db, 1, -1 do
 		if arg1 == db[i] then
 			tremove(db, i)
@@ -138,6 +141,9 @@ function Postal_BlackBook.DeleteAlt(dropdownbutton, arg1, arg2, checked)
 			if r == realm and f == faction and p ~= player then
 				enableAltsMenu = true
 			end
+			if r ~= realm and p ~= player then
+			enableAllAltsMenu = true		
+			end		
 		end
 	end
 	CloseDropDownMenus()
@@ -220,6 +226,20 @@ function Postal_BlackBook:OnChar(editbox, ...)
 	local faction = UnitFactionGroup("player")
 	local player = UnitName("player")
 	local newname
+	
+		-- Check all alt list
+	if db.AutoCompleteAllAlts then
+		local db = Postal.db.global.BlackBook.alts
+		for i = 1, #db do
+			local p, r, f = strsplit("|", db[i])
+			if p ~= player and r ~= realm then
+				if strfind(strupper(p), text, 1, 1) == 1 then
+					newname = p.."-"..r
+					break
+				end
+			end
+		end
+	end
 
 	-- Check alt list
 	if db.AutoCompleteAlts then
@@ -234,6 +254,7 @@ function Postal_BlackBook:OnChar(editbox, ...)
 			end
 		end
 	end
+
 
 	-- Check recent list
 	if not newname and db.AutoCompleteRecent then
@@ -417,6 +438,11 @@ function Postal_BlackBook.BlackBookMenu(self, level)
 		info.text = L["Alts"]
 		info.value = "alt"
 		UIDropDownMenu_AddButton(info, level)
+			
+		info.disabled = not enableAllAltsMenu
+		info.text = L["All Alts"]
+		info.value = "allalt"
+		UIDropDownMenu_AddButton(info, level)
 
 		info.disabled = Postal_BlackBook:SortAndCountNumFriends() == 0
 		info.text = L["Friends"]
@@ -486,6 +512,44 @@ function Postal_BlackBook.BlackBookMenu(self, level)
 					end
 					info.func = Postal_BlackBook.SetSendMailName
 					info.arg1 = p
+					UIDropDownMenu_AddButton(info, level)
+				end
+			end
+
+			info.disabled = 1
+			info.text = nil
+			info.func = nil
+			info.arg1 = nil
+			UIDropDownMenu_AddButton(info, level)
+			info.disabled = nil
+
+			info.text = L["Delete"]
+			info.hasArrow = 1
+			info.keepShownOnClick = 1
+			info.func = self.UncheckHack
+			info.value = "deletealt"
+			UIDropDownMenu_AddButton(info, level)
+
+elseif UIDROPDOWNMENU_MENU_VALUE == "allalt" then
+			if not enableAllAltsMenu then return end
+			local db = Postal.db.global.BlackBook.alts
+			local realm = GetRealmName()
+			local faction = UnitFactionGroup("player")
+			local player = UnitName("player")
+			local plre = player.."-"..realm
+			info.notCheckable = 1
+			for i = 1, #db do
+				local p, r, f, l, c = strsplit("|", db[i])
+				local pr = p.."-"..r
+				if (pr ~= plre ) then					
+					if l and c then
+						local clr = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[c] or RAID_CLASS_COLORS[c]
+						info.text = format("%s-%s |cff%.2x%.2x%.2x(%d %s)|r", p, r, clr.r*255, clr.g*255, clr.b*255, l, LOCALIZED_CLASS_NAMES_MALE[c])
+					else
+						info.text = ("%s-%s"):format(p, r)
+					end
+					info.func = Postal_BlackBook.SetSendMailName
+					info.arg1 = ("%s-%s"):format(p, r)
 					UIDropDownMenu_AddButton(info, level)
 				end
 			end
@@ -676,6 +740,11 @@ function Postal_BlackBook.ModuleMenu(self, level)
 			info.text = L["Alts"]
 			info.arg2 = "AutoCompleteAlts"
 			info.checked = db.AutoCompleteAlts
+			UIDropDownMenu_AddButton(info, level)
+			
+			info.text = L["All Alts"]
+			info.arg2 = "AutoCompleteAllAlts"
+			info.checked = db.AutoCompleteAllAlts
 			UIDropDownMenu_AddButton(info, level)
 
 			info.text = L["Recently Mailed"]
