@@ -153,7 +153,7 @@ function R:GetItemUpgradeLevel(iLink)
 		return 0
 	else
 		local _, _, itemRarity, itemLevel, _, _, _, _, itemEquip = GetItemInfo(iLink)
-		local code = string.match(iLink, ":(%d+)|h")
+		local code = string.match(iLink, ":(%d+):%d:%d|h")
 		if not itemLevel then return 0 end
 		return itemLevel + ItemUpgrade[tonumber(code)]
 	end
