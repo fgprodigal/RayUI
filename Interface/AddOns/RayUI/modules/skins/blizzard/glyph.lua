@@ -16,19 +16,28 @@ local function LoadSkin()
 
 	end
 
+	local function onUpdate(self)
+		local id = self:GetID()
+		if GlyphMatchesSocket(id) then
+			self.bg:SetBackdropBorderColor(r, g, b)
+		else
+			self.bg:SetBackdropBorderColor(0, 0, 0)
+		end
+	end
+
 	for i = 1, #GlyphFrame.scrollFrame.buttons do
 		local bu = _G["GlyphFrameScrollFrameButton"..i]
 		local ic = _G["GlyphFrameScrollFrameButton"..i.."Icon"]
 
 		local bg = CreateFrame("Frame", nil, bu)
-		bg:Point("TOPLEFT", 39, -2)
-		bg:Point("BOTTOMRIGHT", -1, 2)
+		bg:Point("TOPLEFT", 38, -2)
+		bg:Point("BOTTOMRIGHT", 0, 2)
 		bg:SetFrameLevel(bu:GetFrameLevel()-1)
 		S:CreateBD(bg, .25)
 
 		_G["GlyphFrameScrollFrameButton"..i.."Name"]:SetParent(bg)
 		_G["GlyphFrameScrollFrameButton"..i.."TypeName"]:SetParent(bg)
-		bu:StyleButton()
+		bu:SetHighlightTexture("")
 		bu.disabledBG:SetTexture("")
 		select(4, bu:GetRegions()):SetAlpha(0)
 
