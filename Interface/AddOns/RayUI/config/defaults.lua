@@ -205,7 +205,6 @@ P["ActionBar"]={
 	cooldownalpha = false,
 	cdalpha = 1,
 	readyalpha = 0.3,
-	stancealpha = false,
 }
 
 G["Misc"] = {}

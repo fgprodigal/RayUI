@@ -87,12 +87,6 @@ function AB:GetOptions()
 					min = 0, max = 1, step = 0.05,
 					disabled = function() return not self.db.cooldownalpha end,
 				},
-				stancealpha = {
-					type = "toggle",
-					name = L["姿态条"],
-					order = 5,
-					disabled = function() return not self.db.cooldownalpha end,
-				},
 			},
 		},
 		PetGroup = {

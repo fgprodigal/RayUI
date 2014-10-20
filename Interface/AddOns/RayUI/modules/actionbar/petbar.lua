@@ -34,12 +34,12 @@ function AB:CreateBarPet()
 			petActionButton.tooltipSubtext = subtext
 
 			if isActive and name ~= "PET_ACTION_FOLLOW" then
-				petActionButton:SetChecked(1)
+				petActionButton:SetChecked(true)
 				if IsPetAttackAction(i) then
 					PetActionButton_StartFlash(petActionButton)
 				end
 			else
-				petActionButton:SetChecked(0)
+				petActionButton:SetChecked(false)
 				if IsPetAttackAction(i) then
 					PetActionButton_StopFlash(petActionButton)
 				end

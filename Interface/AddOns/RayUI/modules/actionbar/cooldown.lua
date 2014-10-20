@@ -183,26 +183,13 @@ local function CDUpdate(frame)
 end
 
 function AB:UpdateCDAlpha(self)
-	if not AB.db.stancealpha and self:GetName():find("MultiCast") then return end
+	if self:GetName():find("MultiCast") then return end
 	local start, duration, enable = GetActionCooldown(self.action)
 	if start>0 and duration > 1.5 then
 		self.StopTime = start + duration
 		self:SetScript("OnUpdate", CDUpdate)
 	else
 		CDStop(self)
-	end
-end
-
-function AB:UpdateShapeshiftCDAlpha()
-	for i=1, NUM_STANCE_SLOTS do
-		button = _G["ShapeshiftButton"..i]
-		local start, duration, enable = GetShapeshiftFormCooldown(i)
-		if start>0 and duration > 1.5 then
-			button.StopTime = start + duration
-			button:SetScript("OnUpdate", CDUpdate)
-		else
-			CDStop(button)
-		end
 	end
 end
 
@@ -224,9 +211,5 @@ function AB:CreateCooldown()
 	if self.db.cooldownalpha then
 		self:SecureHook("ActionButton_UpdateState", "UpdateCDAlpha")
 		self:SecureHook("ActionButton_UpdateAction", "UpdateCDAlpha")
-	end
-
-	if self.db.stancealpha then
-		self:SecureHook("ActionButton_UpdateAction", "UpdateShapeshiftCDAlpha")
 	end
 end

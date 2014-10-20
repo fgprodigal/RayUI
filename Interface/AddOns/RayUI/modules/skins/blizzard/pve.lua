@@ -131,12 +131,30 @@ local function LoadSkin()
 
 			button.bg2 = CreateFrame("Frame", nil, button)
 			button.bg2:SetPoint("TOPLEFT", na, "TOPLEFT", 10, 0)
-			button.bg2:SetPoint("BOTTOMRIGHT", na, "BOTTOMRIGHT")
+			button.bg2:SetPoint("BOTTOMRIGHT", na, "BOTTOMRIGHT", -2, 0)
 			S:CreateBD(button.bg2, 0)
 
 			button.reskinned = true
 		end
 	end)
+
+	function ReskinGoldIcon(button)
+		_G[button.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
+		_G[button.."IconTexture"]:SetDrawLayer("OVERLAY")
+		_G[button.."Count"]:SetDrawLayer("OVERLAY")
+		_G[button.."NameFrame"]:SetTexture()
+
+		S:CreateBG(_G[button.."IconTexture"])
+		_G[button.."NameFrame"]:SetTexture(0, 0, 0, .25)
+		_G[button.."NameFrame"]:SetSize(118, 39)
+		_G[button].bg2 = CreateFrame("Frame", nil, _G[button])
+		_G[button].bg2:SetPoint("TOPLEFT", _G[button.."NameFrame"], "TOPLEFT", 10, 0)
+		_G[button].bg2:SetPoint("BOTTOMRIGHT", _G[button.."NameFrame"], "BOTTOMRIGHT", -2, 0)
+		S:CreateBD(_G[button].bg2, 0)
+	end
+	ReskinGoldIcon("LFDQueueFrameRandomScrollFrameChildFrameMoneyReward")
+	ReskinGoldIcon("RaidFinderQueueFrameScrollFrameChildFrameMoneyReward")
+	ReskinGoldIcon("ScenarioQueueFrameRandomScrollFrameChildFrameMoneyReward")
 
 	LFGDungeonReadyDialog.SetBackdrop = R.dummy
 	LFGDungeonReadyDialogBackground:Hide()
