@@ -3,6 +3,8 @@ local AB = R:NewModule("ActionBar", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3
 
 AB.modName = L["动作条"]
 AB["Handled"] = {}
+AB["Cooldowns"] = {}
+AB["MouseOverCooldowns"] = {}
 
 local visibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show"
 local actionBarsName = {
@@ -291,6 +293,13 @@ function AB:CreateBar(id)
 	R:CreateMover(bar, "ActionBar"..id.."Mover", L["动作条"..id.."锚点"], true, nil, "ALL,ACTIONBARS")
 end
 
+local function SetMouseOverCooldownAlpha(alpha)
+	for i, cooldown in pairs(AB.MouseOverCooldowns) do
+		cooldown:SetSwipeColor(0, 0, 0, 0.8 * alpha)
+		cooldown:SetDrawBling(alpha == 1)
+	end
+end
+
 function AB:UpdatePositionAndSize(barName)
     local bar = self["Handled"][barName]
     local buttonsPerRow = self.db[barName].buttonsPerRow
@@ -337,6 +346,8 @@ function AB:UpdatePositionAndSize(barName)
     end
 
     local button, lastButton, lastColumnButton
+	table.wipe(self.Cooldowns)
+	table.wipe(self.MouseOverCooldowns)
     for i = 1, NUM_ACTIONBAR_BUTTONS do
 		button = _G[actionButtonsName[barName]..i]
 		lastButton = _G[actionButtonsName[barName]..(i-1)]
@@ -344,6 +355,9 @@ function AB:UpdatePositionAndSize(barName)
 		button:SetSize(buttonsize, buttonsize)
 		button:ClearAllPoints()
 
+		if self.db[barName].autohide and _G[actionButtonsName[barName]..i.."Cooldown"] then
+			tinsert(self.Cooldowns, _G[actionButtonsName[barName]..i.."Cooldown"])
+		end
         if i == 1 then
 			button:SetPoint("TOPLEFT", bar, "TOPLEFT", 0, 0)
         elseif (i - 1) % buttonsPerRow == 0 then
@@ -353,9 +367,18 @@ function AB:UpdatePositionAndSize(barName)
         end
 
         if self.db[barName].mouseover then
+			if _G[actionButtonsName[barName]..i.."Cooldown"] then
+				tinsert(self.MouseOverCooldowns, _G[actionButtonsName[barName]..i.."Cooldown"])
+			end
             if not self.hooks[button] then
-                self:HookScript(button, "OnEnter", function() UIFrameFadeIn(bar,0.5,bar:GetAlpha(),1) end)
-                self:HookScript(button, "OnLeave", function() UIFrameFadeOut(bar,0.5,bar:GetAlpha(),0) end)
+                self:HookScript(button, "OnEnter", function()
+					UIFrameFadeIn(bar,0.5,bar:GetAlpha(),1)
+					SetMouseOverCooldownAlpha(1)
+				end)
+                self:HookScript(button, "OnLeave", function()
+					UIFrameFadeOut(bar,0.5,bar:GetAlpha(),0)
+					SetMouseOverCooldownAlpha(0)
+				end)
             end
         else
             if not self.hooks[button] then
@@ -364,6 +387,10 @@ function AB:UpdatePositionAndSize(barName)
             end
         end
     end
+
+	if self.db[barName].mouseover then
+		SetMouseOverCooldownAlpha(0)
+	end
 
     if self.db[barName].enable then
         bar:Show()
