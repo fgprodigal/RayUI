@@ -14,7 +14,7 @@ terrainFrame:SetFrameLevel(WorldMapDetailFrame:GetFrameLevel())
 
 local overlayTextures, terrainTextures = {}, {}
 ---[[
-FoglightMode = 1
+FoglightMode = 4
 local showTerrain = false
 
 local moads = {'Hybrid', 'Disabled', 'All Terrain', 'No Terrain'}

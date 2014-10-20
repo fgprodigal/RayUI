@@ -2,17 +2,20 @@ local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, loc
 local AB = R:GetModule("ActionBar")
 
 function AB:CreateExtraButton()
-	local holder = CreateFrame('Frame', nil, UIParent)
+	local holder = CreateFrame("Frame", nil, UIParent)
 	holder:Point("CENTER", UIParent, "BOTTOM", 500, 510)
 	holder:Size(ExtraActionBarFrame:GetSize())
 
 	ExtraActionBarFrame:SetParent(holder)
 	ExtraActionBarFrame:ClearAllPoints()
 	ExtraActionBarFrame:SetPoint("CENTER", holder, "CENTER")
+	DraenorZoneAbilityFrame:SetParent(holder)
+	DraenorZoneAbilityFrame:ClearAllPoints()
+	DraenorZoneAbilityFrame:SetPoint("CENTER", holder, "CENTER")
+
 	ExtraActionBarFrame.ignoreFramePositionManager  = true
-	--ExtraActionButton1Cooldown:Point("TOPLEFT", 1, -1)
-	--ExtraActionButton1Cooldown:Point("BOTTOMRIGHT", -1, 1)
-	--ExtraActionButton1:StyleButton(true)
+	DraenorZoneAbilityFrame.ignoreFramePositionManager = true
+
 	for i=1, ExtraActionBarFrame:GetNumChildren() do
 		if _G["ExtraActionButton"..i] then
 			_G["ExtraActionButton"..i].noResize = true
@@ -30,7 +33,7 @@ function AB:CreateExtraButton()
 	end
 
 	if HasExtraActionBar() then
-		ExtraActionBarFrame:Show();
+		ExtraActionBarFrame:Show()
 	end
 
 	R:CreateMover(holder, "BossButton", "BossButton", true, nil, "ALL,ACTIONBARS,RAID15,RAID25,RAID40")
