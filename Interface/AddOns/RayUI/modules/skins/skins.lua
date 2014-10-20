@@ -669,6 +669,25 @@ function S:ReskinNavBar(f)
 	overflowButton:HookScript("OnLeave", clearArrow)
 end
 
+function S:ReskinExpandOrCollapse(f)
+	f:SetSize(13, 13)
+
+	S:Reskin(f)
+	f.SetNormalTexture = R.dummy
+
+	f.minus = f:CreateTexture(nil, "OVERLAY")
+	f.minus:Size(7, 1)
+	f.minus:SetPoint("CENTER")
+	f.minus:SetTexture(S["media"].backdrop)
+	f.minus:SetVertexColor(1, 1, 1)
+
+	f.plus = f:CreateTexture(nil, "OVERLAY")
+	f.plus:Size(1, 7)
+	f.plus:SetPoint("CENTER")
+	f.plus:SetTexture(S["media"].backdrop)
+	f.plus:SetVertexColor(1, 1, 1)
+end
+
 function S:RegisterSkin(name, loadFunc)
 	if name == 'RayUI' then
 		tinsert(self.SkinFuncs["RayUI"], loadFunc)

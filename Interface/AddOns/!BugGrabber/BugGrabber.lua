@@ -181,8 +181,8 @@ end
 
 -- Re-enabled until someone complains and demands that they go away again.
 local function registerAddonActionEvents()
-	frame:RegisterEvent("ADDON_ACTION_BLOCKED")
-	frame:RegisterEvent("ADDON_ACTION_FORBIDDEN")
+	-- frame:RegisterEvent("ADDON_ACTION_BLOCKED")
+	-- frame:RegisterEvent("ADDON_ACTION_FORBIDDEN")
 end
 
 local function unregisterAddonActionEvents()
