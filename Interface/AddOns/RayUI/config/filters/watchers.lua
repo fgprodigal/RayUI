@@ -1188,6 +1188,10 @@ R["Watcher"] = {
                 { spellID = 84617, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --宿怨
                 { spellID = 79140, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --出血
+                { spellID = 16511, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --找尋弱點
+                { spellID = 91021, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --制裁之錘
                 { spellID = 853, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --制裁之拳
