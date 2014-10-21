@@ -3,8 +3,8 @@ local M = R:GetModule("Misc")
 
 local function LoadFunc()
 	if not M.db.quest then return end
-    local Monomyth = CreateFrame("Frame")
-    Monomyth:SetScript("OnEvent", function(self, event, ...) self[event](...) end)
+    local QuickQuest = CreateFrame("Frame")
+    QuickQuest:SetScript("OnEvent", function(self, event, ...) self[event](...) end)
 
 	local DelayHandler
 	do
@@ -36,6 +36,7 @@ local function LoadFunc()
 	end
 
     local atBank, atMail, atMerchant
+	local choiceQueue, autoCompleteIndex
 
 	local delayEvent = {
 		GOSSIP_SHOW = true,
@@ -47,7 +48,7 @@ local function LoadFunc()
 		QUEST_AUTOCOMPLETE = true,
 	}
 
-    function Monomyth:Register(event, func, override)
+    function QuickQuest:Register(event, func, override)
         self:RegisterEvent(event)
         self[event] = function(...)
             if (override or (not IsShiftKeyDown() and M.db.automation)) then
@@ -69,7 +70,7 @@ local function LoadFunc()
         end
     end
 
-    Monomyth:Register("QUEST_GREETING", function()
+    QuickQuest:Register("QUEST_GREETING", function()
         local active = GetNumActiveQuests()
         if(active > 0) then
             for index = 1, active do
@@ -99,7 +100,11 @@ local function LoadFunc()
         return not not select(((index * 6) - 6) + 3, GetGossipAvailableQuests())
     end
 
-    Monomyth:Register("GOSSIP_SHOW", function()
+	local function GetNPCID()
+		return tonumber(string.match(UnitGUID("npc") or "", "Creature%-.-%-.-%-.-%-.-%-(.-)%-"))
+	end
+
+    QuickQuest:Register("GOSSIP_SHOW", function()
         local active = GetNumGossipActiveQuests()
         if(active > 0) then
             for index = 1, active do
@@ -154,44 +159,37 @@ local function LoadFunc()
         [54334] = true, -- Darkmoon Faire Mystic Mage (Alliance)
     }
 
-    Monomyth:Register("GOSSIP_CONFIRM", function(index)
-		local creatureID = tonumber(string.match(UnitGUID("npc") or "", "Creature%-.-%-.-%-.-%-.-%-(.-)%-"))
+    QuickQuest:Register("GOSSIP_CONFIRM", function(index)
+		local npcID = GetNPCID()
 
-        if(creatureID and darkmoonNPC[creatureID]) then
+        if(npcID and darkmoonNPC[npcID]) then
             SelectGossipOption(index, "", true)
             StaticPopup_Hide("GOSSIP_CONFIRM")
         end
     end)
 
-    QuestFrame:UnregisterEvent("QUEST_DETAIL")
-    Monomyth:Register("QUEST_DETAIL", function()
-        if(not QuestGetAutoAccept() and not QuestIsFromAreaTrigger()) then
-            QuestFrame_OnEvent(QuestFrame, "QUEST_DETAIL")
-
-            if(M.db.automation and not IsShiftKeyDown()) then
-                AcceptQuest()
-            end
-        end
-    end, true)
-
-    Monomyth:Register("QUEST_ACCEPT_CONFIRM", AcceptQuest)
-
-    Monomyth:Register("QUEST_ACCEPTED", function(id)
-        if(not GetCVarBool("autoQuestWatch")) then return end
-
-        if(not IsQuestWatched(id) and GetNumQuestWatches() < MAX_WATCHABLE_QUESTS) then
-            AddQuestWatch(id)
-        end
-    end)
-
-    local choiceQueue
-    Monomyth:Register("QUEST_ITEM_UPDATE", function(...)
-        if(choiceQueue and Monomyth[choiceQueue]) then
-			Monomyth[choiceQueue]()
+    QuickQuest:Register("QUEST_DETAIL", function()
+        if(not QuestGetAutoAccept()) then
+			AcceptQuest()
 		end
     end)
 
-	Monomyth:Register("QUEST_PROGRESS", function()
+    QuickQuest:Register("QUEST_ACCEPT_CONFIRM", AcceptQuest)
+
+    QuickQuest:Register("QUEST_ACCEPTED", function(id)
+        if(QuestFrame:IsShown() and QuestGetAutoAccept()) then
+			CloseQuest()
+		end
+    end)
+
+    local choiceQueue
+    QuickQuest:Register("QUEST_ITEM_UPDATE", function(...)
+        if(choiceQueue and QuickQuest[choiceQueue]) then
+			QuickQuest[choiceQueue]()
+		end
+    end)
+
+	QuickQuest:Register("QUEST_PROGRESS", function()
         if(IsQuestCompletable()) then
 			local requiredItems = GetNumQuestItems()
 			if(requiredItems > 0) then
@@ -215,7 +213,7 @@ local function LoadFunc()
 		end
     end)
 
-    Monomyth:Register("QUEST_COMPLETE", function()
+    QuickQuest:Register("QUEST_COMPLETE", function()
 		local choices = GetNumQuestChoices()
 		if(choices <= 1) then
 			GetQuestReward(1)
@@ -247,47 +245,64 @@ local function LoadFunc()
 		end
 	end)
 
-    Monomyth:Register("QUEST_FINISHED", function()
+    QuickQuest:Register("QUEST_FINISHED", function()
         choiceQueue = nil
-    end)
+		autoCompleteIndex = nil
 
-    Monomyth:Register("QUEST_AUTOCOMPLETE", function(id)
-        local index = GetQuestLogIndexByID(id)
-		if(GetQuestLogIsAutoComplete(index)) then
-			-- The quest might not be considered complete, investigate later
-			ShowQuestComplete(index)
+		if(GetNumAutoQuestPopUps() > 0) then
+			QuickQuest:QUEST_AUTOCOMPLETE()
 		end
     end)
 
-    Monomyth:Register("MERCHANT_SHOW", function()
+    QuickQuest:Register("QUEST_AUTOCOMPLETE", function(id)
+        while(not autoCompleteIndex and GetNumAutoQuestPopUps() > 0) do
+			local id, type = GetAutoQuestPopUp(1)
+			if(type == "COMPLETE") then
+				local index = GetQuestLogIndexByID(id)
+				ShowQuestComplete(index)
+				autoCompleteIndex = index
+			else
+				return
+			end
+		end
+    end)
+
+	QuickQuest:Register("BAG_UPDATE_DELAYED", function()
+		if(autoCompleteIndex) then
+			ShowQuestComplete(autoCompleteIndex)
+			autoCompleteIndex = nil
+		end
+	end)
+
+    QuickQuest:Register("MERCHANT_SHOW", function()
         atMerchant = true
     end)
 
-    Monomyth:Register("MERCHANT_CLOSED", function()
+    QuickQuest:Register("MERCHANT_CLOSED", function()
         atMerchant = false
     end)
 
-    Monomyth:Register("BANKFRAME_OPENED", function()
+    QuickQuest:Register("BANKFRAME_OPENED", function()
         atBank = true
     end)
 
-    Monomyth:Register("BANKFRAME_CLOSED", function()
+    QuickQuest:Register("BANKFRAME_CLOSED", function()
         atBank = false
     end)
 
-    Monomyth:Register("GUILDBANKFRAME_OPENED", function()
+    QuickQuest:Register("GUILDBANKFRAME_OPENED", function()
         atBank = true
     end)
 
-    Monomyth:Register("GUILDBANKFRAME_CLOSED", function()
+    QuickQuest:Register("GUILDBANKFRAME_CLOSED", function()
         atBank = false
     end)
 
-    Monomyth:Register("MAIL_SHOW", function()
+    QuickQuest:Register("MAIL_SHOW", function()
         atMail = true
     end)
 
-    Monomyth:Register("MAIL_CLOSED", function()
+    QuickQuest:Register("MAIL_CLOSED", function()
         atMail = false
     end)
 
@@ -323,8 +338,12 @@ local function LoadFunc()
         end
 	end
 
-    Monomyth:Register("PLAYER_LOGIN", function()
-		Monomyth:Register("BAG_UPDATE", BagUpdate)
+    QuickQuest:Register("PLAYER_LOGIN", function()
+		QuickQuest:Register("BAG_UPDATE", BagUpdate)
+
+		if(GetNumAutoQuestPopUps() > 0) then
+			QuickQuest:QUEST_AUTOCOMPLETE()
+		end
 	end)
 
     local errors = {
