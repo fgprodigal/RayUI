@@ -203,6 +203,10 @@ function RA:UpdateHealth(hp)
 		hp.colorReaction = true	
 		hp.colorClass = true
 		hp.bg.multiplier = .2
+	elseif not UF.db.smoothColor then
+		hp.colorReaction = true	
+		hp.colorClass = true
+		hp.bg.multiplier = .8
 	else
 		hp:SetStatusBarColor(.12, .12, .12)
 		hp.bg:SetVertexColor(.33, .33, .33)
