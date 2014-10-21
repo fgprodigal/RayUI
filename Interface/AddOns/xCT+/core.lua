@@ -465,7 +465,7 @@ function x:UpdateComboPointOptions(force)
     end
   end
   
-  addon.options.args["Frames"].args["class"].args["tracker"] = comboSpells
+  -- addon.options.args["Frames"].args["class"].args["tracker"] = comboSpells
   
   x.LOADED_COMBO_POINTS_OPTIONS = true
   
