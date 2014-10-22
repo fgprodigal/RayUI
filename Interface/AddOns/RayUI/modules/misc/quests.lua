@@ -1,7 +1,24 @@
-local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+﻿local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local M = R:GetModule("Misc")
 
 local function LoadFunc()
+	--显示任务等级
+	function questlevel()
+		local numEntries, numQuests = GetNumQuestLogEntries()
+		local titleIndex = 1
+	
+		for i = 1, numEntries do
+			local title, level, suggestedGroup, isHeader, isCollapsed, isComplete, frequency, questID, startEvent, displayQuestID, isOnMap, hasLocalPOI, isTask, isStory = GetQuestLogTitle(i)
+			if title and (not isHeader)  then
+				local titleButton = QuestLogQuests_GetTitleButton(titleIndex)
+				titleButton.Text:SetText("[" .. level .. "] " .. title)
+				titleButton.Check:SetPoint("LEFT", titleButton.Text, titleButton.Text:GetWrappedWidth() + 2, 0);
+				titleIndex = titleIndex + 1
+			end
+		end
+	end
+	hooksecurefunc("QuestLogQuests_Update", questlevel)
+
 	if not M.db.quest then return end
     local QuickQuest = CreateFrame("Frame")
     QuickQuest:SetScript("OnEvent", function(self, event, ...) self[event](...) end)
