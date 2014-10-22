@@ -83,6 +83,15 @@ R.Options = {
 						GameTooltip_Hide()
 					end,
 				},
+				TestBossButton = {
+					order = 7,
+					type = "execute",
+					name = L["测试ExtraActionButton"],
+					desc = L["显示/隐藏ExtraActionButton"],
+					func = function()
+                        TestBossButton()
+					end,
+				},
 			},
 		},
 		media = {

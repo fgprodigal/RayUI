@@ -1,6 +1,22 @@
 local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local AB = R:GetModule("ActionBar")
 
+function TestBossButton()
+	if ExtraActionBarFrame:IsShown() then
+		ExtraActionBarFrame.intro:Stop()
+		ExtraActionBarFrame.outro:Play()
+	else
+		ExtraActionBarFrame.button:Show()
+		ExtraActionBarFrame:Show()
+		ExtraActionBarFrame.outro:Stop()
+		ExtraActionBarFrame.intro:Play()
+		if not ExtraActionBarFrame.button.icon:GetTexture() then
+			ExtraActionBarFrame.button.icon:SetTexture("Interface\\ICONS\\ABILITY_SEAL")
+			ExtraActionBarFrame.button.icon:Show()
+		end
+	end
+end
+
 function AB:CreateExtraButton()
 	local holder = CreateFrame("Frame", nil, UIParent)
 	holder:Point("CENTER", UIParent, "BOTTOM", 500, 510)
