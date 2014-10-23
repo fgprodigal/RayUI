@@ -4,13 +4,14 @@ local M = R:GetModule("Misc")
 local function LoadFunc()
 	--显示任务等级
 	function questlevel()
+		if ENABLE_COLORBLIND_MODE == "1" then return end
 		local numEntries, numQuests = GetNumQuestLogEntries()
 		local titleIndex = 1
 	
 		for i = 1, numEntries do
 			local title, level, suggestedGroup, isHeader, isCollapsed, isComplete, frequency, questID, startEvent, displayQuestID, isOnMap, hasLocalPOI, isTask, isStory = GetQuestLogTitle(i)
-			if title and (not isHeader)  then
-				local titleButton = QuestLogQuests_GetTitleButton(titleIndex)
+			local titleButton = QuestLogQuests_GetTitleButton(titleIndex)
+			if title and (not isHeader) and titleButton.questID == questID then
 				titleButton.Text:SetText("[" .. level .. "] " .. title)
 				titleButton.Check:SetPoint("LEFT", titleButton.Text, titleButton.Text:GetWrappedWidth() + 2, 0);
 				titleIndex = titleIndex + 1
