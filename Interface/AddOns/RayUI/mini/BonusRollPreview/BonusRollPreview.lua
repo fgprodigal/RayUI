@@ -9,11 +9,11 @@ local BACKDROP = {
 	insets = {left = 4, right = 4, top = 4, bottom = 4}
 }
 
-local Container = CreateFrame("Frame", "HabeebItContainer", BonusRollFrame)
-local Handle = CreateFrame("Button", "HabeebItHandle", BonusRollFrame)
+local Container = CreateFrame("Frame", "BonusRollPreviewContainer", BonusRollFrame)
+local Handle = CreateFrame("Button", "BonusRollPreviewHandle", BonusRollFrame)
 
 local Hotspot = CreateFrame("Frame", nil, BonusRollFrame)
-local Buttons = CreateFrame("Frame", "HabeebItSpecButtons", Hotspot)
+local Buttons = CreateFrame("Frame", "BonusRollPreviewSpecButtons", Hotspot)
 Buttons:Hide()
 
 local function SpecButtonClick(self)
@@ -80,8 +80,14 @@ local function ButtonsLeave(self)
 end
 
 local collapsed = true
-local function HandleClick()
+local function HandleClick(self)
 	Handle:ClearAllPoints()
+
+	if(self) then
+		collapsed = not collapsed
+	else
+		collapsed = true
+	end
 
 	if(collapsed) then
 		Handle.Arrow:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-left-active")
@@ -92,8 +98,6 @@ local function HandleClick()
 		Handle:Point("LEFT", BonusRollFrame, "RIGHT", 1, 0)
 		Container:Hide()
 	end
-
-	collapsed = not collapsed
 end
 
 function Container:HandleUpdate()
@@ -123,7 +127,6 @@ local function ItemButtonUpdate(self, elapsed)
 	else
 		ShoppingTooltip1:Hide()
 		ShoppingTooltip2:Hide()
-		ShoppingTooltip3:Hide()
 	end
 
 	if(IsModifiedClick("DRESSUP")) then
@@ -199,7 +202,7 @@ function Container:Populate()
 	local numItems = 0
 	for index = 1, EJ_GetNumLoot() do
 		local name, texture, slot, itemClass, itemID, itemLink, encounterID = EJ_GetLootInfoByIndex(index)
-		if(encounterID == currentEncounterID) then
+		if(encounterID == currentEncounterID and not ns.itemBlacklist[itemID]) then
 			numItems = numItems + 1
 
 			local ItemButton = GetItemLine(numItems)
@@ -215,6 +218,7 @@ function Container:Populate()
 		end
 	end
 
+	self:Hide()
 	self:SetHeight(math.max(50, 10 + (numItems * 40)))
 
 	if(numItems > 0) then
@@ -242,20 +246,20 @@ function Container:Update()
 	EJ_SetDifficulty(difficulty > 0 and difficulty or 4)
 
 	local currentInstance = EJ_GetCurrentInstance()
-	EJ_SelectInstance(currentInstance > 0 and currentInstance or 322)
+	if(not currentInstance or currentInstance == 0) then
+		local oldMap = GetCurrentMapAreaID()
+		SetMapToCurrentZone()
+		currentInstance = ns.continents[GetCurrentMapContinent()]
+		SetMapByID(oldMap)
+	end
+
+	EJ_SelectInstance(currentInstance)
 	EJ_SelectEncounter(currentEncounterID)
 
 	local _, _, classID = UnitClass("player")
 	EJ_SetLootFilter(classID, GetLootSpecialization() or GetSpecializationInfo(GetSpecialization() or 0) or 0)
 
 	self:Populate()
-end
-
-function Container:Initialize()
-	collapsed = false
-	HandleClick()
-
-	Container:Update()
 end
 
 function Container:EJ_LOOT_DATA_RECIEVED(event)
@@ -270,17 +274,19 @@ function Container:PLAYER_LOOT_SPEC_UPDATED(event)
 	self:Update()
 end
 
-function Container:SPELL_CONFIRMATION_PROMPT(event, spellID, confirmType)
+function Container:SPELL_CONFIRMATION_PROMPT(event, spellID, confirmType, _, _, currencyID)
 	if(confirmType == CONFIRMATION_PROMPT_BONUS_ROLL) then
-		currentEncounterID = ns.GetEncounterID(spellID)
+		currentEncounterID = ns.encounterIDs[spellID]
 
 		if(currentEncounterID) then
-			self:RegisterEvent("EJ_LOOT_DATA_RECIEVED")
-			self:RegisterEvent("PLAYER_LOOT_SPEC_UPDATED")
-
-			self:Initialize()
+			local _, count = GetCurrencyInfo(currencyID)
+			if(count > 0) then
+				self:RegisterEvent("EJ_LOOT_DATA_RECIEVED")
+				self:RegisterEvent("PLAYER_LOOT_SPEC_UPDATED")
+				self:Update()
+			end
 		else
-			print("|cffff8080HabeebIt:|r Found an unknown spell [" .. spellID .. "]. Please report this!")
+			print("|cffff8080BonusRollPreview:|r Found an unknown spell [" .. spellID .. "]. Please report this!")
 		end
 	end
 end
@@ -382,8 +388,8 @@ end
 Container:RegisterEvent("PLAYER_LOGIN")
 Container:SetScript("OnEvent", function(self, event, ...) self[event](self, event, ...) end)
 
-SLASH_TestHabeebIt1 = "/testhabeebit"
-SlashCmdList.TestHabeebIt = function()
+SLASH_TestBonusRollPreview1 = "/testbonusroll"
+SlashCmdList.TestBonusRollPreview = function()
 	BonusRollFrame_StartBonusRoll(123, "123", 120)
 	-- Container:SPELL_CONFIRMATION_PROMPT("SPELL_CONFIRMATION_PROMPT", 139691, CONFIRMATION_PROMPT_BONUS_ROLL)
 	local numItems = 0

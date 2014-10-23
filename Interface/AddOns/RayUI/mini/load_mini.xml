@@ -1,14 +1,16 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">	
-	<Script file='DragEmAll\DragEmAll.lua'/>
-	<Script file='FriendsMenuXP\localization.enUS.lua'/>
-	<Script file='FriendsMenuXP\localization.zhCN.lua'/>
-	<Script file='FriendsMenuXP\localization.zhTW.lua'/>
-	<Script file='FriendsMenuXP\localization.deDE.lua'/>
+	<Script file="DragEmAll\DragEmAll.lua"/>
+	<Script file="ExtraQuestButton\ExtraQuestButton.lua"/>
+	<Script file="FriendsMenuXP\localization.enUS.lua"/>
+	<Script file="FriendsMenuXP\localization.zhCN.lua"/>
+	<Script file="FriendsMenuXP\localization.zhTW.lua"/>
+	<Script file="FriendsMenuXP\localization.deDE.lua"/>
 	<Include file="FriendsMenuXP\FriendsMenuXP.xml"/>
-	<Script file='TooltipItemID\TooltipItemID.lua'/>
-	<Script file='TooltipItemIcon\TooltipItemIcon.lua'/>
-	<Script file='TradeTabs\TradeTabs.lua'/>
+	<Script file="TooltipItemID\TooltipItemID.lua"/>
+	<Script file="TooltipItemIcon\TooltipItemIcon.lua"/>
+	<Script file="TradeTabs\TradeTabs.lua"/>
 	<Include file="yClassColors\yClassColors.xml"/>
-	<Script file='HabeebIt\Encounters.lua'/>
-	<Script file='HabeebIt\HabeebIt.lua'/>
+	<Script file="BonusRollPreview\encounters\Draenor.lua"/>
+	<Script file="BonusRollPreview\encounters\Pandaria.lua"/>
+	<Script file="BonusRollPreview\BonusRollPreview.lua"/>
 </Ui>

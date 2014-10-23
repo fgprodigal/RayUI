@@ -384,16 +384,16 @@ function NF:PLAYER_ENTERING_WORLD()
 end
 
 function NF:VIGNETTE_ADDED(event, vignetteInstanceID)
-	local name
-	if vignetteInstanceID then
-		name = select(3, C_Vignettes.GetVignetteInfoFromInstanceID(vignetteInstanceID))
+	local names = ""
+
+	local numVignettes = C_Vignettes.GetNumVignettes()
+	for i=1, numVignettes do
+		local vigInstanceID = C_Vignettes.GetVignetteInstanceID(i)
+		local ofsX, ofsY, name = C_Vignettes. GetVignetteInfoFromInstanceID(vigInstanceID)
+		names = names..name.."("..ofsX..","..ofsY..")  "
 	end
-	-- if not InCombatLockdown() then
-	-- 	f.button:Show()
-	-- 	f.button:SetAttribute("macrotext", "/targetexact "..(name or ""))
-	-- end
 	PlaySoundFile("Sound\\Spells\\PVPFlagTaken.wav")
-	self:Show("发现稀有", name or "", selectTarget)
+	self:Show("发现稀有", names)
 end
 
 function NF:RESURRECT_REQUEST(name)
