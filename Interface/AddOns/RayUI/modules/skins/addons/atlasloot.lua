@@ -243,4 +243,4 @@ local function SkinAtlasLoot()
 	end)
 end
 
-S:RegisterSkin("AtlasLoot", SkinAtlasLoot)
+-- S:RegisterSkin("AtlasLoot", SkinAtlasLoot)

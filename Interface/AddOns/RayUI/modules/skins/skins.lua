@@ -88,19 +88,19 @@ function S:GetOptions()
 				},
 			},
 		},
-		atlaslootgroup = {
-			order = 9,
-			type = "group",
-			name = L["Atlasloot"],
-			guiInline = true,
-			args = {
-				atlasloot = {
-					order = 1,
-					name = L["启用"],
-					type = "toggle",
-				},
-			},
-		},
+		-- atlaslootgroup = {
+			-- order = 9,
+			-- type = "group",
+			-- name = L["Atlasloot"],
+			-- guiInline = true,
+			-- args = {
+				-- atlasloot = {
+					-- order = 1,
+					-- name = L["启用"],
+					-- type = "toggle",
+				-- },
+			-- },
+		-- },
 		bigwigsgroup = {
 			order = 10,
 			type = "group",
