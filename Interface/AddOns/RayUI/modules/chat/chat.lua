@@ -691,6 +691,7 @@ end
 
 function CH:AddMessage(text, ...)
 	if text:find(INTERFACE_ACTION_BLOCKED) then return end
+	if string.find(text, "EUI:.*") then return end
 	if not text:find("BN_CONVERSATION") then
 		text = text:gsub("|h%[(%d+)%. .-%]|h", "|h[%1]|h")
 		-- text = text:gsub("%[(%d0?)%. .-%]", "[%1]") --custom channels
@@ -714,7 +715,7 @@ function CH:AddMessage(text, ...)
 		text = ("|cffffffff|HTimeCopy|h|r%s|h%s"):format(BetterDate(CHAT_TIMESTAMP_FORMAT or "|cff64C2F5[%H:%M]|r ", time()), text)
 	end
 	text = string.gsub(text, "%[(%d+)%. .-%]", "[%1]")
-	text = string.gsub(text, "(|HBNplayer:%S-|k:)(%d-)(:%S-|h)%[(%S-)%](|?h?)(:?)", changeBNetName)
+	text = string.gsub(text, "(%[|HBNplayer:%S-|k:)(%d-)(:%S-|h)%[(%S-)%](|?h?)(%]:?)", changeBNetName)
     text = string.gsub(text, "EUI", "ElvUI")
 	return self.OldAddMessage(self, text, ...)
 end
