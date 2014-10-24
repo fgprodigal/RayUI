@@ -428,8 +428,8 @@ R["Watcher"] = {
 
                 --勝利
                 { spellID = 32216, unitId = "player", caster = "player", filter = "BUFF" },
-                --嗜血
-                { spellID = 23881, filter = "CD" },
+                --嗜血（这个其实是致死打击雕文吧？）
+                { spellID = 12294, filter = "CD" },
                 --巨人打击
                 { spellID = 86346, filter = "CD" },
             },
@@ -495,6 +495,8 @@ R["Watcher"] = {
                 setpoint = positions.target_proc_icon,
                 size = 38,
 
+				--撕裂
+                { spellID = 772, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --震盪波
                 { spellID = 46968, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --斷筋
@@ -504,7 +506,7 @@ R["Watcher"] = {
                 --破膽怒吼
                 { spellID = 5246, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --巨人打击
-                { spellID = 86346, unitId = "target", caster = "player", filter = "DEBUFF" },
+                { spellID = 167105, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --感染之傷（德魯伊）
                 { spellID = 48484, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --挫志咆哮（德魯伊）
