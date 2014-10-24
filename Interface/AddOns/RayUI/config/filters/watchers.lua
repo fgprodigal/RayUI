@@ -609,6 +609,8 @@ R["Watcher"] = {
                 { spellID = 114050, unitId = "player", caster = "player", filter = "BUFF" },
                 --元素回响
                 { spellID = 159105, unitId = "player", caster = "player", filter = "BUFF" },
+                --元素回响
+                { spellID = 159101, unitId = "player", caster = "player", filter = "BUFF" },
                 --先祖指引
                 { spellID = 108281, unitId = "player", caster = "player", filter = "BUFF" },
                 --元素掌握
