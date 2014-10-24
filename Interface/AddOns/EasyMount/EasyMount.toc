@@ -1,0 +1,19 @@
+## Interface: 60000
+## Title: EasyMount
+## Version: 4.10
+## Author: Abin
+## SavedVariables: EasyMount4DB
+
+Includes\InterfaceOptionPage-1.0.lua
+
+Locales\enUS.lua
+Locales\zhCN.lua
+Locales\zhTW.lua
+
+Modules\ShapeShifts.lua
+Modules\Dragonwrath.lua
+Modules\Halloween.lua
+Modules\UtilityMounts.lua
+
+ActionButtons.lua
+OptionFrames.lua
