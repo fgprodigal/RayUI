@@ -163,25 +163,54 @@ function MM:CreateMenu()
 		{text = CHARACTER_BUTTON, notCheckable = true,
 		func = function() ToggleCharacter("PaperDollFrame") end},
 		{text = SPELLBOOK_ABILITIES_BUTTON, notCheckable = true,
-		func = function() ToggleSpellBook("spell") end},
+		func = function() if not SpellBookFrame:IsShown() then ShowUIPanel(SpellBookFrame) else HideUIPanel(SpellBookFrame) end end},
 		{text = TALENTS_BUTTON, notCheckable = true,
-		func = function() ToggleTalentFrame() end},
+		func = function()
+			if not PlayerTalentFrame then
+				TalentFrame_LoadUI()
+			end
+
+			if not GlyphFrame then
+				GlyphFrame_LoadUI()
+			end
+			
+			if not PlayerTalentFrame:IsShown() then
+				ShowUIPanel(PlayerTalentFrame)
+			else
+				HideUIPanel(PlayerTalentFrame)
+			end
+		end},
 		{text = ACHIEVEMENT_BUTTON, notCheckable = true,
 		func = function() ToggleAchievementFrame() end},
-		{text = QUESTLOG_BUTTON, notCheckable = true,
-		func = function() ToggleFrame(QuestLogFrame) end},
 		{text = SOCIAL_BUTTON, notCheckable = true,
 		func = function() ToggleFriendsFrame() end},
-		{text = GUILD, notCheckable = true,
-		func = function() ToggleGuildFrame() end},
-		{text = PLAYER_V_PLAYER, notCheckable = true,
-		func = function() if not PVPUIFrame then PVP_LoadUI() end ToggleFrame(PVPUIFrame) end},
+		{text = ACHIEVEMENTS_GUILD_TAB, notCheckable = true,
+		func = function()
+			if IsInGuild() then
+				if not GuildFrame then GuildFrame_LoadUI() end
+				GuildFrame_Toggle()
+			else
+				if not LookingForGuildFrame then LookingForGuildFrame_LoadUI() end
+				if not LookingForGuildFrame then return end
+				LookingForGuildFrame_Toggle()
+			end
+		end},
 		{text = ENCOUNTER_JOURNAL, notCheckable = true,
-		func = function() if not IsAddOnLoaded("Blizzard_EncounterJournal") then LoadAddOn("Blizzard_EncounterJournal") end ToggleFrame(EncounterJournal) end},
-		{text = MOUNTS_AND_PETS, notCheckable = true,
-		func = function() if not IsAddOnLoaded("Blizzard_PetJournal") then LoadAddOn("Blizzard_PetJournal") end ToggleFrame(PetJournalParent) end},
+		func = function() if not IsAddOnLoaded("Blizzard_EncounterJournal") then EncounterJournal_LoadUI() end ToggleFrame(EncounterJournal) end},
+		{text = MOUNTS, notCheckable = true,
+		func = function()
+			TogglePetJournal(1);
+		end},
+		{text = PETS, notCheckable = true,
+		func = function()
+			TogglePetJournal(2)
+		end},
+		{text = TOY_BOX, notCheckable = true,
+		func = function() 
+			TogglePetJournal(3)
+		end},
 		{text = LFG_TITLE, notCheckable = true,
-		func = function() PVEFrame_ToggleFrame("GroupFinderFrame", LFDParentFrame) end},
+		func = function() PVEFrame_ToggleFrame() end},
 		{text = RAID_FINDER, notCheckable = true,
 		func = function() PVEFrame_ToggleFrame("GroupFinderFrame", RaidFinderFrame) end},
 		{text = BLIZZARD_STORE, notCheckable = true,
@@ -196,9 +225,6 @@ function MM:CreateMenu()
 		{text = LOOT_ROLLS, notCheckable = true,
 		func = function() ToggleFrame(LootHistoryFrame) end},
 	}
-	if(C_StorePublic.IsEnabled()) then
-		tinsert(menuList, {text = BLIZZARD_STORE, notCheckable = true, func = function() StoreMicroButton:Click() end})
-	end
 	Minimap:SetScript("OnMouseUp", function(_, btn)
 		if(btn=="RightButton" and not IsShiftKeyDown()) then
 			ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, "cursor", 0, 0)
