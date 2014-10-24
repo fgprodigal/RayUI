@@ -106,22 +106,27 @@ end)
 Button:SetScript("OnUpdate", function(self, elapsed)
 	if(self.rangeTimer > TOOLTIP_UPDATE_TIME) then
 		local HotKey = self.HotKey
+		local Icon = self.Icon
 		local inRange = IsItemInRange(self.itemLink, "target")
 		if(HotKey:GetText() == RANGE_INDICATOR) then
 			if(inRange == false) then
 				HotKey:SetTextColor(1, 0.1, 0.1)
 				HotKey:Show()
+				Icon:SetVertexColor(1, 0.3, 0.1)
 			elseif(inRange) then
 				HotKey:SetTextColor(1, 1, 1)
 				HotKey:Show()
+				Icon:SetVertexColor(1, 1, 1)
 			else
 				HotKey:Hide()
 			end
 		else
 			if(inRange == false) then
 				HotKey:SetTextColor(1, 0.1, 0.1)
+				Icon:SetVertexColor(1, 0.3, 0.1)
 			else
 				HotKey:SetTextColor(1, 1, 1)
+				Icon:SetVertexColor(1, 1, 1)
 			end
 		end
 
