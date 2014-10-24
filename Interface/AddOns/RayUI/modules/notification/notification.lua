@@ -386,12 +386,12 @@ end
 function NF:VIGNETTE_ADDED(event, vignetteInstanceID)
 	local names = ""
 
-	-- local numVignettes = C_Vignettes.GetNumVignettes()
-	-- for i=1, numVignettes do
-		-- local vigInstanceID = C_Vignettes.GetVignetteInstanceID(i)
-		-- local ofsX, ofsY, name = C_Vignettes. GetVignetteInfoFromInstanceID(vigInstanceID)
-		-- names = names..name.."("..ofsX..","..ofsY..")  "
-	-- end
+	local numVignettes = C_Vignettes.GetNumVignettes()
+	for i=1, numVignettes do
+		local vigInstanceGUID= C_Vignettes.GetVignetteGUID(i)
+		local ofsX, ofsY, name = C_Vignettes. GetVignetteInfoFromInstanceID(vigInstanceGUID)
+		names = names..name.."  "
+	end
 	PlaySoundFile("Sound\\Spells\\PVPFlagTaken.wav")
 	self:Show("发现稀有", names)
 end
