@@ -565,8 +565,6 @@ R["Watcher"] = {
 
                 --Earth Shield / Erdschild
                 { spellID = 974, unitId = "player", caster = "player", filter = "BUFF" },
-                --Riptide / Springflut
-                { spellID = 61295, unitId = "player", caster = "player", filter = "BUFF" },
                 --Lightning Shield / Blitzschlagschild
                 { spellID = 324, unitId = "player", caster = "player", filter = "BUFF" },
                 --Water Shield / Wasserschild
