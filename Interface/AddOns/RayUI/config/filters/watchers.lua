@@ -50,7 +50,14 @@ R["Watcher"] = {
                 direction = "LEFT",
                 setpoint = positions.player_proc_icon,
                 size = 38,
-
+                --日之巅
+				{spellID = 171744, unitID = "player", caster = "player", filter = "BUFF"},
+				--月之巅
+				{spellID = 171743, unitID = "player", caster = "player", filter = "BUFF"},
+				--月光增效
+				{spellID = 164547, unitID = "player", caster = "player", filter = "BUFF"},
+				--日光增效
+				{spellID = 164545, unitID = "player", caster = "player", filter = "BUFF"},
                 --流星
                 { spellID = 93400, unitId = "player", caster = "player", filter = "BUFF" },
                 --兇蠻咆哮
