@@ -581,8 +581,6 @@ R["Watcher"] = {
 
                 --Earth Shield / Erdschild
                 { spellID = 974, unitId = "target", caster = "player", filter = "BUFF" },
-                --Riptide / Springflut
-                { spellID = 61295, unitId = "target", caster = "player", filter = "BUFF" },
                 --冰凍之力
                 { spellID = 63685, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --狂怒釋放
@@ -611,6 +609,14 @@ R["Watcher"] = {
                 { spellID = 108271, unitId = "player", caster = "player", filter = "BUFF" },
                 --升腾
                 { spellID = 114050, unitId = "player", caster = "player", filter = "BUFF" },
+                --元素回响
+                { spellID = 159105, unitId = "player", caster = "player", filter = "BUFF" },
+                --先祖指引
+                { spellID = 108281, unitId = "player", caster = "player", filter = "BUFF" },
+                --元素掌握
+                { spellID = 16166, unitId = "player", caster = "player", filter = "BUFF" },
+                --Riptide / Springflut
+                { spellID = 61295, unitId = "player", caster = "player", filter = "BUFF" },
 
             },
             {
@@ -623,12 +629,14 @@ R["Watcher"] = {
                 { spellID = 51514, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --Storm Strike / Sturmschlag
                 { spellID = 17364, unitId = "target", caster = "player", filter = "DEBUFF" },
-                --Earth Shock / Erdschock
-                { spellID = 8042, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --Frost Shock / Frostschock
                 { spellID = 8056, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --Flame Shock / Flammenschock
                 { spellID = 8050, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --Riptide / Springflut
+                { spellID = 61295, unitId = "target", caster = "player", filter = "BUFF" },
+                --地震术
+                { spellID = 61882, unitId = "target", caster = "player", filter = "DEBUFF" },
 
             },
             {
