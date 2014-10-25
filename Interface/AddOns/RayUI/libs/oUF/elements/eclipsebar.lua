@@ -16,16 +16,6 @@ local UNIT_POWER_FREQUENT = function(self, event, unit, powerType)
 	local power = UnitPower('player', SPELL_POWER_ECLIPSE)
 	local maxPower = UnitPowerMax('player', SPELL_POWER_ECLIPSE)
 
-	if(eb.LunarBar) then
-		eb.LunarBar:SetMinMaxValues(-maxPower, maxPower)
-		-- eb.LunarBar:SetValue(power * -1)
-	end
-
-	if(eb.SolarBar) then
-		eb.SolarBar:SetMinMaxValues(-maxPower, maxPower)
-		-- eb.SolarBar:SetValue(power)
-	end
-
 	if(eb.PostUpdatePower) then
 		return eb:PostUpdatePower(unit)
 	end

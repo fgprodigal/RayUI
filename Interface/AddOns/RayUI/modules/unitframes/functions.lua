@@ -1035,21 +1035,21 @@ function UF:ConstructDruidResourceBar(frame)
     local lbar = CreateFrame("StatusBar", nil, ebar)
     lbar:SetStatusBarTexture(R["media"].normal)
     lbar:SetStatusBarColor(0, .4, 1)
-    lbar:SetWidth(100)
+    lbar:SetWidth(0)
     lbar:SetHeight(5)
     lbar:SetFrameLevel(5)
     lbar:GetStatusBarTexture():SetHorizTile(false)
-    lbar:SetPoint("LEFT", ebar, "LEFT")
+    lbar:SetPoint("RIGHT", ebar, "CENTER")
     ebar.LunarBar = lbar
 
     local sbar = CreateFrame("StatusBar", nil, ebar)
     sbar:SetStatusBarTexture(R["media"].normal)
     sbar:SetStatusBarColor(1, .6, 0)
-    sbar:SetWidth(100)
+    sbar:SetWidth(0)
     sbar:SetHeight(5)
     sbar:SetFrameLevel(5)
     sbar:GetStatusBarTexture():SetHorizTile(false)
-    sbar:SetPoint("LEFT", lbar:GetStatusBarTexture(), "RIGHT")
+    sbar:SetPoint("LEFT", ebar, "CENTER")
     ebar.SolarBar = sbar
 
     ebar.Spark = sbar:CreateTexture(nil, "OVERLAY")
@@ -1058,11 +1058,11 @@ function UF:ConstructDruidResourceBar(frame)
     ebar.Spark:SetAlpha(0.8)
     ebar.Spark:SetHeight(26)
     ebar.Spark:SetWidth(10)
-    ebar.Spark:SetPoint("CENTER", sbar:GetStatusBarTexture(), "LEFT", 0, 0)
+    ebar.Spark:SetPoint("CENTER", ebar, "CENTER", 0, 1)
 
     ebar.Text = sbar:CreateFontString(nil, "OVERLAY")
     ebar.Text:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
-    ebar.Text:SetPoint("CENTER", ebar, "CENTER", 0, 1)
+    ebar.Text:SetPoint("CENTER", ebar, "CENTER", 0, 0)
 
     ebar.PostUpdatePower = self.UpdateEclipse
     ebar.PostUnitAura = self.UpdateEclipse
@@ -1157,8 +1157,13 @@ function UF:UpdateEclipse(unit)
 
     if power < 0 then
         self.Text:SetTextColor(0, .4, 1)
-    else
+        self.LunarBar:SetWidth(absolutePower)
+    elseif power > 0 then
         self.Text:SetTextColor(1, .6, 0)
+        self.SolarBar:SetWidth(absolutePower)
+    else
+        self.LunarBar:SetWidth(0)
+        self.SolarBar:SetWidth(0)
     end
 
     if direction == "sun" then
