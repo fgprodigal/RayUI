@@ -416,6 +416,8 @@ function B:Initialize()
 		end
 	end
 
+	self:OpenBags()
+	self:CloseBags()
 	self:HookScript(TradeFrame, "OnShow", "OpenBags")
 	self:HookScript(TradeFrame, "OnHide", "CloseBags")
 end
