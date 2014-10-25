@@ -265,7 +265,7 @@ end
  String Formatters
 --]=====================================================]
 local format_loot = "([^|]*)|cff(%x*)|H([^:]*):(%d+):%d+:(%d+):[-?%d+:]+|h%[?([^%]]*)%]|h|r?%s?x?(%d*)%.?"
-local format_pet  = sformat("|cff798BDD[%s]:|r %%s (%%s)", sgsub(BATTLE_PET_CAGE_ITEM_NAME," %%s","")) -- [Caged]: Pet Name (Pet Family)
+local format_pet  = sformat("|cff798BDD[%s]:|r %%s (%%s)", sgsub(BATTLE_PET_CAGE_ITEM_NAME,"%%s","")) -- [Caged]: Pet Name (Pet Family)
 
 local format_fade         = "-%s"
 local format_gain         = "+%s"
