@@ -1052,7 +1052,7 @@ function UF:ConstructDruidResourceBar(frame)
     sbar:SetPoint("LEFT", ebar, "CENTER")
     ebar.SolarBar = sbar
 
-    ebar.Spark = sbar:CreateTexture(nil, "OVERLAY")
+    ebar.Spark = ebar:CreateTexture(nil, "OVERLAY")
     ebar.Spark:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
     ebar.Spark:SetBlendMode("ADD")
     ebar.Spark:SetAlpha(0.8)
@@ -1060,7 +1060,7 @@ function UF:ConstructDruidResourceBar(frame)
     ebar.Spark:SetWidth(10)
     ebar.Spark:SetPoint("CENTER", ebar, "CENTER", 0, 1)
 
-    ebar.Text = sbar:CreateFontString(nil, "OVERLAY")
+    ebar.Text = ebar:CreateFontString(nil, "OVERLAY")
     ebar.Text:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
     ebar.Text:SetPoint("CENTER", ebar, "CENTER", 0, 0)
 
@@ -1157,13 +1157,15 @@ function UF:UpdateEclipse(unit)
 
     if power < 0 then
         self.Text:SetTextColor(0, .4, 1)
+        self.LunarBar:SetAlpha(1)
         self.LunarBar:SetWidth(absolutePower)
     elseif power > 0 then
         self.Text:SetTextColor(1, .6, 0)
+        self.SolarBar:SetAlpha(1)
         self.SolarBar:SetWidth(absolutePower)
     else
-        self.LunarBar:SetWidth(0)
-        self.SolarBar:SetWidth(0)
+        self.LunarBar:SetAlpha(0)
+        self.SolarBar:SetAlpha(0)
     end
 
     if direction == "sun" then
