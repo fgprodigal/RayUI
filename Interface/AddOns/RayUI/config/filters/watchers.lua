@@ -98,9 +98,9 @@ R["Watcher"] = {
                 --颶風術
                 { spellID = 33786, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --月火術
-                { spellID = 8921, unitId = "target", caster = "player", filter = "DEBUFF" },
+                { spellID = 164812, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --日炎術
-                { spellID = 93402, unitId = "target", caster = "player", filter = "DEBUFF" },
+                { spellID = 164815, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --掃擊
                 { spellID = 1822, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --撕扯
