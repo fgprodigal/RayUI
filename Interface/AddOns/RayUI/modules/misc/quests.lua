@@ -324,7 +324,7 @@ local function LoadFunc()
         atMail = false
     end)
 
-	local questTip = CreateFrame("GameTooltip", "MonomythTip", UIParent, "GameTooltipTemplate")
+	local questTip = CreateFrame("GameTooltip", "QuickQuestTip", UIParent, "GameTooltipTemplate")
 	local questLevel = string.gsub(ITEM_MIN_LEVEL, "%%d", "(%%d+)")
 
 	local function GetQuestItemLevel()
