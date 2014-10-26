@@ -47,6 +47,7 @@ local function CreateShadow(f, t, thickness)
 	border:SetOutside(f, 1, 1)
     border:SetTemplate("Border")
 	f.border = border
+	f.border.GetFrameLevel = R.dummy  -- fuck you LibStrataFix
 
 	local shadow = CreateFrame("Frame", nil, border)
 	shadow:SetFrameLevel(frameLevel - 1)
@@ -62,6 +63,7 @@ local function CreateShadow(f, t, thickness)
 	shadow:SetBackdropColor( backdropr, backdropg, backdropb, backdropa )
 	shadow:SetBackdropBorderColor( borderr, borderg, borderb )
 	f.shadow = shadow
+	f.shadow.GetFrameLevel = R.dummy  -- fuck you LibStrataFix
 end
 
 local function SetTemplate(f, t, glossTex)
