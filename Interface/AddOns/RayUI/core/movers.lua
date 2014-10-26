@@ -116,6 +116,130 @@ function HideGrid()
 	end
 end
 
+local function UpdateNudgeFrame(mover)
+	local screenWidth, screenHeight, screenCenter = UIParent:GetRight(), UIParent:GetTop(), UIParent:GetCenter()
+	local x, y = mover:GetCenter()
+
+	local LEFT = screenWidth / 3
+	local RIGHT = screenWidth * 2 / 3
+	local TOP = screenHeight / 2
+
+	if y >= TOP then
+		y = -(screenHeight - mover:GetTop())
+	else
+		y = mover:GetBottom()
+	end
+	
+	if x >= RIGHT then
+		x = mover:GetRight() - screenWidth
+	elseif x <= LEFT then
+		x = mover:GetLeft()
+	else
+		x = x - screenCenter
+	end
+	
+	x = R:Round(x, 0)
+	y = R:Round(y, 0)
+
+	MoverNudgeWindow.xOffset:SetText(x)
+	MoverNudgeWindow.yOffset:SetText(y)
+	MoverNudgeWindow.xOffset.currentValue = x
+	MoverNudgeWindow.yOffset.currentValue = y
+	MoverNudgeWindow.title:SetText(mover.textstring)
+end
+
+local function AssignFrameToNudge(self)
+	MoverNudgeWindow.child = self
+	UpdateNudgeFrame(self)
+end
+
+local function GetXYOffset(position)
+	local x, y = 1, 1
+	
+	if position == "TOP" or position == "TOPLEFT" or position == "TOPRIGHT" then
+		return 0, y
+	elseif position == "BOTTOM" or position == "BOTTOMLEFT" or position == "BOTTOMRIGHT" then
+		return 0, -y
+	elseif position == "LEFT" then
+		return -x, 0
+	else
+		return x, 0
+	end
+end
+
+local function HideNudgeWindow()
+	MoverNudgeWindow:Hide()
+end
+
+local function ShowNudgeWindow()
+	local mover = MoverNudgeWindow.child
+	local screenWidth, screenHeight, screenCenter = UIParent:GetRight(), UIParent:GetTop(), UIParent:GetCenter()
+	local x, y = mover:GetCenter()
+
+	local LEFT = screenWidth / 3
+	local RIGHT = screenWidth * 2 / 3
+	local TOP = screenHeight / 2
+	local point, inversePoint
+	if y >= TOP then
+		point = "TOP"
+		inversePoint = "BOTTOM"
+		y = -(screenHeight - mover:GetTop())
+	else
+		point = "BOTTOM"
+		inversePoint = "TOP"
+		y = mover:GetBottom()
+	end
+	
+	if x >= RIGHT then
+		point = "RIGHT"
+		inversePoint = "LEFT"
+		x = mover:GetRight() - screenWidth
+	elseif x <= LEFT then
+		point = "LEFT"
+		inversePoint = "RIGHT"
+		x = mover:GetLeft()
+	else
+		x = x - screenCenter
+	end
+	
+	local coordX, coordY = GetXYOffset(inversePoint)
+	MoverNudgeWindow:ClearAllPoints()
+	MoverNudgeWindow:SetPoint(point, mover, inversePoint, coordX, coordY)
+	MoverNudgeWindow.title:SetText(mover.textstring)
+	MoverNudgeWindow:Show()
+	UpdateNudgeFrame(mover)
+end
+
+local function SetNudge()
+	local mover = MoverNudgeWindow.child
+
+	local screenWidth, screenHeight, screenCenter = UIParent:GetRight(), UIParent:GetTop(), UIParent:GetCenter()
+	local x, y = mover:GetCenter()
+	local point
+	local LEFT = screenWidth / 3
+	local RIGHT = screenWidth * 2 / 3
+	local TOP = screenHeight / 2
+	
+	if y >= TOP then
+		point = "TOP"
+	else
+		point = "BOTTOM"
+	end
+	
+	if x >= RIGHT then
+		point = point.."RIGHT"
+	elseif x <= LEFT then
+		point = point.."LEFT"
+	end
+	
+	x = tonumber(MoverNudgeWindow.xOffset.currentValue)
+	y = tonumber(MoverNudgeWindow.yOffset.currentValue)
+
+	mover:ClearAllPoints()
+	mover:Point(point, UIParent, point, x, y)
+	R:SaveMoverPosition(mover.name)	
+end
+
 local function CreatePopup()
 	local S = R:GetModule("Skins")
 	local f = CreateFrame("Frame", "RayUIMoverPopupWindow", UIParent)
@@ -124,7 +248,7 @@ local function CreatePopup()
 	f:EnableMouse(true)
 	f:SetClampedToScreen(true)
 	f:SetWidth(360)
-	f:SetHeight(110)
+	f:SetHeight(130)
 	f:SetPoint("TOP", 0, -50)
 	f:Hide()
 	S:SetBD(f)
@@ -149,7 +273,7 @@ local function CreatePopup()
 	desc:SetJustifyH("LEFT")
 	desc:SetPoint("TOPLEFT", 18, -32)
 	desc:SetPoint("BOTTOMRIGHT", -18, 48)
-	desc:SetText(L["锚点已解锁，拖动锚点移动位置，完成后点击锁定按钮。"])
+	desc:SetText(L["锚点已解锁，拖动锚点移动位置，右键单击微调，完成后点击锁定按钮。"])
 
 	local lock = CreateFrame("Button", "RayUILock", f, "OptionsButtonTemplate")
 	_G[lock:GetName() .. "Text"]:SetText(L["锁定"])
@@ -218,6 +342,153 @@ local function CreatePopup()
 	
 	
 	UIDropDownMenu_Initialize(moverTypes, MoverTypes_Initialize)
+
+	local nudgeFrame = CreateFrame("Frame", "MoverNudgeWindow", UIParent)
+	nudgeFrame:SetFrameStrata("DIALOG")
+	nudgeFrame:SetWidth(200)
+	nudgeFrame:SetHeight(110)
+	nudgeFrame:CreateShadow("Background")
+	nudgeFrame:Point("TOP", RayUIMoverPopupWindow, "BOTTOM", 0, -15)
+	nudgeFrame:SetFrameLevel(100)
+	nudgeFrame:Hide()
+	nudgeFrame:EnableMouse(true)
+	nudgeFrame:SetClampedToScreen(true)
+	RayUIMoverPopupWindow:HookScript("OnHide", function() MoverNudgeWindow:Hide() end)
+
+	local desc = nudgeFrame:CreateFontString("ARTWORK")
+	desc:SetFontObject("GameFontHighlight")
+	desc:SetJustifyV("TOP")
+	desc:SetJustifyH("CENTER")
+	desc:SetPoint("TOPLEFT", 18, -15)
+	desc:SetPoint("BOTTOMRIGHT", -18, 28)
+	nudgeFrame.title = desc
+	
+	local header = CreateFrame("Button", nil, nudgeFrame)
+	header:SetTemplate("Default", true)
+	header:SetWidth(100)
+	header:SetHeight(25)
+	header:SetPoint("CENTER", nudgeFrame, "TOP")
+	header:SetFrameLevel(header:GetFrameLevel() + 2)
+
+	local title = header:CreateFontString("OVERLAY")
+	title:FontTemplate()
+	title:SetPoint("CENTER", header, "CENTER")
+	title:SetText(L["微调"])
+	
+	local xOffset = CreateFrame("EditBox", nudgeFrame:GetName().."XEditBox", nudgeFrame, "InputBoxTemplate")
+	xOffset:Width(50)
+	xOffset:Height(17)
+	xOffset:SetAutoFocus(false)
+	xOffset.currentValue = 0
+	xOffset:SetScript("OnEscapePressed", function(self)
+		self:SetText(R:Round(xOffset.currentValue))
+		EditBox_ClearFocus(self)
+	end)
+	xOffset:SetScript("OnEnterPressed", function(self)
+		local num = self:GetText()
+		if tonumber(num) then
+			xOffset.currentValue = num
+			SetNudge()
+		end
+		self:SetText(R:Round(xOffset.currentValue))
+		EditBox_ClearFocus(self)
+	end)
+	xOffset:SetScript("OnEditFocusLost", function(self)
+		self:SetText(R:Round(xOffset.currentValue))
+	end)
+	xOffset:SetScript("OnEditFocusGained", xOffset.HighlightText)
+	xOffset:SetScript("OnShow", function(self)
+		EditBox_ClearFocus(self)
+		self:SetText(R:Round(xOffset.currentValue))
+	end)
+	
+	xOffset.text = xOffset:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+	xOffset.text:SetPoint("RIGHT", xOffset, "LEFT", -4, 0)
+	xOffset.text:SetText("X:")	
+	xOffset:SetPoint("BOTTOMRIGHT", nudgeFrame, "CENTER", -6, 8)
+	nudgeFrame.xOffset = xOffset
+	S:ReskinInput(xOffset)
+	
+	local yOffset = CreateFrame("EditBox", nudgeFrame:GetName().."YEditBox", nudgeFrame, "InputBoxTemplate")
+	yOffset:Width(50)
+	yOffset:Height(17)
+	yOffset:SetAutoFocus(false)
+	yOffset.currentValue = 0
+	yOffset:SetScript("OnEscapePressed", function(self)
+		self:SetText(R:Round(yOffset.currentValue))
+		EditBox_ClearFocus(self)
+	end)
+	yOffset:SetScript("OnEnterPressed", function(self)
+		local num = self:GetText()
+		if tonumber(num) then
+			yOffset.currentValue = num
+			SetNudge()
+		end
+		self:SetText(R:Round(yOffset.currentValue))
+		EditBox_ClearFocus(self)
+	end)
+	yOffset:SetScript("OnEditFocusLost", function(self)
+		self:SetText(R:Round(yOffset.currentValue))
+	end)
+	yOffset:SetScript("OnEditFocusGained", yOffset.HighlightText)
+	yOffset:SetScript("OnShow", function(self)
+		EditBox_ClearFocus(self)
+		self:SetText(R:Round(yOffset.currentValue))
+	end)
+	
+	yOffset.text = yOffset:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+	yOffset.text:SetPoint("RIGHT", yOffset, "LEFT", -4, 0)
+	yOffset.text:SetText("Y:")	
+	yOffset:SetPoint("BOTTOMLEFT", nudgeFrame, "CENTER", 16, 8)
+	nudgeFrame.yOffset = yOffset
+	S:ReskinInput(yOffset)	
+	
+	local resetButton = CreateFrame("Button", nudgeFrame:GetName().."ResetButton", nudgeFrame, "UIPanelButtonTemplate")
+	resetButton:SetText(RESET)
+	resetButton:SetPoint("TOP", nudgeFrame, "CENTER", 0, 2)
+	resetButton:Size(100, 25)
+	resetButton:SetScript("OnClick", function()
+		if MoverNudgeWindow.child.textString then
+			E:ResetMovers(MoverNudgeWindow.child.textString)
+		end
+	end)
+	S:Reskin(resetButton)
+	
+	local upButton = CreateFrame("Button", nudgeFrame:GetName().."UpButton", nudgeFrame, "UIPanelSquareButton")
+	upButton:SetPoint("BOTTOMRIGHT", nudgeFrame, "BOTTOM", -6, 4)
+	upButton:SetScript("OnClick", function()
+		yOffset:SetText(yOffset.currentValue + 1)
+		yOffset:GetScript("OnEnterPressed")(yOffset)
+	end)
+	SquareButton_SetIcon(upButton, "UP");
+	S:Reskin(upButton)
+	
+	local downButton = CreateFrame("Button", nudgeFrame:GetName().."DownButton", nudgeFrame, "UIPanelSquareButton")
+	downButton:SetPoint("BOTTOMLEFT", nudgeFrame, "BOTTOM", 6, 4)
+	downButton:SetScript("OnClick", function()
+		yOffset:SetText(yOffset.currentValue - 1)
+		yOffset:GetScript("OnEnterPressed")(yOffset)
+	end)
+	SquareButton_SetIcon(downButton, "DOWN");
+	S:Reskin(downButton)
+
+	local leftButton = CreateFrame("Button", nudgeFrame:GetName().."LeftButton", nudgeFrame, "UIPanelSquareButton")
+	leftButton:SetPoint("RIGHT", upButton, "LEFT", -6, 0)
+	leftButton:SetScript("OnClick", function()
+		xOffset:SetText(xOffset.currentValue - 1)
+		xOffset:GetScript("OnEnterPressed")(xOffset)
+	end)
+	SquareButton_SetIcon(leftButton, "LEFT");
+	S:Reskin(leftButton)		
+	
+	local rightButton = CreateFrame("Button", nudgeFrame:GetName().."RightButton", nudgeFrame, "UIPanelSquareButton")
+	rightButton:SetPoint("LEFT", downButton, "RIGHT", 6, 0)
+	rightButton:SetScript("OnClick", function()
+		xOffset:SetText(xOffset.currentValue + 1)
+		xOffset:GetScript("OnEnterPressed")(xOffset)
+	end)
+	SquareButton_SetIcon(rightButton, "RIGHT");
+	S:Reskin(rightButton)
 end
 
 local function CreateMover(parent, name, text, overlay, postdrag, ignoreSizeChange)
@@ -253,7 +524,7 @@ local function CreateMover(parent, name, text, overlay, postdrag, ignoreSizeChan
 		f:SetPoint(point, anchor, secondaryPoint, x, y)
 	end
 	S:Reskin(f)
-	f:RegisterForDrag("LeftButton", "RightButton")
+	f:RegisterForDrag("LeftButton")
 	f:SetScript("OnDragStart", function(self) 
 		if InCombatLockdown() then R:Print(ERR_NOT_IN_COMBAT) return end
 		self:StartMoving() 
@@ -319,8 +590,15 @@ local function CreateMover(parent, name, text, overlay, postdrag, ignoreSizeChan
 	fs:SetText(text or name)
 	fs:SetTextColor(1, 1, 1)
 	f:SetFontString(fs)
+	f.textstring = text or name
 	f.text = fs
 
+	f:SetScript("OnMouseUp", function(self, btn)
+		if btn=="RightButton" then
+			AssignFrameToNudge(self)
+			ShowNudgeWindow()
+		end
+	end)
 	f:HookScript("OnEnter", function(self) 
 		self.text:SetTextColor(self:GetBackdropBorderColor())
 	end)

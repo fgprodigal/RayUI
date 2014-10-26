@@ -4,8 +4,9 @@ if not L then return end
 
 do
 CALENDAR = "Calendar"
-L["锚点已解锁，拖动锚点移动位置，完成后点击锁定按钮。"] = "Anchors unlocked, move anything you want then click the Lock button."
+L["锚点已解锁，拖动锚点移动位置，右键点击微调，完成后点击锁定按钮。"] = "Anchors unlocked, right click to nudge, move anything you want then click the Lock button."
 L["网格数"] = "Grid size"
+L["微调"] = "Nudge"
 L["锁定"] = "Lock"
 
 L["动作条1锚点"] = "ActionBar1 anchor"
