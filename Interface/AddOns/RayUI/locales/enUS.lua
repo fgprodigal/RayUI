@@ -5,6 +5,7 @@ if not L then return end
 do
 CALENDAR = "Calendar"
 L["锚点已解锁，拖动锚点移动位置，完成后点击锁定按钮。"] = "Anchors unlocked, move anything you want then click the Lock button."
+L["网格数"] = "Grid size"
 L["锁定"] = "Lock"
 
 L["动作条1锚点"] = "ActionBar1 anchor"
@@ -49,7 +50,7 @@ L["储存"] = "Save"
 L["放弃"] = "Discard"
 
 L["自动隐藏信息条"] = "Auto hide infobar"
-L["没有工会"] = "No guild"
+L["没有公会"] = "No guild"
 L["免伤分析"] = "Avoidance Breakdown"
 L["免伤"] = "AVD"
 L["未命中"] = "Unhittable"

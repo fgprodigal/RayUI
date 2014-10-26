@@ -5,6 +5,7 @@ if not L then return end
 do
 CALENDAR = "日历"
 L["锚点已解锁，拖动锚点移动位置，完成后点击锁定按钮。"] = true
+L["网格数"] = true
 L["锁定"] = true
 
 L["动作条1锚点"] = true
@@ -49,7 +50,7 @@ L["储存"] = true
 L["放弃"] = true
 
 L["自动隐藏信息条"] = true
-L["没有工会"] = true
+L["没有公会"] = true
 L["免伤分析"] = true
 L["免伤"] = true
 L["未命中"] = true

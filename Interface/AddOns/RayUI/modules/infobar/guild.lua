@@ -18,7 +18,7 @@ local function LoadGuild()
 		[2] = CHAT_FLAG_DND,
 	}
 	local displayString = string.join("", GUILD, ": %d|r")
-	local noGuildString = string.join("", "", L["没有工会"])
+	local noGuildString = string.join("", "", L["没有公会"])
 
 	local function Guild_TabletClickFunc(name)
 		if not name then return end

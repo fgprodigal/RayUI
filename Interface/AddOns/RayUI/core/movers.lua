@@ -2,6 +2,7 @@
 local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local AddOnName = ...
 local AceConfig = LibStub("AceConfigDialog-3.0")
+local gridSize = 50
 
 R.CreatedMovers = {}
 local selectedValue = "GENERAL"
@@ -44,6 +45,75 @@ local function MoverTypes_Initialize()
 	end
 
 	UIDropDownMenu_SetSelectedValue(RayUIMoverPopupWindowDropDown, selectedValue)
+end
+
+function CreateGrid() 
+	grid = CreateFrame("Frame", "AlignGrid", UIParent) 
+	grid.boxSize = gridSize
+	grid:SetAllPoints(UIParent) 
+	grid:Show()
+
+	local size = 1
+	local width = GetScreenWidth()
+	local ratio = width / GetScreenHeight()
+	local height = GetScreenHeight() * ratio
+
+	local wStep = width / gridSize
+	local hStep = height / gridSize
+
+	for i = 0, gridSize do 
+		local tx = grid:CreateTexture(nil, "BACKGROUND") 
+		if i == gridSize / 2 then 
+			tx:SetTexture(1, 0, 0) 
+		else 
+			tx:SetTexture(0, 0, 0) 
+		end
+		tx:Width(size)
+		tx:SetPoint("TOPLEFT", grid, "TOPLEFT", i*wStep - (size/2), 0) 
+		tx:SetPoint("BOTTOMLEFT", grid, "BOTTOMLEFT", i*wStep - (size/2), 0) 
+	end 
+	height = GetScreenHeight()
+	
+	do
+		local tx = grid:CreateTexture(nil, "BACKGROUND") 
+		tx:SetTexture(1, 0, 0)
+		tx:Height(size)
+		tx:SetPoint("TOPLEFT", grid, "TOPLEFT", 0, -(height/2) + (size/2))
+		tx:SetPoint("TOPRIGHT", grid, "TOPRIGHT", 0, -(height/2) + (size/2))
+	end
+	
+	for i = 1, floor((height/2)/hStep) do
+		local tx = grid:CreateTexture(nil, "BACKGROUND") 
+		tx:SetTexture(0, 0, 0)
+
+		tx:Height(size)
+		tx:SetPoint("TOPLEFT", grid, "TOPLEFT", 0, -(height/2+i*hStep) + (size/2))
+		tx:SetPoint("TOPRIGHT", grid, "TOPRIGHT", 0, -(height/2+i*hStep) + (size/2))
+		
+		tx = grid:CreateTexture(nil, "BACKGROUND") 
+		tx:SetTexture(0, 0, 0)
+
+		tx:Height(size)
+		tx:SetPoint("TOPLEFT", grid, "TOPLEFT", 0, -(height/2-i*hStep) + (size/2))
+		tx:SetPoint("TOPRIGHT", grid, "TOPRIGHT", 0, -(height/2-i*hStep) + (size/2))
+	end
+end
+
+local function ShowGrid()
+	if not grid then
+        CreateGrid()
+	elseif grid.boxSize ~= gridSize then
+        grid:Hide()
+        CreateGrid()
+    else
+		grid:Show()
+	end
+end
+
+function HideGrid()
+	if grid then
+		grid:Hide()
+	end
 end
 
 local function CreatePopup()
@@ -94,7 +164,44 @@ local function CreatePopup()
 	lock:SetPoint("BOTTOMRIGHT", -14, 14)
 	S:Reskin(lock)
 
-	f:RegisterEvent('PLAYER_REGEN_DISABLED')
+	local align = CreateFrame("EditBox", f:GetName().."EditBox", f, "InputBoxTemplate")
+	align:Width(50)
+	align:Height(17)
+	align:SetAutoFocus(false)
+	align:SetScript("OnEscapePressed", function(self)
+		self:SetText(gridSize)
+		EditBox_ClearFocus(self)
+	end)
+	align:SetScript("OnEnterPressed", function(self)
+		local text = self:GetText()
+		if tonumber(text) then
+			if tonumber(text) <= 256 and tonumber(text) >= 4 then
+				gridSize = tonumber(text)
+			else
+				self:SetText(gridSize)
+			end
+		else
+			self:SetText(gridSize)
+		end
+		ShowGrid()
+		EditBox_ClearFocus(self)
+	end)
+	align:SetScript("OnEditFocusLost", function(self)
+		self:SetText(gridSize)
+	end)
+	align:SetScript("OnEditFocusGained", align.HighlightText)
+	align:SetScript("OnShow", function(self)
+		EditBox_ClearFocus(self)
+		self:SetText(gridSize)
+	end)
+	
+	align.text = align:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+	align.text:SetPoint("RIGHT", align, "LEFT", -4, 0)
+	align.text:SetText(L["网格数"])
+	align:SetPoint("TOPRIGHT", lock, "TOPLEFT", -4, -2)
+	S:ReskinInput(align)
+
+	f:RegisterEvent("PLAYER_REGEN_DISABLED")
 	f:SetScript("OnEvent", function(self)
 		if self:IsShown() then
 			self:Hide()
@@ -274,6 +381,7 @@ function R:ToggleConfigMode(override, moverType)
 		end
 		
 		RayUIMoverPopupWindow:Show()
+		ShowGrid()
 		AceConfig["Close"](AceConfig, "RayUI") 
 		GameTooltip:Hide()		
 		R.ConfigurationMode = true
@@ -281,7 +389,7 @@ function R:ToggleConfigMode(override, moverType)
 		if RayUIMoverPopupWindow then
 			RayUIMoverPopupWindow:Hide()
 		end	
-		
+		HideGrid()
 		R.ConfigurationMode = false
 	end
 	
