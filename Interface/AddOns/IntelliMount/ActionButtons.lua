@@ -94,7 +94,7 @@ local function PreClick(self, mouseButton)
 	local broom = self:GetAttribute("magicBroom")
 	if not IsIndoors() and IsPlayerMoving() and broom then
 		normalButton:SetAttribute("type", "macro")
-		normalButton:SetAttribute("macrotext", "/cast "..broom)
+		normalButton:SetAttribute("macrotext", "/use item:37011")
 	end
 
 	if not IsIndoors() and self:GetAttribute("dragonwrath") then
