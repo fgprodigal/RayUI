@@ -1060,14 +1060,6 @@ function UF:ConstructDruidResourceBar(frame)
     sbar:SetPoint("LEFT", ebar, "CENTER", 0, 0)
     ebar.SolarBar = sbar
 
-    ebar.Spark = ebar:CreateTexture(nil, "OVERLAY")
-    ebar.Spark:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
-    ebar.Spark:SetBlendMode("ADD")
-    ebar.Spark:SetAlpha(0.8)
-    ebar.Spark:SetHeight(26)
-    ebar.Spark:SetWidth(10)
-    ebar.Spark:SetPoint("CENTER", sbar:GetStatusBarTexture(), "LEFT", 0, 0)
-
     ebar.Text = ebar:CreateFontString(nil, "OVERLAY")
     ebar.Text:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
     ebar.Text:SetPoint("CENTER", sbar:GetStatusBarTexture(), "LEFT", 0, 1)
