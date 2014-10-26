@@ -16,9 +16,9 @@ local function update()
         -- why the fuck no continue?
         if(button:IsShown() and button.online and button.guildIndex) then
             if(_VIEW == 'tradeskill') then
-                local skillID, isCollapsed, iconTexture, headerName, numOnline, numVisible, numPlayers, playerName, class, online, zone, skill, classFileName, isMobile = GetGuildTradeSkillInfo(button.guildIndex)
+                local skillID, isCollapsed, iconTexture, headerName, numOnline, numVisible, numPlayers, playerDisplayName, playerFullName, class, online, zone, skill, classFileName, isMobile, isAway = GetGuildTradeSkillInfo(button.guildIndex)
                 if((not headerName) and playerName) then
-                    --button.string1:SetText(ycc.classColor[classFileName] .. playerName)
+                    -- button.string1:SetText(ycc.classColor[classFileName] .. playerName)
                     local c = ycc.classColorRaw[classFileName]
                     button.string1:SetTextColor(c.r, c.g, c.b)
                     if(zone == playerArea) then
