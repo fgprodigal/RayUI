@@ -13,7 +13,7 @@ Website: [rayui.cn](http://rayui.cn)
 
 1. Download or clone it
 2. Delete the old `Interface` directory before copy.
-3. Leave the `.gitignore, README.md, update.dat` files, copy the `Interface` directory to `your_wow_path/addons/`
+3. Leave the `.gitignore, README.md` files, copy the `Interface` directory to `your_wow_path/addons/`
 
 ## Contributing
 
@@ -43,7 +43,7 @@ Website: [rayui.cn](http://rayui.cn)
 
 1. 下载或者 clone 这个库
 2. 在复制新内容之前删除旧的 `Interface` 文件夹
-3. 不要管 `.gitignore, README.md, update.dat` 这些文件，只把 `Interface` 文件夹复制到你的 WOW 目录的 `addons` 文件夹下
+3. 不要管 `.gitignore, README.md` 这些文件，只把 `Interface` 文件夹复制到你的 WOW 目录的 `addons` 文件夹下
 
 ## 贡献
 
