@@ -1032,6 +1032,14 @@ function UF:ConstructDruidResourceBar(frame)
     ebar.shadow:SetFrameStrata("BACKGROUND")
     ebar.shadow:SetFrameLevel(0)
 
+	ebar.Spark = ebar:CreateTexture(nil, "OVERLAY")
+    ebar.Spark:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
+    ebar.Spark:SetBlendMode("ADD")
+    ebar.Spark:SetAlpha(0.8)
+    ebar.Spark:SetHeight(26)
+    ebar.Spark:SetWidth(10)
+    ebar.Spark:SetPoint("CENTER", ebar, "CENTER", 0, 0)
+
     local lbar = CreateFrame("StatusBar", nil, ebar)
     lbar:SetStatusBarTexture(R["media"].normal)
     lbar:SetStatusBarColor(0, .4, 1)
@@ -1039,7 +1047,7 @@ function UF:ConstructDruidResourceBar(frame)
     lbar:SetHeight(5)
     lbar:SetFrameLevel(5)
     lbar:GetStatusBarTexture():SetHorizTile(false)
-    lbar:SetPoint("RIGHT", ebar, "CENTER")
+    lbar:SetPoint("RIGHT", ebar, "CENTER", 0, 0)
     ebar.LunarBar = lbar
 
     local sbar = CreateFrame("StatusBar", nil, ebar)
@@ -1049,7 +1057,7 @@ function UF:ConstructDruidResourceBar(frame)
     sbar:SetHeight(5)
     sbar:SetFrameLevel(5)
     sbar:GetStatusBarTexture():SetHorizTile(false)
-    sbar:SetPoint("LEFT", ebar, "CENTER")
+    sbar:SetPoint("LEFT", ebar, "CENTER", 0, 0)
     ebar.SolarBar = sbar
 
     ebar.Spark = ebar:CreateTexture(nil, "OVERLAY")
@@ -1058,11 +1066,11 @@ function UF:ConstructDruidResourceBar(frame)
     ebar.Spark:SetAlpha(0.8)
     ebar.Spark:SetHeight(26)
     ebar.Spark:SetWidth(10)
-    ebar.Spark:SetPoint("CENTER", ebar, "CENTER", 0, 1)
+    ebar.Spark:SetPoint("CENTER", sbar:GetStatusBarTexture(), "LEFT", 0, 0)
 
     ebar.Text = ebar:CreateFontString(nil, "OVERLAY")
     ebar.Text:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
-    ebar.Text:SetPoint("CENTER", ebar, "CENTER", 0, 0)
+    ebar.Text:SetPoint("CENTER", sbar:GetStatusBarTexture(), "LEFT", 0, 1)
 
     ebar.PostUpdatePower = self.UpdateEclipse
     ebar.PostUnitAura = self.UpdateEclipse
@@ -1153,19 +1161,18 @@ end
 function UF:UpdateEclipse(unit)
     local direction = GetEclipseDirection()
     local power = UnitPower("player", SPELL_POWER_ECLIPSE)
-    local absolutePower = math.abs(power)
+	local maxPower = UnitPowerMax("player", SPELL_POWER_ECLIPSE)
+    local absolutePower = math.abs(power/maxPower)*100
 
+	self.Text:ClearAllPoints()
     if power < 0 then
         self.Text:SetTextColor(0, .4, 1)
-        self.LunarBar:SetAlpha(1)
-        self.LunarBar:SetWidth(absolutePower)
-    elseif power > 0 then
-        self.Text:SetTextColor(1, .6, 0)
-        self.SolarBar:SetAlpha(1)
-        self.SolarBar:SetWidth(absolutePower)
+		self.Text:SetPoint("CENTER", self.LunarBar, "LEFT")
+		self.LunarBar:SetPoint("LEFT", self, "CENTER", -absolutePower, 0)
     else
-        self.LunarBar:SetAlpha(0)
-        self.SolarBar:SetAlpha(0)
+        self.Text:SetTextColor(1, .6, 0)
+		self.Text:SetPoint("CENTER", self.SolarBar, "RIGHT")
+		self.SolarBar:SetPoint("RIGHT", self, "CENTER", absolutePower, 0)
     end
 
     if direction == "sun" then
@@ -1175,7 +1182,6 @@ function UF:UpdateEclipse(unit)
     else
         self.Text:SetText("")
     end
-    self.Text:SetPoint("CENTER", self, "CENTER", power, 1)
 
     if self.hasSolarEclipse then
         self.border:SetBackdropBorderColor(1, .6, 0)
