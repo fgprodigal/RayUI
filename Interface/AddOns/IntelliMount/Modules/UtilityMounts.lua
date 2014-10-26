@@ -62,3 +62,12 @@ end
 function addon:IsMountLearned(name)
 	return LEARNED_MOUNTS[name]
 end
+
+local ABYSSAL_SEAHORSE = GetSpellInfo(75207) -- Abyssal Seahorse
+local SEA_LEGS = GetSpellInfo(73701) -- The buff which determines whether the player is located in Vashj'ir
+
+function addon:GetAbyssalSeahorse()
+	if addon.db.seahorseFirst and IsUsableSpell(75207) and UnitBuff("player", SEA_LEGS) then
+		return ABYSSAL_SEAHORSE
+	end
+end

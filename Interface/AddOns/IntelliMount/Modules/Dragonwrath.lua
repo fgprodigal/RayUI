@@ -9,7 +9,9 @@ local GetInventoryItemID = GetInventoryItemID
 
 local _, addon = ...
 
-local DRAGONWRATH = GetItemInfo(71086) -- Query the server data first
+local DRAGONWRATH = GetItemInfo(71086) -- "Dragonwrath, Tarecgosa's Rest"
+
+--local DRAGONWRATH = "Dragonwrath, Tarecgosa's Rest" -- For taking an enUS screenshot...
 
 function addon:GetDragonwrathName()
 	if DRAGONWRATH then

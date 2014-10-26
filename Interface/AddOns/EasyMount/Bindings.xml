@@ -1,6 +1,0 @@
-﻿<Bindings>
-	<Binding name="EASYMOUNT_HOTKEY1" header="EASYMOUNT_TITLE"> </Binding>
-	<Binding name="EASYMOUNT_HOTKEY2"> </Binding>
-	<Binding name="EASYMOUNT_HOTKEY3"> </Binding>
-	<Binding name="EASYMOUNT_HOTKEY4"> </Binding>
-</Bindings>

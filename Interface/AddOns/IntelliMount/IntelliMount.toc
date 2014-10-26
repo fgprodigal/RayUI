@@ -1,8 +1,8 @@
 ## Interface: 60000
-## Title: EasyMount
-## Version: 4.10
+## Title: IntelliMount
+## Version: 1.01
 ## Author: Abin
-## SavedVariables: EasyMount4DB
+## SavedVariables: IntelliMountDB
 
 Includes\InterfaceOptionPage-1.0.lua
 

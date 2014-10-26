@@ -10,7 +10,7 @@ if GetLocale() ~= "zhCN" then return end
 local _, addon = ...
 
 addon.L = {
-	["desc"] = "设置坐骑召唤优先级，并指定功能型坐骑以供快捷召唤。快捷键请到系统|cff00ff00"..KEY_BINDINGS.."|r界面进行设置。",
+	["desc"] = "设置坐骑召唤优先级，并指定功能型坐骑以供快捷召唤。快捷键请到系统“按键设置”界面进行设置。",
 	["summon regular mount"] = "召唤普通坐骑",
 	["summon passenger mount"] = "召唤载客坐骑",
 	["summon vendors mount"] = "召唤商贩坐骑",

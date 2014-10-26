@@ -1,0 +1,6 @@
+﻿<Bindings>
+	<Binding name="INTELLIMOUNT_HOTKEY1" header="INTELLIMOUNT_TITLE"> </Binding>
+	<Binding name="INTELLIMOUNT_HOTKEY2"> </Binding>
+	<Binding name="INTELLIMOUNT_HOTKEY3"> </Binding>
+	<Binding name="INTELLIMOUNT_HOTKEY4"> </Binding>
+</Bindings>

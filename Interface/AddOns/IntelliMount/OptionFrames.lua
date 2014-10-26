@@ -12,28 +12,36 @@ local GetItemInfo = GetItemInfo
 local OPTION_TOOLTIP_AUTO_LOOT_NONE_KEY = OPTION_TOOLTIP_AUTO_LOOT_NONE_KEY
 
 local addonName, addon = ...
-_G.EasyMount = addon
+_G.IntelliMount = addon
 
 local L = addon.L
 
-BINDING_HEADER_EASYMOUNT_TITLE = "EasyMount"
-BINDING_NAME_EASYMOUNT_HOTKEY1 = L["summon regular mount"]
-BINDING_NAME_EASYMOUNT_HOTKEY2 = L["summon passenger mount"]
-BINDING_NAME_EASYMOUNT_HOTKEY3 = L["summon vendors mount"]
-BINDING_NAME_EASYMOUNT_HOTKEY4 = L["summon water strider"]
+BINDING_HEADER_INTELLIMOUNT_TITLE = "IntelliMount"
+BINDING_NAME_INTELLIMOUNT_HOTKEY1 = L["summon regular mount"]
+BINDING_NAME_INTELLIMOUNT_HOTKEY2 = L["summon passenger mount"]
+BINDING_NAME_INTELLIMOUNT_HOTKEY3 = L["summon vendors mount"]
+BINDING_NAME_INTELLIMOUNT_HOTKEY4 = L["summon water strider"]
 
 addon.db = {}
 
-local frame = UICreateInterfaceOptionPage("EasyMountOptionFrame", "EasyMount", L["desc"])
+local frame = UICreateInterfaceOptionPage("IntelliMountOptionFrame", "IntelliMount", L["desc"])
 addon.optionFrame = frame
 
 local group = frame:CreateMultiSelectionGroup(L["summon regular mount"])
 frame:AnchorToTopLeft(group, 0, -16)
 
-local TRAVEL_FORM = GetSpellInfo(783) -- Travel Form
-local WOLF_FORM = GetSpellInfo(2645) -- Wolf Form
-local MAGIC_BROOM = GetSpellInfo(47977) -- Magic Broom
-local ABYSS_SEAHORSE = GetSpellInfo(75207)
+local TRAVEL_FORM = GetSpellInfo(783) -- "Travel Form"
+local WOLF_FORM = GetSpellInfo(2645) -- "Ghost Wolf"
+local MAGIC_BROOM = GetSpellInfo(47977) -- "Magic Broom"
+local ABYSS_SEAHORSE = GetSpellInfo(75207) -- "Abyssal Seahorse"
+
+--[[
+-- For taking an enUS screenshot...
+local TRAVEL_FORM = "Travel Form"
+local WOLF_FORM = "Ghost Wolf"
+local MAGIC_BROOM = "Magic Broom"
+local ABYSS_SEAHORSE = "Abyssal Seahorse"
+--]]
 
 local function CreateDummyCheck(text)
 	local button = group:AddButton(text)
@@ -88,13 +96,13 @@ local function Combo_UpdateStats(self)
 end
 
 local function Combo_UpdateHotkeyText(self)
-	self.hotkeyText:SetText("<"..(GetBindingKey("EASYMOUNT_HOTKEY"..self.buttonId) or OPTION_TOOLTIP_AUTO_LOOT_NONE_KEY)..">")
+	self.hotkeyText:SetText("<"..(GetBindingKey("INTELLIMOUNT_HOTKEY"..self.buttonId) or OPTION_TOOLTIP_AUTO_LOOT_NONE_KEY)..">")
 end
 
 local function CreateMountCombo(text, buttonId, dbKey, dataKey)
 	local combo = frame:CreateComboBox(text, nil, 1)
 	tinsert(comboBoxes, combo)
-	combo:SetWidth(200)
+	combo:SetWidth(240)
 	combo.buttonId, combo.dbKey = buttonId, dbKey
 
 	if buttonId == 2 then
@@ -136,23 +144,30 @@ frame:SetScript("OnShow", function(self)
 		Combo_UpdateStats(combo)
 		Combo_UpdateHotkeyText(combo)
 	end
+
+	--[[
+	-- For taking an enUS screenshot...
+	comboBoxes[1].dropdown.text:SetText("X-53 Touring Rocket")
+	comboBoxes[2].dropdown.text:SetText("Traveler's Tundra Mammoth")
+	comboBoxes[3].dropdown.text:SetText("Azure Water Strider")
+	--]]
 end)
 
 frame:RegisterEvent("ADDON_LOADED")
 frame:SetScript("OnEvent", function(self, event, arg1)
 	if event == "ADDON_LOADED" and arg1 == addonName then
-		if type(EasyMount4DB) ~= "table" then
-			EasyMount4DB = { travelFormFirst = 1, seahorseFirst = 1, dragonwrathFirst = 1, broomFirst = 1 }
+		if type(IntelliMountDB) ~= "table" then
+			IntelliMountDB = { travelFormFirst = 1, seahorseFirst = 1, dragonwrathFirst = 1, broomFirst = 1 }
 		end
 
-		addon.db = EasyMount4DB
+		addon.db = IntelliMountDB
 		addon:UpdateBindings()
 		addon:UpdateAttributes()
 	end
 end)
 
-SLASH_EASYMOUNT1 = "/easymount"
-SLASH_EASYMOUNT2 = "/ezm"
-SlashCmdList["EASYMOUNT"] = function()
+SLASH_INTELLIMOUNT1 = "/intellimount"
+SLASH_INTELLIMOUNT2 = "/inm"
+SlashCmdList["INTELLIMOUNT"] = function()
 	frame:Open()
 end
