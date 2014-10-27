@@ -21,7 +21,7 @@ local function LoadSkin()
 		local bu = _G["LookingForGuildBrowseFrameContainerButton"..i]
 		S:CreateBD(bu, .25)
 		bu:SetHighlightTexture("")
-		bu:GetRegions():SetTexture(S["media"].backdrop)
+		bu:GetRegions():SetTexture(R["media"].gloss)
 		bu:GetRegions():SetVertexColor(r, g, b, .2)
 	end
 	for i = 1, 9 do

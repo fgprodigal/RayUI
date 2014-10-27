@@ -23,7 +23,7 @@ local function SkinACP()
 
 		S:Reskin(down)
 
-		down:SetDisabledTexture(S["media"].backdrop)
+		down:SetDisabledTexture(R["media"].gloss)
 		local dis = down:GetDisabledTexture()
 		dis:SetVertexColor(0, 0, 0, .3)
 		dis:SetDrawLayer("OVERLAY")
@@ -43,7 +43,7 @@ local function SkinACP()
 		local tex = bg:CreateTexture(nil, "BACKGROUND")
 		tex:SetPoint("TOPLEFT")
 		tex:SetPoint("BOTTOMRIGHT")
-		tex:SetTexture(S["media"].backdrop)
+		tex:SetTexture(R["media"].gloss)
 		tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 	end
 

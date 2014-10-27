@@ -2,6 +2,7 @@ local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, loc
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
+	local r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b
 	PVEFrame:DisableDrawLayer("ARTWORK")
 	PVEFrameLeftInset:DisableDrawLayer("BORDER")
 	PVEFrameBlueBg:Hide()
@@ -29,7 +30,7 @@ local function LoadSkin()
 		local bu = GroupFinderFrame["groupButton"..i]
 
 		bu.ring:Hide()
-		bu.bg:SetTexture(S["media"].backdrop)
+		bu.bg:SetTexture(R["media"].gloss)
 		bu.bg:SetVertexColor(r, g, b, .2)
 		bu.bg:SetAllPoints()
 
@@ -253,6 +254,197 @@ local function LoadSkin()
 		S:CreateSD(tab, 5, 0, 0, 0, 1, 1)
 		select(2, tab:GetRegions()):SetTexCoord(.08, .92, .08, .92)
 	end
+
+	local LFGListFrame = LFGListFrame
+
+	-- [[ Category selection ]]
+
+	local CategorySelection = LFGListFrame.CategorySelection
+
+	CategorySelection.Inset.Bg:Hide()
+	select(10, CategorySelection.Inset:GetRegions()):Hide()
+	CategorySelection.Inset:DisableDrawLayer("BORDER")
+
+	S:Reskin(CategorySelection.FindGroupButton)
+	S:Reskin(CategorySelection.StartGroupButton)
+
+	CategorySelection.CategoryButtons[1]:SetNormalFontObject(GameFontNormal)
+
+	hooksecurefunc("LFGListCategorySelection_AddButton", function(self, btnIndex)
+		local bu = self.CategoryButtons[btnIndex]
+
+		if bu and not bu.styled then
+			bu.Cover:Hide()
+
+			bu.Icon:SetDrawLayer("BACKGROUND", 1)
+			bu.Icon:SetTexCoord(.01, .99, .01, .99)
+
+			local bg = S:CreateBG(bu)
+			bg:SetPoint("TOPLEFT", 4, -4)
+			bg:SetPoint("BOTTOMRIGHT", -4, 4)
+
+			bu.styled = true
+		end
+	end)
+
+	-- [[ Search panel ]]
+
+	local SearchPanel = LFGListFrame.SearchPanel
+
+	SearchPanel.ResultsInset.Bg:Hide()
+	SearchPanel.ResultsInset:DisableDrawLayer("BORDER")
+
+	S:Reskin(SearchPanel.RefreshButton)
+	S:Reskin(SearchPanel.BackButton)
+	S:Reskin(SearchPanel.SignUpButton)
+	S:Reskin(SearchPanel.ScrollFrame.StartGroupButton)
+	S:ReskinInput(SearchPanel.SearchBox)
+	S:ReskinScroll(SearchPanel.ScrollFrame.scrollBar)
+
+	SearchPanel.RefreshButton:SetSize(24, 24)
+	SearchPanel.RefreshButton.Icon:SetPoint("CENTER")
+
+	-- Auto complete frame
+
+	SearchPanel.AutoCompleteFrame.BottomLeftBorder:Hide()
+	SearchPanel.AutoCompleteFrame.BottomRightBorder:Hide()
+	SearchPanel.AutoCompleteFrame.BottomBorder:Hide()
+	SearchPanel.AutoCompleteFrame.LeftBorder:Hide()
+	SearchPanel.AutoCompleteFrame.RightBorder:Hide()
+
+	local function resultOnEnter(self)
+		self.hl:Show()
+	end
+
+	local function resultOnLeave(self)
+		self.hl:Hide()
+	end
+
+	local numResults = 1
+	hooksecurefunc("LFGListSearchPanel_UpdateAutoComplete", function(self)
+		local AutoCompleteFrame = self.AutoCompleteFrame
+
+		for i = numResults, #AutoCompleteFrame.Results do
+			local result = AutoCompleteFrame.Results[i]
+
+			if numResults == 1 then
+				result:SetPoint("TOPLEFT", AutoCompleteFrame.LeftBorder, "TOPRIGHT", -8, 1)
+				result:SetPoint("TOPRIGHT", AutoCompleteFrame.RightBorder, "TOPLEFT", 5, 1)
+			else
+				result:SetPoint("TOPLEFT", AutoCompleteFrame.Results[i-1], "BOTTOMLEFT", 0, 1)
+				result:SetPoint("TOPRIGHT", AutoCompleteFrame.Results[i-1], "BOTTOMRIGHT", 0, 1)
+			end
+
+			result:SetNormalTexture("")
+			result:SetPushedTexture("")
+			result:SetHighlightTexture("")
+
+			local hl = result:CreateTexture(nil, "BACKGROUND")
+			hl:SetAllPoints()
+			hl:SetTexture(R["media"].gloss)
+			hl:SetVertexColor(r, g, b, .2)
+			hl:Hide()
+			result.hl = hl
+
+			S:CreateBD(result, .5)
+
+			result:HookScript("OnEnter", resultOnEnter)
+			result:HookScript("OnLeave", resultOnLeave)
+
+			numResults = numResults + 1
+		end
+	end)
+
+	-- [[ Application viewer ]]
+
+	local ApplicationViewer = LFGListFrame.ApplicationViewer
+
+	ApplicationViewer.InfoBackground:Hide()
+
+	ApplicationViewer.Inset.Bg:Hide()
+	ApplicationViewer.Inset:DisableDrawLayer("BORDER")
+
+	local function headerOnEnter(self)
+		self.hl:Show()
+	end
+
+	local function headerOnLeave(self)
+		self.hl:Hide()
+	end
+
+	for _, headerName in pairs({"NameColumnHeader", "RoleColumnHeader", "ItemLevelColumnHeader"}) do
+		local header = ApplicationViewer[headerName]
+		header.Left:Hide()
+		header.Middle:Hide()
+		header.Right:Hide()
+
+		header:SetHighlightTexture("")
+
+		local hl = header:CreateTexture(nil, "BACKGROUND")
+		hl:SetAllPoints()
+		hl:SetTexture(R["media"].gloss)
+		hl:SetVertexColor(r, g, b, .2)
+		hl:Hide()
+		header.hl = hl
+
+		S:CreateBD(header, .25)
+
+		header:HookScript("OnEnter", headerOnEnter)
+		header:HookScript("OnLeave", headerOnLeave)
+	end
+
+	ApplicationViewer.RoleColumnHeader:SetPoint("LEFT", ApplicationViewer.NameColumnHeader, "RIGHT", 1, 0)
+	ApplicationViewer.ItemLevelColumnHeader:SetPoint("LEFT", ApplicationViewer.RoleColumnHeader, "RIGHT", 1, 0)
+
+	S:Reskin(ApplicationViewer.RefreshButton)
+	S:Reskin(ApplicationViewer.RemoveEntryButton)
+	S:Reskin(ApplicationViewer.EditButton)
+	S:ReskinScroll(LFGListApplicationViewerScrollFrameScrollBar)
+
+	ApplicationViewer.RefreshButton:SetSize(24, 24)
+	ApplicationViewer.RefreshButton.Icon:SetPoint("CENTER")
+
+	-- [[ Entry creation ]]
+
+	local EntryCreation = LFGListFrame.EntryCreation
+
+	EntryCreation.Inset.Bg:Hide()
+	select(10, EntryCreation.Inset:GetRegions()):Hide()
+	EntryCreation.Inset:DisableDrawLayer("BORDER")
+
+	for i = 1, 9 do
+		select(i, EntryCreation.Description:GetRegions()):Hide()
+	end
+
+	S:Reskin(EntryCreation.ListGroupButton)
+	S:Reskin(EntryCreation.CancelButton)
+	S:CreateBD(EntryCreation.Description, 0)
+	S:ReskinInput(EntryCreation.Name)
+	S:ReskinInput(EntryCreation.ItemLevel.EditBox)
+	S:ReskinInput(EntryCreation.VoiceChat.EditBox)
+	S:ReskinDropDown(EntryCreation.CategoryDropDown)
+	S:ReskinDropDown(EntryCreation.GroupDropDown)
+	S:ReskinDropDown(EntryCreation.ActivityDropDown)
+	S:ReskinCheck(EntryCreation.ItemLevel.CheckButton)
+	S:ReskinCheck(EntryCreation.VoiceChat.CheckButton)
+
+	-- Activity finder
+
+	local ActivityFinder = EntryCreation.ActivityFinder
+
+	ActivityFinder.Background:SetTexture("")
+	ActivityFinder.Dialog.Bg:Hide()
+	for i = 1, 9 do
+		select(i, ActivityFinder.Dialog.BorderFrame:GetRegions()):Hide()
+	end
+
+	S:CreateBD(ActivityFinder.Dialog)
+	ActivityFinder.Dialog:SetBackdropColor(.2, .2, .2, .9)
+
+	S:Reskin(ActivityFinder.Dialog.SelectButton)
+	S:Reskin(ActivityFinder.Dialog.CancelButton)
+	S:ReskinInput(ActivityFinder.Dialog.EntryBox)
+	S:ReskinScroll(LFGListEntryCreationSearchScrollFrameScrollBar)
 end
 
 S:RegisterSkin("RayUI", LoadSkin)

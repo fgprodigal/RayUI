@@ -89,7 +89,7 @@ local function LoadSkin()
 		local ic = _G["FriendsFrameFriendsScrollFrameButton"..i.."GameIcon"]
 		local inv = _G["FriendsFrameFriendsScrollFrameButton"..i.."TravelPassButton"]
 		local summon = _G["FriendsFrameFriendsScrollFrameButton"..i.."SummonButton"]
-		bu:SetHighlightTexture(S["media"].backdrop)
+		bu:SetHighlightTexture(R["media"].gloss)
 		bu:GetHighlightTexture():SetVertexColor(.24, .56, 1, .2)
 
 		ic:Size(22, 22)

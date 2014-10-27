@@ -436,7 +436,7 @@ function S:ReskinClose(f, a1, p, a2, x, y)
 	S:CreateBD(f, 0)
 	S:CreateBackdropTexture(f)
 
-	f:SetDisabledTexture(S.media.backdrop)
+	f:SetDisabledTexture(R["media"].gloss)
 	local dis = f:GetDisabledTexture()
 	dis:SetVertexColor(0, 0, 0, .4)
 	dis:SetDrawLayer("OVERLAY")
@@ -678,13 +678,13 @@ function S:ReskinExpandOrCollapse(f)
 	f.minus = f:CreateTexture(nil, "OVERLAY")
 	f.minus:Size(7, 1)
 	f.minus:SetPoint("CENTER")
-	f.minus:SetTexture(S["media"].backdrop)
+	f.minus:SetTexture(R["media"].gloss)
 	f.minus:SetVertexColor(1, 1, 1)
 
 	f.plus = f:CreateTexture(nil, "OVERLAY")
 	f.plus:Size(1, 7)
 	f.plus:SetPoint("CENTER")
-	f.plus:SetTexture(S["media"].backdrop)
+	f.plus:SetTexture(R["media"].gloss)
 	f.plus:SetVertexColor(1, 1, 1)
 end
 
@@ -716,7 +716,6 @@ function S:PLAYER_ENTERING_WORLD(event, addon)
 end
 
 function S:Initialize()
-	S["media"].backdrop = R["media"].normal
 	backdropfadecolorr, backdropfadecolorg, backdropfadecolorb, alpha = unpack(R["media"].backdropfadecolor)
 	backdropcolorr, backdropcolorg, backdropcolorb = unpack(R["media"].backdropcolor)
 	bordercolorr, bordercolorg, bordercolorb = unpack(R["media"].bordercolor)

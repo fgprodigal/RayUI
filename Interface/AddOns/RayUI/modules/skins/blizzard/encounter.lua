@@ -56,8 +56,8 @@ local function LoadSkin()
 		tab:SetScale(.75)
 
 		tab:SetBackdrop({
-			bgFile = S["media"].backdrop,
-			edgeFile = S["media"].backdrop,
+			bgFile = R["media"].gloss,
+			edgeFile = R["media"].gloss,
 			edgeSize = 1 / .75,
 		})
 
@@ -233,7 +233,7 @@ local function LoadSkin()
 		local tex = item:CreateTexture(nil, "BACKGROUND")
 		tex:SetPoint("TOPLEFT")
 		tex:Point("BOTTOMRIGHT", -1, 2)
-		tex:SetTexture(S["media"].backdrop)
+		tex:SetTexture(R["media"].gloss)
 		tex:SetVertexColor(0, 0, 0, .25)
 	end
 

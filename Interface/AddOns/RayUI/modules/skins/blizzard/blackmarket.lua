@@ -68,7 +68,7 @@ local function LoadSkin()
                 tex:SetPoint("BOTTOMRIGHT", 0, 5)
                 tex:SetTexture(0, 0, 0, .25)
 
-                bu:SetHighlightTexture(S["media"].backdrop)
+                bu:SetHighlightTexture(R["media"].gloss)
                 local hl = bu:GetHighlightTexture()
                 hl:SetVertexColor(r, g, b, .2)
                 hl.SetAlpha = R.dummy

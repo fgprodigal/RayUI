@@ -26,7 +26,7 @@ local function LoadSkin()
 	local tex = EventTraceFrame:CreateTexture(nil, "BACKGROUND")
 	tex:Point("TOPLEFT", bu.bg)
 	tex:Point("BOTTOMRIGHT", bu.bg)
-	tex:SetTexture(S["media"].backdrop)
+	tex:SetTexture(R["media"].gloss)
 	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 
 	FrameStackTooltip:SetParent(UIParent)

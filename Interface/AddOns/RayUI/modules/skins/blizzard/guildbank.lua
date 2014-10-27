@@ -88,7 +88,7 @@ local function LoadSkin()
 		S:CreateSD(bu, 5, 0, 0, 0, 1, 1)
 
 		local a1, p, a2, x, y = bu:GetPoint()
-		bu:Point(a1, p, a2, x + 11, y)
+		bu:Point(a1, p, a2, x + 5, y)
 
 		ic:SetTexCoord(.08, .92, .08, .92)
 		tb:GetRegions():Hide()

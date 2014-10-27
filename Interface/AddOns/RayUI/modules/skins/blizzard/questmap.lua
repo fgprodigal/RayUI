@@ -29,7 +29,7 @@ local function LoadSkin()
 
 		local hl = StoryHeader.HighlightTexture
 
-		-- hl:SetTexture(S["Media"].backdrop)
+		-- hl:SetTexture(R["media"].gloss)
 		hl:SetVertexColor(r, g, b, .2)
 		hl:SetPoint("TOPLEFT", 1, -2)
 		hl:SetPoint("BOTTOMRIGHT", -5, 1)

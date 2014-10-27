@@ -143,11 +143,11 @@ local function LoadSkin()
         local bu = _G["GuildInfoFrameApplicantsContainerButton"..i]
         S:CreateBD(bu, .25)
         bu:SetHighlightTexture("")
-        bu:GetRegions():SetTexture(S["media"].backdrop)
+        bu:GetRegions():SetTexture(R["media"].gloss)
         bu:GetRegions():SetVertexColor(r, g, b, .2)
     end
 
-    GuildFactionBarProgress:SetTexture(S["media"].backdrop)
+    GuildFactionBarProgress:SetTexture(R["media"].gloss)
     GuildFactionBarLeft:Hide()
     GuildFactionBarMiddle:Hide()
     GuildFactionBarRight:Hide()
@@ -173,7 +173,7 @@ local function LoadSkin()
                 bg:SetPoint("BOTTOMRIGHT")
                 S:CreateBD(bg, 0)
 
-                bu:SetHighlightTexture(S["media"].backdrop)
+                bu:SetHighlightTexture(R["media"].gloss)
                 local hl = bu:GetHighlightTexture()
                 hl:SetVertexColor(r, g, b, .2)
                 hl:SetPoint("TOPLEFT", 0, -1)
@@ -182,7 +182,7 @@ local function LoadSkin()
                 ic:SetTexCoord(.08, .92, .08, .92)
 
                 select(6, bu:GetRegions()):SetAlpha(0)
-                select(7, bu:GetRegions()):SetTexture(S["media"].backdrop)
+                select(7, bu:GetRegions()):SetTexture(R["media"].gloss)
                 select(7, bu:GetRegions()):SetVertexColor(0, 0, 0, .25)
                 select(7, bu:GetRegions()):SetPoint("TOPLEFT", 0, -1)
                 select(7, bu:GetRegions()):SetPoint("BOTTOMRIGHT", 0, 1)
@@ -197,130 +197,27 @@ local function LoadSkin()
         local bu = _G["GuildRosterContainerButton"..i]
         local ic = _G["GuildRosterContainerButton"..i.."Icon"]
 
-        bu:SetHighlightTexture(S["media"].backdrop)
+        bu:SetHighlightTexture(R["media"].gloss)
         bu:GetHighlightTexture():SetVertexColor(r, g, b, .2)
 
         bu.bg = S:CreateBG(ic)
     end
 
-    local function createButtonBg(bu)
-        bu:SetHighlightTexture(S["media"].backdrop)
-        bu:GetHighlightTexture():SetVertexColor(r, g, b, .2)
-        bu.bg = S:CreateBG(bu.icon)
-    end
+	for _, bu in pairs(GuildPerksContainer.buttons) do
+		for i = 1, 4 do
+			select(i, bu:GetRegions()):SetAlpha(0)
+		end
 
-    local tcoords = {
-        ["WARRIOR"]     = {0.02, 0.23, 0.02, 0.23},
-        ["MAGE"]        = {0.27, 0.47609375, 0.02, 0.23},
-        ["ROGUE"]       = {0.51609375, 0.7221875, 0.02, 0.23},
-        ["DRUID"]       = {0.7621875, 0.96828125, 0.02, 0.23},
-        ["HUNTER"]      = {0.02, 0.23, 0.27, 0.48},
-        ["SHAMAN"]      = {0.27, 0.47609375, 0.27, 0.48},
-        ["PRIEST"]      = {0.51609375, 0.7221875, 0.27, 0.48},
-        ["WARLOCK"]     = {0.7621875, 0.96828125, 0.27, 0.48},
-        ["PALADIN"]     = {0.02, 0.23, 0.52, 0.73},
-        ["DEATHKNIGHT"] = {0.27, .48, 0.52, .73},
-        ["MONK"]		= {0.52, 0.71828125, 0.52, .73},
-    }
+		local bg = S:CreateBDFrame(bu, .25)
+		bg:ClearAllPoints()
+		bg:SetPoint("TOPLEFT", 1, -3)
+		bg:SetPoint("BOTTOMRIGHT", 0, 4)
 
-    local UpdateIcons = function()
-        local index
-        local offset = HybridScrollFrame_GetOffset(GuildRosterContainer)
-        local totalMembers, onlineMembers = GetNumGuildMembers()
-        local visibleMembers = onlineMembers
-        local numbuttons = #GuildRosterContainer.buttons
-        if GetGuildRosterShowOffline() then
-            visibleMembers = totalMembers
-        end
+		bu.icon:SetTexCoord(.08, .92, .08, .92)
+		S:CreateBG(bu.icon)
+	end
 
-        for i = 1, numbuttons do
-            local button = GuildRosterContainer.buttons[i]
-            if not button.bg then
-                createButtonBg(button)
-            end
-            index = offset + i
-            local name, _, _, _, _, _, _, _, _, _, classFileName  = GetGuildRosterInfo(index)
-            if name and index <= visibleMembers then
-                if button.icon:IsShown() then
-                    button.icon:SetTexCoord(unpack(tcoords[classFileName]))
-                    button.bg:Show()
-                else
-                    button.bg:Hide()
-                end
-            end
-        end
-    end
-
-    hooksecurefunc("GuildRoster_Update", UpdateIcons)
-    GuildRosterContainer:HookScript("OnMouseWheel", UpdateIcons)
-    GuildRosterContainer:HookScript("OnVerticalScroll", UpdateIcons)
-
-    local closebutton = select(4, GuildTextEditFrame:GetChildren())
-    S:Reskin(closebutton)
-    local logbutton = select(3, GuildLogFrame:GetChildren())
-    S:Reskin(logbutton)
-    local gbuttons = {"GuildAddMemberButton", "GuildViewLogButton", "GuildControlButton", "GuildTextEditFrameAcceptButton", "GuildMemberGroupInviteButton", "GuildMemberRemoveButton", "GuildRecruitmentInviteButton", "GuildRecruitmentMessageButton", "GuildRecruitmentDeclineButton", "GuildPerksToggleButton", "GuildRecruitmentListGuildButton"}
-    for i = 1, #gbuttons do
-        local gbutton = _G[gbuttons[i]]
-        if gbutton then
-            S:Reskin(gbutton)
-        end
-    end
-
-    for i = 1, 3 do
-        for j = 1, 6 do
-            select(j, _G["GuildInfoFrameTab"..i]:GetRegions()):Hide()
-            select(j, _G["GuildInfoFrameTab"..i]:GetRegions()).Show = R.dummy
-        end
-    end
-
-    local tcoords = {
-        ["WARRIOR"]     = {0.02, 0.23, 0.02, 0.23},
-        ["MAGE"]        = {0.27, 0.47609375, 0.02, 0.23},
-        ["ROGUE"]       = {0.51609375, 0.7221875, 0.02, 0.23},
-        ["DRUID"]       = {0.7621875, 0.96828125, 0.02, 0.23},
-        ["HUNTER"]      = {0.02, 0.23, 0.27, 0.48},
-        ["SHAMAN"]      = {0.27, 0.47609375, 0.27, 0.48},
-        ["PRIEST"]      = {0.51609375, 0.7221875, 0.27, 0.48},
-        ["WARLOCK"]     = {0.7621875, 0.96828125, 0.27, 0.48},
-        ["PALADIN"]     = {0.02, 0.23, 0.52, 0.73},
-        ["DEATHKNIGHT"] = {0.27, .48, 0.52, .73},
-        ["MONK"]        = {0.52, 0.71828125, 0.52, .73},
-    }
-
-    local UpdateIcons = function()
-        local index
-        local offset = HybridScrollFrame_GetOffset(GuildRosterContainer)
-        local totalMembers, onlineMembers, onlineAndMobileMembers = GetNumGuildMembers()
-        local visibleMembers = onlineAndMobileMembers
-        local numbuttons = #GuildRosterContainer.buttons
-        if GetGuildRosterShowOffline() then
-            visibleMembers = totalMembers
-        end
-
-        for i = 1, numbuttons do
-            local bu = GuildRosterContainer.buttons[i]
-
-            if not bu.bg then
-                bu:SetHighlightTexture(S["media"].backdrop)
-                bu:GetHighlightTexture():SetVertexColor(r, g, b, .2)
-
-                bu.bg = S:CreateBG(bu.icon)
-            end
-
-            index = offset + i
-            local name, _, _, _, _, _, _, _, _, _, classFileName  = GetGuildRosterInfo(index)
-            if name and index <= visibleMembers and bu.icon:IsShown() then
-                bu.icon:SetTexCoord(unpack(tcoords[classFileName]))
-                bu.bg:Show()
-            else
-                bu.bg:Hide()
-            end
-        end
-    end
-
-    hooksecurefunc("GuildRoster_Update", UpdateIcons)
-    hooksecurefunc(GuildRosterContainer, "update", UpdateIcons)
+	GuildPerksContainerButton1:SetPoint("LEFT", -1, 0)
 end
 
 S:RegisterSkin("Blizzard_GuildUI", LoadSkin)

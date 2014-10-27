@@ -362,7 +362,7 @@ local function LoadSkin()
 						check:Size(20, 20)
 						check:SetDesaturated(true)
 					else
-						check:SetTexture(S["media"].backdrop)
+						check:SetTexture(R["media"].gloss)
 						check:SetVertexColor(r, g, b, .6)
 						check:Size(10, 10)
 						check:SetDesaturated(false)

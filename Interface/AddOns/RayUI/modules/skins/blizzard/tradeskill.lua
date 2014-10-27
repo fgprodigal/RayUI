@@ -56,7 +56,7 @@ local function LoadSkin()
 	S:Reskin(TradeSkillViewGuildCraftersButton)
 	S:Reskin(TradeSkillFilterButton)
 
-	TradeSkillRankFrame:SetStatusBarTexture(S["media"].backdrop)
+	TradeSkillRankFrame:SetStatusBarTexture(R["media"].gloss)
 	TradeSkillRankFrame.SetStatusBarColor = R.dummy
 	TradeSkillRankFrame:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
 
@@ -131,7 +131,7 @@ local function LoadSkin()
 				skillButton.SubSkillRankBar.BorderMid:Hide()
 
 				skillButton.SubSkillRankBar:SetHeight(12)
-				skillButton.SubSkillRankBar:SetStatusBarTexture(S["media"].backdrop)
+				skillButton.SubSkillRankBar:SetStatusBarTexture(R["media"].gloss)
 				skillButton.SubSkillRankBar:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
 				S:CreateBDFrame(skillButton.SubSkillRankBar, .25)
 			end
