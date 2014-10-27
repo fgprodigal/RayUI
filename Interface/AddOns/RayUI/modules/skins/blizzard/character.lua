@@ -149,6 +149,7 @@ local function LoadSkin()
 			local icon = _G["EquipmentFlyoutFrameButton"..i.."IconTexture"]
 			if bu and not bu.reskinned then
 				bu:SetNormalTexture("")
+				bu.IconBorder:Kill()
 				bu:StyleButton()
 				_G["EquipmentFlyoutFrameButton"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
 				icon:Point("TOPLEFT", 2, -2)

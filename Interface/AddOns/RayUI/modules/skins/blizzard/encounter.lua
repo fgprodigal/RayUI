@@ -74,8 +74,8 @@ local function LoadSkin()
 	EncounterJournalInstanceSelectScrollFrameScrollChildInstanceButton1:SetHighlightTexture("")
 
 	local bg = CreateFrame("Frame", nil, EncounterJournalInstanceSelectScrollFrameScrollChildInstanceButton1)
-	bg:SetPoint("TOPLEFT", 4, -4)
-	bg:SetPoint("BOTTOMRIGHT", -5, 3)
+	bg:SetPoint("TOPLEFT", 3, -3)
+	bg:SetPoint("BOTTOMRIGHT", -4, 2)
 	S:CreateBD(bg, 0)
 
 	local index = 2
@@ -89,8 +89,8 @@ local function LoadSkin()
 			bu:SetHighlightTexture("")
 
 			local bg = CreateFrame("Frame", nil, bu)
-			bg:SetPoint("TOPLEFT", 4, -4)
-			bg:SetPoint("BOTTOMRIGHT", -5, 3)
+			bg:SetPoint("TOPLEFT", 3, -3)
+			bg:SetPoint("BOTTOMRIGHT", -4, 2)
 			S:CreateBD(bg, 0)
 
 			index = index + 1

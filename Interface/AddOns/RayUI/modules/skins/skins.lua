@@ -536,7 +536,7 @@ function S:ReskinSlider(f)
 	f.SetBackdrop = R.dummy
 
 	local bd = CreateFrame("Frame", nil, f)
-	bd:Point("TOPLEFT", 1, -2)
+	bd:Point("TOPLEFT", 1, -6)
 	bd:Point("BOTTOMRIGHT", -1, 3)
 	bd:SetFrameStrata("BACKGROUND")
 	bd:SetFrameLevel(f:GetFrameLevel()-1)

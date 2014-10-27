@@ -51,6 +51,8 @@ local function SkinAce3()
 			bg:SetFrameLevel(frame:GetFrameLevel()-1)
 			S:CreateBD(bg, 0)
 			S:CreateBackdropTexture(bg)
+			bg.backdropTexture:Point("TOPLEFT", bg, "TOPLEFT", 0, -1)
+			bg.backdropTexture:Point("BOTTOMRIGHT", bg, "BOTTOMRIGHT", -1, 0)
 
 			S:Reskin(button)
 			button:Size(25, 25)
@@ -168,12 +170,14 @@ local function SkinAce3()
 		elseif TYPE == "Button" then
 			local frame = widget.frame
 			S:Reskin(frame)
+			frame.backdropTexture:Point("TOPLEFT", frame, "TOPLEFT", 0, -1)
+			frame.backdropTexture:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -1, 0)
 		elseif TYPE == "Slider" then
 			local frame = widget.slider
 			local editbox = widget.editbox
 			local lowtext = widget.lowtext
 			local hightext = widget.hightext
-			local HEIGHT = 12
+			local HEIGHT = 8
 
 			frame:StripTextures()
 			S:CreateBD(frame, 0)

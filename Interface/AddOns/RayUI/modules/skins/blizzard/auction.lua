@@ -120,6 +120,7 @@ local function LoadSkin()
 
 			S:CreateBG(it)
 
+			it.IconBorder:Kill()
 			_G["BrowseButton"..i.."Left"]:Hide()
 			select(5, _G["BrowseButton"..i]:GetRegions()):Hide()
 			_G["BrowseButton"..i.."Right"]:Hide()
