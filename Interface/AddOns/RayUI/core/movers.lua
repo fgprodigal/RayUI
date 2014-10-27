@@ -595,8 +595,12 @@ local function CreateMover(parent, name, text, overlay, postdrag, ignoreSizeChan
 
 	f:SetScript("OnMouseUp", function(self, btn)
 		if btn=="RightButton" then
-			AssignFrameToNudge(self)
-			ShowNudgeWindow()
+			if MoverNudgeWindow.child == self and MoverNudgeWindow:IsShown() then
+				HideNudgeWindow()
+			else
+				AssignFrameToNudge(self)
+				ShowNudgeWindow()
+			end
 		end
 	end)
 	f:HookScript("OnEnter", function(self) 
