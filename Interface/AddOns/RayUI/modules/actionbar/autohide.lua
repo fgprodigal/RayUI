@@ -12,29 +12,17 @@ local function pending()
 	if HoverBind and HoverBind.active then return true end
 end
 
-local function OnHide()
-	RayUIActionBarHider:Hide()
-	for i, cooldown in pairs(AB.Cooldowns) do
-		cooldown:SetSwipeColor(0, 0, 0, 0)
-		cooldown:SetDrawBling(alpha == 1)
-	end
-end
-
 local function FadeOutActionButton()
 	local fadeInfo = {}
 	fadeInfo.mode = "OUT"
 	fadeInfo.timeToFade = 0.5
-	fadeInfo.finishedFunc = OnHide
+	fadeInfo.finishedFunc = function() RayUIActionBarHider:Hide() end
 	fadeInfo.startAlpha = RayUIActionBarHider:GetAlpha()
 	fadeInfo.endAlpha = 0
 	R:UIFrameFade(RayUIActionBarHider, fadeInfo)
 end
 
 local function FadeInActionButton()
-	for i, cooldown in pairs(AB.Cooldowns) do
-		cooldown:SetSwipeColor(0, 0, 0, 0.8)
-		cooldown:SetDrawBling(alpha == 1)
-	end
 	RayUIActionBarHider:Show()
 	R:UIFrameFadeIn(RayUIActionBarHider, 0.5, RayUIActionBarHider:GetAlpha(), 1)
 end
