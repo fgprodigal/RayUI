@@ -29,7 +29,7 @@ local function FixActionButtonCooldown(button)
 	if not button.cooldown then return end
 	local cooldown = button.cooldown
 	local parent 
-	if button:GetParent():GetParent():GetParent():GetName()=="RayUIActionBarHider" then
+	if button:GetParent():GetParent():GetParent() and button:GetParent():GetParent():GetParent():GetName()=="RayUIActionBarHider" then
 		parent = RayUIActionBarHider
 		hooksecurefunc(parent, "Show", function(self,alpha)
 			cooldown:Show()
