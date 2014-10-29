@@ -143,6 +143,7 @@ function AB:RegisterCooldown(frame)
 		frame.cooldown:HookScript("OnHide", function(cd) active[cd] = nil end)
 		hooked[frame.cooldown] = true
 		frame.cooldown:SetHideCountdownNumbers(true)
+		frame.cooldown.SetHideCountdownNumbers = R.dummy
 	end
 end
 

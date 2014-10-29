@@ -177,7 +177,7 @@ local function SkinAce3()
 			local editbox = widget.editbox
 			local lowtext = widget.lowtext
 			local hightext = widget.hightext
-			local HEIGHT = 8
+			local HEIGHT = 12
 
 			frame:StripTextures()
 			S:CreateBD(frame, 0)
