@@ -422,7 +422,7 @@ local function LoadSkin()
 	AudioOptionsVoicePanelListeningTitle:SetPoint("BOTTOMLEFT", AudioOptionsVoicePanelListening, "TOPLEFT", 5, 2)
 
 	local dropdowns = {
-	"Display_DisplayModeDropDown",
+		"Display_DisplayModeDropDown",
 		"Display_ResolutionDropDown",
 		"Display_RefreshDropDown",
 		"Display_PrimaryMonitorDropDown",
