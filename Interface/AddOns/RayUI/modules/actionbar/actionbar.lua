@@ -27,15 +27,21 @@ end
 local function FixActionButtonCooldown(button)
 	if not button then return end
 	if not button.cooldown then return end
+	local name = button:GetName()
 	local cooldown = button.cooldown
 	local parent 
 	if button:GetParent():GetParent():GetParent() and button:GetParent():GetParent():GetParent():GetName()=="RayUIActionBarHider" then
-		parent = RayUIActionBarHider
-		hooksecurefunc(parent, "Show", function(self,alpha)
-			cooldown:Show()
-			local start, duration, enable, charges, maxCharges = GetActionCooldown(button.action)
-			CooldownFrame_SetTimer(cooldown, start, duration, enable, charges, maxCharges)
-		end)
+			parent = RayUIActionBarHider
+			hooksecurefunc(parent, "Show", function(self,alpha)
+				cooldown:Show()
+				local start, duration, enable, charges, maxCharges
+				if button.action then
+					start, duration, enable, charges, maxCharges = GetActionCooldown(button.action)
+				else
+					start, duration, enable = GetShapeshiftFormCooldown(button:GetID())
+				end
+				CooldownFrame_SetTimer(cooldown, start, duration, enable, charges, maxCharges)
+			end)
 	else
 		parent = button:GetParent():GetParent()
 	end

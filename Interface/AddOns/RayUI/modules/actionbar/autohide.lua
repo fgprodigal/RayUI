@@ -16,7 +16,10 @@ local function FadeOutActionButton()
 	local fadeInfo = {}
 	fadeInfo.mode = "OUT"
 	fadeInfo.timeToFade = 0.5
-	fadeInfo.finishedFunc = function() RayUIActionBarHider:Hide() end
+	fadeInfo.finishedFunc = function()
+		if InCombatLockdown() then return end
+		RayUIActionBarHider:Hide()
+	end
 	fadeInfo.startAlpha = RayUIActionBarHider:GetAlpha()
 	fadeInfo.endAlpha = 0
 	R:UIFrameFade(RayUIActionBarHider, fadeInfo)
