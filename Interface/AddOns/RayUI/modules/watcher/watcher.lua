@@ -126,6 +126,8 @@ function watcherPrototype:CreateButton(mode)
 		button.cooldown:SetAllPoints(button.icon)
 		button.cooldown:SetReverse()
 		button.cooldown:SetFrameLevel(3)
+		button.cooldown:SetHideCountdownNumbers(true)
+		button.cooldown.SetHideCountdownNumbers = R.dummy
 		button.mode = "ICON"
 	end
 	button.count = button:CreateFontString(nil, "OVERLAY")

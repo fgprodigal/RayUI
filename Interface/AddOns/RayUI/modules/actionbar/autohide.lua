@@ -1,7 +1,8 @@
 local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local AB = R:GetModule("ActionBar")
 
-local hider = CreateFrame("Frame", "RayUIActionBarHider", UIParent)
+local hider = CreateFrame("Frame", "RayUIActionBarHider", UIParent, "SecureActionButtonTemplate")
+RegisterStateDriver(hider, "visibility", "[combat][@target,exists][vehicleui]show")
 
 local function pending()
 	if UnitAffectingCombat("player") then return true end
