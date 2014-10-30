@@ -683,42 +683,42 @@ function UF:LoadUnitFrames()
 	player:Point("BOTTOMRIGHT", UIParent, "BOTTOM", -80, 390)
 	player:Size(PLAYER_WIDTH, PLAYER_HEIGHT)
 	player:Show()
-	R:CreateMover(player, player:GetName().."Mover", "Player Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
+	R:CreateMover(player, player:GetName().."Mover", "玩家头像", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	-- Target
 	local target = oUF:Spawn("target", "RayUF_target")
 	target:Point("BOTTOMLEFT", UIParent, "BOTTOM", 80, 390)
 	target:Size(TARGET_WIDTH, TARGET_HEIGHT)
 	target:Show()
-	R:CreateMover(target, target:GetName().."Mover", "Target Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
+	R:CreateMover(target, target:GetName().."Mover", "目标头像", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	-- Focus
 	local focus = oUF:Spawn("focus", "RayUF_focus")
 	focus:Point("BOTTOMRIGHT", RayUF_player, "TOPLEFT", -20, 20)
 	focus:Size(PARTY_WIDTH, PARTY_HEIGHT)
 	focus:Show()
-	R:CreateMover(focus, focus:GetName().."Mover", "Focus Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
+	R:CreateMover(focus, focus:GetName().."Mover", "焦点头像", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	-- Target's Target
 	local tot = oUF:Spawn("targettarget", "RayUF_targettarget")
 	tot:Point("BOTTOMLEFT", RayUF_target, "TOPRIGHT", 5, 30)
 	tot:Size(SMALL_WIDTH, SMALL_HEIGHT)
 	tot:Show()
-	R:CreateMover(tot, tot:GetName().."Mover", "ToT Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
+	R:CreateMover(tot, tot:GetName().."Mover", "目标的目标头像", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	-- Player's Pet
 	local pet = oUF:Spawn("pet", "RayUF_pet")
 	pet:Point("BOTTOM", RayUIPetBar, "TOP", 0, 3)
 	pet:Size(SMALL_WIDTH, PET_HEIGHT)
 	pet:Show()
-	R:CreateMover(pet, pet:GetName().."Mover", "Pet Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
+	R:CreateMover(pet, pet:GetName().."Mover", "宠物头像", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	-- Focus's target
 	local focustarget = oUF:Spawn("focustarget", "RayUF_focustarget")
 	focustarget:Point("BOTTOMRIGHT", RayUF_focus, "BOTTOMLEFT", -10, 1)
 	focustarget:Size(SMALL_WIDTH, SMALL_HEIGHT)
 	focustarget:Show()
-	R:CreateMover(focustarget, focustarget:GetName().."Mover", "Focus Target Frame", nil, nil, "ALL,RAID15,RAID25,RAID40")
+	R:CreateMover(focustarget, focustarget:GetName().."Mover", "焦点目标头像", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	if self.db.showArenaFrames and not IsAddOnLoaded("Gladius") then
 		local ArenaHeader = CreateFrame("Frame", nil, UIParent)
@@ -736,7 +736,7 @@ function UF:LoadUnitFrames()
 			arena[i]:Size(BOSS_WIDTH, BOSS_HEIGHT)
 			arena[i]:Show()
 		end
-		R:CreateMover(ArenaHeader, "ArenaHeaderMover", "Arena Frames", nil, nil, "ALL,ARENA")
+		R:CreateMover(ArenaHeader, "ArenaHeaderMover", "竞技场头像", nil, nil, "ALL,ARENA")
 	end
 
 	if self.db.showBossFrames then
@@ -755,7 +755,7 @@ function UF:LoadUnitFrames()
 			boss[i]:Size(BOSS_WIDTH, BOSS_HEIGHT)
 			boss[i]:Show()
 		end
-		R:CreateMover(BossHeader, "BossHeaderMover", "Boss Frames", nil, nil, "ALL,RAID15,RAID25,RAID40")
+		R:CreateMover(BossHeader, "BossHeaderMover", "首领头像", nil, nil, "ALL,RAID15,RAID25,RAID40")
 	end
 	self:RegisterEvent("ARENA_PREP_OPPONENT_SPECIALIZATIONS", "UpdatePrep")
 	self:RegisterEvent("ARENA_OPPONENT_UPDATE", "UpdatePrep")

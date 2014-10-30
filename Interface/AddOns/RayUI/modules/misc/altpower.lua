@@ -1,4 +1,4 @@
-local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+﻿local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local M = R:GetModule("Misc")
 
 local function LoadFunc()
@@ -11,7 +11,7 @@ local function LoadFunc()
 	PlayerPowerBarAlt:SetParent(holder)
 	PlayerPowerBarAlt.ignoreFramePositionManager = true
 	
-	R:CreateMover(holder, "AltPowerBarMover", "Alternative Power")
+	R:CreateMover(holder, "AltPowerBarMover", L["副资源条"])
 end
 
 M:RegisterMiscModule("AltPower", LoadFunc)

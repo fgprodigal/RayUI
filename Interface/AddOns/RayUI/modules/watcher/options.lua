@@ -80,7 +80,7 @@ function RW:GetOptions()
 		ToggleAnchors = {
 			order = 5,
 			type = "execute",
-			name = L["解锁锚点"],
+			name = L["解锁界面元素"],
 			func = function()
 				RW:TestMode()
 				AceConfigDialog["Close"](AceConfigDialog,"RayUI") 

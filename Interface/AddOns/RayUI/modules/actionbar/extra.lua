@@ -1,7 +1,7 @@
-local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+﻿local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local AB = R:GetModule("ActionBar")
 
-function TestBossButton()
+function R:TestBossButton()
 	if ExtraActionBarFrame:IsShown() then
 		ExtraActionBarFrame.intro:Stop()
 		ExtraActionBarFrame.outro:Play()
@@ -54,5 +54,5 @@ function AB:CreateExtraButton()
 		ExtraActionBarFrame:Show()
 	end
 
-	R:CreateMover(holder, "BossButton", "BossButton", true, nil, "ALL,ACTIONBARS,RAID15,RAID25,RAID40")
+	R:CreateMover(holder, "BossButtonMover", L["额外按钮"], true, nil, "ALL,ACTIONBARS,RAID15,RAID25,RAID40")
 end

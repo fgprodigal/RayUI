@@ -528,6 +528,8 @@ function AB:Initialize()
 	self:CreateRangeDisplay()
 	self:EnableAutoHide()
 
+	SetCVar("countdownForCooldowns", "0")
+	InterfaceOptionsActionBarsPanelCountdownCooldowns:Kill()
 	self:SecureHook("ActionButton_UpdateHotkeys", "UpdateHotkey")
 	self:SecureHook("ActionButton_Update", "Style")
 	self:SecureHook("ActionButton_UpdateFlyout", "StyleFlyout")

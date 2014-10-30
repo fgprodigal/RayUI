@@ -1,4 +1,4 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB
+﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB
 local M = R:GetModule("Misc")
 
 local eventFrame = CreateFrame("Frame")
@@ -113,7 +113,7 @@ local function LoadFunc()
 	M:ToggleTotemEnable()
 	M:PositionAndSizeTotem()
 
-	R:CreateMover(bar, "TotemBarMover", "TotemBarMover");
+	R:CreateMover(bar, "TotemBarMover", L["图腾条"]);
 end
 
 M:RegisterMiscModule("TotemBar", LoadFunc)

@@ -50,7 +50,7 @@ R.Options = {
 				ToggleAnchors = {
 					order = 4,
 					type = "execute",
-					name = L["解锁锚点"],
+					name = L["解锁界面元素"],
 					desc = L["解锁并移动头像和动作条"],
 					func = function()
                         R:ToggleConfigMode()
@@ -89,7 +89,7 @@ R.Options = {
 					name = L["测试ExtraActionButton"],
 					desc = L["显示/隐藏ExtraActionButton"],
 					func = function()
-                        TestBossButton()
+                        R:TestBossButton()
 					end,
 				},
 			},
