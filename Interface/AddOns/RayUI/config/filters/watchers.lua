@@ -1,4 +1,4 @@
-﻿local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 
 local positions = {
     player_buff_icon    = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 80 },	-- "玩家buff&debuff"
@@ -150,7 +150,20 @@ R["Watcher"] = {
                 { spellID = 124974, filter = "CD" },
                 --星穹大連線
                 { spellID = 112071, filter = "CD" },
-
+                --野性位移
+                { spellID = 102280, filter = "CD" },
+                --化身:艾露恩之眷
+                { spellID = 102560, filter = "CD" },
+                --野性位移
+                { spellID = 102280, filter = "CD" },
+                --狂奔怒吼
+                { spellID = 106898, filter = "CD" },
+                --急奔
+                { spellID = 1850, filter = "CD" },
+                --日光术
+                { spellID = 78675, filter = "CD" },
+                
+                
                 -- 物品
                 -- 手套
                 {slotID = 10, filter = "CD" },
