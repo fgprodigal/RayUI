@@ -5,7 +5,6 @@ local function LoadSkin()
 	local r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b
 
 	PVPUIFrame:StripTextures()
-	S:SetBD(PVPUIFrame)
 
 	S:ReskinClose(PVPUIFrameCloseButton)
 
