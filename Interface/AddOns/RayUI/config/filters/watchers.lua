@@ -50,14 +50,15 @@ R["Watcher"] = {
                 direction = "LEFT",
                 setpoint = positions.player_proc_icon,
                 size = 38,
+
                 --日之巅
-				{spellID = 171744, unitID = "player", caster = "player", filter = "BUFF"},
-				--月之巅
-				{spellID = 171743, unitID = "player", caster = "player", filter = "BUFF"},
-				--月光增效
-				{spellID = 164547, unitID = "player", caster = "player", filter = "BUFF"},
-				--日光增效
-				{spellID = 164545, unitID = "player", caster = "player", filter = "BUFF"},
+                {spellID = 171744, unitID = "player", caster = "player", filter = "BUFF"},
+                --月之巅
+                {spellID = 171743, unitID = "player", caster = "player", filter = "BUFF"},
+                --月光增效
+                {spellID = 164547, unitID = "player", caster = "player", filter = "BUFF"},
+                --日光增效
+                {spellID = 164545, unitID = "player", caster = "player", filter = "BUFF"},
                 --流星
                 { spellID = 93400, unitId = "player", caster = "player", filter = "BUFF" },
                 --兇蠻咆哮
@@ -502,7 +503,7 @@ R["Watcher"] = {
                 setpoint = positions.target_proc_icon,
                 size = 38,
 
-				--撕裂
+                --撕裂
                 { spellID = 772, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --震盪波
                 { spellID = 46968, unitId = "target", caster = "all", filter = "DEBUFF" },
@@ -863,7 +864,7 @@ R["Watcher"] = {
                 --恢复
                 { spellID = 139, unitId = "target", caster = "player", filter = "BUFF" },
                 --防護恐懼結界
-                { spellID = 6346, unitId = "player", caster = "all", filter = "BUFF" },
+                { spellID = 6346, unitId = "target", caster = "all", filter = "BUFF" },
             },
             {
                 name = "玩家重要buff&debuff",
@@ -997,6 +998,26 @@ R["Watcher"] = {
                 setpoint = positions.player_buff_icon,
                 size = 28,
 
+                --黑暗再生
+                { spellID = 108359, unitId = "player", caster = "player", filter = "BUFF" },
+                --灵魂榨取
+                { spellID = 108366, unitId = "player", caster = "player", filter = "BUFF" },
+                --牺牲契约
+                { spellID = 108416, unitId = "player", caster = "player", filter = "BUFF" },
+                --黑暗交易
+                { spellID = 110913, unitId = "player", caster = "player", filter = "BUFF" },
+                --猩红恐惧
+                { spellID = 111397, unitId = "player", caster = "player", filter = "BUFF" },
+                --爆燃冲刺
+                { spellID = 111400, unitId = "player", caster = "player", filter = "BUFF" },
+                --魔性征召
+                { spellID = 114925, unitId = "player", caster = "player", filter = "BUFF" },
+                --魔典：恶魔牺牲
+                { spellID = 108503, unitId = "player", caster = "player", filter = "BUFF" },
+                --恶魔法阵：召唤
+                { spellID = 48018, unitId = "player", caster = "player", filter = "BUFF" },
+                --灵魂石保存
+                { spellID = 20707, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标buff&debuff",
@@ -1006,6 +1027,43 @@ R["Watcher"] = {
 
             },
             {
+                name = "玩家重要buff&debuff",
+                setpoint = positions.player_proc_icon,
+                direction = "LEFT",
+                size = 38,
+
+                --灵魂燃烧
+                { spellID = 74434, unitId = "player", caster = "player", filter = "BUFF" },
+                --灵魂交换
+                { spellID = 86211, unitId = "player", caster = "player", filter = "BUFF" },
+                --黑暗灵魂：哀难
+                { spellID = 113860, unitId = "player", caster = "player", filter = "BUFF" },
+                --熔火之心
+                { spellID = 122355, unitId = "player", caster = "player", filter = "BUFF" },
+                --恶魔协同
+                { spellID = 171982, unitId = "player", caster = "all", filter = "BUFF" },
+                --炽燃之怒（2T16）
+                { spellID = 145085, unitId = "player", caster = "player", filter = "BUFF" },
+                --黑暗灵魂：学识
+                { spellID = 113861, unitId = "player", caster = "player", filter = "BUFF" },
+                --爆燃
+                { spellID = 117828, unitId = "player", caster = "player", filter = "BUFF" },
+                --火焰之雨
+                { spellID = 104232, unitId = "player", caster = "player", filter = "BUFF" },
+                --硫磺烈火
+                { spellID = 108683, unitId = "player", caster = "player", filter = "BUFF" },
+                --浩劫
+                { spellID = 80240, unitId = "player", caster = "player", filter = "BUFF" },
+                --黑暗灵魂：易爆
+                { spellID = 113858, unitId = "player", caster = "player", filter = "BUFF" },
+                --基尔加丹的狡诈
+                { spellID = 137587, unitId = "player", caster = "player", filter = "BUFF" },
+                --玛诺洛斯的狂怒
+                { spellID = 108508, unitId = "player", caster = "player", filter = "BUFF" },
+                --不灭决心
+                { spellID = 104773, unitId = "player", caster = "player", filter = "BUFF" },
+            },
+            {
                 name = "目标重要buff&debuff",
                 setpoint = positions.target_proc_icon,
                 direction = "RIGHT",
@@ -1013,48 +1071,35 @@ R["Watcher"] = {
                 size = 38,
 
                 --恐懼術
-                { spellID = 5782, unitId = "target", caster = "player", filter = "DEBUFF" },
+                { spellID = 118699, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --放逐術
                 { spellID = 710, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --腐蝕術
                 { spellID = 146739, unitId = "target", caster = "player", filter = "DEBUFF" },
-                --獻祭
-                { spellID = 348, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --痛苦災厄
                 { spellID = 980, unitId = "target", caster = "player", filter = "DEBUFF" },
-                --末日災厄
-                { spellID = 603, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --痛苦動盪
                 { spellID = 30108, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --蝕魂術
                 { spellID = 48181, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --腐蝕種子
                 { spellID = 27243, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --古尔丹之手
+                { spellID = 47960, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --末日降临
+                { spellID = 603, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --獻祭
+                { spellID = 157736, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --浩劫
+                { spellID = 80240, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --恐懼嚎叫
                 { spellID = 5484, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --死亡纏繞
                 { spellID = 6789, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --暗影之怒
+                { spellID = 30283, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --奴役惡魔
                 { spellID = 1098, unitId = "pet", caster = "player", filter = "DEBUFF" },
-                --獻祭
-                { spellID = 108686, unitId = "target", caster = "player", filter = "DEBUFF" },
-            },
-            {
-                name = "玩家重要buff&debuff",
-                setpoint = positions.player_proc_icon,
-                direction = "LEFT",
-                size = 38,
-
-                --夜暮
-                { spellID = 17941, unitId = "player", caster = "player", filter = "BUFF" },
-                --靈魂炙燃
-                { spellID = 74434, unitId = "player", caster = "player", filter = "BUFF" },
-                --熔火之心
-                { spellID = 122351, unitId = "player", caster = "player", filter = "BUFF" },
-                --爆燃
-                { spellID = 117828, unitId = "player", caster = "player", filter = "BUFF" },
-                --火焰之雨
-                { spellID = 104232, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "焦点buff&debuff",
@@ -1066,7 +1111,7 @@ R["Watcher"] = {
                 barWidth = 170,
 
                 --恐懼術
-                { spellID = 5782, unitId = "focus", caster = "all", filter = "DEBUFF" },
+                { spellID = 118699, unitId = "focus", caster = "all", filter = "DEBUFF" },
                 --放逐術
                 { spellID = 710, unitId = "focus", caster = "all", filter = "DEBUFF" },
                 --恐懼嚎叫
