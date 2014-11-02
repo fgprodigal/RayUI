@@ -18,7 +18,7 @@ function R:TestBossButton()
 end
 
 function AB:CreateExtraButton()
-	local holder = CreateFrame("Frame", nil, UIParent, SecureHandlerStateTemplate)
+	local holder = CreateFrame("Frame", nil, UIParent, "SecureHandlerStateTemplate")
 	holder:Point("CENTER", UIParent, "BOTTOM", 500, 510)
 	holder:Size(ExtraActionBarFrame:GetSize())
 
