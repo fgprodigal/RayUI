@@ -83,10 +83,16 @@ R["Watcher"] = {
                 { spellID = 48505, unitId = "player", caster = "player", filter = "BUFF" },
                 --星穹大連線
                 { spellID = 112071, unitId = "player", caster = "player", filter = "BUFF" },
-                --化身
+                --化身:艾露恩之眷
                 { spellID = 117679, unitId = "player", caster = "player", filter = "BUFF" },
                 --野性之心
                 { spellID = 108294, unitId = "player", caster = "player", filter = "BUFF" },
+                --化身:丛林之王
+                { spellID = 102543, unitId = "player", caster = "player", filter = "BUFF" },
+                --猛虎之怒
+                { spellID = 5217, unitId = "player", caster = "player", filter = "BUFF" },
+                --野蛮咆哮雕文
+                { spellID = 174544, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -112,6 +118,8 @@ R["Watcher"] = {
                 { spellID = 106830, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --傷殘術
                 { spellID = 22570, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --斜掠
+                { spellID = 155722, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
             {
                 name = "焦点buff&debuff",
@@ -154,16 +162,17 @@ R["Watcher"] = {
                 { spellID = 102280, filter = "CD" },
                 --化身:艾露恩之眷
                 { spellID = 102560, filter = "CD" },
-                --野性位移
-                { spellID = 102280, filter = "CD" },
                 --狂奔怒吼
                 { spellID = 106898, filter = "CD" },
                 --急奔
                 { spellID = 1850, filter = "CD" },
                 --日光术
                 { spellID = 78675, filter = "CD" },
-                
-                
+                --猛虎之怒
+                { spellID = 5217, filter = "CD" },
+                --影遁
+                { spellID = 58984, filter = "CD" },
+
                 -- 物品
                 -- 手套
                 {slotID = 10, filter = "CD" },
