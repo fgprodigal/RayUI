@@ -418,6 +418,7 @@ function B:Initialize()
 
 	self:OpenBags()
 	self:CloseBags()
+	self:RawHook("OpenBag","OpenBags", true)
 	self:HookScript(TradeFrame, "OnShow", "OpenBags")
 	self:HookScript(TradeFrame, "OnHide", "CloseBags")
 end
