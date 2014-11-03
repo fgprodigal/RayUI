@@ -906,6 +906,7 @@ local function LoadSkin()
 
 	for i = 1, MAX_ADDONS_DISPLAYED do
 		S:ReskinCheck(_G["AddonListEntry"..i.."Enabled"])
+		S:Reskin(_G["AddonListEntry"..i.."Load"])
 	end
 
 	-- Navigation Bar
@@ -990,6 +991,13 @@ local function LoadSkin()
 
 		moveNavButtons(self)
 	end)
+
+	S:Reskin(SplashFrame.BottomCloseButton)
+	S:ReskinClose(SplashFrame.TopCloseButton)
+
+	SplashFrame.TopCloseButton:ClearAllPoints()
+
+	SplashFrame.TopCloseButton:SetPoint("TOPRIGHT", SplashFrame, "TOPRIGHT", -18, -18)
 end
 
 S:RegisterSkin("RayUI", LoadSkin)

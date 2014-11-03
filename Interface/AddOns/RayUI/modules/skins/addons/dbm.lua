@@ -16,7 +16,7 @@ local function SkinDBM()
 		if DBM_GUI_Option_57 then
 			DBM_GUI_Option_57:Kill()
 		end
-		self.options.BarYOffset = 10
+		self.options.BarYOffset = 6
 		self.options.ExpandUpwards = false
 		if self.mainAnchor then
 			self.mainAnchor:ClearAllPoints()
@@ -309,7 +309,8 @@ local function SkinDBM()
 		DBT_PersistentOptions["DBM"].Scale = 1
 		DBT_PersistentOptions["DBM"].HugeScale = 1
 		DBT_PersistentOptions["DBM"].BarXOffset = 0
-		DBT_PersistentOptions["DBM"].BarYOffset = 9
+		DBT_PersistentOptions["DBM"].BarYOffset = 6
+		DBT_PersistentOptions["DBM"].HugeBarYOffset = 6
 		DBT_PersistentOptions["DBM"].Texture = "RayUI Normal"
 		DBT_PersistentOptions["DBM"].Font = "RayUI Font"
 	end

@@ -338,7 +338,7 @@ local function LoadSkin()
 	ToyBoxProgressBarBackground:Hide()
 
 	ToyBoxProgressBar.text:SetPoint("CENTER", 0, 1)
-	-- ToyBoxProgressBarBar:SetTexture(R["media"].gloss)
+	ToyBoxProgressBarBar:SetTexture(R["media"].gloss)
 
 	S:CreateBDFrame(ToyBoxProgressBar, .25)
 

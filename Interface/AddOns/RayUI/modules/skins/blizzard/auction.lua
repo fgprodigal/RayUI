@@ -5,6 +5,7 @@ local function LoadSkin()
 	local r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b
 	S:SetBD(AuctionFrame, 2, -10, 0, 10)
 	S:CreateBD(AuctionProgressFrame)
+	S:ReskinCheck(ExactMatchCheckButton)
 
 	AuctionProgressBar:SetStatusBarTexture(R["media"].gloss)
 	local ABBD = CreateFrame("Frame", nil, AuctionProgressBar)

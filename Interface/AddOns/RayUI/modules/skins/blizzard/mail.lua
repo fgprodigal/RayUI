@@ -29,6 +29,7 @@ local function LoadSkin()
 
 	MailTextFontNormal:SetTextColor(1, 1, 1)
 
+	OpenMailLetterButton:StripTextures()
 	OpenMailLetterButton:StyleButton(true)
 	OpenMailLetterButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
 	OpenMailMoneyButton:StyleButton(true)
@@ -127,7 +128,7 @@ local function LoadSkin()
 
 	for i = 1, ATTACHMENTS_MAX_SEND do
 		local button = _G["SendMailAttachment"..i]
-		button:GetRegions():Hide()
+		button:StripTextures()
 
 		local bg = CreateFrame("Frame", nil, button)
 		bg:Point("TOPLEFT", -1, 1)
