@@ -22,6 +22,7 @@ G["general"]={
 	uiscale = 0.75,
 	logo = true,
 	theme = "Shadow",
+	numberType = 1
 }
 
 P["InfoBar"]={

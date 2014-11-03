@@ -3,16 +3,6 @@
 local _, ns = ...
 local oUF = RayUF or oUF
 
-local siValue = function(val)
-    if(val >= 1e6) then
-        return ("%.1fm"):format(val / 1e6):gsub("%.?0+([km])$", "%1")
-    elseif(val >= 1e4) then
-        return ("%.1fk"):format(val / 1e3):gsub("%.?0+([km])$", "%1")
-    else
-        return val
-    end
-end
-
 local utf8sub = function(string, i, dots)
 	local bytes = string:len()
 	if (bytes <= i) then
@@ -85,8 +75,8 @@ oUF.Tags.Methods["RayUF:hp"]  = function(u)
 			color = oUF.colors.reaction[UnitReaction(u, "player") or 5]
 		end
     local min, max = UnitHealth(u), UnitHealthMax(u)
-    -- return siValue(min).." | "..math.floor(min/max*100+.5).."%"
-    return format("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, siValue(min).." | "..math.floor(min/max*100+.5).."%")
+    -- return R:ShortValue(min).." | "..math.floor(min/max*100+.5).."%"
+    return format("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(min).." | "..math.floor(min/max*100+.5).."%")
 end
 oUF.Tags.Events["RayUF:hp"] = "UNIT_HEALTH"
 
@@ -96,7 +86,7 @@ oUF.Tags.Methods["RayUF:pp"] = function(u)
 
     if str and power > 0 then
 	local min, max = UnitPower(u), UnitPowerMax(u)
-        return hex(oUF.colors.power[str])..siValue(min).." | "..math.floor(min/max*100+.5).."%".."|r"
+        return hex(oUF.colors.power[str])..R:ShortValue(min).." | "..math.floor(min/max*100+.5).."%".."|r"
     end
 end
 oUF.Tags.Events["RayUF:pp"] = "UNIT_POWER"

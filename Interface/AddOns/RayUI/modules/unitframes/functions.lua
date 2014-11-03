@@ -29,9 +29,9 @@ function UF:SpawnMenu()
     local unit = self.unit:gsub("(.)", string.upper, 1)
     if self.unit == "targettarget" then return end
     if _G[unit.."FrameDropDown"] then
-        ToggleDropDownMenu(1, nil, _G[unit.."FrameDropDown"], "cursor")
+        ToggleDropDownMenu(1, nil, _G[unit .. "FrameDropDown"], "cursor")
     elseif (self.unit:match("party")) then
-        ToggleDropDownMenu(1, nil, _G["PartyMemberFrame"..self.id.."DropDown"], "cursor")
+        ToggleDropDownMenu(1, nil, _G["PartyMemberFrame" .. self.id .. "DropDown"], "cursor")
     else
         FriendsDropDown.unit = self.unit
         FriendsDropDown.id = self.id

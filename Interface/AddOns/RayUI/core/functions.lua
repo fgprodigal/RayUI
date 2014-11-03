@@ -120,17 +120,6 @@ function R:Scale(x)
 	return (self.mult*math.floor(x/self.mult+.5))
 end
 
-function DoSkill(name)
-	for i=1,GetNumTradeSkills()do
-		local skillName,skillType,numAvailable=GetTradeSkillInfo(i)
-		if skillName and skillName:find(name)and numAvailable>0 then
-			DoTradeSkill(i,numAvailable)
-			UIErrorsFrame:AddMessage("["..skillName.."]x"..numAvailable, TradeSkillTypeColor[skillType].r, TradeSkillTypeColor[skillType].g, TradeSkillTypeColor[skillType].b)
-			break
-		end
-	end
-end
-
 function R:RegisterModule(name)
 	if self.initialized then
 		self:GetModule(name):Initialize()
@@ -291,12 +280,6 @@ function R:PLAYER_ENTERING_WORLD()
 	end)
 end
 
-function R:ToggleGameMenu()
-	GameMenuFrame:SetHeight(GameMenuFrame:GetHeight()+GameMenuButtonMacros:GetHeight())
-	GameMenuButtonOptions:ClearAllPoints()
-	GameMenuButtonOptions:SetPoint("TOP", RayUIConfigButton, "BOTTOM", 0, -1)
-end
-
 function R:Initialize()
 	self:LoadMovers()
 
@@ -315,8 +298,8 @@ function R:Initialize()
 	self:Delay(5, function() collectgarbage("collect") end)
 
 	local configButton = CreateFrame("Button", "RayUIConfigButton", GameMenuFrame, "GameMenuButtonTemplate")
-	configButton:SetSize(GameMenuButtonMacros:GetWidth(), GameMenuButtonMacros:GetHeight())
-	configButton:SetPoint("TOP", GameMenuButtonWhatsNew, "BOTTOM", 0, -1)
+	configButton:SetSize(GameMenuButtonContinue:GetWidth(), GameMenuButtonContinue:GetHeight())
+	configButton:SetPoint("TOP", GameMenuButtonContinue, "BOTTOM", 0, -16)
 	configButton:SetText(L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r设置"])
 	configButton:SetScript("OnClick", function()
 		if RayUIConfigTutorial then
@@ -326,7 +309,7 @@ function R:Initialize()
 		HideUIPanel(GameMenuFrame)
 		self:OpenConfig()
 	end)
-	R:SecureHook("ToggleGameMenu")
+	GameMenuFrame:HookScript("OnShow", function() GameMenuFrame:SetHeight(GameMenuFrame:GetHeight() + configButton:GetHeight() + 16) end)
 
 	local S = self:GetModule("Skins")
 	S:Reskin(configButton)
@@ -514,12 +497,22 @@ function R:RGBToHex(r, g, b)
 end
 
 function R:ShortValue(v)
-	if v >= 1e6 then
-		return ("%.1fm"):format(v / 1e6):gsub("%.?0+([km])$", "%1")
-	elseif v >= 1e3 or v <= -1e3 then
-		return ("%.1fk"):format(v / 1e3):gsub("%.?0+([km])$", "%1")
+	if self.global.general.numberType == 1 then
+		if v >= 1e6 or v <= -1e6 then
+			return ("%.1fm"):format(v / 1e6):gsub("%.?0+([km])$", "%1")
+		elseif v >= 1e3 or v <= -1e3 then
+			return ("%.1fk"):format(v / 1e3):gsub("%.?0+([km])$", "%1")
+		else
+			return v
+		end
 	else
-		return v
+		if v >= 1e8 or v <= -1e8 then
+			return ("%.1f" .. L["亿"]):format(v / 1e8):gsub("%.?0+([km])$", "%1")
+		elseif v >= 1e4 or v <= -1e4 then
+			return ("%.1f" .. L["万"]):format(v / 1e4):gsub("%.?0+([km])$", "%1")
+		else
+			return v
+		end
 	end
 end
 
@@ -789,7 +782,7 @@ local function CompareCPUDiff(module)
 	end
 
 	if(greatestName) then
-		R:Print(greatestName.. " 为CPU占用最多的函数, 用时: "..greatestUsage.."ms. 共执行 ".. greatestCalls.." 次.")
+		R:Print(greatestName .. " 为CPU占用最多的函数, 用时: " .. greatestUsage .. "ms. 共执行 " .. greatestCalls .. " 次.")
 	else
 		R:Print("nothing happened.")
 	end
