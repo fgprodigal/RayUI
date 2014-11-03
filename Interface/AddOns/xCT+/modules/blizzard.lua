@@ -7,11 +7,11 @@
  \//\/_/  \/___/    \/_/
  
  [=====================================]
- [  Author: Dandruff @ Whisperwind-US  ]
- [  xCT+ Version 3.x.x                 ]
- [  ©2012. All Rights Reserved.        ]
+ [  Author: Dandraffbal-Stormreaver US ]
+ [  xCT+ Version 4.x.x                 ]
+ [  ©2014. All Rights Reserved.        ]
  [====================================]]
-
+ 
 local ADDON_NAME, addon = ...
 local x = addon.engine
 
@@ -33,7 +33,7 @@ fsTitle:SetTextColor(1.00, 1.00, 1.00, 1.00)
 fsTitle:SetFont(defaultFont, defaultSize)
 fsTitle:SetText("|cff60A0FFPowered By |cffFF0000x|r|cff80F000CT|r+|r")
 --fsTitle:SetPoint("TOPLEFT", 16, -90)
-fsTitle:SetPoint("TOPLEFT", 180, -16)
+fsTitle:SetPoint("TOPLEFT", 480, -16)
 
 -- Move the Effects and Floating Options
 --[[InterfaceOptionsCombatTextPanelTargetEffects:ClearAllPoints()
@@ -44,6 +44,8 @@ InterfaceOptionsCombatTextPanelEnableFCT:SetPoint("TOPLEFT", 18, -132)
 InterfaceOptionsCombatTextPanelTargetDamage:ClearAllPoints()
 InterfaceOptionsCombatTextPanelTargetDamage:SetPoint("TOPLEFT", 18, -355) ]]
 
+-- Hide Blizzard Pet Battle Options
+InterfaceOptionsCombatTextPanelPetBattle:Hide()
 
 -- Hide Blizzard Combat Text Toggles
 InterfaceOptionsCombatTextPanelEnableFCT:Hide()
@@ -65,6 +67,7 @@ InterfaceOptionsCombatTextPanelHealingAbsorbSelf:Hide()
 
 -- Direction does NOT work with xCT+ at all
 InterfaceOptionsCombatTextPanelFCTDropDown:Hide()
+InterfaceOptionsCombatTextPanelTargetModeDropDown:Hide()
 
 -- FCT Options
 InterfaceOptionsCombatTextPanelTargetDamage:Hide()
@@ -99,11 +102,13 @@ end
 xCTCombatTextConfigButton:ClearAllPoints()
 xCTCombatTextConfigButton:SetPoint("TOPRIGHT", -36, -80)
 xCTCombatTextConfigButton:SetSize(200, 30)
-xCTCombatTextConfigButton:SetText("|cffFFFFFFGo to the |r|cffFF0000x|r|cff80F000CT|r|cff60A0FF+|r |cffFFFFFFOptions Panel...|r")
+xCTCombatTextConfigButton:SetText("|cffFFFFFFOpen |r|cffFF0000x|r|cff80F000CT|r|cff60A0FF+|r |cffFFFFFFOptions...|r")
 xCTCombatTextConfigButton:Show()
 xCTCombatTextConfigButton:SetScript("OnClick", function(self)
   InterfaceOptionsFrameOkay:Click()
-  LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME)
+  GameMenuButtonContinue:Click()
+  --LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME)
+  x:ShowConfigTool()
 end)
 
 -- Interface - Addons (Ace3 Blizzard Options)
@@ -116,7 +121,7 @@ x.blizzardOptions = {
       order = 1,
       type = 'execute',
       name = "Show Config",
-      func = function() InterfaceOptionsFrameOkay:Click(); LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME); GameMenuButtonContinue:Click() end,
+      func = function() InterfaceOptionsFrameOkay:Click(); GameMenuButtonContinue:Click(); x:ShowConfigTool() end,
     },
   },
 }

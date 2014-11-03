@@ -1,4 +1,4 @@
-	--[[   ____    ______      
+--[[   ____    ______      
       /\  _`\ /\__  _\   __
  __  _\ \ \/\_\/_/\ \/ /_\ \___ 
 /\ \/'\\ \ \/_/_ \ \ \/\___  __\
@@ -7,11 +7,11 @@
  \//\/_/  \/___/    \/_/
  
  [=====================================]
- [  Author: Dandruff @ Whisperwind-US  ]
- [  xCT+ Version 3.x.x                 ]
- [  ©2012. All Rights Reserved.        ]
+ [  Author: Dandraffbal-Stormreaver US ]
+ [  xCT+ Version 4.x.x                 ]
+ [  ©2014. All Rights Reserved.        ]
  [====================================]]
-
+ 
 local ADDON_NAME, addon = ...
 local LSM = LibStub("LibSharedMedia-3.0")
 local x, noop = addon.engine, addon.noop
@@ -103,29 +103,33 @@ addon.options = {
       name = " ",
       width = 'half',
     },
-    --[==[space3 = {
-      order = 3,
+    space3 = {
+      order = 30,
       type = 'description',
       name = " ",
       width = 'half',
     },
     space4 = {
-      order = 3,
+      order = 30,
       type = 'description',
       name = " ",
       width = 'half',
-    },]==]
+    },
     ToggleTestMode = {
-      order = 21,
+      order = 31,
       type = 'execute',
-      name = "Toggle Test Mode",
+      name = "Test",
       func = x.ToggleTestMode,
+      desc = "Allows you to preview xCT+ inorder to tweak settings outside of combat.\n\nYou can also type: '|cffFF0000/xct test|r'",
+      width = 'half',
     },
     ToggleFrames = {
-      order = 22,
+      order = 32,
       type = 'execute',
-      name = "Toggle Frames",
+      name = "Move",
+      desc = "Allows you to adjust the position of all the xCT+ frames on your screen.\n\nYou can also type: '|cffFF0000/xct lock|r'",
       func = x.ToggleConfigMode,
+      width = 'half',
     },
 
     hiddenObjectShhhhhh = {
@@ -313,6 +317,9 @@ x.cvar_udpate = function()
     SetCVar("CombatHealingAbsorbTarget", 0)
   end
   
+  -- Floating Combat Text: Display Target Mode
+  SetCVar("CombatDamageStyle", x.db.profile.blizzardFCT.CombatDamageStyle)
+  
   -- Floating Combat Text: Threat Changes
   if x.db.profile.blizzardFCT.CombatThreatChanges then
     COMBAT_THREAT_DECREASE_0, COMBAT_THREAT_DECREASE_1, COMBAT_THREAT_DECREASE_2 = XCT_CT_DEC_0, XCT_CT_DEC_1, XCT_CT_DEC_2
@@ -488,15 +495,15 @@ end
 
 
 addon.options.args["spells"] = {
-  name = "Spam Merger",
+  name = x.new .. "Spam Merger",
   type = 'group',
+  childGroups = 'tab',
   order = 2,
   args = {
     
     mergeOptions = {
       name = "Merge Options",
       type = 'group',
-      guiInline = true,
       order = 11,
       args = {
 
@@ -615,10 +622,95 @@ addon.options.args["spells"] = {
       },
     },
     
-    spellList = {
-      name = "Class Specific Spells", --"List of Mergeable Spells |cff798BDD(Class Specific)|r",
+    multistrike = {
+      name = x.new .. "Multistrike Options", --"List of Mergeable Spells |cff798BDD(Class Specific)|r",
       type = 'group',
       order = 20,
+      args = {
+        title = {
+          type = 'description',
+          order = 0,
+          name = "Spam Merger |cff798BDD(Multistrike)|r",
+          fontSize = "large",
+          width = "double",
+        },
+        multistrikeDesc = {
+          type = "description",
+          order = 1,
+          fontSize = "small",
+          name = "This feature was added to help mitigate multistrike spam. It adds one or two smaller icons next to a big to signify your multistrikes.",
+        },
+        spacer0 = {
+          type = "description",
+          order = 2,
+          fontSize = "small",
+          name="\n\n",
+        },
+        multistrikeEnabled = {
+          order = 11,
+          type = 'toggle',
+          name = "Enable",
+          desc = "Enables the multistrike spam merger.",
+          get = get0_1,
+          set = set0_1,
+        },
+
+        listSpacer1 = {
+          type = "description",
+          order = 20,
+          name = "\n|cff798BDDIcon Settings|r:",
+          fontSize = 'large',
+        },
+        showMultistrikeIcons = {
+          order = 21,
+          type = 'toggle',
+          name = "Icons",
+          desc = "Show multistrike icons.",
+          get = get0_1,
+          set = set0_1,
+        },
+        multistrikeIconMultiplier = {
+          order = 22,
+          name = "Icon Size (|cffFFFFFF%|r)",
+          desc = "Size of the multistrike icons.",
+          type = 'range',
+          min = 0, max = 200, step = 1,
+          get = get0_1,
+          set = set0_1,
+          disabled = function() return not x.db.profile.spells.showMultistrikeIcons end,
+        },
+
+        listSpacer4 = {
+          type = "description",
+          order = 40,
+          name = "\n|cff798BDDAdvanced Settings|r:",
+          fontSize = 'large',
+        },
+        multistikeAutoAdjust = {
+          order = 41,
+          type = 'toggle',
+          name = "Auto Adjust Latency",
+          get = get0_1,
+          set = set0_1,
+        },
+        multistrikeLatency = {
+          order = 42,
+          name = "Multistrike Latency Compensation |cffFFFFFF(In |cffFF0000Milliseconds|r|cffFFFFFF)|r",
+          desc = "Helps the |cffFFFF00Multistrike Merger|r compensate for latency when merging multistrikes.\n\nThis option is |cffFF0000NOT|r your ping. It is how long it takes |cff2233FFBlizzard's|r servers to calculate the multistrike and can vary from day to day depending on their load.\n\nIncreasing this value will improve success rate of merging, but |cffFF0000all|r spells will be delayed by the amount before they are displayed.",
+          type = 'range',
+          width = 'double',
+          min = 200, max = 3000, step = 10,
+          get = get0_1,
+          set = set0_1,
+          disabled = function() return x.db.profile.spells.multistikeAutoAdjust end,
+        },
+      },
+    },
+
+    spellList = {
+      name = "Class Specific", --"List of Mergeable Spells |cff798BDD(Class Specific)|r",
+      type = 'group',
+      order = 21,
       args = {
         title = {
           type = 'description',
@@ -640,9 +732,9 @@ addon.options.args["spells"] = {
     },
     
     itemList = {
-      name = "Items and Spells for All Classes",
+      name = "All Classes",
       type = 'group',
-      order = 21,
+      order = 22,
       args = {
         title = {
           type = 'description',
@@ -659,6 +751,7 @@ addon.options.args["spells"] = {
         },
       },
     },
+  
   },
 }
 
@@ -884,7 +977,7 @@ addon.options.args["spellFilter"] = {
         title = {
           order = 0,
           type = "description",
-          name = "case sensative spell procs",
+          name = "These options allow you to filter out spell |cffFFFF00Procs|r that your player triggers.  In order to filter them, you need to type the |cffFFFF00exact name of the proc|r (case sensitive).",
         },
         whitelistProcs = {
           order = 1,
@@ -986,7 +1079,7 @@ addon.options.args["spellFilter"] = {
         title = {
           order = 0,
           type = "description",
-          name = "Description goes here.",
+          name = "These options allow you to filter out |cff8020FFItems|r that your player collects.  In order to filter them, you need to type the |cffFFFF00exact name of the item|r (case sensitive).",
         },
         whitelistItems = {
           order = 1,
@@ -1086,6 +1179,19 @@ addon.options.args["Credits"] = {
       type = 'description',
       order = 8,
       name = "1. GitHub: |cff22FF80https://github.com/dandruff/xCT|r\n\n2. Send a PM to |cffFF8000Dandruff|r on http://tukui.org",
+    },
+    testerTitleSpace3 = {
+      type = 'description',
+      order = 9,
+      name = "\n\n\n\n\n\n\n\n\n",
+    },
+    multistikeDebug = {
+      order = 10,
+      type = 'toggle',
+      name = "Verbose Debug",
+      width = 'full',
+      get = function(info) return x.db.profile.spells.multistikeDebug end,
+      set = function(info, value) x.db.profile.spells.multistikeDebug = value end,
     },
   },
 }
@@ -1189,15 +1295,35 @@ addon.options.args["FloatingCombatText"] = {
           disabled = function(info) return not x.db.profile.blizzardFCT.fctSpellMechanics end, 
         },
 
-        listSpacer1 = {
+        listSpacer2 = {
           type = "description",
-          order = 10,
+          order = 20,
+          name = "\n\n|cff798BDDFloating Combat Text Target Mode|r:",
+          fontSize = 'large',
+        },
+
+        CombatDamageStyle = {
+          type = "select",
+              order = 21,
+          name = "Target Mode:",
+          values = {
+            [1] = COMBAT_TARGET_MODE_NEW,
+            [2] = COMBAT_TARGET_MODE_OLD,
+          },
+          get = get0,
+          set = set0_update,
+          desc = "Allows you to change how your target's FCT is displayed.\n\n|cff798BDD"..COMBAT_TARGET_MODE_NEW.."|r - |cffFF8000(Fastest)|r displays damage on your target in an arc. New in WoD.\n\n|cff798BDD"..COMBAT_TARGET_MODE_OLD.."|r - |cffFF8000(Slower)|r displays damage floating up. This was the old default in MoP.",
+        },
+
+        listSpacer3 = {
+          type = "description",
+          order = 30,
           name = "\n\n|cff798BDDFloating Combat Text Font|r:",
           fontSize = 'large',
         },
         
         enabled = {
-          order = 11,
+          order = 31,
           type = 'toggle',
           name = "Customize",
           get = get0,
@@ -1206,7 +1332,7 @@ addon.options.args["FloatingCombatText"] = {
         
         font = {
           type = 'select', dialogControl = 'LSM30_Font',
-          order = 12,
+          order = 32,
           name = "Blizzard's FCT Font",
           desc = "Set the font Blizzard's head numbers (|cffFFFF00Default:|r Friz Quadrata TT)",
           values = AceGUIWidgetLSMlists.font,
@@ -1222,6 +1348,20 @@ addon.options.args["FloatingCombatText"] = {
         },
       },
     },
+    --[[
+    battlePetFCT = {
+      name = "Battle Pets",
+      type = 'group',
+      order = 2,
+      args = {
+        title1 = {
+          order = 0,
+          type = "description",
+          name = "Battle Pet Settings to go in here :)",
+        },
+      },
+    },
+    ]]
   },
 }
 
@@ -1611,7 +1751,15 @@ addon.options.args["Frames"] = {
               set = set2_update,
               disabled = isFrameNotScrollable,
             },
-
+            scrollableInCombat = {
+              order = 13,
+              type = 'toggle',
+              name = "Disable in Combat",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            
             frameFading = {
               type = 'description',
               order = 20,
@@ -1931,6 +2079,14 @@ addon.options.args["Frames"] = {
               set = set2_update,
               disabled = isFrameNotScrollable,
             },
+            scrollableInCombat = {
+              order = 13,
+              type = 'toggle',
+              name = "Disable in Combat",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
 
             frameFading = {
               type = 'description',
@@ -2076,7 +2232,7 @@ addon.options.args["Frames"] = {
         fontColors = {
           order = 30,
           type = 'group',
-          name = "Font Colors",
+          name = "Custom Colors",
           args = {
             customColors = {
               type = 'description',
@@ -2270,6 +2426,14 @@ addon.options.args["Frames"] = {
               set = set2_update,
               disabled = isFrameNotScrollable,
             },
+            scrollableInCombat = {
+              order = 13,
+              type = 'toggle',
+              name = "Disable in Combat",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
 
             frameFading = {
               type = 'description',
@@ -2414,7 +2578,7 @@ addon.options.args["Frames"] = {
         fontColors = {
           order = 30,
           type = 'group',
-          name = "Font Colors",
+          name = "Custom Colors",
           args = {
             customColors = {
               type = 'description',
@@ -2583,6 +2747,14 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
               disabled = isFrameNotScrollable,
+            },
+            scrollableInCombat = {
+              order = 13,
+              type = 'toggle',
+              name = "Disable in Combat",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
             },
 
             frameFading = {
@@ -2847,6 +3019,14 @@ addon.options.args["Frames"] = {
               set = set2_update,
               disabled = isFrameNotScrollable,
             },
+            scrollableInCombat = {
+              order = 13,
+              type = 'toggle',
+              name = "Disable in Combat",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
 
             frameFading = {
               type = 'description',
@@ -3098,6 +3278,14 @@ addon.options.args["Frames"] = {
               set = set2_update,
               disabled = isFrameNotScrollable,
             },
+            scrollableInCombat = {
+              order = 13,
+              type = 'toggle',
+              name = "Disable in Combat",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
           },
         },
 
@@ -3270,6 +3458,14 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
               disabled = isFrameNotScrollable,
+            },
+            scrollableInCombat = {
+              order = 13,
+              type = 'toggle',
+              name = "Disable in Combat",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
             },
 
             frameFading = {
@@ -3528,6 +3724,14 @@ addon.options.args["Frames"] = {
               set = set2_update,
               disabled = isFrameNotScrollable,
             },
+            scrollableInCombat = {
+              order = 13,
+              type = 'toggle',
+              name = "Disable in Combat",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
 
             frameFading = {
               type = 'description',
@@ -3778,6 +3982,14 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
               disabled = isFrameNotScrollable,
+            },
+            scrollableInCombat = {
+              order = 13,
+              type = 'toggle',
+              name = "Disable in Combat",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
             },
 
             frameFading = {

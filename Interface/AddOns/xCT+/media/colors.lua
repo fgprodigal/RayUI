@@ -7,11 +7,11 @@
  \//\/_/  \/___/    \/_/
  
  [=====================================]
- [  Author: Dandruff @ Whisperwind-US  ]
- [  xCT+ Version 3.x.x                 ]
- [  ©2012. All Rights Reserved.        ]
+ [  Author: Dandraffbal-Stormreaver US ]
+ [  xCT+ Version 4.x.x                 ]
+ [  ©2014. All Rights Reserved.        ]
  [====================================]]
-
+ 
 local ADDON_NAME, addon = ...
 
 -- Shorten my handle
@@ -69,7 +69,7 @@ x.colorDB = {
 	['dispellBuffs']       = { 0.00, 1.00, 0.50 },
 	['dispellDebuffs']     = { 1.00, 0.00, 0.50 },
 	['dispellStolen']      = { 0.31, 0.71, 1.00 },
-  ['debuffsFaded']       = { 0.50, 0.50, 0.50 },
+	['debuffsFaded']       = { 0.50, 0.50, 0.50 },
 	['debuffsGained']      = { 1.00, 0.10, 0.10 },
 	['honorGains']         = { 0.10, 0.10, 1.00 },
 	['interrupts']         = { 1.00, 0.50, 0.00 },

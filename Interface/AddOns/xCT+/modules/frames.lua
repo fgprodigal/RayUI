@@ -7,11 +7,11 @@
  \//\/_/  \/___/    \/_/
  
  [=====================================]
- [  Author: Dandruff @ Whisperwind-US  ]
- [  xCT+ Version 3.x.x                 ]
- [  ©2012. All Rights Reserved.        ]
+ [  Author: Dandraffbal-Stormreaver US ]
+ [  xCT+ Version 4.x.x                 ]
+ [  ©2014. All Rights Reserved.        ]
  [====================================]]
-
+ 
 -- this file handles updating the frame settings and anything that changes the UI frames themselves
 local ADDON_NAME, addon = ...
 
@@ -169,7 +169,6 @@ function x:UpdateFrames(specificFrame)
 			-- Set the position
 			f:SetWidth(settings.Width)
 			f:SetHeight(settings.Height)
-			f:SetMaxLines(settings.Height / settings.fontSize)
 			
 			f:SetPoint("CENTER", settings.X, settings.Y)
 			f:SetClampRectInsets(0, 0, settings.fontSize, 0)
@@ -191,12 +190,19 @@ function x:UpdateFrames(specificFrame)
 			
 			-- scrolling
 			if settings.enableScrollable then
-				f:SetMaxLines(settings.scrollableLines)
-				f:EnableMouseWheel(true)
-				f:SetScript("OnMouseWheel", Frame_OnMouseWheel)
+        f:SetMaxLines(settings.scrollableLines)
+        if not settings.scrollableInCombat then
+          if InCombatLockdown() then
+            x:DisableFrameScrolling( framename )
+          else
+            x:EnableFrameScrolling( framename )
+          end
+        else
+          x:EnableFrameScrolling( framename )
+        end
 			else
-				f:EnableMouseWheel(false)
-				f:SetScript("OnMouseWheel", nil)
+        f:SetMaxLines(settings.Height / settings.fontSize)
+				x:DisableFrameScrolling( framename )
 			end
 			
 			-- fading
@@ -216,6 +222,20 @@ function x:UpdateFrames(specificFrame)
 
 		end
 	end
+end
+
+function x:EnableFrameScrolling( framename )
+  local f = x.frames[framename]
+  local settings = x.db.profile.frames[framename]
+  f:EnableMouseWheel(true)
+  f:SetScript("OnMouseWheel", Frame_OnMouseWheel)
+end
+
+function x:DisableFrameScrolling( framename )
+  local f = x.frames[framename]
+  local settings = x.db.profile.frames[framename]
+  f:EnableMouseWheel(false)
+  f:SetScript("OnMouseWheel", nil)
 end
 
 -- =====================================================
@@ -883,11 +903,12 @@ function x.TestMoreUpdate(self, elapsed)
 				if random(5) % 5 == 0 and (x.db.profile.spells.mergeDontMergeCriticals or x.db.profile.spells.mergeCriticalsWithOutgoing or x.db.profile.spells.mergeCriticalsByThemselves) then
 					message = sformat("%s |cffFFFFFFx%s|r", message, random(17)+1)
 				end
+				local multistriked = ((random(4) % 4 == 0) and 1 or 0) + ((random(4) % 4 == 0) and 1 or 0)
 				if x.db.profile.frames["outgoing"].iconsEnabled then
 					if x.db.profile.frames["outgoing"].fontJustify == "LEFT" then
-						message = x:GetSpellTextureFormatted(GetRandomSpellID(), x.db.profile.frames["outgoing"].iconsSize) .. "  " .. message
+						message = x:GetSpellTextureFormatted(GetRandomSpellID(), x.db.profile.frames["outgoing"].iconsSize, multistriked) .. "  " .. message
 					else
-						message = message .. x:GetSpellTextureFormatted(GetRandomSpellID(), x.db.profile.frames["outgoing"].iconsSize)
+						message = message .. x:GetSpellTextureFormatted(GetRandomSpellID(), x.db.profile.frames["outgoing"].iconsSize, multistriked)
 					end
 				end
 				x:AddMessage(output, message, x.damagecolor[damageColorLookup[math.random(7)]])
@@ -902,11 +923,12 @@ function x.TestMoreUpdate(self, elapsed)
 				if (random(5) % 5 == 0) and (x.db.profile.spells.mergeCriticalsWithOutgoing or x.db.profile.spells.mergeCriticalsByThemselves) then
 					message = sformat("%s |cffFFFFFFx%s|r", message, random(17)+1)
 				end
+				local multistriked = ((random(4) % 4 == 0) and 1 or 0) + ((random(4) % 4 == 0) and 1 or 0)
 				if x.db.profile.frames["critical"].iconsEnabled then
 					if x.db.profile.frames["critical"].fontJustify == "LEFT" then
-						message = x:GetSpellTextureFormatted(GetRandomSpellID(), x.db.profile.frames["critical"].iconsSize) .. "  " .. message
+						message = x:GetSpellTextureFormatted(GetRandomSpellID(), x.db.profile.frames["critical"].iconsSize, multistriked) .. "  " .. message
 					else
-						message = message .. x:GetSpellTextureFormatted(GetRandomSpellID(), x.db.profile.frames["critical"].iconsSize)
+						message = message .. x:GetSpellTextureFormatted(GetRandomSpellID(), x.db.profile.frames["critical"].iconsSize, multistriked)
 					end
 				end
 				x:AddMessage(output, message, x.damagecolor[damageColorLookup[math.random(7)]])
@@ -1022,6 +1044,8 @@ function x.EndTestMode()
 		frame:SetScript("OnUpdate", nil)
 		frame:Clear()
 	end
+
+	StaticPopup_Hide("XCT_PLUS_TESTMODE")
 end
 
 function x.RestoreAllDefaults()
@@ -1084,6 +1108,21 @@ StaticPopupDialogs["XCT_PLUS_HIDE_IN_COMBAT"] = {
 	OnAccept		= x.noop,
 	OnCancel		= function() x.db.profile.hideConfig = true; x:RefreshConfig() end,
 	
+	-- Taint work around
+	preferredIndex	= 3,
+}
+
+StaticPopupDialogs["XCT_PLUS_DB_CLEANUP_1"] = {
+	text			  = "|cff798BDDxCT+ Spring Cleaning|r\n\nHello, |cffFFFF00xCT|r|cffFF0000+|r needed to cleanup some |cffFF0000old or removed spell entries|r from the spam merger. |cffFFFF00Those settings needed to be reset|r. The rest of your profile settings has |cff22FF44remained the same|r.\n\nSorry for this inconvenience.\n\n",
+	timeout			= 0,
+	whileDead		= 1,
+	
+	button1			= OKAY.."!",
+  button2			= "Don't Show Again",
+	hideOnEscape	= true,
+	
+  OnCancel		= function() x.db.global.dontShowDBCleaning = true end,
+  
 	-- Taint work around
 	preferredIndex	= 3,
 }

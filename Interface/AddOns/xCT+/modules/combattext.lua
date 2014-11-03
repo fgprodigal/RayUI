@@ -1,4 +1,4 @@
-	--[[   ____    ______      
+--[[   ____    ______      
       /\  _`\ /\__  _\   __
  __  _\ \ \/\_\/_/\ \/ /_\ \___ 
 /\ \/'\\ \ \/_/_ \ \ \/\___  __\
@@ -7,19 +7,19 @@
  \//\/_/  \/___/    \/_/
  
  [=====================================]
- [  Author: Dandruff @ Whisperwind-US  ]
- [  xCT+ Version 3.x.x                 ]
- [  ©2012. All Rights Reserved.        ]
+ [  Author: Dandraffbal-Stormreaver US ]
+ [  xCT+ Version 4.x.x                 ]
+ [  ©2014. All Rights Reserved.        ]
  [====================================]]
-
+ 
 local ADDON_NAME, addon = ...
 
 -- Shorten my handle
 local x = addon.engine
 
 -- up values
-local _, _G, sformat, mfloor, ssub, smatch, sgsub, s_upper, s_lower, string, tinsert, ipairs, pairs, print, tostring, tonumber, select, unpack =
-  nil, _G, string.format, math.floor, string.sub, string.match, string.gsub, string.upper, string.lower, string, table.insert, ipairs, pairs, print, tostring, tonumber, select, unpack
+local _, _G, sformat, mfloor, ssub, smatch, sgsub, s_upper, s_lower, string, tinsert, tremove, ipairs, pairs, print, tostring, tonumber, select, unpack =
+  nil, _G, string.format, math.floor, string.sub, string.match, string.gsub, string.upper, string.lower, string, table.insert, table.remove, ipairs, pairs, print, tostring, tonumber, select, unpack
 
 --[=====================================================[
  Holds cached spells, buffs, and debuffs
@@ -31,6 +31,23 @@ x.spellCache = {
   procs = { },
   items = { },
 }
+
+--[=====================================================[
+ A Simple Managed Table Pool
+--]=====================================================]
+local tpool = { }
+local function tnew( )
+  if #tpool > 0 then
+    local t = tpool[1]
+    tremove( tpool, 1 )
+    return t
+  else
+    return { }
+  end
+end
+local function tdel( t )
+  tinsert( tpool, t )
+end
 
 --[=====================================================[
  Holds player info; use AddOn:UpdatePlayer()
@@ -95,6 +112,7 @@ function x:UpdateCombatTextEvents(enable)
     f:RegisterEvent("UNIT_ENTERED_VEHICLE")
     f:RegisterEvent("UNIT_EXITING_VEHICLE")
     f:RegisterEvent("PLAYER_ENTERING_WORLD")
+    f:RegisterEvent("UNIT_PET")
     f:RegisterEvent("PLAYER_TARGET_CHANGED")
     f:RegisterEvent("SPELL_ACTIVATION_OVERLAY_GLOW_SHOW")
     
@@ -161,6 +179,8 @@ local function ShowPartyKill() return x.db.profile.frames["general"].showPartyKi
 local function ShowBuffs() return x.db.profile.frames["general"].showBuffs end
 local function ShowDebuffs() return x.db.profile.frames["general"].showDebuffs end
 local function ShowOverHealing() return x.db.profile.frames["healing"].enableOverHeal end
+local function ShowEnergyGains() return x.db.profile.frames["power"].showEnergyGains end
+local function ShowPeriodicEnergyGains() return x.db.profile.frames["power"].showPeriodicEnergyGains end
 
 local function ShowRogueComboPoints() return x.db.profile.spells.combo["ROGUE"][COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] and x.player.class == "ROGUE" end
 local function ShowFeralComboPoints() return x.db.profile.spells.combo["DRUID"][2][COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] and x.player.class == "DRUID" and x.player.spec == 2 end
@@ -180,6 +200,13 @@ local function MergeCriticalsWithOutgoing() return x.db.profile.spells.mergeCrit
 local function MergeCriticalsByThemselves() return x.db.profile.spells.mergeCriticalsByThemselves end
 local function MergeDontMergeCriticals() return x.db.profile.spells.mergeDontMergeCriticals end
 local function MergeDispells() return x.db.profile.spells.mergeDispells end
+
+local function IsMultistrikeEnabled() return x.db.profile.spells.multistrikeEnabled end
+local function GetMSLatency() return x.db.profile.spells.multistrikeLatency / 1000 end
+local function IsMSAutoAdjusted() return x.db.profile.spells.multistikeAutoAdjust end
+local function IS_MULTISTRIKE_DEBUG() return x.db.profile.spells.multistikeDebug end
+local function GetMultistrikeIconMultiplier() return x.db.profile.spells.multistrikeIconMultiplier / 100 end
+local function ShowMultistrikeIcons() return x.db.profile.spells.showMultistrikeIcons end
 
 local function FilterPlayerPower(value) return x.db.profile.spellFilter.filterPowerValue > value end
 local function FilterOutgoingDamage(value) return x.db.profile.spellFilter.filterOutgoingDamageValue > value end
@@ -260,11 +287,13 @@ local function GetCustomSpellColorFromIndex(index)
 	end
 end
 
-
 --[=====================================================[
  String Formatters
 --]=====================================================]
 local format_loot = "([^|]*)|cff(%x*)|H([^:]*):(%d+):%d+:(%d+):[-?%d+:]+|h%[?([^%]]*)%]|h|r?%s?x?(%d*)%.?"
+--local msg = "|cff1eff00|Hitem:108840:0:0:0:0:0:0:443688319:90:0:0:0|h[Warlords Intro Zone PH Mail Helm]|h|r"
+--local format_loot = "([^|]*)|cff(%x*)|H([^:]*):(%d+):[-?%d+:]+|h%[?([^%]]*)%]|h|r?%s?x?(%d*)%.?"
+
 local format_pet  = sformat("|cff798BDD[%s]:|r %%s (%%s)", sgsub(BATTLE_PET_CAGE_ITEM_NAME,"%%s","")) -- [Caged]: Pet Name (Pet Family)
 
 local format_fade         = "-%s"
@@ -281,6 +310,7 @@ local format_quality      = "ITEM_QUALITY%s_DESC"
 local format_remove_realm = "(.*)-.*"
 
 local format_spell_icon   = " |T%s:%d:%d:0:0:64:64:5:59:5:59|t"
+local format_msspell_icon = " |cffFFFFFFx%d|r |T%s:%d:%d:0:0:64:64:5:59:5:59|t"
 local format_loot_icon    = "|T%s:%d:%d:0:0:64:64:5:59:5:59|t"
 local format_lewtz        = "%s%s: %s [%s]%s%%s"
 local format_lewtz_amount = " |cff798BDDx%s|r"
@@ -289,6 +319,168 @@ local format_lewtz_blind  = "(%s)"
 local format_crafted      = (LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
 local format_looted       = (LOOT_ITEM_SELF:gsub("%%.*", ""))
 local format_pushed       = (LOOT_ITEM_PUSHED_SELF:gsub("%%.*", ""))
+
+--[=====================================================[
+ Message Formatters
+--]=====================================================]
+local xCTFormat = { }
+
+function xCTFormat:SPELL_HEAL( multistriked, outputFrame, spellID, amount, critical, merged )
+  local outputColor, message = "healingOut"
+  
+  -- Format Criticals and also abbreviate values
+  if critical then
+    outputColor = "healingOutCritical"
+    message = sformat( format_crit, x.db.profile.frames["critical"].critPrefix,
+                                    x:Abbreviate( amount, "critical" ),
+                                    x.db.profile.frames["critical"].critPostfix )
+  else
+    message = x:Abbreviate( amount, outputFrame )
+  end
+
+  -- Add Icons
+  if x.db.profile.frames[outputFrame].iconsEnabled then
+    local iconsSize = x.db.profile.frames[outputFrame].iconsSize
+    if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
+      message = x:GetSpellTextureFormatted(spellID, iconsSize, multistriked) .. "  " .. message
+    else
+      message = message .. x:GetSpellTextureFormatted(spellID, iconsSize, multistriked)
+    end
+  end
+  
+  x:AddMessage(outputFrame, message, outputColor)
+end
+
+function xCTFormat:SPELL_PERIODIC_HEAL( multistriked, outputFrame, spellID, amount, critical, merged )
+  local outputColor, message = "healingOutPeriodic"
+
+  -- Format Criticals and also abbreviate values
+  if critical then
+    message = sformat( format_crit, x.db.profile.frames["critical"].critPrefix,
+                                    x:Abbreviate( amount, "critical" ),
+                                    x.db.profile.frames["critical"].critPostfix )
+  else
+    message = x:Abbreviate( amount, outputFrame )
+  end
+
+  -- Add Icons
+  if x.db.profile.frames[outputFrame].iconsEnabled then
+    local iconsSize = x.db.profile.frames[outputFrame].iconsSize
+    if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
+      message = x:GetSpellTextureFormatted(spellID, iconsSize, multistriked) .. "  " .. message
+    else
+      message = message .. x:GetSpellTextureFormatted(spellID, iconsSize, multistriked)
+    end
+  end
+  
+  x:AddMessage(outputFrame, message, outputColor)
+end
+
+function xCTFormat:SWING_DAMAGE( multistriked, outputFrame, spellID, amount, critical, merged )
+  local outputColor, message = "genericDamage"
+
+  if critical and ShowSwingCrit() then
+    if ShowSwingCritPrefix() then
+      message = sformat( format_crit, x.db.profile.frames["critical"].critPrefix,
+                                      x:Abbreviate(amount, "critical"),
+                                      x.db.profile.frames["critical"].critPostfix )
+    else
+      message = x:Abbreviate(amount, "critical")
+    end
+  else
+    message = x:Abbreviate(amount, "outgoing")
+  end
+
+  if x.db.profile.frames[outputFrame].iconsEnabled then
+    local iconsSize = x.db.profile.frames[outputFrame].iconsSize
+    if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
+      message = x:GetSpellTextureFormatted(spellID, iconsSize, multistriked) .. "  " .. message
+    else
+      message = message .. x:GetSpellTextureFormatted(spellID, iconsSize, multistriked)
+    end
+  end
+
+  x:AddMessage(outputFrame, message, outputColor)
+end
+
+function xCTFormat:RANGE_DAMAGE( multistriked, outputFrame, spellID, amount, critical, merged )
+  local outputColor, message = "genericDamage"
+
+  if critical then
+    -- Check to see if we should format the Auto Shot critical hit
+    if not autoShot or autoShot and ShowSwingCritPrefix() then
+      message = sformat( format_crit, x.db.profile.frames["critical"].critPrefix,
+                                      x:Abbreviate(amount, "critical"),
+                                      x.db.profile.frames["critical"].critPostfix )
+    else
+      message = x:Abbreviate(amount, "critical")
+    end
+  else
+    message = x:Abbreviate(amount, "outgoing")
+  end
+
+  -- Add Icons
+  if x.db.profile.frames[outputFrame].iconsEnabled then
+    local iconsSize = x.db.profile.frames[outputFrame].iconsSize
+    if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
+      message = x:GetSpellTextureFormatted(spellID, iconsSize, multistriked) .. "  " .. message
+    else
+      message = message .. x:GetSpellTextureFormatted(spellID, iconsSize, multistriked)
+    end
+  end
+
+  x:AddMessage(outputFrame, message, outputColor)
+end
+
+function xCTFormat:SPELL_DAMAGE( multistriked, outputFrame, spellID, amount, critical, merged, spellSchool )
+  local message
+
+  -- Format Criticals and also abbreviate values
+  if critical then
+    message = sformat( format_crit, x.db.profile.frames["critical"].critPrefix,
+                                    x:Abbreviate( amount, "critical" ),
+                                    x.db.profile.frames["critical"].critPostfix )
+  else
+    message = x:Abbreviate( amount, outputFrame )
+  end
+
+  -- Add Icons
+  if x.db.profile.frames[outputFrame].iconsEnabled then
+    local iconsSize = x.db.profile.frames[outputFrame].iconsSize
+    if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
+      message = x:GetSpellTextureFormatted(spellID, iconsSize, multistriked) .. "  " .. message
+    else
+      message = message .. x:GetSpellTextureFormatted(spellID, iconsSize, multistriked)
+    end
+  end
+  
+  x:AddMessage(outputFrame, message, GetCustomSpellColorFromIndex(spellSchool) )
+end
+
+function xCTFormat:SPELL_PERIODIC_DAMAGE( multistriked, outputFrame, spellID, amount, critical, merged, spellSchool )
+  local message
+
+  -- Format Criticals and also abbreviate values
+  if critical then
+    message = sformat( format_crit, x.db.profile.frames["critical"].critPrefix,
+                                    x:Abbreviate( amount, "critical" ),
+                                    x.db.profile.frames["critical"].critPostfix )
+  else
+    message = x:Abbreviate( amount, outputFrame )
+  end
+
+  -- Add Icons
+  if x.db.profile.frames[outputFrame].iconsEnabled then
+    local iconsSize = x.db.profile.frames[outputFrame].iconsSize
+    if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
+      message = x:GetSpellTextureFormatted(spellID, iconsSize, multistriked) .. "  " .. message
+    else
+      message = message .. x:GetSpellTextureFormatted(spellID, iconsSize, multistriked)
+    end
+  end
+
+  x:AddMessage(outputFrame, message, GetCustomSpellColorFromIndex(spellSchool) )
+end
 
 
 --[=====================================================[
@@ -316,6 +508,12 @@ local COMBATLOG_FILTER_MY_VEHICLE = bit.bor( COMBATLOG_OBJECT_AFFILIATION_MINE,
 function x.OnCombatTextEvent(self, event, ...)
   if event == "COMBAT_LOG_EVENT_UNFILTERED" then
     local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, srcFlags2, destGUID, destName, destFlags, destFlags2 = select(1, ...)
+    
+    --[[local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, spellSchool, amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing, isOffHand, multistrike = select(1, ...)
+    if eventType=="SPELL_DAMAGE" and spellName=="Kill Command" then 
+      print("Flags:", sourceFlags, sourceRaidFlags, sourceGUID, sourceName, hideCaster)
+    end]]
+    
     if sourceGUID == x.player.guid or ( sourceGUID == UnitGUID("pet") and ShowPetDamage() ) or sourceFlags == COMBATLOG_FILTER_MY_VEHICLE then
       if x.outgoing_events[eventType] then
         x.outgoing_events[eventType](...)
@@ -337,6 +535,7 @@ end
  AddOn:GetSpellTextureFormatted(
     spellID,     [number] - The spell ID you want the icon for
     iconSize,    [number] - The format size of the icon
+    multistrike, [number] - *NEW* The number of multistrikes for this item
   )
   Returns:
     message,     [string] - the message contains the formatted icon
@@ -344,18 +543,40 @@ end
     Formats an icon quickly for use when outputing to
   a combat text frame.
 --]=====================================================]
-function x:GetSpellTextureFormatted(spellID, iconSize)
-  local message = ""
-  
+function x:GetSpellTextureFormatted(spellID, iconSize, multistrike)
+  if not multistrike then multistrike = 0 end
+  local message, icon = "", x.BLANK_ICON
+
   if spellID == 0 then
-    message = sformat(format_spell_icon, PET_ATTACK_TEXTURE, iconSize, iconSize)
+    --message = sformat(format_spell_icon, PET_ATTACK_TEXTURE, iconSize, iconSize)
+    icon = PET_ATTACK_TEXTURE
   else
-    local icon = GetSpellTexture(spellID)
-    if icon then
+    --local icon = GetSpellTexture(spellID) or x.BLANK_ICON
+    icon = GetSpellTexture(spellID) or x.BLANK_ICON
+    
+    --[[if icon then
       message = sformat(format_spell_icon, icon, iconSize, iconSize)
     else
       message = sformat(format_spell_icon, x.BLANK_ICON, iconSize, iconSize)
+    end]]
+  end
+
+  if IsMultistrikeEnabled() then
+    if ShowMultistrikeIcons() then
+      -- TODO: Optimize this please
+      local msIconSize = iconSize * GetMultistrikeIconMultiplier()
+      message = sformat( "%s%s%s",
+        sformat( format_spell_icon, icon, iconSize, iconSize ),
+        sformat( format_spell_icon, multistrike >= 1 and icon or x.BLANK_ICON, msIconSize, msIconSize ),
+        sformat( format_spell_icon, multistrike >= 2 and icon or x.BLANK_ICON, msIconSize, msIconSize )
+      )
+    elseif multistrike > 0 then
+      message = sformat( format_msspell_icon, multistrike+1, icon, iconSize, iconSize )
+    else
+      message = sformat( format_spell_icon, icon, iconSize, iconSize )
     end
+  else
+      message = sformat( format_spell_icon, icon, iconSize, iconSize )
   end
   
   if x.db.profile.spells.enableMergerDebug then
@@ -364,6 +585,176 @@ function x:GetSpellTextureFormatted(spellID, iconSize)
   
   return message
 end
+
+--[=====================================================[
+ Multistrike Spam Manager :D "So shiny"
+--]=====================================================]
+-- This is the multistrike queue
+local msQueue = { }
+local msDebug = { }
+
+function x:EnqueueMultistrikeSpell( spellType, outputFrame, spellID, amount, ... )
+  local argn = select("#", ...)
+  local entry = tnew( )
+
+  entry.spellID = spellID
+  entry.outputFrame = outputFrame
+  entry.timestamp = GetTime( )
+  entry.amount = amount
+  entry.spellType = spellType
+  entry.ms = 0
+
+  if IsMSAutoAdjusted() or IS_MULTISTRIKE_DEBUG() then
+    tinsert(msDebug, { t=GetTime(), id=spellID })
+  end
+  
+  -- Soooo they take out "args" and they dont put in "pack"... what to do :P
+  if argn > 0 then
+    entry.params = tnew( )
+  
+    for i=1, argn do
+      entry.params[i] = select(i, ...)
+    end
+  else
+    entry.params = nil
+  end
+  
+  tinsert(msQueue, entry)
+end
+
+local lastAutoUpdate = 0
+local msMaxWait, msPreviousMax = 0, 0
+function x:MultistrikeSpellEvent( spellID, amount )
+  if #msQueue == 0 then return end
+  local entry
+  
+  -- Always assume its the latest entry
+  for i=#msQueue, 1, -1 do -- iter backwards through the queue
+    if msQueue[i].spellID == spellID then
+      entry = msQueue[i]
+      break
+    end
+  end
+  
+  if entry then
+    local timestamp = mfloor( (GetTime() - entry.timestamp) * 1000)
+    if timestamp > msMaxWait then msMaxWait = timestamp end
+
+    if IsMSAutoAdjusted() then
+      lastAutoUpdate = lastAutoUpdate + 1
+
+      -- Every 4 multistrikes, lets re-evaluate our ms
+      if lastAutoUpdate >= 4 then
+        lastAutoUpdate = 0
+
+        if x.db.profile.spells.multistrikeLatency > msMaxWait - 100 then
+          x.db.profile.spells.multistrikeLatency = msMaxWait + 50
+          
+          if x.db.profile.spells.multistrikeLatency > 3000 then
+            print("|cffFFFF00xCT+|r: Latency threshold reached (over |cffFF00003000ms|r)! Disabling |cff798BDDMultistrike Spam Merger|r.")
+            x.db.profile.spells.multistrikeLatency = 300
+            x.db.profile.spells.multistrikeEnabled = false
+          else
+            if IS_MULTISTRIKE_DEBUG() then print("Updating Latency to |cffFF0000"..(msMaxWait + 50)) end
+            msMaxWait = 0
+          end
+          
+          
+        end
+
+        -- 100ms decay every 20 iterations
+        msMaxWait = msMaxWait - 100
+      end
+    end
+
+    entry.ms = entry.ms + 1
+    entry.amount = entry.amount + amount
+    entry.timestamp = GetTime( )
+  else
+    if IsMSAutoAdjusted() then
+      if #msDebug > 0 then
+        for i=#msDebug, 1, -1 do
+          if msDebug[i].id == spellID then
+            local time = mfloor( (GetTime() - msDebug[i].t) * 1000)
+            msDebug[i].t = GetTime()
+            lastAutoUpdate = 0
+            if IS_MULTISTRIKE_DEBUG() then print("Adjusting Latency up to |cffFF0000"..(time + 50)) end
+            x.db.profile.spells.multistrikeLatency = time + 50 -- Add 50 ms on top of what the multistrike was
+            return
+          end
+        end
+      end
+    else
+      print("xCT+ Error: no main entry for multistrike... try increasing your latency compensation")
+    end
+  end
+
+  -- Update the Auto Adjust Queue
+  if IsMSAutoAdjusted() or IS_MULTISTRIKE_DEBUG() then
+    if #msDebug > 0 then
+      for i=#msDebug, 1, -1 do
+        if msDebug[i].id == spellID then
+          if IS_MULTISTRIKE_DEBUG() then
+            local name = GetSpellInfo(spellID)
+            local time = math.floor( (GetTime() - msDebug[i].t) * 1000)
+            print( "Last entry for |cff2255FF" ..(name or "Unknown Spell ID").. "|r: "..time.."|cffFF0000ms|r" )
+            break
+          end
+          msDebug[i].t = GetTime()
+        end
+      end
+    end
+  end
+end
+
+function x:CleanupMultistrikeQueue( )
+  local current = GetTime( )
+  for i, entry in pairs(msQueue) do
+    if entry.timestamp + GetMSLatency() <= current then
+      tremove(msQueue, i)
+      
+      -- OUTPUT the ENTRY
+      if entry.spellType == "SPELL_HEAL" then
+        xCTFormat:SPELL_HEAL( entry.ms, entry.outputFrame, entry.spellID, entry.amount, entry.params[1], entry.params[2] )
+
+      elseif entry.spellType == "SPELL_PERIODIC_HEAL" then
+        xCTFormat:SPELL_PERIODIC_HEAL( entry.ms, entry.outputFrame, entry.spellID, entry.amount, entry.params[1], entry.params[2] )
+        
+      elseif entry.spellType == "SPELL_DAMAGE" then
+        xCTFormat:SPELL_DAMAGE( entry.ms, entry.outputFrame, entry.spellID, entry.amount, entry.params[1], entry.params[2] )
+      
+      elseif entry.spellType == "SPELL_PERIODIC_DAMAGE" then
+        xCTFormat:SPELL_PERIODIC_DAMAGE( entry.ms, entry.outputFrame, entry.spellID, entry.amount, entry.params[1], entry.params[2] )
+      
+      elseif entry.spellType == "SWING_DAMAGE" then
+        xCTFormat:SWING_DAMAGE( entry.ms, entry.outputFrame, entry.spellID, entry.amount, entry.params[1], entry.params[2] )
+        
+      elseif entry.spellType == "RANGE_DAMAGE" then
+        xCTFormat:RANGE_DAMAGE( entry.ms, entry.outputFrame, entry.spellID, entry.amount, entry.params[1], entry.params[2] )
+      
+      end
+      
+      
+      
+      tdel( entry.params )
+      tdel( entry )
+    end
+  end
+end
+
+local lastUpdate = 0
+local testFrame = CreateFrame("FRAME")
+testFrame:SetScript("OnUpdate", function(self, e)
+  if not IsMultistrikeEnabled() then return end
+  lastUpdate = lastUpdate + e
+  
+  if lastUpdate >= 0.1 then
+    lastUpdate = 0
+    
+    x:CleanupMultistrikeQueue( )
+  end
+end)
+
 
 --[=====================================================[
  Combo Points - Rogues / Feral
@@ -645,6 +1036,36 @@ x.combat_events = {
         x:AddMessage("healing", message, "healingTakenPeriodic")
       end
     end,
+  ["PERIODIC_HEAL_CRIT"] = function(healer_name, amount)
+      if FilterIncomingHealing(amount) then return end
+      
+      local message = sformat(format_gain, x:Abbreviate(amount,"healing"))
+      
+      if not ShowHealingRealmNames() then
+        healer_name = smatch(healer_name, format_remove_realm) or healer_name
+      end
+      
+      if MergeIncomingHealing() then
+        x:AddSpamMessage("healing", healer_name, amount, "healingTaken", 5)
+      else
+        if ShowFriendlyNames() and healer_name then
+          if ShowColoredFriendlyNames() then
+            local _, class = UnitClass(healer_name)
+            if (class) then
+              healer_name = sformat("|c%s%s|r", RAID_CLASS_COLORS[class].colorStr, healer_name)
+            end
+          end
+        
+          if x.db.profile.frames["healing"].fontJustify == "LEFT" then
+            message = message .. " " .. healer_name
+          else
+            message = healer_name .. " " .. message
+          end
+        end
+        
+        x:AddMessage("healing", message, "healingTakenPeriodicCritical")
+      end
+    end,
   ["SPELL_ACTIVE"] = function(spellName)
       if TrackSpells() then x.spellCache.procs[spellName] = true end
       if IsProcFiltered(spellName) then return end
@@ -753,6 +1174,7 @@ x.combat_events = {
       end
     end,
   ["ENERGIZE"] = function(amount, energy_type)
+      if not ShowEnergyGains() then return end
       if not FilterPlayerPower(tonumber(amount)) then
         if energy_type and (energy_type == "MANA" and not IsBearForm()) -- do not show mana in bear form (Leader of the Pack)                                     
             or energy_type == "RAGE" or energy_type == "FOCUS"
@@ -765,6 +1187,7 @@ x.combat_events = {
       end
     end,
   ["PERIODIC_ENERGIZE"] = function(amount, energy_type)
+      if not ShowPeriodicEnergyGains() then return end
       if not FilterPlayerPower(tonumber(amount)) then
         if energy_type and (energy_type == "MANA" and not IsBearForm()) -- do not show mana in bear form (Leader of the Pack)
             or energy_type == "RAGE" or energy_type == "FOCUS"
@@ -900,18 +1323,22 @@ x.events = {
       collectgarbage()
     end,
     
+  ["UNIT_PET"] = function()
+      x:UpdatePlayer()
+    end,
+    
   ["ACTIVE_TALENT_GROUP_CHANGED"] = function() x:UpdatePlayer(); x:UpdateComboTracker() end,    -- x:UpdateComboPointOptions(true) end,
   
   ["CHAT_MSG_LOOT"] = function(msg)
       -- Format Loot
       local preMessage, linkColor, linkType, linkID, linkQuality, itemName, amount = select(3, string.find(msg, format_loot))
       
-	  if TrackSpells() then
+      if TrackSpells() then
         x.spellCache.items[linkID] = true
       end
-	  
-	  if IsItemFiltered( linkID ) then return end
-	  
+
+      if IsItemFiltered( linkID ) then return end
+
       -- Check to see if this is a battle pet
       if linkType == "battlepet" then
         local speciesName, speciesIcon, petType = C_PetJournal.GetPetInfoBySpeciesID(linkID)
@@ -986,6 +1413,7 @@ x.events = {
       end
     end,
   ["CHAT_MSG_MONEY"] = function(msg)
+      if not ShowLootMoney() then return end
       local g, s, c = tonumber(msg:match(GOLD_AMOUNT:gsub("%%d", "(%%d+)"))), tonumber(msg:match(SILVER_AMOUNT:gsub("%%d", "(%%d+)"))), tonumber(msg:match(COPPER_AMOUNT:gsub("%%d", "(%%d+)")))
       local money, o = (g and g * 10000 or 0) + (s and s * 100 or 0) + (c or 0), MONEY .. ": "
       
@@ -1018,8 +1446,19 @@ x.outgoing_events = {
   ["SPELL_PERIODIC_HEAL"] = function(...)
       if not ShowHealing() or not ShowHots() then return end
       
-      local spellID, spellName, spellSchool, amount, overhealing, absorbed, critical = select(12, ...)
-      local outputFrame, message, outputColor = "outgoing", amount, "healingOutPeriodic"
+      -- WoD - ADDING SUPPORT FOR MULTISTRIKE
+      local spellID, spellName, spellSchool, amount, overhealing, absorbed, critical, multistrike = select(12, ...)
+      
+      -- Check for Overhealing
+      if not ShowOverHealing() then
+        local realamount = amount - overhealing
+        if realamount < 1 then
+          return
+        end
+        amount = realamount
+      end
+
+      local outputFrame = "outgoing"
       local merged = false
 
       -- Keep track of spells that go by
@@ -1031,61 +1470,51 @@ x.outgoing_events = {
       -- Spell Specific Filter
       if IsSpellFiltered(spellID) then return end
       
-      -- Check for Overhealing
-      if not ShowOverHealing() then
-        local realamount = amount - overhealing
-        if realamount < 1 then
-          return
-        end
-        message = realamount
-      end
-      
       -- Check for merge
       if IsMerged(spellID) then
         if not critical or critical and not MergeCriticalsByThemselves() then
           merged = true
-          x:AddSpamMessage("outgoing", spellID, message, outputColor)
+          x:AddSpamMessage("outgoing", spellID, amount, "healingOutPeriodic")
         end
       end
-      
+
       -- Check for Critical
       if critical then
         if not MergeDontMergeCriticals() and IsMerged(spellID) then
           -- Merge this critical entry
-          x:AddSpamMessage("critical", spellID, message, outputColor)
+          x:AddSpamMessage("critical", spellID, amount, "healingOutPeriodic")
           
           -- We are done, after we check for criticals. We don't need to do anything else.
           return 
         else
           -- Don't merge criticals
-          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, x:Abbreviate(message, "critical"), x.db.profile.frames["critical"].critPostfix)
           outputFrame = "critical"
         end
       elseif merged then  -- return merged, non-crits
         return
-      else
-        message = x:Abbreviate(message, "outgoing")
       end
       
-      -- Add Icons
-      if x.db.profile.frames[outputFrame].iconsEnabled then
-        if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
-          message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+      if IsMultistrikeEnabled() then
+        if multistrike then
+          x:MultistrikeSpellEvent( spellID, amount ) -- sorry, but I just dont think we care about crit'd multistrikes
         else
-          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+          x:EnqueueMultistrikeSpell( "SPELL_PERIODIC_HEAL", outputFrame, spellID, amount, critical, merged )
         end
+        
+        return
       end
       
-      x:AddMessage(outputFrame, message, outputColor)
+      -- Output to Message Frame (Do not format multistrikes here)
+      xCTFormat:SPELL_PERIODIC_HEAL( multistrike and 1 or 0, outputFrame, spellID, amount, critical, merged )
     end,
     
   ["SPELL_HEAL"] = function(...)
       if not ShowHealing() then return end
 
-      local spellID, spellName, spellSchool, amount, overhealing, absorbed, critical = select(12, ...)
-      local outputFrame, message, outputColor = "outgoing", amount, "healingOut"
+      local spellID, spellName, spellSchool, amount, overhealing, absorbed, critical, multistrike = select(12, ...)
+      local outputFrame = "outgoing"
       local merged = false
-
+      
       -- Keep track of spells that go by
       if TrackSpells() then x.spellCache.spells[spellID] = true end
 
@@ -1101,54 +1530,50 @@ x.outgoing_events = {
         if realamount < 1 then
           return
         end
-        message = realamount
+        amount = realamount
       end
       
       -- Check for merge
       if IsMerged(spellID) then
         if not critical or critical and not MergeCriticalsByThemselves() then
           merged = true
-          x:AddSpamMessage("outgoing", spellID, message, outputColor)
+          x:AddSpamMessage("outgoing", spellID, amount, "healingOut")
         end
       end
 
       -- Check for Critical
       if critical then
-        outputColor = "healingOutCritical"
-        
         if not MergeDontMergeCriticals() and IsMerged(spellID) then
           -- Merge this critical entry
-          x:AddSpamMessage("critical", spellID, message, outputColor)
+          x:AddSpamMessage("critical", spellID, amount, "healingOutCritical")
           
           -- We are done, after we check for criticals. We don't need to do anything else.
           return 
         else
-          -- Don't merge criticals
-          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, x:Abbreviate(message, "critical"), x.db.profile.frames["critical"].critPostfix)
           outputFrame = "critical"
         end
       elseif merged then  -- return merged, non-crits
         return
-      else
-        message = x:Abbreviate(message, "outgoing")
       end
-      
-      -- Add Icons
-      if x.db.profile.frames[outputFrame].iconsEnabled then
-        if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
-          message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+
+      if IsMultistrikeEnabled() then
+        if multistrike then
+          x:MultistrikeSpellEvent( spellID, amount )
         else
-          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+          x:EnqueueMultistrikeSpell( "SPELL_HEAL", outputFrame, spellID, amount, critical, merged )
         end
+        
+        return
       end
       
-      x:AddMessage(outputFrame, message, outputColor)
+      -- Output to Message Frame (Do not format multistrikes here)
+      xCTFormat:SPELL_HEAL( (multistrike and 1) or 0, outputFrame, spellID, amount, critical, merged )
     end,
     
   ["SWING_DAMAGE"] = function(...)
       if not ShowDamage() then return end
       
-      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  amount, _, _, _, _, _, critical = ...
+      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  amount, _, _, _, _, _, critical, glancing, crushing, isOffHand, multistrike = ...
       local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount, "outgoing"), "genericDamage"
       local merged, critMessage = false, nil
       
@@ -1167,9 +1592,8 @@ x.outgoing_events = {
       if critical then
         if ShowSwingCrit() then
           outputFrame = "critical"
-          if ShowSwingCritPrefix() then
-            critMessage = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, x:Abbreviate(amount, "critical"), x.db.profile.frames["critical"].critPostfix)
-          end
+        else
+          return
         end
       end
       
@@ -1187,24 +1611,25 @@ x.outgoing_events = {
         return
       end
 
-      -- Add Icons
-      if x.db.profile.frames[outputFrame].iconsEnabled then
-        if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
-          critMessage = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. (critMessage or message)
+      if IsMultistrikeEnabled() then
+        if multistrike then
+          x:MultistrikeSpellEvent( spellID, amount )
         else
-          critMessage = (critMessage or message) .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+          x:EnqueueMultistrikeSpell( "SWING_DAMAGE", outputFrame, spellID, amount, critical, merged )
         end
+        
+        return
       end
       
-      x:AddMessage(outputFrame, (critMessage or message), outputColor)
+      xCTFormat:SWING_DAMAGE( (multistrike and 1) or 0, outputFrame, spellID, amount, critical, merged )
     end,
     
   ["RANGE_DAMAGE"] = function(...)
       if not ShowDamage() then return end
       
-      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, _, amount, _, _, _, _, _, critical = ...
-      local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount, "outgoing"), "genericDamage"
-      local merged, critMessage = false, nil
+      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, _, amount, _, _, _, _, _, critical, glancing, crushing, isOffHand, multistrike = ...
+      local outputFrame, outputColor = "outgoing", "genericDamage"
+      local merged = false
       
       -- Keep track of spells that go by
       if TrackSpells() then x.spellCache.spells[spellID] = true end
@@ -1231,7 +1656,7 @@ x.outgoing_events = {
             -- Are we filtering Auto Attacks in the Outgoing frame?
             if ShowAutoAttack() then
               -- Send message (amount) to "outgoing"
-              x:AddSpamMessage(outputFrame, spellID, amount, outputColor, 6)
+              x:AddSpamMessage(outputFrame, spellID, amount, "genericDamage", 6)
             end
             
             -- After the spam merge, there is nothing we need to do
@@ -1239,10 +1664,7 @@ x.outgoing_events = {
           end
         end
         
-        -- Check to see if we should format the Auto Shot critical hit
-        if not autoShot or autoShot and ShowSwingCritPrefix() then
-          critMessage = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, x:Abbreviate(amount, "critical"), x.db.profile.frames["critical"].critPostfix)
-        end
+        
       end
       
       -- Check for Auto Shot critical merge with normal damage
@@ -1254,7 +1676,7 @@ x.outgoing_events = {
           -- Are we filtering Auto Attacks in the Outgoing frame?
           if ShowAutoAttack() then
             -- Merge with the outgoing damage
-            x:AddSpamMessage("outgoing", spellID, amount, outputColor, 6)
+            x:AddSpamMessage("outgoing", spellID, amount, "genericDamage", 6)
           end
         end
       end
@@ -1263,28 +1685,29 @@ x.outgoing_events = {
       if not ShowAutoAttack() and outputFrame == "outgoing" then return end
       
       if not merged and autoShot and MergeRangedAttacks() then
-        x:AddSpamMessage(outputFrame, spellID, amount, outputColor, 6)
+        x:AddSpamMessage(outputFrame, spellID, amount, "genericDamage", 6)
         return
       end
       
-      -- Add Icons
-      if x.db.profile.frames[outputFrame].iconsEnabled then
-        if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
-          critMessage = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. (critMessage or message)
+      if IsMultistrikeEnabled() then
+        if multistrike then
+          x:MultistrikeSpellEvent( spellID, amount )
         else
-          critMessage = (critMessage or message) .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+          x:EnqueueMultistrikeSpell( "RANGE_DAMAGE", outputFrame, spellID, amount, critical, merged )
         end
+        
+        return
       end
       
-      x:AddMessage(outputFrame, (critMessage or message), outputColor)
+      -- Output to Message Frame (Do not format multistrikes here)
+      xCTFormat:RANGE_DAMAGE( (multistrike and 1) or 0, outputFrame, spellID, amount, critical, merged )
     end,
     
   ["SPELL_DAMAGE"] = function(...)
       if not ShowDamage() then return end
       
-      local _, _, _, sourceGUID, _, sourceFlags, _, destGUID, _, _, _,  spellID, _, spellSchool, amount, _, _, _, _, _, critical = ...
-      local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount, "outgoing"), "genericDamage"
-      local merged = false
+      local timestamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, spellSchool, amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing, isOffHand, multistrike = select(1, ...)
+      local merged, outputFrame = false, "outgoing"
       
       -- Keep track of spells that go by
       if TrackSpells() then x.spellCache.spells[spellID] = true end
@@ -1295,53 +1718,50 @@ x.outgoing_events = {
       -- Spell Specific Filter
       if IsSpellFiltered(spellID) then return end
       
-      -- Get special magic color
-      outputColor = GetCustomSpellColorFromIndex(spellSchool)
-      
       -- Check for merge
       if IsMerged(spellID) then
         if critical and not MergeCriticalsByThemselves() or not critical then
           merged = true
-          x:AddSpamMessage("outgoing", spellID, amount, outputColor)
+          x:AddSpamMessage("outgoing", spellID, amount, GetCustomSpellColorFromIndex(spellSchool))
         end
       end
-
+      
       -- Check for Critical
       if critical then
         if not MergeDontMergeCriticals() and IsMerged(spellID) then
           -- Merge this critical entry
-          x:AddSpamMessage("critical", spellID, amount, outputColor)
+          x:AddSpamMessage("critical", spellID, amount, GetCustomSpellColorFromIndex(spellSchool))
           
           -- We are done, after we check for criticals. We don't need to do anything else.
           return 
         else
-          -- Don't merge criticals
-          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, x:Abbreviate(amount, "critical"), x.db.profile.frames["critical"].critPostfix)
           outputFrame = "critical"
         end
       elseif merged then  -- return merged, non-crits
         return
       end
-      
-      -- Add Icons
-      if x.db.profile.frames[outputFrame].iconsEnabled then
-        if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
-          message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+
+      if IsMultistrikeEnabled() then
+        if multistrike then
+          x:MultistrikeSpellEvent( spellID, amount )
         else
-          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+          x:EnqueueMultistrikeSpell( "SPELL_DAMAGE", outputFrame, spellID, amount, critical, merged, spellSchool )
         end
+        
+        return
       end
-      
-      x:AddMessage(outputFrame, message, outputColor)
+
+      -- Output to Message Frame (Do not format multistrikes here)
+      xCTFormat:SPELL_DAMAGE( (multistrike and 1) or 0, outputFrame, spellID, amount, critical, merged, spellSchool )
     end,
     
   ["SPELL_PERIODIC_DAMAGE"] = function(...)
       if not ShowDamage() or not ShowDots() then return end
       
-      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, spellSchool, amount, _, _, _, _, _, critical = ...
-      local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount, "outgoing"), "genericDamage"
-      local merged = false
+      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, spellSchool, amount, _, _, _, _, _, critical, glancing, crushing, isOffHand, multistrike = ...
+      local merged, outputFrame = false, "outgoing"
       
+	  
       -- Keep track of spells that go by
       if TrackSpells() then x.spellCache.spells[spellID] = true end
 
@@ -1351,14 +1771,11 @@ x.outgoing_events = {
       -- Spell Specific Filter
       if IsSpellFiltered(spellID) then return end
       
-      -- Get special magic color
-      outputColor = GetCustomSpellColorFromIndex(spellSchool)
-      
       -- Check for merge
       if IsMerged(spellID) then
         if critical and not MergeCriticalsByThemselves() or not critical then
           merged = true
-          x:AddSpamMessage("outgoing", spellID, amount, outputColor)
+          x:AddSpamMessage("outgoing", spellID, amount, GetCustomSpellColorFromIndex(spellSchool))
         end
       end
 
@@ -1366,29 +1783,29 @@ x.outgoing_events = {
       if critical then
         if not MergeDontMergeCriticals() and IsMerged(spellID) then
           -- Merge this critical entry
-          x:AddSpamMessage("critical", spellID, amount, outputColor)
+          x:AddSpamMessage("critical", spellID, amount, GetCustomSpellColorFromIndex(spellSchool))
           
           -- We are done, after we check for criticals. We don't need to do anything else.
           return 
         else
-          -- Don't merge criticals
-          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, x:Abbreviate(amount, "critical"), x.db.profile.frames["critical"].critPostfix)
           outputFrame = "critical"
         end
       elseif merged then  -- return merged, non-crits
         return
       end
-
-      -- Add Icons
-      if x.db.profile.frames[outputFrame].iconsEnabled then
-        if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
-          message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
-        else
-          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
-        end
-      end
       
-      x:AddMessage(outputFrame, message, outputColor)
+      if IsMultistrikeEnabled() then
+        if multistrike then
+          x:MultistrikeSpellEvent( spellID, amount )
+        else
+          x:EnqueueMultistrikeSpell( "SPELL_PERIODIC_DAMAGE", outputFrame, spellID, amount, critical, merged, spellSchool )
+        end
+        
+        return
+      end
+
+      -- Output to Message Frame (Do not format multistrikes here)
+      xCTFormat:SPELL_PERIODIC_DAMAGE( (multistrike and 1) or 0, outputFrame, spellID, amount, critical, merged, spellSchool )
     end,
     
   ["SWING_MISSED"] = function(...)

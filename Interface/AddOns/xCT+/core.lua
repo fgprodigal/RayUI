@@ -7,16 +7,16 @@
  \//\/_/  \/___/    \/_/
  
  [=====================================]
- [  Author: Dandruff @ Whisperwind-US  ]
- [  xCT+ Version 3.x.x                 ]
- [  ©2012. All Rights Reserved.        ]
+ [  Author: Dandraffbal-Stormreaver US ]
+ [  xCT+ Version 4.x.x                 ]
+ [  ©2014. All Rights Reserved.        ]
  [====================================]]
-
+ 
 -- Get Addon's name and Blizzard's Addon Stub
 local AddonName, addon = ...
 
-local sgsub, ipairs, pairs, type, string_format, table_insert, table_remove, table_sort, print, tostring, tonumber, select, string_lower, collectgarbage, string_match =
-  string.gsub, ipairs, pairs, type, string.format, table.insert, table.remove, table.sort, print, tostring, tonumber, select, string.lower, collectgarbage, string.match
+local sgsub, ipairs, pairs, type, string_format, table_insert, table_remove, table_sort, print, tostring, tonumber, select, string_lower, collectgarbage, string_match, string_find =
+  string.gsub, ipairs, pairs, type, string.format, table.insert, table.remove, table.sort, print, tostring, tonumber, select, string.lower, collectgarbage, string.match, string.find
 
 -- compares a tables values
 local function tableCompare(t1, t2)
@@ -46,7 +46,18 @@ local x = addon.engine
 -- Profile Updated, need to refresh important stuff 
 local function RefreshConfig()
   -- Clean up the Profile
-  x:CompatibilityLogic()
+  x:CompatibilityLogic(true)
+
+  x:UpdateFrames()
+  x:UpdateSpamSpells()
+  x:UpdateItemTypes()
+    
+  collectgarbage()
+end
+
+local function ProfileReset()
+  -- Clean up the Profile
+  x:CompatibilityLogic(false)
 
   x:UpdateFrames()
   x:UpdateSpamSpells()
@@ -62,6 +73,9 @@ function x:OnInitialize()
     return
   end
 
+  -- Check for new installs
+  self.existingProfile = xCTSavedDB and xCTSavedDB.profiles and xCTSavedDB.profiles[UnitName("player").." - "..GetRealmName()] and true
+
   -- Load the Data Base
   self.db = LibStub('AceDB-3.0'):New('xCTSavedDB', addon.defaults)
 
@@ -71,10 +85,10 @@ function x:OnInitialize()
   -- Had to pass the explicit method into here, not sure why
   self.db.RegisterCallback(self, 'OnProfileChanged', RefreshConfig)
   self.db.RegisterCallback(self, 'OnProfileCopied', RefreshConfig)
-  self.db.RegisterCallback(self, 'OnProfileReset', RefreshConfig)
+  self.db.RegisterCallback(self, 'OnProfileReset', ProfileReset)
   
   -- Clean up the Profile
-  x:CompatibilityLogic()
+  x:CompatibilityLogic(self.existingProfile)
 
   -- Perform xCT+ Update
   x:UpdatePlayer()
@@ -106,21 +120,126 @@ frameUpdate:SetScript("OnEvent", function(self)
   x:UpdateFrames()
 end)
 
--- This function was created as the centeral location for crappy code
-function x:CompatibilityLogic()
+-- Version Compare Helpers... Yeah!
+local function VersionToTable( version )
+  local major, minor, iteration, releaseMsg = string_match(string_lower(version), "(%d+)%.(%d+)%.(%d+)(.*)")
+  major, minor, iteration = tonumber(major) or 0, tonumber(minor) or 0, tonumber(iteration) or 0
+  local isAlpha, isBeta =  string_find(releaseMsg, "alpha") and true or false, string_find(releaseMsg, "beta") and true or false
+  local t = { }
+  t.major = major
+  t.minor = minor
+  t.iteration = iteration
+  t.isAlpha = isAlpha
+  t.isBeta = isBeta
+  t.isRelease = not (isAlpha or isBeta)
+  
+  if not t.isReleased then
+    t.devBuild = tonumber(string_match(releaseMsg, "(%d+)")) or 1
+  end
+  return t
+end
+
+local function CompareVersions( a, b )
+  
+  -- Compare Major numbers
+  if a.major > b.major then
+    return 1
+  elseif a.major < b.major then
+    return -1
+  end
+  
+  -- Compare Minor numbers
+  if a.minor > b.minor then
+    return 1
+  elseif a.minor < b.minor then
+    return -1
+  end
+  
+  -- Compare Iteration numbers
+  if a.iteration > b.iteration then
+    return 1
+  elseif a.iteration < b.iteration then
+    return -1
+  end
+  
+  -- Compare Beta to Release then Alpha
+  if not a.isBeta and b.isBeta then
+    if a.isAlpha then
+      return -1
+    else
+      return 1
+    end
+  elseif a.isBeta and not b.isBeta then
+    if b.isAlpha then
+      return 1
+    else
+      return -1
+    end
+  end
+  
+  -- Compare Beta Build Versions
+  if a.isBeta and b.isBeta then
+    if a.devBuild > b.devBuild then
+      return 1
+    elseif a.devBuild < b.devBuild then
+      return -1
+    end
+    return 0
+  end
+  
+  -- Compare Alpha to Release
+  if not a.isAlpha and b.isAlpha then
+    return 1
+  elseif a.isAlpha and not b.isAlpha then
+    return -1
+  end
+  
+  -- Compare Alpha Build Versions
+  if a.isAlpha and b.isAlpha then
+    if a.devBuild > b.devBuild then
+      return 1
+    elseif a.devBuild < b.devBuild then
+      return -1
+    end
+    return 0
+  end
+  
+  return 0
+end
+
+-- This function was created as the central location for crappy code
+function x:CompatibilityLogic( existing )
+    local addonVersionString = GetAddOnMetadata("xCT+", "Version")
+    local currentVersion = VersionToTable(addonVersionString)
+    local previousVersion = VersionToTable(self.db.profile.dbVersion or "0.0.0")
+    
     -- MegaDamage Change (version 3.3.0)
     if self.db.profile.megaDamage.enableMegaDamage == false then
-        self.db.profile.megaDamage.enableMegaDamage = nil
+      self.db.profile.megaDamage.enableMegaDamage = nil
     elseif self.db.profile.megaDamage.enableMegaDamage == true then
-        self.db.profile.megaDamage.enableMegaDamage = nil
-        self.db.profile.frames.general.megaDamage = true
-        self.db.profile.frames.outgoing.megaDamage = true
-        self.db.profile.frames.critical.megaDamage = true
-        self.db.profile.frames.damage.megaDamage = true
-        self.db.profile.frames.healing.megaDamage = true
-        self.db.profile.frames.power.megaDamage = true
+      self.db.profile.megaDamage.enableMegaDamage = nil
+      self.db.profile.frames.general.megaDamage = true
+      self.db.profile.frames.outgoing.megaDamage = true
+      self.db.profile.frames.critical.megaDamage = true
+      self.db.profile.frames.damage.megaDamage = true
+      self.db.profile.frames.healing.megaDamage = true
+      self.db.profile.frames.power.megaDamage = true
     end
+    
+    -- Updating Spam Merger for 4.0.0 Beta 4 (Requires a reset)
+    if CompareVersions( VersionToTable("4.0.0 BETA 6"), previousVersion) > 0 then
+      -- Reset merge table
+      self.db.profile.spells.merge = {}
+      
+      -- Tell the user... i am sooo sorry
+      if existing and not x.db.global.dontShowDBCleaning then
+        StaticPopup_Show("XCT_PLUS_DB_CLEANUP_1")
+      end
+    end
+    
+    self.db.profile.dbVersion = addonVersionString
 end
+
 
 local getSpellDescription
 do
@@ -465,7 +584,7 @@ function x:UpdateComboPointOptions(force)
     end
   end
   
-  -- addon.options.args["Frames"].args["class"].args["tracker"] = comboSpells
+  addon.options.args["Frames"].args["class"].args["tracker"] = comboSpells
   
   x.LOADED_COMBO_POINTS_OPTIONS = true
   
@@ -993,7 +1112,7 @@ local ACD = LibStub('AceConfigDialog-3.0')
 local ACR = LibStub('AceConfigRegistry-3.0')
 
 -- Register the Options
-ACD:SetDefaultSize(AddonName, 800, 550)
+ACD:SetDefaultSize(AddonName, 800, 560)
 AC:RegisterOptionsTable(AddonName, addon.options)
 AC:RegisterOptionsTable(AddonName.."Blizzard", x.blizzardOptions)
 ACD:AddToBlizOptions(AddonName.."Blizzard", "|cffFF0000x|rCT+")
@@ -1006,18 +1125,28 @@ local lastConfigState, shownWarning = false, false
 function x:CombatStateChanged()
   if x.db.profile.hideConfig then
     if self.inCombat then
-	  if x.myContainer then
+      if x.myContainer then
         if x.myContainer:IsShown( ) then
           lastConfigState = true
-		  x.myContainer:Hide()
-		end
+          x:HideConfigTool()
+        end
       end
     else
       if lastConfigState then
-        ACD:Open(AddonName, x.myContainer)
+        x:ShowConfigTool()
       end
       lastConfigState = false
-	  shownWarning = false
+      shownWarning = false
+    end
+  end
+  
+  for framename, settings in pairs(x.db.profile.frames) do
+    if settings.enableScrollable and settings.scrollableInCombat then
+      if x.inCombat then
+        x:DisableFrameScrolling( framename )
+      else
+        x:EnableFrameScrolling( framename )
+      end
     end
   end
 end
@@ -1103,16 +1232,9 @@ function x:OpenxCTCommand(input)
     return
   end
   
-  if x.inCombat and x.db.profile.hideConfig then
-    if not shownWarning then
-      print("|cffFF0000x|r|cffFFFF00CT+|r will open the |cff798BDDConfiguration Tool|r after combat.")
-      shownWarning = true
-      lastConfigState = true
-    end
-  else
-    if not x.configuring then
-      x:ToggleConfigTool()
-    end
+  
+  if not x.configuring then
+    x:ToggleConfigTool()
   end
 end
 
@@ -1132,16 +1254,35 @@ function x:ToggleConfigTool()
 end
 
 function x:ShowConfigTool()
+  if x.isConfigToolOpen then return end
+  if x.inCombat and x.db.profile.hideConfig then
+    if not shownWarning then
+      print("|cffFF0000x|r|cffFFFF00CT+|r will open the |cff798BDDConfiguration Tool|r after combat.")
+      shownWarning = true
+      lastConfigState = true
+    end
+    return
+  end
+
   x.isConfigToolOpen = true
 
   if x.myContainer then
     x.myContainer:Hide()
   end
 
+  -- Register my AddOn for Escape keypresses
   x.myContainer = AceGUI:Create("Frame")
-  x.myContainer:SetCallback("OnClose", myContainer_OnRelease)
-  x.myContainer.content:GetParent():SetMinResize(800, 300)
+  x.myContainer.frame:SetScript('OnHide', function(self)
+      x:HideConfigTool()
+    end)
+  _G["xCT_PlusConfigFrame"] = x.myContainer.frame
+  table_insert( UISpecialFrames, "xCT_PlusConfigFrame" )
 
+  -- Properly dispose of this frame
+  x.myContainer:SetCallback("OnClose", myContainer_OnRelease)
+  
+  -- Last minute settings and SHOW
+  x.myContainer.content:GetParent():SetMinResize(800, 300)
   ACD:Open(AddonName, x.myContainer)
 end
 
@@ -1172,6 +1313,9 @@ function x:HideConfigTool( wait )
   if x.myContainer then
     x.myContainer:Hide()
   end
+
+  -- MORE!
+  GameTooltip:Hide()
 end
 
 -- Register Slash Commands

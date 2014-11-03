@@ -53,6 +53,7 @@ addon.defaults = {
       ["CombatHealingAbsorbTarget"] = false,
       ["fctSpellMechanics"] = false,
       ["fctSpellMechanicsOther"] = false,
+      ["CombatDamageStyle"] = 1,
     },
     
     frameSettings = {
@@ -209,6 +210,7 @@ addon.defaults = {
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
+        ["scrollableInCombat"] = false,
         
       -- fading text
         ["enableCustomFade"] = false,
@@ -269,6 +271,7 @@ addon.defaults = {
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
+        ["scrollableInCombat"] = false,
         
       -- fading text
         ["enableCustomFade"] = false,
@@ -327,6 +330,7 @@ addon.defaults = {
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
+        ["scrollableInCombat"] = false,
         
       -- fading text
         ["enableCustomFade"] = false,
@@ -364,11 +368,13 @@ addon.defaults = {
           ['healingTaken']         = { enabled = false, desc = "Healing",          default = { 0.10, 0.75, 0.10 } },
           ['healingTakenCritical'] = { enabled = false, desc = "Critical Healing", default = { 0.10, 1.00, 0.10 } },
           ['healingTakenPeriodic'] = { enabled = false, desc = "Periodic Healing", default = { 0.10, 0.50, 0.10 } },
+          ['healingTakenPeriodicCritical'] = { enabled = false, desc = "Critical Periodic Healing", default = { 0.10, 0.50, 0.10 } },
         },
         
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
+        ["scrollableInCombat"] = false,
         
       -- fading text
         ["enableCustomFade"] = false,
@@ -432,6 +438,7 @@ addon.defaults = {
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
+        ["scrollableInCombat"] = false,
         
       -- fading text
         ["enableCustomFade"] = false,
@@ -475,6 +482,7 @@ addon.defaults = {
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
+        ["scrollableInCombat"] = false,
         
       -- fading text
         ["enableCustomFade"] = false,
@@ -508,6 +516,7 @@ addon.defaults = {
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
+        ["scrollableInCombat"] = false,
         
       -- fading text
         ["enableCustomFade"] = false,
@@ -559,7 +568,7 @@ addon.defaults = {
         
         ["DRUID"] = {
           [1] = {                                         -- Balance
-            CreateComboSpellEntry(true, 81192),           --   Lunar Shower
+            --CreateComboSpellEntry(true, 81192),           --   Lunar Shower
           },
           [2] = {                                         -- Feral
             [COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] = true,
@@ -573,7 +582,7 @@ addon.defaults = {
             CreateComboSpellEntry(true, 19615, "pet"),    --   Frenzy Effect
           },
           [2] = {                                         -- Marksman
-            CreateComboSpellEntry(true, 82925),           --   Ready, Set, Aim...
+            --CreateComboSpellEntry(true, 82925),           --   Ready, Set, Aim...
           },
           [3] = {                                         -- Survival
             CreateComboSpellEntry(true, 56453),           --   Lock 'n Load
@@ -666,6 +675,14 @@ addon.defaults = {
       -- yes this is supposed to be blank :P
       -- it is dynamically generated in core.lua
       items = { },
+
+      -- multistike items here
+      multistrikeEnabled = true,
+      multistrikeLatency = 600,
+      multistikeDebug = false,
+      multistikeAutoAdjust = true,
+      showMultistrikeIcons = true,
+      multistrikeIconMultiplier = 50,
     },
     
     spellFilter = {
