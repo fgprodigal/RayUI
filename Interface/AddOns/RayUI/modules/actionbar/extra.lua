@@ -18,16 +18,14 @@ function R:TestBossButton()
 end
 
 function AB:CreateExtraButton()
-	local holder = CreateFrame("Frame", nil, UIParent, "SecureHandlerStateTemplate")
+	local holder = CreateFrame("Frame", nil, UIParent)
 	holder:Point("CENTER", UIParent, "BOTTOM", 500, 510)
 	holder:Size(ExtraActionBarFrame:GetSize())
 
-	RegisterStateDriver(holder, "visibility", "[petbattle][overridebar][vehicleui] hide; show")
-
-	ExtraActionBarFrame:SetParent(holder)
+	ExtraActionBarFrame:SetParent(UIParent)
 	ExtraActionBarFrame:ClearAllPoints()
 	ExtraActionBarFrame:SetPoint("CENTER", holder, "CENTER")
-	DraenorZoneAbilityFrame:SetParent(holder)
+	DraenorZoneAbilityFrame:SetParent(UIParent)
 	DraenorZoneAbilityFrame:ClearAllPoints()
 	DraenorZoneAbilityFrame:SetPoint("CENTER", holder, "CENTER")
 

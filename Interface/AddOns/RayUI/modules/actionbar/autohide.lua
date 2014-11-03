@@ -18,7 +18,7 @@ local function FadeOutActionButton()
 	fadeInfo.mode = "OUT"
 	fadeInfo.timeToFade = 0.5
 	fadeInfo.finishedFunc = function()
-		if InCombatLockdown() then return end
+		if InCombatLockdown() or pending() then return end
 		RayUIActionBarHider:Hide()
 	end
 	fadeInfo.startAlpha = RayUIActionBarHider:GetAlpha()

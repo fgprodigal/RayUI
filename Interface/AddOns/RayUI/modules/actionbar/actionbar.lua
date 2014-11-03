@@ -316,7 +316,7 @@ function AB:CreateBar(id)
 
     self["Handled"]["bar"..id] = bar
     self:UpdatePositionAndSize("bar"..id)
-	R:CreateMover(bar, "ActionBar"..id.."Mover", L["动作条"..id.."锚点"], true, nil, "ALL,ACTIONBARS")
+	R:CreateMover(bar, "ActionBar" .. id .. "Mover", L["动作条" .. id .. "锚点"], true, nil, "ALL,ACTIONBARS")
 end
 
 function AB:UpdatePositionAndSize(barName)
