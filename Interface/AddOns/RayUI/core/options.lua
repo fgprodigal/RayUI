@@ -41,14 +41,27 @@ R.Options = {
 						["Pixel"] = L["1像素"],
 					},
 				},
-				spacer = {
+				numberType = {
 					order = 3,
+					type = "toggle",
+					name = L["数字单位"],
+					type = "select",
+					values = {
+						[1] = "k,m",
+						[2] = L["万"] .. "," .. L["亿"],
+					},
+					hidden = function()
+						return GetLocale()~="zhCN" and GetLocale()~="zhTW"
+					end
+				},
+				spacer = {
+					order = 4,
 					name = " ",
 					desc = " ",
 					type = "description",
 				},
 				ToggleAnchors = {
-					order = 4,
+					order = 5,
 					type = "execute",
 					name = L["解锁界面元素"],
 					desc = L["解锁并移动头像和动作条"],
@@ -63,7 +76,7 @@ R.Options = {
                     --func = function() StaticPopup_Show("RESETMOVER_CHECK") end,
                 --},
 				ChoosLayout = {
-					order = 5,
+					order = 6,
 					type = "execute",
 					name = L["选择布局"],
 					desc = L["选择一个预设布局"],
@@ -74,7 +87,7 @@ R.Options = {
 					end,
 				},
 				ToggleTutorial = {
-					order = 6,
+					order = 7,
 					type = "execute",
 					name = L["显示教程"],
 					func = function()
@@ -84,7 +97,7 @@ R.Options = {
 					end,
 				},
 				TestBossButton = {
-					order = 7,
+					order = 8,
 					type = "execute",
 					name = L["测试ExtraActionButton"],
 					desc = L["显示/隐藏ExtraActionButton"],
