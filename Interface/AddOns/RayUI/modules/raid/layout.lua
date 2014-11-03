@@ -721,7 +721,7 @@ function RA:Raid40SmartVisibility(event)
 		self:SetAttribute("showSolo", RA.db.showwhensolo)
 		self:SetAttribute("showRaid", true)
 		self:SetAttribute("showParty", true)
-		if ( inInstance and instanceType == "pvp" and maxPlayers == 40 ) or RA.db.alwaysshow40 then
+		if ( inInstance and (instanceType == "pvp" and maxPlayers == 40) or (instanceType == "raid" and maxPlayers == 30)) or RA.db.alwaysshow40 then
 			RegisterAttributeDriver(self, "state-visibility", "[group:party,nogroup:raid][group:raid] show;hide")
 		elseif inInstance then
 			RegisterAttributeDriver(self, "state-visibility", "hide")
