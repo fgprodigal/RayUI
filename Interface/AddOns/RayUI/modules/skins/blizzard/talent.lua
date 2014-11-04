@@ -215,7 +215,7 @@ local function LoadSkin()
 	end
 
 	hooksecurefunc("PlayerTalentFrame_UpdateSpecs", function()
-		PlayerSpecTab1:SetPoint("TOPLEFT", PlayerTalentFrame, "TOPRIGHT", 2, -36)
+		PlayerSpecTab1:SetPoint("TOPLEFT", PlayerTalentFrame, "TOPRIGHT", 11, -36)
 		PlayerSpecTab2:SetPoint("TOP", PlayerSpecTab1, "BOTTOM")
 	end)
 

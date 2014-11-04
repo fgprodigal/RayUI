@@ -203,21 +203,45 @@ local function LoadSkin()
         bu.bg = S:CreateBG(ic)
     end
 
-	for _, bu in pairs(GuildPerksContainer.buttons) do
-		for i = 1, 4 do
-			select(i, bu:GetRegions()):SetAlpha(0)
-		end
+    for _, bu in pairs(GuildPerksContainer.buttons) do
+      for i = 1, 4 do
+         select(i, bu:GetRegions()):SetAlpha(0)
+     end
 
-		local bg = S:CreateBDFrame(bu, .25)
-		bg:ClearAllPoints()
-		bg:SetPoint("TOPLEFT", 1, -3)
-		bg:SetPoint("BOTTOMRIGHT", 0, 4)
+     local bg = S:CreateBDFrame(bu, .25)
+     bg:ClearAllPoints()
+     bg:SetPoint("TOPLEFT", 1, -3)
+     bg:SetPoint("BOTTOMRIGHT", 0, 4)
 
-		bu.icon:SetTexCoord(.08, .92, .08, .92)
-		S:CreateBG(bu.icon)
-	end
+     bu.icon:SetTexCoord(.08, .92, .08, .92)
+     S:CreateBG(bu.icon)
+ end
 
-	GuildPerksContainerButton1:SetPoint("LEFT", -1, 0)
+ GuildPerksContainerButton1:SetPoint("LEFT", -1, 0)
+
+ S:Reskin(select(4, GuildTextEditFrame:GetChildren()))
+ S:Reskin(select(3, GuildLogFrame:GetChildren()))
+
+ local gbuttons = {"GuildAddMemberButton", "GuildViewLogButton", "GuildControlButton", "GuildTextEditFrameAcceptButton", "GuildMemberGroupInviteButton", "GuildMemberRemoveButton", "GuildRecruitmentInviteButton", "GuildRecruitmentMessageButton", "GuildRecruitmentDeclineButton", "GuildRecruitmentListGuildButton"}
+ for i = 1, #gbuttons do
+    S:Reskin(_G[gbuttons[i]])
+end
+
+local checkboxes = {"GuildRecruitmentQuestButton", "GuildRecruitmentDungeonButton", "GuildRecruitmentRaidButton", "GuildRecruitmentPvPButton", "GuildRecruitmentRPButton", "GuildRecruitmentWeekdaysButton", "GuildRecruitmentWeekendsButton"}
+for i = 1, #checkboxes do
+    S:ReskinCheck(_G[checkboxes[i]])
+end
+
+S:ReskinCheck(GuildRecruitmentTankButton:GetChildren())
+S:ReskinCheck(GuildRecruitmentHealerButton:GetChildren())
+S:ReskinCheck(GuildRecruitmentDamagerButton:GetChildren())
+
+for i = 1, 3 do
+    for j = 1, 6 do
+        select(j, _G["GuildInfoFrameTab"..i]:GetRegions()):Hide()
+        select(j, _G["GuildInfoFrameTab"..i]:GetRegions()).Show = R.dummy
+    end
+end
 end
 
 S:RegisterSkin("Blizzard_GuildUI", LoadSkin)
