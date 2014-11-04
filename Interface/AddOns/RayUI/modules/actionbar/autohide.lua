@@ -1,7 +1,7 @@
 local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local AB = R:GetModule("ActionBar")
 
-local hider = CreateFrame("Frame", "RayUIActionBarHider", UIParent, "SecureHandlerStateTemplate")
+local hider = CreateFrame("Frame", "RayUIActionBarHider", UIParent)
 RegisterStateDriver(hider, "visibility", "[combat][@target,exists][vehicleui]show")
 
 local function pending()
@@ -27,14 +27,14 @@ local function FadeOutActionButton()
 end
 
 local function FadeInActionButton()
-	RayUIActionBarHider:Show()
+	if not InCombatLockdown() then
+		RayUIActionBarHider:Show()
+	end
 	R:UIFrameFadeIn(RayUIActionBarHider, 0.5, RayUIActionBarHider:GetAlpha(), 1)
 end
 
 function AB:OnAutoHideEvent(event, addon)
-	if event == "PLAYER_ENTERING_WORLD" then
-		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-	elseif event == "ADDON_LOADED" then
+	if event == "ADDON_LOADED" then
 		if addon == "Blizzard_MacroUI" then
 			self:UnregisterEvent("ADDON_LOADED")
 			MacroFrame:HookScript("OnShow", function(self, event)

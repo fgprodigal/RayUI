@@ -22,10 +22,10 @@ function AB:CreateExtraButton()
 	holder:Point("CENTER", UIParent, "BOTTOM", 500, 510)
 	holder:Size(ExtraActionBarFrame:GetSize())
 
-	ExtraActionBarFrame:SetParent(UIParent)
+	ExtraActionBarFrame:SetParent(holder)
 	ExtraActionBarFrame:ClearAllPoints()
 	ExtraActionBarFrame:SetPoint("CENTER", holder, "CENTER")
-	DraenorZoneAbilityFrame:SetParent(UIParent)
+	DraenorZoneAbilityFrame:SetParent(holder)
 	DraenorZoneAbilityFrame:ClearAllPoints()
 	DraenorZoneAbilityFrame:SetPoint("CENTER", holder, "CENTER")
 
