@@ -7,13 +7,13 @@ local gridSize = 50
 R.CreatedMovers = {}
 local selectedValue = "GENERAL"
 local MoverTypes = {
-    "ALL",
-    "GENERAL",
-    "ACTIONBARS",
-    "RAID15",
-    "RAID25",
-    "RAID40",
-    "ARENA",
+	"ALL",
+	"GENERAL",
+	"ACTIONBARS",
+	"RAID15",
+	"RAID25",
+	"RAID40",
+	"ARENA",
 }
 
 local function SizeChanged(frame)
@@ -101,11 +101,11 @@ end
 
 local function ShowGrid()
 	if not grid then
-        CreateGrid()
+		CreateGrid()
 	elseif grid.boxSize ~= gridSize then
-        grid:Hide()
-        CreateGrid()
-    else
+		grid:Hide()
+		CreateGrid()
+	else
 		grid:Show()
 	end
 end
@@ -219,7 +219,7 @@ local function SetNudge()
 	local LEFT = screenWidth / 3
 	local RIGHT = screenWidth * 2 / 3
 	local TOP = screenHeight / 2
-	
+
 	if y >= TOP then
 		point = "TOP"
 	else
@@ -334,7 +334,7 @@ local function CreatePopup()
 
 	local moverTypes = CreateFrame("Frame", f:GetName().."DropDown", f, "UIDropDownMenuTemplate")
 	moverTypes:Point("BOTTOMRIGHT", lock, "TOPRIGHT", 18, -5)
-    moverTypes:Width(160)
+	moverTypes:Width(160)
 	S:ReskinDropDown(moverTypes)
 	moverTypes.text = moverTypes:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	moverTypes.text:SetPoint("RIGHT", moverTypes, "LEFT", 2, 2)
@@ -448,8 +448,8 @@ local function CreatePopup()
 	resetButton:SetPoint("TOP", nudgeFrame, "CENTER", 0, 2)
 	resetButton:Size(100, 25)
 	resetButton:SetScript("OnClick", function()
-		if MoverNudgeWindow.child.textString then
-			E:ResetMovers(MoverNudgeWindow.child.textString)
+		if MoverNudgeWindow.child.name then
+			R:ResetMovers(MoverNudgeWindow.child.textstring)
 		end
 	end)
 	S:Reskin(resetButton)
@@ -513,7 +513,7 @@ local function CreateMover(parent, name, text, overlay, postdrag, ignoreSizeChan
 	end
 	if R.db["movers"] and R.db["movers"][name] then
 		if type(R.db["movers"][name]) == "table" then
-            f:SetPoint(R.db["movers"][name]["p"], UIParent, R.db["movers"][name]["p2"], R.db["movers"][name]["p3"], R.db["movers"][name]["p4"])
+			f:SetPoint(R.db["movers"][name]["p"], UIParent, R.db["movers"][name]["p2"], R.db["movers"][name]["p3"], R.db["movers"][name]["p4"])
 			R.db["movers"][name] = GetPoint(f)
 			f:ClearAllPoints()
 		end
@@ -572,10 +572,10 @@ local function CreateMover(parent, name, text, overlay, postdrag, ignoreSizeChan
 		self:SetUserPlaced(false)
 	end)
 
-    if not ignoreSizeChange then
-        parent:SetScript("OnSizeChanged", SizeChanged)
-        parent.mover = f
-    end
+	if not ignoreSizeChange then
+		parent:SetScript("OnSizeChanged", SizeChanged)
+		parent.mover = f
+	end
 	parent:ClearAllPoints()
 	parent:SetPoint(point, f, 0, 0)
 	parent.ClearAllPoints = function() return end
@@ -591,6 +591,7 @@ local function CreateMover(parent, name, text, overlay, postdrag, ignoreSizeChan
 	fs:SetTextColor(1, 1, 1)
 	f:SetFontString(fs)
 	f.textstring = text or name
+	f.name = name
 	f.text = fs
 
 	f:SetScript("OnMouseUp", function(self, btn)
