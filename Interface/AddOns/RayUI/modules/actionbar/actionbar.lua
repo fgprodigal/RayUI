@@ -232,6 +232,7 @@ function AB:HideBlizz()
 	blizzHider:Hide()
 	MainMenuBar:EnableMouse(false)
 	MainMenuBar:SetAlpha(0)
+	MainMenuBar.slideOut.IsPlaying = function() return true end
 	MainMenuExpBar:UnregisterAllEvents()
 	MainMenuExpBar:Hide()
 	MainMenuExpBar:SetParent(blizzHider)
