@@ -6,18 +6,18 @@ AB["Handled"] = {}
 
 local visibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show"
 local actionBarsName = {
-    "MainMenuBarArtFrame",
-    "MultiBarBottomRight",
-    "MultiBarBottomLeft",
-    "MultiBarRight",
-    "MultiBarLeft"
+	"MainMenuBarArtFrame",
+	"MultiBarBottomRight",
+	"MultiBarBottomLeft",
+	"MultiBarRight",
+	"MultiBarLeft"
 }
 local actionButtonsName = {
-    bar1 = "ActionButton",
-    bar2 = "MultiBarBottomRightButton",
-    bar3 = "MultiBarBottomLeftButton",
-    bar4 = "MultiBarRightButton",
-    bar5 = "MultiBarLeftButton"
+	bar1 = "ActionButton",
+	bar2 = "MultiBarBottomRightButton",
+	bar3 = "MultiBarBottomLeftButton",
+	bar4 = "MultiBarRightButton",
+	bar5 = "MultiBarLeftButton"
 }
 
 local function SetCooldownSwipeAlpha(cooldown,alpha)
@@ -31,17 +31,17 @@ local function FixActionButtonCooldown(button)
 	local cooldown = button.cooldown
 	local parent 
 	if button:GetParent():GetParent():GetParent() and button:GetParent():GetParent():GetParent():GetName()=="RayUIActionBarHider" then
-			parent = RayUIActionBarHider
-			hooksecurefunc(parent, "Show", function(self,alpha)
-				cooldown:Show()
-				local start, duration, enable, charges, maxCharges
-				if button.action then
-					start, duration, enable, charges, maxCharges = GetActionCooldown(button.action)
-				else
-					start, duration, enable = GetShapeshiftFormCooldown(button:GetID())
-				end
-				CooldownFrame_SetTimer(cooldown, start, duration, enable, charges, maxCharges)
-			end)
+		parent = RayUIActionBarHider
+		hooksecurefunc(parent, "Show", function(self,alpha)
+			cooldown:Show()
+			local start, duration, enable, charges, maxCharges
+			if button.action then
+				start, duration, enable, charges, maxCharges = GetActionCooldown(button.action)
+			else
+				start, duration, enable = GetShapeshiftFormCooldown(button:GetID())
+			end
+			CooldownFrame_SetTimer(cooldown, start, duration, enable, charges, maxCharges)
+		end)
 	else
 		parent = button:GetParent():GetParent()
 	end
@@ -57,13 +57,6 @@ function AB:GetOptions()
 			min = 0.5, max = 1.5, step = 0.01,
 			isPercent = true,
 		},
-		-- petbarscale = {
-		-- 	order = 6,
-		-- 	name = L["宠物动作条缩放"],
-		-- 	type = "range",
-		-- 	min = 0.5, max = 1.5, step = 0.01,
-		-- 	isPercent = true,
-		-- },
 		macroname = {
 			order = 9,
 			name = L["显示宏名称"],
@@ -122,10 +115,10 @@ function AB:GetOptions()
 			type = "group",
 			guiInline = false,
 			name = L["宠物条"],
-            get = function(info) return R.db.ActionBar["barpet"][ info[#info] ] end,
+			get = function(info) return R.db.ActionBar["barpet"][ info[#info] ] end,
 			set = function(info, value) R.db.ActionBar["barpet"][ info[#info] ] = value; AB:UpdatePetBar() end,
 			args = {
-                enable = {
+				enable = {
 					order = 1,
 					type = "toggle",
 					name = L["启用"],
@@ -140,19 +133,19 @@ function AB:GetOptions()
 					name = L["鼠标滑过显示"],
 					order = 3,
 				},
-                buttonsize = {
+				buttonsize = {
 					type = "range",
 					name = L["按键大小"],
 					min = 15, max = 40, step = 1,
 					order = 4,
 				},
-                buttonspacing = {
+				buttonspacing = {
 					type = "range",
 					name = L["按键间距"],
 					min = 1, max = 10, step = 1,
 					order = 5,
 				},
-                buttonsPerRow = {
+				buttonsPerRow = {
 					type = "range",
 					name = L["每行按键数"],
 					min = 1, max = NUM_PET_ACTION_SLOTS, step = 1,
@@ -179,16 +172,16 @@ function AB:GetOptions()
 			},
 		},
 	}
-    for i = 1, 5 do
-        options["Bar"..i.."Group"] = {
+	for i = 1, 5 do
+		options["Bar"..i.."Group"] = {
 			order = 20 + i,
 			type = "group",
 			name = L["动作条"..i],
 			guiInline = false,
-            get = function(info) return R.db.ActionBar["bar"..i][ info[#info] ] end,
+			get = function(info) return R.db.ActionBar["bar"..i][ info[#info] ] end,
 			set = function(info, value) R.db.ActionBar["bar"..i][ info[#info] ] = value; AB:UpdatePositionAndSize("bar"..i) end,
 			args = {
-                enable = {
+				enable = {
 					order = 1,
 					type = "toggle",
 					name = L["启用"],
@@ -203,75 +196,72 @@ function AB:GetOptions()
 					name = L["鼠标滑过显示"],
 					order = 3,
 				},
-                buttonsize = {
+				buttonsize = {
 					type = "range",
 					name = L["按键大小"],
 					min = 15, max = 40, step = 1,
 					order = 4,
 				},
-                buttonspacing = {
+				buttonspacing = {
 					type = "range",
 					name = L["按键间距"],
 					min = 1, max = 10, step = 1,
 					order = 5,
 				},
-                buttonsPerRow = {
+				buttonsPerRow = {
 					type = "range",
 					name = L["每行按键数"],
 					min = 1, max = NUM_ACTIONBAR_BUTTONS, step = 1,
 					order = 6,
 				},
 			},
-        }
-    end
+		}
+	end
 	return options
 end
 
 function AB:HideBlizz()
 	local blizzHider = CreateFrame("Frame")
 	blizzHider:Hide()
-	MainMenuBar:EnableMouse(false)
-	MainMenuBar:SetAlpha(0)
+	local hideFrames = {
+		MainMenuBar,
+		MainMenuBarPageNumber,
+		ActionBarDownButton,
+		ActionBarUpButton,
+		OverrideActionBarExpBar,
+		OverrideActionBarHealthBar,
+		OverrideActionBarPowerBar,
+		OverrideActionBarPitchFrame,
+		CharacterMicroButton,
+		SpellbookMicroButton,
+		TalentMicroButton,
+		AchievementMicroButton,
+		QuestLogMicroButton,
+		GuildMicroButton,
+		PVPMicroButton,
+		LFDMicroButton,
+		CompanionsMicroButton,
+		EJMicroButton,
+		MainMenuMicroButton,
+		HelpMicroButton,
+		StoreMicroButton,
+		MainMenuBarBackpackButton
+	}
+	for i = 0, 3 do
+		tinsert(hideFrames, _G["CharacterBag"..i.."Slot"])
+	end
+	for _, frame in pairs(hideFrames) do
+		if frame.UnregisterAllEvents then
+			frame:UnregisterAllEvents()
+		end
+		if frame.EnableMouse then
+			frame:EnableMouse(false)
+		end
+		frame.ignoreFramePositionManager = true
+		frame:SetParent(blizzHider)
+	end
 	MainMenuBar.slideOut.IsPlaying = function() return true end
-	MainMenuExpBar:UnregisterAllEvents()
-	MainMenuExpBar:Hide()
-	MainMenuExpBar:SetParent(blizzHider)
-	MainMenuBarPageNumber:SetParent(blizzHider)
-	ActionBarDownButton:SetParent(blizzHider)
-	ActionBarUpButton:SetParent(blizzHider)
-	OverrideActionBarExpBar:SetParent(blizzHider)
-	OverrideActionBarHealthBar:SetParent(blizzHider)
-	OverrideActionBarPowerBar:SetParent(blizzHider)
-	OverrideActionBarPitchFrame:SetParent(blizzHider)
 
-    local buttonList = {
-        CharacterMicroButton,
-        SpellbookMicroButton,
-        TalentMicroButton,
-        AchievementMicroButton,
-        QuestLogMicroButton,
-        GuildMicroButton,
-        PVPMicroButton,
-        LFDMicroButton,
-        CompanionsMicroButton,
-        EJMicroButton,
-        MainMenuMicroButton,
-        HelpMicroButton,
-        StoreMicroButton,
-        MainMenuBarBackpackButton,
-        CharacterBag0Slot,
-        CharacterBag1Slot,
-        CharacterBag2Slot,
-        CharacterBag3Slot,
-    }
-    for _, button in pairs(buttonList) do
-        button:SetParent(blizzHider)
-    end
-	-----------------------------
-	-- HIDE TEXTURES
-	-----------------------------
-
-	--remove some the default background textures
 	StanceBarLeft:SetTexture(nil)
 	StanceBarMiddle:SetTexture(nil)
 	StanceBarRight:SetTexture(nil)
@@ -313,44 +303,45 @@ function AB:HideBlizz()
 end
 
 function AB:CreateBar(id)
-    local point, anchor, attachTo, x, y = string.split(",", self["DefaultPosition"]["bar"..id])
+	local point, anchor, attachTo, x, y = string.split(",", self["DefaultPosition"]["bar"..id])
 	local bar = CreateFrame("Frame", "RayUIActionBar"..id, UIParent, "SecureHandlerStateTemplate")
-    bar:Point(point, anchor, attachTo, x, y)
+	bar:Point(point, anchor, attachTo, x, y)
 
 	_G[actionBarsName[id]]:SetParent(bar)
+	_G[actionBarsName[id]]:EnableMouse(false)
 
-    self["Handled"]["bar"..id] = bar
-    self:UpdatePositionAndSize("bar"..id)
+	self["Handled"]["bar"..id] = bar
+	self:UpdatePositionAndSize("bar"..id)
 	R:CreateMover(bar, "ActionBar" .. id .. "Mover", L["动作条" .. id .. "锚点"], true, nil, "ALL,ACTIONBARS")
 end
 
 function AB:UpdatePositionAndSize(barName)
-    local bar = self["Handled"][barName]
-    local buttonsPerRow = self.db[barName].buttonsPerRow
-    local buttonsize = self.db[barName].buttonsize
-    local buttonspacing = self.db[barName].buttonspacing
-    local numColumns = ceil(NUM_ACTIONBAR_BUTTONS / buttonsPerRow)
+	local bar = self["Handled"][barName]
+	local buttonsPerRow = self.db[barName].buttonsPerRow
+	local buttonsize = self.db[barName].buttonsize
+	local buttonspacing = self.db[barName].buttonspacing
+	local numColumns = ceil(NUM_ACTIONBAR_BUTTONS / buttonsPerRow)
 
 	bar:SetWidth(buttonsize*buttonsPerRow + buttonspacing*(buttonsPerRow - 1))
 	bar:SetHeight(buttonsize*numColumns + buttonspacing*(numColumns - 1))
 
-    if not self.db.bar2.enable and not self.db.bar3.enable and not ( R.db.movers and R.db.movers.ActionBar1Mover ) then
-        local bar = ActionBar1Mover or self["Handled"]["bar1"]
-        bar:ClearAllPoints()
-        bar:Point("BOTTOM", UIParent, "BOTTOM", 0, 235)
-        if RayUIVehicleBar then
-            RayUIVehicleBar:ClearAllPoints()
-            RayUIVehicleBar:SetPoint("LEFT", "RayUIActionBar1", "RIGHT", AB.db.buttonspacing, 0)
-        end
-    elseif not ( R.db.movers and R.db.movers.ActionBar1Mover ) then
-        local bar = ActionBar1Mover or self["Handled"]["bar1"]
-        local point, anchor, attachTo, x, y = string.split(",", self["DefaultPosition"]["bar1"])
-        bar:Point(point, anchor, attachTo, x, y)
-        if RayUIVehicleBar then
-            RayUIVehicleBar:ClearAllPoints()
-            RayUIVehicleBar:SetPoint("BOTTOMLEFT", "RayUIActionBar3", "BOTTOMRIGHT", AB.db.buttonspacing, 0)
-        end
-    end
+	if not self.db.bar2.enable and not self.db.bar3.enable and not ( R.db.movers and R.db.movers.ActionBar1Mover ) then
+		local bar = ActionBar1Mover or self["Handled"]["bar1"]
+		bar:ClearAllPoints()
+		bar:Point("BOTTOM", UIParent, "BOTTOM", 0, 235)
+		if RayUIVehicleBar then
+			RayUIVehicleBar:ClearAllPoints()
+			RayUIVehicleBar:SetPoint("LEFT", "RayUIActionBar1", "RIGHT", AB.db.buttonspacing, 0)
+		end
+	elseif not ( R.db.movers and R.db.movers.ActionBar1Mover ) then
+		local bar = ActionBar1Mover or self["Handled"]["bar1"]
+		local point, anchor, attachTo, x, y = string.split(",", self["DefaultPosition"]["bar1"])
+		bar:Point(point, anchor, attachTo, x, y)
+		if RayUIVehicleBar then
+			RayUIVehicleBar:ClearAllPoints()
+			RayUIVehicleBar:SetPoint("BOTTOMLEFT", "RayUIActionBar3", "BOTTOMRIGHT", AB.db.buttonspacing, 0)
+		end
+	end
 
 	if self.db[barName].mouseover then
 		self.db[barName].autohide = false
@@ -361,55 +352,55 @@ function AB:UpdatePositionAndSize(barName)
 		bar:SetAlpha(1)
 		bar:SetScript("OnEnter", nil)
 		bar:SetScript("OnLeave", nil)
-    end
+	end
 
-    if self.db[barName].autohide then
-        bar:SetParent(RayUIActionBarHider)
-    else
-        bar:SetParent(UIParent)
-    end
+	if self.db[barName].autohide then
+		bar:SetParent(RayUIActionBarHider)
+	else
+		bar:SetParent(UIParent)
+	end
 
-    local button, lastButton, lastColumnButton
-    for i = 1, NUM_ACTIONBAR_BUTTONS do
+	local button, lastButton, lastColumnButton
+	for i = 1, NUM_ACTIONBAR_BUTTONS do
 		button = _G[actionButtonsName[barName]..i]
 		lastButton = _G[actionButtonsName[barName]..(i-1)]
 		lastColumnButton = _G[actionButtonsName[barName]..(i-buttonsPerRow)]
 		button:SetSize(buttonsize, buttonsize)
 		button:ClearAllPoints()
 
-        if i == 1 then
+		if i == 1 then
 			button:SetPoint("TOPLEFT", bar, "TOPLEFT", 0, 0)
-        elseif (i - 1) % buttonsPerRow == 0 then
+		elseif (i - 1) % buttonsPerRow == 0 then
 			button:SetPoint("TOPLEFT", lastColumnButton, "BOTTOMLEFT", 0, -buttonspacing)
-        else
+		else
 			button:SetPoint("LEFT", lastButton, "RIGHT", buttonspacing, 0)
-        end
+		end
 
-        if self.db[barName].mouseover then
-            if not self.hooks[button] then
-                self:HookScript(button, "OnEnter", function()
+		if self.db[barName].mouseover then
+			if not self.hooks[button] then
+				self:HookScript(button, "OnEnter", function()
 					UIFrameFadeIn(bar,0.5,bar:GetAlpha(),1)
 				end)
-                self:HookScript(button, "OnLeave", function()
+				self:HookScript(button, "OnLeave", function()
 					UIFrameFadeOut(bar,0.5,bar:GetAlpha(),0)
 				end)
 				SetCooldownSwipeAlpha(button.cooldown, 0)
-            end
-        else
-            if not self.hooks[button] then
-                self:Unhook(button, "OnEnter")
-                self:Unhook(button, "OnLeave")
-            end
-        end
-    end
+			end
+		else
+			if not self.hooks[button] then
+				self:Unhook(button, "OnEnter")
+				self:Unhook(button, "OnLeave")
+			end
+		end
+	end
 
-    if self.db[barName].enable then
-        bar:Show()
-        RegisterStateDriver(bar, "visibility", visibility)
-    else
-        bar:Hide()
-        UnregisterStateDriver(bar, "visibility")
-    end
+	if self.db[barName].enable then
+		bar:Show()
+		RegisterStateDriver(bar, "visibility", visibility)
+	else
+		bar:Hide()
+		UnregisterStateDriver(bar, "visibility")
+	end
 end
 
 function AB:PLAYER_ENTERING_WORLD()
@@ -425,27 +416,26 @@ function AB:PLAYER_ENTERING_WORLD()
 end
 
 function AB:Initialize()
-    SetActionBarToggles(1, 1, 1, 1)
-    InterfaceOptionsActionBarsPanelBottomRight:Kill()
-    InterfaceOptionsActionBarsPanelBottomRight:SetScale(0.0001)
+	SetActionBarToggles(1, 1, 1, 1)
+	InterfaceOptionsActionBarsPanelBottomRight:Kill()
+	InterfaceOptionsActionBarsPanelBottomRight:SetScale(0.0001)
 	InterfaceOptionsActionBarsPanelBottomLeft:Kill()
-    InterfaceOptionsActionBarsPanelBottomLeft:SetScale(0.0001)
+	InterfaceOptionsActionBarsPanelBottomLeft:SetScale(0.0001)
 	InterfaceOptionsActionBarsPanelRightTwo:Kill()
-    InterfaceOptionsActionBarsPanelRightTwo:SetScale(0.0001)
+	InterfaceOptionsActionBarsPanelRightTwo:SetScale(0.0001)
 	InterfaceOptionsActionBarsPanelRight:Kill()
-    InterfaceOptionsActionBarsPanelRight:SetScale(0.0001)
+	InterfaceOptionsActionBarsPanelRight:SetScale(0.0001)
 
-    self["DefaultPosition"] = {
-        bar1 = "BOTTOM,UIParent,BOTTOM,"..(-3*AB.db.bar1.buttonsize - 3*AB.db.bar1.buttonspacing)..",235",
-        bar2 = "BOTTOM,ActionBar1Mover,TOP,0,"..AB.db.bar2.buttonspacing,
-        bar3 = "BOTTOMLEFT,ActionBar1Mover,BOTTOMRIGHT,"..AB.db.bar3.buttonspacing..",0",
-        bar4 = "RIGHT,UIParent,RIGHT,-15,0",
-        bar5 = "LEFT,UIParent,LEFT,15,0",
-    }
-	self:HideBlizz()
-    for i =1, 5 do
-        self:CreateBar(i)
-    end
+	self["DefaultPosition"] = {
+		bar1 = "BOTTOM,UIParent,BOTTOM,"..(-3*AB.db.bar1.buttonsize - 3*AB.db.bar1.buttonspacing)..",235",
+		bar2 = "BOTTOM,ActionBar1Mover,TOP,0,"..AB.db.bar2.buttonspacing,
+		bar3 = "BOTTOMLEFT,ActionBar1Mover,BOTTOMRIGHT,"..AB.db.bar3.buttonspacing..",0",
+		bar4 = "RIGHT,UIParent,RIGHT,-15,0",
+		bar5 = "LEFT,UIParent,LEFT,15,0",
+	}
+	for i =1, 5 do
+		self:CreateBar(i)
+	end
 
 	if self.db.showgrid then
 		-- ActionButton_HideGrid = R.dummy
@@ -521,7 +511,7 @@ function AB:Initialize()
 				PetActionBar_HideGrid()
 			end
 		end
-    end
+	end
 
 	self:CreateBarPet()
 	self:CreateStanceBar()
@@ -532,6 +522,7 @@ function AB:Initialize()
 	self:LoadKeyBinder()
 	self:CreateRangeDisplay()
 	self:EnableAutoHide()
+	self:HideBlizz()
 
 	SetCVar("countdownForCooldowns", "0")
 	InterfaceOptionsActionBarsPanelCountdownCooldowns:Kill()
@@ -640,7 +631,7 @@ function AB:Style(button)
 		Count:ClearAllPoints()
 		Count:Point("BOTTOMRIGHT", 2, 0)
 		--Count:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
-        Count:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
+		Count:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
 	end
 
 	if FloatingBG then
@@ -651,9 +642,9 @@ function AB:Style(button)
 		if AB.db.macroname ~= true then
 			Btname:SetDrawLayer("HIGHLIGHT")
 			Btname:Width(50)
-            Btname:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
-            Btname:ClearAllPoints()
-            Btname:Point("BOTTOM", 0, -3)
+			Btname:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
+			Btname:ClearAllPoints()
+			Btname:Point("BOTTOM", 0, -3)
 		end
 	end
 
@@ -677,10 +668,10 @@ function AB:Style(button)
 		HotKey:ClearAllPoints()
 		--HotKey:SetPoint("TOPRIGHT", 0, 0)
 		HotKey:Point("TOP", 0, 5)
-        HotKey:SetJustifyH("CENTER")
-        HotKey:Width(AB.db.buttonsize + 10)
+		HotKey:SetJustifyH("CENTER")
+		HotKey:Width(AB.db.buttonsize + 10)
 		--HotKey:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
-        HotKey:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
+		HotKey:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
 		if not AB.db.hotkeys == true then
 			HotKey:SetText("")
 			HotKey:Hide()
@@ -690,8 +681,8 @@ function AB:Style(button)
 
 	if button.style then
 		button.style:SetDrawLayer("BACKGROUND", -7)
-        button.border:SetFrameLevel(button:GetFrameLevel())
-        button.shadow:SetFrameLevel(button:GetFrameLevel())
+		button.border:SetFrameLevel(button:GetFrameLevel())
+		button.shadow:SetFrameLevel(button:GetFrameLevel())
 	end
 
 	FixActionButtonCooldown(button)
@@ -742,7 +733,7 @@ function AB:SetupFlyoutButton()
 				AB:HookScript(button, "OnEnter", function(self)
 					local bar = self:GetParent():GetParent():GetParent():GetParent()
 					local id = bar:GetName():match("RayUIActionBar(%d)")
-                    if not id then return end
+					if not id then return end
 					if AB.db["bar"..id].mouseover then
 						R:UIFrameFadeIn(bar,0.5,bar:GetAlpha(),1)
 					end
@@ -750,7 +741,7 @@ function AB:SetupFlyoutButton()
 				AB:HookScript(button, "OnLeave", function(self)
 					local bar = self:GetParent():GetParent():GetParent():GetParent()
 					local id = bar:GetName():match("RayUIActionBar(%d)")
-                    if not id then return end
+					if not id then return end
 					if AB.db["bar"..id].mouseover then
 						R:UIFrameFadeOut(bar,0.5,bar:GetAlpha(),0)
 					end
@@ -790,39 +781,39 @@ function AB:StyleFlyout(button)
 	end
 
 	-- if button:GetAttribute("flyoutDirection") ~= nil then
-        -- local layout = "HORIZONTAL"
-        -- if button:GetParent() and button:GetParent():GetParent() then
-            -- if button:GetParent():GetParent():GetHeight() > button:GetParent():GetParent():GetWidth() then
-                -- layout = "VERTICAL"
-            -- end
-        -- end
-		-- local point = R:GetScreenQuadrant(button)
+	-- local layout = "HORIZONTAL"
+	-- if button:GetParent() and button:GetParent():GetParent() then
+	-- if button:GetParent():GetParent():GetHeight() > button:GetParent():GetParent():GetWidth() then
+	-- layout = "VERTICAL"
+	-- end
+	-- end
+	-- local point = R:GetScreenQuadrant(button)
 
-        -- if layout == "HORIZONTAL" then
-            -- if point:find("TOP") then
-                -- button.FlyoutArrow:ClearAllPoints()
-                -- button.FlyoutArrow:SetPoint("BOTTOM", button, "BOTTOM", 0, -arrowDistance)
-                -- SetClampedTextureRotation(button.FlyoutArrow, 180)
-                -- if not InCombatLockdown() then button:SetAttribute("flyoutDirection", "BOTTOM") end
-            -- else
-                -- button.FlyoutArrow:ClearAllPoints()
-                -- button.FlyoutArrow:SetPoint("TOP", button, "TOP", 0,arrowDistance)
-                -- SetClampedTextureRotation(button.FlyoutArrow, 0)
-                -- if not InCombatLockdown() then button:SetAttribute("flyoutDirection", "TOP") end
-            -- end
-        -- else
-            -- if point:find("LEFT") then
-                -- button.FlyoutArrow:ClearAllPoints()
-                -- button.FlyoutArrow:SetPoint("RIGHT", button, "RIGHT", arrowDistance, 0)
-                -- SetClampedTextureRotation(button.FlyoutArrow, 90)
-                -- if not InCombatLockdown() then button:SetAttribute("flyoutDirection", "RIGHT") end
-            -- else
-                -- button.FlyoutArrow:ClearAllPoints()
-                -- button.FlyoutArrow:SetPoint("LEFT", button, "LEFT", -arrowDistance, 0)
-                -- SetClampedTextureRotation(button.FlyoutArrow, 270)
-                -- if not InCombatLockdown() then button:SetAttribute("flyoutDirection", "LEFT") end
-            -- end
-        -- end
+	-- if layout == "HORIZONTAL" then
+	-- if point:find("TOP") then
+	-- button.FlyoutArrow:ClearAllPoints()
+	-- button.FlyoutArrow:SetPoint("BOTTOM", button, "BOTTOM", 0, -arrowDistance)
+	-- SetClampedTextureRotation(button.FlyoutArrow, 180)
+	-- if not InCombatLockdown() then button:SetAttribute("flyoutDirection", "BOTTOM") end
+	-- else
+	-- button.FlyoutArrow:ClearAllPoints()
+	-- button.FlyoutArrow:SetPoint("TOP", button, "TOP", 0,arrowDistance)
+	-- SetClampedTextureRotation(button.FlyoutArrow, 0)
+	-- if not InCombatLockdown() then button:SetAttribute("flyoutDirection", "TOP") end
+	-- end
+	-- else
+	-- if point:find("LEFT") then
+	-- button.FlyoutArrow:ClearAllPoints()
+	-- button.FlyoutArrow:SetPoint("RIGHT", button, "RIGHT", arrowDistance, 0)
+	-- SetClampedTextureRotation(button.FlyoutArrow, 90)
+	-- if not InCombatLockdown() then button:SetAttribute("flyoutDirection", "RIGHT") end
+	-- else
+	-- button.FlyoutArrow:ClearAllPoints()
+	-- button.FlyoutArrow:SetPoint("LEFT", button, "LEFT", -arrowDistance, 0)
+	-- SetClampedTextureRotation(button.FlyoutArrow, 270)
+	-- if not InCombatLockdown() then button:SetAttribute("flyoutDirection", "LEFT") end
+	-- end
+	-- end
 	-- end
 end
 
