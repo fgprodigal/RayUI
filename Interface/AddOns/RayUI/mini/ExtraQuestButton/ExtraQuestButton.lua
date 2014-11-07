@@ -51,16 +51,13 @@ Button:SetScript("OnEvent", function(self, event)
 		self:SetPoint("CENTER", ExtraActionButton1)
 		self:SetSize(ExtraActionButton1:GetSize())
 		self:SetScale(ExtraActionButton1:GetScale())
-		self:SetHighlightTexture([[Interface\Buttons\ButtonHilight-Square]])
-		self:SetPushedTexture([[Interface\Buttons\CheckButtonHilight]])
-		self:GetPushedTexture():SetBlendMode("ADD")
 		self:SetScript("OnLeave", GameTooltip_Hide)
 		self:SetAttribute("type", "item")
 		self.updateTimer = 0
 		self.rangeTimer = 0
 		self:Hide()
 
-		local Icon = self:CreateTexture("$parentIcon", "BACKGROUND")
+		local Icon = self:CreateTexture("$parentIcon", "ARTWORK")
 		Icon:SetAllPoints()
 		self.Icon = Icon
 
@@ -75,10 +72,11 @@ Button:SetScript("OnEvent", function(self, event)
 		Cooldown:Hide()
 		self.Cooldown = Cooldown
 
-		local Artwork = self:CreateTexture("$parentArtwork", "OVERLAY")
+		local Artwork = self:CreateTexture("$parentArtwork", "BACKGROUND")
 		Artwork:SetPoint("CENTER", -2, 0)
 		Artwork:SetSize(256, 128)
-		Artwork:SetTexture([[Interface\ExtraButton\Default]])
+		Artwork:SetTexture([[Interface\ExtraButton\ChampionLight]])
+		-- Artwork:SetTexture([[Interface\ExtraButton\Smash]])
 		self.Artwork = Artwork
 
 		self.Icon:SetTexCoord(.08, .92, .08, .92)
