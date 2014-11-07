@@ -392,10 +392,6 @@ local function UpdateCastbar(frame)
 		frame:SetStatusBarColor(0, 1, 0)
 		frame.shield:Hide()
 	end
-
-	if frame:GetEffectiveScale() < 1 then
-		frame:SetScale(1 / frame:GetEffectiveScale())
-	end
 end
 
 --Determine whether or not the cast is Channelled or a Regular cast so we can grab the proper Cast Name
@@ -550,7 +546,6 @@ local function OnFrameShow(frame)
 
 	local isSmallNP
 	if frame.hp:GetEffectiveScale() < 1 then
-		frame.hp:SetScale(1 / frame:GetEffectiveScale())
 		isSmallNP = true
 	end
 
@@ -611,10 +606,6 @@ end
 --We need to reset everything when a nameplate it hidden, this is so theres no left over data when a nameplate gets reshown for a differant mob.
 local function OnFrameHide(frame)
 	frame.hp:SetStatusBarColor(frame.hp.rcolor, frame.hp.gcolor, frame.hp.bcolor)
-	frame.hp:SetScale(1)
-	frame:SetScale(1)
-	frame.icons:SetScale(1)
-	frame.cb:SetScale(1)
 	frame.overlay:Hide()
 	frame.cb:Hide()
 	frame.unit = nil
