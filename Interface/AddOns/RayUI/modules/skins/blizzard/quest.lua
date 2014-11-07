@@ -93,6 +93,7 @@ local function LoadSkin()
 
 	-- Text colour stuff
 
+	TRIVIAL_QUEST_DISPLAY = gsub(TRIVIAL_QUEST_DISPLAY, "cff000000", "cffaaaaaa")
 	QuestProgressRequiredItemsText:SetTextColor(1, 1, 1)
 	QuestProgressRequiredItemsText:SetShadowColor(0, 0, 0)
 	GreetingText:SetTextColor(1, 1, 1)

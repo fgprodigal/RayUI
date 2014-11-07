@@ -503,6 +503,7 @@ local function LoadSkin()
 		"AudioOptionsSoundPanelMasterVolume",
 		"AudioOptionsSoundPanelSoundVolume",
 		"AudioOptionsSoundPanelMusicVolume",
+		"AudioOptionsSoundPanelDialogVolume",
 		"AudioOptionsSoundPanelAmbienceVolume",
 		"AudioOptionsVoicePanelMicrophoneVolume",
 		"AudioOptionsVoicePanelSpeakerVolume",
