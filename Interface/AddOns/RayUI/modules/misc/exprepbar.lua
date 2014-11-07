@@ -1,35 +1,45 @@
 local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local M = R:GetModule("Misc")
 
-local function LoadFunc()
-	local backdrop = CreateFrame("Frame", "RayUI_ExpBar", Minimap)
-	backdrop:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 10, -5)
-	backdrop:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMRIGHT", -10, -11)
-	backdrop:CreateShadow("Background")
+local RepMenuList = {}
+local function CacheRepData()
+	wipe(RepMenuList)
+	for factionIndex = 1, GetNumFactions() do
+		local factionName, description, standingID, barMin, barMax, barValue, atWarWith, canToggleAtWar, isHeader, isCollapsed, hasRep, isWatched, isChild = GetFactionInfo(factionIndex)
+		if standingID and not isHeader then	
+			local fn = function()
+				local active = GetWatchedFactionInfo()
+				if factionName ~= active then
+					SetWatchedFactionIndex(factionIndex)
+				end
+			end  
+			tinsert(RepMenuList, {text = factionName, func = fn})
+		end
+	end
+end
 
-	local xpBar = CreateFrame("StatusBar", nil, backdrop)
-	xpBar:SetAllPoints()
+local function LoadFunc()
+	local xpBar = CreateFrame("StatusBar", nil, Minimap)
+	xpBar:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 10, -4)
+	xpBar:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", -10, -4)
+	xpBar:SetHeight(8)
+	xpBar:CreateShadow("Background")
 	xpBar:SetStatusBarTexture(R.media.normal)
 	xpBar:SetStatusBarColor(.5, 0, .75)
 
-	local restedxpBar = CreateFrame("StatusBar", nil, backdrop)
+	local restedxpBar = CreateFrame("StatusBar", nil, xpBar)
 	restedxpBar:SetAllPoints()
 	restedxpBar:SetStatusBarTexture(R.media.normal)
 	restedxpBar:SetStatusBarColor(0, .4, .8)
 
-	local repBar = CreateFrame("StatusBar", nil, backdrop)
-	repBar:SetAllPoints()
+	local repBar = CreateFrame("StatusBar", nil, Minimap)
+	repBar:SetPoint("TOPLEFT", xpBar, "BOTTOMLEFT", 0, -4)
+	repBar:SetPoint("TOPRIGHT", xpBar, "BOTTOMRIGHT", 0, -4)
+	repBar:SetHeight(8)
 	repBar:SetStatusBarTexture(R.media.normal)
-
-	local mouseFrame = CreateFrame("Frame", "FreeUIExpBar", backdrop)
-	mouseFrame:SetAllPoints(backdrop)
-	mouseFrame:EnableMouse(true)
-
-	backdrop:SetFrameLevel(0)
-	restedxpBar:SetFrameLevel(1)
-	repBar:SetFrameLevel(2)
-	xpBar:SetFrameLevel(2)
-	mouseFrame:SetFrameLevel(3)
+	repBar:CreateShadow("Background")
+	repBar.MenuFrame = CreateFrame("Frame", nil, UIParent)
+	repBar.MenuFrame:CreateShadow("Background")
 
 	-- Update function
 
@@ -40,14 +50,13 @@ local function LoadFunc()
 		if UnitLevel("player") == MAX_PLAYER_LEVEL then
 			xpBar:Hide()
 			restedxpBar:Hide()
-			if not GetWatchedFactionInfo() then
-				backdrop:Hide()
-			else
-				backdrop:Show()
-			end
+			repBar:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 10, -4)
+			repBar:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", -10, -4)
 		else
 			xpBar:SetMinMaxValues(min(0, XP), maxXP)
 			xpBar:SetValue(XP)
+			repBar:SetPoint("TOPLEFT", xpBar, "BOTTOMLEFT", 0, -4)
+			repBar:SetPoint("TOPRIGHT", xpBar, "BOTTOMRIGHT", 0, -4)
 
 			if restXP then
 				restedxpBar:Show()
@@ -56,8 +65,6 @@ local function LoadFunc()
 			else
 				restedxpBar:Hide()
 			end
-
-			repBar:Hide()
 		end
 
 		if GetWatchedFactionInfo() then
@@ -79,32 +86,96 @@ local function LoadFunc()
 
 	-- Mouse events
 
-	mouseFrame:SetScript("OnEnter", function()
+	xpBar:SetScript("OnEnter", function()
 		local min, max = UnitXP("player"), UnitXPMax("player")
 		local rest = GetXPExhaustion()
 
-		GameTooltip:SetOwner(mouseFrame, "ANCHOR_BOTTOM", 0, -5)
-		GameTooltip:ClearLines()
-		if UnitLevel("player") ~= MAX_PLAYER_LEVEL then
-			GameTooltip:AddDoubleLine(XP, format("%s/%s (%d%%)", min, max, min / max * 100), NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b)
-			GameTooltip:AddDoubleLine(L["剩余"], format("%d (%d%%)", max - min, (max - min) / max * 100), NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b)
-			if rest then
-				GameTooltip:AddDoubleLine(L["双倍"], format("%d (%d%%)", rest, rest / max * 100), 0, .56, 1, HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b)
-			end
-		end
-		if GetWatchedFactionInfo() then
-			local name, rank, start, cap, value = GetWatchedFactionInfo()
-			if UnitLevel("player") ~= MAX_PLAYER_LEVEL then GameTooltip:AddLine(" ") end			
-			GameTooltip:AddDoubleLine(REPUTATION, name, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b)
-			GameTooltip:AddDoubleLine(STANDING, _G["FACTION_STANDING_LABEL"..rank], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, RayUF["colors"].reaction[rank][1], RayUF["colors"].reaction[rank][2], RayUF["colors"].reaction[rank][3])
-			GameTooltip:AddDoubleLine(REPUTATION, string.format("%s/%s (%d%%)", value-start, cap-start, (value-start)/(cap-start)*100), r, g, b, 1, 1, 1)
-			GameTooltip:AddDoubleLine(L["剩余"], string.format("%s", cap-value), r, g, b, 1, 1, 1)
+		GameTooltip:SetOwner(xpBar, "ANCHOR_BOTTOM", 0, -5)
+		GameTooltip:AddDoubleLine(XP, format("%s/%s (%d%%)", min, max, min / max * 100), NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b)
+		GameTooltip:AddDoubleLine(L["剩余"], format("%d (%d%%)", max - min, (max - min) / max * 100), NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b)
+		if rest then
+			GameTooltip:AddDoubleLine(L["双倍"], format("%d (%d%%)", rest, rest / max * 100), 0, .56, 1, HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b)
 		end
 		GameTooltip:Show()
 	end)
 
-	mouseFrame:SetScript("OnLeave", function()
+	xpBar:SetScript("OnLeave", function()
 		GameTooltip:Hide()
+	end)
+
+	repBar:SetScript("OnEnter", function()
+		local name, rank, start, cap, value = GetWatchedFactionInfo()
+		GameTooltip:SetOwner(repBar, "ANCHOR_BOTTOM", 0, -5)
+		GameTooltip:ClearLines()		
+		GameTooltip:AddDoubleLine(REPUTATION, name, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b)
+		GameTooltip:AddDoubleLine(STANDING, _G["FACTION_STANDING_LABEL"..rank], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, RayUF["colors"].reaction[rank][1], RayUF["colors"].reaction[rank][2], RayUF["colors"].reaction[rank][3])
+		GameTooltip:AddDoubleLine(REPUTATION, string.format("%s/%s (%d%%)", value-start, cap-start, (value-start)/(cap-start)*100), r, g, b, 1, 1, 1)
+		GameTooltip:AddDoubleLine(L["剩余"], string.format("%s", cap-value), r, g, b, 1, 1, 1)
+		GameTooltip:Show()
+	end)
+
+	repBar:SetScript("OnLeave", function()
+		GameTooltip:Hide()
+	end)
+
+	repBar:SetScript("OnMouseUp", function(self)
+		GameTooltip:Hide()
+		CacheRepData()
+		if not repBar.MenuFrame.buttons then
+			repBar.MenuFrame.buttons = {}
+			repBar.MenuFrame:SetFrameStrata("DIALOG")
+			repBar.MenuFrame:SetClampedToScreen(true)
+			repBar.MenuFrame:Hide()
+		end
+		local maxPerColumn = 25
+		local cols = 1
+		for i=1, #repBar.MenuFrame.buttons do
+			repBar.MenuFrame.buttons[i]:Hide()
+		end
+
+		for i=1, #RepMenuList do 
+			if not repBar.MenuFrame.buttons[i] then
+				repBar.MenuFrame.buttons[i] = CreateFrame("Button", nil, repBar.MenuFrame)
+				repBar.MenuFrame.buttons[i].hoverTex = repBar.MenuFrame.buttons[i]:CreateTexture(nil, "OVERLAY")
+				repBar.MenuFrame.buttons[i].hoverTex:SetAllPoints()
+				repBar.MenuFrame.buttons[i].hoverTex:SetTexture([[Interface\QuestFrame\UI-QuestTitleHighlight]])
+				repBar.MenuFrame.buttons[i].hoverTex:SetBlendMode("ADD")
+				repBar.MenuFrame.buttons[i].hoverTex:Hide()
+				repBar.MenuFrame.buttons[i].text = repBar.MenuFrame.buttons[i]:CreateFontString(nil, "BORDER")
+				repBar.MenuFrame.buttons[i].text:SetAllPoints()
+				repBar.MenuFrame.buttons[i].text:SetFont(R["media"].font,12,"OUTLINE")
+				repBar.MenuFrame.buttons[i].text:SetJustifyH("LEFT")
+				repBar.MenuFrame.buttons[i]:SetScript("OnEnter", function(self)
+					self.hoverTex:Show()
+				end)
+				repBar.MenuFrame.buttons[i]:SetScript("OnLeave", function(self)
+					self.hoverTex:Hide()
+				end)
+			end
+			repBar.MenuFrame.buttons[i]:Show()
+			repBar.MenuFrame.buttons[i]:SetHeight(16)
+			repBar.MenuFrame.buttons[i]:SetWidth(135)
+			repBar.MenuFrame.buttons[i].text:SetText(RepMenuList[i].text)
+			repBar.MenuFrame.buttons[i].func = RepMenuList[i].func
+			repBar.MenuFrame.buttons[i]:SetScript("OnClick", function(self)
+				self.func()
+				repBar.MenuFrame:Hide()
+			end)
+			if i == 1 then
+				repBar.MenuFrame.buttons[i]:SetPoint("TOPLEFT", repBar.MenuFrame, "TOPLEFT", 10, -10)
+			elseif((i -1) % maxPerColumn == 0) then
+				repBar.MenuFrame.buttons[i]:SetPoint("TOPLEFT", repBar.MenuFrame.buttons[i - maxPerColumn], "TOPRIGHT", 10, 0)
+				cols = cols + 1
+			else
+				repBar.MenuFrame.buttons[i]:SetPoint("TOPLEFT", repBar.MenuFrame.buttons[i - 1], "BOTTOMLEFT")
+			end
+		end
+		local maxHeight = (min(maxPerColumn, #RepMenuList) * 16) + 20
+		local maxWidth = (135 * cols) + (10 * cols)
+		repBar.MenuFrame:SetSize(maxWidth, maxHeight)    
+		repBar.MenuFrame:ClearAllPoints()
+		repBar.MenuFrame:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 10, -10)
+		ToggleFrame(repBar.MenuFrame)
 	end)
 end
 

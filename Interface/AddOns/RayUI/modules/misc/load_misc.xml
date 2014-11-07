@@ -1,6 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="misc.lua"/>
-	<Script file="afkfix.lua"/>
 	<Script file="altpower.lua"/>
 	<Script file="announce.lua"/>
 	<Script file="auction.lua"/>
