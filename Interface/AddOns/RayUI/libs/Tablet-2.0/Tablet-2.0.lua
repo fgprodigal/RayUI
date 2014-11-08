@@ -1078,16 +1078,9 @@ local function NewLine(self)
 		local col1 = newstring(button)
 		testString = col1
 		local highlight = button:CreateTexture(nil, "BACKGROUND")
-		highlight:SetTexture("Interface\\AddOns\\RayUI\\libs\\Tablet-2.0\\Highlight")
-		local r, g, b
-		if CUSTOM_CLASS_COLORS then 
-			r, g, b = CUSTOM_CLASS_COLORS[R.myclass].r, CUSTOM_CLASS_COLORS[R.myclass].g, CUSTOM_CLASS_COLORS[R.myclass].b
-		else
-			r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b
-		end
-		highlight:SetVertexColor(r, g, b, 1)
+		highlight:SetTexture([[Interface\QuestFrame\UI-QuestTitleHighlight]])
 		button.highlight = highlight
-		-- highlight:SetBlendMode("ADD")
+		highlight:SetBlendMode("ADD")
 		highlight:SetAllPoints(button)
 		highlight:Hide()
 		self.buttons[#self.buttons+1] = button

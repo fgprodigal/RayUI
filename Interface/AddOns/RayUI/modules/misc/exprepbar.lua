@@ -13,12 +13,20 @@ local function CacheRepData()
 					SetWatchedFactionIndex(factionIndex)
 				end
 			end  
-			tinsert(RepMenuList, {text = factionName, func = fn})
+			tinsert(RepMenuList, {text = factionName..R:RGBToHex(unpack(RayUF["colors"].reaction[standingID])).." (".._G["FACTION_STANDING_LABEL"..standingID]..")", func = fn})
 		end
 	end
 end
 
 local function LoadFunc()
+	local r, g, b
+	if CUSTOM_CLASS_COLORS then 
+		r, g, b = CUSTOM_CLASS_COLORS[R.myclass].r, CUSTOM_CLASS_COLORS[R.myclass].g, CUSTOM_CLASS_COLORS[R.myclass].b
+	else
+		local S = R:GetModule("Skins")
+		r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b
+	end
+
 	local xpBar = CreateFrame("StatusBar", nil, Minimap)
 	xpBar:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 10, -4)
 	xpBar:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", -10, -4)
@@ -48,10 +56,10 @@ local function LoadFunc()
 		local restXP = GetXPExhaustion()
 
 		if UnitLevel("player") == MAX_PLAYER_LEVEL then
-			xpBar:Hide()
 			restedxpBar:Hide()
 			repBar:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 10, -4)
 			repBar:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", -10, -4)
+			xpBar:Hide()
 		else
 			xpBar:SetMinMaxValues(min(0, XP), maxXP)
 			xpBar:SetValue(XP)
@@ -65,6 +73,7 @@ local function LoadFunc()
 			else
 				restedxpBar:Hide()
 			end
+			xpBar:Show()
 		end
 
 		if GetWatchedFactionInfo() then
@@ -72,6 +81,9 @@ local function LoadFunc()
 			repBar:SetMinMaxValues(minRep, maxRep)
 			repBar:SetValue(value)
 			repBar:SetStatusBarColor(unpack(RayUF["colors"].reaction[rank]))
+			repBar:Show()
+		else
+			repBar:Hide()
 		end
 	end
 
@@ -143,7 +155,7 @@ local function LoadFunc()
 				repBar.MenuFrame.buttons[i].hoverTex:Hide()
 				repBar.MenuFrame.buttons[i].text = repBar.MenuFrame.buttons[i]:CreateFontString(nil, "BORDER")
 				repBar.MenuFrame.buttons[i].text:SetAllPoints()
-				repBar.MenuFrame.buttons[i].text:SetFont(R["media"].font,12,"OUTLINE")
+				repBar.MenuFrame.buttons[i].text:SetFont(R["media"].font,12)
 				repBar.MenuFrame.buttons[i].text:SetJustifyH("LEFT")
 				repBar.MenuFrame.buttons[i]:SetScript("OnEnter", function(self)
 					self.hoverTex:Show()
