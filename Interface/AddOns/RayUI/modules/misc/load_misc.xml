@@ -3,7 +3,6 @@
 	<Script file="altpower.lua"/>
 	<Script file="announce.lua"/>
 	<Script file="auction.lua"/>
-	<Script file="autodez.lua"/>
 	<Script file="autorelease.lua"/>
 	<Script file="bubbles.lua"/>
 	<Script file="debugTools.lua"/>
