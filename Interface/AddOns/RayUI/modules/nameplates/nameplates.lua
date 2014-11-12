@@ -528,6 +528,7 @@ local function OnFrameShow(frame)
 	frame.hp.name:ClearAllPoints()
 	frame.hp.name:SetPoint("BOTTOMLEFT", frame.hp, "TOPLEFT", 0, -1)
 	frame.hp.name:SetPoint("BOTTOMRIGHT", frame.hp, "TOPRIGHT", -20, -1)
+	frame.hp.name:SetFont(R["media"].font, FONTSIZE, R["media"].fontflag)
 
 	frame.hp.value:Show()
 
@@ -550,11 +551,13 @@ local function OnFrameShow(frame)
 	end
 
 	if isSmallNP then
-		frame.hp:Width(hpWidth * .6)
-		frame.hp:Height(hpHeight * .8)
+		local scale = 1 / frame:GetEffectiveScale() - 0.8
+		frame.hp:Width(hpWidth * scale)
+		frame.hp:Height(hpHeight * scale)
 		frame.hp.value:Hide()
 		frame.hp.name:SetJustifyH("CENTER")
 		frame.hp.name:ClearAllPoints()
+		frame.hp.name:SetFont(R["media"].font, FONTSIZE * scale, R["media"].fontflag)
 		frame.hp.name:SetPoint("BOTTOMLEFT", frame.hp, "TOPLEFT", 0, -1)
 		frame.hp.name:SetPoint("BOTTOMRIGHT", frame.hp, "TOPRIGHT", 0, -1)
 	end
