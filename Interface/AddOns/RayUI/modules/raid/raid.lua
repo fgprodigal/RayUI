@@ -7,18 +7,18 @@ local oUF = RayUF or oUF
 RA.modName = L["团队"]
 
 local function RegisterDebuffs()
-    local _, instanceType = IsInInstance()
-    local zone = GetCurrentMapAreaID()
-    local ORD = ns.oUF_RaidDebuffs or oUF_RaidDebuffs
-    if ORD then
-        ORD:ResetDebuffData()
+	local _, instanceType = IsInInstance()
+	local zone = GetCurrentMapAreaID()
+	local ORD = ns.oUF_RaidDebuffs or oUF_RaidDebuffs
+	if ORD then
+		ORD:ResetDebuffData()
 
-        if instanceType == "party" or instanceType == "raid" then
-            if G.Raid.RaidDebuffs.instances[zone] then
-                ORD:RegisterDebuffs(G.Raid.RaidDebuffs.instances[zone])
-            end
-        end
-    end
+		if instanceType == "party" or instanceType == "raid" then
+			if G.Raid.RaidDebuffs.instances[zone] then
+				ORD:RegisterDebuffs(G.Raid.RaidDebuffs.instances[zone])
+			end
+		end
+	end
 end
 
 function RA:GetOptions()
@@ -110,9 +110,9 @@ function RA:GetOptions()
 			name = L["显示"],
 			guiInline = true,
 			set = function(info, value)
-						R.db.Raid[ info[#info] ] = value
-						RA:UpdateVisibility()
-					end,
+				R.db.Raid[ info[#info] ] = value
+				RA:UpdateVisibility()
+			end,
 			args = {
 				showwhensolo = {
 					order = 1,
@@ -275,19 +275,65 @@ function RA:GetOptions()
 	return options
 end
 
-function RA:Initialize()
-	self:SpawnRaid()
-    RegisterDebuffs()
+local function HideCompactRaid()
+	if InCombatLockdown() then return end
+	CompactRaidFrameManager:Kill()
+	local compact_raid = CompactRaidFrameManager_GetSetting("IsShown")
+	if compact_raid and compact_raid ~= "0" then 
+		CompactRaidFrameManager_SetSetting("IsShown", "0")
+	end
+end
 
+function RA:HideBlizzard()
+	hooksecurefunc("CompactRaidFrameManager_UpdateShown", HideCompactRaid)
+	CompactRaidFrameManager:HookScript("OnShow", HideCompactRaid)
+	CompactRaidFrameContainer:UnregisterAllEvents()
+	
+	HideCompactRaid()
+	hooksecurefunc("CompactUnitFrame_RegisterEvents", CompactUnitFrame_UnregisterEvents)
+end
+
+function RA:Initialize()
+	for i = 1, 4 do
+		local frame = _G["PartyMemberFrame"..i]
+		frame:UnregisterAllEvents()
+		frame:Kill()
+
+		local health = frame.healthbar
+		if(health) then
+			health:UnregisterAllEvents()
+		end
+
+		local power = frame.manabar
+		if(power) then
+			power:UnregisterAllEvents()
+		end
+
+		local spell = frame.spellbar
+		if(spell) then
+			spell:UnregisterAllEvents()
+		end
+
+		local altpowerbar = frame.powerBarAlt
+		if(altpowerbar) then
+			altpowerbar:UnregisterAllEvents()
+		end
+	end
+	self:HideBlizzard()
+	self:RegisterEvent("GROUP_ROSTER_UPDATE", "HideBlizzard")
+	UIParent:UnregisterEvent("GROUP_ROSTER_UPDATE")
+
+	self:SpawnRaid()
+	RegisterDebuffs()
 	local ORD = ns.oUF_RaidDebuffs or oUF_RaidDebuffs
 	if ORD then
 		ORD.MatchBySpellName = false
 	end
 
-    local event = CreateFrame("Frame")
-    event:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-    event:RegisterEvent("PLAYER_ENTERING_WORLD")
-    event:SetScript("OnEvent", RegisterDebuffs)
+	local event = CreateFrame("Frame")
+	event:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+	event:RegisterEvent("PLAYER_ENTERING_WORLD")
+	event:SetScript("OnEvent", RegisterDebuffs)
 end
 
 function RA:Info()

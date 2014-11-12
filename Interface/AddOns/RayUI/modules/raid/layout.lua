@@ -831,33 +831,6 @@ function RA:SpawnRaid()
 	oUF:RegisterStyle("RayUFRaid", style)
 	oUF:SetActiveStyle("RayUFRaid")
 	RA:Colors()
-	CompactRaidFrameContainer:Kill()
-	CompactRaidFrameManager:Kill()
-	for i = 1, 4 do
-		local frame = _G["PartyMemberFrame"..i]
-		frame:UnregisterAllEvents()
-		frame:Kill()
-
-		local health = frame.healthbar
-		if(health) then
-			health:UnregisterAllEvents()
-		end
-
-		local power = frame.manabar
-		if(power) then
-			power:UnregisterAllEvents()
-		end
-
-		local spell = frame.spellbar
-		if(spell) then
-			spell:UnregisterAllEvents()
-		end
-
-		local altpowerbar = frame.powerBarAlt
-		if(altpowerbar) then
-			altpowerbar:UnregisterAllEvents()
-		end
-	end
 	local raid15 = {}
 	for i=1, 3 do
 		local group = self:SpawnHeader("RayUFRaid15_"..i, i, 15)
