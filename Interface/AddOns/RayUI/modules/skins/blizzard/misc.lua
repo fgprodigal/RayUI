@@ -813,11 +813,7 @@ local function LoadSkin()
 	S:ReskinClose(BNToastFrameCloseButton)
 	BNToastFrame:HookScript("OnShow", function(self)
 		self:ClearAllPoints()
-		if TempEnchant1:IsShown() or TempEnchant2:IsShown() then
-			self:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", -3, -51)
-		else
-			self:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", -3, -17)
-		end
+		self:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", -3, -17)
 	end)
 
 	ChatConfigFrameDefaultButton:SetWidth(125)

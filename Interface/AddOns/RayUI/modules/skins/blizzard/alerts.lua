@@ -335,9 +335,9 @@ local function LoadSkin()
 			ANCHOR_POINT = "TOP"
 			YOFFSET = 10
 		end
-        if type(rollBars) == "table" then
+        if type(R.rollBars) == "table" then
             local lastframe, lastShownFrame
-            for i, frame in pairs(rollBars) do
+            for i, frame in pairs(R.rollBars) do
                 frame:ClearAllPoints()
                 if i ~= 1 then
                     if POSITION == "TOP" then

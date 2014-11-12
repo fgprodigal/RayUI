@@ -2,8 +2,9 @@ local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, loc
 local M = R:NewModule("Misc", "AceEvent-3.0", "AceTimer-3.0")
 
 M.modName = L["小玩意儿"]
-
+local error=error
 M.Modules = {}
+M.OnLoadErrors = {}
 
 function M:GetOptions()
 	local options = {
@@ -289,8 +290,7 @@ function M:Initialize()
 	for module, func in pairs(self.Modules) do
 		local _, catch = pcall(func)
 		if catch then
-			R:Print(catch)
-			-- error(catch, 2)
+			tinsert(self.OnLoadErrors, catch)
 		end
 	end
 end
