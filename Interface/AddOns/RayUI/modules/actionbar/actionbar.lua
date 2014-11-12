@@ -3,6 +3,7 @@ local AB = R:NewModule("ActionBar", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3
 
 AB.modName = L["动作条"]
 AB["Handled"] = {}
+AB["Skinned"] = {}
 
 local visibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show"
 local actionBarsName = {
@@ -346,8 +347,8 @@ function AB:UpdatePositionAndSize(barName)
 	if self.db[barName].mouseover then
 		self.db[barName].autohide = false
 		bar:SetAlpha(0)
-		bar:SetScript("OnEnter", function(self) UIFrameFadeIn(bar,0.5,bar:GetAlpha(),1) end)
-		bar:SetScript("OnLeave", function(self) UIFrameFadeOut(bar,0.5,bar:GetAlpha(),0) end)
+		bar:SetScript("OnEnter", function(self) R:UIFrameFadeIn(bar,0.5,bar:GetAlpha(),1) end)
+		bar:SetScript("OnLeave", function(self) R:UIFrameFadeOut(bar,0.5,bar:GetAlpha(),0) end)
 	else
 		bar:SetAlpha(1)
 		bar:SetScript("OnEnter", nil)
@@ -377,20 +378,13 @@ function AB:UpdatePositionAndSize(barName)
 		end
 
 		if self.db[barName].mouseover then
-			if not self.hooks[button] then
-				self:HookScript(button, "OnEnter", function()
-					UIFrameFadeIn(bar,0.5,bar:GetAlpha(),1)
-				end)
-				self:HookScript(button, "OnLeave", function()
-					UIFrameFadeOut(bar,0.5,bar:GetAlpha(),0)
-				end)
-				SetCooldownSwipeAlpha(button.cooldown, 0)
-			end
-		else
-			if not self.hooks[button] then
-				self:Unhook(button, "OnEnter")
-				self:Unhook(button, "OnLeave")
-			end
+			button:HookScript("OnEnter", function()
+				R:UIFrameFadeIn(bar,0.5,bar:GetAlpha(),1)
+			end)
+			button:HookScript("OnLeave", function()
+				R:UIFrameFadeOut(bar,0.5,bar:GetAlpha(),0)
+			end)
+			SetCooldownSwipeAlpha(button.cooldown, 0)
 		end
 	end
 
@@ -527,12 +521,8 @@ function AB:Initialize()
 	SetCVar("countdownForCooldowns", "0")
 	InterfaceOptionsActionBarsPanelCountdownCooldowns:Kill()
 	self:SecureHook("ActionButton_UpdateHotkeys", "UpdateHotkey")
-	self:SecureHook("ActionButton_Update", "Style")
+	self:SecureHook("PetActionButton_SetHotkeys", "UpdateHotkey")
 	self:SecureHook("ActionButton_UpdateFlyout", "StyleFlyout")
-	self:SecureHook("StanceBar_Update", "StyleShift")
-	self:SecureHook("StanceBar_UpdateState", "StyleShift")
-	self:SecureHook("PossessBar_Update", "StylePossess")
-	self:SecureHook("PetActionBar_Update", "StylePet")
 	self:HookScript(SpellFlyout, "OnShow", "SetupFlyoutButton")
 
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -544,6 +534,21 @@ function AB:Initialize()
 		self:Style(_G["MultiBarBottomRightButton"..i])
 		self:Style(_G["MultiBarRightButton"..i])
 		self:Style(_G["MultiBarLeftButton"..i])
+	end
+
+	for i = 1, 6 do
+		self:Style(OverrideActionBar["SpellButton"..i])
+	end
+
+	for i = 1, NUM_PET_ACTION_SLOTS do
+		self:StylePet(_G["PetActionButton"..i])
+	end
+
+	for i = 1, NUM_STANCE_SLOTS do
+		self:StyleShift(_G["StanceButton"..i])
+	end
+	for i = 1, NUM_POSSESS_SLOTS do
+		self:StylePossess(_G["PossessButton"..i])
 	end
 end
 
@@ -586,7 +591,7 @@ function AB:Style(button)
 
 	if name:match("MultiCast") then return end
 
-	if not button.equipped then
+	if not button.equipped and not button.style then
 		local equipped = button:CreateTexture(nil, "OVERLAY")
 		equipped:SetTexture(0, 1, 0, .3)
 		equipped:SetAllPoints()
@@ -598,13 +603,13 @@ function AB:Style(button)
 		if not button.equipped:IsShown() then
 			button.equipped:Show()
 		end
-	else
+	elseif not button.style then
 		if button.equipped:IsShown() then
 			button.equipped:Hide()
 		end
 	end
 
-	if button.styled then return end
+	if self["Skinned"][button] then return end
 
 	local Icon = _G[name.."Icon"]
 	local Count = _G[name.."Count"]
@@ -683,12 +688,12 @@ function AB:Style(button)
 		button.style:SetDrawLayer("BACKGROUND", -7)
 		button.border:SetFrameLevel(button:GetFrameLevel())
 		button.shadow:SetFrameLevel(button:GetFrameLevel())
+	elseif not name:find("OverrideActionBarButton") then
+		FixActionButtonCooldown(button)
 	end
-
-	FixActionButtonCooldown(button)
 	button:StyleButton(true)
 	self:UpdateHotkey(button)
-	button.styled = true
+	self["Skinned"][button] = true
 end
 
 function AB:StyleShift()

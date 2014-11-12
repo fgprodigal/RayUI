@@ -128,7 +128,11 @@ local function LoadSkin()
 
 	for i = 1, ATTACHMENTS_MAX_SEND do
 		local button = _G["SendMailAttachment"..i]
+		local ic = _G["OpenMailAttachmentButton"..i.."IconTexture"]
+
 		button:StripTextures()
+		button:StyleButton(true)
+		ic:SetTexCoord(.08, .92, .08, .92)
 
 		local bg = CreateFrame("Frame", nil, button)
 		bg:Point("TOPLEFT", -1, 1)
@@ -141,6 +145,7 @@ local function LoadSkin()
 		local bu = _G["OpenMailAttachmentButton"..i]
 		local ic = _G["OpenMailAttachmentButton"..i.."IconTexture"]
 
+		bu:StripTextures()
 		bu:StyleButton(true)
 		ic:SetTexCoord(.08, .92, .08, .92)
 

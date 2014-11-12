@@ -11,6 +11,7 @@ function R:TestBossButton()
 		ExtraActionBarFrame.outro:Stop()
 		ExtraActionBarFrame.intro:Play()
 		if not ExtraActionBarFrame.button.icon:GetTexture() then
+			ExtraActionBarFrame.button.style:SetTexture("Interface\\ExtraButton\\Default")
 			ExtraActionBarFrame.button.icon:SetTexture("Interface\\ICONS\\ABILITY_SEAL")
 			ExtraActionBarFrame.button.icon:Show()
 		end
