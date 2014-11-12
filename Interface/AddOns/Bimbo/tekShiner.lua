@@ -16,7 +16,7 @@ function lib.new(parent, r, g, b)
 		tex:SetTexture([[Interface\ItemSocketingFrame\UI-ItemSockets]])
 		tex:SetTexCoord(0.3984375, 0.4453125, 0.40234375, 0.44921875)
 		tex:SetBlendMode("ADD")
-		tex:Size(13, 13)
+		tex:SetWidth(13) tex:SetHeight(13)
 		tex:SetVertexColor(r or R, g or G, b or B)
 		f.sparkles[i] = tex
 	end
@@ -40,28 +40,30 @@ function lib:OnUpdate(elapsed)
 
 		if timer <= speed then
 			local basePosition = timer/speed*distance
-			self.sparkles[0+i]:Point("CENTER", self, "TOPLEFT", basePosition, 0)
-			self.sparkles[4+i]:Point("CENTER", self, "BOTTOMRIGHT", -basePosition, 0)
-			self.sparkles[8+i]:Point("CENTER", self, "TOPRIGHT", 0, -basePosition)
-			self.sparkles[12+i]:Point("CENTER", self, "BOTTOMLEFT", 0, basePosition)
+			self.sparkles[0+i]:SetPoint("CENTER", self, "TOPLEFT", basePosition, 0)
+			self.sparkles[4+i]:SetPoint("CENTER", self, "BOTTOMRIGHT", -basePosition, 0)
+			self.sparkles[8+i]:SetPoint("CENTER", self, "TOPRIGHT", 0, -basePosition)
+			self.sparkles[12+i]:SetPoint("CENTER", self, "BOTTOMLEFT", 0, basePosition)
 		elseif timer <= speed*2 then
 			local basePosition = (timer-speed)/speed*distance
-			self.sparkles[0+i]:Point("CENTER", self, "TOPRIGHT", 0, -basePosition)
-			self.sparkles[4+i]:Point("CENTER", self, "BOTTOMLEFT", 0, basePosition)
-			self.sparkles[8+i]:Point("CENTER", self, "BOTTOMRIGHT", -basePosition, 0)
-			self.sparkles[12+i]:Point("CENTER", self, "TOPLEFT", basePosition, 0)
+			self.sparkles[0+i]:SetPoint("CENTER", self, "TOPRIGHT", 0, -basePosition)
+			self.sparkles[4+i]:SetPoint("CENTER", self, "BOTTOMLEFT", 0, basePosition)
+			self.sparkles[8+i]:SetPoint("CENTER", self, "BOTTOMRIGHT", -basePosition, 0)
+			self.sparkles[12+i]:SetPoint("CENTER", self, "TOPLEFT", basePosition, 0)
 		elseif timer <= speed*3 then
 			local basePosition = (timer-speed*2)/speed*distance
-			self.sparkles[0+i]:Point("CENTER", self, "BOTTOMRIGHT", -basePosition, 0)
-			self.sparkles[4+i]:Point("CENTER", self, "TOPLEFT", basePosition, 0)
-			self.sparkles[8+i]:Point("CENTER", self, "BOTTOMLEFT", 0, basePosition)
-			self.sparkles[12+i]:Point("CENTER", self, "TOPRIGHT", 0, -basePosition)
+			self.sparkles[0+i]:SetPoint("CENTER", self, "BOTTOMRIGHT", -basePosition, 0)
+			self.sparkles[4+i]:SetPoint("CENTER", self, "TOPLEFT", basePosition, 0)
+			self.sparkles[8+i]:SetPoint("CENTER", self, "BOTTOMLEFT", 0, basePosition)
+			self.sparkles[12+i]:SetPoint("CENTER", self, "TOPRIGHT", 0, -basePosition)
 		else
 			local basePosition = (timer-speed*3)/speed*distance
-			self.sparkles[0+i]:Point("CENTER", self, "BOTTOMLEFT", 0, basePosition)
-			self.sparkles[4+i]:Point("CENTER", self, "TOPRIGHT", 0, -basePosition)
-			self.sparkles[8+i]:Point("CENTER", self, "TOPLEFT", basePosition, 0)
-			self.sparkles[12+i]:Point("CENTER", self, "BOTTOMRIGHT", -basePosition, 0)
+			self.sparkles[0+i]:SetPoint("CENTER", self, "BOTTOMLEFT", 0, basePosition)
+			self.sparkles[4+i]:SetPoint("CENTER", self, "TOPRIGHT", 0, -basePosition)
+			self.sparkles[8+i]:SetPoint("CENTER", self, "TOPLEFT", basePosition, 0)
+			self.sparkles[12+i]:SetPoint("CENTER", self, "BOTTOMRIGHT", -basePosition, 0)
 		end
 	end
 end
+
+
