@@ -278,6 +278,14 @@ function R:PLAYER_ENTERING_WORLD()
 			eventcount = 0
 		end
 	end)
+	for k, v in self:IterateModules() do
+		if v.OnLoadErrors then
+			for _, errors in pairs(v.OnLoadErrors) do
+				error(errors, 2)
+			end
+			wipe(v.OnLoadErrors)
+		end
+	end
 end
 
 function R:Initialize()
