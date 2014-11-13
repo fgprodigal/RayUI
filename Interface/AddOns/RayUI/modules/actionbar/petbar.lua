@@ -175,7 +175,7 @@ function AB:UpdatePetBar()
 
     if self.db.barpet.enable then
         bar:Show()
-        RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][possessbar,@vehicle,exists]hide;[pet,novehicleui,nobonusbar:5]show;hide")
+        RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; [@pet,exists] show; hide")
     else
         bar:Hide()
         UnregisterStateDriver(bar, "visibility")

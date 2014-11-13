@@ -16,7 +16,7 @@ end
 local function to_hide(self)
 	if self.hiding == true then return end
 	if self:GetAlpha() == 0 then self:hide() return end
-	UIFrameFadeOut(self,self.time,self.state_alpha,0)
+	R:UIFrameFadeOut(self,self.time,self.state_alpha,0)
 	self.hiding = true
 	self.pl_watch_frame:Show()
 end
@@ -26,7 +26,7 @@ local function to_show(self)
 	if self.showing then return end
 	self.hiding = false
 	self.pl_watch_frame:Hide()
-	UIFrameFadeIn(self,self.time,0,self.state_alpha)
+	R:UIFrameFadeIn(self,self.time,0,self.state_alpha)
 end
 
 function R.make_plav(self,time,lock,alpha)
@@ -235,7 +235,7 @@ function R:UIFrameFade(frame, fadeInfo)
 	frame:SetAlpha(fadeInfo.startAlpha)
 
 	frame.fadeInfo = fadeInfo
-	if not frame:IsProtected() then
+	if not frame:IsProtected() and not InCombatLockdown() then
 		frame:Show()
 	end
 

@@ -82,9 +82,13 @@ local function LoadSkin()
 			bu.name:SetParent(bg)
 
 			if bu.DragButton then
+				bu.DragButton:StyleButton(1)
 				bu.DragButton.ActiveTexture:SetTexture(S["media"].checked)
+				bu.DragButton.ActiveTexture:SetVertexColor(r, g, b)
 			else
+				bu.dragButton:StyleButton(1)
 				bu.dragButton.ActiveTexture:SetTexture(S["media"].checked)
+				bu.dragButton.ActiveTexture:SetVertexColor(r, g, b)
 				bu.dragButton.levelBG:SetAlpha(0)
 				bu.dragButton.level:SetFontObject(GameFontNormal)
 				bu.dragButton.level:SetTextColor(1, 1, 1)
@@ -161,7 +165,7 @@ local function LoadSkin()
 	MountJournalSummonRandomFavoriteButton:SetPoint("TOPRIGHT", -7, -32)
 	MountJournalSummonRandomFavoriteButtonBorder:Hide()
 	MountJournalSummonRandomFavoriteButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
-	MountJournalSummonRandomFavoriteButton:SetPushedTexture("")
+	MountJournalSummonRandomFavoriteButton:StyleButton(true)
 	S:CreateBG(MountJournalSummonRandomFavoriteButton)
 
 	do
@@ -348,13 +352,16 @@ local function LoadSkin()
 		local bu = _G["ToySpellButton"..i]
 		local ic = _G["ToySpellButton"..i.."IconTexture"]
 
-		bu:SetPushedTexture("")
-		bu:SetHighlightTexture("")
+		bu:StyleButton(true)
 
 		bu.cooldown:SetAllPoints(ic)
 
 		_G["ToySpellButton"..i.."SlotFrameCollected"]:SetTexture("")
 		_G["ToySpellButton"..i.."SlotFrameUncollected"]:SetTexture("")
+		_G["ToySpellButton"..i].hover:SetAllPoints(ic)
+		_G["ToySpellButton"..i].checked:SetAllPoints(ic)
+		_G["ToySpellButton"..i].pushed:SetAllPoints(ic)
+		_G["ToySpellButton"..i.."Cooldown"]:SetAllPoints(ic)
 
 		ic:SetTexCoord(.08, .92, .08, .92)
 		S:CreateBG(ic)

@@ -125,17 +125,20 @@ function watcherPrototype:CreateButton(mode)
 		button.cooldown = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
 		button.cooldown:SetAllPoints(button.icon)
 		button.cooldown:SetReverse()
-		button.cooldown:SetFrameLevel(3)
+		button.cooldown:SetFrameLevel(2)
 		button.cooldown:SetHideCountdownNumbers(true)
 		button.cooldown.SetHideCountdownNumbers = R.dummy
 		button.mode = "ICON"
 	end
-	button.count = button:CreateFontString(nil, "OVERLAY")
+	local textFrame = CreateFrame("Frame", nil, button)
+	textFrame:SetAllPoints()
+	textFrame:SetFrameLevel(button:GetFrameLevel() + 1)
+	button.count = textFrame:CreateFontString(nil, "OVERLAY")
 	button.count:SetFont(R["media"].font, R["media"].fontsize * (R:Round(self.size) / 30), R["media"].fontflag)
 	button.count:SetPoint("BOTTOMRIGHT", button , "BOTTOMRIGHT", 4, -4)
 	button.count:SetJustifyH("RIGHT")
 
-	button.value = button:CreateFontString(nil, "OVERLAY")
+	button.value = textFrame:CreateFontString(nil, "OVERLAY")
 	button.value:SetFont(R["media"].font, ( R["media"].fontsize - 3 ) * (R:Round(self.size) / 30), R["media"].fontflag)
 	button.value:SetPoint("CENTER", button , "TOP", 0, 1)
 	button.value:SetJustifyH("RIGHT")

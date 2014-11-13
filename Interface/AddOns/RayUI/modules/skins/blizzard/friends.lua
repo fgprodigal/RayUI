@@ -110,10 +110,10 @@ local function LoadSkin()
 		text:SetPoint("CENTER")
 		text:SetText("+")
 
-        select(1, summon:GetRegions()):SetTexCoord( .08, .92, .08, .92)
-        select(10, summon:GetRegions()):SetAlpha(0)
-        summon:StyleButton(1)
-        S:CreateBD(summon, 0)
+		select(1, summon:GetRegions()):SetTexCoord( .08, .92, .08, .92)
+		select(10, summon:GetRegions()):SetAlpha(0)
+		summon:StyleButton(1)
+		S:CreateBD(summon, 0)
 
 		bu.bg = CreateFrame("Frame", nil, bu)
 		bu.bg:SetAllPoints(ic)
@@ -193,7 +193,7 @@ local function LoadSkin()
 
 	-- Battletag invite frame
 	-- for i = 1, 9 do
-		-- select(i, BattleTagInviteFrame.NoteFrame:GetRegions()):Hide()
+	-- select(i, BattleTagInviteFrame.NoteFrame:GetRegions()):Hide()
 	-- end
 
 	S:CreateBD(BattleTagInviteFrame)
@@ -205,6 +205,28 @@ local function LoadSkin()
 	S:Reskin(cancel)
 
 	S:ReskinScroll(BattleTagInviteFrameScrollFrameScrollBar)
+
+	FriendsTabHeaderRecruitAFriendButton:SetTemplate("Default")
+	FriendsTabHeaderRecruitAFriendButton:StyleButton(true)
+	FriendsTabHeaderRecruitAFriendButtonIcon:SetDrawLayer("OVERLAY")
+	FriendsTabHeaderRecruitAFriendButtonIcon:SetTexCoord(.08, .92, .08, .92)
+	S:CreateBG(FriendsTabHeaderRecruitAFriendButtonIcon)
+
+	local RecruitAFriendFrame = RecruitAFriendFrame
+	local RecruitAFriendSentFrame = RecruitAFriendSentFrame
+
+	RecruitAFriendFrame.NoteFrame:DisableDrawLayer("BACKGROUND")
+
+	S:CreateBD(RecruitAFriendFrame)
+	S:ReskinClose(RecruitAFriendFrameCloseButton)
+	S:Reskin(RecruitAFriendFrame.SendButton)
+	S:ReskinInput(RecruitAFriendNameEditBox)
+
+	S:CreateBDFrame(RecruitAFriendFrame.NoteFrame, .25)
+
+	S:CreateBD(RecruitAFriendSentFrame)
+	S:Reskin(RecruitAFriendSentFrame.OKButton)
+	S:ReskinClose(RecruitAFriendSentFrameCloseButton)
 end
 
 S:RegisterSkin("RayUI", LoadSkin)

@@ -76,7 +76,8 @@ local function LoadSkin()
 	local bg = CreateFrame("Frame", nil, EncounterJournalInstanceSelectScrollFrameScrollChildInstanceButton1)
 	bg:SetPoint("TOPLEFT", 3, -3)
 	bg:SetPoint("BOTTOMRIGHT", -4, 2)
-	S:CreateBD(bg, 0)
+	bg:SetFrameLevel(EncounterJournalInstanceSelectScrollFrameScrollChildInstanceButton1:GetFrameLevel()-1)
+	S:CreateBD(bg, 1)
 
 	local index = 2
 
@@ -91,7 +92,8 @@ local function LoadSkin()
 			local bg = CreateFrame("Frame", nil, bu)
 			bg:SetPoint("TOPLEFT", 3, -3)
 			bg:SetPoint("BOTTOMRIGHT", -4, 2)
-			S:CreateBD(bg, 0)
+			bg:SetFrameLevel(bu:GetFrameLevel()-1)
+			S:CreateBD(bg, 1)
 
 			index = index + 1
 		end
