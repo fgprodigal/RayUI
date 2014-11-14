@@ -378,13 +378,20 @@ function AB:UpdatePositionAndSize(barName)
 		end
 
 		if self.db[barName].mouseover then
-			button:HookScript("OnEnter", function()
-				R:UIFrameFadeIn(bar,0.5,bar:GetAlpha(),1)
-			end)
-			button:HookScript("OnLeave", function()
-				R:UIFrameFadeOut(bar,0.5,bar:GetAlpha(),0)
-			end)
-			SetCooldownSwipeAlpha(button.cooldown, 0)
+			if not self.hooks[button] then
+				self:HookScript(button, "OnEnter", function()
+					UIFrameFadeIn(bar,0.5,bar:GetAlpha(),1)
+				end)
+				self:HookScript(button, "OnLeave", function()
+					UIFrameFadeOut(bar,0.5,bar:GetAlpha(),0)
+				end)
+				SetCooldownSwipeAlpha(button.cooldown, 0)
+			end
+		else
+			if not self.hooks[button] then
+				self:Unhook(button, "OnEnter")
+				self:Unhook(button, "OnLeave")
+			end
 		end
 	end
 

@@ -10,8 +10,9 @@ function R:TestBossButton()
 		ExtraActionBarFrame:Show()
 		ExtraActionBarFrame.outro:Stop()
 		ExtraActionBarFrame.intro:Play()
+		ExtraActionBarFrame.button.style:SetTexture("Interface\\ExtraButton\\Default")
+		ExtraActionBarFrame.button.style:Show()
 		if not ExtraActionBarFrame.button.icon:GetTexture() then
-			ExtraActionBarFrame.button.style:SetTexture("Interface\\ExtraButton\\Default")
 			ExtraActionBarFrame.button.icon:SetTexture("Interface\\ICONS\\ABILITY_SEAL")
 			ExtraActionBarFrame.button.icon:Show()
 		end
@@ -34,18 +35,21 @@ function AB:CreateExtraButton()
 	DraenorZoneAbilityFrame.ignoreFramePositionManager = true
 
 	for i=1, ExtraActionBarFrame:GetNumChildren() do
-		if _G["ExtraActionButton"..i] then
-			_G["ExtraActionButton"..i].noResize = true
-			_G["ExtraActionButton"..i].pushed = true
-			_G["ExtraActionButton"..i].checked = true
+		local button = _G["ExtraActionButton"..i]
+		if button then
+			button.Hide = R.dummy
+			button:Show()
+			button.noResize = true
+			button.pushed = true
+			button.checked = true
 
-			self:Style(_G["ExtraActionButton"..i])
-            _G["ExtraActionButton"..i]:StyleButton(true)
+			self:Style(button)
+            button:StyleButton(true)
 			_G["ExtraActionButton"..i.."Icon"]:SetDrawLayer("ARTWORK")
-			local tex = _G["ExtraActionButton"..i]:CreateTexture(nil, "OVERLAY")
+			local tex = button:CreateTexture(nil, "OVERLAY")
 			tex:SetTexture(0.9, 0.8, 0.1, 0.3)
 			tex:SetAllPoints()
-			_G["ExtraActionButton"..i]:SetCheckedTexture(tex)
+			button:SetCheckedTexture(tex)
 		end
 	end
 
