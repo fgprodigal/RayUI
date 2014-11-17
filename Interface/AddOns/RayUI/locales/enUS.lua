@@ -157,6 +157,7 @@ L["托尔巴拉德不可用"] = "Tol Barad Unavailable"
 L["发布者"] = "Publisher"
 
 L["点击进入RayUI控制台。\n请仔细研究每一项设置的作用。"] = "Welcome to RayUI's console.\nYou can custom RayUI here."
+L["点击tab键可以快速切换频道。"] = "You can change channel by pressing tab button."
 
 L["将战利品通报至"] = "Announce Loots to"
 L["箱子中的战利品"] = "Loots in chest"

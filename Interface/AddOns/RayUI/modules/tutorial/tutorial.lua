@@ -143,6 +143,10 @@ function T:PLAYER_ENTERING_WORLD()
 	if not self.db.tutorialdone then
 		self:InitTutorial()
 	end
+	if not self.db.tabchannel then
+		local tutorial2 = self:CreateTutorialFrame("RayUITabChannelTutorial", ChatFrame1EditBox, 220, 100, L["点击tab键可以快速切换频道。"])
+		tutorial2:SetPoint("BOTTOM", ChatFrame1EditBox, "TOP", 0, 15)
+	end
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 end
 

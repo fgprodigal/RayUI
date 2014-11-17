@@ -52,6 +52,10 @@ local cycles = {
 }
 
 function CH:ChatEdit_CustomTabPressed(self)
+    if not R.global.Tutorial.tabchannel then
+        RayUITabChannelTutorial:Hide()
+        R.global.Tutorial.tabchannel = true
+    end
 	if strsub(tostring(self:GetText()), 1, 1) == "/" then return end
     local currChatType = self:GetAttribute("chatType")
     for i, curr in ipairs(cycles) do
