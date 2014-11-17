@@ -19,7 +19,8 @@ local function Update(self, event, unit)
 	
 	local spec = GetSpecialization()
 	local numOrbs = UnitPower("player", SPELL_POWER_SHADOW_ORBS)
-	local totalOrbs = IsSpellKnown(SHADOW_ORB_MINOR_TALENT_ID) and 5 or 3
+	-- local totalOrbs = IsSpellKnown(SHADOW_ORB_MINOR_TALENT_ID) and 5 or 3
+	local totalOrbs = 5
 
 	for i = 1, totalOrbs do
 		if i <= numOrbs then
@@ -39,13 +40,13 @@ local function Update(self, event, unit)
 		pb:Show()
 
 		-- Here we set the number of orbs show
-		if totalOrbs == 5 and not pb[4]:IsShown() then
-			pb[4]:Show()
-			pb[5]:Show()
-		elseif totalOrbs ~= 5 and pb[4]:IsShown() then
-			pb[4]:Hide()
-			pb[5]:Hide()
-		end		
+		-- if totalOrbs == 5 and not pb[4]:IsShown() then
+			-- pb[4]:Show()
+			-- pb[5]:Show()
+		-- elseif totalOrbs ~= 5 and pb[4]:IsShown() then
+			-- pb[4]:Hide()
+			-- pb[5]:Hide()
+		-- end		
 	else
 		self:UnregisterEvent("UNIT_DISPLAYPOWER", Update)
 		self:UnregisterEvent("UNIT_POWER", Update)
