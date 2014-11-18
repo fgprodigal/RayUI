@@ -106,6 +106,10 @@ local function ItemButton_UpdateLock(self, item)
 	if(self.OnUpdateLock) then self:OnUpdateLock(item) end
 end
 
+local function ItemButton_OnEnter(self)
+	ActionButton_HideOverlayGlow(self)
+end
+
 cargBags:RegisterScaffold("RayUI", function(self)
 	self.bgTex = nil --! @property bgTex <string> Texture used as a background if no item is in the slot
 

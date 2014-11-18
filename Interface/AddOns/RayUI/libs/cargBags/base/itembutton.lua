@@ -52,6 +52,7 @@ function ItemButton:New(bagID, slotID)
 
 	local tpl, parent = self:GetTemplate(bagID)
 	local button = table.remove(self.recycled[tpl]) or self:Create(tpl, parent)
+	button:HookScript("OnEnter", button.OnEnter)
 
 	button.bagID = bagID
 	button.slotID = slotID
