@@ -1,5 +1,6 @@
 local Button = CreateFrame("Button", "ExtraQuestButton", UIParent, "SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate")
 RegisterStateDriver(Button, "visible", "[extrabar] hide; show")
+local DefaultExtraActionStyle = "Interface\\ExtraButton\\ChampionLight"
 Button:SetAttribute("_onattributechanged", [[
 	if(name == "item") then
 		if(value and not self:IsShown() and not HasExtraActionBar()) then
@@ -75,7 +76,7 @@ Button:SetScript("OnEvent", function(self, event)
 		local Artwork = self:CreateTexture("$parentArtwork", "BACKGROUND")
 		Artwork:SetPoint("CENTER", -2, 0)
 		Artwork:SetSize(256, 128)
-		Artwork:SetTexture([[Interface\ExtraButton\ChampionLight]])
+		Artwork:SetTexture(GetOverrideBarSkin() or DefaultExtraActionStyle)
 		-- Artwork:SetTexture([[Interface\ExtraButton\Smash]])
 		self.Artwork = Artwork
 
@@ -152,6 +153,7 @@ function Button:SetItem(itemLink, texture)
 		end
 
 		self.Icon:SetTexture(texture)
+		self.Artwork:SetTexture(GetOverrideBarSkin() or DefaultExtraActionStyle)
 		self.itemID, self.itemName = string.match(itemLink, "|Hitem:(.-):.-|h%[(.+)%]|h")
 		self.itemLink = itemLink
 	end
