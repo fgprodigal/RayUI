@@ -93,6 +93,9 @@ function MM:SkinMiniMap()
 	MiniMapChallengeMode:SetFrameStrata("LOW")
 	MiniMapMailFrame:ClearAllPoints()
 	MiniMapMailFrame:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMRIGHT", 2, -6)
+	GarrisonLandingPageMinimapButton:ClearAllPoints()
+	GarrisonLandingPageMinimapButton:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 2, -2)
+	GarrisonLandingPageMinimapButton:SetScale(0.7)
 	MiniMapMailIcon:SetTexture("Interface\\AddOns\\RayUI\\media\\mail")
 	GameTimeCalendarInvitesTexture:ClearAllPoints()
 	GameTimeCalendarInvitesTexture:SetParent(Minimap)
@@ -217,6 +220,8 @@ function MM:CreateMenu()
 		func = function() StoreMicroButton:Click() end},
 		{text = HELP_BUTTON, notCheckable = true,
 		func = function() ToggleHelpFrame() end},
+		{text = GARRISON_LANDING_PAGE_TITLE, notCheckable = true,
+		func = function() GarrisonLandingPageMinimapButton_OnClick() end},
 		{text = CALENDAR, notCheckable = true,
 		func = function()
 		if(not CalendarFrame) then LoadAddOn("Blizzard_Calendar") end
