@@ -387,7 +387,7 @@ function R:CheckRole()
 		self.Role = roles[self.myclass][talentTree]
 	end
 
-	if self.Role == "Tank" and IsInPvPGear then
+	if self.Role == "Tank" and (IsInPvPGear or IsSpellKnown(156291)) then
 		self.Role = "Melee"
 	end
 
