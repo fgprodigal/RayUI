@@ -111,6 +111,9 @@ function AB:CreateCooldownTimer(parent)
 	self:Cooldown_OnSizeChanged(timer, parent:GetSize())
 	parent:SetScript("OnSizeChanged", function(_, ...) self:Cooldown_OnSizeChanged(timer, ...) end)
 
+	-- prevent display of blizzard cooldown text
+	parent:SetHideCountdownNumbers(true)
+
 	parent.timer = timer
 	return timer
 end
