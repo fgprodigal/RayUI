@@ -31,6 +31,7 @@ L["团队buff提醒锚点"] = true
 L["重要buff提醒锚点"] = true
 L["离开载具按钮"] = true
 L["额外按钮"] = true
+L["要塞按钮"] = true
 L["副资源条"] = true
 L["图腾条"] = true
 L["玩家头像"] = true
