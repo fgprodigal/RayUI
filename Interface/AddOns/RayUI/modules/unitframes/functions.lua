@@ -601,7 +601,7 @@ function UF:PostUpdatePower(unit, cur, max)
 end
 
 function UF:UpdateThreatStatus(event, unit)
-    if (self.unit ~= unit) and (event~="PLAYER_TARGET_CHANGED") then return end
+    if self.unit ~= unit and event~="PLAYER_TARGET_CHANGED" then return end
     unit = unit or self.unit
     local s = UnitThreatSituation(unit)
     if s and s > 1 then
@@ -653,12 +653,7 @@ function UF:ComboDisplay(event, unit)
     if(unit == "pet") then return end
 
     local cpoints = self.CPoints
-    local cp
-    if (UnitHasVehicleUI("player") or UnitHasVehicleUI("vehicle")) then
-        cp = GetComboPoints("vehicle", "target")
-    else
-        cp = GetComboPoints("player", "target")
-    end
+    local cp = (UnitHasVehicleUI("player") or UnitHasVehicleUI("vehicle")) and UnitPower("vehicle", 4) or UnitPower("player", 4)
 
     for i=1, MAX_COMBO_POINTS do
         if(i <= cp) then
@@ -807,6 +802,49 @@ function UF:CustomFilter(unit, icon, name, rank, texture, count, dtype, duration
     -- end
 
     return true
+end
+
+function UF:ConstructComboBar(frame)
+    -- Combo Bar
+    local bars = CreateFrame("Frame", nil, frame)
+    bars:SetWidth(35)
+    bars:SetHeight(5)
+    bars:Point("BOTTOMLEFT", frame, "TOP", - bars:GetWidth()*2.5 - 10, 1)
+
+    bars:SetBackdropBorderColor(0,0,0,0)
+    bars:SetBackdropColor(0,0,0,0)
+
+    for i = 1, 5 do
+        bars[i] = CreateFrame("StatusBar", frame:GetName().."_Combo"..i, bars)
+        bars[i]:SetHeight(5)
+        bars[i]:SetStatusBarTexture(R["media"].normal)
+        bars[i]:GetStatusBarTexture():SetHorizTile(false)
+
+        if i == 1 then
+            bars[i]:SetPoint("LEFT", bars)
+        else
+            bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
+        end
+        bars[i]:SetAlpha(0.15)
+        bars[i]:SetWidth(35)
+        bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
+        bars[i].bg:SetAllPoints(bars[i])
+        bars[i].bg:SetTexture(R["media"].normal)
+        bars[i].bg.multiplier = .2
+
+        bars[i]:CreateShadow("Background")
+        bars[i].shadow:SetFrameStrata("BACKGROUND")
+        bars[i].shadow:SetFrameLevel(0)
+    end
+
+    bars[1]:SetStatusBarColor(255/255, 0/255, 0)
+    bars[2]:SetStatusBarColor(255/255, 0/255, 0)
+    bars[3]:SetStatusBarColor(255/255, 255/255, 0)
+    bars[4]:SetStatusBarColor(255/255, 255/255, 0)
+    bars[5]:SetStatusBarColor(0, 1, 0)
+    bars.Override = self.ComboDisplay
+
+    return bars
 end
 
 function UF:ConstructMonkResourceBar(frame)
