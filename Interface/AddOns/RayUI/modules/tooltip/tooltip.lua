@@ -307,10 +307,10 @@ function TT:SetiLV()
 end
 
 function TT:GetQuality(ItemScore)
-	if ItemScore < 500 then
+	if ItemScore < 600 then
 		return 1, 1, 0.1
 	else
-		return R:ColorGradient((ItemScore - 500)/100, 1, 1, 0.1, 1, 0.1, 0.1)
+		return R:ColorGradient((ItemScore - 600)/100, 1, 1, 0.1, 1, 0.1, 0.1)
 	end
 end
 
