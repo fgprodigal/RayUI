@@ -120,6 +120,7 @@ end
 
 function AB:OnSetCooldown(cd, start, duration, charges, maxCharges)
 	if cd.noOCC then return end
+	cd:SetHideCountdownNumbers(true)
 
 	local remainingCharges = charges or 0
 	--start timer

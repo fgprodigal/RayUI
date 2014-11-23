@@ -138,6 +138,15 @@ local function LoadSkin()
 		slot.glow = CreateFrame("Frame", nil, slot)
 		slot.glow:SetAllPoints()
 		slot.glow:CreateBorder()
+
+		hooksecurefunc(slot.IconBorder, "SetVertexColor", function(self, r, g, b)
+			self:GetParent().glow:SetBackdropBorderColor(r, g, b)
+			self:GetParent():SetBackdropColor(0, 0, 0)
+		end)
+		hooksecurefunc(slot.IconBorder, "Hide", function(self)
+			self:GetParent().glow:SetBackdropBorderColor(0, 0, 0)
+			self:GetParent():SetBackdropColor(0, 0, 0, 0)
+		end)
 	end
 
 	select(9, CharacterMainHandSlot:GetRegions()):Kill()
@@ -160,41 +169,6 @@ local function LoadSkin()
 	end
 	EquipmentFlyoutFrameButtons:HookScript("OnShow", SkinItemFlyouts)
 	hooksecurefunc("EquipmentFlyout_Show", SkinItemFlyouts)
-
-	local function ColorItemBorder()
-		for i = 1, #slots do
-			-- Colour the equipment slots by rarity
-			local target = _G["Character"..slots[i].."Slot"]
-			local icon = _G["Character"..slots[i].."SlotIconTexture"]
-			local slotId, _, _ = GetInventorySlotInfo(slots[i].."Slot")
-			local itemId = GetInventoryItemID("player", slotId)
-
-			local glow = target.glow
-
-			if itemId then
-				local _, _, rarity, _, _, _, _, _, _, _, _ = GetItemInfo(itemId)
-				if rarity and rarity > 1 then
-					glow:SetAllPoints()
-					glow:SetBackdropBorderColor(GetItemQualityColor(rarity))
-					target:SetBackdropColor(0, 0, 0)
-				else
-					glow:Point("TOPLEFT", 1, -1)
-					glow:Point("BOTTOMRIGHT", -1, 1)
-					glow:SetBackdropBorderColor(0, 0, 0)
-					target:SetBackdropColor(0, 0, 0, 0)
-				end
-			else
-				glow:SetBackdropBorderColor(0, 0, 0, 0)
-				target:SetBackdropColor(0, 0, 0, 0)
-			end
-		end
-	end
-
-	local CheckItemBorderColor = CreateFrame("Frame")
-	CheckItemBorderColor:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
-	CheckItemBorderColor:SetScript("OnEvent", ColorItemBorder)
-	CharacterFrame:HookScript("OnShow", ColorItemBorder)
-	ColorItemBorder()
 
 	local function ColorFlyOutItemBorder(self)
 		local location = self.location
