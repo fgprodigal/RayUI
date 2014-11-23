@@ -167,6 +167,7 @@ P["Reminder"]["filters"] = {
 		["伤害性毒药"] = {
 			["spellGroup"] = {
 				[2823] = true, -- 致命毒藥
+				[157584] = true, -- 速效毒藥
 				[8679] = true, -- 致傷毒藥
 			},
 			["instance"] = true,
