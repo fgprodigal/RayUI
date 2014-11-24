@@ -224,6 +224,7 @@ function UF:DPSLayout(frame, unit)
 		elseif R.myclass == "MAGE" then
 			frame.RunePower = self:ConstructMageResourceBar(frame)
 		elseif R.myclass == "ROGUE" then
+			frame.Anticipation = self:ConstructRogueResourceBar(frame)
 			frame.CPoints = self:ConstructComboBar(frame)
 		end
 

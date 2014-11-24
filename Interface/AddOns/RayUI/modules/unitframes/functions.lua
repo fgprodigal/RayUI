@@ -309,11 +309,11 @@ end
 
 function UF:CustomCastTimeText(duration)
     -- self.Time:SetText(("%.1f | %.1f"):format(self.channeling and duration or self.max - duration, self.max))
-	if self.channeling then
-		self.Time:SetText(("%.1f | %.1f"):format(duration, self.max))
-	else
-		self.Time:SetText(("%.1f | %.1f"):format(abs(duration - self.max), self.max))
-	end
+    if self.channeling then
+      self.Time:SetText(("%.1f | %.1f"):format(duration, self.max))
+  else
+      self.Time:SetText(("%.1f | %.1f"):format(abs(duration - self.max), self.max))
+  end
 end
 
 function UF:CustomCastDelayText(duration)
@@ -546,7 +546,7 @@ function UF:PostUpdateHealth(unit, cur, max)
         else
             self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(cur))
         end
-    -- 否则当血量不满或者设置了总是显示时显示
+        -- 否则当血量不满或者设置了总是显示时显示
     elseif UF.db.alwaysShowHealth or cur < max then
         if UF.db.showHealthValue then
             self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(cur))
@@ -806,15 +806,15 @@ end
 
 function UF:ConstructComboBar(frame)
     -- Combo Bar
+    local count = 5
     local bars = CreateFrame("Frame", nil, frame)
-    bars:SetWidth(35)
-    bars:SetHeight(5)
-    bars:Point("BOTTOMLEFT", frame, "TOP", - bars:GetWidth()*2.5 - 10, 1)
+    bars:SetSize(200, 5)
+    bars:Point("BOTTOM", frame, "TOP", 0, 1)
 
     bars:SetBackdropBorderColor(0,0,0,0)
     bars:SetBackdropColor(0,0,0,0)
 
-    for i = 1, 5 do
+    for i = 1, count do
         bars[i] = CreateFrame("StatusBar", frame:GetName().."_Combo"..i, bars)
         bars[i]:SetHeight(5)
         bars[i]:SetStatusBarTexture(R["media"].normal)
@@ -826,7 +826,7 @@ function UF:ConstructComboBar(frame)
             bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
         end
         bars[i]:SetAlpha(0.15)
-        bars[i]:SetWidth(35)
+        bars[i]:SetWidth((200 - (count - 1)*5)/count)
         bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
         bars[i].bg:SetAllPoints(bars[i])
         bars[i].bg:SetTexture(R["media"].normal)
@@ -1024,7 +1024,7 @@ function UF:ConstructPriestResourceBar(frame)
         bars[i].shadow:SetFrameLevel(0)
     end
 
-	bars.PostUpdate = UF.UpdateShadowOrbs
+    bars.PostUpdate = UF.UpdateShadowOrbs
 
     return bars
 end
@@ -1061,6 +1061,46 @@ function UF:ConstructShamanResourceBar(frame)
     return bars
 end
 
+function UF:ConstructRogueResourceBar(frame)
+    local bars = CreateFrame("Frame", nil, frame)
+    bars:SetSize(200, 5)
+    bars:SetFrameLevel(7)
+    bars:Point("BOTTOM", frame, "TOP", 0, -6)
+    local count = 5
+
+    for i = 1, count do                  
+        bars[i] = CreateFrame("StatusBar", nil, bars)
+        bars[i]:SetStatusBarTexture(R["media"].normal)
+        bars[i]:SetWidth((200 - (count - 1)*5)/count)
+        bars[i]:SetHeight(3)
+        bars[i]:GetStatusBarTexture():SetHorizTile(false)
+        bars[i]:SetFrameLevel(7)
+
+        if i == 1 then
+            bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
+        else
+            bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
+        end
+        
+        bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
+        bars[i].bg:SetAllPoints(bars[i])
+        bars[i].bg:SetTexture(R["media"].normal)
+        bars[i].bg:SetVertexColor(0, 0, 0)
+        bars[i].bg.multiplier = .2
+
+        bars[i]:CreateShadow("Background")
+        bars[i].border:SetFrameLevel(7)
+        bars[i].shadow:SetFrameStrata("BACKGROUND")
+        bars[i].shadow:SetFrameLevel(6)
+    end
+    bars[1]:SetStatusBarColor(255/255, 0/255, 0)
+    bars[2]:SetStatusBarColor(255/255, 0/255, 0)
+    bars[3]:SetStatusBarColor(255/255, 255/255, 0)
+    bars[4]:SetStatusBarColor(255/255, 255/255, 0)
+    bars[5]:SetStatusBarColor(0, 1, 0)
+    return bars
+end
+
 function UF:ConstructDruidResourceBar(frame)
     local ebar = CreateFrame("Frame", nil, frame)
     ebar:Point("BOTTOM", frame, "TOP", 0, 1)
@@ -1070,7 +1110,7 @@ function UF:ConstructDruidResourceBar(frame)
     ebar.shadow:SetFrameStrata("BACKGROUND")
     ebar.shadow:SetFrameLevel(0)
 
-	ebar.Spark = ebar:CreateTexture(nil, "OVERLAY")
+    ebar.Spark = ebar:CreateTexture(nil, "OVERLAY")
     ebar.Spark:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
     ebar.Spark:SetBlendMode("ADD")
     ebar.Spark:SetAlpha(0.8)
@@ -1191,18 +1231,18 @@ end
 function UF:UpdateEclipse(unit)
     local direction = GetEclipseDirection()
     local power = UnitPower("player", SPELL_POWER_ECLIPSE)
-	local maxPower = UnitPowerMax("player", SPELL_POWER_ECLIPSE)
+    local maxPower = UnitPowerMax("player", SPELL_POWER_ECLIPSE)
     local absolutePower = math.abs(power/maxPower)*100
 
-	self.Text:ClearAllPoints()
+    self.Text:ClearAllPoints()
     if power < 0 then
         self.Text:SetTextColor(0, .4, 1)
-		self.Text:SetPoint("CENTER", self.LunarBar, "LEFT")
-		self.LunarBar:SetPoint("LEFT", self, "CENTER", -absolutePower, 0)
+        self.Text:SetPoint("CENTER", self.LunarBar, "LEFT")
+        self.LunarBar:SetPoint("LEFT", self, "CENTER", -absolutePower, 0)
     else
         self.Text:SetTextColor(1, .6, 0)
-		self.Text:SetPoint("CENTER", self.SolarBar, "RIGHT")
-		self.SolarBar:SetPoint("RIGHT", self, "CENTER", absolutePower, 0)
+        self.Text:SetPoint("CENTER", self.SolarBar, "RIGHT")
+        self.SolarBar:SetPoint("RIGHT", self, "CENTER", absolutePower, 0)
     end
 
     if direction == "sun" then
@@ -1247,7 +1287,7 @@ end
 function UF:UpdateHarmony()
     local maxChi = UnitPowerMax("player", SPELL_POWER_CHI)
 
-	for i = 1, 6 do
+    for i = 1, 6 do
         if i > maxChi then
             self[i]:Hide()
         else

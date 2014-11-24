@@ -1,4 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="Anticipation.lua"/>
 	<Script file="AuraBars.lua"/>
 	<Script file="AuraWatch.lua"/>
 	<Script file="HealPredictionAndAbsorb.lua"/>
