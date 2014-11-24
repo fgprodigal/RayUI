@@ -1066,6 +1066,7 @@ function UF:ConstructRogueResourceBar(frame)
     bars:SetSize(200, 5)
     bars:SetFrameLevel(7)
     bars:Point("BOTTOM", frame, "TOP", 0, -6)
+    bars:Hide()
     local count = 5
 
     for i = 1, count do                  

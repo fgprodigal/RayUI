@@ -229,13 +229,18 @@ function UF:DPSLayout(frame, unit)
 		end
 
 		if self.db.separateEnergy and R.myclass == "ROGUE" then
-			bars:SetParent(RayUF_EnergyBar)
-			bars:ClearAllPoints()
-			bars:Point("BOTTOMLEFT", RayUF_EnergyBar, "TOPLEFT", 0, 3)
+			frame.CPoints:SetParent(RayUF_EnergyBar)
+			frame.CPoints:ClearAllPoints()
+			frame.CPoints:Point("BOTTOMLEFT", RayUF_EnergyBar, "TOPLEFT", 0, 3)
+			frame.Anticipation:SetParent(RayUF_EnergyBar)
+			frame.Anticipation:ClearAllPoints()
+			frame.Anticipation:Point("BOTTOMLEFT", RayUF_EnergyBar, "TOPLEFT", 0, 9)
 			for i = 1, 5 do
-				bars[i]:SetHeight(3)
-				bars[i]:SetWidth((ENERGY_WIDTH- 20)/5)
-				bars[i]:SetAlpha(0)
+				frame.CPoints[i]:SetHeight(3)
+				frame.CPoints[i]:SetWidth((ENERGY_WIDTH- 20)/5)
+				frame.CPoints[i]:SetAlpha(0)
+				frame.Anticipation[i]:SetHeight(3)
+				frame.Anticipation[i]:SetWidth((ENERGY_WIDTH- 20)/5)
 			end
 		end
 
