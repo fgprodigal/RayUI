@@ -169,14 +169,17 @@ end
 
 local function HideObjects(parent)
 	for object in pairs(parent.queue) do
-		if(object:GetObjectType() == "Texture") then
-			object:SetTexture(nil)
+		objectType = object:GetObjectType()  
+		if objectType == "Texture" then
+			object.OldTexture = object:GetTexture()
+			object:SetTexture("")
 			object:SetTexCoord(0, 0, 0, 0)
-		elseif (object:GetObjectType() == "FontString") then
+		elseif objectType == "FontString" then
 			object:SetWidth(0.001)
+		elseif objectType == "StatusBar" then
+			object:SetStatusBarTexture("")
 		else
 			object:Hide()
-			object.Show = R.dummy
 		end
 	end
 end
@@ -378,19 +381,28 @@ local function OnAura(frame, unit)
 	for index = i, #frame.icons do frame.icons[index]:Hide() end
 end
 
---Color the castbar depending on if we can interrupt or not,
---also resize it as nameplates somehow manage to resize some frames when they reappear after being hidden
-local function UpdateCastbar(frame)
-	frame:ClearAllPoints()
-	frame:SetPoint("TOPLEFT", frame:GetParent().hp, "BOTTOMLEFT", 0, -4)
-	frame:SetPoint("BOTTOMRIGHT", frame:GetParent().hp, "BOTTOMRIGHT", 0, -4-cbHeight)
-	frame:GetStatusBarTexture():SetHorizTile(true)
-	if(frame.oldshield:IsShown()) then
-		frame:SetStatusBarColor(1, 0, 0)
-		frame.shield:Show()
+local function CastBar_OnShow(frame)
+	frame._parent.castBar:Show()
+end
+
+local function CastBar_OnHide(frame)
+	frame._parent.castBar:Hide()
+end
+
+local function CastBar_OnValueChanged(self, value)
+	local myPlate = self._parent
+	local min, max = self:GetMinMaxValues()
+	local isChannel = value < myPlate.castBar:GetValue()
+	myPlate.castBar:SetMinMaxValues(min, max)
+	myPlate.castBar:SetValue(value)
+	myPlate.castBar.time:SetFormattedText("%.1f ", value)
+
+	if(myPlate.castBar.oldshield:IsShown()) then
+		myPlate.castBar:SetStatusBarColor(1, 0, 0)
+		myPlate.castBar.shield:Show()
 	else
-		frame:SetStatusBarColor(0, 1, 0)
-		frame.shield:Hide()
+		myPlate.castBar:SetStatusBarColor(0, 1, 0)
+		myPlate.castBar.shield:Hide()
 	end
 end
 
@@ -423,20 +435,6 @@ local function CheckFilter(frame, ...)
 	else
 		frame.healerIcon:Hide()
 	end
-end
-
---Sometimes castbar likes to randomly resize
-local OnValueChanged = function(self, curValue)
-	UpdateCastText(self, curValue)
-	if self.needFix then
-		UpdateCastbar(self)
-		self.needFix = nil
-	end
-end
-
---Sometimes castbar likes to randomly resize
-local OnSizeChanged = function(self)
-	self.needFix = true
 end
 
 --Color Nameplate
@@ -688,40 +686,44 @@ local function SkinObjects(frame, nameFrame)
 	frame.healthOriginal:HookScript("OnValueChanged", OnHealthValueChanged)
 
 	--Cast Bar
-	cb:SetStatusBarTexture(R["media"].normal)
-	CreateVirtualFrame(cb)
+	frame.castBar = CreateFrame("StatusBar", nil, frame)
+	frame.castBar:SetStatusBarTexture(R["media"].normal)
+	frame.castBar:SetPoint("TOPLEFT", frame.hp, "BOTTOMLEFT", 0, -5)	
+	frame.castBar:SetPoint("TOPRIGHT", frame.hp, "BOTTOMRIGHT", 0, -5)	
+	frame.castBar:SetSize(cbWidth, cbHeight)	
+	frame.castBar:SetFrameStrata("BACKGROUND")
+	frame.castBar:SetFrameLevel(0)
+	CreateVirtualFrame(frame.castBar)
 
-	--Create Cast Time Text
-	cb.time = cb:CreateFontString(nil, "ARTWORK")
-	cb.time:SetPoint("TOPRIGHT", cb, "BOTTOMRIGHT", 0, -1)
-	cb.time:SetFont(R["media"].font, FONTSIZE, R["media"].fontflag)
-	cb.time:SetJustifyH("RIGHT")
-	cb.time:SetShadowColor(0, 0, 0, 0.4)
-	cb.time:SetTextColor(1, 1, 1)
-	cb.time:SetShadowOffset(R.mult, -R.mult)
+	frame.castBar.time = frame.castBar:CreateFontString(nil, "ARTWORK")
+	frame.castBar.time:SetPoint("TOPRIGHT", frame.castBar, "BOTTOMRIGHT", 0, -1)
+	frame.castBar.time:SetFont(R["media"].font, FONTSIZE, R["media"].fontflag)
+	frame.castBar.time:SetJustifyH("RIGHT")
+	frame.castBar.time:SetShadowColor(0, 0, 0, 0.4)
+	frame.castBar.time:SetTextColor(1, 1, 1)
+	frame.castBar.time:SetShadowOffset(R.mult, -R.mult)
 
-	--Create Cast Name Text
-	cb.name = cbtext
-	cb.name:ClearAllPoints()
-	cb.name:SetPoint("TOPLEFT", cb, "BOTTOMLEFT", 0, -1)
-	cb.name:SetFont(R["media"].font, FONTSIZE, R["media"].fontflag)
-	cb.name:SetJustifyH("LEFT")
-	cb.name:SetTextColor(1, 1, 1)
-	cb.name:SetShadowColor(0, 0, 0, 0.4)
-	cb.name:SetShadowOffset(R.mult, -R.mult)
+	frame.castBar.name = cbtext
+	frame.castBar.name:SetParent(frame.castBar)
+	frame.castBar.name:ClearAllPoints()
+	frame.castBar.name:SetPoint("TOPLEFT", frame.castBar, "BOTTOMLEFT", 0, -1)
+	frame.castBar.name:SetFont(R["media"].font, FONTSIZE, R["media"].fontflag)
+	frame.castBar.name:SetJustifyH("LEFT")
+	frame.castBar.name:SetTextColor(1, 1, 1)
+	frame.castBar.name:SetShadowColor(0, 0, 0, 0.4)
+	frame.castBar.name:SetShadowOffset(R.mult, -R.mult)
 
-	--Setup CastBar Icon
-	cbicon:ClearAllPoints()
-	cbicon:SetPoint("TOPRIGHT", frame.hp, "TOPLEFT", -3, 0)
-	cbicon:SetSize(iconSize - 4, iconSize - 4)
-	cbicon:SetTexCoord(.07, .93, .07, .93)
-	cbicon:SetDrawLayer("OVERLAY")
-	cb.icon = cbicon
-	if not cbicon.backdrop then
-		cbicon.backdrop = CreateFrame("Frame", nil ,cb)
-		cbicon.backdrop:SetAllPoints()
+	frame.castBar.icon = cbicon
+	frame.castBar.icon:SetParent(frame.castBar)
+	frame.castBar.icon:SetTexCoord(.07, .93, .07, .93)
+	frame.castBar.icon:SetDrawLayer("OVERLAY")
+	frame.castBar.icon:ClearAllPoints()
+	frame.castBar.icon:SetPoint("TOPRIGHT", frame.hp, "TOPLEFT", -3, 0)
+	if not frame.castBar.icon.backdrop then
+		frame.castBar.icon.backdrop = CreateFrame("Frame", nil ,cb)
+		frame.castBar.icon.backdrop:SetAllPoints()
 		if R.global.general.theme == "Shadow" then
-			cbicon.backdrop:SetBackdrop({
+			frame.castBar.icon.backdrop:SetBackdrop({
 				bgFile = R["media"].blank,
 				edgeFile = R["media"].glow,
 				edgeSize = 3*noscalemult,
@@ -729,10 +731,10 @@ local function SkinObjects(frame, nameFrame)
 					top = 3*noscalemult, left = 3*noscalemult, bottom = 3*noscalemult, right = 3*noscalemult
 				}
 			})
-			cbicon.backdrop:SetPoint("TOPLEFT", cbicon, -3*noscalemult, 3*noscalemult)
-			cbicon.backdrop:SetPoint("BOTTOMRIGHT", cbicon, 3*noscalemult, -3*noscalemult)
+			frame.castBar.icon.backdrop:SetPoint("TOPLEFT", frame.castBar.icon, -3*noscalemult, 3*noscalemult)
+			frame.castBar.icon.backdrop:SetPoint("BOTTOMRIGHT", frame.castBar.icon, 3*noscalemult, -3*noscalemult)
 		else
-			cbicon.backdrop:SetBackdrop({
+			frame.castBar.icon.backdrop:SetBackdrop({
 				bgFile = R["media"].blank,
 				edgeFile = R["media"].blank,
 				edgeSize = noscalemult,
@@ -740,39 +742,40 @@ local function SkinObjects(frame, nameFrame)
 					top = noscalemult, left = noscalemult, bottom = noscalemult, right = noscalemult
 				}
 			})
-			cbicon.backdrop:SetPoint("TOPLEFT", cbicon, -noscalemult, noscalemult)
-			cbicon.backdrop:SetPoint("BOTTOMRIGHT", cbicon, noscalemult, -noscalemult)
+			frame.castBar.icon.backdrop:SetPoint("TOPLEFT", frame.castBar.icon, -noscalemult, noscalemult)
+			frame.castBar.icon.backdrop:SetPoint("BOTTOMRIGHT", frame.castBar.icon, noscalemult, -noscalemult)
 		end
-		cbicon.backdrop:SetBackdropColor(.05, .05, .05, .9)
-		cbicon.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
+		frame.castBar.icon.backdrop:SetBackdropColor(.05, .05, .05, .9)
+		frame.castBar.icon.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 		if cb:GetFrameLevel() - 1 >0 then
-			cbicon.backdrop:SetFrameLevel(cb:GetFrameLevel() - 1)
+			frame.castBar.icon.backdrop:SetFrameLevel(cb:GetFrameLevel() - 1)
 		else
-			cbicon.backdrop:SetFrameLevel(0)
+			frame.castBar.icon.backdrop:SetFrameLevel(0)
 		end
 	end
 
-	if not cb.shield then
-		cb.shield = cb:CreateTexture(nil, "ARTWORK")
-		cb.shield:SetTexture("Interface\\AddOns\\RayUI\\media\\shield")
-		cb.shield:SetTexCoord(0, .53125, 0, .6875)
+	if not frame.castBar.shield then
+		frame.castBar.shield = frame.castBar:CreateTexture(nil, "ARTWORK")
+		frame.castBar.shield:SetTexture("Interface\\AddOns\\RayUI\\media\\shield")
+		frame.castBar.shield:SetTexCoord(0, .53125, 0, .6875)
 
-		cb.shield:SetSize(12, 17)
-		cb.shield:SetPoint("CENTER", cb, 0, -1)
+		frame.castBar.shield:SetSize(12, 17)
+		frame.castBar.shield:SetPoint("CENTER", frame.castBar, 0, -1)
 
-		cb.shield:SetBlendMode("BLEND")
-		cb.shield:SetDrawLayer("ARTWORK", 7)
-		cb.shield:SetVertexColor(1, .1, .1)
+		frame.castBar.shield:SetBlendMode("BLEND")
+		frame.castBar.shield:SetDrawLayer("ARTWORK", 7)
+		frame.castBar.shield:SetVertexColor(1, .1, .1)
 
-		cb.shield:Hide()
+		frame.castBar.shield:Hide()
 	end
 
-	cb.oldshield = cbshield
-	cbshield:ClearAllPoints()
-	cbshield:SetPoint("TOP", cb, "BOTTOM")
-	cb:HookScript("OnShow", UpdateCastbar)
-	cb:HookScript("OnSizeChanged", OnSizeChanged)
-	cb:HookScript("OnValueChanged", OnValueChanged)
+	frame.castBar.oldshield = cbshield
+	frame.castBar.oldshield:ClearAllPoints()
+	frame.castBar.oldshield:SetPoint("TOP", frame.castBar, "BOTTOM")
+	cb._parent = frame
+	cb:HookScript("OnShow", CastBar_OnShow)
+	cb:HookScript("OnHide", CastBar_OnHide)
+	cb:HookScript("OnValueChanged", CastBar_OnValueChanged)
 	frame.cb = cb
 
 	--Highlight
@@ -819,14 +822,20 @@ local function SkinObjects(frame, nameFrame)
 	QueueObject(frame, oldname)
 	QueueObject(frame, bossicon)
 	QueueObject(frame, elite)
+	QueueObject(frame, cb)
 
 	OnFrameShow(frame.hp)
-	UpdateCastbar(cb)
 
 	frame:HookScript("OnHide", OnFrameHide)
 	frame:GetParent():HookScript("OnUpdate", OnFrameUpdate)
 	frames[frame:GetParent()] = true
 	frame.RayUIPlate = true
+
+	if not cb:IsShown() then
+		frame.castBar:Hide()
+	else
+		CastBar_OnShow(cb)
+	end
 end
 
 local function UpdateThreat(frame, elapsed)
