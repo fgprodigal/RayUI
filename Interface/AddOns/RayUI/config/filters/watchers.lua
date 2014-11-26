@@ -1173,8 +1173,6 @@ R["Watcher"] = {
                 { spellID = 84746, unitId = "player", caster = "player", filter = "BUFF" },
                 --深度洞察
                 { spellID = 84747, unitId = "player", caster = "player", filter = "BUFF" },
-                --預知
-                { spellID = 115189, unitId = "player", caster = "player", filter = "BUFF" },
                 --手裏劍
                 { spellID = 137586, unitId = "player", caster = "player", filter = "BUFF" },
                 --無聲之刃
