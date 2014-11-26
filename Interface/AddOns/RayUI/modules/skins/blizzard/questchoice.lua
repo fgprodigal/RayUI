@@ -2,9 +2,13 @@ local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, loc
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
-    for i = 1, 18 do
-        select(i, QuestChoiceFrame:GetRegions()):Hide()
-    end
+    for i = 1, 15 do
+		select(i, QuestChoiceFrame:GetRegions()):Hide()
+	end
+
+	for i = 17, 19 do
+		select(i, QuestChoiceFrame:GetRegions()):Hide()
+	end
 
     for i = 1, 2 do
         local option = QuestChoiceFrame["Option"..i]
