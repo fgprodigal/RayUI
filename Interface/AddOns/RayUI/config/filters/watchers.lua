@@ -899,31 +899,31 @@ R["Watcher"] = {
                 --佈道
                 { spellID = 81661, unitId = "player", caster = "player", filter = "BUFF" },
                 --大天使
-                { spellID = 81700,  unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 81700, unitId = "player", caster = "player", filter = "BUFF" },
                 --影散
                 { spellID = 47585, unitId = "player", caster = "player", filter = "BUFF" },
                 --心靈鑚刺雕文
-                { spellID = 81292,  unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 81292, unitId = "player", caster = "player", filter = "BUFF" },
                 --暗影强化（4T16）
-                { spellID = 145180,  unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 145180, unitId = "player", caster = "player", filter = "BUFF" },
                 --鬼魅幻影
-                { spellID = 119032,  unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 119032, unitId = "player", caster = "player", filter = "BUFF" },
                 --天使之壁
-                { spellID = 114214,  unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 114214, unitId = "player", caster = "player", filter = "BUFF" },
                 --光之澎湃
-                { spellID = 114255,  unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 114255, unitId = "player", caster = "player", filter = "BUFF" },
                 --黑暗奔騰
-                { spellID = 87160,  unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 87160, unitId = "player", caster = "player", filter = "BUFF" },
                 --命運無常
-                { spellID = 123254,  unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 123254, unitId = "player", caster = "player", filter = "BUFF" },
                 --注入能量
                 { spellID = 10060, unitId = "player", caster = "player", filter = "BUFF" },
                 --神聖洞察
-                { spellID = 123267,  unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 123267, unitId = "player", caster = "player", filter = "BUFF" },
                 --幽暗洞察
-                { spellID = 124430,  unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 124430, unitId = "player", caster = "player", filter = "BUFF" },
                 --精神護罩
-                { spellID = 109964,  unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 109964, unitId = "player", caster = "player", filter = "BUFF" },
                 
             },
             {
@@ -954,6 +954,8 @@ R["Watcher"] = {
                 { spellID = 47788, unitId = "target", caster = "all", filter = "BUFF" },
                 --痛苦鎮壓
                 { spellID = 33206, unitId = "target", caster = "all", filter = "BUFF" },
+                --意志洞悉
+                { spellID = 152118, unitId = "target", caster = "all", filter = "BUFF" },
             },
             {
                 name = "焦点buff&debuff",
