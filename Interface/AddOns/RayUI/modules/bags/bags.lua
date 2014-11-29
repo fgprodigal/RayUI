@@ -62,6 +62,23 @@ function B:CloseBags()
 	cargBags.blizzard:Hide()
 end
 
+local equipSetTip = CreateFrame("GameTooltip", "RayUICheckEquipSetTip", UIParent, "GameTooltipTemplate")
+
+local function CheckEquipmentSet(item)
+	if not item.bagID or not item.slotID then return false end
+	equipSetTip:SetOwner(UIParent, "ANCHOR_NONE")
+    equipSetTip:ClearLines()
+    equipSetTip:SetBagItem(item.bagID, item.slotID)
+	equipSetTip:Show()
+
+	for index = 1, equipSetTip:NumLines() do
+		if string.match(_G["RayUICheckEquipSetTipTextLeft" .. index]:GetText(), string.gsub(EQUIPMENT_SETS,"%%s\124r","")) then
+			return true
+		end
+	end
+	return false
+end
+
 function B:Initialize()
 	if B.db.bagWidth > 20 then B.db.bagWidth = 10 end
 	if B.db.bankWidth > 20 then B.db.bankWidth = 12 end
@@ -79,12 +96,12 @@ function B:Initialize()
 		local consumable = select(4, GetAuctionItemClasses())
 		-- The filters control which items go into which container
 		local INVERTED = -1 -- with inverted filters (using -1), everything goes into this bag when the filter returns false
-		local onlyBags = function(item) return item.bagID >= 0 and item.bagID <= 4 and not cargBags.itemKeys["setID"](item) and item.type ~= consumable end
-		local onlyBank =		function(item) return item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11 and not cargBags.itemKeys["setID"](item) and item.type ~= consumable end
+		local onlyBags = function(item) return item.bagID >= 0 and item.bagID <= 4 and not CheckEquipmentSet(item) and item.type ~= consumable end
+		local onlyBank =		function(item) return item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11 and not CheckEquipmentSet(item) and item.type ~= consumable end
 		local onlyReagent =		function(item) return item.bagID == -3 end
-		local onlyBagSets =		function(item) return cargBags.itemKeys["setID"](item) and not (item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11) end
+		local onlyBagSets =		function(item) return CheckEquipmentSet(item) and not (item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11) end
 		local onlyBagConsumables =		function(item) return item.type == consumable and not (item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11) end
-		local onlyBankSets =	function(item) return cargBags.itemKeys["setID"](item) and not (item.bagID >= 0 and item.bagID <= 4) end
+		local onlyBankSets =	function(item) return CheckEquipmentSet(item) and not (item.bagID >= 0 and item.bagID <= 4) end
 		local onlyBankConsumables =		function(item) return item.type == consumable and not (item.bagID >= 0 and item.bagID <= 4) end
 		local onlyRareEpics =	function(item) return item.rarity and item.rarity > 3 end
 		local onlyEpics =		function(item) return item.rarity and item.rarity > 3 end
