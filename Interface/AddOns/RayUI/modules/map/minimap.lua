@@ -55,6 +55,18 @@ function MM:TimeManagerClockButton_UpdateTooltip()
 	GameTooltip:Show()
 end
 
+local function PositionGarrisonButton(self, screenQuadrant)
+	GarrisonLandingPageMinimapButton:SetScale(0.7)
+	screenQuadrant = screenQuadrant or R:GetScreenQuadrant(self)
+	if strfind(screenQuadrant, "RIGHT") then
+		GarrisonLandingPageMinimapButton:ClearAllPoints()
+		GarrisonLandingPageMinimapButton:SetPoint("TOPLEFT", Minimap, "TOPLEFT", -100, 10)
+	else
+		GarrisonLandingPageMinimapButton:ClearAllPoints()
+		GarrisonLandingPageMinimapButton:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 100, 10)
+	end
+end
+
 function MM:SkinMiniMap()
 	local frames = {
 		"GameTimeFrame",
@@ -93,9 +105,6 @@ function MM:SkinMiniMap()
 	MiniMapChallengeMode:SetFrameStrata("LOW")
 	MiniMapMailFrame:ClearAllPoints()
 	MiniMapMailFrame:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMRIGHT", 2, -6)
-	GarrisonLandingPageMinimapButton:ClearAllPoints()
-	GarrisonLandingPageMinimapButton:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 100, 10)
-	GarrisonLandingPageMinimapButton:SetScale(0.7)
 	MiniMapMailIcon:SetTexture("Interface\\AddOns\\RayUI\\media\\mail")
 	GameTimeCalendarInvitesTexture:ClearAllPoints()
 	GameTimeCalendarInvitesTexture:SetParent(Minimap)
@@ -231,9 +240,9 @@ function MM:CreateMenu()
 		func = function() ToggleFrame(LootHistoryFrame) end},
 	}
 	Minimap:SetScript("OnMouseUp", function(_, btn)
-		if(btn=="RightButton" and not IsShiftKeyDown()) then
+		if( btn == "RightButton" and not IsShiftKeyDown() ) then
 			ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, "cursor", 0, 0)
-		elseif(btn=="MiddleButton" or (btn=="RightButton" and IsShiftKeyDown())) then
+		elseif(btn == "MiddleButton" or ( btn== "RightButton" and IsShiftKeyDown())) then
 			EasyMenu(menuList, menuFrame, "cursor", 0, 0, "MENU", 1)
 		else
 			local x, y = GetCursorPosition()
@@ -269,6 +278,7 @@ end
 
 local function MinimapPostDrag(self, screenQuadrant)
     MM:PositionButtonCollector(self, screenQuadrant)
+    PositionGarrisonButton(self, screenQuadrant)
 end
 
 function MM:Initialize()
