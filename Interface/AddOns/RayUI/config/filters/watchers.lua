@@ -29,6 +29,8 @@ R["Watcher"] = {
                 { spellID = 8936, unitId = "player", caster = "player", filter = "BUFF" },
                 --共生
                 { spellID = 100977, unitId = "player", caster = "player", filter = "BUFF" },
+                --回春術（萌芽）
+                { spellID = 155777, unitId = "player", caster = "player", filter = "BUFF" },  
             },
             {
                 name = "目标buff&debuff",
@@ -44,6 +46,8 @@ R["Watcher"] = {
                 { spellID = 8936, unitId = "target", caster = "player", filter = "BUFF" },
                 --精靈群襲
                 { spellID = 102355, unitId = "target", caster = "all", filter = "DEBUFF" },
+                --回春術（萌芽）
+                { spellID = 155777, unitId = "target", caster = "player", filter = "BUFF" },  
             },
             {
                 name = "玩家重要buff&debuff",
@@ -93,6 +97,8 @@ R["Watcher"] = {
                 { spellID = 5217, unitId = "player", caster = "player", filter = "BUFF" },
                 --野蛮咆哮雕文
                 { spellID = 174544, unitId = "player", caster = "player", filter = "BUFF" },
+                --血腥爪击
+                { spellID = 145152, unitId = "player", caster = "player", filter = "BUFF" },		
             },
             {
                 name = "目标重要buff&debuff",
