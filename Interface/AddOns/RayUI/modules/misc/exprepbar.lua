@@ -5,15 +5,20 @@ local RepMenuList = {}
 local function CacheRepData()
 	wipe(RepMenuList)
 	for factionIndex = 1, GetNumFactions() do
-		local factionName, description, standingID, barMin, barMax, barValue, atWarWith, canToggleAtWar, isHeader, isCollapsed, hasRep, isWatched, isChild = GetFactionInfo(factionIndex)
+		local factionName, description, standingID, barMin, barMax, barValue, atWarWith, canToggleAtWar, isHeader, isCollapsed, hasRep, isWatched, isChild, factionID = GetFactionInfo(factionIndex)
+		local friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
 		if standingID and not isHeader then	
 			local fn = function()
 				local active = GetWatchedFactionInfo()
 				if factionName ~= active then
 					SetWatchedFactionIndex(factionIndex)
 				end
-			end  
-			tinsert(RepMenuList, {text = factionName..R:RGBToHex(unpack(RayUF["colors"].reaction[standingID])).." (".._G["FACTION_STANDING_LABEL"..standingID]..")", func = fn})
+			end
+			if friendID then
+				tinsert(RepMenuList, {text = factionName..R:RGBToHex(unpack(RayUF["colors"].reaction[8])).." ("..friendTextLevel..")", func = fn})
+			else
+				tinsert(RepMenuList, {text = factionName..R:RGBToHex(unpack(RayUF["colors"].reaction[standingID])).." (".._G["FACTION_STANDING_LABEL"..standingID]..")", func = fn})
+			end
 		end
 	end
 end
@@ -80,9 +85,13 @@ local function LoadFunc()
 		end
 
 		if GetWatchedFactionInfo() then
-			local name, rank, minRep, maxRep, value = GetWatchedFactionInfo()
+			local name, rank, minRep, maxRep, value, factionID = GetWatchedFactionInfo()
+			local friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
 			repBar:SetMinMaxValues(minRep, maxRep)
 			repBar:SetValue(value)
+			if friendID then
+				rank = 8
+			end
 			repBar:SetStatusBarColor(unpack(RayUF["colors"].reaction[rank]))
 			repBar:Show()
 		else
@@ -119,11 +128,17 @@ local function LoadFunc()
 	end)
 
 	repBar:SetScript("OnEnter", function()
-		local name, rank, start, cap, value = GetWatchedFactionInfo()
+		local name, rank, start, cap, value, factionID = GetWatchedFactionInfo()
+		local friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
 		GameTooltip:SetOwner(repBar, "ANCHOR_BOTTOM", 0, -5)
 		GameTooltip:ClearLines()		
 		GameTooltip:AddDoubleLine(REPUTATION, name, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b)
-		GameTooltip:AddDoubleLine(STANDING, _G["FACTION_STANDING_LABEL"..rank], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, RayUF["colors"].reaction[rank][1], RayUF["colors"].reaction[rank][2], RayUF["colors"].reaction[rank][3])
+		if friendID then
+			rank = 8
+			GameTooltip:AddDoubleLine(STANDING, friendTextLevel, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, RayUF["colors"].reaction[rank][1], RayUF["colors"].reaction[rank][2], RayUF["colors"].reaction[rank][3])
+		else
+			GameTooltip:AddDoubleLine(STANDING, _G["FACTION_STANDING_LABEL"..rank], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, RayUF["colors"].reaction[rank][1], RayUF["colors"].reaction[rank][2], RayUF["colors"].reaction[rank][3])
+		end
 		GameTooltip:AddDoubleLine(REPUTATION, string.format("%s/%s (%d%%)", value-start, cap-start, (value-start)/(cap-start)*100), NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, 1, 1, 1)
 		GameTooltip:AddDoubleLine(L["剩余"], string.format("%s", cap-value), NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, 1, 1, 1)
 		GameTooltip:Show()
