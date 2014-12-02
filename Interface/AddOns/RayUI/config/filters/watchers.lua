@@ -1751,6 +1751,14 @@ R["Watcher"] = {
                 { spellID = 104993, unitId = "player", caster = "all", filter = "BUFF" },
 
                 --藥水
+                -- Draenic Agility Potion
+                { spellID = 156423, unitId = "player", caster = "player", filter = "BUFF"},
+                -- Draenic Intellect Potion
+                { spellID = 156426, unitId = "player", caster = "player", filter = "BUFF"},
+                -- Draenic Strength Potion
+                { spellID = 156428, unitId = "player", caster = "player", filter = "BUFF"},
+                -- Draenic Armor Potion
+                { spellID = 156430, unitId = "player", caster = "player", filter = "BUFF"},
                 --玉蛟
                 { spellID = 105702, unitId = "player", caster = "player", filter = "BUFF" },
                 --兔妖之咬
