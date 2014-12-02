@@ -9,7 +9,12 @@ local _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, wands = GetAuctionItemSubClas
 
 local function GetSocketCount(link, slot, unit)
 	local num, filled = 0, 0
-	if slot then tip:SetInventoryItem(unit, GetInventorySlotInfo(slot)) else tip:SetHyperlink(link) end
+	if slot then
+		local slotid = GetInventorySlotInfo(slot)
+		tip:SetInventoryItem(unit, slotid)
+	else
+		tip:SetHyperlink(link)
+	end
 	for i=1,10 do if tip.icon[i] then num = num + 1 end end
 
 	for i=1,num do
