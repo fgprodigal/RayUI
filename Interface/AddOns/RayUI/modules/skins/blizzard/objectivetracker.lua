@@ -36,6 +36,8 @@ local function LoadSkin()
 		header.Text:FontTemplate(R["media"].font, R["media"].fontsize, "OUTLINE")
 	end
 
+	BONUS_OBJECTIVE_TRACKER_MODULE.Header.Background:Hide()
+
 	hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, "SetBlockHeader", function(_, block)
 		if not block.headerStyled then
 			block.HeaderText:FontTemplate(R["media"].font, R["media"].fontsize, "OUTLINE")
@@ -116,6 +118,33 @@ local function LoadSkin()
 			block.shouldFix = true
 			hooksecurefunc(block, "SetHeight", fixBlockHeight)
 			block.styled = true
+		end
+	end)
+
+	-- [[ Bonus objective progress bar ]]
+
+	hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "AddProgressBar", function(self, block, line)
+		local progressBar = line.ProgressBar
+
+		if not progressBar.styled then
+			local bar = progressBar.Bar
+			local label = bar.Label
+
+			bar.BorderLeft:Hide()
+			bar.BorderRight:Hide()
+			bar.BorderMid:Hide()
+			select(5, bar:GetRegions()):Hide()
+
+			bar:SetStatusBarTexture(R["media"].gloss)
+
+			label:ClearAllPoints()
+			label:SetPoint("CENTER", 0, -1)
+
+			local bg = S:CreateBDFrame(bar)
+			bg:Point("TOPLEFT", -1, 1)
+			bg:Point("BOTTOMRIGHT", 0, -1)
+
+			progressBar.styled = true
 		end
 	end)
 end

@@ -355,6 +355,51 @@ local function LoadSkin()
 		iconbg:SetPoint("TOPLEFT", 3, -1)
 	end
 
+	for i = 1, 3 do
+		local follower = MissionPage.Followers[i]
+
+		follower:GetRegions():Hide()
+
+		S:CreateBD(follower, .25)
+	end
+
+	hooksecurefunc("GarrisonMissionPage_SetFollower", function(frame)
+		local portrait = frame.PortraitFrame
+
+		portrait.LevelBorder:SetTexture(0, 0, 0, .5)
+		portrait.LevelBorder:SetSize(44, 11)
+	end)
+
+	hooksecurefunc("GarrisonMissionPage_ClearFollower", function(frame)
+		local portrait = frame.PortraitFrame
+
+		portrait.LevelBorder:SetTexture(0, 0, 0, .5)
+		portrait.LevelBorder:SetSize(44, 11)
+
+		if portrait.squareBG then portrait.squareBG:SetBackdropBorderColor(0, 0, 0) end
+	end)
+
+	for i = 1, 10 do
+		select(i, MissionPage.RewardsFrame:GetRegions()):Hide()
+	end
+
+	S:CreateBD(MissionPage.RewardsFrame, .25)
+
+	for i = 1, 2 do
+		local reward = MissionPage.RewardsFrame.Rewards[i]
+		local icon = reward.Icon
+
+		reward.BG:Hide()
+
+		icon:SetTexCoord(.08, .92, .08, .92)
+		icon:SetDrawLayer("BORDER", 1)
+		S:CreateBG(icon)
+
+		reward.ItemBurst:SetDrawLayer("BORDER", 2)
+
+		S:CreateBD(reward, .15)
+	end
+
 	-- Follower tab
 
 	local FollowerTab = GarrisonMissionFrame.FollowerTab
