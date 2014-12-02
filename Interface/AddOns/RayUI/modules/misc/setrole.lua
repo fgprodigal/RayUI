@@ -2,6 +2,12 @@
 local M = R:GetModule("Misc")
 local S = R:GetModule("Skins")
 
+local t = {
+	["Melee"] = "DAMAGER",
+	["Caster"] = "DAMAGER",
+	["Tank"] = "TANK",
+}
+
 local function LoadFunc()
 	local function SetRole()
 		local spec = GetSpecialization()
@@ -10,8 +16,11 @@ local function LoadFunc()
 				UnitSetRole("player", "NONE")
 			elseif spec ~= nil then
 				if GetNumGroupMembers() > 0 then
-					local role = GetSpecializationRole(spec)
-					UnitSetRole("player", role)
+					if R.isHealer then
+						UnitSetRole("player", "HEALER")
+					else
+						UnitSetRole("player", t[R.Role])
+					end
 				end
 			end
 		end
