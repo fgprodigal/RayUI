@@ -25,7 +25,7 @@ local function LoadFunc()
 				local skillName, _, _, _, altVerb = GetTradeSkillInfo(id)
 				if IsTradeSkillGuild() or IsTradeSkillLinked() then
 					button:Hide()
-				elseif altVerb and CURRENT_TRADESKILL == GetSpellInfo(7411) then
+				elseif altVerb and CURRENT_TRADESKILL == GetSpellInfo(7411) and GetItemInfo(38682) then
 					button:Show()
 					local creatable = 1
 					if not skillName then
