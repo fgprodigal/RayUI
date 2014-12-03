@@ -8,12 +8,6 @@ local function LoadFunc()
 	local bsize = 30
 	local ignoreIcons = {}
 
-	if R.Role == "Caster" then
-		ignoreIcons[3] = 2
-	else
-		ignoreIcons[5] = 4
-	end
-
 	local DefaultIcons = {
 		[1] = "Interface\\Icons\\Spell_Magic_GreaterBlessingofKings", -- Stats
 		[2] = "Interface\\Icons\\Spell_Holy_WordFortitude", -- Stamina
@@ -123,6 +117,32 @@ local function LoadFunc()
 		if (event == "UNIT_AURA" and unit ~= "player") then return end
 		local frame = RaidBuffReminder
 		
+		wipe(ignoreIcons)
+		if R.Role == "Caster" then
+			ignoreIcons[3] = 2
+		else
+			ignoreIcons[5] = 4
+		end
+
+		for i = 1, NUM_LE_RAID_BUFF_TYPES do
+			local button = frame["spell"..i]
+			button.t:SetAlpha(1)
+			button:ClearAllPoints()
+
+			if i == 1 then
+				button:SetPoint("LEFT", frame, "LEFT", 0, 0)
+			else
+				local index = ignoreIcons[i - 1] or (i - 1)
+				button:SetPoint("LEFT", frame["spell"..index], "RIGHT", 8, 0)
+			end
+
+			if(ignoreIcons[i]) then
+				button:Hide()
+			else
+				button:Show()
+			end
+		end
+		
 		if M.db.raidbuffreminderparty and GetNumGroupMembers() == 0 then
 			return frame:Hide()
 		elseif M.db.raidbuffreminderparty and GetNumGroupMembers() > 0 then
@@ -130,7 +150,7 @@ local function LoadFunc()
 		end
 
 		for i = 1, NUM_LE_RAID_BUFF_TYPES do
-		local spellName, rank, texture, duration, expirationTime, spellId, slot = GetRaidBuffTrayAuraInfo(i)
+			local spellName, rank, texture, duration, expirationTime, spellId, slot = GetRaidBuffTrayAuraInfo(i)
 			local button = frame["spell"..i]
 			
 			if(spellName) then
@@ -284,25 +304,6 @@ local function LoadFunc()
 		frame["spell"..i]:SetID(i)
 		frame["spell"..i]:SetScript("OnEnter", Button_OnEnter)
 		frame["spell"..i]:SetScript("OnLeave", GameTooltip_Hide)
-	end
-
-	for i = 1, NUM_LE_RAID_BUFF_TYPES do
-		local button = frame["spell"..i]
-		button.t:SetAlpha(1)
-		button:ClearAllPoints()
-
-		if i == 1 then
-			button:SetPoint("LEFT", frame, "LEFT", 0, 0)
-		else
-			local index = ignoreIcons[i - 1] or (i - 1)
-			button:SetPoint("LEFT", frame["spell"..index], "RIGHT", 8, 0)
-		end
-
-		if(ignoreIcons[i]) then
-			button:Hide()
-		else
-			button:Show()
-		end
 	end
 
 	R:CreateMover(frame, "RaidBuffReminderMover", L["团队buff提醒锚点"], true)
