@@ -651,6 +651,10 @@ R["Watcher"] = {
                 { spellID = 108281, unitId = "player", caster = "player", filter = "BUFF" },
                 --元素掌握
                 { spellID = 16166, unitId = "player", caster = "player", filter = "BUFF" },
+                --元素融合
+                { spellID = 157174, unitId = "player", caster = "player", filter = "BUFF" },
+                --火焰释放
+                { spellID = 165462, unitId = "player", caster = "player", filter = "BUFF" },
                 --Riptide / Springflut
                 { spellID = 61295, unitId = "player", caster = "player", filter = "BUFF" },
 
