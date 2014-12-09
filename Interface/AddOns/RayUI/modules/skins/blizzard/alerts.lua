@@ -13,8 +13,6 @@ local function LoadSkin()
 		for i=1, MAX_ACHIEVEMENT_ALERTS do
 			local frame = _G["AchievementAlertFrame"..i]
 			if frame then
-				frame:SetAlpha(1)
-				frame.SetAlpha = R.dummy
 				if not frame.bg then
 					frame.bg = CreateFrame("Frame", nil, frame)
 					frame.bg:SetPoint("TOPLEFT", _G[frame:GetName().."Background"], "TOPLEFT", -2, -6)
@@ -51,8 +49,6 @@ local function LoadSkin()
 		for i = 1, DUNGEON_COMPLETION_MAX_REWARDS do
 			local frame = _G["DungeonCompletionAlertFrame"..i]
 			if frame then
-				frame:SetAlpha(1)
-				frame.SetAlpha = R.dummy
 				if not frame.bg then
 					frame.bg = CreateFrame("Frame", nil, frame)
 					frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", -2, -6)
@@ -97,9 +93,6 @@ local function LoadSkin()
 		local frame = GuildChallengeAlertFrame
 
 		if frame then
-			frame:SetAlpha(1)
-			frame.SetAlpha = R.dummy
-
 			if not frame.bg then
 				frame.bg = CreateFrame("Frame", nil, frame)
 				frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", -2, -6)
@@ -133,9 +126,6 @@ local function LoadSkin()
 		local frame = ChallengeModeAlertFrame1
 
 		if frame then
-			frame:SetAlpha(1)
-			frame.SetAlpha = R.dummy
-
 			if not frame.bg then
 				frame.bg = CreateFrame("Frame", nil, frame)
 				frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 19, -6)
@@ -181,9 +171,6 @@ local function LoadSkin()
 		local frame = ScenarioAlertFrame1
 
 		if frame then
-			frame:SetAlpha(1)
-			frame.SetAlpha = R.dummy
-
 			if not frame.bg then
 				frame.bg = CreateFrame("Frame", nil, frame)
 				frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 4, -4)
@@ -227,9 +214,6 @@ local function LoadSkin()
 		for i = 1, MAX_ACHIEVEMENT_ALERTS do
 			local frame = _G["CriteriaAlertFrame"..i]
 			if frame then
-				frame:SetAlpha(1)
-				frame.SetAlpha = R.dummy
-
 				if not frame.bg then
 					frame.bg = CreateFrame("Frame", nil, frame)
 					frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 39, -6)
@@ -264,72 +248,164 @@ local function LoadSkin()
 		end
 	end)
 
-	hooksecurefunc("AlertFrame_SetLootWonAnchors", function()
-		for i=1, #LOOT_WON_ALERT_FRAMES do
-			local frame = LOOT_WON_ALERT_FRAMES[i]
-			if frame then
-				frame:SetAlpha(1)
-				frame.SetAlpha = R.dummy
+	hooksecurefunc("LootWonAlertFrame_SetUp", function(frame)
+		if not frame.bg then
+			frame.bg = CreateFrame("Frame", nil, frame)
+			frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 8, -8)
+			frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -6, 8)
+			frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+			S:CreateBD(frame.bg)
 
-				if not frame.bg then
-					frame.bg = CreateFrame("Frame", nil, frame)
-					frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 8, -8)
-					frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -6, 8)
-					frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
-
-					-- Icon border
-					if not frame.Icon.b then
-						frame.Icon.b = S:CreateBG(frame.Icon)
-					end
-
-					frame:HookScript("OnEnter", function()
-						S:CreateBD(frame.bg)
-					end)
-
-					frame.animIn:HookScript("OnFinished", function()
-						S:CreateBD(frame.bg)
-					end)
-				end
-				frame.Background:Kill()
-				frame.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-				frame.IconBorder:Kill()
-			end
-		end	
+			-- Icon border
+			frame.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+			S:CreateBG(frame.Icon)
+		end
+		frame.Icon:SetDrawLayer("BORDER")
+		frame.Background:Kill()
+		frame.BGAtlas:Kill()
+		frame.PvPBackground:Kill()
+		frame.IconBorder:Kill()
 	end)
 
-	hooksecurefunc("AlertFrame_SetMoneyWonAnchors", function()
-		for i=1, #MONEY_WON_ALERT_FRAMES do
-			local frame = MONEY_WON_ALERT_FRAMES[i]
-			if frame then
-				frame:SetAlpha(1)
-				frame.SetAlpha = R.dummy
+	hooksecurefunc("MoneyWonAlertFrame_SetUp", function(frame)
+		if not frame.bg then
+			frame.bg = CreateFrame("Frame", nil, frame)
+			frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 8, -8)
+			frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -6, 8)
+			frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+			S:CreateBD(frame.bg)
 
-				if not frame.bg then
-					frame.bg = CreateFrame("Frame", nil, frame)
-					frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 8, -8)
-					frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -6, 8)
-					frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
-
-					-- Icon border
-					if not frame.Icon.b then
-						frame.Icon.b = S:CreateBG(frame.Icon)
-					end
-
-					frame:HookScript("OnEnter", function()
-						S:CreateBD(frame.bg)
-					end)
-
-					frame.animIn:HookScript("OnFinished", function()
-						S:CreateBD(frame.bg)
-					end)
-				end
-				frame.Background:Kill()
-				frame.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-				frame.IconBorder:Kill()
-			end
+			-- Icon border
+			frame.Icon:SetDrawLayer("ARTWORK")
+			frame.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+			S:CreateBG(frame.Icon)
 		end
+		frame.IconBorder:Kill()
+		frame.Background:Kill()
 	end)	
 
+	-- Digsite completion alert
+
+	do
+		local frame = DigsiteCompleteToastFrame
+		local icon = frame.DigsiteTypeTexture
+
+		S:CreateBD(frame)
+
+		frame:GetRegions():Hide()
+	end
+
+	-- Garrison building alert
+
+	do
+		local frame = GarrisonBuildingAlertFrame
+		local icon = frame.Icon
+
+		frame:GetRegions():Hide()
+
+		frame.bg = CreateFrame("Frame", nil, frame)
+		frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 8, -8)
+		frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -6, 8)
+		frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+		S:CreateBD(frame.bg)
+
+		icon:SetTexCoord(.08, .92, .08, .92)
+		icon:SetDrawLayer("ARTWORK")
+		S:CreateBG(icon)
+	end
+
+	-- Garrison mission alert
+
+	do
+		local frame = GarrisonMissionAlertFrame
+
+		frame:GetRegions():Hide()
+		frame.IconBG:Hide()
+
+		frame.bg = CreateFrame("Frame", nil, frame)
+		frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 8, -8)
+		frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -6, 8)
+		frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+		S:CreateBD(frame.bg)
+	end
+
+	-- Garrison follower alert
+
+	do
+		local frame = GarrisonFollowerAlertFrame
+
+		frame:GetRegions():Hide()
+		frame.FollowerBG:SetAlpha(0)
+
+		frame.bg = CreateFrame("Frame", nil, frame)
+		frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 16, -3)
+		frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -16, 16)
+		frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+		S:CreateBD(frame.bg)
+
+		local level = frame.PortraitFrame.Level
+		local cover = frame.PortraitFrame.PortraitRingCover
+
+		frame.PortraitFrame.PortraitRing:Hide()
+		frame.PortraitFrame.PortraitRingQuality:SetTexture("")
+
+		frame.PortraitFrame.LevelBorder:SetTexture(0, 0, 0, .5)
+		frame.PortraitFrame.LevelBorder:SetSize(44, 11)
+		frame.PortraitFrame.LevelBorder:ClearAllPoints()
+		frame.PortraitFrame.LevelBorder:SetPoint("BOTTOM", 0, 12)
+
+		level:ClearAllPoints()
+		level:SetPoint("BOTTOM", frame.PortraitFrame, 0, 12)
+
+		local squareBG = CreateFrame("Frame", nil, frame.PortraitFrame)
+		squareBG:SetFrameLevel(frame.PortraitFrame:GetFrameLevel()-1)
+		squareBG:SetPoint("TOPLEFT", 3, -3)
+		squareBG:SetPoint("BOTTOMRIGHT", -3, 11)
+		S:CreateBD(squareBG, 1)
+		frame.PortraitFrame.squareBG = squareBG
+
+		if cover then
+			cover:SetTexture(0, 0, 0)
+			cover:SetAllPoints(squareBG)
+		end
+	end
+
+	hooksecurefunc("GarrisonFollowerAlertFrame_ShowAlert", function(_, _, _, _, quality)
+		local color = BAG_ITEM_QUALITY_COLORS[quality]
+		if color then
+			GarrisonFollowerAlertFrame.PortraitFrame.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
+		else
+			GarrisonFollowerAlertFrame.PortraitFrame.squareBG:SetBackdropBorderColor(0, 0, 0)
+		end
+	end)
+
+	hooksecurefunc("LootUpgradeFrame_SetUp", function(frame)
+		if not frame.bg then
+			local bg = CreateFrame("Frame", nil, frame)
+			bg:SetPoint("TOPLEFT", 10, -10)
+			bg:SetPoint("BOTTOMRIGHT", -10, 10)
+			bg:SetFrameLevel(frame:GetFrameLevel()-1)
+			S:CreateBD(bg)
+			frame.bg = bg
+
+			frame.Background:Hide()
+
+			frame.Icon:SetTexCoord(.08, .92, .08, .92)
+			S:CreateBG(frame.icon)
+			frame.Icon:SetDrawLayer("BORDER", 5)
+			frame.Icon:ClearAllPoints()
+			frame.Icon:SetPoint("CENTER", frame.BaseQualityBorder)
+		end
+
+		frame.BaseQualityBorder:SetTexture(R["media"].gloss)
+		frame.UpgradeQualityBorder:SetTexture(R["media"].gloss)
+		frame.BaseQualityBorder:SetSize(52, 52)
+		frame.UpgradeQualityBorder:SetSize(52, 52)
+		frame.BaseQualityBorder:SetVertexColor(frame.BaseQualityItemName:GetTextColor())
+		frame.UpgradeQualityBorder:SetVertexColor(frame.UpgradeQualityItemName:GetTextColor())
+	end)
+
+	--position
 	hooksecurefunc("AlertFrame_FixAnchors", function(self, screenQuadrant)	
 		if POSITION == "TOP" then
 			ANCHOR_POINT = "BOTTOM"
