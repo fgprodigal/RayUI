@@ -450,11 +450,11 @@ function TT:SetStyle(tooltip)
 		tooltip.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 		tooltip.shadow:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 	end
-	if tooltip.NumLines then
-		for index=1, tooltip:NumLines() do
-			_G[tooltip:GetName().."TextLeft"..index]:SetShadowOffset(R.mult, -R.mult)
-		end
-	end
+	-- if tooltip.NumLines then
+	-- 	for index=1, tooltip:NumLines() do
+	-- 		-- _G[tooltip:GetName().."TextLeft"..index]:SetShadowOffset(R.mult, -R.mult)
+	-- 	end
+	-- end
 	tooltip.needRefresh = true
 end
 
