@@ -605,6 +605,8 @@ R["Watcher"] = {
                 { spellID = 324, unitId = "player", caster = "player", filter = "BUFF" },
                 --Water Shield / Wasserschild
                 { spellID = 52127, unitId = "player", caster = "player", filter = "BUFF" },
+                --治疗之雨
+                { spellID = 73920, unitId = "player", caster = "player", filter = "BUFF" },
 
             },
             {
