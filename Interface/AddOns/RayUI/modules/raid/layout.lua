@@ -320,7 +320,7 @@ local counterOffsets = {
 	["BOTTOM"] = {0, 0},
 }
 
-function UpdateAuraWatch(frame)
+local function UpdateAuraWatch(frame)
 	local buffs = {}
 	local auras = frame.AuraWatch
 	auras:Show()
