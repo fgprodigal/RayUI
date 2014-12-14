@@ -934,6 +934,8 @@ R["Watcher"] = {
                 { spellID = 124430, unitId = "player", caster = "player", filter = "BUFF" },
                 --精神護罩
                 { spellID = 109964, unitId = "player", caster = "player", filter = "BUFF" },
+                --暗言术：乱
+                { spellID = 132573, unitId = "player", caster = "player", filter = "BUFF" },
                 
             },
             {
@@ -1204,8 +1206,6 @@ R["Watcher"] = {
                 { spellID = 112961, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --致傷毒藥
                 { spellID = 8680, unitId = "target", caster = "player", filter = "DEBUFF" },
-                --暗影反射
-                { spellID = 156745, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
             {
                 name = "玩家重要buff&debuff",
@@ -1292,6 +1292,8 @@ R["Watcher"] = {
                 { spellID = 853, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --制裁之拳
                 { spellID = 105593, unitId = "target", caster = "all", filter = "DEBUFF" },
+                --暗影反射
+                { spellID = 156745, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
             {
                 name = "焦点buff&debuff",
