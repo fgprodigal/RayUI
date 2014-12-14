@@ -820,6 +820,9 @@ local function LoadSkin()
 	ChatConfigFrameDefaultButton:SetPoint("TOPLEFT", ChatConfigCategoryFrame, "BOTTOMLEFT", 0, -4)
 	ChatConfigFrameOkayButton:SetPoint("TOPRIGHT", ChatConfigBackgroundFrame, "BOTTOMRIGHT", 0, -4)
 
+	TicketStatusFrame:ClearAllPoints()
+	TicketStatusFrame:SetPoint("TOP", UIParent, "TOP", 0, -20)
+
 	hooksecurefunc("PanelTemplates_DeselectTab", function(tab)
 		_G[tab:GetName().."Text"]:SetPoint("CENTER", tab, "CENTER")
 	end)
