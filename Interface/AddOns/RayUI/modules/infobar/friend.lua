@@ -250,7 +250,7 @@ local function LoadFriend()
 		infobar.Text:SetFormattedText(displayString, FRIENDS, onlineFriends + numBNetOnline)
 	end
 
-	function Friends_OnMouseDown(self)
+	local function Friends_OnMouseDown(self)
 		if not InCombatLockdown() then
 			ToggleFriendsFrame()
 		end

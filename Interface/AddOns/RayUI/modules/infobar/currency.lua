@@ -125,6 +125,7 @@ local function LoadCurrency()
 			end
 
 			infobar.Text:SetText(formatMoney(NewMoney))
+			infobar:SetWidth(infobar.Text:GetWidth() + IF.gap*2)
 			db.Gold[R.myrealm][R.myname] = NewMoney
 
 			local total = 0

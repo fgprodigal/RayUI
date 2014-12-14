@@ -220,7 +220,7 @@ local function LoadGuild()
 		self.hidden = false
 	end
 
-	function Guild_OnMouseDown(self)
+	local function Guild_OnMouseDown(self)
 		if not InCombatLockdown() then
 			ToggleGuildFrame()
 		end

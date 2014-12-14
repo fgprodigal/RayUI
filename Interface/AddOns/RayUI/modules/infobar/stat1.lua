@@ -175,6 +175,7 @@ local function LoadStat()
 		unhittable = avoidance - unhittableMax
 
 		infobar.Text:SetFormattedText(displayFloatString, L["免伤"]..": ", avoidance)
+		infobar:SetWidth(infobar.Text:GetWidth() + IF.gap*2)
 	end
 
 	local function UpdateCaster(self)
@@ -185,6 +186,7 @@ local function LoadStat()
 		end
 
 		infobar.Text:SetFormattedText(displayNumberString, STAT_SPELLPOWER..": ", spellpwr)
+		infobar:SetWidth(infobar.Text:GetWidth() + IF.gap*2)
 	end
 
 	local function UpdateMelee(self)
@@ -200,6 +202,7 @@ local function LoadStat()
 		end
 
 		infobar.Text:SetFormattedText(displayNumberString, STAT_ATTACK_POWER..": ", pwr)
+		infobar:SetWidth(infobar.Text:GetWidth() + IF.gap*2)
 	end
 
 	local function UpdateBattlefieldScore(self)
@@ -211,6 +214,7 @@ local function LoadStat()
 				else
 					infobar.Text:SetFormattedText(displayNumberString, SCORE_DAMAGE_DONE..": ", damageDone)
 				end
+				infobar:SetWidth(infobar.Text:GetWidth() + IF.gap*2)
 				self.index = index
 			end
 		end

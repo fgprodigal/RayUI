@@ -79,6 +79,7 @@ local function LoadCallToArms()
 		else
 			infobar.Text:SetText(BATTLEGROUND_HOLIDAY..": "..MakeIconString(tankReward, healerReward, dpsReward))
 		end
+		infobar:SetWidth(infobar.Text:GetWidth() + IF.gap*2)
 	end
 
 	infobar:HookScript("OnEnter", OnEnter)

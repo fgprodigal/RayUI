@@ -238,6 +238,7 @@ local function LoadTalent()
 		else
             infobar.Text:SetText(NONE..TALENTS)
 		end
+		infobar:SetWidth(infobar.Text:GetWidth() + IF.gap*2)
 	end
 
 	infobar:HookScript("OnEnter", Spec_OnEnter)
