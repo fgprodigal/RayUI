@@ -1204,6 +1204,8 @@ R["Watcher"] = {
                 { spellID = 112961, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --致傷毒藥
                 { spellID = 8680, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --暗影反射
+                { spellID = 156745, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
             {
                 name = "玩家重要buff&debuff",
