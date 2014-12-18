@@ -168,16 +168,14 @@ local function LoadFunc()
 
 		if(available == 0 and active == 0 and GetNumGossipOptions() == 1) then
 			local npcID = GetNPCID()
-			if(QuickQuestDB.faireport) then
-				if(npcID == 57850) then
-					return SelectGossipOption(1)
-				end
+			if(npcID == 57850) then
+				return SelectGossipOption(1)
 			end
 
 			local _, instance = GetInstanceInfo()
 			if instance ~= "raid" then
 				local _, type = GetGossipOptions()
-				if(type == "gossip") then
+				if type == "gossip" and not ignoreGossipNPC[npcID] then
 					SelectGossipOption(1)
 					return
 				end
