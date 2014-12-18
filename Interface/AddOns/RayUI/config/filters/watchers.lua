@@ -1757,6 +1757,8 @@ R["Watcher"] = {
                 { spellID = 148911, unitId = "player", caster = "player", filter = "BUFF" },
                 -- 傲慢之棱光囚笼（智力，觸發）
                 { spellID = 146314, unitId = "player", caster = "player", filter = "BUFF" },
+				-- 動亂聚焦水晶（智力，使用）
+                { spellID = 176882, unitId = "player", caster = "player", filter = "BUFF" },
 
                 --專業技能
                 -- 神經突觸彈簧
@@ -1765,6 +1767,8 @@ R["Watcher"] = {
                 { spellID = 54861, unitId = "player", caster = "player", filter = "BUFF" },
                 -- 降落傘
                 { spellID = 55001, unitId = "player", caster = "player", filter = "BUFF" },
+				-- 德萊尼煉金石
+                { spellID = 60234, unitId = "player", caster = "player", filter = "BUFF" },
 
                 --武器附魔
                 --玉魂
