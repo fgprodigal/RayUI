@@ -88,7 +88,21 @@ local function LoadFunc()
         end
     end
 
+	local function GetNPCID()
+		return tonumber(string.match(UnitGUID("npc") or "", "Creature%-.-%-.-%-.-%-.-%-(.-)%-"))
+	end
+
+	local ignoreQuestNPC = {
+		[88570] = true, -- Fate-Twister Tiklal
+		[87391] = true, -- Fate-Twister Seress
+	}
+
     QuickQuest:Register("QUEST_GREETING", function()
+		local npcID = GetNPCID()
+		if(ignoreQuestNPC[npcID]) then
+			return
+		end
+
         local active = GetNumActiveQuests()
         if(active > 0) then
             for index = 1, active do
@@ -118,9 +132,20 @@ local function LoadFunc()
         return not not select(((index * 6) - 6) + 3, GetGossipAvailableQuests())
     end
 
-	local function GetNPCID()
-		return tonumber(string.match(UnitGUID("npc") or "", "Creature%-.-%-.-%-.-%-.-%-(.-)%-"))
-	end
+	local ignoreGossipNPC = {
+		-- Bodyguards
+		[86945] = true, -- Aeda Brightdawn (Horde)
+		[86933] = true, -- Vivianne (Horde)
+		[86927] = true, -- Delvar Ironfist (Alliance)
+		[86934] = true, -- Defender Illona (Alliance)
+		[86682] = true, -- Tormmok
+		[86964] = true, -- Leorajh
+		[86946] = true, -- Talonpriest Ishaal
+
+		-- Misc NPCs
+		[79740] = true, -- Warmaster Zog (Horde)
+		[79953] = true, -- Lieutenant Thorn (Alliance)
+	}
 
     QuickQuest:Register("GOSSIP_SHOW", function()
         local active = GetNumGossipActiveQuests()
@@ -142,10 +167,15 @@ local function LoadFunc()
         end
 
 		if(available == 0 and active == 0 and GetNumGossipOptions() == 1) then
+			local npcID = GetNPCID()
+			if(npcID == 57850) then
+				return SelectGossipOption(1)
+			end
+
 			local _, instance = GetInstanceInfo()
 			if instance ~= "raid" then
 				local _, type = GetGossipOptions()
-				if(type == "gossip") then
+				if type == "gossip" and not ignoreGossipNPC[npcID] then
 					SelectGossipOption(1)
 					return
 				end
@@ -171,11 +201,11 @@ local function LoadFunc()
         [29464] = true, -- Soothsayer's Runes
     }
 
-    local darkmoonNPC = {
-        [57850] = true, -- Teleportologist Fozlebub
-        [55382] = true, -- Darkmoon Faire Mystic Mage (Horde)
-        [54334] = true, -- Darkmoon Faire Mystic Mage (Alliance)
-    }
+	local darkmoonNPC = {
+		[57850] = true, -- Teleportologist Fozlebub
+		[55382] = true, -- Darkmoon Faire Mystic Mage (Horde)
+		[54334] = true, -- Darkmoon Faire Mystic Mage (Alliance)
+	}
 
     QuickQuest:Register("GOSSIP_CONFIRM", function(index)
 		local npcID = GetNPCID()
@@ -231,6 +261,11 @@ local function LoadFunc()
 		end
     end)
 
+	local cashRewards = {
+		[45724] = 1e5, -- Champion's Purse
+		[64491] = 2e6, -- Royal Reward
+	}
+
     QuickQuest:Register("QUEST_COMPLETE", function()
 		local choices = GetNumQuestChoices()
 		if(choices <= 1) then
@@ -242,11 +277,7 @@ local function LoadFunc()
 				local link = GetQuestItemLink("choice", index)
 				if(link) then
 					local _, _, _, _, _, _, _, _, _, _, value = GetItemInfo(link)
-
-					if(string.match(link, "item:45724:")) then
-						-- Champion's Purse, contains 10 gold
-						value = 1e5
-					end
+					value = cashRewards[tonumber(string.match(link, "item:(%d+):"))] or value
 
 					if(value > bestValue) then
 						bestValue, bestIndex = value, index
