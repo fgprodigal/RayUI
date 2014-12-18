@@ -1750,9 +1750,8 @@ R["Watcher"] = {
                 { spellID = 176882, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 空無裂片（智力，使用）
                 { spellID = 176875, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 戰歌印記（急速，附魔，觸發）
-                { spellID = 159675, unitId = "player", caster = "player", filter = "BUFF" },
 				
+				--------------------------------------------------------------------------------
                 -- 治療
                 -- 秦璽的極化徽印 (智力, 觸發)
                 { spellID = 126588, unitId = "player", caster = "player", filter = "BUFF" },
@@ -1764,7 +1763,7 @@ R["Watcher"] = {
                 { spellID = 148911, unitId = "player", caster = "player", filter = "BUFF" },
                 -- 傲慢之棱光囚笼（智力，觸發）
                 { spellID = 146314, unitId = "player", caster = "player", filter = "BUFF" },
-
+				--------------------------------------------------------------------------------
                 --專業技能
                 -- 神經突觸彈簧
                 { spellID = 126734, unitId = "player", caster = "player", filter = "BUFF", fuzzy = true },
@@ -1774,10 +1773,12 @@ R["Watcher"] = {
                 { spellID = 55001, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 德萊尼煉金石
                 { spellID = 60234, unitId = "player", caster = "player", filter = "BUFF" },
-
+				--------------------------------------------------------------------------------
                 --武器附魔
                 --玉魂
                 { spellID = 104993, unitId = "player", caster = "all", filter = "BUFF" },
+				-- 戰歌印記（急速，附魔，觸發）
+                { spellID = 159675, unitId = "player", caster = "all", filter = "BUFF" },
 
                 --藥水
                 -- Draenic Agility Potion
@@ -1796,7 +1797,7 @@ R["Watcher"] = {
                 { spellID = 105706, unitId = "player", caster = "player", filter = "BUFF" },
                 --卡法加速
                 { spellID = 125282, unitId = "player", caster = "player", filter = "BUFF" },
-
+				--------------------------------------------------------------------------------
                 --特殊buff
                 -- 偷天換日
                 { spellID = 57933, unitId = "player", caster = "all", filter = "BUFF" },
