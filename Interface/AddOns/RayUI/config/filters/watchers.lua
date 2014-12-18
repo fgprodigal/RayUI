@@ -1759,6 +1759,8 @@ R["Watcher"] = {
                 { spellID = 146314, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 動亂聚焦水晶（智力，使用）
                 { spellID = 176882, unitId = "player", caster = "player", filter = "BUFF" },
+				-- 空無裂片（智力，使用）
+                { spellID = 176875, unitId = "player", caster = "player", filter = "BUFF" },
 
                 --專業技能
                 -- 神經突觸彈簧
