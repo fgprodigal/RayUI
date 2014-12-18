@@ -1746,6 +1746,13 @@ R["Watcher"] = {
                 { spellID = 126577, unitId = "player", caster = "player", filter = "BUFF" },
                 -- 完美瞄準 (智力, 觸發)
                 { spellID = 138963, unitId = "player", caster = "player", filter = "BUFF" },
+				-- 動亂聚焦水晶（智力，使用）
+                { spellID = 176882, unitId = "player", caster = "player", filter = "BUFF" },
+				-- 空無裂片（智力，使用）
+                { spellID = 176875, unitId = "player", caster = "player", filter = "BUFF" },
+				-- 戰歌印記（急速，附魔，觸發）
+                { spellID = 159675, unitId = "player", caster = "player", filter = "BUFF" },
+				
                 -- 治療
                 -- 秦璽的極化徽印 (智力, 觸發)
                 { spellID = 126588, unitId = "player", caster = "player", filter = "BUFF" },
@@ -1757,10 +1764,6 @@ R["Watcher"] = {
                 { spellID = 148911, unitId = "player", caster = "player", filter = "BUFF" },
                 -- 傲慢之棱光囚笼（智力，觸發）
                 { spellID = 146314, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 動亂聚焦水晶（智力，使用）
-                { spellID = 176882, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 空無裂片（智力，使用）
-                { spellID = 176875, unitId = "player", caster = "player", filter = "BUFF" },
 
                 --專業技能
                 -- 神經突觸彈簧
