@@ -88,6 +88,10 @@ local function LoadFunc()
         end
     end
 
+	local function GetNPCID()
+		return tonumber(string.match(UnitGUID("npc") or "", "Creature%-.-%-.-%-.-%-.-%-(.-)%-"))
+	end
+
 	local ignoreQuestNPC = {
 		[88570] = true, -- Fate-Twister Tiklal
 		[87391] = true, -- Fate-Twister Seress
@@ -127,10 +131,6 @@ local function LoadFunc()
     local function IsGossipQuestTrivial(index)
         return not not select(((index * 6) - 6) + 3, GetGossipAvailableQuests())
     end
-
-	local function GetNPCID()
-		return tonumber(string.match(UnitGUID('npc') or '', 'Creature%-.-%-.-%-.-%-.-%-(.-)%-'))
-	end
 
 	local ignoreGossipNPC = {
 		-- Bodyguards
