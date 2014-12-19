@@ -388,12 +388,6 @@ function RM:CreateReminder(name, index)
 	self.CreatedReminders[name] = frame
 end
 
-function RM:UpdateAllIcons()
-	for name, frame in pairs(self.CreatedReminders) do
-		RM.UpdateReminderIcon(frame)
-	end
-end
-
 function RM:CheckForNewReminders()
 	local db = P["Reminder"].filters[R.myclass]
 	if not db then return end
@@ -403,8 +397,6 @@ function RM:CheckForNewReminders()
 		index = index + 1
 		self:CreateReminder(groupName, index)
 	end
-
-	self:UpdateAllIcons()
 end
 
 function RM:Initialize()
