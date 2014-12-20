@@ -72,3 +72,17 @@ G.UnitFrames.ChannelTicks = {
 	[SpellName(101546)] = 3, -- spinning crane kick
 	[SpellName(115175)] = 9, -- smoothing mist
 }
+
+local f = CreateFrame("Frame")
+f:RegisterEvent("PLAYER_ENTERING_WORLD")
+f:SetScript("OnEvent", function(self)
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+
+	local mfTicks = 3
+	if string.lower((UnitClass("player"))) == "priest" and IsSpellKnown(157223) then --Enhanced Mind Flay
+		mfTicks = 4
+	end
+
+	G.UnitFrames.ChannelTicks[SpellName(15407)] = mfTicks -- "Mind Flay"
+	G.UnitFrames.ChannelTicks[SpellName(129197)] = mfTicks -- "Mind Flay (Insanity)"
+end)
