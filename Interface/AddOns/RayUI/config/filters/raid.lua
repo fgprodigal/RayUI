@@ -100,6 +100,73 @@ G.Raid.RaidDebuffs = {
 
 	-- Raid Debuffs
 	instances = {
+		[994] = { 
+            --悬槌堡 
+            -- 1 卡加斯 
+   
+            [SpellName(158986)] = Defaults(2), -- 冲锋 
+            [SpellName(159178)] = Defaults(5), -- 迸裂创伤         
+            [SpellName(162497)] = Defaults(3), -- 搜寻猎物       
+            [SpellName(163130)] = Defaults(3), -- 着火 
+   
+            -- 2 屠夫 
+   
+            [SpellName(156151)] = Defaults(3), -- 捶肉槌 
+            [SpellName(156147)] = Defaults(5), -- 切肉刀           
+            [SpellName(156152)] = Defaults(3), -- 龟裂创伤         
+            [SpellName(163046)] = Defaults(4), -- 白鬼硫酸 
+   
+            -- 3 泰克图斯 
+
+            [SpellName(162346)] = Defaults(4),  -- 晶化弹幕  点名 
+            [SpellName(162370)] = Defaults(3), -- 晶化弹幕   踩到 
+   
+            -- 4  布兰肯斯波 
+     
+            [SpellName(163242)] = Defaults(5), -- 感染孢子 
+            [SpellName(159426)] = Defaults(5), -- 回春孢子 
+            [SpellName(163241)] = Defaults(4), -- 溃烂 
+            [SpellName(159220)] = Defaults(2),  -- 死疽吐息   
+            [SpellName(160179)] = Defaults(2),  -- 蚀脑真菌 
+            [SpellName(165223)] = Defaults(6), -- 爆裂灌注 
+            [SpellName(163666)] = Defaults(3), -- 脉冲高热 
+   
+            -- 5  独眼魔双子 
+   
+            [SpellName(155569)] = Defaults(3), -- 受伤 
+            [SpellName(158241)] = Defaults(4), -- 烈焰   
+            [SpellName(163372)] = Defaults(4), -- 奥能动荡 
+            [SpellName(167200)] = Defaults(3), -- 奥术致伤 
+            [SpellName(163297)] = Defaults(3), -- 扭曲奥能 
+
+   
+            -- 6 克拉戈 
+   
+            [SpellName(172813)] = Defaults(5), -- 魔能散射：冰霜 
+            [SpellName(162185)] = Defaults(5), -- 魔能散射：火焰 
+            [SpellName(162184)] = Defaults(3), -- 魔能散射：暗影 
+            [SpellName(162186)] = Defaults(2), -- 魔能散射：奥术 
+            [SpellName(161345)] = Defaults(2), -- 压制力场 
+            [SpellName(161242)] = Defaults(3), -- 废灵标记 
+            [SpellName(172886)] = Defaults(4), -- 废灵璧垒 
+            [SpellName(172895)] = Defaults(4), -- 魔能散射：邪能  点名 
+            [SpellName(172917)] = Defaults(4), -- 魔能散射：邪能  踩到 
+            [SpellName(163472)] = Defaults(2), -- 统御之力 
+   
+            -- 7 元首 
+   
+            [SpellName(157763)] = Defaults(3),  -- 锁定         
+            [SpellName(159515)] = Defaults(4), -- 狂莽突击         
+            [SpellName(156225)] = Defaults(4), -- 烙印       
+            [SpellName(164004)] = Defaults(4), -- 烙印：偏移         
+            [SpellName(164006)] = Defaults(4), -- 烙印：强固         
+            [SpellName(164005)] = Defaults(4), -- 烙印：复制         
+            [SpellName(158605)] = Defaults(2), -- 混沌标记         
+            [SpellName(164176)] = Defaults(2), -- 混沌标记：偏移           
+            [SpellName(164178)] = Defaults(2), -- 混沌标记：强固         
+            [SpellName(164191)] = Defaults(2), -- 混沌标记：复制 
+   
+        }, 
 		[953] = {
 			--Siege of Orgrimmar
 			--Immerseus
