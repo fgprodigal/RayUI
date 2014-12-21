@@ -48,7 +48,7 @@ R.Options = {
 					type = "select",
 					values = {
 						[1] = "k,m",
-						[2] = L["万"] .. "," .. L["亿"],
+						[2] = FIRST_NUMBER_CAP .. "," .. SECOND_NUMBER_CAP,
 					},
 					hidden = function()
 						return GetLocale()~="zhCN" and GetLocale()~="zhTW"

@@ -77,10 +77,6 @@ P["Buff"]={
 	enable = true,
 }
 
-P["CooldownFlash"]={
-	enable = true,
-}
-
 G["UnitFrames"]={}
 
 P["UnitFrames"]={

@@ -52,8 +52,6 @@ L["RAID40"] = "Raid40"
 L["ARENA"] = "Arena"
 
 L["数字单位"] = ""
-L["万"] = ""
-L["亿"] = ""
 
 L["您不能在战斗中设定快捷键"] = "You can't change keybindings in combat."
 L["未绑定."] = "Not bounded"
