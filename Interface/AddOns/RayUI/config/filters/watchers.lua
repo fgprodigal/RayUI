@@ -199,6 +199,10 @@ R["Watcher"] = {
                 direction = "LEFT",
                 setpoint = positions.player_buff_icon,
                 size = 28,
+                --狙击训练
+                { spellID = 168811, unitId = "player", caster = "player", filter = "BUFF" },
+				--狙击训练；最近移动
+                { spellID = 168809, unitId = "player", caster = "player", filter = "BUFF" },
 
             },
             {
@@ -235,6 +239,8 @@ R["Watcher"] = {
                 { spellID = 34720, unitId = "player", caster = "player", filter = "BUFF" },
                 --4T13
                 { spellID = 105919, unitId = "player", caster = "player", filter = "BUFF" },
+                --稳固集中
+                { spellID = 177668, unitId = "player", caster = "player", filter = "BUFF" },
                 --擊殺命令
                 { spellID = 34026, filter = "CD" },
                 --爆裂射擊
@@ -254,6 +260,9 @@ R["Watcher"] = {
                 { spellID = 3674, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --爆裂射擊
                 { spellID = 53301, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --黑鸦
+                { spellID = 131894, unitId = "target", caster = "player", filter = "DEBUFF" },
+                
             },
             {
                 name = "焦点buff&debuff",
