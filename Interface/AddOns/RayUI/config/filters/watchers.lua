@@ -100,7 +100,25 @@ R["Watcher"] = {
                 --野蛮咆哮雕文
                 { spellID = 174544, unitId = "player", caster = "player", filter = "BUFF" },
                 --血腥爪击
-                { spellID = 145152, unitId = "player", caster = "player", filter = "BUFF" },		
+                { spellID = 145152, unitId = "player", caster = "player", filter = "BUFF" },
+                --粉碎
+                { spellID = 158792, unitId = "player", caster = "player", filter = "BUFF" },
+                --鬃毛倒竖
+                { spellID = 155835, unitId = "player", caster = "player", filter = "BUFF" },
+                --塞纳里奥结界
+                { spellID = 102351, unitId = "player", caster = "player", filter = "BUFF" },
+                --塞纳里奥结界:触发
+                { spellID = 102352, unitId = "player", caster = "player", filter = "BUFF" },
+                --狂暴:熊形态
+                { spellID = 50334, unitId = "player", caster = "player", filter = "BUFF" },
+                --化身:乌索克之子
+                { spellID = 102558, unitId = "player", caster = "player", filter = "BUFF" },
+                --巨熊之力
+                { spellID = 159233, unitId = "player", caster = "player", filter = "BUFF" },
+                --尖牙与利爪
+                { spellID = 135286, unitId = "player", caster = "player", filter = "BUFF" },
+                --野蛮防御
+                { spellID = 132402, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -128,6 +146,8 @@ R["Watcher"] = {
                 { spellID = 22570, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --斜掠
                 { spellID = 155722, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --痛击
+                { spellID = 77758, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
             {
                 name = "焦点buff&debuff",
