@@ -46,8 +46,12 @@ local function CreateShadow(f, t, thickness)
 	border:SetFrameLevel(frameLevel)
 	border:SetOutside(f, 1, 1)
     border:SetTemplate("Border")
-	f.border = border
-	f.border.GetFrameLevel = R.dummy  -- fuck you LibStrataFix
+    hooksecurefunc(border, "SetFrameLevel", function(self, value)
+    	if value > frameLevel + 1 then
+    		border:SetFrameLevel(frameLevel)
+    	end
+    end)
+	f.border = border 
 
 	local shadow = CreateFrame("Frame", nil, border)
 	shadow:SetFrameLevel(frameLevel - 1)
@@ -62,8 +66,12 @@ local function CreateShadow(f, t, thickness)
 	})
 	shadow:SetBackdropColor( backdropr, backdropg, backdropb, backdropa )
 	shadow:SetBackdropBorderColor( borderr, borderg, borderb )
+	hooksecurefunc(shadow, "SetFrameLevel", function(self, value)
+    	if value > frameLevel then
+    		shadow:SetFrameLevel(frameLevel - 1)
+    	end
+    end)
 	f.shadow = shadow
-	f.shadow.GetFrameLevel = R.dummy  -- fuck you LibStrataFix
 end
 
 local function SetTemplate(f, t, glossTex)
@@ -267,7 +275,7 @@ local function Kill(object)
 		object:UnregisterAllEvents()
 		object:SetParent(R.HiddenFrame)
 	else
-		object.Show = R.dummy
+		object.Show = object.Hide
 	end
 	object:Hide()
 end

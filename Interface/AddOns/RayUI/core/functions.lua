@@ -371,6 +371,7 @@ local healingClasses = {
 	PRIEST = {1, 2}
 }
 
+local gladStance = GetSpellInfo(156291)
 function R:CheckRole()
 	local talentTree = GetSpecialization()
 	local IsInPvPGear = false;
@@ -387,7 +388,7 @@ function R:CheckRole()
 		self.Role = roles[self.myclass][talentTree]
 	end
 
-	if self.Role == "Tank" and (IsInPvPGear or IsSpellKnown(156291)) then
+	if self.Role == "Tank" and (IsInPvPGear or UnitBuff("player", gladStance)) then
 		self.Role = "Melee"
 	end
 

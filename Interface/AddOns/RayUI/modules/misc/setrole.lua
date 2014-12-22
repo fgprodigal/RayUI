@@ -8,6 +8,8 @@ local t = {
 	["Tank"] = "TANK",
 }
 
+local gladStance = GetSpellInfo(156291)
+
 local function LoadFunc()
 	local function SetRole()
 		local spec = GetSpecialization()
@@ -19,7 +21,11 @@ local function LoadFunc()
 					if R.isHealer then
 						UnitSetRole("player", "HEALER")
 					else
-						UnitSetRole("player", t[R.Role])
+						local tempRole
+						if R.Role == "Tank" and UnitBuff("player", gladStance) then
+							tempRole = "Melee"
+						end
+						UnitSetRole("player", t[tempRole or R.Role])
 					end
 				end
 			end
