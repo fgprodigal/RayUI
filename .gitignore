@@ -13,10 +13,8 @@
 
 /Interface/AddOns*/*
 /Interface/AddOns/RayUI/core/test.lua
-!/Interface/AddOns/!BugGrabber/
 !/Interface/AddOns/Bimbo/
 !/Interface/AddOns/Buffet/
-!/Interface/AddOns/BugSack/
 !/Interface/AddOns/Foglight/
 !/Interface/AddOns/IntelliMount/
 !/Interface/AddOns/Multishot/
