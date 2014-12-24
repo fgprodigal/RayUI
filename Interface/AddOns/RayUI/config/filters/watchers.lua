@@ -557,6 +557,10 @@ R["Watcher"] = {
                 { spellID = 112048, unitId = "player", caster = "player", filter = "BUFF" },
                 --最后通牒
                 { spellID = 122510, unitId = "player", caster = "player", filter = "BUFF" },
+                --剑在人在
+                { spellID = 118038, unitId = "player", caster = "player", filter = "BUFF" },
+                --盾牌冲锋
+                { spellID = 156321, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
