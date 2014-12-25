@@ -10,6 +10,35 @@ local function SkinSkada()
     local windowWidth = 280
 
 	Skada.classcolors = R.colors.class
+
+	local AcceptFrame
+	function Skada:ShowPopup()
+		if not AcceptFrame then
+			AcceptFrame = CreateFrame("Frame", "AcceptFrame", UIParent)
+			S:SetBD(AcceptFrame)
+			AcceptFrame:SetPoint("CENTER", UIParent, "CENTER")
+			AcceptFrame:SetFrameStrata("DIALOG")
+			AcceptFrame.Text = AcceptFrame:CreateFontString(nil, "OVERLAY")
+			AcceptFrame.Text:SetFont(R["media"].font, 14)
+			AcceptFrame.Text:SetPoint("TOP", AcceptFrame, "TOP", 0, -10)
+			AcceptFrame.Accept = CreateFrame("Button", nil, AcceptFrame, "OptionsButtonTemplate")
+			S:Reskin(AcceptFrame.Accept)
+			AcceptFrame.Accept:SetSize(70, 25)
+			AcceptFrame.Accept:SetPoint("RIGHT", AcceptFrame, "BOTTOM", -10, 20)
+			AcceptFrame.Accept:SetFormattedText("|cFFFFFFFF%s|r", YES)
+			AcceptFrame.Close = CreateFrame("Button", nil, AcceptFrame, "OptionsButtonTemplate")
+			S:Reskin(AcceptFrame.Close)
+			AcceptFrame.Close:SetSize(70, 25)
+			AcceptFrame.Close:SetPoint("LEFT", AcceptFrame, "BOTTOM", 10, 20)
+			AcceptFrame.Close:SetScript("OnClick", function(self) self:GetParent():Hide() end)
+			AcceptFrame.Close:SetFormattedText("|cFFFFFFFF%s|r", NO)
+		end
+		AcceptFrame.Text:SetText(LibStub("AceLocale-3.0"):GetLocale("Skada", false)["Do you want to reset Skada?"])
+		AcceptFrame:SetSize(AcceptFrame.Text:GetStringWidth() + 50, AcceptFrame.Text:GetStringHeight() + 60)
+		AcceptFrame.Accept:SetScript("OnClick", function(self) Skada:Reset() self:GetParent():Hide() end)
+		AcceptFrame:Show()
+	end
+
 	local barmod = Skada.displays["bar"]
 	-- Used to strip unecessary options from the in-game config
 	local function StripOptions(options)
