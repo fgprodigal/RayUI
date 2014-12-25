@@ -5,6 +5,7 @@ local AceConfig = LibStub("AceConfig-3.0")
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 local DEFAULT_WIDTH = 850
 local DEFAULT_HEIGHT = 650
+AddOn.callbacks = AddOn.callbacks or LibStub("CallbackHandler-1.0"):New(AddOn)
 AddOn.DF = {}
 AddOn.DF["profile"] = {}
 AddOn.DF["global"] = {}
