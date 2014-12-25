@@ -302,6 +302,7 @@ function R:Initialize()
 	self:RegisterEvent("CHARACTER_POINTS_CHANGED", "CheckRole")
 	self:RegisterEvent("UNIT_INVENTORY_CHANGED", "CheckRole")
 	self:RegisterEvent("UPDATE_BONUS_ACTIONBAR", "CheckRole")
+	self:RegisterEvent("UPDATE_SHAPESHIFT_FORM", "CheckRole")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:Delay(5, function() collectgarbage("collect") end)
 
@@ -373,6 +374,7 @@ local healingClasses = {
 
 local gladStance = GetSpellInfo(156291)
 function R:CheckRole()
+	local role = self.Role
 	local talentTree = GetSpecialization()
 	local IsInPvPGear = false;
 	local resilperc = GetCombatRatingBonus(COMBAT_RATING_RESILIENCE_PLAYER_DAMAGE_TAKEN)
@@ -422,6 +424,10 @@ function R:CheckRole()
 		end
 	end
 	self.isHealer = false
+
+	if(self.Role ~= role) then
+		self.callbacks:Fire("RoleChanged")
+	end
 end
 
 local tmp={}
