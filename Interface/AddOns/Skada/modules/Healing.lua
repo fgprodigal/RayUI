@@ -7,10 +7,10 @@ Skada:AddLoadableModule("Healing", function(Skada, L)
 	local healedmod = Skada:NewModule(L["Healed players"])
 	local healingtaken = Skada:NewModule(L["Healing taken"])
 
-	local function log_heal(set, heal, is_absorb)
+	local function log_heal(set, heal)
 		-- Get the player from set.
 		local player = Skada:get_player(set, heal.playerid, heal.playername)
-		if player then
+		if player and heal and heal.spellname then
 			-- Subtract overhealing
 			local amount = math.max(0, heal.amount - heal.overhealing)
 			-- Add absorbed
@@ -122,7 +122,28 @@ Skada:AddLoadableModule("Healing", function(Skada, L)
 		end
 	end
 
+	local function SpellAbsorbed(timestamp, eventtype, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, ...)
+        local chk = ...
+        local spellId, spellName, spellSchool, aGUID, aName, aFlags, aRaidFlags, aspellId, aspellName, aspellSchool, aAmount
 
+        if type(chk) == "number" then
+            -- Spell event
+            spellId, spellName, spellSchool, aGUID, aName, aFlags, aRaidFlags, aspellId, aspellName, aspellSchool, aAmount = ...
+            
+            if aAmount then
+                SpellHeal(timestamp, eventtype, aGUID, aName, aFlags, dstGUID, dstName, dstFlags, aspellId, aspellName, aspellSchool, aAmount, 0, 0)
+            end
+        else
+            -- Swing event
+            aGUID, aName, aFlags, aRaidFlags, aspellId, aspellName, aspellSchool, aAmount = ...
+
+            if aAmount then
+                SpellHeal(timestamp, eventtype, aGUID, aName, aFlags, dstGUID, dstName, dstFlags, aspellId, aspellName, nil, aAmount, 0, 0)
+            end
+        end
+    end
+
+    --[[
 	local shields = {}
 
 	local function AuraApplied(timestamp, eventtype, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, ...)
@@ -211,8 +232,7 @@ Skada:AddLoadableModule("Healing", function(Skada, L)
 			end
 		end
 	end
-
-
+    ]]
 
 	local function getHPS(set, player)
 		local totaltime = Skada:PlayerActiveTime(set, player)
@@ -425,12 +445,13 @@ Skada:AddLoadableModule("Healing", function(Skada, L)
 
 		-- handlers for Healing spells
 		Skada:RegisterForCL(SpellHeal, 'SPELL_HEAL', {src_is_interesting = true})
+		Skada:RegisterForCL(SpellAbsorbed, 'SPELL_ABSORBED', {dst_is_interesting = true})
 		Skada:RegisterForCL(SpellHeal, 'SPELL_PERIODIC_HEAL', {src_is_interesting = true})
 
 		-- handlers for Absorption spells
-		Skada:RegisterForCL(AuraApplied, 'SPELL_AURA_APPLIED', {src_is_interesting_nopets = true})
-		Skada:RegisterForCL(AuraRefresh, 'SPELL_AURA_REFRESH', {src_is_interesting_nopets = true})
-		Skada:RegisterForCL(AuraRemoved, 'SPELL_AURA_REMOVED', {src_is_interesting_nopets = true})
+		--Skada:RegisterForCL(AuraApplied, 'SPELL_AURA_APPLIED', {src_is_interesting_nopets = true})
+		--Skada:RegisterForCL(AuraRefresh, 'SPELL_AURA_REFRESH', {src_is_interesting_nopets = true})
+		--Skada:RegisterForCL(AuraRemoved, 'SPELL_AURA_REMOVED', {src_is_interesting_nopets = true})
 
 		Skada:AddMode(self)
 		Skada:AddMode(healingtaken)
@@ -487,7 +508,7 @@ Skada:AddLoadableModule("Healing", function(Skada, L)
 		set.overhealing = set.overhealing or 0
 		set.healingabsorbed = set.healingabsorbed or 0
 		set.multistrikes = set.multistrikes or 0
-		wipe(shields)
+		--wipe(shields)
 	end
 end)
 

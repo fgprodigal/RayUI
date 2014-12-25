@@ -51,24 +51,23 @@ Skada:AddLoadableModule("Damage", function(Skada, L)
 			-- Get the spell from player.
 			local spell = player.damagespells[dmg.spellname]
 
-			spell.totalhits = spell.totalhits + 1
+			if not dmg.multistrike then
+				spell.totalhits = spell.totalhits + 1
 
-			if spell.max == nil or amount > spell.max then
-				spell.max = amount
-			end
+				if spell.max == nil or amount > spell.max then
+					spell.max = amount
+				end
 
-			if (spell.min == nil or amount < spell.min) and not dmg.missed then
-				spell.min = amount
+				if (spell.min == nil or amount < spell.min) and not dmg.missed then
+					spell.min = amount
+				end
 			end
 
 			spell.damage = spell.damage + amount
 
-			-- Multistrikes can crit.
 			if dmg.multistrike then
 				spell.multistrike = (spell.multistrike or 0) + 1
-			end
-			-- These below are mutually exclusive.
-			if dmg.critical then
+			elseif dmg.critical then
 				spell.critical = (spell.critical or 0) + 1
 			elseif dmg.missed ~= nil then
 				spell[dmg.missed] = (spell[dmg.missed] or 0) + 1
@@ -158,6 +157,27 @@ Skada:AddLoadableModule("Damage", function(Skada, L)
 		end
 	end
 
+	local function SpellAbsorbed(timestamp, eventtype, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, ...)
+        local chk = ...
+        local spellId, spellName, spellSchool, aGUID, aName, aFlags, aRaidFlags, aspellId, aspellName, aspellSchool, aAmount
+
+        if type(chk) == "number" then
+            -- Spell event
+            spellId, spellName, spellSchool, aGUID, aName, aFlags, aRaidFlags, aspellId, aspellName, aspellSchool, aAmount = ...
+            
+            if aAmount then
+                SpellDamage(timestamp, eventtype, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, spellId, spellName, spellSchool, aAmount)
+            end
+        else
+            -- Swing event
+            aGUID, aName, aFlags, aRaidFlags, aspellId, aspellName, aspellSchool, aAmount = ...
+
+            if aAmount then
+                SwingDamage(timestamp, eventtype, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, aAmount)   
+            end
+        end
+    end
+        
 	local function SwingMissed(timestamp, eventtype, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, missed)
 		if srcGUID ~= dstGUID then
 			-- Melee misses
@@ -500,6 +520,7 @@ Skada:AddLoadableModule("Damage", function(Skada, L)
 
 		Skada:RegisterForCL(SpellDamage, 'DAMAGE_SHIELD', {src_is_interesting = true, dst_is_not_interesting = true})
 		Skada:RegisterForCL(SpellDamage, 'SPELL_DAMAGE', {src_is_interesting = true, dst_is_not_interesting = true})
+		Skada:RegisterForCL(SpellAbsorbed, 'SPELL_ABSORBED', {src_is_interesting = true, dst_is_not_interesting = true})
 		Skada:RegisterForCL(SpellDamage, 'SPELL_PERIODIC_DAMAGE', {src_is_interesting = true, dst_is_not_interesting = true})
 		Skada:RegisterForCL(SpellDamage, 'SPELL_BUILDING_DAMAGE', {src_is_interesting = true, dst_is_not_interesting = true})
 		Skada:RegisterForCL(SpellDamage, 'RANGE_DAMAGE', {src_is_interesting = true, dst_is_not_interesting = true})
