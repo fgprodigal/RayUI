@@ -17,10 +17,8 @@ Button:SetAttribute("_onattributechanged", [[
 			self:ClearBindings()
 		end
 	end
-
 	if(self:IsShown() and (name == "item" or name == "binding")) then
 		self:ClearBindings()
-
 		local key = GetBindingKey("EXTRAACTIONBUTTON1")
 		if(key) then
 			self:SetBindingClick(1, key, self, "LeftButton")
@@ -28,21 +26,26 @@ Button:SetAttribute("_onattributechanged", [[
 	end
 ]])
 
+local function UpdateCooldown(self)
+	if(self:IsShown()) then
+		local start, duration, enable = GetItemCooldown(self.itemID)
+		if(duration > 0) then
+			self.Cooldown:SetCooldown(start, duration)
+			self.Cooldown:Show()
+		else
+			self.Cooldown:Hide()
+		end
+	end
+end
+
 Button:RegisterEvent("PLAYER_LOGIN")
 Button:SetScript("OnEvent", function(self, event)
 	if(event == "BAG_UPDATE_COOLDOWN") then
-		if(self:IsShown()) then
-			local start, duration, enable = GetItemCooldown(self.itemID)
-			if(duration > 0) then
-				self.Cooldown:SetCooldown(start, duration)
-				self.Cooldown:Show()
-			else
-				self.Cooldown:Hide()
-			end
-		end
+		UpdateCooldown(self)
 	elseif(event == "PLAYER_REGEN_ENABLED") then
 		self:SetAttribute("item", self.attribute)
 		self:UnregisterEvent(event)
+		UpdateCooldown(self)
 	elseif(event == "UPDATE_BINDINGS") then
 		if(self:IsShown()) then
 			self:SetItem()
@@ -54,6 +57,7 @@ Button:SetScript("OnEvent", function(self, event)
 		self:SetScale(ExtraActionButton1:GetScale())
 		self:SetScript("OnLeave", GameTooltip_Hide)
 		self:SetAttribute("type", "item")
+		self:SetToplevel(true)
 		self.updateTimer = 0
 		self.rangeTimer = 0
 		self:Hide()
@@ -105,27 +109,22 @@ end)
 Button:SetScript("OnUpdate", function(self, elapsed)
 	if(self.rangeTimer > TOOLTIP_UPDATE_TIME) then
 		local HotKey = self.HotKey
-		local Icon = self.Icon
 		local inRange = IsItemInRange(self.itemLink, "target")
 		if(HotKey:GetText() == RANGE_INDICATOR) then
 			if(inRange == false) then
 				HotKey:SetTextColor(1, 0.1, 0.1)
 				HotKey:Show()
-				Icon:SetVertexColor(1, 0.3, 0.1)
 			elseif(inRange) then
 				HotKey:SetTextColor(1, 1, 1)
 				HotKey:Show()
-				Icon:SetVertexColor(1, 1, 1)
 			else
 				HotKey:Hide()
 			end
 		else
 			if(inRange == false) then
 				HotKey:SetTextColor(1, 0.1, 0.1)
-				Icon:SetVertexColor(1, 0.3, 0.1)
 			else
 				HotKey:SetTextColor(1, 1, 1)
-				Icon:SetVertexColor(1, 1, 1)
 			end
 		end
 
@@ -144,6 +143,18 @@ end)
 
 local zoneWide = {
 	[14108] = 541,
+	[13998] = 11,
+	[25798] = 61, -- quest is bugged, has no zone
+	[25799] = 61, -- quest is bugged, has no zone
+	[25112] = 161,
+	[25111] = 161,
+	[24735] = 201,
+}
+
+local blacklist = {
+	[113191] = true,
+	[110799] = true,
+	[109164] = true,
 }
 
 function Button:SetItem(itemLink, texture)
@@ -152,10 +163,17 @@ function Button:SetItem(itemLink, texture)
 			return
 		end
 
+		local itemID, itemName = string.match(itemLink, '|Hitem:(.-):.-|h%[(.+)%]|h')
+
 		self.Icon:SetTexture(texture)
 		self.Artwork:SetTexture(GetOverrideBarSkin() or DefaultExtraActionStyle)
-		self.itemID, self.itemName = string.match(itemLink, "|Hitem:(.-):.-|h%[(.+)%]|h")
+		self.itemID = tonumber(itemID)
+		self.itemName = itemName
 		self.itemLink = itemLink
+
+		if(blacklist[self.itemID]) then
+			return
+		end
 	end
 
 	local HotKey = self.HotKey
@@ -187,7 +205,9 @@ function Button:RemoveItem()
 	end
 end
 
+local ticker
 function Button:Update()
+	local numItems = 0
 	local shortestDistance = 62500 -- 250 yards²
 	local closestQuestLink, closestQuestTexture
 
@@ -208,6 +228,8 @@ function Button:Update()
 						closestQuestTexture = texture
 					end
 				end
+
+				numItems = numItems + 1
 			end
 		end
 	end
@@ -216,5 +238,14 @@ function Button:Update()
 		self:SetItem(closestQuestLink, closestQuestTexture)
 	elseif(self:IsShown()) then
 		self:RemoveItem()
+	end
+
+	if(numItems > 0 and not ticker) then
+		ticker = C_Timer.NewTicker(30, function() -- might want to lower this
+			Button:Update()
+		end)
+	elseif(numItems == 0 and ticker) then
+		ticker:Cancel()
+		ticker = nil
 	end
 end
