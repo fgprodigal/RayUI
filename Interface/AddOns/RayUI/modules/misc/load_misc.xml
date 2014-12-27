@@ -15,7 +15,6 @@
 	<Script file="merchant.lua"/>
 	<Script file="mirror.lua"/>
 	<Script file="objectivetracker.lua"/>
-	<Script file="OneClickEnchantScroll.lua"/>
 	<Script file="quests.lua"/>
 	<Script file="raidBuffReminder.lua"/>
 	<Script file="raidCD.lua"/>
