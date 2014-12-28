@@ -55,8 +55,6 @@ R["Watcher"] = {
                 setpoint = positions.player_proc_icon,
                 size = 38,
 
-                --坚毅
-                { spellID = 158300, unitId = "player", caster = "player", filter = "BUFF" },
                 --日之巅
                 { spellID = 171744, unitId = "player", caster = "player", filter = "BUFF" },
                 --月之巅
@@ -513,8 +511,6 @@ R["Watcher"] = {
                 setpoint = positions.player_proc_icon,
                 size = 38,
 
-                --坚毅
-                { spellID = 158300, unitId = "player", caster = "player", filter = "BUFF" },
                 --驟亡
                 { spellID = 52437, unitId = "player", caster = "player", filter = "BUFF" },
                 --狂暴之怒
@@ -561,6 +557,8 @@ R["Watcher"] = {
                 { spellID = 118038, unitId = "player", caster = "player", filter = "BUFF" },
                 --盾牌冲锋
                 { spellID = 156321, unitId = "player", caster = "player", filter = "BUFF" },
+                --盾牌冲锋
+                { spellID = 169667, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -796,8 +794,6 @@ R["Watcher"] = {
                 setpoint = positions.player_proc_icon,
                 size = 38,
 
-                --坚毅
-                { spellID = 158300, unitId = "player", caster = "player", filter = "BUFF" },
                 --神聖之盾
                 { spellID = 20925, unitId = "player", caster = "player", filter = "BUFF" },
                 --神圣意志
@@ -1433,8 +1429,6 @@ R["Watcher"] = {
                 setpoint = positions.player_proc_icon,
                 size = 38,
 
-                --坚毅
-                { spellID = 158300, unitId = "player", caster = "player", filter = "BUFF" },
                 --血魄護盾
                 { spellID = 77535, unitId = "player", caster = "player", filter = "BUFF" },
                 --血魄轉化
@@ -1566,8 +1560,6 @@ R["Watcher"] = {
                 setpoint = positions.player_proc_icon,
                 size = 38,
 
-                --坚毅
-                { spellID = 158300, unitId = "player", caster = "player", filter = "BUFF" },
                 --虎掌
                 { spellID = 125359, unitId = "player", caster = "player", filter = "BUFF" },
                 --禪心玉

@@ -1,7 +1,7 @@
 local _, ns = ...
 local oUF = RayUF or oUF
 
-local vengeance = GetSpellInfo(93098)
+local vengeance = GetSpellInfo(158300)
 -- local vengeance = GetSpellInfo(76691)
 
 local function valueChanged(self, event, unit)
@@ -20,7 +20,6 @@ local function valueChanged(self, event, unit)
 		local value = select(15, UnitAura("player", vengeance, nil, "PLAYER|HELPFUL")) or -1
 		if value > 0 then
 			if value > bar.max then bar.max = value end
-			-- if value > bar.max then value = bar.max end
 			if value == bar.value then return end
 
 			bar:SetMinMaxValues(0, bar.max)
@@ -31,6 +30,9 @@ local function valueChanged(self, event, unit)
 			if bar.Text then
 				bar.Text:SetText(value)
 			end
+		else
+			bar:Hide()
+			bar.value = 0
 		end
 	elseif bar.showInfight and InCombatLockdown() then
 		bar:Show()
@@ -43,33 +45,13 @@ local function valueChanged(self, event, unit)
 	end
 end
 
-local function maxChanged(self, event, unit)
-	local R, L = unpack(RayUI)
-
-	unit = event == "PLAYER_ENTERING_WORLD" and "player" or unit
-	if unit ~= "player" then return end
-	local bar = self.Vengeance
-
-	if R.Role ~= "Tank" then
-		bar:Hide()
-		return
-	end
-
-	local health = UnitHealthMax(unit)
-	if not health then return end
-	bar.max = health
-end
-
 local function Enable(self, unit)
 	local bar = self.Vengeance
 
 	if bar and unit == "player" then
-		bar.max = 0
+		bar.max = 100
 		bar.value = 0
 		self:RegisterEvent("UNIT_AURA", valueChanged)
-		self:RegisterEvent("PLAYER_ENTERING_WORLD", maxChanged)
-		self:RegisterEvent("UNIT_MAXHEALTH", maxChanged)
-		self:RegisterEvent("UNIT_LEVEL", maxChanged)
 
 		bar:Hide()
 		bar:SetScript("OnEnter", function(self)
@@ -92,9 +74,6 @@ local function Disable(self)
 
 	if bar then
 		self:UnregisterEvent("UNIT_AURA", valueChanged)
-		self:UnregisterEvent("PLAYER_ENTERING_WORLD", maxChanged)
-		self:UnregisterEvent("UNIT_MAXHEALTH", maxChanged)
-		self:UnregisterEvent("UNIT_LEVEL", maxChanged)
 	end
 end
 

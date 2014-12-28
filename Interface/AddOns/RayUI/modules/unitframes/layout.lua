@@ -154,23 +154,23 @@ function UF:DPSLayout(frame, unit)
 		end
 
 		-- Vengeance Bar
-		-- if self.db.vengeance then
-		-- local VengeanceBarHolder = CreateFrame("Frame", nil, frame)
-		-- VengeanceBarHolder:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 317)
-		-- VengeanceBarHolder:Size(ENERGY_WIDTH, ENERGY_HEIGHT)
-		-- local VengeanceBar = CreateFrame("Statusbar", "RayUF_VengeanceBar", VengeanceBarHolder)
-		-- VengeanceBar:SetStatusBarTexture(R["media"].normal)
-		-- VengeanceBar:SetStatusBarColor(unpack(self.db.powerColorClass and oUF.colors.class[R.myclass] or oUF.colors.power["RAGE"]))
-		-- VengeanceBar:SetPoint("CENTER")
-		-- VengeanceBar:Size(ENERGY_WIDTH, ENERGY_HEIGHT)
-		-- VengeanceBar:CreateShadow("Background")
-		-- VengeanceBar.shadow:SetBackdropColor(.12, .12, .12, 1)
-		-- VengeanceBar.Text = VengeanceBar:CreateFontString(nil, "OVERLAY")
-		-- VengeanceBar.Text:SetPoint("CENTER")
-		-- VengeanceBar.Text:SetFont(R["media"].font, R["media"].fontsize + 2, R["media"].fontflag)
-		-- R:CreateMover(VengeanceBarHolder, "VengeanceBarMover", L["复仇条锚点"], true, nil, "ALL,RAID15,RAID25,RAID40")
-		-- frame.Vengeance = VengeanceBar
-		-- end
+		if self.db.vengeance then
+			local VengeanceBarHolder = CreateFrame("Frame", nil, frame)
+			VengeanceBarHolder:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 317)
+			VengeanceBarHolder:Size(ENERGY_WIDTH, ENERGY_HEIGHT)
+			local VengeanceBar = CreateFrame("Statusbar", "RayUF_VengeanceBar", VengeanceBarHolder)
+			VengeanceBar:SetStatusBarTexture(R["media"].normal)
+			VengeanceBar:SetStatusBarColor(unpack(self.db.powerColorClass and oUF.colors.class[R.myclass] or oUF.colors.power["RAGE"]))
+			VengeanceBar:SetPoint("CENTER")
+			VengeanceBar:Size(ENERGY_WIDTH, ENERGY_HEIGHT)
+			VengeanceBar:CreateShadow("Background")
+			VengeanceBar.shadow:SetBackdropColor(.12, .12, .12, 1)
+			VengeanceBar.Text = VengeanceBar:CreateFontString(nil, "OVERLAY")
+			VengeanceBar.Text:SetPoint("CENTER")
+			VengeanceBar.Text:SetFont(R["media"].font, R["media"].fontsize + 2, R["media"].fontflag)
+			R:CreateMover(VengeanceBarHolder, "VengeanceBarMover", L["复仇条锚点"], true, nil, "ALL,RAID15,RAID25,RAID40")
+			frame.Vengeance = VengeanceBar
+		end
 
 		-- CastBar
 		local castbar = self:ConstructCastBar(frame)
