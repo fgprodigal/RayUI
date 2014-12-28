@@ -38,7 +38,7 @@ local function LoadSkin()
 
 		_G["MerchantItem"..i.."SlotTexture"]:Hide()
 		_G["MerchantItem"..i.."NameFrame"]:Hide()
-		_G["MerchantItem"..i.."Name"]:SetHeight(20)
+		-- _G["MerchantItem"..i.."Name"]:SetHeight(20)
 		local a1, p, a2= bu:GetPoint()
 		bu:SetPoint(a1, p, a2, -2, -2)
 		bu:SetNormalTexture("")
@@ -69,6 +69,10 @@ local function LoadSkin()
 
 	S:CreateBD(MerchantBuyBackItemItemButton, 0)
 	S:CreateBD(MerchantBuyBackItem, .25)
+
+	MerchantBuyBackItemName:SetHeight(25)
+	MerchantBuyBackItemName:ClearAllPoints()
+	MerchantBuyBackItemName:SetPoint("LEFT", MerchantBuyBackItemSlotTexture, "RIGHT", -5, 8)
 
 	MerchantBuyBackItemItemButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
 	MerchantBuyBackItemItemButtonIconTexture:ClearAllPoints()

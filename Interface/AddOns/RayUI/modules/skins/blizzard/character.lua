@@ -163,6 +163,14 @@ local function LoadSkin()
 				_G["EquipmentFlyoutFrameButton"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
 				icon:Point("TOPLEFT", 2, -2)
 				icon:Point("BOTTOMRIGHT", -2, 2)
+				hooksecurefunc(bu.IconBorder, "SetVertexColor", function(self, r, g, b)
+					self:GetParent().glow:SetBackdropBorderColor(r, g, b)
+					self:GetParent():SetBackdropColor(0, 0, 0)
+				end)
+				hooksecurefunc(bu.IconBorder, "Hide", function(self)
+					self:GetParent().glow:SetBackdropBorderColor(0, 0, 0)
+					self:GetParent():SetBackdropColor(0, 0, 0, 0)
+				end)
 				bu.reskinned = true
 			end
 		end
@@ -183,6 +191,8 @@ local function LoadSkin()
 					bgFile = R["media"].blank, 
 					insets = { left = -R.mult, right = -R.mult, top = -R.mult, bottom = -R.mult }
 				})
+			self.glow:SetBackdropBorderColor(self.IconBorder:GetVertexColor())
+			self:SetBackdropColor(0, 0, 0)
 		end
 		if (not location) or (location >= EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION) then
 			self.glow:Point("TOPLEFT", 1, -1)
@@ -191,41 +201,9 @@ local function LoadSkin()
 			self:SetBackdropColor(0, 0, 0, 0)
 			return
 		end
-		local id = EquipmentManager_GetItemInfoByLocation(location)
-		local icon = _G[self:GetName().."IconTexture"]
-		if id then
-			local _, _, rarity, _, _, _, _, _, _, _, _ = GetItemInfo(id)
-			if rarity and rarity > 1 then
-				glow:SetAllPoints()
-				glow:SetBackdropBorderColor(GetItemQualityColor(rarity))
-				self:SetBackdropColor(0, 0, 0)
-			else
-				glow:Point("TOPLEFT", 1, -1)
-				glow:Point("BOTTOMRIGHT", -1, 1)
-				glow:SetBackdropBorderColor(0, 0, 0)
-				self:SetBackdropColor(0, 0, 0, 0)
-			end
-		else
-			glow:Point("TOPLEFT", 1, -1)
-			glow:Point("BOTTOMRIGHT", -1, 1)
-			glow:SetBackdropBorderColor(0, 0, 0)
-			self:SetBackdropColor(0, 0, 0, 0)
-		end
 	end
 
 	hooksecurefunc("EquipmentFlyout_DisplayButton", ColorFlyOutItemBorder)
-	hooksecurefunc("EquipmentFlyout_Show", function()
-		local flyout = EquipmentFlyoutFrame
-		local buttonAnchor = flyout.buttonFrame
-		local p1, parent, p2, x, y = buttonAnchor:GetPoint()
-		if p2 == "TOPRIGHT" then
-			buttonAnchor:ClearAllPoints()
-			buttonAnchor:Point(p1, parent, p2, x, 2)
-		elseif p2 == "BOTTOMLEFT" then
-			buttonAnchor:ClearAllPoints()
-			buttonAnchor:Point(p1, parent, p2, -2, y)
-		end
-	end)
 
 	for i = 1, #PAPERDOLL_SIDEBARS do
 		local tab = _G["PaperDollSidebarTab"..i]
