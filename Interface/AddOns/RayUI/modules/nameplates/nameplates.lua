@@ -543,21 +543,35 @@ local function OnFrameShow(frame)
 		frame:HookScript("OnEvent", OnAura)
 	end
 
-	local isSmallNP
+	local isSmallNP, noscalemult
 	if frame.hp:GetEffectiveScale() < 1 then
 		isSmallNP = true
 	end
 
 	if isSmallNP then
-		local scale = 1 / frame:GetEffectiveScale() - 0.8
-		frame.hp:Width(hpWidth * scale)
-		frame.hp:Height(hpHeight * scale)
+		local scale = 1 / frame:GetEffectiveScale()
+		frame.hp:SetWidth(hpWidth * scale - 80)
+		frame.hp:SetHeight(hpHeight * scale)
 		frame.hp.value:Hide()
 		frame.hp.name:SetJustifyH("CENTER")
 		frame.hp.name:ClearAllPoints()
 		frame.hp.name:SetFont(R["media"].font, FONTSIZE * scale, R["media"].fontflag)
 		frame.hp.name:SetPoint("BOTTOMLEFT", frame.hp, "TOPLEFT", 0, -1)
 		frame.hp.name:SetPoint("BOTTOMRIGHT", frame.hp, "TOPRIGHT", 0, -1)
+		noscalemult = R.mult * UIParent:GetScale() * scale
+		frame.icons:Hide()
+	else
+		noscalemult = R.mult * UIParent:GetScale()
+		frame.icons:Show()
+	end
+
+	frame.hp.backdrop:ClearAllPoints()
+	if R.global.general.theme == "Shadow" then
+		frame.hp.backdrop:SetPoint("TOPLEFT", frame.hp, -3*noscalemult, 3*noscalemult)
+		frame.hp.backdrop:SetPoint("BOTTOMRIGHT", frame.hp, 3*noscalemult, -3*noscalemult)
+	else
+		frame.hp.backdrop:SetPoint("TOPLEFT", frame.hp, -noscalemult, noscalemult)
+		frame.hp.backdrop:SetPoint("BOTTOMRIGHT", frame.hp, noscalemult, -noscalemult)
 	end
 
 	local level, mylevel = tonumber(frame.hp.oldlevel:GetText()), UnitLevel("player")
@@ -718,6 +732,7 @@ local function SkinObjects(frame, nameFrame)
 	frame.castBar.icon:SetTexCoord(.07, .93, .07, .93)
 	frame.castBar.icon:SetDrawLayer("OVERLAY")
 	frame.castBar.icon:ClearAllPoints()
+	frame.castBar.icon:SetSize(20, 20)
 	frame.castBar.icon:SetPoint("TOPRIGHT", frame.hp, "TOPLEFT", -3, 0)
 	if not frame.castBar.icon.backdrop then
 		frame.castBar.icon.backdrop = CreateFrame("Frame", nil ,cb)
