@@ -40,7 +40,7 @@ function B:GetOptions()
 end
 
 function B:Tooltip_Show()
-	GameTooltip:SetOwner(self:GetParent(), "ANCHOR_TOP", 0, 4)
+	GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, 4)
 	GameTooltip:ClearLines()
 	GameTooltip:AddLine(self.ttText)
 	if self.ttText2 then
@@ -67,8 +67,8 @@ local equipSetTip = CreateFrame("GameTooltip", "RayUICheckEquipSetTip", UIParent
 local function CheckEquipmentSet(item)
 	if not item.bagID or not item.slotID then return false end
 	equipSetTip:SetOwner(UIParent, "ANCHOR_NONE")
-    equipSetTip:ClearLines()
-    equipSetTip:SetBagItem(item.bagID, item.slotID)
+	equipSetTip:ClearLines()
+	equipSetTip:SetBagItem(item.bagID, item.slotID)
 	equipSetTip:Show()
 
 	for index = 1, equipSetTip:NumLines() do
@@ -130,8 +130,8 @@ function B:Initialize()
 		-- Reagent frame and bank bags
 		f.reagent = MyContainer:New("Reagent", {Columns = B.db.bankWidth, Bags = "bankreagent"})
 		f.reagent:SetFilter(onlyReagent, true)
-		f.reagent:SetParent(f.bank)
-		f.reagent:SetPoint("BOTTOMRIGHT", "RayUI_ContainerFrameBank", "BOTTOMLEFT", -25, 0)
+		f.reagent:Hide()
+		f.reagent:SetPoint("BOTTOMRIGHT", "RayUI_ContainerFrameMain", "BOTTOMLEFT", -25, 0)
 
 		f.consumables = MyContainer:New("Consumables", {Columns = B.db.bagWidth, Bags = "backpack+bags"})
 		f.consumables:SetFilter(onlyBagConsumables, true)
@@ -156,10 +156,12 @@ function B:Initialize()
 
 	-- Bank frame toggling
 	function RayUI_ContainerFrame:OnBankOpened()
+		BankFrame:Show()
 		self:GetContainer("Bank"):Show()
 	end
 
 	function RayUI_ContainerFrame:OnBankClosed()
+		BankFrame:Hide()
 		self:GetContainer("Bank"):Hide()
 	end
 
@@ -274,27 +276,29 @@ function B:Initialize()
 			--Sort Button
 			self.sortButton = CreateFrame("Button", nil, self)
 			self.sortButton:Point("TOPLEFT", self, "TOPLEFT", 5, -4)
-			self.sortButton:Size(55, 10)
+			self.sortButton:Size(16, 16)
+			self.sortButton:SetNormalTexture("Interface\\ICONS\\INV_Pet_Broom")
+			self.sortButton:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
+			self.sortButton:SetPushedTexture("Interface\\ICONS\\INV_Pet_Broom")
+			self.sortButton:GetPushedTexture():SetTexCoord(.08, .92, .08, .92)
+			self.sortButton.pushed = true
+			self.sortButton:StyleButton(true)
 			self.sortButton.ttText = L["整理背包"]
 			self.sortButton:SetScript("OnEnter", B.Tooltip_Show)
 			self.sortButton:SetScript("OnLeave", B.Tooltip_Hide)
 			self.sortButton:SetScript("OnClick", function() B:CommandDecorator(B.SortBags, self.name == "Bank" and "bank" or "bags")() end)
-			S:Reskin(self.sortButton)
-
-			--Stack Button
-			self.stackButton = CreateFrame("Button", nil, self)
-			self.stackButton:Point("LEFT", self.sortButton, "RIGHT", 3, 0)
-			self.stackButton:Size(55, 10)
-			self.stackButton.ttText = L["堆叠物品"]
-			self.stackButton:SetScript("OnEnter", B.Tooltip_Show)
-			self.stackButton:SetScript("OnLeave", B.Tooltip_Hide)
-			self.stackButton:SetScript("OnClick", function() B:CommandDecorator(B.Compress, self.name == "Bank" and "bank" or "bags")() end)
-			S:Reskin(self.stackButton)
+			S:CreateBG(self.sortButton)
 
 			--Bagbar Button
 			self.bagsButton = CreateFrame("Button", nil, self)
-			self.bagsButton:Point("LEFT", self.stackButton, "RIGHT", 3, 0)
-			self.bagsButton:Size(55, 10)
+			self.bagsButton:Point("LEFT", self.sortButton, "RIGHT", 3, 0)
+			self.bagsButton:Size(16, 16)
+			self.bagsButton:SetNormalTexture("Interface\\Buttons\\Button-Backpack-Up")
+			self.bagsButton:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
+			self.bagsButton:SetPushedTexture("Interface\\Buttons\\Button-Backpack-Up")
+			self.bagsButton:GetPushedTexture():SetTexCoord(.08, .92, .08, .92)
+			self.bagsButton.pushed = true
+			self.bagsButton:StyleButton(true)
 			self.bagsButton.ttText = L["显示背包"]
 			self.bagsButton:SetScript("OnEnter", B.Tooltip_Show)
 			self.bagsButton:SetScript("OnLeave", B.Tooltip_Hide)
@@ -306,7 +310,7 @@ function B:Initialize()
 				end
 				self:UpdateDimensions()
 			end)
-			S:Reskin(self.bagsButton)
+			S:CreateBG(self.bagsButton)
 
 			local infoFrame = CreateFrame("Button", nil, self)
 			infoFrame:Point("TOPLEFT", self, "TOPLEFT", 5, -21)
@@ -334,7 +338,7 @@ function B:Initialize()
 			self.Search.Left:Hide()
 			self.Search.Right:Hide()
 			self.Search.Center:Hide()
-			RayUI[1]:GetModule("Skins"):ReskinInput(self.Search)
+			S:ReskinInput(self.Search)
 
 			-- Plugin: BagBar
 			local bagBar = self:SpawnPlugin("BagBar", settings.Bags)
@@ -350,7 +354,7 @@ function B:Initialize()
 			local closebutton = CreateFrame("Button", nil, self)
 			closebutton:SetFrameLevel(30)
 			closebutton:SetSize(14,14)
-			RayUI[1]:GetModule("Skins"):ReskinClose(closebutton)
+			S:ReskinClose(closebutton)
 			closebutton:ClearAllPoints()
 			closebutton:SetPoint("TOPRIGHT", -6, -3)
 
@@ -381,22 +385,56 @@ function B:Initialize()
 			--Sort Button
 			self.sortButton = CreateFrame("Button", nil, self)
 			self.sortButton:Point("TOPLEFT", self, "TOPLEFT", 5, -24)
-			self.sortButton:Size(55, 10)
+			self.sortButton:Size(16, 16)
+			self.sortButton:SetNormalTexture("Interface\\ICONS\\INV_Pet_Broom")
+			self.sortButton:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
+			self.sortButton:SetPushedTexture("Interface\\ICONS\\INV_Pet_Broom")
+			self.sortButton:GetPushedTexture():SetTexCoord(.08, .92, .08, .92)
+			self.sortButton.pushed = true
+			self.sortButton:StyleButton(true)
 			self.sortButton.ttText = L["整理背包"]
 			self.sortButton:SetScript("OnEnter", B.Tooltip_Show)
 			self.sortButton:SetScript("OnLeave", B.Tooltip_Hide)
 			self.sortButton:SetScript("OnClick", SortReagentBankBags)
-			S:Reskin(self.sortButton)
-	
+			S:CreateBG(self.sortButton)
+			
 			--Deposit Button
 			self.depositButton = CreateFrame("Button", nil, self)
 			self.depositButton:Point("LEFT", self.sortButton, "RIGHT", 3, 0)
-			self.depositButton:Size(55, 10)
+			self.depositButton:Size(16, 16)
+			self.depositButton:SetNormalTexture("Interface\\ICONS\\misc_arrowdown")
+			self.depositButton:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
+			self.depositButton:SetPushedTexture("Interface\\ICONS\\misc_arrowdown")
+			self.depositButton:GetPushedTexture():SetTexCoord(.08, .92, .08, .92)
+			self.depositButton.pushed = true
+			self.depositButton:StyleButton(true)
 			self.depositButton.ttText = REAGENTBANK_DEPOSIT
 			self.depositButton:SetScript("OnEnter", B.Tooltip_Show)
 			self.depositButton:SetScript("OnLeave", B.Tooltip_Hide)
 			self.depositButton:SetScript("OnClick", DepositReagentBank)
-			S:Reskin(self.depositButton)
+			S:CreateBG(self.depositButton)
+
+			self.reagentToggle = CreateFrame("Button", nil, self)
+			self.reagentToggle:Point("LEFT", self.depositButton, "RIGHT", 3, 0)
+			self.reagentToggle:Size(16, 16)
+			self.reagentToggle:SetNormalTexture("Interface\\Buttons\\Button-Backpack-Up")
+			self.reagentToggle:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
+			self.reagentToggle:SetPushedTexture("Interface\\Buttons\\Button-Backpack-Up")
+			self.reagentToggle:GetPushedTexture():SetTexCoord(.08, .92, .08, .92)
+			self.reagentToggle.pushed = true
+			self.reagentToggle:StyleButton(true)
+			self.reagentToggle.ttText = BANK
+			self.reagentToggle:SetScript("OnEnter", B.Tooltip_Show)
+			self.reagentToggle:SetScript("OnLeave", B.Tooltip_Hide)
+			self.reagentToggle:SetScript("OnClick", function() B:CommandDecorator(B.SortBags, self.name == "Bank" and "bank" or "bags")() end)
+			S:CreateBG(self.reagentToggle)
+			self.reagentToggle:SetScript("OnClick", function()
+				PlaySound("igCharacterInfoTab")
+				ReagentBankFrame:Hide()
+				BankFrame.selectedTab = 1
+				f.reagent:Hide()
+				f.bank:Show()
+			end)
 
 			if not IsReagentBankUnlocked() then
 				local buyReagent = CreateFrame("Button", nil, self, "UIPanelButtonTemplate")
@@ -415,14 +453,40 @@ function B:Initialize()
 					StaticPopup_Show("CONFIRM_BUY_REAGENTBANK_TAB")
 				end)
 				buyReagent:SetScript("OnEvent", function(...)
-					buyReagent:UnregisterEvent("REAGENTBANK_PURCHASED")
-					buyReagent:Hide()
+					if IsReagentBankUnlocked() then
+						buyReagent:UnregisterAllEvents()
+						buyReagent:Hide()
+					end
 				end)
 				S:Reskin(buyReagent)
 				buyReagent:RegisterEvent("REAGENTBANK_PURCHASED")
+				buyReagent:RegisterEvent("PLAYER_ENTERING_WORLD")
 			end
 		end
 
+		if name == "Bank" then
+			self.reagentToggle = CreateFrame("Button", nil, self)
+			self.reagentToggle:Point("LEFT", self.bagsButton, "RIGHT", 3, 0)
+			self.reagentToggle:Size(16, 16)
+			self.reagentToggle:SetNormalTexture("Interface\\ICONS\\INV_Enchant_DustArcane")
+			self.reagentToggle:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
+			self.reagentToggle:SetPushedTexture("Interface\\ICONS\\INV_Enchant_DustArcane")
+			self.reagentToggle:GetPushedTexture():SetTexCoord(.08, .92, .08, .92)
+			self.reagentToggle.pushed = true
+			self.reagentToggle:StyleButton(true)
+			self.reagentToggle.ttText = REAGENT_BANK
+			self.reagentToggle:SetScript("OnEnter", B.Tooltip_Show)
+			self.reagentToggle:SetScript("OnLeave", B.Tooltip_Hide)
+			self.reagentToggle:SetScript("OnClick", function() B:CommandDecorator(B.SortBags, self.name == "Bank" and "bank" or "bags")() end)
+			S:CreateBG(self.reagentToggle)
+			self.reagentToggle:SetScript("OnClick", function()
+				PlaySound("igCharacterInfoTab")
+				ReagentBankFrame:Show()
+				BankFrame.selectedTab = 2
+				f.reagent:Show()
+				f.bank:Hide()
+			end)
+		end
 		if name == "Main" or name == "ItemSets" or name == "Consumables" then
 			self:HookScript("OnShow", function()
 				R:GetModule("Tooltip"):GameTooltip_SetDefaultAnchor(GameTooltip)
