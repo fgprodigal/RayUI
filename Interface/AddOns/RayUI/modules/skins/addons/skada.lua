@@ -39,6 +39,16 @@ local function SkinSkada()
 		AcceptFrame:Show()
 	end
 
+	function Skada:FormatNumber(number)
+		if number then
+			if self.db.profile.numberformat == 1 then
+				return R:ShortValue(number)
+			else
+				return math.floor(number)
+			end
+		end
+	end
+
 	local barmod = Skada.displays["bar"]
 	-- Used to strip unecessary options from the in-game config
 	local function StripOptions(options)
