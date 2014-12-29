@@ -117,6 +117,10 @@ local function LoadSkin()
         S:ReskinCheck(_G["GuildNewsFilterButton"..i])
     end
 
+	for i=1, 14 do
+		S:Reskin(_G["GuildRosterContainerButton"..i.."HeaderButton"])
+	end
+
     local a1, p, a2, x, y = GuildNewsBossModel:GetPoint()
     GuildNewsBossModel:ClearAllPoints()
     GuildNewsBossModel:SetPoint(a1, p, a2, x+5, y)
@@ -216,6 +220,41 @@ local function LoadSkin()
         bu.icon:SetTexCoord(.08, .92, .08, .92)
         S:CreateBG(bu.icon)
     end
+
+	local UpdateIcons = function()
+		local index
+		local offset = HybridScrollFrame_GetOffset(GuildRosterContainer)
+		local totalMembers, onlineMembers, onlineAndMobileMembers = GetNumGuildMembers()
+		local visibleMembers = onlineAndMobileMembers
+		local numbuttons = #GuildRosterContainer.buttons
+		if GetGuildRosterShowOffline() then
+			visibleMembers = totalMembers
+		end
+
+		for i = 1, numbuttons do
+			local bu = GuildRosterContainer.buttons[i]
+
+			if not bu.bg then
+				bu:SetHighlightTexture(R["media"].gloss)
+				bu:GetHighlightTexture():SetVertexColor(r, g, b, .2)
+
+				bu.bg = F.CreateBG(bu.icon)
+			end
+
+			index = offset + i
+			local name, _, _, _, _, _, _, _, _, _, classFileName  = GetGuildRosterInfo(index)
+			if name and index <= visibleMembers and bu.icon:IsShown() then
+				local tcoords = CLASS_ICON_TCOORDS[classFileName]
+				bu.icon:SetTexCoord(tcoords[1] + 0.022, tcoords[2] - 0.025, tcoords[3] + 0.022, tcoords[4] - 0.025)
+				bu.bg:Show()
+			else
+				bu.bg:Hide()
+			end
+		end
+	end
+
+	hooksecurefunc("GuildRoster_Update", UpdateIcons)
+	hooksecurefunc(GuildRosterContainer, "update", UpdateIcons)
 
     GuildPerksContainerButton1:SetPoint("LEFT", -1, 0)
 
