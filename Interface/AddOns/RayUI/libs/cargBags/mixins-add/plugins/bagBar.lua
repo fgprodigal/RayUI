@@ -127,7 +127,16 @@ function BagButton:OnEnter()
 		end
 	end
 
-	BagSlotButton_OnEnter(self)
+	GameTooltip:SetOwner(self, "ANCHOR_LEFT")
+	if ( GameTooltip:SetInventoryItem("player", self:GetID()) ) then
+		local bindingKey = GetBindingKey("TOGGLEBAG"..(4 -  (self:GetID() - CharacterBag0Slot:GetID())))
+		if ( bindingKey ) then
+			GameTooltip:AppendText(" "..NORMAL_FONT_COLOR_CODE.."("..bindingKey..")"..FONT_COLOR_CODE_CLOSE)
+		end
+		GameTooltip:Show()
+	else
+		GameTooltip:SetText(EQUIP_CONTAINER, 1.0, 1.0, 1.0)
+	end
 end
 
 function BagButton:OnLeave()
