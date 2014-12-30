@@ -42,7 +42,7 @@ local function SkinSkada()
 	function Skada:FormatNumber(number)
 		if number then
 			if self.db.profile.numberformat == 1 then
-				return R:ShortValue(number)
+				return R:ShortValue(math.floor(number))
 			else
 				return math.floor(number)
 			end
