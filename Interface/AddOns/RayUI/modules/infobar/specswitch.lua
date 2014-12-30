@@ -1,9 +1,19 @@
 local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local IF = R:GetModule("InfoBar")
 
+local menuFrame = CreateFrame("Frame", "LootSpecializationClickMenu", UIParent, "UIDropDownMenuTemplate")
+local menuList = {
+	{ text = SELECT_LOOT_SPECIALIZATION, isTitle = true, notCheckable = true },
+	{ notCheckable = true, func = function() SetLootSpecialization(0) end },
+	{ notCheckable = true },
+	{ notCheckable = true },
+	{ notCheckable = true },
+	{ notCheckable = true }
+}
+
 local function LoadTalent()
 	local infobar = IF:CreateInfoPanel("RayUI_InfoPanel_Talent", 70)
-	infobar:SetPoint("RIGHT", RayUI_InfoPanel_Stat1, "LEFT", 0, 0)
+	infobar:SetPoint("LEFT", RayUI_InfoPanel_Latency, "RIGHT", 0, 0)
 	infobar.Text:SetText(NONE..TALENTS)
 
 	local spec = LibStub("Tablet-2.0")
@@ -233,8 +243,30 @@ local function LoadTalent()
 		end
 
 		local active = GetActiveSpecGroup(false, false)
+		local talent, loot = "", ""
+		if GetSpecialization(false, false, active) then
+			talent = format("|T%s:14:14:0:0:64:64:4:60:4:60|t", select(4, GetSpecializationInfo(GetSpecialization(false, false, active))))
+		end
+		local specialization = GetLootSpecialization()
+		if specialization == 0 then
+			local specIndex = GetSpecialization();
+			
+			if specIndex then
+				local specID, _, _, texture = GetSpecializationInfo(specIndex);
+				loot = format("|T%s:14:14:0:0:64:64:4:60:4:60|t", texture)
+			else
+				loot = "N/A"
+			end
+		else
+			local specID, _, _, texture = GetSpecializationInfoByID(specialization);
+			if specID then
+				loot = format("|T%s:14:14:0:0:64:64:4:60:4:60|t", texture)
+			else
+				loot = "N/A"
+			end
+		end
 		if GetSpecialization(false, false, active) and select(2, GetSpecializationInfo(GetSpecialization(false, false, active))) then
-			infobar.Text:SetText(select(2, GetSpecializationInfo(GetSpecialization(false, false, active))))
+			infobar.Text:SetText(format("%s: %s %s: %s", TALENTS, talent, LOOT, loot))
 		else
             infobar.Text:SetText(NONE..TALENTS)
 		end
@@ -256,6 +288,7 @@ local function LoadTalent()
 			self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 			self:RegisterEvent("EQUIPMENT_SETS_CHANGED")
 			self:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
+			self:RegisterEvent("PLAYER_LOOT_SPEC_UPDATED")
 			manager:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 		end
 
@@ -265,9 +298,29 @@ local function LoadTalent()
 	infobar:RegisterEvent("PLAYER_LOGIN")
 	infobar:HookScript("OnEvent", OnEvent)
 
-	infobar:HookScript("OnMouseDown", function()
-		local active = GetActiveSpecGroup(false, false)
-		SetActiveSpecGroup(active == 1 and 2 or 1)
+	infobar:HookScript("OnMouseDown", function(self, button)
+		local specIndex = GetSpecialization()
+		if not specIndex then return end
+
+		if button == "LeftButton" then
+			SetActiveSpecGroup(GetActiveSpecGroup() == 1 and 2 or 1)
+		else
+			spec:Close()
+			local specID, specName = GetSpecializationInfo(specIndex)
+			menuList[2].text = format(LOOT_SPECIALIZATION_DEFAULT, specName)
+
+			for index = 1, 4 do
+				local id, name = GetSpecializationInfo(index)
+				if ( id ) then
+					menuList[index + 2].text = name
+					menuList[index + 2].func = function() SetLootSpecialization(id) end
+				else
+					menuList[index + 2] = nil
+				end
+			end
+
+			EasyMenu(menuList, menuFrame, "cursor", -15, -7, "MENU", 2)
+		end
 	end)
 
 	manager:SetScript("OnEvent", function(self, event, id)

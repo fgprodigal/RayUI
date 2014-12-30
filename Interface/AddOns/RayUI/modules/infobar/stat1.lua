@@ -3,7 +3,7 @@ local IF = R:GetModule("InfoBar")
 
 local function LoadStat()
 	local infobar = IF:CreateInfoPanel("RayUI_InfoPanel_Stat1", 120)
-	infobar:SetPoint("RIGHT", RayUI_InfoPanel_Currency, "LEFT", 0, 0)
+	infobar:SetPoint("RIGHT", RayUI_InfoPanel_Memory, "LEFT", 0, 0)
 
 	local format = string.format
 	local targetlv, playerlv

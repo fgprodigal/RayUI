@@ -4,7 +4,7 @@ local IF = R:GetModule("InfoBar")
 local function LoadDurability()
 	local stringText = DURABILITY..": %d%%"
 	local infobar = IF:CreateInfoPanel("RayUI_InfoPanel_Durability", 100)
-	infobar:SetPoint("LEFT", RayUI_InfoPanel_Memory, "RIGHT", 0, 0)
+	infobar:SetPoint("LEFT", RayUI_InfoPanel_Talent, "RIGHT", 0, 0)
 	infobar.Text:SetText(string.format(stringText, 100))
 
 	local Slots = {

@@ -3,7 +3,7 @@ local IF = R:GetModule("InfoBar")
 
 local function LoadMemory()
 	local infobar = IF:CreateInfoPanel("RayUI_InfoPanel_Memory", 80)
-	infobar:SetPoint("LEFT", RayUI_InfoPanel_Latency, "RIGHT", 0, 0)
+	infobar:SetPoint("RIGHT", RayUI_InfoPanel_Currency, "LEFT", 0, 0)
 	local scriptProfile = GetCVar("scriptProfile") == "1"
 
     local maxMemorySize = 35

@@ -3,13 +3,13 @@
 	<Script file="infotext.lua"/>
 	<Script file="fps.lua"/>
 	<Script file="latency.lua"/>
-	<Script file="memory.lua"/>
+	<Script file="specswitch.lua"/>
 	<Script file="durability.lua"/>
 	<Script file="friend.lua"/>
 	<Script file="guild.lua"/>
 	<Script file="currency.lua"/>
+	<Script file="memory.lua"/>
 	<Script file="stat1.lua"/>
-	<Script file="specswitch.lua"/>
 	<Script file="stat2.lua"/>
 	<Script file="calltoarms.lua"/>
 </Ui>
