@@ -163,6 +163,9 @@ function B:Initialize()
 	function RayUI_ContainerFrame:OnBankClosed()
 		BankFrame:Hide()
 		self:GetContainer("Bank"):Hide()
+		self:GetContainer("Reagent"):Hide()
+		ReagentBankFrame:Hide()
+		BankFrame.selectedTab = 1
 	end
 
 	-- Class: ItemButton appearencence classification
@@ -377,10 +380,23 @@ function B:Initialize()
 			setname:SetFont(R["media"].font, R["media"].fontsize, "THINOUTLINE")
 			setname:SetText(consumable)
 		elseif name == "Reagent" then
-			local setname = self:CreateFontString(nil,"OVERLAY")
-			setname:SetPoint("TOPLEFT", self, "TOPLEFT",5,-5)
-			setname:SetFont(R["media"].font, R["media"].fontsize, "THINOUTLINE")
-			setname:SetText(REAGENT_BANK)
+			local reagentname = self:CreateFontString(nil,"OVERLAY")
+			reagentname:SetPoint("TOPLEFT", self, "TOPLEFT",5,-5)
+			reagentname:SetFont(R["media"].font, R["media"].fontsize, "THINOUTLINE")
+			reagentname:SetText(REAGENT_BANK)
+			
+			local closebutton = CreateFrame("Button", nil, self)
+			closebutton:SetFrameLevel(30)
+			closebutton:SetSize(14,14)
+			S:ReskinClose(closebutton)
+			closebutton:ClearAllPoints()
+			closebutton:SetPoint("TOPRIGHT", -6, -3)
+
+			closebutton:SetScript("OnClick", function(self) 
+				if RayUI_ContainerFrame:AtBank() then 
+					CloseBankFrame()
+				end 
+			end)
 			
 			--Sort Button
 			self.sortButton = CreateFrame("Button", nil, self)
@@ -465,6 +481,11 @@ function B:Initialize()
 		end
 
 		if name == "Bank" then
+			local bankname = self:CreateFontString(nil,"OVERLAY")
+			bankname:SetPoint("TOPLEFT", self, "TOPLEFT",5,-5)
+			bankname:SetFont(R["media"].font, R["media"].fontsize, "THINOUTLINE")
+			bankname:SetText(BANK)
+
 			self.reagentToggle = CreateFrame("Button", nil, self)
 			self.reagentToggle:Point("LEFT", self.bagsButton, "RIGHT", 3, 0)
 			self.reagentToggle:Size(16, 16)
