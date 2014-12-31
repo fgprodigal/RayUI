@@ -51,10 +51,6 @@ P["NamePlates"]={
     fadeValue = 0.5,
 }
 
-P["Bag"]={
-	enable = true,
-}
-
 P["Chat"]={
 	["enable"] = true,
 	["height"] = 140,
@@ -137,7 +133,7 @@ P["ActionBar"]={
 	buttonsize   = 28,
 	buttonspacing   = 6,
 	barscale = 1,
-	macroname = false,
+	macroname = true,
 	itemcount = true,
 	hotkeys = true,
 	showgrid = true,
@@ -171,7 +167,7 @@ P["ActionBar"]={
 
     bar4 = {
         enable = true,
-        mouseover = false,
+        mouseover = true,
         autohide = false,
         buttonsPerRow = 1,
         buttonsize = 28,
@@ -180,7 +176,7 @@ P["ActionBar"]={
 
     bar5 = {
         enable = true,
-        mouseover = true,
+        mouseover = false,
         autohide = false,
         buttonsPerRow = 1,
         buttonsize = 28,
@@ -202,6 +198,8 @@ P["ActionBar"]={
 	cooldownalpha = false,
 	cdalpha = 1,
 	readyalpha = 0.3,
+
+	clickondown = true
 }
 
 G["Misc"] = {}
@@ -251,8 +249,8 @@ P["Skins"]={
 }
 
 P["Bags"]={
-	bagSize = 32,
-	bankSize = 32,
+	bagSize = 35,
+	bankSize = 35,
 	sortInverted = true,
 	bagWidth = 10,
 	bankWidth = 12,

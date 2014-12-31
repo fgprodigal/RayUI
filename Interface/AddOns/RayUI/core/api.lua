@@ -51,7 +51,7 @@ local function CreateShadow(f, t, thickness)
     		border:SetFrameLevel(frameLevel)
     	end
     end)
-	f.border = border 
+	f.border = f.border or border
 
 	local shadow = CreateFrame("Frame", nil, border)
 	shadow:SetFrameLevel(frameLevel - 1)

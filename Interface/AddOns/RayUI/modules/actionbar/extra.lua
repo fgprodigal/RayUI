@@ -41,8 +41,8 @@ function AB:CreateExtraButton()
 	for i=1, ExtraActionBarFrame:GetNumChildren() do
 		local button = _G["ExtraActionButton"..i]
 		if button then
-			button.Hide = button.Show
-			button:Show()
+			-- button.Hide = R.dummy
+			-- button:Show()
 			button.noResize = true
 			button.pushed = true
 			button.checked = true
@@ -50,27 +50,26 @@ function AB:CreateExtraButton()
 			self:Style(button)
             button:StyleButton(true)
 			_G["ExtraActionButton"..i.."Icon"]:SetDrawLayer("ARTWORK")
-			_G["ExtraActionButton"..i.."Cooldown"]:SetFrameLevel(button:GetFrameLevel()+1)
+			_G["ExtraActionButton"..i.."Cooldown"]:SetFrameLevel(button:GetFrameLevel()+2)
 		end
 	end
 
 	do
 		local button = DraenorZoneAbilityFrame.SpellButton
-		if button then
-			button.Hide = button.Show
-			button:Show()
-			button.pushed = true
-			button.checked = true
-			
-            button:StyleButton(true)
-			button:CreateShadow("Background")
-			button.Cooldown:SetFrameLevel(button:GetFrameLevel()+1)
-			button.border:SetFrameLevel(button:GetFrameLevel())
-			button.NormalTexture:Kill()
-            button.Icon:SetDrawLayer("ARTWORK")
-			button.Icon:SetTexCoord(.08, .92, .08, .92)
-			button.Style:SetDrawLayer("BACKGROUND")
-		end
+		-- button.Hide = R.dummy
+		-- button:Show()
+		button.pushed = true
+		button.checked = true
+		
+        button:StyleButton(true)
+		button:CreateShadow("Background")
+		button.Cooldown:SetFrameLevel(button:GetFrameLevel()+2)
+		button.border:SetFrameLevel(button:GetFrameLevel())
+		button.NormalTexture:SetDrawLayer("BACKGROUND")
+		button.NormalTexture:Kill()
+        button.Icon:SetDrawLayer("ARTWORK")
+		button.Icon:SetTexCoord(.08, .92, .08, .92)
+		button.Style:SetDrawLayer("BACKGROUND")
 	end
 
 	if HasExtraActionBar() then

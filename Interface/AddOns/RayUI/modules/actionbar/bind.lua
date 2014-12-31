@@ -269,6 +269,10 @@ function AB:LoadKeyBinder()
 		b = EnumerateFrames(b)
 	end
 
+	for b, _ in pairs(self["handledbuttons"]) do
+		self:RegisterButtonBind(b, true);
+	end	
+
 	for i=1, 12 do
 		local b = _G["SpellButton"..i]
 		b:HookScript("OnEnter", function(b) AB:BindUpdate(b, "SPELL"); end)

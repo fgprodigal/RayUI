@@ -6,7 +6,6 @@
 	<Script file="extra.lua"/>
 	<Script file="overridebar.lua"/>
 	<Script file="cooldown.lua"/>
-	<Script file="range.lua"/>
 	<Script file="bind.lua"/>
 	<Script file="autohide.lua"/>
 </Ui>

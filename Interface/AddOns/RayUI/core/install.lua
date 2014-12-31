@@ -31,20 +31,6 @@ local function ShowFinish(text, subtext)
     PlaySoundKitID(31749)
 
     LevelUpDisplay:SetScript("OnShow", script)
-
-	--if not hooked then
-		--hooksecurefunc("LevelUpDisplay_BuildPetBattleWinnerList", function(self)
-			--if self.hooked then
-				--self.winnerSoundKitID = 31749
-				--self.hooked=nil
-			--end
-		--end)
-		--hooked = true
-	--end
-	--LevelUpDisplay.hooked=true
-	--LevelUpDisplay.type=TOAST_PET_BATTLE_WINNER
-	--LevelUpDisplay:Show()
-	--LevelUpDisplay.levelFrame.singleline:SetText(text)
 end
 
 function R:SetLayout(layout)
@@ -84,7 +70,7 @@ function R:SetLayout(layout)
 		R.db.movers.RayUFRaid15_1Mover = "BOTTOMLEFTUIParentBOTTOMLEFT15235"
 		R.db.movers.RayUFRaid25_1Mover = "BOTTOMLEFTUIParentBOTTOMLEFT15235"
 		R.db.movers.RayUFRaid40_6Mover = "TOPLEFTRayUFRaid25_5MoverTOPRIGHT"..R.db.Raid.spacing.."0"
-		R.db.movers.ActionBar5Mover = "TOPRIGHTActionBar4MoverTOPLEFT"..-R.db.ActionBar.buttonspacing.."0"
+		R.db.movers.ActionBar4Mover = "RIGHTUIParentRIGHT-490"
 		R.db.Raid.horizontal = false
 		R.db.Raid.growth = "RIGHT"
 		StaticPopup_Show("CFG_RELOAD")
@@ -167,3 +153,14 @@ function R:ChooseLayout()
 	end
 	RayUILayoutChooser:Show()
 end
+
+local f = CreateFrame("Frame")
+f:RegisterEvent("PLAYER_ENTERING_WORLD")
+f:SetScript("OnEvent", function(self)
+	self:UnregisterAllEvents("PLAYER_ENTERING_WORLD")
+	if R.db.movers and R.db.movers.ActionBar5Mover == "TOPRIGHTActionBar4MoverTOPLEFT"..-R.db.ActionBar.buttonspacing.."0" and not R.db.movers.ActionBar4Mover then
+		R.db.movers.ActionBar5Mover = nil
+		R.db.movers.ActionBar4Mover = "RIGHTUIParentRIGHT-490"
+		R:SetMoversPositions()
+	end
+end)

@@ -55,6 +55,7 @@ function AB:OnAutoHideEvent(event, addon)
 end
 
 function AB:EnableAutoHide()
+	AB:RegisterEvent("PLAYER_ENTERING_WORLD", "OnAutoHideEvent")
 	AB:RegisterEvent("PLAYER_REGEN_ENABLED", "OnAutoHideEvent")
 	AB:RegisterEvent("PLAYER_REGEN_DISABLED", "OnAutoHideEvent")
 	AB:RegisterEvent("PLAYER_TARGET_CHANGED", "OnAutoHideEvent")
