@@ -71,7 +71,7 @@ local function LoadCurrency()
 		for i=1, GetCurrencyListSize() do
 			local name, isHeader, isExpanded, isUnused, isWatched, count, icon, totalMax = GetCurrencyListInfo(i)
 			if not isHeader and icon and count>0 then
-				GameTooltip:AddLine(" ")
+				-- GameTooltip:AddLine(" ")
 				if totalMax and totalMax > 100 then
 					totalMax = math.floor(totalMax/100)
 				else
