@@ -543,11 +543,11 @@ function AB:UpdatePositionAndSize(barName)
 		button:ClearAllPoints()
 
 		if i == 1 then
-			button:SetPoint("TOPLEFT", bar, "TOPLEFT", 0, 0)
+			button:Point("TOPLEFT", bar, "TOPLEFT", 0, 0)
 		elseif (i - 1) % buttonsPerRow == 0 then
-			button:SetPoint("TOPLEFT", lastColumnButton, "BOTTOMLEFT", 0, -buttonspacing)
+			button:Point("TOPLEFT", lastColumnButton, "BOTTOMLEFT", 0, -buttonspacing)
 		else
-			button:SetPoint("LEFT", lastButton, "RIGHT", buttonspacing, 0)
+			button:Point("LEFT", lastButton, "RIGHT", buttonspacing, 0)
 		end
 
 		if self.db[barName].mouseover then
