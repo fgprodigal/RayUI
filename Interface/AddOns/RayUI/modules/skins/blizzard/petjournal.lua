@@ -1,6 +1,8 @@
 local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local S = R:GetModule("Skins")
 
+local ToyBoxFilterFixerFilter = false
+
 local function LoadSkin()
 	local r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b
 	-- [[ Mounts and pets ]]
@@ -381,6 +383,9 @@ local function LoadSkin()
 			toyString:SetTextColor(.5, .5, .5)
 		end
 	end)
+
+	C_ToyBox.SetFilterUncollected(ToyBoxFilterFixerFilter)
+	hooksecurefunc(C_ToyBox, "SetFilterUncollected", function(filter) ToyBoxFilterFixerFilter = filter end)
 end
 
 S:RegisterSkin("Blizzard_PetJournal", LoadSkin)
