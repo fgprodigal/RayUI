@@ -356,10 +356,6 @@ function AB:HideBlizz()
 	OverrideActionBar:UnregisterAllEvents()
 	OverrideActionBar:Hide()
 	OverrideActionBar:SetParent(blizzHider)
-
-	PetActionBarFrame:UnregisterAllEvents()
-	PetActionBarFrame:Hide()
-	PetActionBarFrame:SetParent(blizzHider)
 	
 	MultiCastActionBarFrame:UnregisterAllEvents()
 	MultiCastActionBarFrame:Hide()
