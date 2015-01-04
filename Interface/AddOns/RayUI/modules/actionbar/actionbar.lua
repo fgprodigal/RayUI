@@ -658,6 +658,7 @@ function AB:Initialize()
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:RegisterEvent("UPDATE_BINDINGS", "ReassignBindings")
 	self:RegisterEvent("PET_BATTLE_CLOSE", "ReassignBindings")
+	self:RegisterEvent("PET_BATTLE_OPENING_DONE", "RemoveBindings")
 	self:PLAYER_ENTERING_WORLD()
 
 	if C_PetBattles.IsInBattle() then
