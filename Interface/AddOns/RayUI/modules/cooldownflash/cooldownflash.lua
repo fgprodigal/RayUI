@@ -116,9 +116,6 @@ local function OnUpdate(_,update)
 					DCP.TextFrame:SetText(animating[1][3])
 				end
                 DCPT:SetTexture(animating[1][1])
-                if animating[1][2] then
-                    DCPT:SetVertexColor(unpack(CF.db.petOverlay))
-                end
             end
             local alpha = CF.db.maxAlpha
             if (runtimer < CF.db.fadeInTime) then

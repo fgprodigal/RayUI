@@ -809,7 +809,7 @@ function AB:Style(button)
 		button.shadow:SetFrameLevel(button:GetFrameLevel())
 	end
 
-	if not name:find("OverrideActionBarButton") then
+	if not name:find("OverrideActionBarButton") and not name:find("PetActionButton") then
 		FixActionButtonCooldown(button)
 	end
 	button:StyleButton(true)
