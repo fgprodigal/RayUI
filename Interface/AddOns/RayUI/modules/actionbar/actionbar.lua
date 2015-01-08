@@ -606,7 +606,7 @@ end
 
 function AB:RemoveBindings()
 	if InCombatLockdown() then return end	
-	for _, bar in pairs(self["handledBars"]) do
+	for _, bar in pairs(self["Handled"]) do
 		if not bar then return end
 		
 		ClearOverrideBindings(bar)

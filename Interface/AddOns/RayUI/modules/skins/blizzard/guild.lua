@@ -238,7 +238,7 @@ local function LoadSkin()
 				bu:SetHighlightTexture(R["media"].gloss)
 				bu:GetHighlightTexture():SetVertexColor(r, g, b, .2)
 
-				bu.bg = F.CreateBG(bu.icon)
+				bu.bg = S:CreateBG(bu.icon)
 			end
 
 			index = offset + i
