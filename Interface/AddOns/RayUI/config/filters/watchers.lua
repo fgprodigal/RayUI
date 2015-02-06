@@ -1659,6 +1659,21 @@ R["Watcher"] = {
                 -- PvP 飾品 (全能)
                 { spellID = 170397, unitId = "player", caster = "all", filter = "BUFF" },
 
+                --錮法索銀指環 
+               -- 大法師的白熱光 (智力) 
+               { spellID = 177159, unitId = "player", caster = "player", filter = "BUFF" }, 
+               -- 大法師的白熱光 (力量) 
+               { spellID = 177160, unitId = "player", caster = "player", filter = "BUFF" }, 
+               -- 大法師的白熱光 (敏捷) 
+               { spellID = 177161, unitId = "player", caster = "player", filter = "BUFF" }, 
+
+               --錮法符文指環 
+               -- 大法師的白熱強光 (智力) 
+               { spellID = 177176, unitId = "player", caster = "player", filter = "BUFF" }, 
+               -- 大法師的白熱強光 (力量) 
+               { spellID = 177175, unitId = "player", caster = "player", filter = "BUFF" }, 
+               -- 大法師的白熱強光 (敏捷) 
+               { spellID = 177172, unitId = "player", caster = "player", filter = "BUFF" },
                 -- 暗月卡牌
                 -- 玉珑圣物 (智力, 触发)
                 { spellID = 128985, unitId = "player", caster = "all", filter = "BUFF" },
@@ -1974,8 +1989,6 @@ R["Watcher"] = {
                 { spellID = 98008, unitId = "player", caster = "all", filter = "BUFF" },
                 -- 气茧护体
                 { spellID = 116849, unitId = "player", caster = "all", filter = "BUFF" },
-                -- 烟雾弹
-                { spellID = 88611, unitId = "player", caster = "all", filter = "BUFF" },
                 -- 铁木树皮
                 { spellID = 102342, unitId = "player", caster = "all", filter = "BUFF" },
                 -- 奔窜咆哮
@@ -2178,6 +2191,8 @@ R["Watcher"] = {
                 --盜賊
                 -- 腎擊
                 { spellID = 408, unitId = "player", caster = "all", filter = "DEBUFF" },
+                -- 烟雾弹
+                { spellID = 88611, unitId = "player", caster = "all", filter = "BUFF" },
                 -- 偷襲
                 { spellID = 1833, unitId = "player", caster = "all", filter = "DEBUFF" },
                 -- 悶棍
