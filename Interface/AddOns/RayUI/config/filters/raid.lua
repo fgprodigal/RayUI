@@ -101,6 +101,108 @@ G.Raid.RaidDebuffs = {
 
 	-- Raid Debuffs
 	instances = {
+		[988] = { 
+   		-- 黑石铸造厂 
+   		--格鲁尔 
+   		
+   		[SpellName(155080)] = Defaults(4), -- 煉獄切割 分担组DOT 
+  	        [SpellName(155078)] = Defaults(3), -- 压迫打击 普攻坦克易伤 
+   		[SpellName(162322)] = Defaults(5), -- 炼狱打击 吃刀坦克易伤 
+   		[SpellName(155506)] = Defaults(2), -- 石化 
+
+   		--奥尔高格 
+   		
+   		[SpellName(156203)] = Defaults(5), -- 呕吐黑石 远程躲 
+   		[SpellName(156374)] = Defaults(5), -- 爆炸裂片 近战躲 
+   		[SpellName(156297)] = Defaults(3), -- 酸液洪流 副坦克易伤 
+   		[SpellName(173471)] = Defaults(4), -- 酸液巨口 主坦克DOT 
+   		[SpellName(155900)] = Defaults(2), -- 翻滚之怒 击倒 
+
+   		--爆裂熔炉 
+   		
+   		[SpellName(156932)] = Defaults(5), -- 崩裂 
+   		[SpellName(178279)] = Defaults(4), -- 炸弹 
+   		[SpellName(155192)] = Defaults(4), -- 炸弹 
+   		[SpellName(176121)] = Defaults(6), -- 不稳定的火焰 点名八码爆炸 
+   		[SpellName(155196)] = Defaults(2), -- 锁定 
+   		[SpellName(155743)] = Defaults(5), -- 熔渣池 
+   		[SpellName(155240)] = Defaults(3), -- 淬火 坦克易伤 
+   		[SpellName(155242)] = Defaults(3), -- 高热 三层换坦 
+  		[SpellName(155225)] = Defaults(5), -- 熔化 点名 
+   		[SpellName(155223)] = Defaults(5), -- 熔化 
+
+   		--汉斯加尔与弗兰佐克 
+   		
+   		[SpellName(157139)] = Defaults(3), -- 折脊碎椎 跳跃易伤 
+   		[SpellName(160838)] = Defaults(2), -- 干扰怒吼 
+   		[SpellName(160845)] = Defaults(2), -- 干扰怒吼 
+   		[SpellName(160847)] = Defaults(2), -- 干扰怒吼 
+   		[SpellName(160848)] = Defaults(2), -- 干扰怒吼 
+   		[SpellName(155818)] = Defaults(4), -- 灼热燃烧 场地边缘的火 
+
+   		--缚火者卡格拉兹 
+   		
+   		[SpellName(154952)] = Defaults(3), -- 锁定 
+   		[SpellName(155074)] = Defaults(1), -- 焦灼吐息 坦克易伤 
+   		[SpellName(155049)] = Defaults(2), -- 火焰链接 
+   		[SpellName(154932)] = Defaults(4), -- 熔岩激流 点名分摊 
+   		[SpellName(155277)] = Defaults(5), -- 炽热光辉 点名AOE 
+   		[SpellName(155314)] = Defaults(1), -- 岩浆猛击 冲锋火线 
+   		[SpellName(163284)] = Defaults(2), -- 升腾烈焰 坦克DOT 
+
+   		--克罗莫格 
+   		
+   		[SpellName(156766)] = Defaults(1), -- 扭曲护甲 坦克易伤 
+   		[SpellName(157059)] = Defaults(2), -- 纠缠之地符文 
+   		[SpellName(161839)] = Defaults(3), -- 破碎大地符文 
+   		[SpellName(161923)] = Defaults(3), -- 破碎大地符文 
+
+   		--兽王达玛克
+   		
+   		[SpellName(154960)] = Defaults(4), -- 长矛钉刺 
+   		[SpellName(155061)] = Defaults(1), -- 狂乱撕扯 狼阶段流血 
+   		[SpellName(162283)] = Defaults(1), -- 狂乱撕扯 BOSS继承的流血 
+   		[SpellName(154989)] = Defaults(3), -- 炼狱吐息 
+   		[SpellName(154981)] = Defaults(5), -- 爆燃 秒驱 
+   		[SpellName(155030)] = Defaults(2), -- 炽燃利齿 龙阶段坦克易伤 
+   		[SpellName(155236)] = Defaults(2), -- 碾碎护甲 象阶段坦克易伤 
+   		[SpellName(155499)] = Defaults(3), -- 高热弹片 
+   		[SpellName(155657)] = Defaults(4), -- 烈焰灌注 
+   		[SpellName(159044)] = Defaults(1), -- 强震 
+   		[SpellName(162277)] = Defaults(1), -- 强震 
+
+   		--主管索戈尔 
+   		
+   		[SpellName(155921)] = Defaults(2), -- 点燃 坦克易伤 
+   		[SpellName(165195)] = Defaults(4), -- 实验型脉冲手雷 
+   		[SpellName(156310)] = Defaults(3), -- 熔岩震击 
+   		[SpellName(159481)] = Defaults(3), -- 延时攻城炸弹 
+   		[SpellName(164380)] = Defaults(2), -- 燃烧 
+   		[SpellName(164280)] = Defaults(2), -- 热能冲击 
+
+   		--钢铁女武神 
+   		
+   		[SpellName(156631)] = Defaults(2), -- 急速射击 
+   		[SpellName(164271)] = Defaults(3), -- 穿透射击 
+   		[SpellName(158601)] = Defaults(1), -- 主炮轰击 
+   		[SpellName(156214)] = Defaults(4), -- 震颤暗影 
+   		[SpellName(158315)] = Defaults(2), -- 暗影猎杀 
+   		[SpellName(159724)] = Defaults(3), -- 鲜血仪式 
+   		[SpellName(158010)] = Defaults(2), -- 浸血觅心者 
+   		[SpellName(158692)] = Defaults(1), -- 致命投掷 
+   		[SpellName(158702)] = Defaults(2), -- 锁定 
+   		[SpellName(158683)] = Defaults(3), -- 堕落之血 
+
+   		--Blackhand
+		[SpellName(156096)] = Defaults(5), --MARKEDFORDEATH
+		[SpellName(156107)] = Defaults(4), --IMPALED
+		[SpellName(156047)] = Defaults(2), --SLAGGED
+		[SpellName(156401)] = Defaults(4), --MOLTENSLAG
+		[SpellName(156404)] = Defaults(3), --BURNED
+		[SpellName(158054)] = Defaults(4), --SHATTERINGSMASH 158054 155992 159142
+		[SpellName(156888)] = Defaults(5), --OVERHEATED
+		[SpellName(157000)] = Defaults(2), --ATTACHSLAGBOMBS
+  },
 		[994] = { 
             --悬槌堡 
             -- 1 卡加斯 
