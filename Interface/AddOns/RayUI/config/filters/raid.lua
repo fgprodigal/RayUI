@@ -193,9 +193,15 @@ G.Raid.RaidDebuffs = {
    		[SpellName(158702)] = Defaults(2), -- 锁定 
    		[SpellName(158683)] = Defaults(3), -- 堕落之血 
 
-   		--黑手 
-   		[SpellName(156096)] = Defaults(5), -- 死亡标记 
-   	
+   		--Blackhand
+		[SpellName(156096)] = Defaults(5), --MARKEDFORDEATH
+		[SpellName(156107)] = Defaults(4), --IMPALED
+		[SpellName(156047)] = Defaults(2), --SLAGGED
+		[SpellName(156401)] = Defaults(4), --MOLTENSLAG
+		[SpellName(156404)] = Defaults(3), --BURNED
+		[SpellName(158054)] = Defaults(4), --SHATTERINGSMASH 158054 155992 159142
+		[SpellName(156888)] = Defaults(5), --OVERHEATED
+		[SpellName(157000)] = Defaults(2), --ATTACHSLAGBOMBS
   },
 		[994] = { 
             --悬槌堡 
