@@ -219,6 +219,9 @@ local function LoadSkin()
 		f:SetScript("OnEvent", function(self, event, addon)
 			if addon == "MasterPlan" then
 				S:CreateTab(GarrisonMissionFrameTab3)
+				if GarrisonMissionFrameTab4 then
+					S:CreateTab(GarrisonMissionFrameTab4)
+				end
 				self:UnregisterEvent("ADDON_LOADED")
 			end
 		end)
