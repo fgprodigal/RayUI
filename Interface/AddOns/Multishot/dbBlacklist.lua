@@ -1,5 +1,5 @@
 Multishot_dbBlacklist = {
-  [16803] = true, -- Naxxramas: DeathKnight Understudy: Razuvious "adds"
+  [16803] = true, -- Naxxramas: DeathKnight Understudy (Razuvious "adds")
   [15930] = true, -- Naxxramas: Feugen (Thaddius pre-event)
   [15929] = true, -- Naxxramas: Stalagg (Thaddius pre-event)
   [32933] = true, -- Ulduar: Left Arm (Kologarn's arms)

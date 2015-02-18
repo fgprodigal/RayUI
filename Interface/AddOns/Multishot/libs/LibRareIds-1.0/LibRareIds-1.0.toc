@@ -1,9 +1,12 @@
-## Interface: 40100
+## Interface: 60000
 ## Title: LibRareIds-1.0
-## Author: dlui
-## Version: r10
+## Author: Dridzt
+## Version: 1.0.10
 ## Notes: A table of all rare/rare-elites in game.
+## X-Curse-Packaged-Version: 1.0.10
+## X-Curse-Project-Name: LibRareIds-1.0
 ## X-Curse-Project-ID: librareids-1-0
+## X-Curse-Repository-ID: wow/librareids-1-0/mainline
 
 LibStub\LibStub.lua
 LibRareIds-1.0.xml

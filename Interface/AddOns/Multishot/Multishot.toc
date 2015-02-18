@@ -1,13 +1,16 @@
-﻿## Interface: 60000
+## Interface: 60000
 ## Title: Multishot
-## Author: dlui
-## Version: r10
-## Notes: Taking screenshots of memorable events in your World of Warcraft career.
+## Author: dlui & dridzt
+## Version: 3.1.4
+## Notes: Takes screenshots of memorable events in your World of Warcraft career.
 ## OptionalDeps: LibStub, CallbackHandler-1.0, Ace3, LibBossIDs-1.0, LibRareIds-1.0
 ## SavedVariables: MultishotConfig
 ## SavedVariablesPerCharacter: MultishotPlayerScreens
-## X-Curse-Project-ID: multishot
 ## X-WoWI-ID: 9590
+## X-Curse-Packaged-Version: 3.1.4
+## X-Curse-Project-Name: Multishot (Screenshot)
+## X-Curse-Project-ID: multishot
+## X-Curse-Repository-ID: wow/multishot/mainline
 
 #@no-lib-strip@
 libs\data.xml

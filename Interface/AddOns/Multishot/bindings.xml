@@ -1,0 +1,5 @@
+<Bindings>
+  <Binding name="MULTISHOTSCREENSHOT" header="MULTISHOT" category="ADDONS">
+    Multishot:CustomScreenshot(KEY_BINDING)
+  </Binding>
+</Bindings>

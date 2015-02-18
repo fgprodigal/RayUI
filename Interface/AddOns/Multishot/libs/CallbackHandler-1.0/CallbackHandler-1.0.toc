@@ -1,4 +1,4 @@
-## Interface: 30300
+## Interface: 60000
 ## LoadOnDemand: 1
 ## Title: Lib: CallbackHandler-1.0
 ## Notes: Callback handling Library, normally embedded inside other libraries
@@ -6,7 +6,7 @@
 ## X-Website: http://www.wowace.com/projects/callbackhandler/
 ## X-Category: Library
 ## X-License: BSD-2.0
-## X-Curse-Packaged-Version: 1.0.6
+## X-Curse-Packaged-Version: 1.0.6.60000
 ## X-Curse-Project-Name: CallbackHandler-1.0
 ## X-Curse-Project-ID: callbackhandler
 ## X-Curse-Repository-ID: wow/callbackhandler/mainline
