@@ -256,6 +256,7 @@ Skada:AddLoadableModule("Damage", function(Skada, L)
 				d.value = player.damage
 				d.id = player.id
 				d.class = player.class
+				d.role = player.role
 				if player.damage > max then
 					max = player.damage
 				end
@@ -499,6 +500,7 @@ Skada:AddLoadableModule("Damage", function(Skada, L)
 				d.id = player.id
 				d.value = dps
 				d.class = player.class
+				d.role = player.role
 				d.valuetext = Skada:FormatNumber(dps)
 				if dps > max then
 					max = dps
