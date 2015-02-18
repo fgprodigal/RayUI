@@ -7,6 +7,7 @@ local oUF = RayUF or oUF
 RA.modName = L["团队"]
 
 local function RegisterDebuffs()
+	SetMapToCurrentZone()
 	local _, instanceType = IsInInstance()
 	local zone = GetCurrentMapAreaID()
 	local ORD = ns.oUF_RaidDebuffs or oUF_RaidDebuffs
