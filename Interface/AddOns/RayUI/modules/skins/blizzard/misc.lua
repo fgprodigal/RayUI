@@ -717,38 +717,6 @@ local function LoadSkin()
 		S:ReskinCheck(_G[checkboxes[i]])
 	end
 
-	local dropdowns = {
-		"InterfaceOptionsControlsPanelAutoLootKeyDropDown",
-		"InterfaceOptionsCombatPanelTOTDropDown",
-		"InterfaceOptionsCombatPanelFocusCastKeyDropDown",
-		"InterfaceOptionsCombatPanelSelfCastKeyDropDown",
-		"InterfaceOptionsDisplayPanelAggroWarningDisplay",
-		"InterfaceOptionsDisplayPanelWorldPVPObjectiveDisplay",
-		"InterfaceOptionsSocialPanelChatStyle",
-		"InterfaceOptionsSocialPanelTimestamps",
-		"InterfaceOptionsSocialPanelWhisperMode",
-		"InterfaceOptionsSocialPanelBnWhisperMode",
-		"InterfaceOptionsSocialPanelConversationMode",
-		"InterfaceOptionsActionBarsPanelPickupActionKeyDropDown",
-		"InterfaceOptionsNamesPanelNPCNamesDropDown",
-		"InterfaceOptionsNamesPanelUnitNameplatesMotionDropDown",
-		"InterfaceOptionsCombatTextPanelFCTDropDown",
-		"CompactUnitFrameProfilesProfileSelector",
-		"CompactUnitFrameProfilesGeneralOptionsFrameSortByDropdown",
-		"CompactUnitFrameProfilesGeneralOptionsFrameHealthTextDropdown",
-		"InterfaceOptionsCameraPanelStyleDropDown",
-		"InterfaceOptionsMousePanelClickMoveStyleDropDown",
-		"Advanced_GraphicsAPIDropDown",
-		"InterfaceOptionsCombatPanelLossOfControlFullDropDown",
-		"InterfaceOptionsCombatPanelLossOfControlSilenceDropDown",
-		"InterfaceOptionsCombatPanelLossOfControlInterruptDropDown",
-		"InterfaceOptionsCombatPanelLossOfControlDisarmDropDown",
-		"InterfaceOptionsCombatPanelLossOfControlRootDropDown"
-	}
-	for i = 1, #dropdowns do
-		S:ReskinDropDown(_G[dropdowns[i]])
-	end
-
 	local sliders = {
 		"InterfaceOptionsCombatPanelSpellAlertOpacitySlider",
 		"InterfaceOptionsCombatPanelMaxSpellStartRecoveryOffset",
