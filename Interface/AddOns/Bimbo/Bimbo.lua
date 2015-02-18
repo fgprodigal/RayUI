@@ -1,22 +1,29 @@
 
-local tip = BimboScanTip
+local myname, ns = ...
 
 local links = {}
 local slots = {"BackSlot", "ChestSlot", "FeetSlot", "Finger0Slot", "Finger1Slot", "HandsSlot", "HeadSlot", "LegsSlot", "MainHandSlot", "NeckSlot", "SecondaryHandSlot", "ShoulderSlot", "Trinket0Slot", "Trinket1Slot", "WaistSlot", "WristSlot"}
 local enchantables = {BackSlot = true, Finger0Slot = true, Finger1Slot = true, NeckSlot = true, MainHandSlot = true}
 local _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, wands = GetAuctionItemSubClasses(1)
+local sockets = {
+	"EMPTY_SOCKET_META",
+	"EMPTY_SOCKET_RED",
+	"EMPTY_SOCKET_YELLOW",
+	"EMPTY_SOCKET_BLUE",
+	"EMPTY_SOCKET_PRISMATIC",
+	"EMPTY_SOCKET_NO_COLOR",
+	"EMPTY_SOCKET_COGWHEEL",
+	"EMPTY_SOCKET_HYDRAULIC",
+}
 
 
-local function GetSocketCount(link, slot, unit)
+local function GetSocketCount(link)
 	local num, filled = 0, 0
-	if slot then
-		local slotid = GetInventorySlotInfo(slot)
-		tip:SetInventoryItem(unit, slotid)
-	else
-		tip:SetHyperlink(link)
-	end
-	for i=1,10 do if tip.icon[i] then num = num + 1 end end
+	local stats = GetItemStats(link)
 
+	for _,socket in pairs(sockets) do
+		num = num + (stats[socket] or 0)
+	end
 	for i=1,num do
 		if GetItemGem(link, i) then filled = filled + 1 end
 	end
@@ -64,7 +71,7 @@ local function Check(unit, report)
 	end
 
 	for slot,link in pairs(links) do
-		local num, filled = GetSocketCount(link, slot, unit)
+		local num, filled = GetSocketCount(link)
 		if filled < num then
 			found = true
 			glows[slot]:Show()
