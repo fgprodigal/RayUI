@@ -12,7 +12,7 @@ local function SkinDBM()
 	local buttonsize = 20
 
 	local function ApplyMyStyle(self)
-		if not S.db.dbmposition then return end
+		if not S.db.dbm or not S.db.dbmposition then return end
 		if DBM_GUI_Option_57 then
 			DBM_GUI_Option_57:Kill()
 		end
@@ -306,13 +306,18 @@ local function SkinDBM()
 	end
 
 	local ForceOptions = function()
-		DBT_PersistentOptions["DBM"].Scale = 1
-		DBT_PersistentOptions["DBM"].HugeScale = 1
-		DBT_PersistentOptions["DBM"].BarXOffset = 0
-		DBT_PersistentOptions["DBM"].BarYOffset = 6
-		DBT_PersistentOptions["DBM"].HugeBarYOffset = 6
-		DBT_PersistentOptions["DBM"].Texture = "RayUI Normal"
-		DBT_PersistentOptions["DBM"].Font = "RayUI Font"
+		local db = DBT_AllPersistentOptions["Default"] or DBT_PersistentOptions["DBM"] or nil
+		if not db then
+			R:Print("DBM配置写入失败")
+			return
+		end
+		db.Scale = 1
+		db.HugeScale = 1
+		db.BarXOffset = 0
+		db.BarYOffset = 6
+		db.HugeBarYOffset = 6
+		db.Texture = "RayUI Normal"
+		db.Font = "RayUI Font"
 	end
 
 	local loadOptions = CreateFrame("Frame")
