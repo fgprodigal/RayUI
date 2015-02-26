@@ -12,13 +12,24 @@ local function LoadSkin()
 
 	for i = 1, 14 do
 		if i ~= 8 then
-			select(i, PetJournalParent:GetRegions()):Hide()
+			select(i, CollectionsJournal:GetRegions()):Hide()
 		end
 	end
 	for i = 1, 9 do
 		select(i, MountJournal.MountCount:GetRegions()):Hide()
 		select(i, PetJournal.PetCount:GetRegions()):Hide()
 	end
+	
+	S:CreateBD(CollectionsJournal)
+	S:CreateTab(CollectionsJournalTab1)
+	S:CreateTab(CollectionsJournalTab2)
+	S:CreateTab(CollectionsJournalTab3)
+	S:CreateTab(CollectionsJournalTab4)
+	S:ReskinClose(CollectionsJournalCloseButton)
+	
+	CollectionsJournalTab2:SetPoint("LEFT", CollectionsJournalTab1, "RIGHT", -15, 0)
+	CollectionsJournalTab3:SetPoint("LEFT", CollectionsJournalTab2, "RIGHT", -15, 0)
+	CollectionsJournalTab4:SetPoint("LEFT", CollectionsJournalTab3, "RIGHT", -15, 0)
 
 	MountJournal.LeftInset:Hide()
 	MountJournal.RightInset:Hide()
@@ -31,7 +42,6 @@ local function LoadSkin()
 	MountJournal.MountDisplay.ShadowOverlay:Hide()
 	PetJournalTutorialButton.Ring:Hide()
 
-	S:CreateBD(PetJournalParent)
 	S:CreateBD(MountJournal.MountCount, .25)
 	S:CreateBD(PetJournal.PetCount, .25)
 	S:CreateBD(MountJournal.MountDisplay.ModelFrame, .25)
@@ -39,10 +49,6 @@ local function LoadSkin()
 	S:Reskin(MountJournalMountButton)
 	S:Reskin(PetJournalSummonButton)
 	S:Reskin(PetJournalFindBattle)
-	S:CreateTab(PetJournalParentTab1)
-	S:CreateTab(PetJournalParentTab2)
-	S:CreateTab(PetJournalParentTab3)
-	S:ReskinClose(PetJournalParentCloseButton)
 	S:ReskinScroll(MountJournalListScrollFrameScrollBar)
 	S:ReskinScroll(PetJournalListScrollFrameScrollBar)
 	S:ReskinInput(MountJournalSearchBox)
@@ -56,9 +62,6 @@ local function LoadSkin()
 	PetJournalFilterButton:SetPoint("TOPRIGHT", PetJournalLeftInset, -5, -8)
 
 	PetJournalTutorialButton:SetPoint("TOPLEFT", PetJournal, "TOPLEFT", -14, 14)
-
-	PetJournalParentTab2:SetPoint("LEFT", PetJournalParentTab1, "RIGHT", -15, 0)
-	PetJournalParentTab3:SetPoint("LEFT", PetJournalParentTab2, "RIGHT", -15, 0)
 
 	local scrollFrames = {MountJournal.ListScrollFrame.buttons, PetJournal.listScroll.buttons}
 	for _, scrollFrame in pairs(scrollFrames) do
@@ -324,53 +327,58 @@ local function LoadSkin()
 
 	-- [[ Toy box ]]
 
-	ToyBoxIconsFrame.Bg:Hide()
-	ToyBoxIconsFrameBackgroundTile:Hide()
-	ToyBoxIconsFrame:DisableDrawLayer("BORDER")
-	ToyBoxIconsFrame:DisableDrawLayer("ARTWORK")
-	ToyBoxIconsFrame:DisableDrawLayer("OVERLAY")
+	local ToyBox = ToyBox
+
+	local icons = ToyBox.iconsFrame
+	icons.Bg:Hide()
+	icons.BackgroundTile:Hide()
+	icons:DisableDrawLayer("BORDER")
+	icons:DisableDrawLayer("ARTWORK")
+	icons:DisableDrawLayer("OVERLAY")
 
 	S:ReskinInput(ToyBox.searchBox)
 	S:ReskinFilterButton(ToyBoxFilterButton)
-	S:ReskinArrow(ToyBoxPrevPageButton, "left")
-	S:ReskinArrow(ToyBoxNextPageButton, "right")
+	S:ReskinArrow(ToyBox.navigationFrame.prevPageButton, "left")
+	S:ReskinArrow(ToyBox.navigationFrame.nextPageButton, "right")
 
-	ToyBoxPrevPageButton:SetPoint("BOTTOMRIGHT", -320, 51)
-	ToyBoxNextPageButton:SetPoint("BOTTOMRIGHT", -285, 51)
+	ToyBox.navigationFrame.prevPageButton:SetPoint("BOTTOMRIGHT", -320, 51)
+	ToyBox.navigationFrame.nextPageButton:SetPoint("BOTTOMRIGHT", -285, 51)
 
 	-- Progress bar
 
-	ToyBoxProgressBarBorder:Hide()
-	ToyBoxProgressBarBackground:Hide()
+	local progressBar = ToyBox.progressBar
+	progressBar.border:Hide()
+	progressBar:DisableDrawLayer("BACKGROUND")
 
-	ToyBoxProgressBar.text:SetPoint("CENTER", 0, 1)
-	ToyBoxProgressBarBar:SetTexture(R["media"].gloss)
+	progressBar.text:SetPoint("CENTER", 0, 1)
+	progressBar:SetStatusBarTexture(R["media"].gloss)
 
-	S:CreateBDFrame(ToyBoxProgressBar, .25)
+	S:CreateBDFrame(progressBar, .25)
 
 	-- Toys!
 
+	local buttons = ToyBox.iconsFrame
 	for i = 1, 18 do
-		local bu = _G["ToySpellButton"..i]
-		local ic = _G["ToySpellButton"..i.."IconTexture"]
+		local bu = buttons["spellButton"..i]
+		local ic = bu.iconTexture
 
 		bu:StyleButton(true)
 
 		bu.cooldown:SetAllPoints(ic)
 
-		_G["ToySpellButton"..i.."SlotFrameCollected"]:SetTexture("")
-		_G["ToySpellButton"..i.."SlotFrameUncollected"]:SetTexture("")
-		_G["ToySpellButton"..i].hover:SetAllPoints(ic)
-		_G["ToySpellButton"..i].checked:SetAllPoints(ic)
-		_G["ToySpellButton"..i].pushed:SetAllPoints(ic)
-		_G["ToySpellButton"..i.."Cooldown"]:SetAllPoints(ic)
+		bu.slotFrameCollected:SetTexture("")
+		bu.slotFrameUncollected:SetTexture("")
+		bu.hover:SetAllPoints(ic)
+		bu.checked:SetAllPoints(ic)
+		bu.pushed:SetAllPoints(ic)
+		bu.cooldown:SetAllPoints(ic)
 
 		ic:SetTexCoord(.08, .92, .08, .92)
 		S:CreateBG(ic)
 	end
 
 	hooksecurefunc("ToySpellButton_UpdateButton", function(self)
-		local toyString = _G[self:GetName().."ToyName"]
+		local toyString = self.name
 
 		if PlayerHasToy(self.itemID) then
 			local _, _, quality = GetItemInfo(self.itemID)
@@ -386,6 +394,37 @@ local function LoadSkin()
 
 	C_ToyBox.SetFilterUncollected(ToyBoxFilterFixerFilter)
 	hooksecurefunc(C_ToyBox, "SetFilterUncollected", function(filter) ToyBoxFilterFixerFilter = filter end)
+
+	-- [[ Heirlooms ]]
+
+	local HeirloomsJournal = HeirloomsJournal
+
+	local icons = HeirloomsJournal.iconsFrame
+	icons.Bg:Hide()
+	icons.BackgroundTile:Hide()
+	icons:DisableDrawLayer("BORDER")
+	icons:DisableDrawLayer("ARTWORK")
+	icons:DisableDrawLayer("OVERLAY")
+
+	S:ReskinInput(HeirloomsJournalSearchBox)
+	S:ReskinDropDown(HeirloomsJournalClassDropDown)
+	S:ReskinFilterButton(HeirloomsJournalFilterButton)
+	S:ReskinArrow(HeirloomsJournal.navigationFrame.prevPageButton, "left")
+	S:ReskinArrow(HeirloomsJournal.navigationFrame.nextPageButton, "right")
+
+	HeirloomsJournal.navigationFrame.prevPageButton:SetPoint("BOTTOMRIGHT", -320, 51)
+	HeirloomsJournal.navigationFrame.nextPageButton:SetPoint("BOTTOMRIGHT", -285, 51)
+
+	-- Progress bar
+
+	local progressBar = HeirloomsJournal.progressBar
+	progressBar.border:Hide()
+	progressBar:DisableDrawLayer("BACKGROUND")
+
+	progressBar.text:SetPoint("CENTER", 0, 1)
+	progressBar:SetStatusBarTexture(R["media"].gloss)
+
+	S:CreateBDFrame(progressBar, .25)
 end
 
-S:RegisterSkin("Blizzard_PetJournal", LoadSkin)
+S:RegisterSkin("Blizzard_Collections", LoadSkin)

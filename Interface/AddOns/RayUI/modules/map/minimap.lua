@@ -209,17 +209,9 @@ function MM:CreateMenu()
 		end},
 		{text = ENCOUNTER_JOURNAL, notCheckable = true,
 		func = function() if not IsAddOnLoaded("Blizzard_EncounterJournal") then EncounterJournal_LoadUI() end ToggleFrame(EncounterJournal) end},
-		{text = MOUNTS, notCheckable = true,
+		{text = COLLECTIONS, notCheckable = true,
 		func = function()
-			TogglePetJournal(1);
-		end},
-		{text = PETS, notCheckable = true,
-		func = function()
-			TogglePetJournal(2)
-		end},
-		{text = TOY_BOX, notCheckable = true,
-		func = function() 
-			TogglePetJournal(3)
+			ToggleCollectionsJournal();
 		end},
 		{text = LFG_TITLE, notCheckable = true,
 		func = function() PVEFrame_ToggleFrame() end},

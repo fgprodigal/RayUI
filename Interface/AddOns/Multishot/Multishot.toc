@@ -1,4 +1,4 @@
-## Interface: 60000
+## Interface: 60100
 ## Title: Multishot
 ## Author: dlui & dridzt
 ## Version: 3.1.4
