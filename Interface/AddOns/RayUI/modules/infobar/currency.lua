@@ -70,6 +70,7 @@ local function LoadCurrency()
 		GameTooltip:AddLine(CURRENCY, 0.69, 0.31, 0.31)
 		for i=1, GetCurrencyListSize() do
 			local name, isHeader, isExpanded, isUnused, isWatched, count, icon, totalMax = GetCurrencyListInfo(i)
+			if isHeader and name == UNUSED then break end
 			if not isHeader and icon and count>0 then
 				-- GameTooltip:AddLine(" ")
 				if totalMax and totalMax > 100 then

@@ -5,6 +5,7 @@
 ## OptionalDeps: Blizzard_DebugTools,Skada,DBM-Core, BigWigs, AtlasLoot, SharedMedia
 ## RequiredDeps: Blizzard_CombatText
 ## X-Credits: Tukz, Elv, Haste, Haleth, Tekkub, Zork
+## X-SpecialThanks: Yvette
 ## X-oUF: RayUF
 ## SavedVariables: RayUIData
 ## SavedVariablesPerCharacter:RayUICharacterData
