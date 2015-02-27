@@ -97,6 +97,7 @@ local lodFrames = {
   Blizzard_BlackMarketUI = { ["BlackMarketFrame"] = false }, -- UNTESTED
   Blizzard_ChallengesUI = { ["ChallengesLeaderboardFrame"] = false }, -- UNTESTED
   Blizzard_ItemUpgradeUI = { ["ItemUpgradeFrame"] = false, }, -- UNTESTED
+  Blizzard_GarrisonUI = { ["GarrisonCapacitiveDisplayFrame"] = false, },
 }
 
 local parentFrame = {}

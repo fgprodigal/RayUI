@@ -35,8 +35,16 @@ local function LoadSkin()
 
 	local GarrisonCapacitiveDisplayFrame = GarrisonCapacitiveDisplayFrame
 
+	GarrisonCapacitiveDisplayFrame:SetFrameStrata("MEDIUM")
+	GarrisonCapacitiveDisplayFrame:SetFrameLevel(45)
+
 	S:ReskinPortraitFrame(GarrisonCapacitiveDisplayFrame, true)
 	S:Reskin(GarrisonCapacitiveDisplayFrame.StartWorkOrderButton, true)
+	S:Reskin(GarrisonCapacitiveDisplayFrame.CreateAllWorkOrdersButton, true)
+	GarrisonCapacitiveDisplayFrame.Count:StripTextures()
+	S:ReskinInput(GarrisonCapacitiveDisplayFrame.Count)
+	S:ReskinArrow(GarrisonCapacitiveDisplayFrame.DecrementButton, "left")
+	S:ReskinArrow(GarrisonCapacitiveDisplayFrame.IncrementButton, "right")
 
 	-- Capacitive display
 
@@ -218,6 +226,9 @@ local function LoadSkin()
 		f:RegisterEvent("ADDON_LOADED")
 		f:SetScript("OnEvent", function(self, event, addon)
 			if addon == "MasterPlan" then
+				GarrisonMissionFrameTab3.Pulse:Stop()
+				GarrisonMissionFrameTab3.Pulse = GarrisonMissionFrameTab3:CreateAnimationGroup()
+				GarrisonMissionFrameTab3:StripTextures()
 				S:CreateTab(GarrisonMissionFrameTab3)
 				if GarrisonMissionFrameTab4 then
 					S:CreateTab(GarrisonMissionFrameTab4)
