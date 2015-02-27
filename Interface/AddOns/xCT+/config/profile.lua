@@ -146,9 +146,9 @@ addon.defaults = {
         ["visibilityTime"] = 5,
         
       -- special tweaks
-        ["showInterrupts"] = true,
-        ["showDispells"] = true,
-        ["showPartyKills"] = true,
+        ["showInterrupts"] = false,
+        ["showDispells"] = false,
+        ["showPartyKills"] = false,
         ["showBuffs"] = true,
         ["showDebuffs"] = true,
         ["showLowManaHealth"] = true,
