@@ -117,6 +117,8 @@ R["Watcher"] = {
                 { spellID = 135286, unitId = "player", caster = "player", filter = "BUFF" },
                 --野蛮防御
                 { spellID = 132402, unitId = "player", caster = "player", filter = "BUFF" },
+                --落日余晖
+                { spellID = 155592, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
