@@ -154,7 +154,28 @@ oUF.Tags.Events["RayUIRaid:ws"] = "UNIT_AURA"
 oUF.Tags.Methods["RayUIRaid:fw"] = function(u) if UnitAura(u, GetSpellInfo(6346)) then return "|cff8B4513"..x.."|r" end end
 oUF.Tags.Events["RayUIRaid:fw"] = "UNIT_AURA"
 
-oUF.Tags.Methods["RayUIRaid:fort"] = function(u) if not(UnitAura(u, GetSpellInfo(21562)) or UnitAura(u, GetSpellInfo(90364)) or UnitAura(u, GetSpellInfo(469)) or UnitAura(u, GetSpellInfo(109773))) then return "|cff00A1DE"..x.."|r" end end
+-- 10%耐力
+oUF.Tags.Methods["RayUIRaid:fort"] = function(u)
+	if not (
+		-- 真言術：韌
+		UnitAura(u, GetSpellInfo(21562))
+		-- 血之契印
+		or UnitAura(u, GetSpellInfo(166928))
+		-- 命令怒吼
+		or UnitAura(u, GetSpellInfo(469))
+		-- pet 野性活力
+		or UnitAura(u, GetSpellInfo(160003))
+		-- pet 鼓舞咆哮
+		or UnitAura(u, GetSpellInfo(50256))
+		-- pet 堅忍不拔
+		or UnitAura(u, GetSpellInfo(160014))
+		-- pet 其拉堅韌（獸王）
+		or UnitAura(u, GetSpellInfo(90364))
+		-- 孤狼：熊之堅韌
+		or UnitAura(u, GetSpellInfo(160199))) then
+		return "|cff00A1DE"..x.."|r"
+	end
+end
 oUF.Tags.Events["RayUIRaid:fort"] = "UNIT_AURA"
 
 oUF.Tags.Methods["RayUIRaid:pwb"] = function(u) if UnitAura(u, GetSpellInfo(81782)) then return "|cffEEEE00"..x.."|r" end end
@@ -204,14 +225,48 @@ oUF.Tags.Events["RayUIRaid:regrow"] = "UNIT_AURA"
 oUF.Tags.Methods["RayUIRaid:wg"] = function(u) if UnitAura(u, GetSpellInfo(48438)) then return "|cff33FF33"..x.."|r" end end
 oUF.Tags.Events["RayUIRaid:wg"] = "UNIT_AURA"
 
-oUF.Tags.Methods["RayUIRaid:motw"] = function(u) if not(UnitAura(u, GetSpellInfo(20217)) or UnitAura(u,GetSpellInfo(1126))  or UnitAura(u,GetSpellInfo(117666))) then return "|cff00A1DE"..x.."|r" end end
+-- 5%屬性
+oUF.Tags.Methods["RayUIRaid:motw"] = function(u)
+	if not (
+		-- 野性印記
+		UnitAura(u, GetSpellInfo(1126))
+		-- 御傳心法（織霧）
+		or UnitAura(u,GetSpellInfo(115921))
+		-- 雪怒心法（釀酒、禦風）
+		or UnitAura(u,GetSpellInfo(116781)) 
+		-- 王者祝福
+		or UnitAura(u,GetSpellInfo(20217)) 
+		-- pet 狂野怒吼
+		or UnitAura(u,GetSpellInfo(159988)) 
+		-- pet 金剛的祝福
+		or UnitAura(u,GetSpellInfo(160017)) 
+		-- pet 岩蛛之擁（獸王）
+		or UnitAura(u,GetSpellInfo(90363)) 
+		-- pet 大地之力（獸王）
+		or UnitAura(u,GetSpellInfo(160077)) 
+		-- 孤狼：猿之神力
+		or UnitAura(u,GetSpellInfo(160206))) then
+		return "|cff00A1DE"..x.."|r"
+	end
+end
 oUF.Tags.Events["RayUIRaid:motw"] = "UNIT_AURA"
 
 -- Warrior
-oUF.Tags.Methods["RayUIRaid:stragi"] = function(u) if not(UnitAura(u, GetSpellInfo(6673)) or UnitAura(u, GetSpellInfo(57330)) or UnitAura(u, GetSpellInfo(8076))) then return "|cffFF0000"..x.."|r" end end
+-- 10%攻強
+oUF.Tags.Methods["RayUIRaid:stragi"] = function(u)
+	if not (
+		-- 凜冬號角
+		UnitAura(u, GetSpellInfo(57330))
+		-- 強擊光環
+		or UnitAura(u, GetSpellInfo(19506))
+		-- 戰鬥怒吼
+		or UnitAura(u, GetSpellInfo(6673))) then
+		return "|cffFF0000"..x.."|r"
+	end
+end
 oUF.Tags.Events["RayUIRaid:stragi"] = "UNIT_AURA"
 
-oUF.Tags.Methods["RayUIRaid:vigil"] = function(u) if UnitAura(u, GetSpellInfo(50720)) then return "|cff8B4513"..x.."|r" end end
+oUF.Tags.Methods["RayUIRaid:vigil"] = function(u) if UnitAura(u, GetSpellInfo(114030)) then return "|cff8B4513"..x.."|r" end end
 oUF.Tags.Events["RayUIRaid:vigil"] = "UNIT_AURA"
 
 -- Shaman
@@ -234,7 +289,30 @@ end
 oUF.Tags.Events["RayUIRaid:earth"] = "UNIT_AURA"
 
 -- Paladin
-oUF.Tags.Methods["RayUIRaid:might"] = function(u) if not(UnitAura(u, GetSpellInfo(19740))) then return "|cffFF0000"..x.."|r" end end
+-- 精通
+oUF.Tags.Methods["RayUIRaid:might"] = function(u)
+	if not (
+		-- 墳塚之力
+		UnitAura(u, GetSpellInfo(155522))
+		-- 梟獸光環
+		or UnitAura(u, GetSpellInfo(24907))
+		-- 力量祝福
+		or UnitAura(u, GetSpellInfo(19740))
+		-- 風之優雅
+		or UnitAura(u, GetSpellInfo(116956))
+		-- pet 激勵咆哮
+		or UnitAura(u, GetSpellInfo(93435))
+		-- pet 敏銳感官
+		or UnitAura(u, GetSpellInfo(160039))
+		-- pet 靈獸祝福（獸王）
+		or UnitAura(u, GetSpellInfo(128997))
+		-- pet 如履平地
+		or UnitAura(u, GetSpellInfo(160073))
+		-- 孤狼：貓之優雅
+		or UnitAura(u, GetSpellInfo(160198))) then
+		return "|cffFF0000"..x.."|r"
+	end
+end
 oUF.Tags.Events["RayUIRaid:might"] = "UNIT_AURA"
 
 oUF.Tags.Methods["RayUIRaid:beacon"] = function(u)
@@ -252,11 +330,48 @@ oUF.Tags.Methods["RayUIRaid:forbearance"] = function(u) if UnitDebuff(u, GetSpel
 oUF.Tags.Events["RayUIRaid:forbearance"] = "UNIT_AURA"
 
 -- Warlock
+-- 黑暗意圖
 oUF.Tags.Methods["RayUIRaid:di"] = function(u)
-	if not ((UnitAura(u, GetSpellInfo(21562)) or UnitAura(u, GetSpellInfo(6307)) or UnitAura(u, GetSpellInfo(469)) or UnitAura(u, GetSpellInfo(109773)))
-			and (UnitAura(u, GetSpellInfo(1459)) or UnitAura(u, GetSpellInfo(61316))))
-			and not UnitAura(u, GetSpellInfo(109773)) then
-			return "|cffCC00FF"..x.."|r"
+	if not (
+		(
+			-- 10%法能
+			-- 秘法光輝
+			UnitAura(u, GetSpellInfo(1459))
+			-- 達拉然光輝
+			or UnitAura(u, GetSpellInfo(61316))
+			-- pet 其拉堅韌（獸王）
+			or UnitAura(u, GetSpellInfo(90364))
+			-- pet 平靜如水（獸王）
+			or UnitAura(u, GetSpellInfo(126309))
+			-- pet 蛇之迅捷
+			or UnitAura(u, GetSpellInfo(128433))
+			-- 孤狼：蛇之靈智
+			or UnitAura(u, GetSpellInfo(160205)))
+		and (
+			-- 5%雙擊
+			-- 強風吹拂
+			UnitAura(u, GetSpellInfo(166916))
+			-- 思維敏捷
+			or UnitAura(u, GetSpellInfo(49868))
+			-- pet 迅刃靈巧
+			or UnitAura(u, GetSpellInfo(113742))
+			-- pet 音波集中
+			or UnitAura(u, GetSpellInfo(50519))
+			-- pet 雙重性
+			or UnitAura(u, GetSpellInfo(159736))
+			-- pet 雙頭狂咬（獸王）
+			or UnitAura(u, GetSpellInfo(58604))
+			-- pet 輕巧攻擊
+			or UnitAura(u, GetSpellInfo(34889))
+			-- pet 野性力量
+			or UnitAura(u, GetSpellInfo(57386))
+			-- pet 強風吐息
+			or UnitAura(u, GetSpellInfo(24844)))
+		)
+		and not 
+			-- 黑暗意圖
+			UnitAura(u, GetSpellInfo(109773)) then
+		return "|cffCC00FF"..x.."|r"
 	end
 end
 oUF.Tags.Events["RayUIRaid:di"] = "UNIT_AURA"
@@ -272,7 +387,48 @@ end
 oUF.Tags.Events["RayUIRaid:ss"] = "UNIT_AURA"
 
 -- Mage
-oUF.Tags.Methods["RayUIRaid:int"] = function(u) if not(UnitAura(u, GetSpellInfo(1459)) or UnitAura(u, GetSpellInfo(61316)) or UnitAura(u, GetSpellInfo(116781))) then return "|cff00A1DE"..x.."|r" end end
+-- 秘法光輝/達拉然光輝
+oUF.Tags.Methods["RayUIRaid:int"] = function(u)
+	if not (
+		(
+			-- 10%法能
+			-- 黑暗意圖
+			UnitAura(u, GetSpellInfo(109773))
+			-- pet 其拉堅韌（獸王）
+			or UnitAura(u, GetSpellInfo(90364))
+			-- pet 蛇之迅捷
+			or UnitAura(u, GetSpellInfo(128433))
+			-- 孤狼：蛇之靈智
+			or UnitAura(u, GetSpellInfo(160205)))
+		and (
+			-- 5%爆擊
+			-- 獸群領袖
+			UnitAura(u, GetSpellInfo(17007))
+			-- 雪怒心法
+			or UnitAura(u, GetSpellInfo(116781))
+			-- pet 恐嚇咆哮（獸王）
+			or UnitAura(u, GetSpellInfo(90309))
+			-- pet 無懼咆哮（獸王）
+			or UnitAura(u, GetSpellInfo(126373))
+			-- pet 獸群之力
+			or UnitAura(u, GetSpellInfo(160052))
+			-- pet 岩蛛之擁（獸王）
+			or UnitAura(u, GetSpellInfo(90363))
+			-- pet 狂怒之嚎
+			or UnitAura(u, GetSpellInfo(24604))
+			-- 孤狼：迅猛龍之殘暴
+			or UnitAura(u, GetSpellInfo(160200)))
+		)
+		and not (
+			-- 秘法光輝
+			UnitAura(u, GetSpellInfo(1459))
+			-- 達拉然光輝
+			or UnitAura(u, GetSpellInfo(61316))
+			-- pet 平靜如水（獸王）
+			or UnitAura(u, GetSpellInfo(126309))) then
+		return "|cff00A1DE"..x.."|r"
+	end
+end
 oUF.Tags.Events["RayUIRaid:int"] = "UNIT_AURA"
 
 oUF.Tags.Methods["RayUIRaid:fmagic"] = function(u) if UnitAura(u, GetSpellInfo(54648)) then return "|cffCC00FF"..x.."|r" end end
@@ -320,7 +476,7 @@ RA.classIndicators={
     },
     ["DEATHKNIGHT"] = {
         ["TL"] = "",
-        ["TR"] = "",
+        ["TR"] = "[RayUIRaid:stragi]",
         ["BL"] = "",
         ["BR"] = "",
         ["Cen"] = "",
