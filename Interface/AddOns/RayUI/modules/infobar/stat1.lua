@@ -58,45 +58,30 @@ local function LoadStat()
 				GameTooltip:AddDoubleLine(BLOCK_CHANCE, format(chanceString, block),1,1,1)
 				GameTooltip:AddDoubleLine(MISS_CHANCE, format(chanceString, basemisschance),1,1,1)
 				local _, effectiveArmor = UnitArmor("player")
-				GameTooltip:AddDoubleLine(ARMOR, format(chanceString, effectiveArmor),1,1,1)
+				GameTooltip:AddDoubleLine(ARMOR, format("%s", effectiveArmor),1,1,1)
 				if unhittable > 0 then
 					GameTooltip:AddDoubleLine(L["未命中"], "+"..format(chanceString, unhittable), 1, 1, 1, 0, 1, 0)
 				else
 					GameTooltip:AddDoubleLine(L["未命中"], format(chanceString, unhittable), 1, 1, 1, 1, 0, 0)
 				end
-			elseif R.Role == "Caster" then
-				GameTooltip:AddDoubleLine(STAT_HIT_CHANCE, format(modifierString, GetCombatRating(CR_HIT_SPELL), GetCombatRatingBonus(CR_HIT_SPELL)), 1, 1, 1)
+			elseif R.Role == "Caster" then				
 				GameTooltip:AddDoubleLine(STAT_HASTE, format(modifierString, GetCombatRating(CR_HASTE_SPELL), GetCombatRatingBonus(CR_HASTE_SPELL)), 1, 1, 1)
 				GameTooltip:AddDoubleLine(SPELL_CRIT_CHANCE, format(modifierString, GetCombatRating(CR_CRIT_SPELL), GetCombatRatingBonus(CR_CRIT_SPELL)), 1, 1, 1)
-				local base, combat = GetManaRegen()
-				GameTooltip:AddDoubleLine(MANA_REGEN, format(manaRegenString, base * 5, combat * 5), 1, 1, 1)
+				local multistrike = GetCombatRating(CR_MULTISTRIKE)
+				local multistrikeBonus = GetCombatRatingBonus(CR_MULTISTRIKE)
+				GameTooltip:AddDoubleLine(STAT_MULTISTRIKE, format(modifierString, multistrike, multistrikeBonus), 1, 1, 1)
 			elseif R.Role == "Melee" then
-				local hit = R.myclass == "HUNTER" and GetCombatRating(CR_HIT_RANGED) or GetCombatRating(CR_HIT_MELEE)
-				local hitBonus = R.myclass == "HUNTER" and GetCombatRatingBonus(CR_HIT_RANGED) or GetCombatRatingBonus(CR_HIT_MELEE)
-
-				GameTooltip:AddDoubleLine(STAT_HIT_CHANCE, format(modifierString, hit, hitBonus), 1, 1, 1)
-
-				local expertisePercent, offhandExpertisePercent = GetExpertise()
-				expertisePercent = format("%.2f", expertisePercent)
-				offhandExpertisePercent = format("%.2f", offhandExpertisePercent)
-
-				local expertisePercentDisplay
-				if IsDualWielding() then
-					expertisePercentDisplay = expertisePercent.."% / "..offhandExpertisePercent.."%"
-				else
-					expertisePercentDisplay = expertisePercent.."%"
-				end
-				GameTooltip:AddDoubleLine(COMBAT_RATING_NAME24, format('%d (+%s)', GetCombatRating(CR_EXPERTISE), expertisePercentDisplay), 1, 1, 1)
-
 				local haste = R.myclass == "HUNTER" and GetCombatRating(CR_HASTE_RANGED) or GetCombatRating(CR_HASTE_MELEE)
 				local hasteBonus = R.myclass == "HUNTER" and GetCombatRatingBonus(CR_HASTE_RANGED) or GetCombatRatingBonus(CR_HASTE_MELEE)
 				local crit = R.myclass == "HUNTER" and GetCombatRating(CR_CRIT_RANGED) or GetCombatRating(CR_CRIT_MELEE)
 				local critBonus = R.myclass == "HUNTER" and GetCombatRatingBonus(CR_CRIT_RANGED) or GetCombatRatingBonus(CR_CRIT_MELEE)
-
+				local multistrike = GetCombatRating(CR_MULTISTRIKE)
+				local multistrikeBonus = GetCombatRatingBonus(CR_MULTISTRIKE)
 				GameTooltip:AddDoubleLine(STAT_HASTE, format(modifierString, haste, hasteBonus), 1, 1, 1)
 				GameTooltip:AddDoubleLine(MELEE_CRIT_CHANCE, format(modifierString, crit, critBonus), 1, 1, 1)
+				GameTooltip:AddDoubleLine(STAT_MULTISTRIKE, format(modifierString, multistrike, multistrikeBonus), 1, 1, 1)
 			end
-
+						
 			local masteryspell
 			if GetCombatRating(CR_MASTERY) ~= 0 and GetSpecialization() then
 				if R.myclass == "DRUID" then
@@ -110,8 +95,6 @@ local function LoadStat()
 				else
 					masteryspell = GetSpecializationMasterySpells(GetSpecialization())
 				end
-
-
 
 				local masteryName, _, _, _, _, _, _, _, _ = GetSpellInfo(masteryspell)
                 if masteryName then
