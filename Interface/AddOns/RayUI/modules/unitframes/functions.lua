@@ -975,6 +975,10 @@ function UF:ConstructWarlockResourceBar(frame)
         local color = RayUF.colors.class[R.myclass]
         bars[i]:SetStatusBarColor(unpack(color))
 
+        bars[i].text = bars[i]:CreateFontString(nil, "OVERLAY")
+        bars[i].text:SetPoint("CENTER")
+        bars[i].text:SetFont(R["media"].font, R["media"].fontsize - 2, R["media"].fontflag)
+
         if i == 1 then
             bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
         else
@@ -1300,12 +1304,19 @@ end
 function UF:UpdateShardBar(spec)
     local maxBars = self.number
     local frame = self:GetParent()
+    local spec = GetSpecialization()
+    local power = UnitPower("player", SPELL_POWER_DEMONIC_FURY)
 
     for i = 1, 4 do
         if i > maxBars then
             self[i]:Hide()
         else
             self[i]:SetWidth((200 - (maxBars - 1)*5)/maxBars)
+                if spec == SPEC_WARLOCK_DEMONOLOGY then
+                    self[i].text:SetText(power)
+                else
+                    self[i].text:SetText()
+                end
         end
     end
 end
