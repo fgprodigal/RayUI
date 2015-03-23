@@ -67,6 +67,7 @@ function UF:DPSLayout(frame, unit)
 	-- Name
 	local name = frame.textframe:CreateFontString(nil, "OVERLAY")
 	name:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
+	name:SetWordWrap(false)
 	frame.Name = name
 
 	-- mouseover highlight
