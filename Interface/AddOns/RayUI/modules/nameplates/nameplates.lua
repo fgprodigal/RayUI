@@ -527,6 +527,7 @@ local function OnFrameShow(frame)
 	frame.hp.name:SetPoint("BOTTOMLEFT", frame.hp, "TOPLEFT", 0, -1)
 	frame.hp.name:SetPoint("BOTTOMRIGHT", frame.hp, "TOPRIGHT", -20, -1)
 	frame.hp.name:SetFont(R["media"].font, FONTSIZE, R["media"].fontflag)
+	frame.hp.name:SetWordWrap(false)
 
 	frame.hp.value:Show()
 
