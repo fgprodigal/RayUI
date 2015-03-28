@@ -658,8 +658,8 @@ R["Watcher"] = {
                 { spellID = 974, unitId = "target", caster = "player", filter = "BUFF" },
                 --冰凍之力
                 { spellID = 63685, unitId = "target", caster = "player", filter = "DEBUFF" },
-                --狂怒釋放
-                { spellID = 118473, unitId = "target", caster = "player", filter = "BUFF" },
+                --陷地图腾（天赋）
+                { spellID = 64695, unitId = "target", caster = "player", filter = "BUFF" },
 
             },
             {
@@ -696,6 +696,8 @@ R["Watcher"] = {
                 { spellID = 157174, unitId = "player", caster = "player", filter = "BUFF" },
                 --火焰释放
                 { spellID = 165462, unitId = "player", caster = "player", filter = "BUFF" },
+                --怒火释放
+                { spellID = 182387, unitId = "player", caster = "player", filter = "BUFF" },
                 --Riptide / Springflut
                 { spellID = 61295, unitId = "player", caster = "player", filter = "BUFF" },
 
@@ -746,7 +748,8 @@ R["Watcher"] = {
                 { spellID = 2894, filter = "CD" },
                 --土元素圖騰
                 { spellID = 2062, filter = "CD" },
-
+                --升腾
+                { spellID = 114050, filter = "CD" },
                 -- 物品
                 -- 手套
                 {slotID = 10, filter = "CD" },
@@ -1662,6 +1665,9 @@ R["Watcher"] = {
                 { spellID = 126697, unitId = "player", caster = "all", filter = "BUFF" },
                 -- PvP 飾品 (全能)
                 { spellID = 170397, unitId = "player", caster = "all", filter = "BUFF" },
+                -- 炼金 飾品 (敏捷)
+                { spellID = 60233, unitId = "player", caster = "all", filter = "BUFF" },
+
 
                 --錮法索銀指環 
                -- 大法師的白熱光 (智力) 
