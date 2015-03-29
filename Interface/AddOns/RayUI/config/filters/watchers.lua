@@ -282,7 +282,7 @@ R["Watcher"] = {
                 { spellID = 53301, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --黑鸦
                 { spellID = 131894, unitId = "target", caster = "player", filter = "DEBUFF" },
-                
+
             },
             {
                 name = "焦点buff&debuff",
@@ -981,7 +981,7 @@ R["Watcher"] = {
                 { spellID = 132573, unitId = "player", caster = "player", filter = "BUFF" },
                 --愈合之语(十层)
                 { spellID = 155363, unitId = "player", caster = "player", filter = "BUFF" },
-                
+
             },
             {
                 name = "目标重要buff&debuff",
@@ -1122,7 +1122,7 @@ R["Watcher"] = {
                 --黑暗灵魂：哀难
                 { spellID = 113860, unitId = "player", caster = "player", filter = "BUFF" },
                 --熔火之心
-                { spellID = 122355, unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 140074, unitId = "player", caster = "player", filter = "BUFF" },
                 --恶魔协同
                 { spellID = 171982, unitId = "player", caster = "all", filter = "BUFF" },
                 --炽燃之怒(2T16)
@@ -1663,20 +1663,20 @@ R["Watcher"] = {
                 -- PvP 飾品 (全能)
                 { spellID = 170397, unitId = "player", caster = "all", filter = "BUFF" },
 
-                --錮法索銀指環 
-               -- 大法師的白熱光 (智力) 
-               { spellID = 177159, unitId = "player", caster = "player", filter = "BUFF" }, 
-               -- 大法師的白熱光 (力量) 
-               { spellID = 177160, unitId = "player", caster = "player", filter = "BUFF" }, 
-               -- 大法師的白熱光 (敏捷) 
-               { spellID = 177161, unitId = "player", caster = "player", filter = "BUFF" }, 
+                --錮法索銀指環
+               -- 大法師的白熱光 (智力)
+               { spellID = 177159, unitId = "player", caster = "player", filter = "BUFF" },
+               -- 大法師的白熱光 (力量)
+               { spellID = 177160, unitId = "player", caster = "player", filter = "BUFF" },
+               -- 大法師的白熱光 (敏捷)
+               { spellID = 177161, unitId = "player", caster = "player", filter = "BUFF" },
 
-               --錮法符文指環 
-               -- 大法師的白熱強光 (智力) 
-               { spellID = 177176, unitId = "player", caster = "player", filter = "BUFF" }, 
-               -- 大法師的白熱強光 (力量) 
-               { spellID = 177175, unitId = "player", caster = "player", filter = "BUFF" }, 
-               -- 大法師的白熱強光 (敏捷) 
+               --錮法符文指環
+               -- 大法師的白熱強光 (智力)
+               { spellID = 177176, unitId = "player", caster = "player", filter = "BUFF" },
+               -- 大法師的白熱強光 (力量)
+               { spellID = 177175, unitId = "player", caster = "player", filter = "BUFF" },
+               -- 大法師的白熱強光 (敏捷)
                { spellID = 177172, unitId = "player", caster = "player", filter = "BUFF" },
                 -- 暗月卡牌
                 -- 玉珑圣物 (智力, 触发)
@@ -2014,7 +2014,7 @@ R["Watcher"] = {
                 { spellID = 137326, unitId = "player", caster = "all", filter = "BUFF" },
                 { spellID = 137288, unitId = "player", caster = "all", filter = "BUFF" },
 
-                --橙色披风 
+                --橙色披风
                 -- 赤精之魂 (治疗)
                 { spellID = 146200, unitId = "player", caster = "all", filter = "BUFF" },
                 -- 雪怒之捷 (物理)
