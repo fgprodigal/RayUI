@@ -51,10 +51,20 @@ local function LoadSkin()
 	AuctionsDurationSort:DisableDrawLayer("BACKGROUND")
 	AuctionsHighBidderSort:DisableDrawLayer("BACKGROUND")
 	AuctionsBidSort:DisableDrawLayer("BACKGROUND")
+	select(6, BrowseCloseButton:GetRegions()):Hide()
+	select(6, BrowseBuyoutButton:GetRegions()):Hide()
+	select(6, BrowseBidButton:GetRegions()):Hide()
+	select(6, BidCloseButton:GetRegions()):Hide()
+	select(6, BidBuyoutButton:GetRegions()):Hide()
+	select(6, BidBidButton:GetRegions()):Hide()
 
 	for i = 1, NUM_FILTERS_TO_DISPLAY do
-		_G["AuctionFilterButton"..i]:SetNormalTexture("")
+		_G["AuctionFilterButton"..i]:GetNormalTexture():SetAlpha(0)
 	end
+
+	hooksecurefunc("FilterButton_SetType", function(button)
+		button:SetNormalTexture("")
+	end)
 
 	for i = 1, 3 do
 		S:CreateTab(_G["AuctionFrameTab"..i])
@@ -281,6 +291,34 @@ local function LoadSkin()
 	BrowseDropDown:SetPoint("TOPLEFT", BrowseLevelText, "BOTTOMRIGHT", 2, 4)
 	BrowseNameText:ClearAllPoints()
 	BrowseNameText:SetPoint("TOPLEFT", AuctionFrameBrowse, "TOPLEFT", 75, -44)
+
+	-- [[ WoW token ]]
+
+	local BrowseWowTokenResults = BrowseWowTokenResults
+
+	S:Reskin(BrowseWowTokenResults.Buyout)
+
+	-- Tutorial
+
+	local WowTokenGameTimeTutorial = WowTokenGameTimeTutorial
+
+	S:ReskinPortraitFrame(WowTokenGameTimeTutorial, true)
+	S:Reskin(StoreButton)
+
+	-- Token
+
+	do
+		local Token = BrowseWowTokenResults.Token
+		local icon = Token.Icon
+		local iconBorder = Token.IconBorder
+
+		Token.ItemBorder:Hide()
+		iconBorder:SetTexture(R["media"].gloss)
+		iconBorder:SetDrawLayer("BACKGROUND")
+		iconBorder:Point("TOPLEFT", icon, -1, 1)
+		iconBorder:Point("BOTTOMRIGHT", icon, 1, -1)
+		icon:SetTexCoord(.08, .92, .08, .92)
+	end
 end
 
 S:RegisterSkin("Blizzard_AuctionUI", LoadSkin)
