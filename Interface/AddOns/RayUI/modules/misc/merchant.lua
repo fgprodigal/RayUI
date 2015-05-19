@@ -4,14 +4,6 @@ local M = R:GetModule("Misc")
 local function LoadFunc()
 	if not M.db.merchant then return end
 
-	local poisons = {
-		[6947] = 20,		--速效
-		[3775] = 20,		--减速
-		-- [5237] = 20,		--麻痹
-		[2892] = 20,		--致命
-		[10918] = 20,	--致伤
-	}
-
 	local f = CreateFrame("Frame")
 	f:SetScript("OnEvent", function()
 		local c = 0
@@ -50,18 +42,6 @@ local function LoadFunc()
 							DEFAULT_CHAT_FRAME:AddMessage(L["您没有足够的金钱来修理!"],255,0,0)
 							return
 						end
-					end
-				end
-			end
-		end
-		if M.db.poisons and R.myclass == "ROGUE" then
-			local numItems = GetMerchantNumItems()
-			for i = 1, numItems do
-				local merchantItemLink = GetMerchantItemLink(i)
-				if merchantItemLink then
-					local id = tonumber(merchantItemLink:match("item:(%d+)"))
-					if poisons[id] and GetItemCount(id) < poisons[id] then
-						BuyMerchantItem(i, poisons[id] - GetItemCount(id))
 					end
 				end
 			end
