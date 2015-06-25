@@ -516,7 +516,7 @@ Container:RegisterEvent("PLAYER_LOGIN")
 
 SLASH_TestBonusRollPreview1 = "/testbonusroll"
 SlashCmdList.TestBonusRollPreview = function()
-	BonusRollFrame_StartBonusRoll(123, "123", 120, 994)
+	BonusRollFrame_StartBonusRoll(123, "123", 120)
 	Container:SPELL_CONFIRMATION_PROMPT("SPELL_CONFIRMATION_PROMPT", 139691, CONFIRMATION_PROMPT_BONUS_ROLL, nil, nil, 0)
 	local numItems = 0
 	for index = 1, 8 do
