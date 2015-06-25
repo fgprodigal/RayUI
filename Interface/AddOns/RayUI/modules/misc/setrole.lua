@@ -13,18 +13,20 @@ local gladStance = GetSpellInfo(156291)
 function M:SetRole()
 	local spec = GetSpecialization()
 	if UnitLevel("player") >= 10 and not InCombatLockdown() then
-		if spec == nil then
+		if spec == nil and UnitGroupRolesAssigned("player") ~= "NONE" then
 			UnitSetRole("player", "NONE")
 		elseif spec ~= nil then
 			if GetNumGroupMembers() > 0 then
-				if R.isHealer then
+				if R.isHealer and UnitGroupRolesAssigned("player") ~= "HEALER" then
 					UnitSetRole("player", "HEALER")
 				else
 					local tempRole
 					if R.Role == "Tank" and UnitBuff("player", gladStance) then
 						tempRole = "Melee"
 					end
-					UnitSetRole("player", t[tempRole or R.Role])
+					if UnitGroupRolesAssigned("player") ~= t[tempRole or R.Role] then
+						UnitSetRole("player", t[tempRole or R.Role])
+					end
 				end
 			end
 		end
