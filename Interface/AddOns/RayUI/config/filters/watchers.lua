@@ -696,12 +696,8 @@ R["Watcher"] = {
                 { spellID = 157174, unitId = "player", caster = "player", filter = "BUFF" },
                 --火焰释放
                 { spellID = 165462, unitId = "player", caster = "player", filter = "BUFF" },
-                --怒火释放（元素）
-                { spellID = 118470, unitId = "player", caster = "player", filter = "BUFF" },
-                --怒火释放（治疗）
-                { spellID = 118473, unitId = "player", caster = "player", filter = "BUFF" },
-                --怒火释放（增强）
-                { spellID = 118472, unitId = "player", caster = "player", filter = "BUFF" },
+                --怒火释放
+                { spellID = 182387, unitId = "player", caster = "player", filter = "BUFF" },
                 --Riptide / Springflut
                 { spellID = 61295, unitId = "player", caster = "player", filter = "BUFF" },
 
@@ -723,7 +719,7 @@ R["Watcher"] = {
                 --Riptide / Springflut
                 { spellID = 61295, unitId = "target", caster = "player", filter = "BUFF" },
                 --地震术
-                { spellID = 182387, unitId = "target", caster = "player", filter = "DEBUFF" },
+                { spellID = 61882, unitId = "target", caster = "player", filter = "DEBUFF" },
 
             },
             {
