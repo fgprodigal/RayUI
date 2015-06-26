@@ -17,8 +17,10 @@ function M:SetRole()
 			UnitSetRole("player", "NONE")
 		elseif spec ~= nil then
 			if GetNumGroupMembers() > 0 then
-				if R.isHealer and UnitGroupRolesAssigned("player") ~= "HEALER" then
-					UnitSetRole("player", "HEALER")
+				if R.isHealer then
+					if UnitGroupRolesAssigned("player") ~= "HEALER" then
+						UnitSetRole("player", "HEALER")
+					end
 				else
 					local tempRole
 					if R.Role == "Tank" and UnitBuff("player", gladStance) then
