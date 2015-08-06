@@ -669,6 +669,11 @@ function S:ReskinNavBar(f)
 	overflowButton:HookScript("OnLeave", clearArrow)
 end
 
+function S:ReskinIcon(icon)
+	icon:SetTexCoord(.08, .92, .08, .92)
+	S:CreateBG(icon)
+end
+
 function S:ReskinExpandOrCollapse(f)
 	f:SetSize(13, 13)
 
