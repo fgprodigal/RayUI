@@ -56,8 +56,7 @@ local function LoadSkin()
 	do
 		local icon = CapacitiveDisplay.ShipmentIconFrame.Icon
 
-		icon:SetTexCoord(.08, .92, .08, .92)
-		S:CreateBG(icon)
+		S:ReskinIcon(icon)
 	end
 
 	do
@@ -70,9 +69,8 @@ local function LoadSkin()
 			while reagent do
 				reagent.NameFrame:SetAlpha(0)
 
-				reagent.Icon:SetTexCoord(.08, .92, .08, .92)
 				reagent.Icon:SetDrawLayer("BORDER")
-				S:CreateBG(reagent.Icon)
+				S:ReskinIcon(reagent.Icon)
 
 				local bg = CreateFrame("Frame", nil, reagent)
 				bg:SetPoint("TOPLEFT")
@@ -126,8 +124,7 @@ local function LoadSkin()
 
 		for _, reward in pairs(button.Rewards) do
 			reward:GetRegions():Hide()
-			reward.Icon:SetTexCoord(.08, .92, .08, .92)
-			S:CreateBG(reward.Icon)
+			S:ReskinIcon(reward.Icon)
 		end
 
 		S:CreateBD(bg, .25)
@@ -349,8 +346,7 @@ local function LoadSkin()
 
 			reward:GetRegions():Hide()
 
-			reward.Icon:SetTexCoord(.08, .92, .08, .92)
-			S:CreateBG(reward.Icon)
+			S:ReskinIcon(icon)
 		end
 	end)
 
@@ -430,9 +426,8 @@ local function LoadSkin()
 
 		reward.BG:Hide()
 
-		icon:SetTexCoord(.08, .92, .08, .92)
 		icon:SetDrawLayer("BORDER", 1)
-		S:CreateBG(icon)
+		S:ReskinIcon(icon)
 
 		reward.ItemBurst:SetDrawLayer("BORDER", 2)
 
@@ -463,8 +458,7 @@ local function LoadSkin()
 
 		item.Border:Hide()
 
-		icon:SetTexCoord(.08, .92, .08, .92)
-		S:CreateBG(icon)
+		S:ReskinIcon(icon)
 
 		local bg = S:CreateBDFrame(item, .25)
 		bg:SetPoint("TOPLEFT", 41, -1)
@@ -855,9 +849,8 @@ local function LoadSkin()
 
 		reward.BG:Hide()
 
-		icon:SetTexCoord(.08, .92, .08, .92)
 		icon:SetDrawLayer("BORDER", 1)
-		S:CreateBG(icon)
+		S:ReskinIcon(icon)
 
 		reward.ItemBurst:SetDrawLayer("BORDER", 2)
 
@@ -940,8 +933,7 @@ local function LoadSkin()
 			local icon = ability.Icon
 
 			icon:SetSize(19, 19)
-			icon:SetTexCoord(.08, .92, .08, .92)
-			S:CreateBG(icon)
+			S:ReskinIcon(icon)
 
 			ability.styled = true
 		end
@@ -963,9 +955,8 @@ local function LoadSkin()
 		while ability do
 			local icon = ability.IconButton.Icon
 
-			icon:SetTexCoord(.08, .92, .08, .92)
 			icon:SetDrawLayer("BACKGROUND", 1)
-			S:CreateBG(icon)
+			S:ReskinIcon(icon)
 
 			numAbilitiesStyled = numAbilitiesStyled + 1
 			ability = abilities[numAbilitiesStyled]
@@ -1016,8 +1007,7 @@ local function SkinTooltip()
 
 		local icon = frame.Icon
 
-		icon:SetTexCoord(.08, .92, .08, .92)
-		S:CreateBG(icon)
+		S:ReskinIcon(icon)
 
 		S:CreateBD(frame)
 	end
@@ -1046,8 +1036,7 @@ local function SkinTooltip()
 		while ability do
 			local icon = ability.Icon
 
-			icon:SetTexCoord(.08, .92, .08, .92)
-			S:CreateBG(icon)
+			S:ReskinIcon(icon)
 
 			numAbilitiesStyled = numAbilitiesStyled + 1
 			ability = abilities[numAbilitiesStyled]
@@ -1069,8 +1058,7 @@ local function SkinTooltip()
 		while trait do
 			local icon = trait.Icon
 
-			icon:SetTexCoord(.08, .92, .08, .92)
-			S:CreateBG(icon)
+			S:ReskinIcon(icon)
 
 			numTraitsStyled = numTraitsStyled + 1
 			trait = traits[numTraitsStyled]
