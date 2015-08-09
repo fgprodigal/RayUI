@@ -319,7 +319,7 @@ local function LoadSkin()
 	do
 		local frame = GarrisonMissionAlertFrame
 
-		frame:GetRegions():Hide()
+		frame.Background:Hide()
 		frame.IconBG:Hide()
 
 		frame.bg = CreateFrame("Frame", nil, frame)

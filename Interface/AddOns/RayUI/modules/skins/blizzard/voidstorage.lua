@@ -7,8 +7,6 @@ local function LoadSkin()
 	for i = 1, 10 do
 		select(i, VoidStoragePurchaseFrame:GetRegions()):Hide()
 	end
-	VoidStorageBorderFrame:SetFrameStrata("HIGH")
-	VoidStorageBorderFrame:SetFrameLevel(10)
 	VoidStorageBorderFrame:DisableDrawLayer("BACKGROUND")
 	VoidStorageBorderFrame:DisableDrawLayer("BORDER")
 	VoidStorageBorderFrame:DisableDrawLayer("BACKGROUND")
@@ -31,61 +29,42 @@ local function LoadSkin()
 	select(12, VoidStorageDepositFrame:GetRegions()):Hide()
 	select(12, VoidStorageWithdrawFrame:GetRegions()):Hide()
 
-	for i = 1, 9 do
-		local bu1 = _G["VoidStorageDepositButton"..i]
-		local bu2 = _G["VoidStorageWithdrawButton"..i]
+	for _, voidButton in pairs({"VoidStorageDepositButton", "VoidStorageWithdrawButton"}) do
+		for i = 1, 9 do
+			local bu = _G[voidButton..i]
+			local border = bu.IconBorder
 
-		_G["VoidStorageDepositButton"..i.."Bg"]:Hide()
-		_G["VoidStorageWithdrawButton"..i.."Bg"]:Hide()
+			bu:SetPushedTexture("")
+			_G[voidButton..i.."Bg"]:Hide()
 
-		_G["VoidStorageDepositButton"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
-		_G["VoidStorageWithdrawButton"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
+			bu.icon:SetTexCoord(.08, .92, .08, .92)
 
-		bu1:StyleButton(1)
-		if not bu1.border then
-			local border = CreateFrame("Frame", nil, bu1)
-			border:Point("TOPLEFT", -1, 1)
-			border:Point("BOTTOMRIGHT", 1, -1)
-			border:SetFrameStrata("BACKGROUND")
-			border:SetFrameLevel(0)
-			bu1.border = border
-			bu1.border:CreateBorder()
+			border:SetTexture(R["media"].blank)
+			border:SetPoint("TOPLEFT", -1, 1)
+			border:SetPoint("BOTTOMRIGHT", 1, -1)
+			border:SetDrawLayer("BACKGROUND")
+
+			S:CreateBDFrame(bu, .25)
 		end
-		bu1:SetNormalTexture("")
-		bu1:SetFrameStrata("HIGH")
-
-		bu2:StyleButton(1)
-		if not bu2.border then
-			local border = CreateFrame("Frame", nil, bu2)
-			border:Point("TOPLEFT", -1, 1)
-			border:Point("BOTTOMRIGHT", 1, -1)
-			border:SetFrameStrata("BACKGROUND")
-			border:SetFrameLevel(0)
-			bu2.border = border
-			bu2.border:CreateBorder()
-		end
-		bu2:SetNormalTexture("")
-		bu2:SetFrameStrata("HIGH")
 	end
 
 	for i = 1, 80 do
 		local bu = _G["VoidStorageStorageButton"..i]
+		local buB = bu.IconBorder
+		local buS = bu.searchOverlay
 
 		_G["VoidStorageStorageButton"..i.."Bg"]:Hide()
 		_G["VoidStorageStorageButton"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
+		
+		buB:SetTexture(R["media"].blank)
+		buB:SetPoint("TOPLEFT", -1, 1)
+		buB:SetPoint("BOTTOMRIGHT", 1, -1)
+		buB:SetDrawLayer("BACKGROUND")
 
-		bu:StyleButton(1)
-		if not bu.border then
-			local border = CreateFrame("Frame", nil, bu)
-			border:Point("TOPLEFT", -1, 1)
-			border:Point("BOTTOMRIGHT", 1, -1)
-			border:SetFrameStrata("BACKGROUND")
-			border:SetFrameLevel(0)
-			bu.border = border
-			bu.border:CreateBorder()
-		end
-		bu:SetNormalTexture("")
-		bu:SetFrameStrata("HIGH")
+		S:CreateBDFrame(bu, .25)
+
+		buS:SetPoint("TOPLEFT", -1, 1)
+		buS:SetPoint("BOTTOMRIGHT", 1, -1)
 	end
 
 	for i = 1, 2 do
