@@ -335,9 +335,13 @@ local function LoadSkin()
 
 	local MissionPage = MissionTab.MissionPage
 
-	for i = 1, 11 do
+	for i = 1, 15 do
 		select(i, MissionPage:GetRegions()):Hide()
 	end
+
+	select(18, MissionPage:GetRegions()):Hide()
+	select(19, MissionPage:GetRegions()):Hide()
+	select(20, MissionPage:GetRegions()):Hide()
 
 	S:Reskin(MissionPage.StartMissionButton)
 	S:ReskinClose(MissionPage.CloseButton)
@@ -345,12 +349,8 @@ local function LoadSkin()
 	MissionPage.CloseButton:ClearAllPoints()
 	MissionPage.CloseButton:SetPoint("TOPRIGHT", -10, -5)
 
-	for i = 4, 8 do
-		select(i, MissionPage.Stage:GetRegions()):Hide()
-	end
-	for i = 19, 21 do
-		select(i, MissionPage.Stage:GetRegions()):Hide()
-	end
+	select(4, MissionPage.Stage:GetRegions()):Hide()
+	select(5, MissionPage.Stage:GetRegions()):Hide()
 
 	do
 		local bg = CreateFrame("Frame", nil, MissionPage.Stage)
@@ -364,7 +364,7 @@ local function LoadSkin()
 		overlay:SetAllPoints(bg)
 		overlay:SetTexture(0, 0, 0, .5)
 
-		local iconbg = MissionPage.Stage.IconBG
+		local iconbg = select(16, MissionPage:GetRegions())
 		iconbg:ClearAllPoints()
 		iconbg:SetPoint("TOPLEFT", 3, -1)
 	end
@@ -477,8 +477,8 @@ local function LoadSkin()
 
 	-- [[ Shared templates ]]
 
-	hooksecurefunc("GarrisonFollowerList_Update", function(self)
-		local followerFrame = self
+	local function onUpdateData(self)
+		local followerFrame = self:GetParent()
 		local followers = followerFrame.FollowerList.followers
 		local followersList = followerFrame.FollowerList.followersList
 		local numFollowers = #followersList
@@ -524,7 +524,10 @@ local function LoadSkin()
 			end
 			select(9,button:GetRegions()):Hide()
 		end
-	end)
+	end
+
+	hooksecurefunc(GarrisonMissionFrameFollowers, "UpdateData", onUpdateData)
+	hooksecurefunc(GarrisonLandingPageFollowerList, "UpdateData", onUpdateData)
 
 	hooksecurefunc("GarrisonFollowerButton_AddAbility", function(self, index)
 		local ability = self.Abilities[index]
@@ -540,7 +543,10 @@ local function LoadSkin()
 		end
 	end)
 
-	hooksecurefunc("GarrisonFollowerPage_ShowFollower", function(self, followerID)
+	local function onShowFollower(self, followerId)
+		local followerList = self
+		local self = self.followerTab
+
 		local abilities = self.AbilitiesFrame.Abilities
 
 		if self.numAbilitiesStyled == nil then
@@ -554,6 +560,7 @@ local function LoadSkin()
 			local icon = ability.IconButton.Icon
 
 			icon:SetTexCoord(.08, .92, .08, .92)
+			icon:SetDrawLayer("BACKGROUND", 1)
 			S:CreateBG(icon)
 
 			numAbilitiesStyled = numAbilitiesStyled + 1
@@ -561,7 +568,10 @@ local function LoadSkin()
 		end
 
 		self.numAbilitiesStyled = numAbilitiesStyled
-	end)
+	end
+
+	hooksecurefunc(GarrisonMissionFrame.FollowerList, "ShowFollower", onShowFollower)
+	hooksecurefunc(GarrisonLandingPageFollowerList, "ShowFollower", onShowFollower)
 end
 
 local function SkinTooltip()

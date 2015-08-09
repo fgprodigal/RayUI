@@ -688,6 +688,11 @@ function S:ReskinExpandOrCollapse(f)
 	f.plus:SetVertexColor(1, 1, 1)
 end
 
+function S:ReskinIcon(icon)
+	icon:SetTexCoord(.08, .92, .08, .92)
+	return S:CreateBG(icon)
+end
+
 function S:RegisterSkin(name, loadFunc)
 	if name == 'RayUI' then
 		tinsert(self.SkinFuncs["RayUI"], loadFunc)
