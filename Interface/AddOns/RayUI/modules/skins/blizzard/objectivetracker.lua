@@ -129,23 +129,34 @@ local function LoadSkin()
 		if not progressBar.styled then
 			local bar = progressBar.Bar
 			local label = bar.Label
+			local icon = bar.Icon
 
-			bar.BorderLeft:Hide()
-			bar.BorderRight:Hide()
-			bar.BorderMid:Hide()
-			select(5, bar:GetRegions()):Hide()
+			bar.BarFrame:Hide()
+			bar.BarBG:Hide()
+			bar.IconBG:Hide()
 
+			if icon:IsShown() then
+				icon:SetMask(nil)
+				icon:SetDrawLayer("BACKGROUND", 1)
+				icon:ClearAllPoints()
+				icon:SetPoint("RIGHT", 35, 2)
+				S:ReskinIcon(icon)
+			end
+			
 			bar:SetStatusBarTexture(R["media"].gloss)
 
 			label:ClearAllPoints()
 			label:SetPoint("CENTER", 0, -1)
+			label:FontTemplate(nil, nil, "OUTLINE")
 
 			local bg = S:CreateBDFrame(bar)
 			bg:Point("TOPLEFT", -1, 1)
-			bg:Point("BOTTOMRIGHT", 0, -1)
+			bg:Point("BOTTOMRIGHT", 0, -2)
 
 			progressBar.styled = true
 		end
+
+		progressBar.Bar:SetValue(50)
 	end)
 end
 

@@ -3,8 +3,8 @@ local NP = R:NewModule("NamePlates", "AceEvent-3.0", "AceHook-3.0", "AceTimer-3.
 NP.modName = L["姓名板"]
 
 local FONTSIZE = 9
-local hpHeight = 10
-local hpWidth = 110
+local hpHeight = 7
+local hpWidth = 137
 local iconSize = 23		--Size of all Icons, RaidIcon/ClassIcon/Castbar Icon
 local cbHeight = 5
 local cbWidth = 110
@@ -646,7 +646,7 @@ end
 --This is where we create most "Static" objects for the nameplate, it gets fired when a nameplate is first seen.
 local function SkinObjects(frame, nameFrame)
 	local noscalemult = R.mult * UIParent:GetScale()
-	local oldhp, cb = frame:GetChildren()
+	local oldhp, absorb, cb = frame:GetChildren()
 	local threat, hpborder, overlay, oldlevel, bossicon, raidicon, elite = frame:GetRegions()
 	local oldname = nameFrame:GetRegions()
 	local _, cbborder, cbshield, cbicon, cbtext, cbshadow = cb:GetRegions()
