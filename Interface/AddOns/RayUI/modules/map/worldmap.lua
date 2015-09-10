@@ -75,16 +75,16 @@ function WM:PLAYER_REGEN_DISABLED()
 end
 
 function WM:UpdateCoords()
-	if(not WorldMapFrame:IsShown()) then return end
+	if not WorldMapFrame:IsShown() then return end
 	local inInstance, _ = IsInInstance()
 	local x, y = GetPlayerMapPosition("player")
 	x = R:Round(100 * x, 2)
 	y = R:Round(100 * y, 2)
 	
 	if x ~= 0 and y ~= 0 then
-		CoordsHolder.playerCoords:SetText(PLAYER..":   "..x..", "..y)
+		CoordsHolder.playerCoords:SetText(PLAYER..": "..x..", "..y)
 	else
-		CoordsHolder.playerCoords:SetText("")
+		CoordsHolder.playerCoords:SetText(nil)
 	end
 	
 	local scale = WorldMapDetailFrame:GetEffectiveScale()
@@ -93,14 +93,14 @@ function WM:UpdateCoords()
 	local centerX, centerY = WorldMapDetailFrame:GetCenter()
 	local x, y = GetCursorPosition()
 	local adjustedX = (x / scale - (centerX - (width/2))) / width
-	local adjustedY = (centerY + (height/2) - y / scale) / height	
+	local adjustedY = (centerY + (height/2) - y / scale) / height
 
 	if (adjustedX >= 0  and adjustedY >= 0 and adjustedX <= 1 and adjustedY <= 1) then
 		adjustedX = R:Round(100 * adjustedX, 2)
 		adjustedY = R:Round(100 * adjustedY, 2)
-		CoordsHolder.mouseCoords:SetText(MOUSE_LABEL..":   "..adjustedX..", "..adjustedY)
+		CoordsHolder.mouseCoords:SetText(MOUSE_LABEL..": "..adjustedX..", "..adjustedY)
 	else
-		CoordsHolder.mouseCoords:SetText("")
+		CoordsHolder.mouseCoords:SetText(nil)
 	end
 end
 
@@ -115,14 +115,12 @@ function WM:Initialize()
 	CoordsHolder:SetFrameStrata(WorldMapDetailFrame:GetFrameStrata())
 	CoordsHolder.playerCoords = CoordsHolder:CreateFontString(nil, "OVERLAY")
 	CoordsHolder.mouseCoords = CoordsHolder:CreateFontString(nil, "OVERLAY")
-	CoordsHolder.playerCoords:SetTextColor(1, 1 ,0)
-	CoordsHolder.mouseCoords:SetTextColor(1, 1 ,0)
 	CoordsHolder.playerCoords:SetFontObject(NumberFontNormal)
 	CoordsHolder.mouseCoords:SetFontObject(NumberFontNormal)
-	CoordsHolder.playerCoords:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, "BOTTOMLEFT", 5, 25)
 	CoordsHolder.playerCoords:SetText(PLAYER..":   0, 0")
-	CoordsHolder.mouseCoords:SetPoint("BOTTOMLEFT", CoordsHolder.playerCoords, "TOPLEFT", 0, 5)
 	CoordsHolder.mouseCoords:SetText(MOUSE_LABEL..":   0, 0")
+	CoordsHolder.playerCoords:SetPoint("BOTTOMLEFT", WorldMapFrame.UIElementsFrame, "BOTTOMLEFT", 5, 5)
+	CoordsHolder.mouseCoords:SetPoint("BOTTOMLEFT", CoordsHolder.playerCoords, "TOPLEFT")
 	
 	self:ScheduleRepeatingTimer("UpdateCoords", 0.05)
 
