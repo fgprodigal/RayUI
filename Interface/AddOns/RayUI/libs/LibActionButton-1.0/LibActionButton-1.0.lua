@@ -1295,6 +1295,10 @@ function UpdateHotkeys(self)
 		self.HotKey:SetPoint("TOPLEFT", self, "TOPLEFT", - 2, - 2)
 		self.HotKey:Show()
 	end
+
+	if self.postKeybind then
+		self.postKeybind(nil, self)
+	end
 end
 
 function UpdateOverlayGlow(self)
