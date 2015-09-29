@@ -85,7 +85,7 @@ for _, itemID in next, {
 	95059, -- Cluth of Ji-Kun
 	104253, -- Kor'kron Juggernaut
 
-	-- Garrosh Heirlooms (Flex, Normal, Heroic)
+	-- Garrosh Heirlooms (Normal, Heroic, Mythic)
 	105674, 104409, 105687, -- Hellscream's Barrier
 	105672, 104404, 105685, -- Hellscream's Cleaver
 	105679, 104405, 105692, -- Hellscream's Decapitator
