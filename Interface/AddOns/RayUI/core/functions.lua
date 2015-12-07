@@ -67,6 +67,9 @@ local ItemUpgrade = setmetatable ({
 	[505] = 16,
 	[506] = 20,
 	[507] = 24,
+	[529] = 0,
+	[530] = 5, 
+	[531] = 10
 },{__index=function() return 0 end})
 
 function R.dummy()
@@ -145,6 +148,60 @@ function R:GetItemUpgradeLevel(iLink)
 		local code = string.match(iLink, ":(%d+):%d:%d|h")
 		if not itemLevel then return 0 end
 		return itemLevel + ItemUpgrade[tonumber(code)]
+	end
+end
+
+do
+	-- Convert the ITEM_LEVEL constant into a pattern for our use
+	local itemLevelPattern = _G["ITEM_LEVEL"]:gsub("%%d", "(%%d+)")
+
+	local scanningTooltip
+	local heirloomCache = {}
+	function R:GetHeirloomTrueLevel(itemString)
+		if type(itemString) ~= "string" then return nil,false end
+		local scantooltip=false
+		local header,s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14 = strsplit(":", itemString, 16)
+		s13=tonumber(s13) or 0
+		s14=tonumber(s14) or 0
+		scantooltip=(s13==1 or s13==2) and (s14==693 or s14==615) -- Really to be better tested
+		scantooltip=true
+		local _, itemLink, rarity, itemLevel = GetItemInfo(itemString)
+		if (not itemLink) then
+			return nil,false
+		end
+		if not scantooltip then
+			scantooltip=rarity == _G.LE_ITEM_QUALITY_HEIRLOOM
+		end
+		if scantooltip then
+			local ilvl = heirloomCache[itemLink]
+			if ilvl ~= nil then
+				return ilvl, true
+			end
+			if not scanningTooltip then
+				scanningTooltip = _G.CreateFrame("GameTooltip", "LibItemUpgradeInfoTooltip", nil, "GameTooltipTemplate")
+				scanningTooltip:SetOwner(_G.WorldFrame, "ANCHOR_NONE")
+			end
+			scanningTooltip:ClearLines()
+			local rc,message=pcall(scanningTooltip.SetHyperlink,scanningTooltip,itemLink)
+			if (not rc) then
+				return nil,false
+			end
+			-- line 1 is the item name
+			-- line 2 may be the item level, or it may be a modifier like "Heroic"
+			-- check up to line 4 just in case
+			for i = 2, 4 do
+				local label, text = _G["LibItemUpgradeInfoTooltipTextLeft"..i], nil
+				if label then text=label:GetText() end
+				if text then
+					ilvl = tonumber(text:match(itemLevelPattern))
+					if ilvl ~= nil then
+						heirloomCache[itemLink] = ilvl
+						return ilvl, true
+					end
+				end
+			end
+		end
+		return itemLevel, false
 	end
 end
 
