@@ -400,6 +400,9 @@ function TT:GetItemScore(iLink)
 			return 0
 		end
 	end
+	if itemRarity == 7 then
+		return R:GetHeirloomTrueLevel(iLink)
+	end
 	return R:GetItemUpgradeLevel(iLink)
 end
 
