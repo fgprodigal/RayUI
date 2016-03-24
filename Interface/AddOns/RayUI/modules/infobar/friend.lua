@@ -87,7 +87,7 @@ local function LoadFriend()
 				if ( not FriendsTabletData or FriendsTabletData == nil ) then FriendsTabletData = {} end
 				if ( not FriendsTabletDataNames or FriendsTabletDataNames == nil ) then FriendsTabletDataNames = {} end
 
-				local _,name, _, realmName, _, faction, race, class, guild, area, lvl = BNGetToonInfo(toonID)
+				local _,name, _, realmName, _, faction, race, class, guild, area, lvl = BNGetGameAccountInfo(toonID)
 				curFriendsOnline = curFriendsOnline + 1
 
 				if (realmName == R.myrealm) then

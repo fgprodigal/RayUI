@@ -28,7 +28,7 @@ local function friendsFrame()
             elseif (button.buttonType == FRIENDS_BUTTON_TYPE_BNET) then
                 local presenceID, presenceName, battleTag, isBattleTagPresence, toonName, toonID, client, isOnline, lastOnline, isAFK, isDND, messageText, noteText, isRIDFriend, messageTime, canSoR = BNGetFriendInfo(button.id)
                 if(isOnline and client==BNET_CLIENT_WOW) then
-                    local hasFocus, toonName, client, realmName, realmID, faction, race, class, guild, zoneName, level, gameText, broadcastText, broadcastTime = BNGetToonInfo(toonID)
+                    local hasFocus, toonName, client, realmName, realmID, faction, race, class, guild, zoneName, level, gameText, broadcastText, broadcastTime = BNGetGameAccountInfo(toonID)
                     if(presenceName and toonName and class) then
                         nameText = presenceName .. ' ' .. FRIENDS_WOW_NAME_COLOR_CODE..'('..
                                     ycc.classColor[class] .. toonName .. FRIENDS_WOW_NAME_COLOR_CODE .. ')'
