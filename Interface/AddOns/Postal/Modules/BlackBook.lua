@@ -287,7 +287,7 @@ function Postal_BlackBook:OnChar(editbox, ...)
 		local numBNetTotal, numBNetOnline = BNGetNumFriends()
 		for i = 1, numBNetOnline do
 			local presenceID, presenceName, battleTag, isBattleTagPresence, toonName, toonID, client, isOnline, lastOnline, isAFK, isDND, messageText, noteText, isRIDFriend, messageTime, canSoR = BNGetFriendInfo(i)
-			if (toonName and client == BNET_CLIENT_WOW and CanCooperateWithToon(toonID, false)) then
+			if (toonName and client == BNET_CLIENT_WOW and CanCooperateWithGameAccount(toonID)) then
 				if strfind(strupper(toonName), text, 1, 1) == 1 then
 					newname = toonName
 					break
@@ -357,7 +357,7 @@ function Postal_BlackBook:SortAndCountNumFriends()
 		local numBNetTotal, numBNetOnline = BNGetNumFriends()
 		for i= 1, numBNetOnline do
 			local presenceID, presenceName, battleTag, isBattleTagPresence, toonName, toonID, client, isOnline, lastOnline, isAFK, isDND, messageText, noteText, isRIDFriend, messageTime, canSoR = BNGetFriendInfo(i)
-			if (toonName and client == BNET_CLIENT_WOW and CanCooperateWithToon(toonID, false)) then
+			if (toonName and client == BNET_CLIENT_WOW and CanCooperateWithGameAccount(toonID)) then
 				-- Check if already on friends list
 				local alreadyOnList = false
 				for j = 1, numFriends do
