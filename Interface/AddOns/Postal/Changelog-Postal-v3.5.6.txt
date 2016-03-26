@@ -1,0 +1,31 @@
+------------------------------------------------------------------------
+r394 | stanzilla | 2016-03-23 02:41:31 +0000 (Wed, 23 Mar 2016) | 1 line
+Changed paths:
+   A /tags/v3.5.6 (from /trunk:393)
+
+Tagging as v3.5.6
+------------------------------------------------------------------------
+r393 | oscarucb | 2016-03-23 01:51:25 +0000 (Wed, 23 Mar 2016) | 2 lines
+Changed paths:
+   M /trunk/Modules/BlackBook.lua
+
+fix ticket 132: CanCooperateWithToon lua error in Blackbook
+
+------------------------------------------------------------------------
+r392 | oscarucb | 2016-03-23 01:40:09 +0000 (Wed, 23 Mar 2016) | 2 lines
+Changed paths:
+   M /trunk/Postal.toc
+
+toc bump to pickup new locale strings and translations
+
+------------------------------------------------------------------------
+r391 | oscarucb | 2016-03-22 12:02:28 +0000 (Tue, 22 Mar 2016) | 4 lines
+Changed paths:
+   M /trunk/Modules/OpenAll.lua
+   M /trunk/Postal.lua
+
+OpenAll module improvements
+Remove Neutral AH, which no longer exists
+Add an option to automatically open mail from the Postmaster (lost items)
+
+------------------------------------------------------------------------
