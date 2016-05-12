@@ -396,12 +396,9 @@ end
 function TT:GetItemScore(iLink)
 	local _, _, itemRarity, itemLevel, _, _, _, _, itemEquip = GetItemInfo(iLink)
 	if (IsEquippableItem(iLink)) then
-		if not   (itemLevel > 1) and (itemRarity > 1) then
+		if not (itemLevel > 0) and (itemRarity > 1) then
 			return 0
 		end
-	end
-	if itemRarity == 7 then
-		return R:GetHeirloomTrueLevel(iLink)
 	end
 	return R:GetItemUpgradeLevel(iLink)
 end

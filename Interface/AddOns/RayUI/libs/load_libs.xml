@@ -21,4 +21,5 @@
     <Script file="LibRangeCheck-2.0\LibRangeCheck-2.0.lua"/>
 	<Script file="LibDataBroker\LibDataBroker-1.1.lua"/>
 	<Script file="LibActionButton-1.0\LibActionButton-1.0.lua"/>
+	<Script file="LibItemUpgradeInfo-1.0\LibItemUpgradeInfo-1.0.lua"/>
 </Ui>

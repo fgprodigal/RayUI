@@ -1,5 +1,6 @@
 ﻿local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local LSM = LibStub("LibSharedMedia-3.0")
+local LibItemUpgrade = LibStub("LibItemUpgradeInfo-1.0");
 
 SlashCmdList["RELOAD"] = function() ReloadUI() end
 SLASH_RELOAD1 = "/rl"
@@ -16,61 +17,6 @@ R.HiddenFrame:Hide()
 local AddonNotSupported = {}
 local BlackList = {"bigfoot", "duowan", "163ui", "neavo", "sora"}
 local demoFrame
-
-local ItemUpgrade = setmetatable ({
-	[1]   =  8, -- 1/1
-	[373] =  4, -- 1/2
-	[374] =  8, -- 2/2
-	[375] =  4, -- 1/3
-	[376] =  4, -- 2/3
-	[377] =  4, -- 3/3
-	[378] =  7, -- 1/1
-	[379] =  4, -- 1/2
-	[380] =  4, -- 2/2
-	[445] =  0, -- 0/2
-	[446] =  4, -- 1/2
-	[447] =  8, -- 2/2
-	[451] =  0, -- 0/1
-	[452] =  8, -- 1/1
-	[453] =  0, -- 0/2
-	[454] =  4, -- 1/2
-	[455] =  8, -- 2/2
-	[456] =  0, -- 0/1
-	[457] =  8, -- 1/1
-	[458] =  0, -- 0/4
-	[459] =  4, -- 1/4
-	[460] =  8, -- 2/4
-	[461] = 12, -- 3/4
-	[462] = 16, -- 4/4
-	[465] =  0, -- 0/2
-	[466] =  4, -- 1/2
-	[467] =  8, -- 2/2
-	[468] =  0, -- 0/4
-	[469] =  4, -- 1/4
-	[470] =  8, -- 2/4
-	[471] = 12, -- 3/4
-	[472] = 16, -- 4/4
-	[476] =  0, -- 0/2
-	[477] =  4, -- 1/2
-	[478] =  8, -- 2/2
-	[479] =  0, -- 0/1
-	[480] =  8, -- 1/1
-	[491] =  0, -- 0/2
-	[492] =  4, -- 1/2
-	[493] =  8, -- 2/2
-	[494] =  0, -- 0/4
-	[495] =  4, -- 1/4
-	[496] =  8, -- 2/4
-	[497] = 12, -- 3/4
-	[498] = 16, -- 4/4
-	[504] = 12, -- thanks Dridzt
-	[505] = 16,
-	[506] = 20,
-	[507] = 24,
-	[529] = 0,
-	[530] = 5, 
-	[531] = 10
-},{__index=function() return 0 end})
 
 function R.dummy()
 	return
@@ -144,64 +90,7 @@ function R:GetItemUpgradeLevel(iLink)
 	if not iLink then
 		return 0
 	else
-		local _, _, itemRarity, itemLevel, _, _, _, _, itemEquip = GetItemInfo(iLink)
-		local code = string.match(iLink, ":(%d+):%d:%d|h")
-		if not itemLevel then return 0 end
-		return itemLevel + ItemUpgrade[tonumber(code)]
-	end
-end
-
-do
-	-- Convert the ITEM_LEVEL constant into a pattern for our use
-	local itemLevelPattern = _G["ITEM_LEVEL"]:gsub("%%d", "(%%d+)")
-
-	local scanningTooltip
-	local heirloomCache = {}
-	function R:GetHeirloomTrueLevel(itemString)
-		if type(itemString) ~= "string" then return nil,false end
-		local scantooltip=false
-		local header,s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14 = strsplit(":", itemString, 16)
-		s13=tonumber(s13) or 0
-		s14=tonumber(s14) or 0
-		scantooltip=(s13==1 or s13==2) and (s14==693 or s14==615) -- Really to be better tested
-		scantooltip=true
-		local _, itemLink, rarity, itemLevel = GetItemInfo(itemString)
-		if (not itemLink) then
-			return nil,false
-		end
-		if not scantooltip then
-			scantooltip=rarity == _G.LE_ITEM_QUALITY_HEIRLOOM
-		end
-		if scantooltip then
-			local ilvl = heirloomCache[itemLink]
-			if ilvl ~= nil then
-				return ilvl, true
-			end
-			if not scanningTooltip then
-				scanningTooltip = _G.CreateFrame("GameTooltip", "LibItemUpgradeInfoTooltip", nil, "GameTooltipTemplate")
-				scanningTooltip:SetOwner(_G.WorldFrame, "ANCHOR_NONE")
-			end
-			scanningTooltip:ClearLines()
-			local rc,message=pcall(scanningTooltip.SetHyperlink,scanningTooltip,itemLink)
-			if (not rc) then
-				return nil,false
-			end
-			-- line 1 is the item name
-			-- line 2 may be the item level, or it may be a modifier like "Heroic"
-			-- check up to line 4 just in case
-			for i = 2, 4 do
-				local label, text = _G["LibItemUpgradeInfoTooltipTextLeft"..i], nil
-				if label then text=label:GetText() end
-				if text then
-					ilvl = tonumber(text:match(itemLevelPattern))
-					if ilvl ~= nil then
-						heirloomCache[itemLink] = ilvl
-						return ilvl, true
-					end
-				end
-			end
-		end
-		return itemLevel, false
+		return LibItemUpgrade:GetUpgradedItemLevel(iLink)
 	end
 end
 
