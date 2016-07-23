@@ -91,7 +91,7 @@ local function FixActionButtonCooldown(button)
 			else
 				start, duration, enable = GetShapeshiftFormCooldown(button:GetID())
 			end
-			CooldownFrame_SetTimer(cooldown, start, duration, enable, charges, maxCharges)
+			CooldownFrame_Set(cooldown, start, duration, enable)
 		end)
 	else
 		parent = button:GetParent()
@@ -371,14 +371,10 @@ function AB:HideBlizz()
 		TalentMicroButtonAlert:SetPoint("BOTTOM", RayUI_InfoPanel_Talent, "TOP", 0, 30)
 	end)
 
-	InterfaceOptionsCombatPanelActionButtonUseKeyDown:SetScale(0.0001)
-	InterfaceOptionsCombatPanelActionButtonUseKeyDown:SetAlpha(0)
 	InterfaceOptionsActionBarsPanelAlwaysShowActionBars:EnableMouse(false)
 	InterfaceOptionsActionBarsPanelLockActionBars:SetScale(0.0001)
 	InterfaceOptionsActionBarsPanelAlwaysShowActionBars:SetAlpha(0)
 	InterfaceOptionsActionBarsPanelLockActionBars:SetAlpha(0)
-	InterfaceOptionsStatusTextPanelXP:SetAlpha(0)
-	InterfaceOptionsStatusTextPanelXP:SetScale(0.00001)
 	InterfaceOptionsActionBarsPanelBottomRight:SetAlpha(0)
 	InterfaceOptionsActionBarsPanelBottomRight:SetScale(0.0001)
 	InterfaceOptionsActionBarsPanelBottomLeft:SetAlpha(0)
@@ -404,8 +400,8 @@ end
 function AB:UpdateButtonConfig(bar, buttonName)
 	if InCombatLockdown() then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return; end
 	if not bar.buttonConfig then bar.buttonConfig = { hideElements = {}, colors = {} } end
-	bar.buttonConfig.hideElements.macro = self.db.macroname
-	bar.buttonConfig.hideElements.hotkey = self.db.hotkeys
+	bar.buttonConfig.hideElements.macro = not self.db.macroname
+	bar.buttonConfig.hideElements.hotkey = not self.db.hotkeys
 	bar.buttonConfig.showGrid = self.db.showgrid
 	bar.buttonConfig.clickOnDown = self.db.clickondown
 	bar.buttonConfig.colors.range = { 1, 0.3, 0.1 }
@@ -735,7 +731,7 @@ function AB:Style(button)
 
 	if not button.equipped and not button.style then
 		local equipped = button:CreateTexture(nil, "OVERLAY")
-		equipped:SetTexture(0, 1, 0, .3)
+		equipped:SetColorTexture(0, 1, 0, .3)
 		equipped:SetAllPoints()
 		equipped:Hide()
 		button.equipped = equipped

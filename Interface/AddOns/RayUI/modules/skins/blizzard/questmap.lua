@@ -96,7 +96,6 @@ local function LoadSkin()
 	local QuestLogPopupDetailFrame = QuestLogPopupDetailFrame
 
 	select(18, QuestLogPopupDetailFrame:GetRegions()):Hide()
-	QuestLogPopupDetailFramePageBg:Hide()
 	QuestLogPopupDetailFrameScrollFrameTop:Hide()
 	QuestLogPopupDetailFrameScrollFrameBottom:Hide()
 	QuestLogPopupDetailFrameScrollFrameMiddle:Hide()

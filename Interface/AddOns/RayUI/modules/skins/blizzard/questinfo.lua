@@ -77,8 +77,6 @@ local function LoadSkin()
 
 	-- [[ Quest rewards ]]
 
-	restyleSpellButton(QuestInfoRewardSpell)
-
 	local function restyleRewardButton(bu, isMapQuestInfo)
 		bu.NameFrame:Hide()
 
@@ -112,8 +110,6 @@ local function LoadSkin()
 		end
 	end)
 
-	restyleRewardButton(QuestInfoSkillPointFrame)
-	restyleRewardButton(MapQuestInfoRewardsFrame.SpellFrame, true)
 	restyleRewardButton(MapQuestInfoRewardsFrame.XPFrame, true)
 	restyleRewardButton(MapQuestInfoRewardsFrame.MoneyFrame, true)
 	restyleRewardButton(MapQuestInfoRewardsFrame.SkillPointFrame, true)
@@ -166,9 +162,6 @@ local function LoadSkin()
 
 	QuestInfoRewardsFrame.ItemReceiveText:SetTextColor(1, 1, 1)
 	QuestInfoRewardsFrame.ItemReceiveText.SetTextColor = R.dummy
-
-	QuestInfoRewardsFrame.SpellLearnText:SetTextColor(1, 1, 1)
-	QuestInfoRewardsFrame.SpellLearnText.SetTextColor = R.dummy
 
 	QuestInfoRewardsFrame.PlayerTitleText:SetTextColor(1, 1, 1)
 	QuestInfoRewardsFrame.PlayerTitleText.SetTextColor = R.dummy

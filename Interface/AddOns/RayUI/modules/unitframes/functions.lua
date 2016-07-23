@@ -70,13 +70,11 @@ function UF:ConstructHealthBar(frame, bg, text)
         if self.db.smoothColor == true then
         	health:SetStatusBarColor(.1, .1, .1)
         else
-        	health.colorTapping = true
         	health.colorClass = true
         	health.colorReaction = true
         	health.bg.multiplier = .8
         end
     else
-        health.colorTapping = true
         health.colorClass = true
         health.colorReaction = true
     end
@@ -123,7 +121,6 @@ function UF:ConstructPowerBar(frame, bg, text)
     end
 
     power.colorDisconnected = true
-    power.colorTapping = false
 
     return power
 end
@@ -137,9 +134,6 @@ function UF:ConstructPortrait(frame)
     portrait:SetInside(frame.Health, 1, 1)
     portrait:SetAlpha(.2)
     portrait.PostUpdate = function(frame)
-        if frame:GetModel() and frame:GetModel().find and frame:GetModel():find("worgenmale") then
-            frame:SetCamera(1)
-        end
         frame:SetCamDistanceScale(1 - 0.01) --Blizzard bug fix
         frame:SetCamDistanceScale(1)
     end
@@ -532,8 +526,6 @@ function UF:PostUpdateHealth(unit, cur, max)
         if class then
             color = oUF.colors.class[class]
         end
-    elseif UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) then
-        color = oUF.colors.tapped
     elseif UnitIsEnemy(unit, "player") then
         color = oUF.colors.reaction[1]
     else

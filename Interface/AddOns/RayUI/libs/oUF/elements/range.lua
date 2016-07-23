@@ -8,79 +8,78 @@ local UnitIsConnected = UnitIsConnected
 local tinsert, tremove, twipe = table.insert, table.remove, table.wipe
 
 local friendlySpells, resSpells, longEnemySpells, enemySpells, petSpells = {}, {}, {}, {}, {}
+local addSpellRetry = {}
+
+local SpellRange = LibStub("SpellRange-1.0")
 
 local function AddSpell(table, spellID)
-	local name = GetSpellInfo(spellID)
-	if name then
-		local usable, nomana = IsUsableSpell(name)
-		if usable or nomana then
-			table[#table + 1] = name
-		end
-	end
+	table[#table + 1] = spellID
 end
 
 local _,class = UnitClass("player")
-local function UpdateSpellList()
-	twipe(friendlySpells)
-	twipe(resSpells)
-	twipe(longEnemySpells)
-	twipe(enemySpells)
-	twipe(petSpells)
-	
+do
 	if class == "PRIEST" then
-		AddSpell(enemySpells, 585) -- Smite
-		AddSpell(longEnemySpells, 589) -- Shadow Word: Pain
-		AddSpell(friendlySpells, 2061) -- Flash Heal
-		AddSpell(resSpells, 2006) -- Resurrection
+		AddSpell(enemySpells, 585) -- Smite (40 yards)
+		AddSpell(enemySpells, 589) -- Shadow Word: Pain (40 yards)
+		AddSpell(friendlySpells, 2061) -- Flash Heal (40 yards)
+		AddSpell(friendlySpells, 17) -- Power Word: Shield (40 yards)
+		AddSpell(resSpells, 2006) -- Resurrection (40 yards)
 	elseif class == "DRUID" then
-		AddSpell(enemySpells, 33786) -- Cyclone
-		AddSpell(longEnemySpells, 5176) -- Wrath
-		AddSpell(friendlySpells, 774) -- Rejuvenation
-		AddSpell(resSpells, 50769) -- Revive 
-		AddSpell(resSpells, 20484) -- Rebirth 
+		AddSpell(enemySpells, 339) -- Entangling Roots (35 yards)
+		AddSpell(longEnemySpells, 8921) -- Moonfire (40 yards)
+		AddSpell(friendlySpells, 2782) -- Remove Corruption (40 yards)
+		AddSpell(resSpells, 50769) -- Revive (40 yards)
+		AddSpell(resSpells, 20484) -- Rebirth (40 yards)
 	elseif class == "PALADIN" then
-		AddSpell(enemySpells, 20271) -- Judgement
-		AddSpell(friendlySpells, 85673) -- Word of Glory
-		AddSpell(resSpells, 7328) -- Redemption
-		AddSpell(longEnemySpells, 114165) -- Holy Prism
-		AddSpell(longEnemySpells, 114157) -- Execution Sentence
+		AddSpell(enemySpells, 20271) -- Judgement (30 yards)
+		AddSpell(longEnemySpells, 20473) -- Holy Shock (40 yards)
+		AddSpell(friendlySpells, 19750) -- Flash of Light (40 yards)
+		AddSpell(resSpells, 7328) -- Redemption (40 yards)
 	elseif class == "SHAMAN" then
-		AddSpell(enemySpells, 8042) -- Earth Shock 
-		AddSpell(longEnemySpells, 403) -- Lightning Bolt
-		AddSpell(friendlySpells, 8004) -- Healing Surge
-		AddSpell(resSpells, 2008) -- Ancestral Spirit 
+		AddSpell(enemySpells, 188196) -- Lightning Bolt (Elemental) (40 yards)
+		AddSpell(enemySpells, 187837) -- Lightning Bolt (Enhancement) (40 yards)
+		AddSpell(enemySpells, 403) -- Lightning Bolt (Resto) (40 yards)
+		AddSpell(friendlySpells, 8004) -- Healing Surge (Resto/Elemental) (40 yards)
+		AddSpell(friendlySpells, 188070) -- Healing Surge (Enhancement) (40 yards)
+		AddSpell(resSpells, 2008) -- Ancestral Spirit (40 yards) 
 	elseif class == "WARLOCK" then
-		AddSpell(enemySpells, 5782) -- Fear
-		AddSpell(longEnemySpells, 172) -- Corruption
-		AddSpell(longEnemySpells, 686) -- Shadow Bolt
-		AddSpell(longEnemySpells, 17962) -- Conflag
-		AddSpell(petSpells, 755) -- Health Funnel
-		AddSpell(friendlySpells, 5697) -- Unending Breath
+		AddSpell(enemySpells, 5782) -- Fear (30 yards)
+		AddSpell(longEnemySpells, 689) -- Drain Life (40 yards)
+		AddSpell(petSpells, 755) -- Health Funnel (45 yards)
+		AddSpell(friendlySpells, 20707) -- Soulstone (40 yards)
 	elseif class == "MAGE" then
-		AddSpell(enemySpells, 118) -- Polymorph
-		AddSpell(longEnemySpells, 44614) -- Frostfire Bolt
-		AddSpell(friendlySpells, 475) -- Remove Curse
+		AddSpell(enemySpells, 118) -- Polymorph (30 yards)
+		AddSpell(longEnemySpells, 116) -- Frostbolt (Frost) (40 yards)
+		AddSpell(longEnemySpells, 44425) -- Arcane Barrage (Arcane) (40 yards)
+		AddSpell(longEnemySpells, 133) -- Fireball (Fire) (40 yards)
+		AddSpell(friendlySpells, 130) -- Slow Fall (40 yards)
 	elseif class == "HUNTER" then
-		AddSpell(petSpells, 136) -- Mend Pet
-		AddSpell(enemySpells, 75) -- Auto Shot
+		AddSpell(petSpells, 982) -- Mend Pet (45 yards)
+		AddSpell(enemySpells, 75) -- Auto Shot (40 yards)
 	elseif class == "DEATHKNIGHT" then
 		AddSpell(enemySpells, 49576) -- Death Grip
-		AddSpell(friendlySpells, 47541) -- Death Coil
-		AddSpell(resSpells, 61999) -- Raise Ally 
+		AddSpell(longEnemySpells, 47541) -- Death Coil (Unholy) (40 yards)
+		AddSpell(resSpells, 61999) -- Raise Ally (40 yards)
 	elseif class == "ROGUE" then
-		AddSpell(enemySpells, 2094) -- Blind 
-		AddSpell(longEnemySpells, 1725) -- Distract
-		AddSpell(friendlySpells, 57934) -- Tricks of the Trade
+		AddSpell(enemySpells, 185565) -- Poisoned Knife (Assassination) (30 yards)
+		AddSpell(enemySpells, 185763) -- Pistol Shot (Outlaw) (20 yards)
+		AddSpell(enemySpells, 114014) -- Shuriken Toss (Sublety) (30 yards)
+		AddSpell(enemySpells, 1725) -- Distract (30 yards)
+		AddSpell(friendlySpells, 57934) -- Tricks of the Trade (100 yards)
 	elseif class == "WARRIOR" then
-		AddSpell(enemySpells, 5246) -- Intimidating Shout
-		AddSpell(enemySpells, 100) -- Charge
-		AddSpell(longEnemySpells, 355) -- Taunt
-		AddSpell(friendlySpells, 3411) -- Intervene
+		AddSpell(enemySpells, 5246) -- Intimidating Shout (Arms/Fury) (8 yards)
+		AddSpell(enemySpells, 100) -- Charge (Arms/Fury) (8-25 yards)
+		AddSpell(longEnemySpells, 355) -- Taunt (30 yards)
 	elseif class == "MONK" then
-		AddSpell(enemySpells, 115546) -- Provoke
-		AddSpell(friendlySpells, 115450) -- Detox
-		AddSpell(resSpells, 115178) -- Resuscitate
-	end	
+		AddSpell(enemySpells, 115546) -- Provoke (30 yards)
+		AddSpell(longEnemySpells, 117952) -- Crackling Jade Lightning (40 yards)
+		AddSpell(friendlySpells, 116694) -- Effuse (40 yards)
+		AddSpell(resSpells, 115178) -- Resuscitate (40 yards)
+	elseif class == "DEMONHUNTER" then
+		AddSpell(enemySpells, 183752) -- Consume Magic (20 yards)
+		AddSpell(longEnemySpells, 185123) -- Throw Glaive (Havoc) (30 yards)
+		AddSpell(longEnemySpells, 204021) -- Fiery Brand (Vengeance) (30 yards)
+	end
 end
 
 local function getUnit(unit)
@@ -101,14 +100,14 @@ local function getUnit(unit)
 	end
 end
 
-local function friendlyIsInRange(unit)
-	if CheckInteractDistance(unit, 1) then
+local function friendlyIsInRange(unit)	
+	if CheckInteractDistance(unit, 1) and UnitInPhase(unit) then --Inspect (28 yards) and same phase as you
 		return true
 	end
-	
+
 	if UnitIsDeadOrGhost(unit) and #resSpells > 0 then
-		for _, name in ipairs(resSpells) do
-			if IsSpellInRange(name, unit) == 1 then
+		for _, spellID in ipairs(resSpells) do
+			if SpellRange.IsSpellInRange(spellID, unit) == 1 then
 				return true
 			end
 		end
@@ -120,8 +119,8 @@ local function friendlyIsInRange(unit)
 		unit = getUnit(unit)
 		return unit and UnitInRange(unit)
 	else
-		for _, name in ipairs(friendlySpells) do
-			if IsSpellInRange(name, unit) == 1 then
+		for _, spellID in ipairs(friendlySpells) do
+			if SpellRange.IsSpellInRange(spellID, unit) == 1 then
 				return true
 			end
 		end
@@ -135,13 +134,13 @@ local function petIsInRange(unit)
 		return true
 	end
 	
-	for _, name in ipairs(friendlySpells) do
-		if IsSpellInRange(name, unit) == 1 then
+	for _, spellID in ipairs(friendlySpells) do
+		if SpellRange.IsSpellInRange(spellID, unit) == 1 then
 			return true
 		end
 	end
-	for _, name in ipairs(petSpells) do
-		if IsSpellInRange(name, unit) == 1 then
+	for _, spellID in ipairs(petSpells) do
+		if SpellRange.IsSpellInRange(spellID, unit) == 1 then
 			return true
 		end
 	end
@@ -154,8 +153,8 @@ local function enemyIsInRange(unit)
 		return true
 	end
 	
-	for _, name in ipairs(enemySpells) do
-		if IsSpellInRange(name, unit) == 1 then
+	for _, spellID in ipairs(enemySpells) do
+		if SpellRange.IsSpellInRange(spellID, unit) == 1 then
 			return true
 		end
 	end
@@ -164,8 +163,8 @@ local function enemyIsInRange(unit)
 end
 
 local function enemyIsInLongRange(unit)
-	for _, name in ipairs(longEnemySpells) do
-		if IsSpellInRange(name, unit) == 1 then
+	for _, spellID in ipairs(longEnemySpells) do
+		if SpellRange.IsSpellInRange(spellID, unit) == 1 then
 			return true
 		end
 	end
@@ -222,10 +221,7 @@ local Enable = function(self)
 
 		if(not OnRangeFrame) then
 			OnRangeFrame = CreateFrame"Frame"
-			OnRangeFrame:RegisterEvent("LEARNED_SPELL_IN_TAB");
-			OnRangeFrame:RegisterEvent("PLAYER_ENTERING_WORLD");
 			OnRangeFrame:SetScript("OnUpdate", OnRangeUpdate)
-			OnRangeFrame:SetScript("OnEvent", UpdateSpellList)
 		end
 
 		OnRangeFrame:Show()

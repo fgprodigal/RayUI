@@ -326,7 +326,7 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 			end
 			local data, name = strmatch(clink, "|H(.-)|h(.-)|h")
 			local  _, _, level, rarity, _, _, _, id = strmatch(data, "(%w+):(%d+):(%d+):(%d+):(%d+):(%d+):(%d+):(%d+)")
-			i.type = L["Battle Pets"]
+			i.type = AUCTION_CATEGORY_BATTLE_PETS
 			i.rarity = tonumber(rarity) or 0
 			i.id = tonumber(id) or 0
 			i.name = name

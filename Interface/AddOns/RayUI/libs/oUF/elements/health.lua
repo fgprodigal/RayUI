@@ -52,7 +52,7 @@
 
    -- Position and size
    local Health = CreateFrame("StatusBar", nil, self)
-   Health:SetHeight(20)
+   Health:Height(20)
    Health:SetPoint('TOP')
    Health:SetPoint('LEFT')
    Health:SetPoint('RIGHT')
@@ -60,7 +60,7 @@
    -- Add a background
    local Background = Health:CreateTexture(nil, 'BACKGROUND')
    Background:SetAllPoints(Health)
-   Background:SetTexture(1, 1, 1, .5)
+   Background:SetColorTexture(1, 1, 1, .5)
    
    -- Options
    Health.frequentUpdates = true
@@ -86,8 +86,10 @@
 local parent, ns = ...
 local oUF = ns.oUF
 local updateFrequentUpdates
-oUF.colors.health = {49/255, 207/255, 37/255}
 
+local isBetaClient = select(4, GetBuildInfo()) >= 70000
+
+oUF.colors.health = {49/255, 207/255, 37/255}
 
 local Update = function(self, event, unit)
 	if(self.unit ~= unit) or not unit then return end
@@ -113,7 +115,9 @@ local Update = function(self, event, unit)
 	end
 
 	local r, g, b, t
-	if(health.colorTapping and not UnitPlayerControlled(unit) and UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) and not UnitIsTappedByAllThreatList(unit)) then
+	if(health.colorTapping and not UnitPlayerControlled(unit) and
+		(isBetaClient and UnitIsTapDenied(unit) or not isBetaClient and UnitIsTapped(unit) and
+		not UnitIsTappedByPlayer(unit) and not UnitIsTappedByAllThreatList(unit))) then
 		t = self.colors.tapped
 	elseif(health.colorDisconnected and not UnitIsConnected(unit)) then
 		t = self.colors.disconnected
@@ -136,6 +140,7 @@ local Update = function(self, event, unit)
 
 	if(b) then
 		health:SetStatusBarColor(r, g, b)
+
 		local bg = health.bg
 		if(bg) then local mu = bg.multiplier or 1
 			bg:SetVertexColor(r * mu, g * mu, b * mu)
@@ -159,7 +164,7 @@ function updateFrequentUpdates(self)
 	local health = self.Health
 	if health.frequentUpdates and not self:IsEventRegistered("UNIT_HEALTH_FREQUENT") then
 		if GetCVarBool("predictedHealth") ~= true then
-			SetCVar("predictedHealth", true)
+			SetCVar("predictedHealth", "1")
 		end
 
 		self:RegisterEvent('UNIT_HEALTH_FREQUENT', Path)
@@ -172,7 +177,7 @@ function updateFrequentUpdates(self)
 
 		if self:IsEventRegistered("UNIT_HEALTH_FREQUENT") then
 			self:UnregisterEvent("UNIT_HEALTH_FREQUENT", Path)
-		end		
+		end	
 	end
 end
 
@@ -201,6 +206,7 @@ end
 local Disable = function(self)
 	local health = self.Health
 	if(health) then
+		health:Hide()
 		self:UnregisterEvent('UNIT_HEALTH_FREQUENT', Path)
 		self:UnregisterEvent('UNIT_HEALTH', Path)
 		self:UnregisterEvent('UNIT_MAXHEALTH', Path)

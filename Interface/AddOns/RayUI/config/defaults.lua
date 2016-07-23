@@ -44,11 +44,265 @@ P["MiniMap"]={
 P["NamePlates"]={
 	enable = true,
 	showdebuff = true,
-	combat = false,
 	showhealer = true,
 	smooth = true,
-	fade = false,
-    fadeValue = 0.5,
+	fontsize = 9,
+	hpHeight = 10,
+	hpWidth = 150,
+	pbHeight = 5,
+	iconSize = 23,
+	cbHeight = 5,
+	cbWidth = 110,
+	targetScale = 1.3,
+	motionType = "STACKED", --OVERLAP
+	['units'] = {
+		['HEALER'] = {
+			['healthbar'] = {
+				['enable'] = true,
+				['healPrediction'] = true,
+				['glowStyle'] = "TARGET_THREAT",
+				['text'] = {
+					['enable'] = false,
+					['format'] = 'CURRENT',
+				}
+			},
+			['showName'] = true,
+			['showLevel'] = false,
+			['powerbar'] = {
+				['enable'] = true,
+				['costPrediction'] = true,
+				['height'] = 8,
+				['text'] = {
+					['enable'] = false,
+					['format'] = 'CURRENT',
+				}		
+			},
+			['castbar'] = {
+				['enable'] = true,
+				['height'] = 8,
+			},			
+			['buffs'] = {
+				['enable'] = true,
+				['numAuras'] = 4,
+				['baseHeight'] = 18,
+				['filters'] = {
+					['personal'] = true,
+					['boss'] = true,
+					['maxDuration'] = 120,
+					['filter'] = 'TurtleBuffs'
+				},
+			},
+			['debuffs'] = {
+				['enable'] = true,
+				['numAuras'] = 4,
+				['baseHeight'] = 18,
+				['filters'] = {
+					['personal'] = true,
+					['boss'] = true,
+					['maxDuration'] = 120,
+					['filter'] = 'CCDebuffs'
+				},
+			},				
+		},
+		['FRIENDLY_PLAYER'] = {
+			["minions"] = false,
+			['healthbar'] = {
+				['enable'] = true,
+				['healPrediction'] = true,
+				['glowStyle'] = "TARGET_THREAT",
+				['text'] = {
+					['enable'] = false,
+					['format'] = 'CURRENT',
+				}
+			},
+			['showName'] = true,
+			['showLevel'] = false,
+			['powerbar'] = {
+				['enable'] = true,
+				['costPrediction'] = true,
+				['height'] = 8,
+				['baseHeight'] = 18,
+				['text'] = {
+					['enable'] = false,
+					['format'] = 'CURRENT',
+				}		
+			},
+			['castbar'] = {
+				['enable'] = true,
+				['height'] = 8,
+			},			
+			['buffs'] = {
+				['enable'] = true,
+				['numAuras'] = 4,
+				['filters'] = {
+					['personal'] = true,
+					['boss'] = true,
+					['maxDuration'] = 120,
+					['filter'] = 'TurtleBuffs'
+				},
+			},
+			['debuffs'] = {
+				['enable'] = true,
+				['numAuras'] = 4,
+				['baseHeight'] = 18,
+				['filters'] = {
+					['personal'] = true,
+					['boss'] = true,
+					['maxDuration'] = 120,
+					['filter'] = 'CCDebuffs'
+				},
+			},				
+		},
+		['ENEMY_PLAYER'] = {
+			["minions"] = false,
+			["markHealers"] = true,
+			['healthbar'] = {
+				['enable'] = true,
+				['healPrediction'] = true,
+				['glowStyle'] = "TARGET_THREAT",
+				['text'] = {
+					['enable'] = false,
+					['format'] = 'CURRENT',
+				}
+			},
+			['showName'] = true,
+			['showLevel'] = true,
+			['powerbar'] = {
+				['enable'] = false,
+				['costPrediction'] = true,
+				['height'] = 8,
+				['text'] = {
+					['enable'] = false,
+					['format'] = 'CURRENT',
+				}		
+			},
+			['castbar'] = {
+				['enable'] = true,
+				['height'] = 8,
+			},			
+			['buffs'] = {
+				['enable'] = true,
+				['numAuras'] = 4,
+				['baseHeight'] = 18,
+				['filters'] = {
+					['personal'] = true,
+					['boss'] = true,
+					['maxDuration'] = 120,
+					['filter'] = 'TurtleBuffs'
+				},
+			},
+			['debuffs'] = {
+				['enable'] = true,
+				['numAuras'] = 4,
+				['baseHeight'] = 18,
+				['filters'] = {
+					['personal'] = true,
+					['boss'] = true,
+					['maxDuration'] = 120,
+					['filter'] = 'CCDebuffs'
+				},
+			},				
+		},
+		['FRIENDLY_NPC'] = {
+			['healthbar'] = {
+				['enable'] = false,
+				['healPrediction'] = true,
+				['glowStyle'] = "TARGET_THREAT",
+				['text'] = {
+					['enable'] = false,
+					['format'] = 'CURRENT',
+				}
+			},
+			['showName'] = true,
+			['showLevel'] = true,
+			['powerbar'] = {
+				['enable'] = false,
+				['costPrediction'] = true,
+				['height'] = 8,
+				['text'] = {
+					['enable'] = false,
+					['format'] = 'CURRENT',
+				}		
+			},
+			['castbar'] = {
+				['enable'] = false,
+				['height'] = 8,
+			},			
+			['buffs'] = {
+				['enable'] = true,
+				['numAuras'] = 4,
+				['baseHeight'] = 18,
+				['filters'] = {
+					['personal'] = true,
+					['boss'] = true,
+					['maxDuration'] = 120,
+					['filter'] = 'TurtleBuffs'
+				},
+			},
+			['debuffs'] = {
+				['enable'] = true,
+				['numAuras'] = 4,
+				['baseHeight'] = 18,
+				['filters'] = {
+					['personal'] = true,
+					['boss'] = true,
+					['maxDuration'] = 120,
+					['filter'] = 'CCDebuffs'
+				},
+			},				
+		},
+		['ENEMY_NPC'] = {
+			["minors"] = true,
+			['healthbar'] = {
+				['enable'] = true,
+				['height'] = 10,
+				['width'] = 150,
+				['healPrediction'] = true,
+				['glowStyle'] = "TARGET_THREAT",
+				['text'] = {
+					['enable'] = false,
+					['format'] = 'CURRENT',
+				}
+			},
+			['showName'] = true,
+			['showLevel'] = true,
+			['powerbar'] = {
+				['enable'] = false,
+				['costPrediction'] = true,
+				['height'] = 8,
+				['text'] = {
+					['enable'] = false,
+					['format'] = 'CURRENT',
+				}		
+			},
+			['castbar'] = {
+				['enable'] = true,
+				['height'] = 8,
+			},			
+			['buffs'] = {
+				['enable'] = true,
+				['numAuras'] = 4,
+				['baseHeight'] = 18,
+				['filters'] = {
+					['personal'] = true,
+					['boss'] = true,
+					['maxDuration'] = 120,
+					['filter'] = 'TurtleBuffs'
+				},
+			},
+			['debuffs'] = {
+				['enable'] = true,
+				['numAuras'] = 4,
+				['baseHeight'] = 18,
+				['filters'] = {
+					['personal'] = true,
+					['boss'] = true,
+					['maxDuration'] = 120,
+					['filter'] = 'CCDebuffs'
+				},
+			},				
+		},
+	},	
 }
 
 P["Chat"]={

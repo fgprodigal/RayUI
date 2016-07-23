@@ -7,6 +7,9 @@ local oUF = ns.oUF
 
 local format = string.format
 local tinsert, tremove = table.insert, table.remove
+
+local isBetaClient = select(4, GetBuildInfo()) >= 70000
+
 local _PATTERN = '%[..-%]+'
 
 local _ENV = {
@@ -20,6 +23,7 @@ local _ENV = {
 		return format("|cff%02x%02x%02x", r*255, g*255, b*255)
 	end,
 	ColorGradient = oUF.ColorGradient,
+	isBetaClient = isBetaClient,
 }
 local _PROXY = setmetatable(_ENV, {__index = _G})
 
@@ -57,9 +61,11 @@ local tagStrings = {
 
 	["level"] = [[function(u)
 		local l = UnitLevel(u)
-		if ( UnitIsWildBattlePet(u) or UnitIsBattlePetCompanion(u) ) then
-			return UnitBattlePetLevel(u);
-		elseif(l > 0) then
+		if(UnitIsWildBattlePet(u) or UnitIsBattlePetCompanion(u)) then
+			l = UnitBattlePetLevel(u)
+		end
+
+		if(l > 0) then
 			return l
 		else
 			return '??'
@@ -217,12 +223,14 @@ local tagStrings = {
 		local c = UnitClassification(u)
 		if(c == 'rare') then
 			return 'Rare'
-		elseif(c == 'eliterare') then
+		elseif(c == 'rareelite') then
 			return 'Rare Elite'
 		elseif(c == 'elite') then
 			return 'Elite'
 		elseif(c == 'worldboss') then
 			return 'Boss'
+		elseif(c == 'minus') then
+			return 'Affix'
 		end
 	end]],
 
@@ -230,12 +238,14 @@ local tagStrings = {
 		local c = UnitClassification(u)
 		if(c == 'rare') then
 			return 'R'
-		elseif(c == 'eliterare') then
+		elseif(c == 'rareelite') then
 			return 'R+'
 		elseif(c == 'elite') then
 			return '+'
 		elseif(c == 'worldboss') then
 			return 'B'
+		elseif(c == 'minus') then
+			return '-'
 		end
 	end]],
 
@@ -262,15 +272,6 @@ local tagStrings = {
 		end
 	end]],
 
-	['pereclipse'] = [[function(u)
-		local m = UnitPowerMax('player', SPELL_POWER_ECLIPSE)
-		if(m == 0) then
-			return 0
-		else
-			return math.abs(UnitPower('player', SPELL_POWER_ECLIPSE)/m*100)
-		end
-	end]],
-
 	['curmana'] = [[function(unit)
 		return UnitPower(unit, SPELL_POWER_MANA)
 	end]],
@@ -280,19 +281,64 @@ local tagStrings = {
 	end]],
 
 	['soulshards'] = [[function()
+		if(not isBetaClient and not IsPlayerSpell(WARLOCK_SOULBURN)) then
+			return
+		end
+
 		local num = UnitPower('player', SPELL_POWER_SOUL_SHARDS)
 		if(num > 0) then
 			return num
 		end
 	end]],
 
-	['holypower'] = [[funtion()
+	['holypower'] = [[function()
+		if((isBetaClient and GetSpecialization() ~= SPEC_PALADIN_RETRIBUTION))
+			or (not isBetaClient and IsPlayerSpell(85673)) then
+			return
+		end
+
 		local num = UnitPower('player', SPELL_POWER_HOLY_POWER)
 		if(num > 0) then
 			return num
 		end
 	end]],
+
+	['chi'] = [[function()
+		if(isBetaClient and GetSpecialization() ~= SPEC_MONK_WINDWALKER) then
+			return
+		end
+
+		local num = UnitPower('player', SPELL_POWER_CHI)
+		if(num > 0) then
+			return num
+		end
+	end]],
+
+	['affix'] = [[function(u)
+		local c = UnitClassification(u)
+		if(c == 'minus') then
+			return 'Affix'
+		end
+	end]],
 }
+
+if(isBetaClient) then
+	tagStrings['arcanecharges'] = [[function()
+		local num = UnitPower('player', SPELL_POWER_ARCANE_CHARGES)
+		if(num > 0) then
+			return num
+		end
+	end]]
+else
+	tagStrings['shadoworbs'] = [[function()
+		if(IsPlayerSpell(95740)) then
+			local num = UnitPower('player', SPELL_POWER_SHADOW_ORBS)
+			if(num > 0) then
+				return num
+			end
+		end
+	end]]
+end
 
 local tags = setmetatable(
 	{
@@ -340,7 +386,6 @@ local tags = setmetatable(
 
 _ENV._TAGS = tags
 
-local onUpdateDelay = {}
 local tagEvents = {
 	["curhp"]               = "UNIT_HEALTH",
 	["dead"]                = "UNIT_HEALTH",
@@ -357,6 +402,8 @@ local tagEvents = {
 	["threat"]              = "UNIT_THREAT_SITUATION_UPDATE",
 	["threatcolor"]         = "UNIT_THREAT_SITUATION_UPDATE",
 	['cpoints']             = 'UNIT_COMBO_POINTS PLAYER_TARGET_CHANGED',
+	['affix']				= 'UNIT_CLASSIFICATION_CHANGED',
+	['plus']				= 'UNIT_CLASSIFICATION_CHANGED',
 	['rare']                = 'UNIT_CLASSIFICATION_CHANGED',
 	['classification']      = 'UNIT_CLASSIFICATION_CHANGED',
 	['shortclassification'] = 'UNIT_CLASSIFICATION_CHANGED',
@@ -367,12 +414,21 @@ local tagEvents = {
 	["perpp"]               = 'UNIT_MAXPOWER UNIT_POWER',
 	["offline"]             = "UNIT_HEALTH UNIT_CONNECTION",
 	["status"]              = "UNIT_HEALTH PLAYER_UPDATE_RESTING UNIT_CONNECTION",
-	["pereclipse"]          = 'UNIT_POWER',
 	['curmana']             = 'UNIT_POWER UNIT_MAXPOWER',
 	['maxmana']             = 'UNIT_POWER UNIT_MAXPOWER',
-	['soulshards']          = 'UNIT_POWER',
-	['holypower']           = 'UNIT_POWER',
+	['soulshards']          = 'UNIT_POWER SPELLS_CHANGED',
+	['holypower']           = 'UNIT_POWER SPELLS_CHANGED',
 }
+
+if(isBetaClient) then
+	tagEvents['arcanecharges'] = 'UNIT_POWER SPELLS_CHANGED'
+	tagEvents['soulshards'] = 'UNIT_POWER'
+	tagEvents['chi'] = 'UNIT_POWER SPELLS_CHANGED'
+else
+	tagEvents['shadoworbs'] = 'UNIT_POWER SPELLS_CHANGED'
+	tagEvents['soulshards'] = 'UNIT_POWER SPELLS_CHANGED'
+	tagEvents['chi'] = 'UNIT_POWER'
+end
 
 local unitlessEvents = {
 	PLAYER_LEVEL_UP = true,
@@ -487,6 +543,7 @@ local OnLeave = function(self)
 	end
 end
 
+local onUpdateDelay = {}
 local tagPool = {}
 local funcPool = {}
 local tmp = {}
@@ -548,7 +605,7 @@ local Tag = function(self, fs, tagstr)
 			containsOnUpdate = onUpdateDelay[tag:sub(2, -2)] or 0.15;
 		end	
 	end
-	
+
 	local func = tagPool[tagstr]
 	if(not func) then
 		local format, numTags = tagstr:gsub('%%', '%%%%'):gsub(_PATTERN, '%%s')
@@ -556,7 +613,7 @@ local Tag = function(self, fs, tagstr)
 
 		for bracket in tagstr:gmatch(_PATTERN) do
 			local tagFunc = funcPool[bracket] or tags[bracket:sub(2, -2)]
-			
+
 			if(not tagFunc) then
 				local tagName, s, e = getTagName(bracket)
 				local tag = tags[tagName]
@@ -603,7 +660,7 @@ local Tag = function(self, fs, tagstr)
 			else
 				numTags = -1
 				func = function(self)
-					return self:SetFormattedText('[error]')
+					return self:SetFormattedText('[invalid tag]')
 				end
 			end
 		end
@@ -679,9 +736,9 @@ local Tag = function(self, fs, tagstr)
 		end
 	end
 	fs.UpdateTag = func
-	
+
 	local unit = self.unit
-	if((unit and unit:match'%w+target') or fs.frequentUpdates) or containsOnUpdate then
+	if(self.__eventless or fs.frequentUpdates) or containsOnUpdate then
 		local timer
 		if(type(fs.frequentUpdates) == 'number') then
 			timer = fs.frequentUpdates

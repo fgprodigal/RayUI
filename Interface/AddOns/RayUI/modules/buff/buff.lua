@@ -108,7 +108,7 @@ function A:CreateIcon(button)
 	button.shadow:SetBackdropColor(0, 0, 0)
 
 	button.highlight = button:CreateTexture(nil, "HIGHLIGHT")
-	button.highlight:SetTexture(1,1,1,0.45)
+	button.highlight:SetColorTexture(1,1,1,0.45)
 	button.highlight:SetAllPoints(button.texture)
 
 	button:SetScript("OnAttributeChanged", A.OnAttributeChanged)
@@ -273,7 +273,6 @@ end
 
 function A:Initialize()
 	BuffFrame:Kill()
-	ConsolidatedBuffs:Kill()
 	TemporaryEnchantFrame:Kill()
 	InterfaceOptionsFrameCategoriesButton12:SetScale(0.0001)
 

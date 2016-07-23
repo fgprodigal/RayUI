@@ -34,7 +34,7 @@ function IF:CreateInfoPanel(name, width)
 	panel.Square:Point("LEFT", 5, 0)
 	panel.Square:Size(5, 5)
 	panel.Square.Bg = panel:CreateTexture(nil, "BORDER")
-	panel.Square.Bg:SetTexture(0, 0, 0)
+	panel.Square.Bg:SetColorTexture(0, 0, 0)
 	panel.Square.Bg:Point("LEFT", 4, 0)
 	panel.Square.Bg:Size(7, 7)
 

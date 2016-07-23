@@ -34,7 +34,7 @@ G.UnitFrames.aurafilters["Blacklist"] = {
     [SpellName(24755)] = true, --gay homosexual tricked or treated debuff
     [SpellName(25163)] = true, --fucking annoying pet debuff oozeling disgusting aura
     [SpellName(80354)] = true, --timewarp debuff
-    [SpellName(95223)] = true, --group res debuff		
+    -- [SpellName(95223)] = true, --group res debuff		
 }
 
 G.UnitFrames.aurafilters["Whitelist"] = {
@@ -47,26 +47,26 @@ G.UnitFrames.aurafilters["Whitelist"] = {
 G.UnitFrames.ChannelTicks = {
 	-- priest
 	[SpellName(15407)] = 3, -- mind flay
-	[SpellName(129197)] = 3, -- mind flay (insanity)
+	-- [SpellName(129197)] = 3, -- mind flay (insanity)
 	[SpellName(32000)] = 5, -- mind sear
 	[SpellName(47540)] = 3, -- penance, first tick instant
 	[SpellName(64843)] = 4, -- divine hymn
 
 	-- mage
-	[SpellName(10)] = 8, -- blizzard
+	-- [SpellName(10)] = 8, -- blizzard
 	[SpellName(5143)] = 5, -- arcane missiles
 	[SpellName(12051)] = 4, -- evocation
 
 	-- warlock
 	[SpellName(689)] = 3, -- drain life
 	[SpellName(4629)] = 4, -- rain of fire
-	[SpellName(1949)] = 15, -- hellfire
+	-- [SpellName(1949)] = 15, -- hellfire
 	[SpellName(755)] = 3, -- health funnel
-	[SpellName(103103)] = 4, -- malefic grasp
+	-- [SpellName(103103)] = 4, -- malefic grasp
 
 	-- druid
 	[SpellName(740)] = 4, -- tranquility
-	[SpellName(16914)] = 10, -- hurricane
+	-- [SpellName(16914)] = 10, -- hurricane
 
 	-- monk
 	[SpellName(101546)] = 3, -- spinning crane kick
@@ -84,5 +84,5 @@ f:SetScript("OnEvent", function(self)
 	end
 
 	G.UnitFrames.ChannelTicks[SpellName(15407)] = mfTicks -- "Mind Flay"
-	G.UnitFrames.ChannelTicks[SpellName(129197)] = mfTicks -- "Mind Flay (Insanity)"
+	-- G.UnitFrames.ChannelTicks[SpellName(129197)] = mfTicks -- "Mind Flay (Insanity)"
 end)

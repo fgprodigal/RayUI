@@ -446,7 +446,7 @@ function S:ReskinClose(f, a1, p, a2, x, y)
 
 	for i = 1, 7 do
 		local tex = f:CreateTexture()
-		tex:SetTexture(1, 1, 1)
+		tex:SetColorTexture(1, 1, 1)
 		tex:Size(1, 1)
 		tex:Point("BOTTOMLEFT", 4+i, 4+i)
 		tinsert(f.pixels, tex)
@@ -454,7 +454,7 @@ function S:ReskinClose(f, a1, p, a2, x, y)
 
 	for i = 1, 7 do
 		local tex = f:CreateTexture()
-		tex:SetTexture(1, 1, 1)
+		tex:SetColorTexture(1, 1, 1)
 		tex:Size(1, 1)
 		tex:Point("TOPLEFT", 4+i, -4-i)
 		tinsert(f.pixels, tex)

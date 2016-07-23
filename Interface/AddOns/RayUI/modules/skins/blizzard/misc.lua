@@ -231,35 +231,35 @@ local function LoadSkin()
 
 	local createBackdrop = function(parent, texture)
 		local bg = parent:CreateTexture(nil, "BACKGROUND")
-		bg:SetTexture(0, 0, 0, .5)
+		bg:SetColorTexture(0, 0, 0, .5)
 		bg:SetPoint("CENTER", texture)
 		bg:Size(12, 12)
 		parent.bg = bg
 
 		local left = parent:CreateTexture(nil, "BACKGROUND")
 		left:Width(1)
-		left:SetTexture(0, 0, 0)
+		left:SetColorTexture(0, 0, 0)
 		left:SetPoint("TOPLEFT", bg)
 		left:SetPoint("BOTTOMLEFT", bg)
 		parent.left = left
 
 		local right = parent:CreateTexture(nil, "BACKGROUND")
 		right:Width(1)
-		right:SetTexture(0, 0, 0)
+		right:SetColorTexture(0, 0, 0)
 		right:SetPoint("TOPRIGHT", bg)
 		right:SetPoint("BOTTOMRIGHT", bg)
 		parent.right = right
 
 		local top = parent:CreateTexture(nil, "BACKGROUND")
 		top:Height(1)
-		top:SetTexture(0, 0, 0)
+		top:SetColorTexture(0, 0, 0)
 		top:SetPoint("TOPLEFT", bg)
 		top:SetPoint("TOPRIGHT", bg)
 		parent.top = top
 
 		local bottom = parent:CreateTexture(nil, "BACKGROUND")
 		bottom:Height(1)
-		bottom:SetTexture(0, 0, 0)
+		bottom:SetColorTexture(0, 0, 0)
 		bottom:SetPoint("BOTTOMLEFT", bg)
 		bottom:SetPoint("BOTTOMRIGHT", bg)
 		parent.bottom = bottom
@@ -347,7 +347,7 @@ local function LoadSkin()
 
 				if not bu.bg then
 					createBackdrop(bu, check)
-					hl:SetTexture(r, g, b, .2)
+					hl:SetColorTexture(r, g, b, .2)
 					_G["DropDownList"..level.."Button"..j.."UnCheck"]:SetTexture("")
 				end
 
@@ -395,7 +395,7 @@ local function LoadSkin()
 	local line = VideoOptionsFrame:CreateTexture(nil, "ARTWORK")
 	line:Size(1, 536)
 	line:SetPoint("LEFT", 205, 18)
-	line:SetTexture(1, 1, 1, .2)
+	line:SetColorTexture(1, 1, 1, .2)
 
 	Display_:SetBackdrop(nil)
 	Graphics_:SetBackdrop(nil)
@@ -407,7 +407,7 @@ local function LoadSkin()
 	local hline = Display_:CreateTexture(nil, "ARTWORK")
 	hline:Size(580, 1)
 	hline:SetPoint("TOPLEFT", GraphicsButton, "BOTTOMLEFT", 14, -4)
-	hline:SetTexture(1, 1, 1, .2)
+	hline:SetColorTexture(1, 1, 1, .2)
 
 	S:CreateBD(AudioOptionsSoundPanelPlayback, .25)
 	S:CreateBD(AudioOptionsSoundPanelHardware, .25)
@@ -495,9 +495,6 @@ local function LoadSkin()
 		S:ReskinDropDown(_G[dropdowns[i]])
 	end
 
-	Graphics_RightQuality:GetRegions():Hide()
-	Graphics_RightQuality:DisableDrawLayer("BORDER")
-
 	local sliders = {
 		"Graphics_Quality",
 		"Advanced_UIScaleSlider",
@@ -562,7 +559,7 @@ local function LoadSkin()
 	local line = InterfaceOptionsFrame:CreateTexture(nil, "ARTWORK")
 	line:Size(1, 536)
 	line:SetPoint("LEFT", 205, 18)
-	line:SetTexture(1, 1, 1, .2)
+	line:SetColorTexture(1, 1, 1, .2)
 
 	local checkboxes = {
 		"CompactUnitFrameProfilesRaidStylePartyFrames",
@@ -591,66 +588,26 @@ local function LoadSkin()
 		"InterfaceOptionsControlsPanelStickyTargeting",
 		"InterfaceOptionsControlsPanelAutoDismount",
 		"InterfaceOptionsControlsPanelAutoClearAFK",
-		"InterfaceOptionsControlsPanelBlockTrades",
-		"InterfaceOptionsControlsPanelBlockGuildInvites",
-		"InterfaceOptionsControlsPanelBlockChatChannelInvites",
 		"InterfaceOptionsControlsPanelLootAtMouse",
 		"InterfaceOptionsControlsPanelAutoLootCorpse",
-		"InterfaceOptionsControlsPanelAutoOpenLootHistory",
 		"InterfaceOptionsControlsPanelInteractOnLeftClick",
-		"InterfaceOptionsControlsPanelReverseCleanUpBags",
-		"InterfaceOptionsControlsPanelReverseNewLoot",
-		"InterfaceOptionsCombatPanelAttackOnAssist",
-		"InterfaceOptionsCombatPanelStopAutoAttack",
-		"InterfaceOptionsNamesPanelUnitNameplatesNameplateClassColors",
 		"InterfaceOptionsCombatPanelTargetOfTarget",
-		"InterfaceOptionsCombatPanelShowSpellAlerts",
-		"InterfaceOptionsCombatPanelReducedLagTolerance",
-		"InterfaceOptionsCombatPanelActionButtonUseKeyDown",
-		"InterfaceOptionsCombatPanelEnemyCastBarsOnPortrait",
-		"InterfaceOptionsCombatPanelEnemyCastBarsOnNameplates",
-		"InterfaceOptionsCombatPanelEnemyCastBarsOnOnlyTargetNameplates",
-		"InterfaceOptionsCombatPanelEnemyCastBarsNameplateSpellNames",
 		"InterfaceOptionsCombatPanelAutoSelfCast",
 		"InterfaceOptionsCombatPanelLossOfControl",
-		"InterfaceOptionsDisplayPanelShowCloak",
-		"InterfaceOptionsDisplayPanelShowHelm",
-		"InterfaceOptionsDisplayPanelShowAggroPercentage",
-		"InterfaceOptionsDisplayPanelPlayAggroSounds",
-		"InterfaceOptionsDisplayPanelShowSpellPointsAvg",
-		"InterfaceOptionsDisplayPanelShowFreeBagSpace",
-		"InterfaceOptionsDisplayPanelCinematicSubtitles",
 		"InterfaceOptionsDisplayPanelRotateMinimap",
-		"InterfaceOptionsDisplayPanelShowAccountAchievments",
-		"InterfaceOptionsObjectivesPanelAutoQuestTracking",
-		"InterfaceOptionsObjectivesPanelMapFade",
 		"InterfaceOptionsSocialPanelProfanityFilter",
 		"InterfaceOptionsSocialPanelSpamFilter",
-		"InterfaceOptionsSocialPanelChatBubbles",
-		"InterfaceOptionsSocialPanelPartyChat",
-		"InterfaceOptionsSocialPanelChatHoverDelay",
 		"InterfaceOptionsSocialPanelGuildMemberAlert",
-		"InterfaceOptionsSocialPanelChatMouseScroll",
 		"InterfaceOptionsSocialPanelEnableTwitter",
-		"InterfaceOptionsSocialPanelWholeChatWindowClickable",
 		"InterfaceOptionsActionBarsPanelBottomLeft",
 		"InterfaceOptionsActionBarsPanelBottomRight",
 		"InterfaceOptionsActionBarsPanelRight",
 		"InterfaceOptionsActionBarsPanelRightTwo",
 		"InterfaceOptionsActionBarsPanelLockActionBars",
 		"InterfaceOptionsActionBarsPanelAlwaysShowActionBars",
-		"InterfaceOptionsActionBarsPanelSecureAbilityToggle",
 		"InterfaceOptionsActionBarsPanelCountdownCooldowns",
 		"InterfaceOptionsNamesPanelMyName",
-		"InterfaceOptionsNamesPanelMinus",
 		"InterfaceOptionsNamesPanelFriendlyPlayerNames",
-		"InterfaceOptionsNamesPanelFriendlyPets",
-		"InterfaceOptionsNamesPanelFriendlyGuardians",
-		"InterfaceOptionsNamesPanelFriendlyTotems",
-		"InterfaceOptionsNamesPanelUnitNameplatesFriends",
-		"InterfaceOptionsNamesPanelUnitNameplatesFriendlyPets",
-		"InterfaceOptionsNamesPanelUnitNameplatesFriendlyGuardians",
-		"InterfaceOptionsNamesPanelUnitNameplatesFriendlyTotems",
 		"InterfaceOptionsNamesPanelGuilds",
 		"InterfaceOptionsNamesPanelGuildTitles",
 		"InterfaceOptionsNamesPanelTitles",
@@ -659,10 +616,6 @@ local function LoadSkin()
 		"InterfaceOptionsNamesPanelEnemyPets",
 		"InterfaceOptionsNamesPanelEnemyGuardians",
 		"InterfaceOptionsNamesPanelEnemyTotems",
-		"InterfaceOptionsNamesPanelUnitNameplatesEnemies",
-		"InterfaceOptionsNamesPanelUnitNameplatesEnemyPets",
-		"InterfaceOptionsNamesPanelUnitNameplatesEnemyGuardians",
-		"InterfaceOptionsNamesPanelUnitNameplatesEnemyTotems",
 		"InterfaceOptionsNamesPanelUnitNameplatesEnemyMinus",
 		"InterfaceOptionsCombatTextPanelTargetDamage",
 		"InterfaceOptionsCombatTextPanelPeriodicDamage",
@@ -938,7 +891,7 @@ local function LoadSkin()
 			navButton.arrowDown:SetAlpha(0)
 
 			navButton.selected:SetDrawLayer("BACKGROUND", 1)
-			navButton.selected:SetTexture(r, g, b, .3)
+			navButton.selected:SetColorTexture(r, g, b, .3)
 
 			navButton:HookScript("OnClick", function()
 				moveNavButtons(self)

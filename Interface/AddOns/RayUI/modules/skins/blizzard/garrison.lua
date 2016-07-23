@@ -13,7 +13,7 @@ local function LoadSkin()
 		portrait.PortraitRing:Hide()
 		portrait.PortraitRingQuality:SetTexture("")
 
-		portrait.LevelBorder:SetTexture(0, 0, 0, .5)
+		portrait.LevelBorder:SetColorTexture(0, 0, 0, .5)
 		portrait.LevelBorder:SetSize(44, 11)
 		portrait.LevelBorder:ClearAllPoints()
 		portrait.LevelBorder:SetPoint("BOTTOM", 0, 12)
@@ -28,7 +28,7 @@ local function LoadSkin()
 		S:CreateBD(squareBG, 1)
 		portrait.squareBG = squareBG
 
-		cover:SetTexture(0, 0, 0)
+		cover:SetColorTexture(0, 0, 0)
 		cover:SetAllPoints(squareBG)
 	end
 
@@ -142,7 +142,7 @@ local function LoadSkin()
 
 		local selectedTex = bg:CreateTexture(nil, "BACKGROUND")
 		selectedTex:SetAllPoints()
-		selectedTex:SetTexture(r, g, b, .2)
+		selectedTex:SetColorTexture(r, g, b, .2)
 		selectedTex:Hide()
 		tab.selectedTex = selectedTex
 
@@ -380,7 +380,7 @@ local function LoadSkin()
 		local overlay = MissionPage.Stage:CreateTexture()
 		overlay:SetDrawLayer("ARTWORK", 3)
 		overlay:SetAllPoints(bg)
-		overlay:SetTexture(0, 0, 0, .5)
+		overlay:SetColorTexture(0, 0, 0, .5)
 
 		local iconbg = select(16, MissionPage:GetRegions())
 		iconbg:ClearAllPoints()
@@ -398,14 +398,14 @@ local function LoadSkin()
 	local function onAssignFollowerToMission(self, frame)
 		local portrait = frame.PortraitFrame
 
-		portrait.LevelBorder:SetTexture(0, 0, 0, .5)
+		portrait.LevelBorder:SetColorTexture(0, 0, 0, .5)
 		portrait.LevelBorder:SetSize(44, 11)
 	end
 
 	local function onRemoveFollowerFromMission(self, frame)
 		local portrait = frame.PortraitFrame
 
-		portrait.LevelBorder:SetTexture(0, 0, 0, .5)
+		portrait.LevelBorder:SetColorTexture(0, 0, 0, .5)
 		portrait.LevelBorder:SetSize(44, 11)
 
 		if portrait.squareBG then portrait.squareBG:SetBackdropBorderColor(0, 0, 0) end
@@ -600,7 +600,7 @@ local function LoadSkin()
 		tab.bg = bg
 		
 		local hl = tab:GetHighlightTexture()
-		hl:SetTexture(r, g, b, .1)
+		hl:SetColorTexture(r, g, b, .1)
 		hl:ClearAllPoints()
 		hl:SetPoint("TOPLEFT", bg, 1, -1)
 		hl:SetPoint("BOTTOMRIGHT", bg, -1, 1)
@@ -629,13 +629,13 @@ local function LoadSkin()
 				bg:SetFrameLevel(button:GetFrameLevel()-1)
 				S:CreateBD(bg, .25)
 			
-				button.SelectedBG:SetTexture(r, g, b, .2)
+				button.SelectedBG:SetColorTexture(r, g, b, .2)
 				button.SelectedBG:ClearAllPoints()
 				button.SelectedBG:SetPoint("TOPLEFT", bg, 1, -1)
 				button.SelectedBG:SetPoint("BOTTOMRIGHT", bg, -1, 1)
 			
 				local hl = button:GetHighlightTexture()
-				hl:SetTexture(r, g, b, .1)
+				hl:SetColorTexture(r, g, b, .1)
 				hl:ClearAllPoints()
 				hl:SetPoint("TOPLEFT", bg, 1, -1)
 				hl:SetPoint("BOTTOMRIGHT", bg, -1, 1)
@@ -830,7 +830,7 @@ local function LoadSkin()
 		local overlay = MissionPage.Stage:CreateTexture()
 		overlay:SetDrawLayer("ARTWORK", 3)
 		overlay:SetAllPoints(bg)
-		overlay:SetTexture(0, 0, 0, .5)
+		overlay:SetColorTexture(0, 0, 0, .5)
 
 		local iconbg = select(16, MissionPage:GetRegions())
 		iconbg:ClearAllPoints()
@@ -888,7 +888,7 @@ local function LoadSkin()
 				button.BusyFrame:SetAllPoints()
 
 				local hl = button:GetHighlightTexture()
-				hl:SetTexture(r, g, b, .1)
+				hl:SetColorTexture(r, g, b, .1)
 				hl:ClearAllPoints()
 				hl:SetPoint("TOPLEFT", 1, -1)
 				hl:SetPoint("BOTTOMRIGHT", -1, 1)

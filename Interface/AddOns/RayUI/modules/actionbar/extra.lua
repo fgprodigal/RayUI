@@ -31,12 +31,12 @@ function AB:CreateExtraButton()
 	ExtraActionBarFrame:SetParent(holder)
 	ExtraActionBarFrame:ClearAllPoints()
 	ExtraActionBarFrame:SetPoint("CENTER", holder, "CENTER")
-	DraenorZoneAbilityFrame:SetParent(draenorholder)
-	DraenorZoneAbilityFrame:ClearAllPoints()
-	DraenorZoneAbilityFrame:SetPoint("CENTER", draenorholder, "CENTER")
+	ZoneAbilityFrame:SetParent(draenorholder)
+	ZoneAbilityFrame:ClearAllPoints()
+	ZoneAbilityFrame:SetPoint("CENTER", draenorholder, "CENTER")
 
 	ExtraActionBarFrame.ignoreFramePositionManager  = true
-	DraenorZoneAbilityFrame.ignoreFramePositionManager = true
+	ZoneAbilityFrame.ignoreFramePositionManager = true
 
 	for i=1, ExtraActionBarFrame:GetNumChildren() do
 		local button = _G["ExtraActionButton"..i]
@@ -55,7 +55,7 @@ function AB:CreateExtraButton()
 	end
 
 	do
-		local button = DraenorZoneAbilityFrame.SpellButton
+		local button = ZoneAbilityFrame.SpellButton
 		-- button.Hide = R.dummy
 		-- button:Show()
 		button.pushed = true

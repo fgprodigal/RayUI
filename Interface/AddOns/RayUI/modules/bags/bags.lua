@@ -93,7 +93,7 @@ function B:Initialize()
 
 	local f = {}
 	function RayUI_ContainerFrame:OnInit()
-		local consumable = select(4, GetAuctionItemClasses())
+		local consumable = AUCTION_CATEGORY_CONSUMABLES
 		-- The filters control which items go into which container
 		local INVERTED = -1 -- with inverted filters (using -1), everything goes into this bag when the filter returns false
 		local onlyBags = function(item) return item.bagID >= 0 and item.bagID <= 4 and not CheckEquipmentSet(item) and item.type ~= consumable end
@@ -374,7 +374,7 @@ function B:Initialize()
 			setname:SetFont(R["media"].font, R["media"].fontsize, "THINOUTLINE")
 			setname:SetText(string.format(EQUIPMENT_SETS,' '))
 		elseif name == "Consumables" or name == "BankConsumables" then
-			local consumable = select(4, GetAuctionItemClasses())
+			local consumable = AUCTION_CATEGORY_CONSUMABLES
 			local setname = self:CreateFontString(nil,"OVERLAY")
 			setname:SetPoint("TOPLEFT", self, "TOPLEFT",5,-5)
 			setname:SetFont(R["media"].font, R["media"].fontsize, "THINOUTLINE")

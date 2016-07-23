@@ -246,7 +246,7 @@ local function LoadFunc()
 	CombatText:UnregisterEvent("PLAYER_REGEN_ENABLED")
 	CombatText:UnregisterEvent("PLAYER_REGEN_DISABLED")
 
-	SetCVar("fctCombatState", "1")
+	-- SetCVar("fctCombatState", "1")
 	local a = CreateFrame ("Frame")
 	a:RegisterEvent("PLAYER_REGEN_ENABLED")
 	a:RegisterEvent("PLAYER_REGEN_DISABLED")

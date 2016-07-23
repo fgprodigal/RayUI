@@ -136,7 +136,7 @@ local function LoadSkin()
 		if not bar.reskinned then
 			bar:SetStatusBarTexture(R["media"].gloss)
 
-			_G["AchievementFrameProgressBar"..index.."BG"]:SetTexture(0, 0, 0, .25)
+			_G["AchievementFrameProgressBar"..index.."BG"]:SetColorTexture(0, 0, 0, .25)
 			_G["AchievementFrameProgressBar"..index.."BorderLeft"]:Hide()
 			_G["AchievementFrameProgressBar"..index.."BorderCenter"]:Hide()
 			_G["AchievementFrameProgressBar"..index.."BorderRight"]:Hide()

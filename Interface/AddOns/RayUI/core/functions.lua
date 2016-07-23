@@ -6,7 +6,7 @@ SlashCmdList["RELOAD"] = function() ReloadUI() end
 SLASH_RELOAD1 = "/rl"
 
 R["RegisteredModules"] = {}
-R.resolution           = GetCVar("gxResolution")
+R.resolution           = ({GetScreenResolutions()})[GetCurrentResolution()] or GetCVar("gxWindowedResolution")
 R.screenheight         = tonumber(string.match(R.resolution, "%d+x(%d+)"))
 R.screenwidth          = tonumber(string.match(R.resolution, "(%d+)x+%d"))
 R.mult                 = 1
@@ -62,7 +62,7 @@ function R:UIScale()
 		R.ResScale = 1
 	end
 
-	self.mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/self.global.general.uiscale
+	self.mult = 768/string.match(self.resolution, "%d+x(%d+)")/self.global.general.uiscale
 end
 
 function R:Scale(x)
@@ -544,50 +544,133 @@ end
 local Unusable
 
 if R.myclass == "DEATHKNIGHT" then
-	Unusable = {{3, 4, 10, 11, 13, 14, 15, 16}, {7}}
+	Unusable = { -- weapon, armor, dual-wield
+		{LE_ITEM_WEAPON_BOWS, LE_ITEM_WEAPON_GUNS, LE_ITEM_WEAPON_WARGLAIVE, LE_ITEM_WEAPON_STAFF,LE_ITEM_WEAPON_UNARMED, LE_ITEM_WEAPON_DAGGER, LE_ITEM_WEAPON_THROWN, LE_ITEM_WEAPON_CROSSBOW, LE_ITEM_WEAPON_WAND},
+		{LE_ITEM_ARMOR_SHIELD}
+	}
+elseif R.myclass == "DEMONHUNTER" then
+	Unusable = {
+		{LE_ITEM_WEAPON_AXE2H, LE_ITEM_WEAPON_BOWS, LE_ITEM_WEAPON_GUNS, LE_ITEM_WEAPON_MACE1H, LE_ITEM_WEAPON_MACE2H, LE_ITEM_WEAPON_POLEARM, LE_ITEM_WEAPON_SWORD2H, LE_ITEM_WEAPON_STAFF, LE_ITEM_WEAPON_THROWN, LE_ITEM_WEAPON_CROSSBOW, LE_ITEM_WEAPON_WAND},
+		{LE_ITEM_ARMOR_MAIL, LE_ITEM_ARMOR_PLATE, LE_ITEM_ARMOR_SHIELD}
+	}
 elseif R.myclass == "DRUID" then
-	Unusable = {{1, 2, 3, 4, 8, 9, 14, 15, 16}, {4, 5, 7}, true}
+	Unusable = {
+		{LE_ITEM_WEAPON_AXE1H, LE_ITEM_WEAPON_AXE2H, LE_ITEM_WEAPON_BOWS, LE_ITEM_WEAPON_GUNS, LE_ITEM_WEAPON_SWORD1H, LE_ITEM_WEAPON_SWORD2H, LE_ITEM_WEAPON_WARGLAIVE, LE_ITEM_WEAPON_THROWN, LE_ITEM_WEAPON_CROSSBOW, LE_ITEM_WEAPON_WAND},
+		{LE_ITEM_ARMOR_MAIL, LE_ITEM_ARMOR_PLATE, LE_ITEM_ARMOR_SHIELD},
+		true
+	}
 elseif R.myclass == "HUNTER" then
-	Unusable = {{5, 6, 16}, {5, 6, 7}}
+	Unusable = {
+		{LE_ITEM_WEAPON_MACE1H, LE_ITEM_WEAPON_MACE2H, LE_ITEM_WEAPON_WARGLAIVE, LE_ITEM_WEAPON_THROWN, LE_ITEM_WEAPON_WAND},
+		{LE_ITEM_ARMOR_PLATE, LE_ITEM_ARMOR_SHIELD}
+	}
 elseif R.myclass == "MAGE" then
-	Unusable = {{1, 2, 3, 4, 5, 6, 7, 9, 11, 14, 15}, {3, 4, 5, 7}, true}
-elseif R.myclass == "PALADIN" then
-	Unusable = {{3, 4, 10, 11, 13, 14, 15, 16}, {}, true}
-elseif R.myclass == "PRIEST" then
-	Unusable = {{1, 2, 3, 4, 6, 7, 8, 9, 11, 14, 15}, {3, 4, 5, 7}, true}
-elseif R.myclass == "ROGUE" then
-	Unusable = {{2, 6, 7, 9, 10, 16}, {4, 5, 6, 7}}
-elseif R.myclass == "SHAMAN" then
-	Unusable = {{3, 4, 7, 8, 9, 14, 15, 16}, {5}}
-elseif R.myclass == "WARLOCK" then
-	Unusable = {{1, 2, 3, 4, 5, 6, 7, 9, 11, 14, 15}, {3, 4, 5, 7}, true}
-elseif R.myclass == "WARRIOR" then
-	Unusable = {{16}, {}}
+	Unusable = {
+		{LE_ITEM_WEAPON_AXE1H, LE_ITEM_WEAPON_AXE2H, LE_ITEM_WEAPON_BOWS, LE_ITEM_WEAPON_GUNS, LE_ITEM_WEAPON_MACE1H, LE_ITEM_WEAPON_MACE2H, LE_ITEM_WEAPON_POLEARM, LE_ITEM_WEAPON_SWORD2H, LE_ITEM_WEAPON_WARGLAIVE, LE_ITEM_WEAPON_UNARMED, LE_ITEM_WEAPON_THROWN, LE_ITEM_WEAPON_CROSSBOW},
+		{LE_ITEM_ARMOR_LEATHER, LE_ITEM_ARMOR_MAIL, LE_ITEM_ARMOR_PLATE, LE_ITEM_ARMOR_SHIELD},
+		true
+	}
 elseif R.myclass == "MONK" then
-	Unusable = {{2, 3, 4, 6, 9, 13, 14, 15, 16}, {4, 5, 7}}
+	Unusable = {
+		{LE_ITEM_WEAPON_AXE2H, LE_ITEM_WEAPON_BOWS, LE_ITEM_WEAPON_GUNS, LE_ITEM_WEAPON_MACE2H, LE_ITEM_WEAPON_SWORD2H, LE_ITEM_WEAPON_WARGLAIVE, LE_ITEM_WEAPON_DAGGER, LE_ITEM_WEAPON_THROWN, LE_ITEM_WEAPON_CROSSBOW, LE_ITEM_WEAPON_WAND},
+		{LE_ITEM_ARMOR_MAIL, LE_ITEM_ARMOR_PLATE, LE_ITEM_ARMOR_SHIELD}
+	}
+elseif R.myclass == "PALADIN" then
+	Unusable = {
+		{LE_ITEM_WEAPON_BOWS, LE_ITEM_WEAPON_GUNS, LE_ITEM_WEAPON_WARGLAIVE, LE_ITEM_WEAPON_STAFF, LE_ITEM_WEAPON_UNARMED, LE_ITEM_WEAPON_DAGGER, LE_ITEM_WEAPON_THROWN, LE_ITEM_WEAPON_CROSSBOW, LE_ITEM_WEAPON_WAND},
+		{},
+		true
+	}
+elseif R.myclass == "PRIEST" then
+	Unusable = {
+		{LE_ITEM_WEAPON_AXE1H, LE_ITEM_WEAPON_AXE2H, LE_ITEM_WEAPON_BOWS, LE_ITEM_WEAPON_GUNS, LE_ITEM_WEAPON_MACE2H, LE_ITEM_WEAPON_POLEARM, LE_ITEM_WEAPON_SWORD1H, LE_ITEM_WEAPON_SWORD2H, LE_ITEM_WEAPON_WARGLAIVE, LE_ITEM_WEAPON_UNARMED, LE_ITEM_WEAPON_THROWN, LE_ITEM_WEAPON_CROSSBOW},
+		{LE_ITEM_ARMOR_LEATHER, LE_ITEM_ARMOR_MAIL, LE_ITEM_ARMOR_PLATE, LE_ITEM_ARMOR_SHIELD},
+		true
+	}
+elseif R.myclass == "ROGUE" then
+	Unusable = {
+		{LE_ITEM_WEAPON_AXE2H, LE_ITEM_WEAPON_MACE2H, LE_ITEM_WEAPON_POLEARM, LE_ITEM_WEAPON_SWORD2H, LE_ITEM_WEAPON_WARGLAIVE, LE_ITEM_WEAPON_STAFF, LE_ITEM_WEAPON_WAND},
+		{LE_ITEM_ARMOR_MAIL, LE_ITEM_ARMOR_PLATE, LE_ITEM_ARMOR_SHIELD}
+	}
+elseif R.myclass == "SHAMAN" then
+	Unusable = {
+		{LE_ITEM_WEAPON_BOWS, LE_ITEM_WEAPON_GUNS, LE_ITEM_WEAPON_POLEARM, LE_ITEM_WEAPON_SWORD1H, LE_ITEM_WEAPON_SWORD2H, LE_ITEM_WEAPON_WARGLAIVE, LE_ITEM_WEAPON_THROWN, LE_ITEM_WEAPON_CROSSBOW, LE_ITEM_WEAPON_WAND},
+		{LE_ITEM_ARMOR_PLATEM}
+	}
+elseif R.myclass == "WARLOCK" then
+	Unusable = {
+		{LE_ITEM_WEAPON_AXE1H, LE_ITEM_WEAPON_AXE2H, LE_ITEM_WEAPON_BOWS, LE_ITEM_WEAPON_GUNS, LE_ITEM_WEAPON_MACE1H, LE_ITEM_WEAPON_MACE2H, LE_ITEM_WEAPON_POLEARM, LE_ITEM_WEAPON_SWORD2H, LE_ITEM_WEAPON_WARGLAIVE, LE_ITEM_WEAPON_UNARMED, LE_ITEM_WEAPON_THROWN, LE_ITEM_WEAPON_CROSSBOW},
+		{LE_ITEM_ARMOR_LEATHER, LE_ITEM_ARMOR_MAIL, LE_ITEM_ARMOR_PLATE, LE_ITEM_ARMOR_SHIELD},
+		true
+	}
+elseif R.myclass == "WARRIOR" then
+	Unusable = {{LE_ITEM_WEAPON_WARGLAIVE, LE_ITEM_WEAPON_WAND}, {}}
+else
+	Unusable = {{}, {}}
 end
 
-for class = 1, 2 do
-	local subs = {GetAuctionItemSubClasses(class)}
-	for i, subclass in ipairs(Unusable[class]) do
-		if subs[subclass] then
-			Unusable[subs[subclass]] = true
-		end
-	end
-	Unusable[class] = nil
-	subs = nil
-end
+--[[
+LE_ITEM_CLASS_WEAPON    2
+LE_ITEM_CLASS_ARMOR     4
+ 
+LE_ITEM_WEAPON_AXE1H        0
+LE_ITEM_WEAPON_AXE2H        1
+LE_ITEM_WEAPON_BOWS         2
+LE_ITEM_WEAPON_GUNS         3
+LE_ITEM_WEAPON_MACE1H       4
+LE_ITEM_WEAPON_MACE2H       5
+LE_ITEM_WEAPON_POLEARM      6
+LE_ITEM_WEAPON_SWORD1H      7
+LE_ITEM_WEAPON_SWORD2H      8
+LE_ITEM_WEAPON_WARGLAIVE    9   (DH Only?)
+LE_ITEM_WEAPON_STAFF        10
+LE_ITEM_WEAPON_BEARCLAW     11
+LE_ITEM_WEAPON_CATCLAW      12
+LE_ITEM_WEAPON_UNARMED      13  (Fist Weapons)
+LE_ITEM_WEAPON_GENERIC      14
+LE_ITEM_WEAPON_DAGGER       15
+LE_ITEM_WEAPON_THROWN       16
+Spears?                     17  (Not in game)
+LE_ITEM_WEAPON_CROSSBOW     18
+LE_ITEM_WEAPON_WAND         19
+LE_ITEM_WEAPON_FISHINGPOLE  20
+ 
+LE_ITEM_ARMOR_GENERIC   0
+LE_ITEM_ARMOR_CLOTH     1
+LE_ITEM_ARMOR_LEATHER   2
+LE_ITEM_ARMOR_MAIL      3
+LE_ITEM_ARMOR_PLATE     4
+LE_ITEM_ARMOR_COSMETIC  5
+LE_ITEM_ARMOR_SHIELD    6
+LE_ITEM_ARMOR_LIBRAM    7
+LE_ITEM_ARMOR_IDOL      8
+LE_ITEM_ARMOR_TOTEM     9
+LE_ITEM_ARMOR_SIGIL     10
+LE_ITEM_ARMOR_RELIC     11
+]]
 
-function R:IsClassUnusable(subclass, slot)
-	if subclass then
-		return Unusable[subclass] or slot == "INVTYPE_WEAPONOFFHAND" and Unusable[3]
+R.unusable = {}
+R.cannotDual = Unusable[3]
+
+for i, class in ipairs({LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR}) do
+	local list = {}
+	for _, subclass in ipairs(Unusable[i]) do
+		list[subclass] = true
 	end
+	
+	R.unusable[class] = list
 end
 
 function R:IsItemUnusable(...)
 	if ... then
-		local subclass, _, slot = select(7, GetItemInfo(...))
-		return R:IsClassUnusable(subclass, slot)
+		local slot, _,_, class, subclass = select(9, GetItemInfo(...))
+		return R:IsClassUnusable(class, subclass, slot)
+	end
+end
+
+function R:IsClassUnusable(class, subclass, slot)
+	if class and subclass and R.unusable[class] then
+		return slot ~= '' and R.unusable[class][subclass] or slot == "INVTYPE_WEAPONOFFHAND" and R.cannotDual
 	end
 end
 

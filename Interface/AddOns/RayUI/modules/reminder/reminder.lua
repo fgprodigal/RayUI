@@ -403,4 +403,4 @@ function RM:Initialize()
 	RM:CheckForNewReminders()
 end
 
-R:RegisterModule(RM:GetName())
+-- R:RegisterModule(RM:GetName())

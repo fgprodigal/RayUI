@@ -19,7 +19,7 @@ local function LoadSkin()
 				button.highlight:SetPoint("TOPLEFT", 1, 0)
 				button.highlight:SetPoint("BOTTOMRIGHT", -1, 0)
 				button.highlight.SetPoint = R.dummy
-				button.highlight:SetTexture(r, g, b, .2)
+				button.highlight:SetColorTexture(r, g, b, .2)
 				button.highlight.SetTexture = R.dummy
 				button.categoryMiddle:SetAlpha(0)
 				button.categoryLeft:SetAlpha(0)

@@ -154,10 +154,10 @@ function watcherPrototype:UpdateButton(button, index, icon, count, duration, exp
 	if button.cooldown then
 		if filter:find("CD") then
 			button.cooldown:SetReverse(false)
-			CooldownFrame_SetTimer(button.cooldown, expires, duration, 1)
+			CooldownFrame_Set(button.cooldown, expires, duration, true)
 		else
 			button.cooldown:SetReverse(true)
-			CooldownFrame_SetTimer(button.cooldown, expires - duration, duration, 1)
+			CooldownFrame_Set(button.cooldown, expires - duration, duration, true)
 		end
 	end
 	if filter:find("CD") then

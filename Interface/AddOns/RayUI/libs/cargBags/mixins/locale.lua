@@ -44,27 +44,27 @@ function cargBags:GetLocalizedTypes()
 
 	L = {}
 
-	-- http://www.wowpedia.org/API_GetAuctionItemClasses
-	L["Weapon"], L["Armor"], L["Container"], L["Consumable"], L["Glyph"], L["Trade Goods"], L["Recipe"], L["Gem"], L["Miscellaneous"], L["Quest"], L["Battle Pets"] = GetAuctionItemClasses()
+	-- -- http://www.wowpedia.org/API_GetAuctionItemClasses
+	-- L["Weapon"], L["Armor"], L["Container"], L["Consumable"], L["Glyph"], L["Trade Goods"], L["Recipe"], L["Gem"], L["Miscellaneous"], L["Quest"], L["Battle Pets"] = GetAuctionItemClasses()
 
-	-- http://www.wowpedia.org/API_GetAuctionItemSubClasses
-	L["One-Handed Axes"], L["Two-Handed Axes"], L["Bows"], L["Guns"], L["One-Handed Maces"], L["Two-Handed Maces"], L["Polearms"], L["One-Handed Swords"], L["Two-Handed Swords"], L["Staves"], L["Fist Weapons"], L["Miscellaneous"], L["Daggers"], L["Thrown"], L["Crossbows"], L["Wands"], L["Fishing Poles"] = GetAuctionItemSubClasses(1)
+	-- -- http://www.wowpedia.org/API_GetAuctionItemSubClasses
+	-- L["One-Handed Axes"], L["Two-Handed Axes"], L["Bows"], L["Guns"], L["One-Handed Maces"], L["Two-Handed Maces"], L["Polearms"], L["One-Handed Swords"], L["Two-Handed Swords"], L["Staves"], L["Fist Weapons"], L["Miscellaneous"], L["Daggers"], L["Thrown"], L["Crossbows"], L["Wands"], L["Fishing Poles"] = GetAuctionItemSubClasses(1)
 	
-	L["Miscellaneous"], L["Cloth"], L["Leather"], L["Mail"], L["Plate"], L["Shields"], L["Relic"] = GetAuctionItemSubClasses(2)
+	-- L["Miscellaneous"], L["Cloth"], L["Leather"], L["Mail"], L["Plate"], L["Shields"], L["Relic"] = GetAuctionItemSubClasses(2)
 	
-	L["Bag"], L["Herb Bag"], L["Enchanting Bag"], L["Engineering Bag"], L["Gem Bag"], L["Mining Bag"], L["Leatherworking Bag"], L["Inscription Bag"], L["Tackle Box"] = GetAuctionItemSubClasses(3)
+	-- L["Bag"], L["Herb Bag"], L["Enchanting Bag"], L["Engineering Bag"], L["Gem Bag"], L["Mining Bag"], L["Leatherworking Bag"], L["Inscription Bag"], L["Tackle Box"] = GetAuctionItemSubClasses(3)
 	
-	L["Food & Drink"], L["Potion"], L["Elixir"], L["Flask"], L["Bandage"], L["Item Enhancement"], L["Scroll"], L["Other"] = GetAuctionItemSubClasses(4)
+	-- L["Food & Drink"], L["Potion"], L["Elixir"], L["Flask"], L["Bandage"], L["Item Enhancement"], L["Scroll"], L["Other"] = GetAuctionItemSubClasses(4)
 	
-	L["Warrior"], L["Paladin"], L["Hunter"], L["Rogue"], L["Priest"], L["Death Knight"], L["Shaman"], L["Mage"], L["Warlock"], L["Monk"], L["Druid"] = GetAuctionItemSubClasses(5)
+	-- L["Warrior"], L["Paladin"], L["Hunter"], L["Rogue"], L["Priest"], L["Death Knight"], L["Shaman"], L["Mage"], L["Warlock"], L["Monk"], L["Druid"] = GetAuctionItemSubClasses(5)
 	
-	L["Elemental"], L["Cloth"], L["Leather"], L["Metal & Stone"], L["Meat"], L["Herb"], L["Enchanting"], L["Jewelcrafting"], L["Parts"], L["Devices"], L["Explosives"], L["Materials"], L["Other"], L["Item Enchantment"] = GetAuctionItemSubClasses(6)
+	-- L["Elemental"], L["Cloth"], L["Leather"], L["Metal & Stone"], L["Meat"], L["Herb"], L["Enchanting"], L["Jewelcrafting"], L["Parts"], L["Devices"], L["Explosives"], L["Materials"], L["Other"], L["Item Enchantment"] = GetAuctionItemSubClasses(6)
 	
-	L["Book"], L["Leatherworking"], L["Tailoring"], L["Engineering"], L["Blacksmithing"], L["Cooking"], L["Alchemy"], L["First Aid"], L["Enchanting"], L["Fishing"], L["Jewelcrafting"], L["Inscription"] = GetAuctionItemSubClasses(7)
+	-- L["Book"], L["Leatherworking"], L["Tailoring"], L["Engineering"], L["Blacksmithing"], L["Cooking"], L["Alchemy"], L["First Aid"], L["Enchanting"], L["Fishing"], L["Jewelcrafting"], L["Inscription"] = GetAuctionItemSubClasses(7)
 	
-	L["Red"], L["Blue"], L["Yellow"], L["Purple"], L["Green"], L["Orange"], L["Meta"], L["Simple"], L["Prismatic"], L["Cogwheel"] = GetAuctionItemSubClasses(8)
+	-- L["Red"], L["Blue"], L["Yellow"], L["Purple"], L["Green"], L["Orange"], L["Meta"], L["Simple"], L["Prismatic"], L["Cogwheel"] = GetAuctionItemSubClasses(8)
 	
-	L["Junk"], L["Reagent"], L["Companion"], L["Pets"], L["Holiday"], L["Other"], L["Mount"] = GetAuctionItemSubClasses(9)
+	-- L["Junk"], L["Reagent"], L["Companion"], L["Pets"], L["Holiday"], L["Other"], L["Mount"] = GetAuctionItemSubClasses(9)
 
 	return L
 end

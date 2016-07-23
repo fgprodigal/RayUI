@@ -41,4 +41,4 @@ local function LoadFunc()
 	end)
 end
 
-M:RegisterMiscModule("HatTrick", LoadFunc)
+-- M:RegisterMiscModule("HatTrick", LoadFunc)

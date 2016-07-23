@@ -3,16 +3,16 @@ Copyright (c) 2010-2015, Hendrik "nevcairiel" Leppkes <h.leppkes@gmail.com>
 
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without 
+Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
-    * Redistributions of source code must retain the above copyright notice, 
+    * Redistributions of source code must retain the above copyright notice,
       this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above copyright notice, 
-      this list of conditions and the following disclaimer in the documentation 
+    * Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
       and/or other materials provided with the distribution.
-    * Neither the name of the developer nor the names of its contributors 
-      may be used to endorse or promote products derived from this software without 
+    * Neither the name of the developer nor the names of its contributors
+      may be used to endorse or promote products derived from this software without
       specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
@@ -28,17 +28,14 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ]]
---[[DIY by ViolyS 
-base v20
-From "LibActionButton-1.0" v63 update
-]]
-
 local MAJOR_VERSION = "LibActionButton-1.0"
-local MINOR_VERSION = 63   -- v20
+local MINOR_VERSION = 3
 
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
 if not lib then return end
+
+local IsLegion = select(4, GetBuildInfo()) >= 70000
 
 -- Lua functions
 local _G = _G
@@ -64,6 +61,8 @@ local str_match, format, tinsert, tremove = string.match, format, tinsert, tremo
 
 local KeyBound = LibStub("LibKeyBound-1.0", true)
 local CBH = LibStub("CallbackHandler-1.0")
+local LBG = LibStub("LibButtonGlow-1.0", true)
+local Masque = LibStub("Masque", true)
 
 lib.eventFrame = lib.eventFrame or CreateFrame("Frame")
 lib.eventFrame:UnregisterAllEvents()
@@ -116,9 +115,23 @@ local ButtonRegistry, ActiveButtons, ActionButtons, NonActionButtons = lib.butto
 local Update, UpdateButtonState, UpdateUsable, UpdateCount, UpdateCooldown, UpdateTooltip, UpdateNewAction
 local StartFlash, StopFlash, UpdateFlash, UpdateHotkeys, UpdateRangeTimer, UpdateOverlayGlow
 local UpdateFlyout, ShowGrid, HideGrid, UpdateGrid, SetupSecureSnippets, WrapOnClick
+local ShowOverlayGlow, HideOverlayGlow
 local EndChargeCooldown
 
 local InitializeEventHandler, OnEvent, ForAllButtons, OnUpdate
+
+
+local SPELL_POWER_HOLY_POWER = SPELL_POWER_HOLY_POWER;
+local HAND_OF_LIGHT = GetSpellInfo(90174);
+local DIVINE_CRUSADER = GetSpellInfo(144595)
+local DIVINE_PURPOSE = GetSpellInfo(223819)
+local PLAYERCLASS = select(2, UnitClass('player'))
+local HOLY_POWER_SPELLS = {
+	[85256] = GetSpellInfo(85256), --Templar's Verdict
+	[53385] = GetSpellInfo(53385), --Divine Storm
+	[157048] = GetSpellInfo(157048), -- Final Verdict
+	[152262] = GetSpellInfo(152262), --Seraphim
+};
 
 local DefaultConfig = {
 	outOfRangeColoring = "button",
@@ -126,7 +139,8 @@ local DefaultConfig = {
 	showGrid = false,
 	colors = {
 		range = { 0.8, 0.1, 0.1 },
-		mana = { 0.5, 0.5, 1.0 }
+		mana = { 0.5, 0.5, 1.0 },
+		hp = { 0.5, 0.5, 1.0 }
 	},
 	hideElements = {
 		macro = false,
@@ -523,6 +537,31 @@ local function PickupAny(kind, target, detail, ...)
 	end
 end
 
+function Generic:OnUpdate(elapsed)
+	if not GetCVarBool('lockActionBars') then return; end
+
+	self.lastupdate = (self.lastupdate or 0) + elapsed;
+	if (self.lastupdate < .2) then return end
+	self.lastupdate = 0
+
+	local isDragKeyDown
+	if GetModifiedClick("PICKUPACTION") == 'ALT' then
+		isDragKeyDown = IsAltKeyDown()
+	elseif GetModifiedClick("PICKUPACTION") == 'CTRL' then
+		isDragKeyDown = IsControlKeyDown()
+	elseif GetModifiedClick("PICKUPACTION") == 'SHIFT' then
+		isDragKeyDown = IsShiftKeyDown()
+	end
+
+	if isDragKeyDown and (self.clickState == 'AnyDown' or self.clickState == nil) then
+		self.clickState = 'AnyUp'
+		self:RegisterForClicks(self.clickState)
+	elseif self.clickState == 'AnyUp' and not isDragKeyDown then
+		self.clickState = 'AnyDown'
+		self:RegisterForClicks(self.clickState)
+	end
+end
+
 function Generic:OnEnter()
 	if self.config.tooltip ~= "disabled" and (self.config.tooltip ~= "nocombat" or not InCombatLockdown()) then
 		UpdateTooltip(self)
@@ -535,10 +574,15 @@ function Generic:OnEnter()
 		lib.ACTION_HIGHLIGHT_MARKS[self._state_action] = false
 		UpdateNewAction(self)
 	end
+
+	if self.config.clickOnDown then
+		self:SetScript('OnUpdate', Generic.OnUpdate)
+	end
 end
 
 function Generic:OnLeave()
 	GameTooltip:Hide()
+	self:SetScript('OnUpdate', nil)
 end
 
 -- Insecure drag handler to allow clicking on the button with an action on the cursor
@@ -626,7 +670,7 @@ function Generic:UpdateConfig(config)
 		self.HotKey:SetVertexColor(0.75, 0.75, 0.75)
 	end
 
-	if not self.config.hideElements.macro then
+	if self.config.hideElements.macro then
 		self.Name:Hide()
 	else
 		self.Name:Show()
@@ -790,12 +834,12 @@ function OnEvent(frame, event, arg1, ...)
 		for button in next, ActiveButtons do
 			local spellId = button:GetSpellId()
 			if spellId and spellId == arg1 then
-				ActionButton_ShowOverlayGlow(button)
+				ShowOverlayGlow(button)
 			else
 				if button._state_type == "action" then
 					local actionType, id = GetActionInfo(button._state_action)
 					if actionType == "flyout" and FlyoutHasSpell(id, arg1) then
-						ActionButton_ShowOverlayGlow(button)
+						ShowOverlayGlow(button)
 					end
 				end
 			end
@@ -804,12 +848,12 @@ function OnEvent(frame, event, arg1, ...)
 		for button in next, ActiveButtons do
 			local spellId = button:GetSpellId()
 			if spellId and spellId == arg1 then
-				ActionButton_HideOverlayGlow(button)
+				HideOverlayGlow(button)
 			else
 				if button._state_type == "action" then
 					local actionType, id = GetActionInfo(button._state_action)
 					if actionType == "flyout" and FlyoutHasSpell(id, arg1) then
-						ActionButton_HideOverlayGlow(button)
+						HideOverlayGlow(button)
 					end
 				end
 			end
@@ -1134,6 +1178,23 @@ function UpdateButtonState(self)
 	lib.callbacks:Fire("OnButtonState", self)
 end
 
+local function IsHolyPowerAbility(actionId)
+	if not actionId or type(actionId) ~= 'number' then return false; end
+	local actionType, id = GetActionInfo(actionId);
+	if actionType == 'macro' then
+		local macroSpell = GetMacroSpell(id);
+		if macroSpell then
+			for spellId, spellName in pairs(HOLY_POWER_SPELLS) do
+				if macroSpell == spellName then
+					return true;
+				end
+			end
+		end
+	else
+		return HOLY_POWER_SPELLS[id];
+	end
+	return false;
+end
 function UpdateUsable(self)
 	-- TODO: make the colors configurable
 	-- TODO: allow disabling of the whole recoloring
@@ -1141,6 +1202,8 @@ function UpdateUsable(self)
 		self.icon:SetVertexColor(unpack(self.config.colors.range))
 	else
 		local isUsable, notEnoughMana = self:IsUsable()
+		local action = self._state_action
+		--print(type(UnitPower('player', SPELL_POWER_HOLY_POWER)))
 		if isUsable then
 			self.icon:SetVertexColor(1.0, 1.0, 1.0)
 			--self.NormalTexture:SetVertexColor(1.0, 1.0, 1.0)
@@ -1169,7 +1232,7 @@ function UpdateCount(self)
 		end
 	else
 		local charges, maxCharges, chargeStart, chargeDuration = self:GetCharges()
-		if charges and maxCharges and maxCharges > 0 then
+		if charges and maxCharges and maxCharges > 1 then
 			self.Count:SetText(charges)
 		else
 			self.Count:SetText("")
@@ -1203,8 +1266,15 @@ local function StartChargeCooldown(parent, chargeStart, chargeDuration)
 		parent.chargeCooldown = cooldown
 		cooldown.parent = parent
 	end
+	-- set cooldown
 	parent.chargeCooldown:SetDrawBling(parent.chargeCooldown:GetEffectiveAlpha() > 0.5)
 	parent.chargeCooldown:SetCooldown(chargeStart, chargeDuration)
+
+	-- update charge cooldown skin when masque is used
+	if Masque and Masque.UpdateCharge then
+		Masque:UpdateCharge(parent)
+	end
+
 	if not chargeStart or chargeStart == 0 then
 		EndChargeCooldown(parent.chargeCooldown)
 	end
@@ -1229,7 +1299,11 @@ function UpdateCooldown(self)
 			self.cooldown:SetHideCountdownNumbers(true)
 			self.cooldown.currentCooldownType = COOLDOWN_TYPE_LOSS_OF_CONTROL
 		end
-		CooldownFrame_SetTimer(self.cooldown, locStart, locDuration, 1, true)
+		if IsLegion then
+			CooldownFrame_Set(self.cooldown, locStart, locDuration, true, true)
+		else
+			CooldownFrame_SetTimer(self.cooldown, locStart, locDuration, 1, true)
+		end
 	else
 		if self.cooldown.currentCooldownType ~= COOLDOWN_TYPE_NORMAL then
 			self.cooldown:SetEdgeTexture("Interface\\Cooldown\\edge")
@@ -1241,13 +1315,17 @@ function UpdateCooldown(self)
 			self.cooldown:SetScript("OnCooldownDone", OnCooldownDone)
 		end
 
-		if charges and maxCharges and maxCharges > 0 and charges > 0 and charges < maxCharges then
+		if charges and maxCharges and charges > 0 and charges < maxCharges then
 			StartChargeCooldown(self, chargeStart, chargeDuration)
 		elseif self.chargeCooldown then
 			EndChargeCooldown(self.chargeCooldown)
 		end
 
-		CooldownFrame_SetTimer(self.cooldown, start, duration, enable)
+		if IsLegion then
+			CooldownFrame_Set(self.cooldown, start, duration, enable)
+		else
+			CooldownFrame_SetTimer(self.cooldown, start, duration, enable)
+		end
 	end
 end
 
@@ -1286,7 +1364,7 @@ end
 
 function UpdateHotkeys(self)
 	local key = self:GetHotkey()
-	if not key or key == "" or not self.config.hideElements.hotkey then
+	if not key or key == "" or self.config.hideElements.hotkey then
 		self.HotKey:SetText(RANGE_INDICATOR)
 		self.HotKey:SetPoint("TOPLEFT", self, "TOPLEFT", 1, - 2)
 		self.HotKey:Hide()
@@ -1301,12 +1379,24 @@ function UpdateHotkeys(self)
 	end
 end
 
+function ShowOverlayGlow(self)
+	if LBG then
+		LBG.ShowOverlayGlow(self)
+	end
+end
+
+function HideOverlayGlow(self)
+	if LBG then
+		LBG.HideOverlayGlow(self)
+	end
+end
+
 function UpdateOverlayGlow(self)
 	local spellId = self:GetSpellId()
 	if spellId and IsSpellOverlayed(spellId) then
-		ActionButton_ShowOverlayGlow(self)
+		ShowOverlayGlow(self)
 	else
-		ActionButton_HideOverlayGlow(self)
+		HideOverlayGlow(self)
 	end
 end
 
@@ -1369,6 +1459,10 @@ function UpdateFlyout(self)
 			else
 				self.FlyoutArrow:SetPoint("TOP", self, "TOP", 0, arrowDistance)
 				SetClampedTextureRotation(self.FlyoutArrow, 0)
+			end
+
+			if self.FlyoutUpdateFunc then
+				self.FlyoutUpdateFunc(nil, self)
 			end
 
 			-- return here, otherwise flyout is hidden

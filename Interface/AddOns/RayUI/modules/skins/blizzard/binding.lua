@@ -32,7 +32,7 @@ local function LoadSkin()
 		selected:SetTexture(R["media"].gloss)
 		selected:SetPoint("TOPLEFT", 1, -1)
 		selected:SetPoint("BOTTOMRIGHT", -1, 1)
-		selected:SetTexture(r, g, b, .2)
+		selected:SetColorTexture(r, g, b, .2)
 
 		S:Reskin(bu)
 	end
@@ -60,7 +60,7 @@ local function LoadSkin()
 	local line = KeyBindingFrame:CreateTexture(nil, "ARTWORK")
 	line:SetSize(1, 546)
 	line:SetPoint("LEFT", 205, 10)
-	line:SetTexture(1, 1, 1, .2)
+	line:SetColorTexture(1, 1, 1, .2)
 end
 
 S:RegisterSkin("Blizzard_BindingUI", LoadSkin)

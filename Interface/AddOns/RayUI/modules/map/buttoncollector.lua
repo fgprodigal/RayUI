@@ -5,7 +5,7 @@ local buttons = {}
 
 function MM:PositionButtonCollector(self, screenQuadrant)
 	local line = math.ceil(Minimap:GetWidth() / 20)
-	-- MBCF.bg:SetTexture(0, 0, 0, 1)
+	-- MBCF.bg:SetColorTexture(0, 0, 0, 1)
 	-- MBCF:SetAlpha(0)
 	MBCF:ClearAllPoints()
 	screenQuadrant = screenQuadrant or R:GetScreenQuadrant(self)
@@ -90,7 +90,7 @@ function MM:ButtonCollector()
 				if frame:GetObjectType() == "Texture" then 
 					local iconFile = frame:GetTexture()
 					if(iconFile ~= nil and (iconFile:find("Border") or iconFile:find("Background") or iconFile:find("AlphaMask"))) then 
-						frame:SetTexture(0,0,0,0)
+						frame:SetColorTexture(0,0,0,0)
 					else
 						frame:ClearAllPoints()
 						frame:SetAllPoints()

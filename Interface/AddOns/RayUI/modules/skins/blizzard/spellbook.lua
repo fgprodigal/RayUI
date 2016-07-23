@@ -81,7 +81,7 @@ local function LoadSkin()
 			local ic = _G["SpellButton"..i.."IconTexture"]
 
 			if _G["SpellButton"..i.."Highlight"] then
-				_G["SpellButton"..i.."Highlight"]:SetTexture(1, 1, 1, 0.3)
+				_G["SpellButton"..i.."Highlight"]:SetColorTexture(1, 1, 1, 0.3)
 				_G["SpellButton"..i.."Highlight"]:ClearAllPoints()
 				_G["SpellButton"..i.."Highlight"]:SetAllPoints(ic)
 			end
@@ -185,53 +185,6 @@ local function LoadSkin()
 		bg:SetFrameLevel(0)
 		S:CreateBD(bg, .25)
 	end
-
-	local coreTabsSkinned = false
-	hooksecurefunc("SpellBookCoreAbilities_UpdateTabs", function()
-		if coreTabsSkinned then return end
-		coreTabsSkinned = true
-		for i = 1, GetNumSpecializations() do
-			local tab = SpellBookCoreAbilitiesFrame.SpecTabs[i]
-
-			tab:GetRegions():Hide()
-			tab:StyleButton(true)
-			tab:SetPushedTexture(nil)
-
-			S:CreateBG(tab)
-			S:CreateSD(tab, 5, 0, 0, 0, 1, 1)
-
-			tab:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
-
-			if i == 1 then
-				tab:SetPoint("TOPLEFT", SpellBookCoreAbilitiesFrame, "TOPRIGHT", 11, -53)
-			end
-		end
-	end)
-
-	hooksecurefunc("SpellBook_UpdateCoreAbilitiesTab", function()
-		for i = 1, #SpellBookCoreAbilitiesFrame.Abilities do
-			local bu = SpellBook_GetCoreAbilityButton(i)
-			if not bu.reskinned then
-				bu.EmptySlot:SetAlpha(0)
-				bu.ActiveTexture:SetAlpha(0)
-				bu.FutureTexture:SetAlpha(0)
-				bu.RequiredLevel:SetTextColor(1, 1, 1)
-
-				bu.iconTexture:SetTexCoord(.08, .92, .08, .92)
-				bu.iconTexture.bg = S:CreateBG(bu.iconTexture)
-
-				if bu.FutureTexture:IsShown() then
-					bu.Name:SetTextColor(.8, .8, .8)
-					bu.InfoText:SetTextColor(.7, .7, .7)
-				else
-					bu.Name:SetTextColor(1, 1, 1)
-					bu.InfoText:SetTextColor(.9, .9, .9)
-				end
-				bu:StyleButton(true)
-				bu.reskinned = true
-			end
-		end
-	end)
 
 	SpellBookFrameTutorialButton.Ring:Hide()
 	SpellBookFrameTutorialButton:SetPoint("TOPLEFT", SpellBookFrame, "TOPLEFT", -12, 12)

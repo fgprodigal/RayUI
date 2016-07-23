@@ -452,7 +452,7 @@ function Container:PLAYER_LOGIN()
 
 	local HandleBackground = Handle:CreateTexture(nil, "BACKGROUND")
 	HandleBackground:SetAllPoints()
-	HandleBackground:SetTexture(0, 0, 0, 0.8)
+	HandleBackground:SetColorTexture(0, 0, 0, 0.8)
 
 	local TopCenter = Handle:CreateTexture(nil, "BORDER")
 	TopCenter:SetPoint("TOP", 0, 4.5)

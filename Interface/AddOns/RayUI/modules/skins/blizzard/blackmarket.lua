@@ -66,7 +66,7 @@ local function LoadSkin()
                 local tex = bu:CreateTexture(nil, "BACKGROUND")
                 tex:SetPoint("TOPLEFT")
                 tex:SetPoint("BOTTOMRIGHT", 0, 5)
-                tex:SetTexture(0, 0, 0, .25)
+                tex:SetColorTexture(0, 0, 0, .25)
 
                 bu:SetHighlightTexture(R["media"].gloss)
                 local hl = bu:GetHighlightTexture()

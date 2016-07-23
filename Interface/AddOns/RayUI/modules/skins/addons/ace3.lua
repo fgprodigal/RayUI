@@ -205,10 +205,10 @@ local function SkinAce3()
 			]]
 		elseif TYPE == "Heading" then
 			widget.left:Height(1)
-			widget.left:SetTexture(.4, .4, .4)
+			widget.left:SetColorTexture(.4, .4, .4)
 			widget.left:SetGradientAlpha("HORIZONTAL", .8, .8, .8, 0, .8, .8, .8, 1)
 			widget.right:Height(1)
-			widget.right:SetTexture(.4, .4, .4)
+			widget.right:SetColorTexture(.4, .4, .4)
 			widget.right:SetGradientAlpha("HORIZONTAL", .8, .8, .8, 1, .8, .8, .8, 0)
 		end
 		return oldRegisterAsWidget(self, widget)

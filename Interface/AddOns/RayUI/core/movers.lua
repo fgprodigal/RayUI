@@ -64,9 +64,9 @@ function CreateGrid()
 	for i = 0, gridSize do 
 		local tx = grid:CreateTexture(nil, "BACKGROUND") 
 		if i == gridSize / 2 then 
-			tx:SetTexture(1, 0, 0) 
+			tx:SetColorTexture(1, 0, 0) 
 		else 
-			tx:SetTexture(0, 0, 0) 
+			tx:SetColorTexture(0, 0, 0) 
 		end
 		tx:Width(size)
 		tx:SetPoint("TOPLEFT", grid, "TOPLEFT", i*wStep - (size/2), 0) 
@@ -76,7 +76,7 @@ function CreateGrid()
 	
 	do
 		local tx = grid:CreateTexture(nil, "BACKGROUND") 
-		tx:SetTexture(1, 0, 0)
+		tx:SetColorTexture(1, 0, 0)
 		tx:Height(size)
 		tx:SetPoint("TOPLEFT", grid, "TOPLEFT", 0, -(height/2) + (size/2))
 		tx:SetPoint("TOPRIGHT", grid, "TOPRIGHT", 0, -(height/2) + (size/2))
@@ -84,14 +84,14 @@ function CreateGrid()
 	
 	for i = 1, floor((height/2)/hStep) do
 		local tx = grid:CreateTexture(nil, "BACKGROUND") 
-		tx:SetTexture(0, 0, 0)
+		tx:SetColorTexture(0, 0, 0)
 
 		tx:Height(size)
 		tx:SetPoint("TOPLEFT", grid, "TOPLEFT", 0, -(height/2+i*hStep) + (size/2))
 		tx:SetPoint("TOPRIGHT", grid, "TOPRIGHT", 0, -(height/2+i*hStep) + (size/2))
 		
 		tx = grid:CreateTexture(nil, "BACKGROUND") 
-		tx:SetTexture(0, 0, 0)
+		tx:SetColorTexture(0, 0, 0)
 
 		tx:Height(size)
 		tx:SetPoint("TOPLEFT", grid, "TOPLEFT", 0, -(height/2-i*hStep) + (size/2))

@@ -352,30 +352,6 @@ local function LoadSkin()
         SLASH_AUTOLOOT1 = "/autoloot"
 
 	end
-
-	-- Missing loot frame
-	MissingLootFrameCorner:Hide()
-
-	hooksecurefunc("MissingLootFrame_Show", function()
-		for i = 1, GetNumMissingLootItems() do
-			local bu = _G["MissingLootFrameItem"..i]
-
-			if not bu.styled then
-				_G["MissingLootFrameItem"..i.."NameFrame"]:Hide()
-
-				bu.icon:SetTexCoord(.08, .92, .08, .92)
-				bu.icon.bg = S:CreateBG(bu.icon)
-				bu:StyleButton(true)
-
-				bu.styled = true
-			end
-
-			-- bu.icon.bg:SetVertexColor(bu.name:GetVertexColor())
-		end
-	end)
-
-	S:CreateBD(MissingLootFrame)
-	S:ReskinClose(MissingLootFramePassButton)
 end
 
 S:RegisterSkin("RayUI", LoadSkin)

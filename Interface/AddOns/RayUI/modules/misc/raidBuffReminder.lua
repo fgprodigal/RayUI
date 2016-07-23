@@ -267,7 +267,7 @@ local function LoadFunc()
 		button.t:SetTexture("Interface\\Icons\\INV_Misc_QuestionMark")
 
 		-- button.highlight = button:CreateTexture(nil, "HIGHLIGHT")
-		-- button.highlight:SetTexture(1,1,1,0.45)
+		-- button.highlight:SetColorTexture(1,1,1,0.45)
 		-- button.highlight:SetAllPoints(button.t)
 
 		button.cd = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
@@ -325,4 +325,4 @@ local function LoadFunc()
 	UpdateReminder()
 end
 
-M:RegisterMiscModule("RaidBuffReminder", LoadFunc)
+-- M:RegisterMiscModule("RaidBuffReminder", LoadFunc)

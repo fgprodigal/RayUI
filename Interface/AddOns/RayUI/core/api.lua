@@ -125,7 +125,7 @@ local function StyleButton(button, offset)
 
 	if button.SetHighlightTexture and not button.hover then
 		local hover = button:CreateTexture(nil, "OVERLAY")
-		hover:SetTexture(1, 1, 1, 0.3)
+		hover:SetColorTexture(1, 1, 1, 0.3)
 		if offset == true then
 			hover:SetAllPoints()
 		else
@@ -147,7 +147,7 @@ local function StyleButton(button, offset)
 
 	if button.SetPushedTexture and not button.pushed then
 		local pushed = button:CreateTexture(nil, "OVERLAY")
-		pushed:SetTexture(0.9, 0.8, 0.1, 0.3)
+		pushed:SetColorTexture(0.9, 0.8, 0.1, 0.3)
 		if offset == true then
 			pushed:SetAllPoints()
 		else
@@ -169,7 +169,7 @@ local function StyleButton(button, offset)
 
 	if button.SetCheckedTexture and not button.checked then
 		local checked = button:CreateTexture(nil, "OVERLAY")
-		checked:SetTexture(23/255,132/255,209/255,0.3)
+		checked:SetColorTexture(23/255,132/255,209/255,0.3)
 		if offset == true then
 			checked:SetAllPoints()
 		else

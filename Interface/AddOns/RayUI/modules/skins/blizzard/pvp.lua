@@ -89,7 +89,7 @@ local function LoadSkin()
 		bg:SetFrameLevel(bu:GetFrameLevel()-1)
 
 		SelectedTexture:SetDrawLayer("BACKGROUND")
-		SelectedTexture:SetTexture(r, g, b, .2)
+		SelectedTexture:SetColorTexture(r, g, b, .2)
 		SelectedTexture:SetPoint("TOPLEFT", 2, 0)
 		SelectedTexture:SetPoint("BOTTOMRIGHT", -1, 2)
 

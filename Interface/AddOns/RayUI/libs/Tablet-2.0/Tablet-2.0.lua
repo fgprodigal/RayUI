@@ -1240,7 +1240,7 @@ local function AcquireFrame(self, registration, data, detachedData)
 				tooltip.scrollFrame:SetVerticalScroll(0)
 				tooltip.slider:SetValue(0)
 				tooltip:Hide()
-				tooltip.registration.tooltip = nil
+				if tooltip.registration then tooltip.registration.tooltip = nil end
 				tooltip.registration = nil
 				overFrame = nil
 			end

@@ -11,19 +11,19 @@ local function addLine(self,id,isItem)
 		local line = _G["GameTooltipTextLeft"..i]
 		if not line then break end
 		local text = line:GetText()
-		if text and (text:match("FFCA3C3C技能ID") or text:match("FFCA3C3C堆疊數") or text:match("FFCA3C3C已擁有") or text:match("FFCA3C3C物品ID")) then
+		if text and (text:match("FFCA3C3C技能ID") or text:match("FFCA3C3C堆叠数") or text:match("FFCA3C3C已拥有") or text:match("FFCA3C3C物品ID")) then
 			return
 		end
 	end
 	self:AddLine(" ")
 	if isItem then
 		if select(8, GetItemInfo(id)) and select(8, GetItemInfo(id)) >1 then
-			self:AddDoubleLine("|cFFCA3C3C堆疊數:|r","|cffffffff"..select(8, GetItemInfo(id)))
+			self:AddDoubleLine("|cFFCA3C3C堆叠数:|r","|cffffffff"..select(8, GetItemInfo(id)))
 		end
 		if GetItemCount(id, true) and GetItemCount(id, true) - GetItemCount(id) > 0 then
-			self:AddDoubleLine("|cFFCA3C3C已擁有(|r"..R:RGBToHex(50/255, 217/255, 1).."銀行|r".."|cFFCA3C3C):|r","|cffffffff"..GetItemCount(id, true).."(|r"..R:RGBToHex(50/255, 217/255, 1)..GetItemCount(id, true) - GetItemCount(id).."|r|cffffffff)|r")
+			self:AddDoubleLine("|cFFCA3C3C已拥有(|r"..R:RGBToHex(50/255, 217/255, 1).."银行|r".."|cFFCA3C3C):|r","|cffffffff"..GetItemCount(id, true).."(|r"..R:RGBToHex(50/255, 217/255, 1)..GetItemCount(id, true) - GetItemCount(id).."|r|cffffffff)|r")
 		elseif GetItemCount(id) > 0 then
-			self:AddDoubleLine("|cFFCA3C3C已擁有:|r","|cffffffff"..GetItemCount(id))
+			self:AddDoubleLine("|cFFCA3C3C已拥有:|r","|cffffffff"..GetItemCount(id))
 		end
 		self:AddDoubleLine("|cFFCA3C3C物品ID:|r","|cffffffff"..id)
 	else
@@ -32,18 +32,18 @@ local function addLine(self,id,isItem)
 	self:Show()
 end
 
-hooksecurefunc(GameTooltip, "SetUnitConsolidatedBuff", function(self, unit, index)
-	local name = GetRaidBuffTrayAuraInfo(index)
-	local _, _, _, _, _, _, _, caster, _, _, id = UnitAura(unit, name)
-	if id then
-		self:AddLine(" ")
-		if caster then
-			self:AddLine(UnitName(caster))
-		end
-		self:AddDoubleLine("|cFFCA3C3C技能ID:|r","|cffffffff"..id)
-		self:Show()
-	end	
-end)
+-- hooksecurefunc(GameTooltip, "SetUnitConsolidatedBuff", function(self, unit, index)
+-- 	local name = GetRaidBuffTrayAuraInfo(index)
+-- 	local _, _, _, _, _, _, _, caster, _, _, id = UnitAura(unit, name)
+-- 	if id then
+-- 		self:AddLine(" ")
+-- 		if caster then
+-- 			self:AddLine(UnitName(caster))
+-- 		end
+-- 		self:AddDoubleLine("|cFFCA3C3C技能ID:|r","|cffffffff"..id)
+-- 		self:Show()
+-- 	end	
+-- end)
 
 hooksecurefunc(GameTooltip, "SetUnitAura", function(self,...)
 	local id = select(11, UnitAura(...))
@@ -87,7 +87,7 @@ local function attachItemTooltip(self)
 		end
 		_, link = GetItemInfo(newItemId)
 	end
-	local id = select(3,strfind(link, "^|%x+|Hitem:(%-?%d+):(%d+):(%d+):(%d+):(%d+):(%d+):(%-?%d+):(%-?%d+)"))
+	local id = select(3,strfind(link, "^|%x+|Hitem:(%-?%d-):(%d-):(%d-):(%d-):(%d-):(%d-):(%-?%d-):(%-?%d-)"))
 	if id then addLine(self,id,true) end
 end
 

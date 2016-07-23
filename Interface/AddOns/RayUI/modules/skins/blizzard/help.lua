@@ -24,7 +24,7 @@ local function LoadSkin()
 	select(2, HelpFrameCharacterStuckHearthstone:GetRegions()):SetAlpha(0)
 	select(3, HelpFrameCharacterStuckHearthstone:GetRegions()):SetAlpha(0)
 	local hover = HelpFrameCharacterStuckHearthstone:CreateTexture(nil, "HIGHLIGHT")
-	hover:SetTexture(1, 1, 1, 0.3)
+	hover:SetColorTexture(1, 1, 1, 0.3)
 	hover:SetAllPoints()
 	HelpFrameCharacterStuckHearthstoneIconTexture:SetTexCoord(.08, .92, .08, .92)
 

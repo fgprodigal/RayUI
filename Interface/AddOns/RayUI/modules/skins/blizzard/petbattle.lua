@@ -377,11 +377,11 @@ end)
 		self:StyleButton(true)
 
 		local pushed = self:GetPushedTexture()
-		pushed:SetTexture(r, g, b, .2)
+		pushed:SetColorTexture(r, g, b, .2)
 		pushed:SetDrawLayer("BACKGROUND")
 		pushed:SetAllPoints()
 
-		self.SelectedHighlight:SetTexture(r, g, b, .2)
+		self.SelectedHighlight:SetColorTexture(r, g, b, .2)
 		self.SelectedHighlight:SetAllPoints()
 		-- self.SelectedHighlight:SetAlpha(0)
 		-- self:SetFrameStrata("LOW")

@@ -17,14 +17,9 @@ local function LoadSkin()
 	end
 	CharacterModelFrame:DisableDrawLayer("OVERLAY")
 	CharacterFramePortrait:Hide()
-	CharacterFrameExpandButton:GetNormalTexture():SetAlpha(0)
-	CharacterFrameExpandButton:GetPushedTexture():SetAlpha(0)
-	CharacterStatsPaneTop:Hide()
-	CharacterStatsPaneBottom:Hide()
 	CharacterFramePortraitFrame:Hide()
 	CharacterFrameTopRightCorner:Hide()
 	CharacterFrameTopBorder:Hide()
-	CharacterFrameExpandButton:SetPoint("BOTTOMRIGHT", CharacterFrameInset, "BOTTOMRIGHT", -14, 6)
 	ReputationListScrollFrame:GetRegions():Hide()
 	ReputationDetailCorner:Hide()
 	ReputationDetailDivider:Hide()
@@ -61,24 +56,6 @@ local function LoadSkin()
 	S:ReskinCheck(ReputationDetailLFGBonusReputationCheckBox)
 	S:ReskinInput(GearManagerDialogPopupEditBox)
 
-	hooksecurefunc("CharacterFrame_Expand", function()
-		select(15, CharacterFrameExpandButton:GetRegions()):SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-left-active")
-	end)
-
-	hooksecurefunc("CharacterFrame_Collapse", function()
-		select(15, CharacterFrameExpandButton:GetRegions()):SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-right-active")
-	end)
-
-	hooksecurefunc("PaperDollFrame_CollapseStatCategory", function(categoryFrame)
-			categoryFrame.BgMinimized:Hide()
-		end)
-
-	hooksecurefunc("PaperDollFrame_ExpandStatCategory", function(categoryFrame)
-		categoryFrame.BgTop:Hide()
-		categoryFrame.BgMiddle:Hide()
-		categoryFrame.BgBottom:Hide()
-	end)
-
 	local titles = false
 	hooksecurefunc("PaperDollTitlesPane_Update", function()
 		if titles == false then
@@ -95,6 +72,10 @@ local function LoadSkin()
 
 	EquipmentFlyoutFrameButtons:DisableDrawLayer("BACKGROUND")
 	EquipmentFlyoutFrameButtons:DisableDrawLayer("ARTWORK")
+
+	-- [[ Stats pane ]]
+
+	CharacterStatsPane.ClassBackground:Hide()
 
 	local slots = {
 		"Head",
@@ -119,8 +100,9 @@ local function LoadSkin()
 
 	for i = 1, #slots do
 		local slot = _G["Character"..slots[i].."Slot"]
-		local ic = _G["Character"..slots[i].."SlotIconTexture"]
+		local ic = slot.icon
 		_G["Character"..slots[i].."SlotFrame"]:Hide()
+		slot.IconBorder:Kill()
 
 		slot.backgroundTextureName = ""
 		slot.checkRelic = nil
@@ -216,10 +198,10 @@ local function LoadSkin()
 			end
 		end
 
-		tab.Highlight:SetTexture(r, g, b, .2)
+		tab.Highlight:SetColorTexture(r, g, b, .2)
 		tab.Highlight:Point("TOPLEFT", 3, -4)
 		tab.Highlight:Point("BOTTOMRIGHT", -1, 0)
-		tab.Hider:SetTexture(.3, .3, .3, .4)
+		tab.Hider:SetColorTexture(.3, .3, .3, .4)
 		tab.TabBg:SetAlpha(0)
 
 		select(2, tab:GetRegions()):ClearAllPoints()
