@@ -24,8 +24,8 @@ end
 
 function mod:ConfigureElement_PowerBar(frame)
 	local powerBar = frame.PowerBar
-	powerBar:SetPoint("TOPLEFT", frame.HealthBar, "BOTTOMLEFT", 0, -3)
-	powerBar:SetPoint("TOPRIGHT", frame.HealthBar, "BOTTOMRIGHT", 0, -3)
+	powerBar:SetPoint("TOPLEFT", frame.HealthBar, "BOTTOMLEFT", 0, -1)
+	powerBar:SetPoint("TOPRIGHT", frame.HealthBar, "BOTTOMRIGHT", 0, -1)
 	powerBar:SetHeight(self.db.pbHeight)
 	powerBar:SetStatusBarTexture(LSM:Fetch("statusbar", R.global.media.normal))
 end

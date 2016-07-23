@@ -313,9 +313,6 @@ local function RayUITutorial_HelpPlate_Show( self, parent, mainHelpButton )
 		button.toolTipText = self[i].ToolTipText
 		button.viewed = false
 		button:Show()
-		button.BigI:Show()
-		button.Ring:Show()
-		button.Pulse:Play()
 	end
 	HelpPlate:SetPoint( "CENTER", parent, "CENTER", 0, 0 )
 	HelpPlate:SetSize( UIParent:GetWidth(), UIParent:GetHeight() )

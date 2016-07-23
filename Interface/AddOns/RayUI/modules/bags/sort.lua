@@ -32,7 +32,6 @@ local bagStacks = {}
 local bagMaxStacks = {}
 local bagGroups = {}
 local initialOrder = {}
-local itemTypes, itemSubTypes
 local bagSorted, bagLocked = {}, {}
 local bagRole
 local moves = {}
@@ -91,18 +90,6 @@ end)
 frame:Hide()
 B.SortUpdateTimer = frame
 
-local function BuildSortOrder()
-	itemTypes = {}
-	itemSubTypes = {}
-	for i, iType in ipairs({GetAuctionItemClasses()}) do
-		itemTypes[iType] = i
-		itemSubTypes[iType] = {}
-		for ii, isType in ipairs({GetAuctionItemSubClasses(i)}) do
-			itemSubTypes[iType][isType] = ii
-		end
-	end
-end
-
 local function UpdateLocation(from, to)
 	if (bagIDs[from] == bagIDs[to]) and (bagStacks[to] < bagMaxStacks[to]) then
 		local stackSize = bagMaxStacks[to]
@@ -140,64 +127,68 @@ local function DefaultSort(a, b)
 	local bID = bagIDs[b]
 
 	if (not aID) or (not bID) then return aID end
-	
-	if bagPetIDs[a] and bagPetIDs[b] then
-		local aName, _, aType = C_PetJournal.GetPetInfoBySpeciesID(aID)
-		local bName, _, bType = C_PetJournal.GetPetInfoBySpeciesID(bID)
 
-		if aType ~= bType then
+	if bagPetIDs[a] and bagPetIDs[b] then
+		local aName, _, aType = C_PetJournalGetPetInfoBySpeciesID(aID);
+		local bName, _, bType = C_PetJournalGetPetInfoBySpeciesID(bID);
+
+		if aType and bType and aType ~= bType then
 			return aType > bType
 		end
-		
-		if aName ~= bName then
+
+		if aName and bName and aName ~= bName then
 			return aName < bName
 		end
-	end		
+	end
 
-		
+
 	local aOrder, bOrder = initialOrder[a], initialOrder[b]
 
 	if aID == bID then
 		local aCount = bagStacks[a]
 		local bCount = bagStacks[b]
-		if aCount == bCount then
+		if aCount and bCount and aCount == bCount then
 			return aOrder < bOrder
-		else
+		elseif aCount and bCount then
 			return aCount < bCount
 		end
 	end
 
-	local _, _, aRarity, _, _, aType, aSubType, _, aEquipLoc = GetItemInfo(aID)
-	local _, _, bRarity, _, _, bType, bSubType, _, bEquipLoc = GetItemInfo(bID)
-	
+	local _, _, aRarity, _, _, _, _, _, aEquipLoc, _, _, aItemClassId, aItemSubClassId = GetItemInfo(aID)
+	local _, _, bRarity, _, _, _, _, _, bEquipLoc, _, _, bItemClassId, bItemSubClassId = GetItemInfo(bID)
+
 	if bagPetIDs[a] then
 		aRarity = 1
 	end
-	
+
 	if bagPetIDs[b] then
 		bRarity = 1
-	end	
-	
+	end
+
 	if aRarity ~= bRarity and aRarity and bRarity then
 		return aRarity > bRarity
 	end
 
-	if itemTypes[aType] ~= itemTypes[bType] then
-		return (itemTypes[aType] or 99) < (itemTypes[bType] or 99)
+	if aItemClassId ~= bItemClassId then
+		return (aItemClassId or 99) < (bItemClassId or 99)
 	end
 
-	if aType == ARMOR or aType == ENCHSLOT_WEAPON then
+	if aItemClassId == LE_ITEM_CLASS_ARMOR or aItemClassId == LE_ITEM_CLASS_WEAPON then
 		local aEquipLoc = inventorySlots[aEquipLoc] or -1
 		local bEquipLoc = inventorySlots[bEquipLoc] or -1
 		if aEquipLoc == bEquipLoc then
 			return PrimarySort(a, b)
 		end
-		return aEquipLoc < bEquipLoc
+
+		if aEquipLoc and bEquipLoc then
+			return aEquipLoc < bEquipLoc
+		end
 	end
-	if aSubType == bSubType then
+	if (aItemClassId == bItemClassId) and (aItemSubClassId == bItemSubClassId) then
 		return PrimarySort(a, b)
 	end
-	return ((itemSubTypes[aType] or {})[aSubType] or 99) < ((itemSubTypes[bType] or {})[bSubType] or 99)
+
+	return (aItemSubClassId or 99) < (bItemSubClassId or 99)
 end
 
 local function ReverseSort(a, b)
@@ -405,7 +396,6 @@ end
 
 function B.Sort(bags, sorter, invertDirection)
 	if not sorter then sorter = invertDirection and ReverseSort or DefaultSort end
-	if not itemTypes then BuildSortOrder() end
 
 	for i, bag, slot in B.IterateBags(bags, nil, "both") do
 		local bagSlot = B:Encode_BagSlot(bag, slot)
