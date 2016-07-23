@@ -34,6 +34,12 @@ RayUF["colors"].reaction = {
 	[8] = {0.2, 1, 0.2}, -- Exalted
 }
 
+RayUF["colors"].ComboPoints = {
+	[1] = {1, 0, 0},
+	[2] = {1, 1, 0},
+	[3] = {0, 1, 0},
+}
+
 R.colors = {
 	class = {},
 }

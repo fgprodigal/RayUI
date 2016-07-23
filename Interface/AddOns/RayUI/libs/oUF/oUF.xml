@@ -14,7 +14,6 @@
 	<Script file='elements\health.lua' />
 	<Script file='elements\ricons.lua' />
 	<Script file='elements\leader.lua' />
-	<Script file='elements\cpoints.lua' />
 	<Script file='elements\combat.lua' />
 	<Script file='elements\resting.lua' />
 	<Script file='elements\pvp.lua' />
@@ -25,25 +24,21 @@
 	<Script file='elements\tags.lua' />
 	<Script file='elements\masterlooter.lua' />
 	<Script file='elements\assistant.lua' />
-	<Script file='elements\runebar.lua' />
 	<Script file='elements\lfdrole.lua' />
 	<Script file='elements\healprediction.lua' />
 	<Script file='elements\powerprediction.lua' />
 	<Script file='elements\picon.lua' />
 	<Script file='elements\readycheck.lua' />
 	<Script file='elements\qicon.lua' />
-	<Script file='elements\eclipsebar.lua' />
 	<Script file='elements\altpowerbar.lua' />
-	<Script file='elements\harmony.lua' />
-	<Script file='elements\shadoworbs.lua' />
 	<Script file='elements\holypower.lua' />
-	<Script file='elements\shardbar.lua' />
 	<Script file='elements\totems.lua' />
 	<Script file='elements\resurrect.lua' />
 	<Script file='elements\raidrole.lua' />
 	<Script file='elements\additionalpower.lua' />
 	<Script file='elements\classicons.lua' />
 	<Script file='elements\stagger.lua' />
+	<Script file='elements\runebar.lua' />
 
 	<!-- Clique support -->
 	<Button name="oUF_ClickCastUnitTemplate" virtual="true" inherits="SecureUnitButtonTemplate,SecureHandlerEnterLeaveTemplate">

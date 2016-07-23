@@ -154,25 +154,6 @@ function UF:DPSLayout(frame, unit)
 			frame.Portrait = self:ConstructPortrait(frame)
 		end
 
-		-- Vengeance Bar
-		if self.db.vengeance then
-			local VengeanceBarHolder = CreateFrame("Frame", nil, frame)
-			VengeanceBarHolder:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 317)
-			VengeanceBarHolder:Size(ENERGY_WIDTH, ENERGY_HEIGHT)
-			local VengeanceBar = CreateFrame("Statusbar", "RayUF_VengeanceBar", VengeanceBarHolder)
-			VengeanceBar:SetStatusBarTexture(R["media"].normal)
-			VengeanceBar:SetStatusBarColor(unpack(self.db.powerColorClass and oUF.colors.class[R.myclass] or oUF.colors.power["RAGE"]))
-			VengeanceBar:SetPoint("CENTER")
-			VengeanceBar:Size(ENERGY_WIDTH, ENERGY_HEIGHT)
-			VengeanceBar:CreateShadow("Background")
-			VengeanceBar.shadow:SetBackdropColor(.12, .12, .12, 1)
-			VengeanceBar.Text = VengeanceBar:CreateFontString(nil, "OVERLAY")
-			VengeanceBar.Text:SetPoint("CENTER")
-			VengeanceBar.Text:SetFont(R["media"].font, R["media"].fontsize + 2, R["media"].fontflag)
-			R:CreateMover(VengeanceBarHolder, "VengeanceBarMover", L["复仇条锚点"], true, nil, "ALL,RAID15,RAID25,RAID40")
-			frame.Vengeance = VengeanceBar
-		end
-
 		-- CastBar
 		local castbar = self:ConstructCastBar(frame)
 		castbar:ClearAllPoints()
@@ -208,42 +189,37 @@ function UF:DPSLayout(frame, unit)
 		Fader(frame)
 
 		-- ClassBar
-		if R.myclass == "MONK" then
-			frame.Harmony = self:ConstructMonkResourceBar(frame)
-		elseif R.myclass == "DEATHKNIGHT" then
-			frame.Runes = self:ConstructDeathKnightResourceBar(frame)
-		elseif R.myclass == "PALADIN" then
-			frame.HolyPower = self:ConstructPaladinResourceBar(frame)
-		elseif R.myclass == "WARLOCK" then
-			frame.ShardBar = self:ConstructWarlockResourceBar(frame)
-		elseif R.myclass == "PRIEST" then
-			frame.ShadowOrbs = self:ConstructPriestResourceBar(frame)
-		elseif R.myclass == "SHAMAN" then
-			frame.TotemBar = self:ConstructShamanResourceBar(frame)
+		frame.ClassIcons = self:Construct_ClassBar(frame)
+		frame.ClassBar = "ClassIcons"
+		if R.myclass == "DEATHKNIGHT" then
+			frame.Runes = self:Construct_DeathKnightResourceBar(frame)
+			frame.ClassBar = "Runes"
 		elseif R.myclass == "DRUID" then
-			frame.EclipseBar = self:ConstructDruidResourceBar(frame)
-		elseif R.myclass == "MAGE" then
-			frame.RunePower = self:ConstructMageResourceBar(frame)
-		elseif R.myclass == "ROGUE" then
-			frame.Anticipation = self:ConstructRogueResourceBar(frame)
-			frame.CPoints = self:ConstructComboBar(frame)
+			frame.AdditionalPower = self:Construct_AdditionalPowerBar(frame)
+		elseif R.myclass == "MONK" then
+			frame.Stagger = self:Construct_Stagger(frame)
+		elseif R.myclass == "PRIEST" then
+			frame.AdditionalPower = self:Construct_AdditionalPowerBar(frame)
+		elseif R.myclass == "SHAMAN" then
+			frame.AdditionalPower = self:Construct_AdditionalPowerBar(frame)
 		end
+		frame.USE_CLASSBAR = true
 
-		if self.db.separateEnergy and R.myclass == "ROGUE" then
+--[[ 		if self.db.separateEnergy and R.myclass == "ROGUE" then
 			frame.CPoints:SetParent(RayUF_EnergyBar)
 			frame.CPoints:ClearAllPoints()
 			frame.CPoints:Point("BOTTOMLEFT", RayUF_EnergyBar, "TOPLEFT", 0, 3)
-			frame.Anticipation:SetParent(RayUF_EnergyBar)
-			frame.Anticipation:ClearAllPoints()
-			frame.Anticipation:Point("BOTTOMLEFT", RayUF_EnergyBar, "TOPLEFT", 0, 9)
+			-- frame.Anticipation:SetParent(RayUF_EnergyBar)
+			-- frame.Anticipation:ClearAllPoints()
+			-- frame.Anticipation:Point("BOTTOMLEFT", RayUF_EnergyBar, "TOPLEFT", 0, 9)
 			for i = 1, 5 do
 				frame.CPoints[i]:SetHeight(3)
 				frame.CPoints[i]:SetWidth((ENERGY_WIDTH- 20)/5)
 				frame.CPoints[i]:SetAlpha(0)
-				frame.Anticipation[i]:SetHeight(3)
-				frame.Anticipation[i]:SetWidth((ENERGY_WIDTH- 20)/5)
+				-- frame.Anticipation[i]:SetHeight(3)
+				-- frame.Anticipation[i]:SetWidth((ENERGY_WIDTH- 20)/5)
 			end
-		end
+		end ]]
 
 		local Combat = frame:CreateTexture(nil, "OVERLAY")
 		Combat:Size(20, 20)
@@ -333,10 +309,6 @@ function UF:DPSLayout(frame, unit)
 
 		frame.Buffs = buffs
 		frame.Debuffs = debuffs
-
-		if R.myclass ~= "ROGUE" then
-			frame.CPoints = self:ConstructComboBar(frame)
-		end
 
 		if UF.db.aurabar then
 			frame.AuraBars = self:Construct_AuraBarHeader(frame)

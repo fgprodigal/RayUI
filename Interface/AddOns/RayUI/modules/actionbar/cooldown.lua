@@ -56,6 +56,7 @@ end
 
 function AB:Cooldown_OnSizeChanged(cd, width, height)
 	local fontScale = R:Round(width) / 36
+	local override = cd:GetParent():GetParent().SizeOverride
 	if fontScale == cd.fontScale then
 		return
 	end
@@ -64,7 +65,7 @@ function AB:Cooldown_OnSizeChanged(cd, width, height)
 	if fontScale < MIN_SCALE then
 		cd:Hide()
 	else
-		cd.text:SetFont(R["media"].cdfont, fontScale * FONT_SIZE, 'OUTLINE')
+		cd.text:SetFont(R["media"].cdfont, fontScale * (override or FONT_SIZE), 'OUTLINE')
 		cd.text:SetShadowColor(0, 0, 0, 0.5)
 		cd.text:SetShadowOffset(2, -2)
 		if cd.enabled then

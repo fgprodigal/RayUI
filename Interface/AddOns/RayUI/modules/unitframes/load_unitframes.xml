@@ -1,5 +1,6 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="unitframes.lua"/>
+	<Script file="classbars.lua"/>
 	<Script file="tags.lua"/>
 	<Script file="filter.lua"/>
 	<Script file="functions.lua"/>

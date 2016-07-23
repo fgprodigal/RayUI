@@ -356,11 +356,6 @@ local function LoadSkin()
 		end
 		CharacterFrame:HookScript("OnEvent", FixTab)
 		CharacterFrame:HookScript("OnShow", FixTab)
-
-		PetModelFrameRotateLeftButton:Hide()
-		PetModelFrameRotateRightButton:Hide()
-		PetModelFrameShadowOverlay:Hide()
-		PetPaperDollPetModelBg:SetAlpha(0)
 	end
 end
 

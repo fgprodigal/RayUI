@@ -70,11 +70,13 @@ function UF:ConstructHealthBar(frame, bg, text)
         if self.db.smoothColor == true then
         	health:SetStatusBarColor(.1, .1, .1)
         else
+			health.colorTapping = true
         	health.colorClass = true
         	health.colorReaction = true
         	health.bg.multiplier = .8
         end
     else
+		health.colorTapping = true
         health.colorClass = true
         health.colorReaction = true
     end

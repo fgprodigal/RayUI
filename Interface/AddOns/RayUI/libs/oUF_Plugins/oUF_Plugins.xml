@@ -1,5 +1,4 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file="Anticipation.lua"/>
 	<Script file="AuraBars.lua"/>
 	<Script file="AuraWatch.lua"/>
 	<Script file="HealPredictionAndAbsorb.lua"/>
@@ -10,5 +9,4 @@
 	<Script file="Smooth.lua"/>
 	<Script file="TotemBar.lua"/>
 	<Script file="Trinkets.lua"/>
-	<Script file="Vengeance.lua"/>
 </Ui>

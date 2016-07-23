@@ -67,8 +67,8 @@ oUF.Tags.Methods["RayUF:hp"]  = function(u)
 		if UnitIsPlayer(u) then
 			local _, class = UnitClass(u)
 			color = oUF.colors.class[class]
-		-- elseif UnitIsTapped(u) and not UnitIsTappedByPlayer(u) then
-		-- 	color = oUF.colors.tapped
+		elseif UnitIsTapDenied(u) then
+			color = oUF.colors.tapped
 		elseif UnitIsEnemy(u, "player") then
 			color = oUF.colors.reaction[1]
 		else
@@ -95,10 +95,9 @@ oUF.Tags.Methods["RayUF:color"] = function(u, r)
     local _, class = UnitClass(u)
     local reaction = UnitReaction(u, "player")
 
-    -- if (UnitIsTapped(u) and not UnitIsTappedByPlayer(u)) then
-    --     return hex(oUF.colors.tapped)
-    -- else
-    if (UnitIsPlayer(u)) then
+    if UnitIsTapDenied(u) then
+        return hex(oUF.colors.tapped)
+    elseif (UnitIsPlayer(u)) then
         return hex(oUF.colors.class[class])
     elseif reaction then
         return hex(oUF.colors.reaction[reaction])
