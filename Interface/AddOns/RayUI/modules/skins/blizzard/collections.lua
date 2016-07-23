@@ -25,6 +25,7 @@ local function LoadSkin()
 	S:CreateTab(CollectionsJournalTab2)
 	S:CreateTab(CollectionsJournalTab3)
 	S:CreateTab(CollectionsJournalTab4)
+	S:CreateTab(CollectionsJournalTab5)
 	S:ReskinClose(CollectionsJournalCloseButton)
 	
 	CollectionsJournalTab2:SetPoint("LEFT", CollectionsJournalTab1, "RIGHT", -15, 0)
@@ -402,9 +403,6 @@ local function LoadSkin()
 		hooksecurefunc(bu.name, "SetTextColor", changeTextColor)
 	end
 
-	C_ToyBox.SetFilterUncollected(ToyBoxFilterFixerFilter)
-	hooksecurefunc(C_ToyBox, "SetFilterUncollected", function(filter) ToyBoxFilterFixerFilter = filter end)
-
 	-- [[ Heirlooms ]]
 
 	local HeirloomsJournal = HeirloomsJournal
@@ -435,6 +433,77 @@ local function LoadSkin()
 	progressBar:SetStatusBarTexture(R["media"].gloss)
 
 	S:CreateBDFrame(progressBar, .25)
+
+	-- [[ WardrobeCollection ]]
+
+	local WardrobeCollectionFrame = WardrobeCollectionFrame
+	local ModelsFrame = WardrobeCollectionFrame.ModelsFrame
+
+	WardrobeCollectionFrameBg:Hide()
+	ModelsFrame:DisableDrawLayer("BACKGROUND")
+	ModelsFrame:DisableDrawLayer("BORDER")
+	ModelsFrame:DisableDrawLayer("ARTWORK")
+	ModelsFrame:DisableDrawLayer("OVERLAY")
+
+	S:ReskinInput(WardrobeCollectionFrameSearchBox)
+	S:ReskinFilterButton(WardrobeCollectionFrame.FilterButton)
+	S:ReskinDropDown(WardrobeCollectionFrameWeaponDropDown)
+	S:ReskinArrow(WardrobeCollectionFrame.NavigationFrame.PrevPageButton, "left")
+	S:ReskinArrow(WardrobeCollectionFrame.NavigationFrame.NextPageButton, "right")
+
+	WardrobeCollectionFrame.NavigationFrame.PrevPageButton:SetPoint("BOTTOM", 23, 51)
+	WardrobeCollectionFrame.NavigationFrame.NextPageButton:SetPoint("BOTTOM", 58, 51)
+
+	-- Progress bar
+
+	local progressBar = WardrobeCollectionFrame.progressBar
+	progressBar.borderLeft:Hide()
+	progressBar.borderMid:Hide()
+	progressBar.borderRight:Hide()
+	progressBar:DisableDrawLayer("BACKGROUND")
+
+	progressBar.text:SetPoint("CENTER", 0, 1)
+	progressBar:SetStatusBarTexture(R["media"].normal)
+
+	S:CreateBDFrame(progressBar, .25)
+
+	-- [[ Wardrobe ]]
+
+	local WardrobeFrame = WardrobeFrame
+	local WardrobeTransmogFrame = WardrobeTransmogFrame
+
+	WardrobeTransmogFrameBg:Hide()
+	WardrobeTransmogFrame.Inset.BG:Hide()
+	WardrobeTransmogFrame.Inset:DisableDrawLayer("BORDER")
+	WardrobeTransmogFrame.MoneyLeft:Hide()
+	WardrobeTransmogFrame.MoneyMiddle:Hide()
+	WardrobeTransmogFrame.MoneyRight:Hide()
+	WardrobeTransmogFrame.SpecButton.Icon:Hide()
+
+	for i = 1, 9 do
+		select(i, WardrobeTransmogFrame.SpecButton:GetRegions()):Hide()
+	end
+
+	S:ReskinPortraitFrame(WardrobeFrame)
+	S:Reskin(WardrobeTransmogFrame.ApplyButton)
+	S:Reskin(WardrobeOutfitDropDown.SaveButton)
+	S:ReskinArrow(WardrobeTransmogFrame.SpecButton, "down")
+	S:ReskinDropDown(WardrobeOutfitDropDown)
+
+	WardrobeOutfitDropDown:SetHeight(32)
+	WardrobeOutfitDropDown.SaveButton:SetPoint("LEFT", WardrobeOutfitDropDown, "RIGHT", -13, 2)
+	WardrobeTransmogFrame.SpecButton:SetPoint("RIGHT", WardrobeTransmogFrame.ApplyButton, "LEFT", -3, 0)
+
+	local slots = {"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Back", "Shirt", "Tabard", "MainHand", "SecondaryHand"}
+
+	for i = 1, #slots do
+		local slot = WardrobeTransmogFrame.Model[slots[i].."Button"]
+		if slot then
+			slot.Border:Hide()
+			slot.Icon:SetDrawLayer("BACKGROUND", 1)
+			S:ReskinIcon(slot.Icon)
+		end
+	end
 end
 
 S:RegisterSkin("Blizzard_Collections", LoadSkin)

@@ -21,7 +21,6 @@ local function LoadSkin()
 	end
 
 	S:CreateBG(PlayerTalentFrameTalentsClearInfoFrame)
-	PlayerTalentFrameTalentsClearInfoFrameIcon:SetTexCoord(.08, .92, .08, .92)
 
 	PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.Seperator:SetColorTexture(1, 1, 1)
 	PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.Seperator:SetAlpha(.2)
@@ -118,7 +117,6 @@ local function LoadSkin()
 	end
 
 	PlayerTalentFrameSpecializationLearnButton.Flash:SetTexture("")
-	PlayerTalentFrameTalentsLearnButton.Flash:SetTexture("")
 
 	local buttons = {"PlayerTalentFrameSpecializationSpecButton", "PlayerTalentFramePetSpecializationSpecButton"}
 
@@ -164,7 +162,6 @@ local function LoadSkin()
 			bu:SetHighlightTexture("")
 			bu.Slot:SetAlpha(0)
 			bu.knownSelection:SetAlpha(0)
-			bu.learnSelection:SetAlpha(0)
 
 			ic:SetDrawLayer("ARTWORK")
 			ic:SetTexCoord(.08, .92, .08, .92)
@@ -186,11 +183,6 @@ local function LoadSkin()
 					bu.bg:SetBackdropColor(r, g, b, .2)
 				else
 					bu.bg:SetBackdropColor(0, 0, 0, .25)
-				end
-				if bu.learnSelection:IsShown() then
-					bu.bg:SetBackdropBorderColor(r, g, b)
-				else
-					bu.bg:SetBackdropBorderColor(0, 0, 0)
 				end
 			end
 		end

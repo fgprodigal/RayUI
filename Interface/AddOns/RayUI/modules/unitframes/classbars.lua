@@ -85,8 +85,7 @@ function UF:Configure_ClassBar(frame)
 					bars[i]:SetStatusBarColor(r, g, b)
 				end
 				bars[i]:SetOrientation("HORIZONTAL")
-
-				bars[i]:Show()
+				-- bars[i]:Show()
 			end
 		end
 	elseif (frame.ClassBar == "AdditionalPower" or frame.ClassBar == "Stagger") then
