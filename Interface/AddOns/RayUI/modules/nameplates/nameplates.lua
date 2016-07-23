@@ -505,7 +505,7 @@ end
 function mod:UpdateCVars()
 	SetCVar("nameplateShowSelf", "0")
 	SetCVar("nameplateMotion", self.db.motionType == "STACKED" and "1" or "0")
-	SetCVar("nameplateShowAll", "0")
+	SetCVar("nameplateShowAll", "1")
 	SetCVar("nameplateShowFriendlyMinions", self.db.units.FRIENDLY_PLAYER.minions == true and "1" or "0")
 	SetCVar("nameplateShowEnemyMinions", self.db.units.ENEMY_PLAYER.minions == true and "1" or "0")
 	SetCVar("nameplateShowEnemyMinus", self.db.units.ENEMY_NPC.minors == true and "1" or "0")
