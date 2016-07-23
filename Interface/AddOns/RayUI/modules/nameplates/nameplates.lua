@@ -509,6 +509,10 @@ function mod:UpdateCVars()
 	SetCVar("nameplateShowFriendlyMinions", self.db.units.FRIENDLY_PLAYER.minions == true and "1" or "0")
 	SetCVar("nameplateShowEnemyMinions", self.db.units.ENEMY_PLAYER.minions == true and "1" or "0")
 	SetCVar("nameplateShowEnemyMinus", self.db.units.ENEMY_NPC.minors == true and "1" or "0")
+
+	SetCVar("nameplateOtherTopInset", -1)
+	SetCVar("nameplateOtherBottomInset", -1)
+	SetCVar("nameplateMaxDistance", 40)
 end
 
 local function CopySettings(from, to)
