@@ -142,7 +142,7 @@ local function LoadMemory()
 		end
 	end
 
-	infobar:HookScript("OnMouseDown", function(self)
+	infobar:SetScript("OnMouseDown", function(self)
 		UpdateAddOnMemoryUsage()
 		local before = gcinfo()
 		collectgarbage("collect")

@@ -14,11 +14,6 @@ local function LoadSkin()
 	ABBD:SetFrameLevel(AuctionProgressBar:GetFrameLevel()-1)
 	S:CreateBD(ABBD, .25)
 
-	AuctionProgressBarIcon:SetTexCoord(.08, .92, .08, .92)
-	S:CreateBG(AuctionProgressBarIcon)
-
-	AuctionProgressBarText:SetPoint("CENTER", 0, 1)
-
 	S:ReskinClose(AuctionProgressFrameCancelButton, "LEFT", AuctionProgressBar, "RIGHT", 4, 0)
 	select(14, AuctionProgressFrameCancelButton:GetRegions()):SetPoint("CENTER", 0, 2)
 
@@ -27,7 +22,6 @@ local function LoadSkin()
 	for i = 1, 4 do
 		select(i, AuctionProgressFrame:GetRegions()):Hide()
 	end
-	AuctionProgressBarBorder:Hide()
 	BrowseFilterScrollFrame:GetRegions():Hide()
 	select(2, BrowseFilterScrollFrame:GetRegions()):Hide()
 	BrowseScrollFrame:GetRegions():Hide()
@@ -58,11 +52,7 @@ local function LoadSkin()
 	select(6, BidBuyoutButton:GetRegions()):Hide()
 	select(6, BidBidButton:GetRegions()):Hide()
 
-	for i = 1, NUM_FILTERS_TO_DISPLAY do
-		_G["AuctionFilterButton"..i]:GetNormalTexture():SetAlpha(0)
-	end
-
-	hooksecurefunc("FilterButton_SetType", function(button)
+	hooksecurefunc("FilterButton_SetUp", function(button)
 		button:SetNormalTexture("")
 	end)
 

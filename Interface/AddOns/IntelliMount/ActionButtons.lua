@@ -105,7 +105,7 @@ local function PreClick(self, mouseButton)
 	if IsIndoors() or IsPlayerMoving() then return end
 
 	normalButton:SetAttribute("type", "macro")
-	normalButton:SetAttribute("macrotext", "/script C_MountJournal.Summon(0)")
+	normalButton:SetAttribute("macrotext", "/script C_MountJournal.SummonByID(0)")
 end
 
 local function PostClick()

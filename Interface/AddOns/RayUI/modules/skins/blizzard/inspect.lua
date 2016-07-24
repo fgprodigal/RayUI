@@ -3,6 +3,7 @@ local S = R:GetModule("Skins")
 
 local function LoadSkin()
 	S:SetBD(InspectFrame)
+	S:Reskin(InspectPaperDollFrame.ViewButton)
 	InspectFrame:DisableDrawLayer("BACKGROUND")
 	InspectFrame:DisableDrawLayer("BORDER")
 	InspectFrameInset:DisableDrawLayer("BACKGROUND")
@@ -76,6 +77,7 @@ local function LoadSkin()
 		local slot = _G["Inspect"..slots[i].."Slot"]
 		local icon = _G["Inspect"..slots[i].."SlotIconTexture"]
 		_G["Inspect"..slots[i].."SlotFrame"]:Hide()
+		slot.IconBorder:Kill()
 		slot:SetNormalTexture("")
 		slot:StripTextures()
 		slot.backgroundTextureName = ""

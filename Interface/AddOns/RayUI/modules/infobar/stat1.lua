@@ -221,7 +221,7 @@ local function LoadStat()
 
 	infobar:HookScript("OnEnter", ShowTooltip)
 	infobar:HookScript("OnLeave", GameTooltip_Hide)
-	infobar:HookScript("OnMouseDown", function()
+	infobar:SetScript("OnMouseDown", function()
 		local inInstance, instanceType = IsInInstance()
 		if inInstance and instanceType == "pvp" then
 			ToggleFrame(WorldStateScoreFrame)
@@ -241,4 +241,4 @@ local function LoadStat()
 	Update(infobar)
 end
 
-IF:RegisterInfoText("Stat1", LoadStat)
+-- IF:RegisterInfoText("Stat1", LoadStat)

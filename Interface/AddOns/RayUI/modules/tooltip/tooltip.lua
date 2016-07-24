@@ -270,7 +270,11 @@ local function GetPlayerScore(unit)
 		end
 	end
 	-- ClearInspectPlayer()
-	return floor(ilvl / equipped)
+	if equipped > 0 then
+		return floor(ilvl / equipped)
+	else
+		return 0
+	end
 end
 
 function TT:SetiLV()

@@ -22,33 +22,15 @@ local function LoadTalent()
 
 	local function SpecChangeClickFunc(self, ...)
 		if ... then
-			if GetActiveSpecGroup() == ... then return end
-		end
-
-		if GetNumSpecGroups() > 1 then
-			SetActiveSpecGroup(GetActiveSpecGroup() == 1 and 2 or 1)
+			if GetSpecialization(false, false, 1) == ... then return end
+			SetSpecialization(...)
 		end
 	end
 
 	local function SpecGearClickFunc(self, index, equipName)
 		if not index then return end
 
-		if IsShiftKeyDown() then
-			if R.db.specgear.primary == index then
-				R.db.specgear.primary = -1
-			end
-			if R.db.specgear.secondary == index then
-				R.db.specgear.secondary = -1
-			end
-		elseif IsAltKeyDown() then
-			R.db.specgear.secondary = index
-		elseif IsControlKeyDown() then
-			R.db.specgear.primary = index
-		else
-			EquipmentManager_EquipSet(equipName)
-		end
-
-		spec:Refresh(self)
+		EquipmentManager_EquipSet(equipName)
 	end
 
 	local function SpecAddEquipListToCat(self, cat)
@@ -62,7 +44,7 @@ local function LoadTalent()
 				local _, _, _, isEquipped = GetEquipmentSetInfo(k)
 
 				wipe(line)
-				for i = 1, 4 do
+				for i = 1, 2 do
 					if i == 1 then
 						line["text"] = string.format("|T%s:%d:%d:0:0:64:64:5:59:5:59|t %s", SpecEquipList[k].icon, 10 + resSizeExtra, 10 + resSizeExtra, SpecEquipList[k].name)
 						line["size"] = 10 + resSizeExtra
@@ -76,19 +58,12 @@ local function LoadTalent()
 						line["func"] = function() SpecGearClickFunc(self, k, SpecEquipList[k].name) end
 						line["customwidth"] = 110
 					elseif i == 2 then
-						line["text"..i] = PRIMARY
+						line["text"..i] = isEquipped and ACTIVE_PETS or ""
 						line["size"..i] = 10 + resSizeExtra
 						line["justify"..i] = "LEFT"
-						line["text"..i.."R"] = (R.db.specgear.primary == k) and 0 or 0.3
-						line["text"..i.."G"] = (R.db.specgear.primary == k) and 0.9 or 0.3
-						line["text"..i.."B"] = (R.db.specgear.primary == k) and 0 or 0.3
-					elseif (i == 3) and (numTalentGroups > 1) then
-						line["text"..i] = SECONDARY
-						line["size"..i] = 10 + resSizeExtra
-						line["justify"..i] = "LEFT"
-						line["text"..i.."R"] = (R.db.specgear.secondary == k) and 0 or 0.3
-						line["text"..i.."G"] = (R.db.specgear.secondary == k) and 0.9 or 0.3
-						line["text"..i.."B"] = (R.db.specgear.secondary == k) and 0 or 0.3
+						line["text"..i.."R"] = isEquipped and 0 or 0.3
+						line["text"..i.."G"] = isEquipped and 0.9 or 0.3
+						line["text"..i.."B"] = isEquipped and 0 or 0.3
 					end
 				end
 
@@ -105,15 +80,14 @@ local function LoadTalent()
 		local ActiveColor = {0, 0.9, 0}
 		local InactiveColor = {0.3, 0.3, 0.3}
 
-		local IsPrimary = GetActiveSpecGroup()
+		local IsPrimary = GetSpecialization(false, false, 1)
 
 		local line = {}
 		for i = 1, 2 do
 			local SpecColor = (IsPrimary == talentGroup) and ActiveColor or InactiveColor
-            local specid = GetSpecialization(nil, nil, talentGroup)
 			if i == 1 then
-                if specid then
-                    line["text"] = string.format("|T%s:%d:%d:0:0:64:64:5:59:5:59|t %s", select(4, GetSpecializationInfo(specid)), 10 + resSizeExtra, 10 + resSizeExtra, select(2, GetSpecializationInfo(specid)))
+                if talentGroup then
+                    line["text"] = string.format("|T%s:%d:%d:0:0:64:64:5:59:5:59|t %s", select(4, GetSpecializationInfo(talentGroup)), 10 + resSizeExtra, 10 + resSizeExtra, select(2, GetSpecializationInfo(talentGroup)))
                 else
                     line["text"] = NONE..TALENTS 
                 end
@@ -128,7 +102,7 @@ local function LoadTalent()
 				line["func"] = function() SpecChangeClickFunc(self, talentGroup) end
 				line["customwidth"] = 130
 			else
-				line["text"..i] = IsPrimary == talentGroup and ACTIVE_PETS or FACTION_INACTIVE
+				line["text"..i] = IsPrimary == talentGroup and ACTIVE_PETS or ""
 				line["justify"..i] = "RIGHT"
 				line["size"..i] = 10 + resSizeExtra
 				line["text"..i.."R"] = SpecColor[1]
@@ -146,7 +120,7 @@ local function LoadTalent()
 
 		local numTalentGroups = GetNumSpecializations()
 
-		if numTalentGroups > 0 then
+		if numTalentGroups > 0 and UnitLevel("player") >= 10 then
 			wipe(SpecSection)
 
 			-- Spec Category
@@ -158,12 +132,8 @@ local function LoadTalent()
 			SpecSection["specs"].talentCat = spec:AddCategory("columns", 2)
 			R:AddBlankTabLine(SpecSection["specs"].talentCat, 2)
 
-			-- Primary Talent line
-			SpecAddTalentGroupLineToCat(self, SpecSection["specs"].talentCat, 1)
-
-			-- Secondary Talent line
-			if numTalentGroups > 1 then
-				SpecAddTalentGroupLineToCat(self, SpecSection["specs"].talentCat, 2)
+			for i = 1, numTalentGroups do
+				SpecAddTalentGroupLineToCat(self, SpecSection["specs"].talentCat, i)
 			end
 		end
 		
@@ -180,19 +150,19 @@ local function LoadTalent()
 			R:AddBlankTabLine(SpecSection["equipment"].cat, 2)
 
 			-- Equipment Cat
-			SpecSection["equipment"].equipCat = spec:AddCategory("columns", 3)
+			SpecSection["equipment"].equipCat = spec:AddCategory("columns", 2)
 			R:AddBlankTabLine(SpecSection["equipment"].equipCat, 1)
 
 			SpecAddEquipListToCat(self, SpecSection["equipment"].equipCat)
 		end
 
 		-- Hint
-		if (numTalentGroups > 0) and (numEquipSets > 0) then
-			spec:SetHint(L["<点击天赋> 切换天赋."].."\n"..L["<点击套装> 装备套装."].."\n"..L["<Ctrl+点击套装> 套装绑定至主天赋."].."\n"..L["<Alt+点击套装> 套装绑定至副天赋."].."\n"..L["<Shift+点击套装> 解除天赋绑定."])
-		elseif numTalentGroups > 0 then
+		if (numTalentGroups > 0 and UnitLevel("player") >= 10) and (numEquipSets > 0) then
+			spec:SetHint(L["<点击天赋> 切换天赋."].."\n"..L["<点击套装> 装备套装."])
+		elseif numTalentGroups > 0 and UnitLevel("player") >= 10 then
 			spec:SetHint(L["<点击天赋> 切换天赋."])
 		elseif numEquipSets > 0 then
-			spec:SetHint(L["<点击套装> 装备套装."].."\n"..L["<Ctrl+点击套装> 套装绑定至主天赋."]..PRIMARY.."\n"..L["<Shift+点击套装> 解除天赋绑定."])
+			spec:SetHint(L["<点击套装> 装备套装."])
 		end
 	end
 
@@ -237,7 +207,7 @@ local function LoadTalent()
 				local equipName, equipIcon = GetEquipmentSetInfo(index)
 				SpecEquipList[index] = {
 					name = equipName,
-					icon = equipIcon,
+					icon = equipIcon or 132632,
 				}
 			end
 		end
@@ -274,13 +244,9 @@ local function LoadTalent()
 	end
 
 	infobar:HookScript("OnEnter", Spec_OnEnter)
-	local manager = CreateFrame("Frame", nil, UIParent)
 
 	local function OnEvent(self, event, ...)
 		if event == "PLAYER_LOGIN" then
-			R.db.specgear = R.db.specgear or {}
-			R.db.specgear.primary = R.db.specgear.primary or -1
-			R.db.specgear.secondary = R.db.specgear.secondary or -1
 			self:UnregisterEvent("PLAYER_LOGIN")
 			self:RegisterEvent("PLAYER_ENTERING_WORLD");
 			self:RegisterEvent("CHARACTER_POINTS_CHANGED");
@@ -289,21 +255,33 @@ local function LoadTalent()
 			self:RegisterEvent("EQUIPMENT_SETS_CHANGED")
 			self:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
 			self:RegisterEvent("PLAYER_LOOT_SPEC_UPDATED")
-			manager:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+			return
 		end
 
+		if event ~= "PLAYER_ENTERING_WORLD" then
+			C_Timer.After(0.25, function() spec:Refresh(self) end)
+		end
 		Spec_Update(self)
 	end
 
 	infobar:RegisterEvent("PLAYER_LOGIN")
 	infobar:HookScript("OnEvent", OnEvent)
 
-	infobar:HookScript("OnMouseDown", function(self, button)
+	infobar:SetScript("OnMouseDown", function(self, button)
 		local specIndex = GetSpecialization()
+		if UnitLevel("player") <10 then return end
 		if not specIndex then return end
 
 		if button == "LeftButton" then
-			SetActiveSpecGroup(GetActiveSpecGroup() == 1 and 2 or 1)
+			if not PlayerTalentFrame then
+				TalentFrame_LoadUI()
+			end
+			
+			if not PlayerTalentFrame:IsShown() then
+				ShowUIPanel(PlayerTalentFrame)
+			else
+				HideUIPanel(PlayerTalentFrame)
+			end
 		else
 			spec:Close()
 			local specID, specName = GetSpecializationInfo(specIndex)
@@ -320,31 +298,6 @@ local function LoadTalent()
 			end
 
 			EasyMenu(menuList, menuFrame, "cursor", -15, -7, "MENU", 2)
-		end
-	end)
-
-	manager:SetScript("OnEvent", function(self, event, id)
-		local numEquipSets = GetNumEquipmentSets()
-		if id == 1 then
-			if R.db.specgear.primary > 0 and R.db.specgear.primary <= numEquipSets then
-				self.needEquipSet = GetEquipmentSetInfo(R.db.specgear.primary)
-			end
-		else
-			if R.db.specgear.secondary > 0 and R.db.specgear.secondary <= numEquipSets then
-				self.needEquipSet = GetEquipmentSetInfo(R.db.specgear.secondary)
-			end
-		end
-	end)
-
-	manager:SetScript("OnUpdate", function(self, elapsed)
-		self.updateElapsed = (self.updateElapsed or 0) + elapsed
-		if self.updateElapsed > TOOLTIP_UPDATE_TIME then
-			self.updateElapsed = 0
-
-			if self.needEquipSet then
-				EquipmentManager_EquipSet(self.needEquipSet)
-				self.needEquipSet = nil
-			end
 		end
 	end)
 end

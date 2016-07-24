@@ -256,7 +256,7 @@ local function LoadFriend()
 		end
 	end
 
-	infobar:HookScript("OnMouseDown", Friends_OnMouseDown)
+	infobar:SetScript("OnMouseDown", Friends_OnMouseDown)
 	infobar:HookScript("OnEnter", Friends_OnEnter)
 
 	infobar:RegisterEvent("FRIENDLIST_UPDATE")

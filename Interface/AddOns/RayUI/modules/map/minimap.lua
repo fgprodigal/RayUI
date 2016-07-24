@@ -181,10 +181,6 @@ function MM:CreateMenu()
 			if not PlayerTalentFrame then
 				TalentFrame_LoadUI()
 			end
-
-			if not GlyphFrame then
-				GlyphFrame_LoadUI()
-			end
 			
 			if not PlayerTalentFrame:IsShown() then
 				ShowUIPanel(PlayerTalentFrame)

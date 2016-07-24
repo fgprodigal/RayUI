@@ -3,7 +3,7 @@ local IF = R:GetModule("InfoBar")
 
 local function LoadCallToArms()
 	local infobar = IF:CreateInfoPanel("RayUI_InfoPanel_CallToArms", 130)
-	infobar:SetPoint("RIGHT", RayUI_InfoPanel_Stat1, "LEFT", 0, 0)
+	infobar:SetPoint("RIGHT", RayUI_InfoPanel_Memory, "LEFT", 0, 0)
 
 	local TANK_ICON = "|TInterface\\AddOns\\RayUI\\media\\tank.tga:14:14|t"
 	local HEALER_ICON = "|TInterface\\AddOns\\RayUI\\media\\healer.tga:14:14|t"
@@ -85,7 +85,7 @@ local function LoadCallToArms()
 	infobar:HookScript("OnEnter", OnEnter)
 	infobar:HookScript("OnLeave", GameTooltip_Hide)
 	infobar:HookScript("OnEvent", OnEvent)
-	infobar:HookScript("OnMouseDown", function() PVEFrame_ToggleFrame("GroupFinderFrame", LFDParentFrame) end)
+	infobar:SetScript("OnMouseDown", function() PVEFrame_ToggleFrame("GroupFinderFrame", LFDParentFrame) end)
 	infobar:RegisterEvent("PLAYER_ENTERING_WORLD")
 	infobar:RegisterEvent("LFG_UPDATE_RANDOM_INFO")
 end

@@ -311,55 +311,110 @@ end
 
 function S:ReskinScroll(f)
 	if not f then return end
-	local frame = f:GetName()
+	if f:GetName() then
+		local frame = f:GetName()
 
-	if _G[frame.."Track"] then _G[frame.."Track"]:Hide() end
-	if _G[frame.."BG"] then _G[frame.."BG"]:Hide() end
-	if _G[frame.."Top"] then _G[frame.."Top"]:Hide() end
-	if _G[frame.."Middle"] then _G[frame.."Middle"]:Hide() end
-	if _G[frame.."Bottom"] then _G[frame.."Bottom"]:Hide() end
+		if _G[frame.."Track"] then _G[frame.."Track"]:Hide() end
+		if _G[frame.."BG"] then _G[frame.."BG"]:Hide() end
+		if _G[frame.."Top"] then _G[frame.."Top"]:Hide() end
+		if _G[frame.."Middle"] then _G[frame.."Middle"]:Hide() end
+		if _G[frame.."Bottom"] then _G[frame.."Bottom"]:Hide() end
 
-	local bu = _G[frame.."ThumbTexture"]
-	bu:SetAlpha(0)
-	bu:Width(17)
+		local bu = _G[frame.."ThumbTexture"]
+		bu:SetAlpha(0)
+		bu:Width(17)
 
-	bu.bg = CreateFrame("Frame", nil, f)
-	bu.bg:Point("TOPLEFT", bu, 0, -2)
-	bu.bg:Point("BOTTOMRIGHT", bu, 0, 4)
-	S:CreateBD(bu.bg, 0)
-	S:CreateBackdropTexture(f)
-	f.backdropTexture:SetInside(bu.bg, 1, 1)
+		bu.bg = CreateFrame("Frame", nil, f)
+		bu.bg:Point("TOPLEFT", bu, 0, -2)
+		bu.bg:Point("BOTTOMRIGHT", bu, 0, 4)
+		S:CreateBD(bu.bg, 0)
+		S:CreateBackdropTexture(f)
+		f.backdropTexture:SetInside(bu.bg, 1, 1)
 
-	local up = _G[frame.."ScrollUpButton"]
-	local down = _G[frame.."ScrollDownButton"]
+		local up = _G[frame.."ScrollUpButton"]
+		local down = _G[frame.."ScrollDownButton"]
 
-	up:Width(17)
-	down:Width(17)
+		up:Width(17)
+		down:Width(17)
 
-	S:Reskin(up)
-	S:Reskin(down)
+		S:Reskin(up)
+		S:Reskin(down)
 
-	up:SetDisabledTexture(R["media"].blank)
-	local dis1 = up:GetDisabledTexture()
-	dis1:SetVertexColor(0, 0, 0, .3)
-	dis1:SetDrawLayer("OVERLAY")
+		up:SetDisabledTexture(R["media"].blank)
+		local dis1 = up:GetDisabledTexture()
+		dis1:SetVertexColor(0, 0, 0, .3)
+		dis1:SetDrawLayer("OVERLAY")
 
-	down:SetDisabledTexture(R["media"].blank)
-	local dis2 = down:GetDisabledTexture()
-	dis2:SetVertexColor(0, 0, 0, .3)
-	dis2:SetDrawLayer("OVERLAY")
+		down:SetDisabledTexture(R["media"].blank)
+		local dis2 = down:GetDisabledTexture()
+		dis2:SetVertexColor(0, 0, 0, .3)
+		dis2:SetDrawLayer("OVERLAY")
 
-	local uptex = up:CreateTexture(nil, "ARTWORK")
-	uptex:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-up-active")
-	uptex:Size(8, 8)
-	uptex:SetPoint("CENTER")
-	uptex:SetVertexColor(1, 1, 1)
+		local uptex = up:CreateTexture(nil, "ARTWORK")
+		uptex:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-up-active")
+		uptex:Size(8, 8)
+		uptex:SetPoint("CENTER")
+		uptex:SetVertexColor(1, 1, 1)
 
-	local downtex = down:CreateTexture(nil, "ARTWORK")
-	downtex:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-down-active")
-	downtex:Size(8, 8)
-	downtex:SetPoint("CENTER")
-	downtex:SetVertexColor(1, 1, 1)
+		local downtex = down:CreateTexture(nil, "ARTWORK")
+		downtex:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-down-active")
+		downtex:Size(8, 8)
+		downtex:SetPoint("CENTER")
+		downtex:SetVertexColor(1, 1, 1)
+	else
+		if f.Background then f.Background:SetTexture(nil) end
+		if f.trackBG then f.trackBG:SetTexture(nil) end
+		if f.Middle then f.Middle:SetTexture(nil) end
+		if f.Top then f.Top:SetTexture(nil) end
+		if f.Bottom then f.Bottom:SetTexture(nil) end
+		if f.ScrollBarTop then f.ScrollBarTop:SetTexture(nil) end
+		if f.ScrollBarBottom then f.ScrollBarBottom:SetTexture(nil) end
+		if f.ScrollBarMiddle then f.ScrollBarMiddle:SetTexture(nil) end
+		if f.ScrollUpButton and f.ScrollDownButton then
+			if not f.ScrollUpButton.icon then
+				S:Reskin(f.ScrollUpButton)
+				f.ScrollUpButton:SetDisabledTexture(R["media"].blank)
+				f.ScrollUpButton:Width(17)
+				local uptex = f.ScrollUpButton:CreateTexture(nil, "ARTWORK")
+				uptex:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-up-active")
+				uptex:Size(8, 8)
+				uptex:SetPoint("CENTER")
+				uptex:SetVertexColor(1, 1, 1)
+				f.ScrollUpButton.icon = uptex
+				local dis1 = f.ScrollUpButton:GetDisabledTexture()
+				dis1:SetVertexColor(0, 0, 0, .3)
+				dis1:SetDrawLayer("OVERLAY")
+			end
+
+			if not f.ScrollDownButton.icon then
+				S:Reskin(f.ScrollDownButton)
+				f.ScrollDownButton:SetDisabledTexture(R["media"].blank)
+				f.ScrollDownButton:Width(17)
+				local downtex = f.ScrollDownButton:CreateTexture(nil, "ARTWORK")
+				downtex:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-down-active")
+				downtex:Size(8, 8)
+				downtex:SetPoint("CENTER")
+				downtex:SetVertexColor(1, 1, 1)
+				f.ScrollDownButton.icon = downtex
+				local dis2 = f.ScrollDownButton:GetDisabledTexture()
+				dis2:SetVertexColor(0, 0, 0, .3)
+				dis2:SetDrawLayer("OVERLAY")
+			end
+			
+			if f.thumbTexture then
+				local bu = f.thumbTexture
+				bu:SetAlpha(0)
+				bu:Width(17)
+
+				bu.bg = CreateFrame("Frame", nil, f)
+				bu.bg:Point("TOPLEFT", bu, 0, -2)
+				bu.bg:Point("BOTTOMRIGHT", bu, 0, 4)
+				S:CreateBD(bu.bg, 0)
+				S:CreateBackdropTexture(f)
+				f.backdropTexture:SetInside(bu.bg, 1, 1)
+			end
+		end
+	end
 end
 
 function S:ReskinDropDown(f)
@@ -691,11 +746,6 @@ function S:ReskinExpandOrCollapse(f)
 	f.plus:SetPoint("CENTER")
 	f.plus:SetTexture(R["media"].gloss)
 	f.plus:SetVertexColor(1, 1, 1)
-end
-
-function S:ReskinIcon(icon)
-	icon:SetTexCoord(.08, .92, .08, .92)
-	return S:CreateBG(icon)
 end
 
 function S:RegisterSkin(name, loadFunc)

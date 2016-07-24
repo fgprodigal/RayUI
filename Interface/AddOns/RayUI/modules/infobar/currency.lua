@@ -137,6 +137,10 @@ local function LoadCurrency()
 		end
 	end
 
+	local function Currency_OnMouseDown(self)
+		ToggleBackpack()
+	end
+
 	infobar:RegisterEvent("PLAYER_MONEY")
 	infobar:RegisterEvent("SEND_MAIL_MONEY_CHANGED")
 	infobar:RegisterEvent("SEND_MAIL_COD_CHANGED")
@@ -144,7 +148,7 @@ local function LoadCurrency()
 	infobar:RegisterEvent("TRADE_MONEY_CHANGED")
 	infobar:RegisterEvent("PLAYER_ENTERING_WORLD")
 	infobar:HookScript("OnEnter", ShowCurrency)
-	infobar:HookScript("OnMouseDown", function() ToggleBackpack() end)
+	infobar:SetScript("OnMouseDown", Currency_OnMouseDown)
 	infobar:HookScript("OnLeave", GameTooltip_Hide)
 	infobar:HookScript("OnEvent", OnEvent)
 end

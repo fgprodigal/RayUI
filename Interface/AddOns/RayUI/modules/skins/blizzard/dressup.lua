@@ -15,6 +15,37 @@ local function LoadSkin()
 	S:Reskin(DressUpFrameCancelButton)
 	S:Reskin(DressUpFrameResetButton)
 	S:ReskinClose(DressUpFrameCloseButton, "TOPRIGHT", DressUpFrame, "TOPRIGHT", -38, -16)
+
+	S:Reskin(DressUpFrameOutfitDropDown.SaveButton)
+	S:Reskin(DressUpFrameCancelButton)
+	S:Reskin(DressUpFrameResetButton)
+	S:ReskinDropDown(DressUpFrameOutfitDropDown)
+	S:ReskinClose(DressUpFrameCloseButton, "TOPRIGHT", DressUpFrame, "TOPRIGHT", -38, -16)
+
+	DressUpFrameOutfitDropDown:SetHeight(32)
+	DressUpFrameOutfitDropDown.SaveButton:SetPoint("LEFT", DressUpFrameOutfitDropDown, "RIGHT", -13, 2)
+	DressUpFrameResetButton:SetPoint("RIGHT", DressUpFrameCancelButton, "LEFT", -1, 0)
+
+	-- SideDressUp
+
+	for i = 1, 4 do
+		select(i, SideDressUpFrame:GetRegions()):Hide()
+	end
+	select(5, SideDressUpModelCloseButton:GetRegions()):Hide()
+
+	SideDressUpModel:HookScript("OnShow", function(self)
+		self:ClearAllPoints()
+		self:SetPoint("LEFT", self:GetParent():GetParent(), "RIGHT", 1, 0)
+	end)
+
+	S:Reskin(SideDressUpModelResetButton)
+	S:ReskinClose(SideDressUpModelCloseButton)
+
+	SideDressUpModel.bg = CreateFrame("Frame", nil, SideDressUpModel)
+	SideDressUpModel.bg:SetPoint("TOPLEFT", 0, 1)
+	SideDressUpModel.bg:SetPoint("BOTTOMRIGHT", 1, -1)
+	SideDressUpModel.bg:SetFrameLevel(SideDressUpModel:GetFrameLevel()-1)
+	S:CreateBD(SideDressUpModel.bg)
 end
 
 S:RegisterSkin("RayUI", LoadSkin)

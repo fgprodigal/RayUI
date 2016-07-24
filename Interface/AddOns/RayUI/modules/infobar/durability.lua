@@ -61,7 +61,7 @@ local function LoadDurability()
 		end
 	end)
 	infobar:HookScript("OnLeave", GameTooltip_Hide)
-	infobar:HookScript("OnMouseDown", function() GameTooltip_Hide() ToggleCharacter("PaperDollFrame") end)
+	infobar:SetScript("OnMouseDown", function() GameTooltip_Hide() ToggleCharacter("PaperDollFrame") end)
 	infobar:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
 	infobar:RegisterEvent("MERCHANT_SHOW")
 	infobar:RegisterEvent("PLAYER_ENTERING_WORLD")

@@ -752,14 +752,6 @@ local function LoadSkin()
 	TicketStatusFrame:ClearAllPoints()
 	TicketStatusFrame:SetPoint("TOP", UIParent, "TOP", 0, -20)
 
-	hooksecurefunc("PanelTemplates_DeselectTab", function(tab)
-		_G[tab:GetName().."Text"]:SetPoint("CENTER", tab, "CENTER")
-	end)
-
-	hooksecurefunc("PanelTemplates_SelectTab", function(tab)
-		_G[tab:GetName().."Text"]:SetPoint("CENTER", tab, "CENTER")
-	end)
-
 	--[[ if IsMacClient() then
 		S:CreateBD(MacOptionsFrame)
 		MacOptionsFrameHeader:SetTexture("")

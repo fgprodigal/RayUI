@@ -242,7 +242,7 @@ local function LoadGuild()
 	infobar:RegisterEvent("GUILD_PERK_UPDATE")
 	infobar:RegisterEvent("GUILD_MOTD")
 	infobar:HookScript("OnEnter", Guild_OnEnter)
-	infobar:HookScript("OnMouseDown", Guild_OnMouseDown)
+	infobar:SetScript("OnMouseDown", Guild_OnMouseDown)
 	infobar:HookScript("OnEvent", function(self, event, ...)
 		if event == "GUILD_MOTD" then
 			if not self.hidden then return end

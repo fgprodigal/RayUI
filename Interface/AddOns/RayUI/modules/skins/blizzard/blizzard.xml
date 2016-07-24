@@ -21,7 +21,6 @@
 	<Script file='encounter.lua'/>
 	<Script file='friends.lua'/>
 	<Script file='garrison.lua'/>
-	<Script file='glyph.lua'/>
 	<Script file='gmsurvey.lua'/>
 	<Script file='gossip.lua'/>
 	<Script file='guild.lua'/>
