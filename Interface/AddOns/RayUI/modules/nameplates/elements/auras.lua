@@ -164,7 +164,7 @@ function mod:CreateAuraIcon(parent)
 
 	aura.icon = aura:CreateTexture(nil, "OVERLAY")
 	aura.icon:SetAllPoints()
-	aura.icon:SetTexCoord(.08, .92, .08, .92)
+	aura.icon:SetTexCoord(.07, 1-.07, .23, 1-.23)
 	
 	aura.cooldown = CreateFrame("Cooldown", nil, aura, "CooldownFrameTemplate")
 	aura.cooldown:SetAllPoints(aura)

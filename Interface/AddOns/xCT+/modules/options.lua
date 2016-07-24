@@ -1,17 +1,19 @@
---[[   ____    ______      
+--[[   ____    ______
       /\  _`\ /\__  _\   __
- __  _\ \ \/\_\/_/\ \/ /_\ \___ 
+ __  _\ \ \/\_\/_/\ \/ /_\ \___
 /\ \/'\\ \ \/_/_ \ \ \/\___  __\
 \/>  </ \ \ \L\ \ \ \ \/__/\_\_/
  /\_/\_\ \ \____/  \ \_\  \/_/
  \//\/_/  \/___/    \/_/
- 
+
  [=====================================]
  [  Author: Dandraffbal-Stormreaver US ]
  [  xCT+ Version 4.x.x                 ]
- [  ©2014. All Rights Reserved.        ]
+ [  Â©2015. All Rights Reserved.        ]
  [====================================]]
- 
+
+local build = select(4, GetBuildInfo())
+
 local ADDON_NAME, addon = ...
 local LSM = LibStub("LibSharedMedia-3.0")
 local x, noop = addon.engine, addon.noop
@@ -82,7 +84,7 @@ addon.options = {
       name = "Startup Message",
       get = function(info) return x.db.profile.showStartupText end,
       set = function(info, value) x.db.profile.showStartupText = value end,
-    },  
+    },
     hideConfig = {
       order = 12,
       type = 'toggle',
@@ -141,210 +143,200 @@ addon.options = {
 }
 
 -- A fast C-Var Update routine
-x.cvar_udpate = function()
-  -- Always have Combat Text Enabled
-  SetCVar("enableCombatText", 1)
-  _G["SHOW_COMBAT_TEXT"] = "1"
-  
-  -- We dont care about "combatTextFloatMode"
-  -- _G["COMBAT_TEXT_FLOAT_MODE"] = "1"
+local function isCVarsDisabled( ) return x.db.profile.bypassCVars end
 
-  -- Check: fctLowManaHealth (General Option)
-  if x.db.profile.frames.general.showLowManaHealth then
-    SetCVar("fctLowManaHealth", 1)
-    _G["COMBAT_TEXT_SHOW_LOW_HEALTH_MANA"] = "1"
-  else
-    SetCVar("fctLowManaHealth", 0)
-    _G["COMBAT_TEXT_SHOW_LOW_HEALTH_MANA"] = "0"
-  end
-  
-  -- Check: fctAuras (General Option)
-  if x.db.profile.frames.general.showBuffs or x.db.profile.frames.general.showDebuffs then
-    SetCVar("fctAuras", 1)
-    _G["COMBAT_TEXT_SHOW_AURAS"] = "1"
-    _G["COMBAT_TEXT_SHOW_AURA_FADE"] = "1"
-  else
-    SetCVar("fctAuras", 0)
-    _G["COMBAT_TEXT_SHOW_AURAS"] = "0"
-    _G["COMBAT_TEXT_SHOW_AURA_FADE"] = "0"
-  end
-  
-  -- Check: fctCombatState (General Option)
-  if x.db.profile.frames.general.showCombatState then
-    SetCVar("fctCombatState", 1)
-    _G["COMBAT_TEXT_SHOW_COMBAT_STATE"] = "1"
-  else
-    SetCVar("fctCombatState", 0)
-    _G["COMBAT_TEXT_SHOW_COMBAT_STATE"] = "0"
-  end
-  
-  -- Check: fctDodgeParryMiss (Damage Option)
-  if x.db.profile.frames.damage.showDodgeParryMiss then
-    SetCVar("fctDodgeParryMiss", 1)
-    _G["COMBAT_TEXT_SHOW_DODGE_PARRY_MISS"] = "1"
-  else
-    SetCVar("fctDodgeParryMiss", 0)
-    _G["COMBAT_TEXT_SHOW_DODGE_PARRY_MISS"] = "0"
-  end
-  
-  -- Check: fctDamageReduction (Damage Option)
-  if x.db.profile.frames.damage.showDamageReduction then
-    SetCVar("fctDamageReduction", 1)
-    _G["COMBAT_TEXT_SHOW_RESISTANCES"] = "1"
-  else
-    SetCVar("fctDamageReduction", 0)
-    _G["COMBAT_TEXT_SHOW_RESISTANCES"] = "0"
-  end
-  
-  -- Check: fctRepChanges (General Option)
-  if x.db.profile.frames.general.showRepChanges then
-    SetCVar("fctRepChanges", 1)
-    _G["COMBAT_TEXT_SHOW_REPUTATION"] = "1"
-  else
-    SetCVar("fctRepChanges", 0)
-    _G["COMBAT_TEXT_SHOW_REPUTATION"] = "0"
-  end
-  
-  -- Check: fctHonorGains (General Option)
-  if x.db.profile.frames.damage.showHonorGains then
-    SetCVar("fctHonorGains", 0)
-    _G["COMBAT_TEXT_SHOW_HONOR_GAINED"] = "0"
-  else
-    SetCVar("fctHonorGains", 0)
-    _G["COMBAT_TEXT_SHOW_HONOR_GAINED"] = "0"
-  end
-  
-  -- Check: fctReactives (Attach to Procs Frame)
-  if x.db.profile.frames.procs.enabledFrame then
-    SetCVar("fctReactives", 1)
-    _G["COMBAT_TEXT_SHOW_REACTIVES"] = "1"
-  else
-    SetCVar("fctReactives", 0)
-    _G["COMBAT_TEXT_SHOW_REACTIVES"] = "0"
-  end
-  
-  -- Check: fctFriendlyHealers (Healing Option)
-  if x.db.profile.frames.healing.showFriendlyHealers then
-    SetCVar("fctFriendlyHealers", 1)
-    _G["COMBAT_TEXT_SHOW_FRIENDLY_NAMES"] = "1"
-  else
-    SetCVar("fctFriendlyHealers", 0)
-    _G["COMBAT_TEXT_SHOW_FRIENDLY_NAMES"] = "0"
-  end
-  
-  -- Check: CombatHealingAbsorbSelf (Healing Option)
-  if x.db.profile.frames.healing.enableSelfAbsorbs then
-    SetCVar("CombatHealingAbsorbSelf", 1)
-    _G["SHOW_COMBAT_HEALING_ABSORB_SELF"] = "1"
-  else
-    SetCVar("CombatHealingAbsorbSelf", 0)
-    _G["SHOW_COMBAT_HEALING_ABSORB_SELF"] = "0"
-  end
-  
-  -- Check: fctComboPoints (COMBO Option)
-  if x.player.class == "ROGUE" and x.db.profile.frames.class.enabledFrame then
-    SetCVar("fctComboPoints", 1)
-    _G["COMBAT_TEXT_SHOW_COMBO_POINTS"] = "1"
-  else
-    SetCVar("fctComboPoints", 0)
-    _G["COMBAT_TEXT_SHOW_COMBO_POINTS"] = "0"
-  end
-  
-  -- Check: fctEnergyGains (Power Option)
-  if x.db.profile.frames.power.showEnergyGains then
-    SetCVar("fctEnergyGains", 1)
-    _G["COMBAT_TEXT_SHOW_ENERGIZE"] = "1"
-  else
-    SetCVar("fctEnergyGains", 0)
-    _G["COMBAT_TEXT_SHOW_ENERGIZE"] = "0"
-  end
-  
-  -- Check: fctPeriodicEnergyGains (Power Option)
-  if x.db.profile.frames.power.showPeriodicEnergyGains then
-    SetCVar("fctPeriodicEnergyGains", 1)
-    _G["COMBAT_TEXT_SHOW_PERIODIC_ENERGIZE"] = "1"
-  else
-    SetCVar("fctPeriodicEnergyGains", 0)
-    _G["COMBAT_TEXT_SHOW_PERIODIC_ENERGIZE"] = "0"
-  end
-  
-  -- Floating Combat Text: Effects
-  if x.db.profile.blizzardFCT.fctSpellMechanics then
-    SetCVar("fctSpellMechanics", 1)
-  else
-    SetCVar("fctSpellMechanics", 0)
-  end
-  
-  -- Floating Combat Text: Effects (Others)
-  if x.db.profile.blizzardFCT.fctSpellMechanicsOther then
-    SetCVar("fctSpellMechanicsOther", 1)
-  else
-    SetCVar("fctSpellMechanicsOther", 0)
-  end
-  
-  -- Floating Combat Text: Outgoing Damage
-  if x.db.profile.blizzardFCT.CombatDamage then
-    SetCVar("CombatDamage", 1)
-  else
-    SetCVar("CombatDamage", 0)
-  end
-  
-  -- Floating Combat Text: Outgoing Dots and Hots
-  if x.db.profile.blizzardFCT.CombatLogPeriodicSpells then
-    SetCVar("CombatLogPeriodicSpells", 1)
-  else
-    SetCVar("CombatLogPeriodicSpells", 0)
-  end
-  
-  -- Floating Combat Text: Outgoing Pet Damage
-  if x.db.profile.blizzardFCT.PetMeleeDamage then
-    SetCVar("PetMeleeDamage", 1)
-  else
-    SetCVar("PetMeleeDamage", 0)
-  end
-  
-  -- Floating Combat Text: Outgoing Healing
-  if x.db.profile.blizzardFCT.CombatHealing then
-    SetCVar("CombatHealing", 1)
-  else
-    SetCVar("CombatHealing", 0)
-  end
-  
-  -- Floating Combat Text: Outgoing Absorbs
-  if x.db.profile.blizzardFCT.CombatHealingAbsorbTarget then
-    SetCVar("CombatHealingAbsorbTarget", 1)
-  else
-    SetCVar("CombatHealingAbsorbTarget", 0)
-  end
-  
-  -- Floating Combat Text: Display Target Mode
-  SetCVar("CombatDamageStyle", x.db.profile.blizzardFCT.CombatDamageStyle)
-  
+
+x.cvar_update = function( force )
   -- Floating Combat Text: Threat Changes
-  if x.db.profile.blizzardFCT.CombatThreatChanges then
-    COMBAT_THREAT_DECREASE_0, COMBAT_THREAT_DECREASE_1, COMBAT_THREAT_DECREASE_2 = XCT_CT_DEC_0, XCT_CT_DEC_1, XCT_CT_DEC_2
-    COMBAT_THREAT_INCREASE_1, COMBAT_THREAT_INCREASE_3 = XCT_CT_INC_1, XCT_CT_INC_3
-  else
+  if not x.db.profile.blizzardFCT.CombatThreatChanges then
     COMBAT_THREAT_DECREASE_0, COMBAT_THREAT_DECREASE_1, COMBAT_THREAT_DECREASE_2 = "", "", ""
     COMBAT_THREAT_INCREASE_1, COMBAT_THREAT_INCREASE_3 = "", ""
+  elseif COMBAT_THREAT_DECREASE_0 == "" then
+    -- only overwrite Blizzard constants if they were previously changed
+    COMBAT_THREAT_DECREASE_0, COMBAT_THREAT_DECREASE_1, COMBAT_THREAT_DECREASE_2 = XCT_CT_DEC_0, XCT_CT_DEC_1, XCT_CT_DEC_2
+    COMBAT_THREAT_INCREASE_1, COMBAT_THREAT_INCREASE_3 = XCT_CT_INC_1, XCT_CT_INC_3
   end
-  
+
+  if  isCVarsDisabled( ) then
+    if force then
+      StaticPopup_Show("XCT_PLUS_FORCE_CVAR_UPDATE")
+    else
+      return
+    end
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextAllSpellMechanics then
+    SetCVar("floatingCombatTextAllSpellMechanics", 1)
+  else
+    SetCVar("floatingCombatTextAllSpellMechanics", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextAuras then
+    SetCVar("floatingCombatTextAuras", 1)
+  else
+    SetCVar("floatingCombatTextAuras", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextCombatDamage then
+    SetCVar("floatingCombatTextCombatDamage", 1)
+  else
+    SetCVar("floatingCombatTextCombatDamage", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextCombatDamageAllAutos then
+    SetCVar("floatingCombatTextCombatDamageAllAutos", 1)
+  else
+    SetCVar("floatingCombatTextCombatDamageAllAutos", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextCombatDamageDirectionalOffset then
+    SetCVar("floatingCombatTextCombatDamageDirectionalOffset", 1)
+  else
+    SetCVar("floatingCombatTextCombatDamageDirectionalOffset", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextCombatDamageDirectionalScale then
+    SetCVar("floatingCombatTextCombatDamageDirectionalScale", 1)
+  else
+    SetCVar("floatingCombatTextCombatDamageDirectionalScale", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextCombatHealing then
+    SetCVar("floatingCombatTextCombatHealing", 1)
+  else
+    SetCVar("floatingCombatTextCombatHealing", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextCombatHealingAbsorbSelf then
+    SetCVar("floatingCombatTextCombatHealingAbsorbSelf", 1)
+  else
+    SetCVar("floatingCombatTextCombatHealingAbsorbSelf", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextCombatHealingAbsorbTarget then
+    SetCVar("floatingCombatTextCombatHealingAbsorbTarget", 1)
+  else
+    SetCVar("floatingCombatTextCombatHealingAbsorbTarget", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextCombatLogPeriodicSpells then
+    SetCVar("floatingCombatTextCombatLogPeriodicSpells", 1)
+  else
+    SetCVar("floatingCombatTextCombatLogPeriodicSpells", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextCombatState then
+    SetCVar("floatingCombatTextCombatState", 1)
+  else
+    SetCVar("floatingCombatTextCombatState", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextComboPoints then
+    SetCVar("floatingCombatTextComboPoints", 1)
+  else
+    SetCVar("floatingCombatTextComboPoints", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextDamageReduction then
+    SetCVar("floatingCombatTextDamageReduction", 1)
+  else
+    SetCVar("floatingCombatTextDamageReduction", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextDodgeParryMiss then
+    SetCVar("floatingCombatTextDodgeParryMiss", 1)
+  else
+    SetCVar("floatingCombatTextDodgeParryMiss", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextEnergyGains then
+    SetCVar("floatingCombatTextEnergyGains", 1)
+  else
+    SetCVar("floatingCombatTextEnergyGains", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextFloatMode then
+    SetCVar("floatingCombatTextFloatMode", 1)
+  else
+    SetCVar("floatingCombatTextFloatMode", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextFriendlyHealers then
+    SetCVar("floatingCombatTextFriendlyHealers", 1)
+  else
+    SetCVar("floatingCombatTextFriendlyHealers", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextHonorGains then
+    SetCVar("floatingCombatTextHonorGains", 1)
+  else
+    SetCVar("floatingCombatTextHonorGains", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextLowManaHealth then
+    SetCVar("floatingCombatTextLowManaHealth", 1)
+  else
+    SetCVar("floatingCombatTextLowManaHealth", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextPeriodicEnergyGains then
+    SetCVar("floatingCombatTextPeriodicEnergyGains", 1)
+  else
+    SetCVar("floatingCombatTextPeriodicEnergyGains", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextPetMeleeDamage then
+    SetCVar("floatingCombatTextPetMeleeDamage", 1)
+  else
+    SetCVar("floatingCombatTextPetMeleeDamage", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextPetSpellDamage then
+    SetCVar("floatingCombatTextPetSpellDamage", 1)
+  else
+    SetCVar("floatingCombatTextPetSpellDamage", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextReactives then
+    SetCVar("floatingCombatTextReactives", 1)
+  else
+    SetCVar("floatingCombatTextReactives", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextRepChanges then
+    SetCVar("floatingCombatTextRepChanges", 1)
+  else
+    SetCVar("floatingCombatTextRepChanges", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextSpellMechanics then
+    SetCVar("floatingCombatTextSpellMechanics", 1)
+  else
+    SetCVar("floatingCombatTextSpellMechanics", 0)
+  end
+
+  if x.db.profile.blizzardFCT.floatingCombatTextSpellMechanicsOther then
+    SetCVar("floatingCombatTextSpellMechanicsOther", 1)
+  else
+    SetCVar("floatingCombatTextSpellMechanicsOther", 0)
+  end
 end
 
 -- Generic Get/Set methods
 local function get0(info) return x.db.profile[info[#info-1]][info[#info]] end
-local function set0(info, value) x.db.profile[info[#info-1]][info[#info]] = value; x.cvar_udpate() end
-local function set0_update(info, value) x.db.profile[info[#info-1]][info[#info]] = value; x:UpdateFrames(); x.cvar_udpate() end
+local function set0(info, value) x.db.profile[info[#info-1]][info[#info]] = value; x.cvar_update() end
+local function set0_update(info, value) x.db.profile[info[#info-1]][info[#info]] = value; x:UpdateFrames(); x.cvar_update() end
 local function get0_1(info) return x.db.profile[info[#info-2]][info[#info]] end
-local function set0_1(info, value) x.db.profile[info[#info-2]][info[#info]] = value; x.cvar_udpate() end
+local function set0_1(info, value) x.db.profile[info[#info-2]][info[#info]] = value; x.cvar_update() end
 local function getTextIn0(info) return string_gsub(x.db.profile[info[#info-1]][info[#info]], "|", "||") end
-local function setTextIn0(info, value) x.db.profile[info[#info-1]][info[#info]] = string_gsub(value, "||", "|"); x.cvar_udpate() end
+local function setTextIn0(info, value) x.db.profile[info[#info-1]][info[#info]] = string_gsub(value, "||", "|"); x.cvar_update() end
 local function get1(info) return x.db.profile.frames[info[#info-1]][info[#info]] end
-local function set1(info, value) x.db.profile.frames[info[#info-1]][info[#info]] = value; x.cvar_udpate() end
-local function set1_update(info, value) set1(info, value); x:UpdateFrames(info[#info-1]); x.cvar_udpate() end
+local function set1(info, value) x.db.profile.frames[info[#info-1]][info[#info]] = value; x.cvar_update() end
+local function set1_update(info, value) set1(info, value); x:UpdateFrames(info[#info-1]); x.cvar_update() end
 local function get2(info) return x.db.profile.frames[info[#info-2]][info[#info]] end
-local function set2(info, value) x.db.profile.frames[info[#info-2]][info[#info]] = value; x.cvar_udpate() end
-local function set2_update(info, value) set2(info, value); x:UpdateFrames(info[#info-2]); x.cvar_udpate() end
+local function set2(info, value) x.db.profile.frames[info[#info-2]][info[#info]] = value; x.cvar_update() end
+local function set2_update(info, value) set2(info, value); x:UpdateFrames(info[#info-2]); x.cvar_update() end
+local function set2_update_force(info, value) set2(info, value); x:UpdateFrames(info[#info-2]); x.cvar_update(true) end
 local function getColor2(info) return unpack(x.db.profile.frames[info[#info-2]][info[#info]] or blankTable) end
 local function setColor2(info, r, g, b) x.db.profile.frames[info[#info-2]][info[#info]] = {r,g,b} end
 local function getTextIn2(info) return string_gsub(x.db.profile.frames[info[#info-2]][info[#info]], "|", "||") end
@@ -366,11 +358,11 @@ local function isFrameIconDisabled(info) return isFrameItemDisabled(info) or not
 local function isFrameItemEnabled(info) return x.db.profile.frames[info[#info-2]].enabledFrame end
 
 
-
 local function setSpecialCriticalOptions(info, value)
   x.db.profile[info[#info-2]].mergeCriticalsWithOutgoing = false
   x.db.profile[info[#info-2]].mergeCriticalsByThemselves = false
   x.db.profile[info[#info-2]].mergeDontMergeCriticals = false
+  x.db.profile[info[#info-2]].mergeHideMergedCriticals = false
 
   x.db.profile[info[#info-2]][info[#info]] = true
 end
@@ -431,15 +423,18 @@ local function IsTrackSpellsDisabled() return not x.db.profile.spellFilter.track
 -- Lists that will be used to show tracked spells
 local buffHistory, debuffHistory, spellHistory, procHistory, itemHistory = { }, { }, { }, { }, { }
 
+
+-- GetSpellTextureFormatted( spellID, message, multistrike, iconSize, justify, strColor, mergeOverride, forceOff )
+
 local function GetBuffHistory()
   for i in pairs(buffHistory) do
     buffHistory[i] = nil
   end
-  
+
   for i in pairs(x.spellCache.buffs) do
-    buffHistory[i] = x:GetSpellTextureFormatted(i, 16).." "..i
+    buffHistory[i] = x:GetSpellTextureFormatted(i, "", 0, 16, nil, nil, nil, true).." "..i
   end
-  
+
   return buffHistory
 end
 
@@ -447,11 +442,11 @@ local function GetDebuffHistory()
   for i in pairs(debuffHistory) do
     debuffHistory[i] = nil
   end
-  
+
   for i in pairs(x.spellCache.debuffs) do
-    debuffHistory[i] = x:GetSpellTextureFormatted(i, 16).." "..i
+    debuffHistory[i] = x:GetSpellTextureFormatted(i, "", 0, 16, nil, nil, nil, true).." "..i
   end
-  
+
   return debuffHistory
 end
 
@@ -459,12 +454,12 @@ local function GetSpellHistory()
   for i in pairs(spellHistory) do
     spellHistory[i] = nil
   end
-  
+
   for i in pairs(x.spellCache.spells) do
     local name = GetSpellInfo(i) or "Unknown Spell ID"
-    spellHistory[tostring(i)] = x:GetSpellTextureFormatted(i, 16).." "..name.." (|cff798BDD"..i.."|r)"
+    spellHistory[tostring(i)] = x:GetSpellTextureFormatted(i, "", 0, 16, nil, nil, nil, true).." "..name.." (|cff798BDD"..i.."|r)"
   end
-  
+
   return spellHistory
 end
 
@@ -472,11 +467,11 @@ local function GetProcHistory()
   for i in pairs(procHistory) do
     procHistory[i] = nil
   end
-  
+
   for i in pairs(x.spellCache.procs) do
-    procHistory[i] = x:GetSpellTextureFormatted(i, 16).." "..i
+    procHistory[i] = x:GetSpellTextureFormatted(i, "", 0, 16, nil, nil, nil, true).." "..i
   end
-  
+
   return procHistory
 end
 
@@ -484,23 +479,23 @@ local function GetItemHistory()
   for i in pairs(itemHistory) do
     itemHistory[i] = nil
   end
-  
+
   for i in pairs(x.spellCache.items) do
 	local name, _, _, _, _, _, _, _, _, texture = GetItemInfo( i )
     itemHistory[i] = sformat("|T%s:%d:%d:0:0:64:64:5:59:5:59|t %s", texture, 16, 16, name)
   end
-  
+
   return itemHistory
 end
 
 
 addon.options.args["spells"] = {
-  name = x.new .. "Spam Merger",
+  name = "Spam Merger",
   type = 'group',
   childGroups = 'tab',
   order = 2,
   args = {
-    
+
     mergeOptions = {
       name = "Merge Options",
       type = 'group',
@@ -529,7 +524,7 @@ addon.options.args["spells"] = {
           name = "\n|cff798BDDMerge Incoming Healing|r:",
           fontSize = 'large',
         },
-      
+
         mergeHealing = {
           order = 11,
           type = 'toggle',
@@ -539,14 +534,14 @@ addon.options.args["spells"] = {
           set = set0_1,
           width = 'double',
         },
-        
+
         listSpacer2 = {
           type = "description",
           order = 20,
           name = "\n|cff798BDDMerge Multiple Dispells|r:",
           fontSize = 'large',
         },
-      
+
         mergeDispells = {
           order = 21,
           type = 'toggle',
@@ -556,14 +551,14 @@ addon.options.args["spells"] = {
           set = set0_1,
           width = 'double',
         },
-        
+
         listSpacer3 = {
           type = "description",
           order = 30,
           name = "\n|cff798BDDMerge Auto-Attacks|r:",
           fontSize = 'large',
         },
-      
+
         mergeSwings = {
           order = 31,
           type = 'toggle',
@@ -572,7 +567,7 @@ addon.options.args["spells"] = {
           get = get0_1,
           set = set0_1,
         },
-        
+
         mergeRanged = {
           order = 32,
           type = 'toggle',
@@ -581,24 +576,24 @@ addon.options.args["spells"] = {
           get = get0_1,
           set = set0_1,
         },
-        
+
         listSpacer4 = {
           type = "description",
           order = 40,
           name = "\n|cff798BDDMerge Critical Hits|r (Choose one):",
           fontSize = 'large',
         },
-        
+
         mergeDontMergeCriticals = {
           order = 41,
           type = 'toggle',
-          name = "Don't Merge Critical Together",
+          name = "Don't Merge Critical Hits Together",
           desc = "Crits will not get merged in the critical frame, but they will be included in the outgoing total. |cffFFFF00(Default)|r",
           get = get0_1,
           set = setSpecialCriticalOptions,
           width = 'full',
         },
-        
+
         mergeCriticalsWithOutgoing = {
           order = 42,
           type = 'toggle',
@@ -608,7 +603,7 @@ addon.options.args["spells"] = {
           set = setSpecialCriticalOptions,
           width = 'full',
         },
-        
+
         mergeCriticalsByThemselves = {
           order = 43,
           type = 'toggle',
@@ -619,98 +614,24 @@ addon.options.args["spells"] = {
           width = 'full',
         },
 
-      },
-    },
-    
-    multistrike = {
-      name = x.new .. "Multistrike Options", --"List of Mergeable Spells |cff798BDD(Class Specific)|r",
-      type = 'group',
-      order = 20,
-      args = {
-        title = {
-          type = 'description',
-          order = 0,
-          name = "Spam Merger |cff798BDD(Multistrike)|r",
-          fontSize = "large",
-          width = "double",
-        },
-        multistrikeDesc = {
-          type = "description",
-          order = 1,
-          fontSize = "small",
-          name = "This feature was added to help mitigate multistrike spam. It adds one or two smaller icons next to a big to signify your multistrikes.",
-        },
-        spacer0 = {
-          type = "description",
-          order = 2,
-          fontSize = "small",
-          name="\n\n",
-        },
-        multistrikeEnabled = {
-          order = 11,
+        mergeHideMergedCriticals = {
+          order = 44,
           type = 'toggle',
-          name = "Enable",
-          desc = "Enables the multistrike spam merger.",
+          name = "Hide Merged Criticals",
+          desc = "Criticals that have been merged with the Outgoing frame will not be shown in the Critical frame",
           get = get0_1,
-          set = set0_1,
+          set = setSpecialCriticalOptions,
+          width = 'full',
         },
 
-        listSpacer1 = {
-          type = "description",
-          order = 20,
-          name = "\n|cff798BDDIcon Settings|r:",
-          fontSize = 'large',
-        },
-        showMultistrikeIcons = {
-          order = 21,
-          type = 'toggle',
-          name = "Icons",
-          desc = "Show multistrike icons.",
-          get = get0_1,
-          set = set0_1,
-        },
-        multistrikeIconMultiplier = {
-          order = 22,
-          name = "Icon Size (|cffFFFFFF%|r)",
-          desc = "Size of the multistrike icons.",
-          type = 'range',
-          min = 0, max = 200, step = 1,
-          get = get0_1,
-          set = set0_1,
-          disabled = function() return not x.db.profile.spells.showMultistrikeIcons end,
-        },
-
-        listSpacer4 = {
-          type = "description",
-          order = 40,
-          name = "\n|cff798BDDAdvanced Settings|r:",
-          fontSize = 'large',
-        },
-        multistikeAutoAdjust = {
-          order = 41,
-          type = 'toggle',
-          name = "Auto Adjust Latency",
-          get = get0_1,
-          set = set0_1,
-        },
-        multistrikeLatency = {
-          order = 42,
-          name = "Multistrike Latency Compensation |cffFFFFFF(In |cffFF0000Milliseconds|r|cffFFFFFF)|r",
-          desc = "Helps the |cffFFFF00Multistrike Merger|r compensate for latency when merging multistrikes.\n\nThis option is |cffFF0000NOT|r your ping. It is how long it takes |cff2233FFBlizzard's|r servers to calculate the multistrike and can vary from day to day depending on their load.\n\nIncreasing this value will improve success rate of merging, but |cffFF0000all|r spells will be delayed by the amount before they are displayed.",
-          type = 'range',
-          width = 'double',
-          min = 200, max = 3000, step = 10,
-          get = get0_1,
-          set = set0_1,
-          disabled = function() return x.db.profile.spells.multistikeAutoAdjust end,
-        },
       },
     },
 
-    spellList = {
-      name = "Class Specific", --"List of Mergeable Spells |cff798BDD(Class Specific)|r",
+    classList = {
+      name = "Class Spells", --"List of Mergeable Spells |cff798BDD(Class Specific)|r",
       type = 'group',
       order = 21,
+      childGroups = 'select',
       args = {
         title = {
           type = 'description',
@@ -719,27 +640,52 @@ addon.options.args["spells"] = {
           fontSize = "large",
           width = "double",
         },
-        
+
         --[[  TODO: Add Check all and uncheck all buttons ]]
-        
+
         mergeListDesc = {
           type = "description",
           order = 1,
           fontSize = "small",
           name = "Uncheck a spell if you do not want it merged. Contact me to add new spells. See |cffFFFF00Credits|r for contact info.\n\n",
         },
+
+        --[[classes = {
+          name = "Class Spells",
+          type = 'group',
+          order = 2,
+          childGroups = 'select',
+          args = {
+
+          },
+        }]]
+
+
+        ["DEATHKNIGHT"] = { type = 'group', order = 1,  name = "|cffC41F3BDeath Knight|r" },
+        ["DEMONHUNTER"] = { type = 'group', order = 2,  name = "|cffA330C9Demon Hunter|r" },
+        ["DRUID"]       = { type = 'group', order = 3,  name = "|cffFF7D0ADruid|r" },
+        ["HUNTER"]      = { type = 'group', order = 4,  name = "|cffABD473Hunter|r" },
+        ["MAGE"]        = { type = 'group', order = 5,  name = "|cff69CCF0Mage|r" },
+        ["MONK"]        = { type = 'group', order = 6,  name = "|cff00FF96Monk|r" },
+        ["PALADIN"]     = { type = 'group', order = 7,  name = "|cffF58CBAPaladin|r" },
+        ["PRIEST"]      = { type = 'group', order = 8,  name = "|cffFFFFFFPriest|r" },
+        ["ROGUE"]       = { type = 'group', order = 9,  name = "|cffFFF569Rogue|r" },
+        ["SHAMAN"]      = { type = 'group', order = 10, name = "|cff0070DEShaman|r" },
+        ["WARLOCK"]     = { type = 'group', order = 11, name = "|cff9482C9Warlock|r" },
+        ["WARRIOR"]     = { type = 'group', order = 12, name = "|cffC79C6EWarrior|r" },
+
       },
     },
-    
-    itemList = {
-      name = "All Classes",
+
+    globalList = {
+      name = "Global Spells",
       type = 'group',
       order = 22,
       args = {
         title = {
           type = 'description',
           order = 0,
-          name = "List of Mergeable Spells |cff798BDD(Items)|r",
+          name = "List of Mergeable Spells |cff798BDD(See Category)|r",
           fontSize = "large",
           width = "double",
         },
@@ -751,7 +697,7 @@ addon.options.args["spells"] = {
         },
       },
     },
-  
+
   },
 }
 
@@ -760,13 +706,13 @@ addon.options.args["spellFilter"] = {
   type = "group",
   order = 3,
   args = {
-    filterSpacer1 = {
+    --[[filterSpacer1 = {
       type = 'description',
       order = 1,
       fontSize = "medium",
       name = "",
-    },
-    
+    },]]
+
     filterValues = {
       name = "Minimal Value Thresholds",
       type = 'group',
@@ -779,7 +725,7 @@ addon.options.args["spellFilter"] = {
           name = "|cff798BDDIncoming Player Power Threshold|r: (Mana, Rage, Energy, etc.)",
           fontSize = "large",
         },
-        
+
         filterPowerValue = {
           order = 1,
           type = 'input',
@@ -788,14 +734,14 @@ addon.options.args["spellFilter"] = {
           set = setNumber2,
           get = getNumber2,
         },
-      
+
         listSpacer1 = {
           type = "description",
           order = 10,
           name = "\n|cff798BDDOutgoing Damage and Healing Threshold|r:",
           fontSize = "large",
         },
-        
+
         filterOutgoingDamageValue = {
           order = 11,
           type = 'input',
@@ -804,7 +750,7 @@ addon.options.args["spellFilter"] = {
           set = setNumber2,
           get = getNumber2,
         },
-        
+
         filterOutgoingHealingValue = {
           order = 12,
           type = 'input',
@@ -813,14 +759,14 @@ addon.options.args["spellFilter"] = {
           set = setNumber2,
           get = getNumber2,
         },
-        
+
         listSpacer2 = {
           type = "description",
           order = 20,
           name = "\n|cff798BDDIncoming Damage and Healing Threshold|r:",
           fontSize = "large",
         },
-        
+
         filterIncomingDamageValue = {
           order = 21,
           type = 'input',
@@ -829,7 +775,7 @@ addon.options.args["spellFilter"] = {
           set = setNumber2,
           get = getNumber2,
         },
-        
+
         filterIncomingHealingValue = {
           order = 22,
           type = 'input',
@@ -839,33 +785,25 @@ addon.options.args["spellFilter"] = {
         },
       },
     },
-  
+
     spellFilter = {
       name = "Track Spell History",
       type = 'group',
-      order = 11,
+      order = 21,
       guiInline = true,
       args = {
-    
-        -- This is a feature option that I will enable when I get more time D:
         trackSpells = {
           order = 1,
           type = 'toggle',
           name = "Enable History",
-          desc = "\n\nTrack incoming |cff1AFF1ABuff|r and |cff1AFF1ADebuff|r names, as well as |cff71d5ffOutgoing Spell|r IDs. |cffFF0000(RECOMMEND FOR TEMPORARY USE ONLY)|r\n",
+          desc = "Track all the spells that you've seen. This will make filtering them out easier.",
           set = set0_1,
           get = get0_1,
-        },
-
-        description = {
-          type = 'description',
-          order = 2,
-          name = "\n|cffFF0000WARNING:|r This option was designed to help you filter spells more easily. Because of the large |cffFF8000memory requirements|r to hold a list of all the spells you use, this option is meant for temporary use! It is best used during a test Boss pull like in LFR. After you disable this option, you should perform a |cff798BDDUI Reload|r to reclaim the resources (e.g. type: '|cffFFFF00/reload|r').",
-        },
-      },
+        }
+      }
     },
-    
-    
+
+
     listBuffs = {
       name = "|cffFFFFFFFilter:|r |cff798BDDBuffs|r",
       type = 'group',
@@ -902,7 +840,7 @@ addon.options.args["spellFilter"] = {
           get = getCheckAdd,
           set = setCheckAdd,
         },
-        
+
         -- This is a feature option that I will enable when I get more time D:
         selectTracked = {
           order = 8,
@@ -916,7 +854,7 @@ addon.options.args["spellFilter"] = {
         },
       },
     },
-    
+
     listDebuffs = {
       name = "|cffFFFFFFFilter:|r |cff798BDDDebuffs|r",
       type = 'group',
@@ -953,7 +891,7 @@ addon.options.args["spellFilter"] = {
           get = getCheckAdd,
           set = setCheckAdd,
         },
-        
+
         -- This is a feature option that I will enable when I get more time D:
         selectTracked = {
           order = 4,
@@ -1004,7 +942,7 @@ addon.options.args["spellFilter"] = {
           get = getCheckAdd,
           set = setCheckAdd,
         },
-        
+
         -- This is a feature option that I will enable when I get more time D:
         selectTracked = {
           order = 8,
@@ -1018,7 +956,7 @@ addon.options.args["spellFilter"] = {
         },
       },
     },
-    
+
     listSpells = {
       name = "|cffFFFFFFFilter:|r |cff798BDDOutgoing Spells|r",
       type = 'group',
@@ -1055,7 +993,7 @@ addon.options.args["spellFilter"] = {
           get = getCheckAdd,
           set = setCheckAdd,
         },
-        
+
         -- This is a feature option that I will enable when I get more time D:
         selectTracked = {
           order = 4,
@@ -1069,8 +1007,8 @@ addon.options.args["spellFilter"] = {
         },
       },
     },
-    
-	listItems = {
+
+    listItems = {
       name = "|cffFFFFFFFilter:|r |cff798BDDItems (Plus)|r",
       type = 'group',
       order = 50,
@@ -1106,7 +1044,7 @@ addon.options.args["spellFilter"] = {
           get = getCheckAdd,
           set = setCheckAdd,
         },
-        
+
         -- This is a feature option that I will enable when I get more time D:
         selectTracked = {
           order = 4,
@@ -1120,8 +1058,8 @@ addon.options.args["spellFilter"] = {
         },
       },
     },
-	
-	
+
+
   },
 }
 
@@ -1152,48 +1090,112 @@ addon.options.args["Credits"] = {
       order = 3,
       name = " ",
     },
+
     testerTitle = {
       type = 'description',
-      order = 4,
-      name = "|cffFFFF00Beta Testers|r",
+      order = 10,
+      name = "|cffFFFF00Beta Testers - Version 3.0.0|r",
       fontSize = "large",
     },
     userName1 = {
       type = 'description',
-      order = 5,
+      order = 11,
       fontSize = "medium",
       name = " |cffAAAAFF Alex|r,|cff8080EE BuG|r,|cffAAAAFF Kkthnxbye|r,|cff8080EE Azilroka|r,|cffAAAAFF Prizma|r,|cff8080EE schmeebs|r,|cffAAAAFF Pat|r,|cff8080EE hgwells|r,|cffAAAAFF Jaron|r,|cff8080EE Fitzbattleaxe|r,|cffAAAAFF Nihan|r,|cff8080EE Jaxo|r,|cffAAAAFF Schaduw|r,|cff8080EE sylenced|r,|cffAAAAFF kaleidoscope|r,|cff8080EE Killatones|r,|cffAAAAFF Trokko|r,|cff8080EE Yperia|r,|cffAAAAFF Edoc|r,|cff8080EE Cazart|r,|cffAAAAFF Nevah|r,|cff8080EE Refrakt|r,|cffAAAAFF Thakah|r,|cff8080EE johnis007|r,|cffAAAAFF Sgt|r,|cff8080EE NitZo|r,|cffAAAAFF cptblackgb|r,|cff8080EE pollyzoid|r.",
     },
+
     testerTitleSpace2 = {
       type = 'description',
-      order = 6,
+      order = 20,
       name = " ",
     },
+    curseTitle = {
+      type = 'description',
+      order = 21,
+      name = "|cffFFFF00Beta Testers - Version 4.0.0 (Curse)|r",
+      fontSize = "large",
+    },
+    userName2 = {
+      type = 'description',
+      order = 22,
+      fontSize = "medium",
+      name = " |cffAAAAFF CadjieBOOM|r,|cff8080EE Mokal|r,|cffAAAAFF ShadoFall|r,|cff8080EE alloman|r,|cffAAAAFF chhld|r,|cff8080EE chizzlestick|r,|cffAAAAFF egreym|r,|cff8080EE nukme|r,|cffAAAAFF razrwolf|r,|cff8080EE star182|r,|cffAAAAFF zacheklund|r"
+    },
+
+    testerTitleSpace3 = {
+      type = 'description',
+      order = 30,
+      name = " ",
+    },
+    tukuiTitle = {
+      type = 'description',
+      order = 31,
+      name = "|cffFFFF00Beta Testers - Version 4.0.0 (Tukui)|r",
+      fontSize = "large",
+    },
+    userName3 = {
+      type = 'description',
+      order = 32,
+      fontSize = "medium",
+      name = " |cffAAAAFF Affiniti|r,|cff8080EE Badinfluence|r,|cffAAAAFF Badinfluence|r,|cff8080EE BuG|r,|cffAAAAFF Curdi|r,|cff8080EE Dorkie|r,|cffAAAAFF Galadeon|r,|cff8080EE HarryDotter|r,|cffAAAAFF Joebacsi21|r,|cff8080EE Kuron|r,|cffAAAAFF Mabb22|r,|cff8080EE Narlya|r,|cffAAAAFF Nihan|r,|cff8080EE Verdell|r,|cffAAAAFF arzelia|r,|cff8080EE blessed|r,|cffAAAAFF djouga|r,|cff8080EE fakemessiah|r,|cffAAAAFF faze|r,|cff8080EE firewall|r,|cffAAAAFF jatha86|r,|cff8080EE jaydogg10|r,|cffAAAAFF jlor|r,|cff8080EE lunariongames|r,|cffAAAAFF stoankold|r",
+    },
+
+    testerTitleSpace3Legion = {
+      type = 'description',
+      order = 33,
+      name = " ",
+    },
+    tukuiTitleLegion = {
+      type = 'description',
+      order = 34,
+      name = "|cffFFFF00Beta Testers - Version 4.2.0 for Legion|r",
+      fontSize = "large",
+    },
+    userName3Legion = {
+      type = 'description',
+      order = 35,
+      fontSize = "medium",
+      name = " |cffAAAAFF Azazu|r,|cff8080EE Merathilis|r,|cffAAAAFF Torch|r,|cff8080EE Broni|r,|cffAAAAFF Zylos|r",
+    },
+
+    testerTitleSpace4 = {
+      type = 'description',
+      order = 40,
+      name = " ",
+    },
+
+    githubTitle = {
+      type = 'description',
+      order = 41,
+      name = "|cffFFFF00Thank You Github Contributors!|r",
+      fontSize = "large",
+    },
+    userName4 = {
+      type = 'description',
+      order = 42,
+      fontSize = "medium",
+      name = " |cff22FF80 Tonyleila|r,|cff1AAD59 ckaotik|r,|cff22FF80 Stanzilla|r,|cff1AAD59 Torch (behub)|r,|cff22FF80 vforge|r",
+    },
+
+    testerTitleSpace5 = {
+      type = 'description',
+      order = 50,
+      name = " ",
+    },
+
     contactTitle = {
       type = 'description',
-      order = 7,
+      order = 51,
       name = "|cffFFFF00Contact Me|r",
       fontSize = "large",
     },
+
     contactStep1 = {
       type = 'description',
-      order = 8,
-      name = "1. GitHub: |cff22FF80https://github.com/dandruff/xCT|r\n\n2. Send a PM to |cffFF8000Dandruff|r on http://tukui.org",
-    },
-    testerTitleSpace3 = {
-      type = 'description',
-      order = 9,
-      name = "\n\n\n\n\n\n\n\n\n",
-    },
-    multistikeDebug = {
-      order = 10,
-      type = 'toggle',
-      name = "Verbose Debug",
-      width = 'full',
-      get = function(info) return x.db.profile.spells.multistikeDebug end,
-      set = function(info, value) x.db.profile.spells.multistikeDebug = value end,
-    },
-  },
+      order = 52,
+      name = "1. GitHub: |cff22FF80https://github.com/dandruff/xCT|r\n\n2. Send a PM to |cffFF8000Dandruff|r at |cff6495EDhttp://tukui.org/|r",
+    }
+  }
 }
 
 addon.options.args["FloatingCombatText"] = {
@@ -1207,18 +1209,356 @@ addon.options.args["FloatingCombatText"] = {
       name = "|cffA0A0A0Some changes might require a full|r |cffD0D000Client Restart|r |cffA0A0A0(completely exit out of WoW). Do not|r |cffD00000Alt+F4|r |cffA0A0A0or|r |cffD00000Command+Q|r |cffA0A0A0or your settings might not save. Use '|r|cff798BDD/exit|r|cffA0A0A0' to close the client.|r\n\n",
       fontSize = "small",
     },
+
+    listSpacer1 = {
+      type = "description",
+      order = 3,
+      name = "\n\n|cff798BDDFloating Combat Text|r |cffFF0000Advanced Settings|r:",
+      fontSize = 'large',
+    },
+
+    bypassCVARUpdates = {
+      order = 4,
+      type = 'toggle',
+      name = "Bypass CVar Updates (requires |cffFF0000/reload|r)",
+      desc = "Allows you to bypass xCT+'s CVar engine. This option might help if you have FCT enabled, but it disappears after awhile. Once you set your FCT options, enable this. Requires a UI reload after changing.",
+      width = 'full',
+      get = function( info ) return x.db.profile.bypassCVars end,
+      set = function( info, value ) x.db.profile.bypassCVars = value end,
+    },
+
+    listSpacer2 = {
+      type = "description",
+      order = 5,
+      name = "\n\n",
+      fontSize = 'large',
+    },
+
     blizzardFCT = {
-      name = "Blizzard's Floating Combat Text |cffFFFFFF(Head Numbers)|r",
+      name = "", --Blizzard's Floating Combat Text |cffFFFFFF(Head Numbers)|r",
       type = 'group',
       order = 1,
       guiInline = true,
+      disabled = isCVarsDisabled,
       args = {
         listSpacer0 = {
           type = "description",
-          order = 1,
-          name = "|cff798BDDFloating Combat Text Options|r:",
+          order = 0,
+          name = "|cff798BDDFloating Combat Text Options|r:\n",
           fontSize = 'large',
         },
+
+        -- Damage
+        headerDamage = {
+          type = "description",
+          order = 1,
+          name = "|cffFFFF00Damage:|r",
+          fontSize = 'medium',
+        },
+
+        floatingCombatTextCombatDamage = {
+          order = 2,
+          name = "Show Damage",
+          type = 'toggle',
+          desc = "Enable this option if you want to see your damage.",
+          get = get0,
+          set = set0_update,
+        },
+
+        floatingCombatTextCombatLogPeriodicSpells = {
+          order = 3,
+          name = "Show DoTs",
+          type = 'toggle',
+          desc = "Enable this option if you want to see your damage over time.",
+          get = get0,
+          set = set0_update,
+        },
+
+        floatingCombatTextCombatDamageAllAutos = {
+          order = 4,
+          name = "Show Auto Attacks",
+          type = 'toggle',
+          desc = "Enable this option if you want to see all auto-attack numbers, rather than hiding non-event numbers.",
+          get = get0,
+          set = set0_update,
+        },
+
+        floatingCombatTextPetMeleeDamage = {
+          order = 5,
+          name = "Show Pet Melee",
+          type = 'toggle',
+          desc = "Enable this option if you want to see pet's melee damage.",
+          get = get0,
+          set = set0_update,
+        },
+
+        floatingCombatTextPetSpellDamage = {
+          order = 6,
+          name = "Show Pet Spells",
+          type = 'toggle',
+          desc = "Enable this option if you want to see pet's spell damage.",
+          get = get0,
+          set = set0_update,
+        },
+
+        floatingCombatTextDamageReduction = {
+          order = 7,
+          name = "Show Damage Reduction",
+          type = 'toggle',
+          desc = "New option in Legion. Updating description soon.",
+          get = get0,
+          set = set0_update,
+        },
+
+        -- Healing and Absorbs
+        headerHealingAbsorbs = {
+          type = "description",
+          order = 10,
+          name = "\n|cffFFFF00Healing and Absorbs:|r",
+          fontSize = 'medium',
+        },
+
+        floatingCombatTextCombatHealing = {
+          order = 11,
+          name = "Show Healing",
+          type = 'toggle',
+          desc = "Enable this option if you want to see your healing.",
+          get = get0,
+          set = set0_update,
+        },
+
+        floatingCombatTextFriendlyHealers = {
+          order = 12,
+          name = "Show Friendly Healers",
+          type = 'toggle',
+          desc = "New option in Legion. Updating description soon.",
+          get = get0,
+          set = set0_update,
+        },
+
+        floatingCombatTextCombatHealingAbsorbSelf = {
+          order = 13,
+          name = "Show Absorbs (Self)",
+          type = 'toggle',
+          desc = "Enable this option if you want to see shields that are put on you.",
+          get = get0,
+          set = set0_update,
+        },
+
+        floatingCombatTextCombatHealingAbsorbTarget = {
+          order = 14,
+          name = "Show Absorbs (Target)",
+          type = 'toggle',
+          desc = "Enable this option if you want to see shields that are put on your target.",
+          get = get0,
+          set = set0_update,
+        },
+
+
+        -- Gains
+        headerGains = {
+          type = "description",
+          order = 20,
+          name = "\n|cffFFFF00Player Gains:|r",
+          fontSize = 'medium',
+        },
+
+        floatingCombatTextEnergyGains = {
+          order = 21,
+          name = "Show Energy",
+          type = 'toggle',
+          desc = "Enable this option if you want to see class engery gains.",
+          get = get0,
+          set = set0_update,
+        },
+
+        floatingCombatTextPeriodicEnergyGains = {
+          order = 21,
+          name = "Show Energy (Periodic)",
+          type = 'toggle',
+          desc = "Enable this option if you want to see class engery gains that happen over time.",
+          get = get0,
+          set = set0_update,
+        },
+
+        floatingCombatTextComboPoints = {
+          order = 22,
+          name = "Show Combo Points",
+          type = 'toggle',
+          desc = "Enable this option if you want to see combo point gains.",
+          get = get0,
+          set = set0_update,
+        },
+
+        floatingCombatTextHonorGains = {
+          order = 23,
+          name = "Show Honor",
+          type = 'toggle',
+          desc = "Enable this option if you want to see your honor point gains.",
+          get = get0,
+          set = set0_update,
+        },
+
+        floatingCombatTextRepChanges = {
+          order = 24,
+          name = "Show Rep Changes",
+          type = 'toggle',
+          desc = "Enable this option if you want to see your reputation gains or losses.",
+          get = get0,
+          set = set0_update,
+        },
+
+
+        -- Status Effects
+        headerStatusEffects = {
+          type = "description",
+          order = 30,
+          name = "\n|cffFFFF00Status Effects:|r",
+          fontSize = 'medium',
+        },
+
+        floatingCombatTextDodgeParryMiss = {
+          order = 31,
+          name = "Show Miss Types",
+          type = 'toggle',
+          desc = "Enable this option if you want to see misses (dodges, parries, etc).",
+          get = get0,
+          set = set0_update,
+        },
+
+        floatingCombatTextAuras = {
+          order = 32,
+          name = "Show Auras",
+          type = 'toggle',
+          desc = "New option in Legion. Updating description soon.",
+          get = get0,
+          set = set0_update,
+        },
+
+        floatingCombatTextSpellMechanics = {
+          order = 33,
+          name = "Show Effects (Mine)",
+          type = 'toggle',
+          desc = "Enable if you want to see your effects (snare, root, etc).",
+          get = get0,
+          set = set0_update,
+        },
+
+        floatingCombatTextSpellMechanicsOther = {
+          order = 34,
+          name = "Show Effects (Group)",
+          type = 'toggle',
+          desc = "Enable if you want to see other effects (snare, root, etc) from your group.",
+          get = get0,
+          set = set0_update,
+        },
+
+        floatingCombatTextAllSpellMechanics = {
+          order = 35,
+          name = "Show Effects (All)",
+          type = 'toggle',
+          desc = "Enable if you want to see all effects (snare, root, etc) from anyone.",
+          get = get0,
+          set = set0_update,
+        },
+
+        CombatThreatChanges = {
+          order = 36,
+          type = 'toggle',
+          name = "Show Threat Changes",
+          desc = "Enable this option if you want to see threat changes.",
+          get = get0,
+          set = set0_update,
+        },
+
+
+        -- Player's Status
+        headerPlayerStatus = {
+          type = "description",
+          order = 40,
+          name = "\n|cffFFFF00Player Status:|r",
+          fontSize = 'medium',
+        },
+
+        floatingCombatTextCombatState = {
+          order = 41,
+          name = "Show Combat State",
+          type = 'toggle',
+          desc = "Enable this option if you want to see when you are leaving and entering combat.",
+          get = get0,
+          set = set0_update,
+        },
+
+        floatingCombatTextLowManaHealth = {
+          order = 42,
+          name = "Show Low HP/Mana",
+          type = 'toggle',
+          desc = "Enable this option if you want to see when you are low mana and health.",
+          get = get0,
+          set = set0_update,
+        },
+
+        floatingCombatTextReactives = {
+          order = 43,
+          name = "Show Reactives",
+          type = 'toggle',
+          desc = "Enable this option if you want to see your spell reactives (Kill Shot, Shadow Word: Death, etc).",
+          get = get0,
+          set = set0_update,
+        },
+
+
+        -- Misc
+        --[[
+        headerMisc = {
+          type = "description",
+          order = 20,
+          name = "|cffFFFF00Misc:|r",
+          fontSize = 'medium',
+        },
+
+        floatingCombatTextCombatDamageDirectionalOffset = {
+          order = 51,
+          name = "Show Damage",
+          type = 'toggle',
+          desc = "Amount to offset directional damage numbers when they start.",
+          get = get0,
+          set = set0_update,
+        },
+
+        floatingCombatTextCombatDamageDirectionalScale = {
+          order = 51,
+          name = "Show Damage",
+          type = 'toggle',
+          desc = "Directional damage numbers movement scale (0 = no directional numbers)",
+          get = get0,
+          set = set0_update,
+        },
+
+        floatingCombatTextFloatMode = {
+          order = 51,
+          name = "Show Damage",
+          type = 'range',
+          desc = "The combat text float mode.",
+          
+          min = 1, max = 100,
+          get = get0,
+          set = set0_update,
+        },]]
+
+
+
+
+
+
+
+
+
+
+
+
+
+        --[==[
         CombatDamage = {
           order = 2,
           type = 'toggle',
@@ -1227,7 +1567,7 @@ addon.options.args["FloatingCombatText"] = {
           get = get0,
           set = set0_update,
         },
-        
+
         CombatLogPeriodicSpells = {
           order = 3,
           type = 'toggle',
@@ -1235,9 +1575,9 @@ addon.options.args["FloatingCombatText"] = {
           desc = "Enable this option if you want your DoT's as Floating Combat Text.",
           get = get0,
           set = set0_update,
-          disabled = function(info) return not x.db.profile.blizzardFCT.CombatDamage end,
+          disabled = function(info) return isCVarsDisabled( ) or not x.db.profile.blizzardFCT.CombatDamage end,
         },
-        
+
         PetMeleeDamage = {
           order = 4,
           type = 'toggle',
@@ -1245,9 +1585,9 @@ addon.options.args["FloatingCombatText"] = {
           desc = "Enable this option if you want your pet's melee damage as Floating Combat Text.",
           get = get0,
           set = set0_update,
-          disabled = function(info) return not x.db.profile.blizzardFCT.CombatDamage end, 
+          disabled = function(info) return isCVarsDisabled( ) or not x.db.profile.blizzardFCT.CombatDamage end,
         },
-        
+
         CombatHealing = {
           order = 5,
           type = 'toggle',
@@ -1256,7 +1596,7 @@ addon.options.args["FloatingCombatText"] = {
           get = get0,
           set = set0_update,
         },
-        
+
         CombatHealingAbsorbTarget = {
           order = 6,
           type = 'toggle',
@@ -1265,16 +1605,9 @@ addon.options.args["FloatingCombatText"] = {
           get = get0,
           set = set0_update,
         },
+
         
-        CombatThreatChanges = {
-          order = 7,
-          type = 'toggle',
-          name = "Show Threat Changes",
-          desc = "Enable this option if you want threat changes as Floating Combat Text.",
-          get = get0,
-          set = set0_update,
-        },
-        
+
         -- Floating Combat Text Effects
         fctSpellMechanics = {
           order = 8,
@@ -1284,7 +1617,7 @@ addon.options.args["FloatingCombatText"] = {
           get = get0,
           set = set0_update,
         },
-        
+
         fctSpellMechanicsOther = {
           order = 9,
           type = 'toggle',
@@ -1292,7 +1625,7 @@ addon.options.args["FloatingCombatText"] = {
           desc = "Enable this option if you want to see other player's snares and roots too.",
           get = get0,
           set = set0_update,
-          disabled = function(info) return not x.db.profile.blizzardFCT.fctSpellMechanics end, 
+          disabled = function(info) return isCVarsDisabled( ) or not x.db.profile.blizzardFCT.fctSpellMechanics end,
         },
 
         listSpacer2 = {
@@ -1321,7 +1654,7 @@ addon.options.args["FloatingCombatText"] = {
           name = "\n\n|cff798BDDFloating Combat Text Font|r:",
           fontSize = 'large',
         },
-        
+
         enabled = {
           order = 31,
           type = 'toggle',
@@ -1329,7 +1662,7 @@ addon.options.args["FloatingCombatText"] = {
           get = get0,
           set = set0_update,
         },
-        
+
         font = {
           type = 'select', dialogControl = 'LSM30_Font',
           order = 32,
@@ -1340,12 +1673,17 @@ addon.options.args["FloatingCombatText"] = {
           set = function(info, value)
             x.db.profile.blizzardFCT.font = value
             x.db.profile.blizzardFCT.fontName = LSM:Fetch("font", value)
-            
+
             --x:UpdateFrames()
-            --x.cvar_udpate()
+            --x.cvar_update()
           end,
-          disabled = function(info) return not x.db.profile.blizzardFCT.enabled end,
+          disabled = function(info) return isCVarsDisabled( ) or not x.db.profile.blizzardFCT.enabled end,
         },
+        ]==]
+
+
+
+
       },
     },
     --[[
@@ -1370,7 +1708,7 @@ addon.options.args["Frames"] = {
   type = 'group',
   order = 0,
   args = {
-    
+
 
     frameSettings = {
       name = "Frame Settings ",
@@ -1378,7 +1716,7 @@ addon.options.args["Frames"] = {
       order = 1,
       guiInline = true,
       args = {
-        
+
         listSpacer0 = {
           type = "description",
           order = 1,
@@ -1394,7 +1732,7 @@ addon.options.args["Frames"] = {
           get = get0,
           set = set0,
         },
-        
+
         showPositions = {
           order = 3,
           type = 'toggle',
@@ -1430,7 +1768,7 @@ addon.options.args["Frames"] = {
           get = get0,
           set = set0_update,
         },
-        
+
         listSpacer2 = {
           type = "description",
           order = 20,
@@ -1542,8 +1880,8 @@ addon.options.args["Frames"] = {
           order = 0,
           name = "The following settings are marked as experimental. They should all work, but they might not be very useful. Expect chanrges or updates to these in the near future.\n\nClick |cffFFFF00Set All|r to apply setting to all |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r frames.\n",
         },
-        
-        
+
+
         font = {
           type = 'select', dialogControl = 'LSM30_Font',
           order = 1,
@@ -1553,7 +1891,7 @@ addon.options.args["Frames"] = {
           get = function(info) return miscFont end,
           set = function(info, value) miscFont = value end,
         },
-        
+
         applyFont = {
           type = 'execute',
           order = 2,
@@ -1568,13 +1906,13 @@ addon.options.args["Frames"] = {
             end
           end,
         },
-        
+
         spacer1 = {
           type = 'description',
           order = 3,
           name = "",
         },
-        
+
         fontOutline = {
           type = 'select',
           order = 4,
@@ -1585,14 +1923,14 @@ addon.options.args["Frames"] = {
             ['2OUTLINE'] = 'OUTLINE',
             -- BUG: Setting font to monochrome AND above size 16 will crash WoW
             -- http://us.battle.net/wow/en/forum/topic/6470967362
-            --['3MONOCHROME'] = 'MONOCHROME',
+            ['3MONOCHROME'] = 'MONOCHROME',
             ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
             ['5THICKOUTLINE'] = 'THICKOUTLINE',
           },
           get = function(info) return miscFontOutline end,
           set = function(info, value) miscFontOutline = value end,
         },
-        
+
         applyFontOutline = {
           type = 'execute',
           order = 5,
@@ -1607,13 +1945,13 @@ addon.options.args["Frames"] = {
             end
           end,
         },
-        
+
         spacer2 = {
           type = 'description',
           order = 6,
           name = "",
         },
-        
+
         customFade = {
           type = 'toggle',
           order = 7,
@@ -1622,7 +1960,7 @@ addon.options.args["Frames"] = {
           get = function(info) return miscEnableCustomFade end,
           set = function(info, value) miscEnableCustomFade = value end,
         },
-        
+
         applyCustomFade = {
           type = 'execute',
           order = 8,
@@ -1639,7 +1977,7 @@ addon.options.args["Frames"] = {
             end
           end,
         },
-        
+
       },
     },
 
@@ -1690,7 +2028,7 @@ addon.options.args["Frames"] = {
                 [5] = "Incoming (Healing)",
                 [6] = "Class Power",
                 [7] = "Special Effects (Procs)",
-                [8] = "Loot & Money",
+                [8] = "Loot, Currency & Money",
               },
               get = get2,
               set = set2,
@@ -1759,7 +2097,7 @@ addon.options.args["Frames"] = {
               set = set2_update,
               disabled = isFrameItemDisabled,
             },
-            
+
             frameFading = {
               type = 'description',
               order = 20,
@@ -1769,8 +2107,7 @@ addon.options.args["Frames"] = {
             enableCustomFade = {
               order = 21,
               type = 'toggle',
-              name = "Use Custom Fade (See |cffFF0000Warning|r)",
-              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
+              name = "Use Custom Fade",
               width = 'full',
               get = get2,
               set = set2_update,
@@ -1836,7 +2173,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 32, step = 1,
+              min = 6, max = 64, step = 1,
               get = get2,
               set = set2_update,
               disabled = isFrameItemDisabled,
@@ -1851,7 +2188,7 @@ addon.options.args["Frames"] = {
                 ['2OUTLINE'] = 'OUTLINE',
                 -- BUG: Setting font to monochrome AND above size 16 will crash WoW
                 -- http://us.battle.net/wow/en/forum/topic/6470967362
-                --['3MONOCHROME'] = 'MONOCHROME',
+                ['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -1871,6 +2208,32 @@ addon.options.args["Frames"] = {
               },
               get = get2,
               set = set2_update,
+            },
+
+            iconSizeSettings = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDIcon Size Settings|r:",
+              fontSize = 'large',
+            },
+            iconsEnabled = {
+              order = 11,
+              type = 'toggle',
+              name = "Icons",
+              desc = "Show icons next to your damage.",
+              get = get2,
+              set = set2,
+              disabled = isFrameItemDisabled,
+            },
+            iconsSize = {
+              order = 12,
+              name = "Icon Size",
+              desc = "Set the icon size.",
+              type = 'range',
+              min = 6, max = 22, step = 1,
+              get = get2,
+              set = set2,
+              disabled = isFrameIconDisabled,
             },
           },
         },
@@ -1977,7 +2340,7 @@ addon.options.args["Frames"] = {
 
       },
     },
-    
+
     outgoing = {
       name = "|cffFFFFFFOutgoing|r",
       type = 'group',
@@ -2018,7 +2381,7 @@ addon.options.args["Frames"] = {
                 [5] = "Incoming (Healing)",
                 [6] = "Class Power",
                 [7] = "Special Effects (Procs)",
-                [8] = "Loot & Money",
+                [8] = "Loot, Currency & Money",
               },
               get = get2,
               set = set2,
@@ -2097,8 +2460,7 @@ addon.options.args["Frames"] = {
             enableCustomFade = {
               order = 31,
               type = 'toggle',
-              name = "Use Custom Fade (See |cffFF0000Warning|r)",
-              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
+              name = "Use Custom Fade",
               width = 'full',
               get = get2,
               set = set2_update,
@@ -2164,7 +2526,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 32, step = 1,
+              min = 6, max = 64, step = 1,
               get = get2,
               set = set2_update,
               disabled = isFrameItemDisabled,
@@ -2179,7 +2541,7 @@ addon.options.args["Frames"] = {
                 ['2OUTLINE'] = 'OUTLINE',
                 -- BUG: Setting font to monochrome AND above size 16 will crash WoW
                 -- http://us.battle.net/wow/en/forum/topic/6470967362
-                --['3MONOCHROME'] = 'MONOCHROME',
+                ['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -2323,7 +2685,7 @@ addon.options.args["Frames"] = {
 
       },
     },
-    
+
     critical = {
       name = "|cffFFFFFFOutgoing|r |cff798BDD(Criticals)|r",
       type = 'group',
@@ -2365,7 +2727,7 @@ addon.options.args["Frames"] = {
                 [5] = "Incoming (Healing)",
                 [6] = "Class Power",
                 [7] = "Special Effects (Procs)",
-                [8] = "Loot & Money",
+                [8] = "Loot, Currency & Money",
               },
               get = get2,
               set = set2,
@@ -2444,8 +2806,7 @@ addon.options.args["Frames"] = {
             enableCustomFade = {
               order = 31,
               type = 'toggle',
-              name = "Use Custom Fade (See |cffFF0000Warning|r)",
-              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
+              name = "Use Custom Fade",
               width = 'full',
               get = get2,
               set = set2_update,
@@ -2510,7 +2871,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 32, step = 1,
+              min = 6, max = 64, step = 1,
               get = get2,
               set = set2_update,
               disabled = isFrameItemDisabled,
@@ -2525,7 +2886,7 @@ addon.options.args["Frames"] = {
                 ['2OUTLINE'] = 'OUTLINE',
                 -- BUG: Setting font to monochrome AND above size 16 will crash WoW
                 -- http://us.battle.net/wow/en/forum/topic/6470967362
-                --['3MONOCHROME'] = 'MONOCHROME',
+                ['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -2603,16 +2964,16 @@ addon.options.args["Frames"] = {
             showSwing = {
               order = 1,
               type = 'toggle',
-              name = "Swing Crits",
-              desc = "Show Swing and Auto Attack crits in this frame.",
+              name = "Show Auto Attacks",
+              desc = "Show Auto Attack and Swings criticals in this frame. If disabled here, they are automatically shown in the Outgoing frame and can be completely disabled there.",
               get = get2,
               set = set2,
             },
             prefixSwing = {
               order = 2,
               type = 'toggle',
-              name = "Swing (Pre)Postfix",
-              desc = "Make Swing and Auto Attack crits more visible by adding the prefix and postfix.",
+              name = "Show Auto Attacks (Pre)Postfix",
+              desc = "Make Auto Attack and Swing criticals more visible by adding the prefix and postfix.",
               get = get2,
               set = set2,
             },
@@ -2646,7 +3007,7 @@ addon.options.args["Frames"] = {
         },
       },
     },
-    
+
     damage = {
       name = "|cffFFFFFFIncoming|r |cff798BDD(Damage)|r",
       type = 'group',
@@ -2687,7 +3048,7 @@ addon.options.args["Frames"] = {
                 [5] = "Incoming (Healing)",
                 [6] = "Class Power",
                 [7] = "Special Effects (Procs)",
-                [8] = "Loot & Money",
+                [8] = "Loot, Currency & Money",
               },
               get = get2,
               set = set2,
@@ -2766,8 +3127,7 @@ addon.options.args["Frames"] = {
             enableCustomFade = {
               order = 21,
               type = 'toggle',
-              name = "Use Custom Fade (See |cffFF0000Warning|r)",
-              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
+              name = "Use Custom Fade",
               width = 'full',
               get = get2,
               set = set2_update,
@@ -2833,7 +3193,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 32, step = 1,
+              min = 6, max = 64, step = 1,
               get = get2,
               set = set2_update,
               disabled = isFrameItemDisabled,
@@ -2848,7 +3208,7 @@ addon.options.args["Frames"] = {
                 ['2OUTLINE'] = 'OUTLINE',
                 -- BUG: Setting font to monochrome AND above size 16 will crash WoW
                 -- http://us.battle.net/wow/en/forum/topic/6470967362
-                --['3MONOCHROME'] = 'MONOCHROME',
+                ['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -2917,7 +3277,7 @@ addon.options.args["Frames"] = {
         },
       },
     },
-    
+
     healing = {
       name = "|cffFFFFFFIncoming|r |cff798BDD(Healing)|r",
       type = 'group',
@@ -2958,7 +3318,7 @@ addon.options.args["Frames"] = {
                 --[5] = "Incoming (Healing)",
                 [6] = "Class Power",
                 [7] = "Special Effects (Procs)",
-                [8] = "Loot & Money",
+                [8] = "Loot, Currency & Money",
               },
               get = get2,
               set = set2,
@@ -3037,8 +3397,7 @@ addon.options.args["Frames"] = {
             enableCustomFade = {
               order = 21,
               type = 'toggle',
-              name = "Use Custom Fade (See |cffFF0000Warning|r)",
-              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
+              name = "Use Custom Fade",
               width = 'full',
               get = get2,
               set = set2_update,
@@ -3104,7 +3463,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 32, step = 1,
+              min = 6, max = 64, step = 1,
               get = get2,
               set = set2_update,
               disabled = isFrameItemDisabled,
@@ -3119,7 +3478,7 @@ addon.options.args["Frames"] = {
                 ['2OUTLINE'] = 'OUTLINE',
                 -- BUG: Setting font to monochrome AND above size 16 will crash WoW
                 -- http://us.battle.net/wow/en/forum/topic/6470967362
-                --['3MONOCHROME'] = 'MONOCHROME',
+                ['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -3172,7 +3531,7 @@ addon.options.args["Frames"] = {
               order = 1,
               type = 'toggle',
               name = "Show Names",
-              desc = "Shows the healer names next to incoming heals.",
+              desc = "Shows the healer names next to incoming heals.\n|cffFF0000Requires:|r CVar Engine in order to change.",
               get = get2,
               set = set2,
             },
@@ -3208,11 +3567,28 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
+            showOnlyMyHeals = {
+              order = 6,
+              type = 'toggle',
+              name = "Show My Heals Only",
+              desc = "Shows only the player's healing done to himself or herself.",
+              get = get2,
+              set = set2,
+            },
+            showOnlyPetHeals = {
+              order = 7,
+              type = 'toggle',
+              name = "Show Pet Heals Too",
+              desc = "Will also attempt to show the player pet's healing.",
+              get = get2,
+              set = set2,
+              disabled = function() return not x.db.profile.frames.healing.showOnlyMyHeals end
+            },
           },
         },
       },
     },
-    
+
     class = {
       name = "|cffFFFFFFClass Combo Points|r",
       type = 'group',
@@ -3255,7 +3631,7 @@ addon.options.args["Frames"] = {
               disabled = isFrameItemDisabled,
             },
 
-            frameScrolling = {
+            --[[frameScrolling = {
               type = 'description',
               order = 10,
               name = "\n|cff798BDDScrollable Frame Settings|r:",
@@ -3285,7 +3661,7 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
               disabled = isFrameItemDisabled,
-            },
+            },]]
           },
         },
 
@@ -3315,7 +3691,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 32, step = 1,
+              min = 6, max = 64, step = 1,
               get = get2,
               set = set2_update,
               disabled = isFrameItemDisabled,
@@ -3330,7 +3706,7 @@ addon.options.args["Frames"] = {
                 ['2OUTLINE'] = 'OUTLINE',
                 -- BUG: Setting font to monochrome AND above size 16 will crash WoW
                 -- http://us.battle.net/wow/en/forum/topic/6470967362
-                --['3MONOCHROME'] = 'MONOCHROME',
+                ['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -3357,7 +3733,7 @@ addon.options.args["Frames"] = {
 
       },
     },
-    
+
     power = {
       name = "|cffFFFFFFClass Power|r",
       type = 'group',
@@ -3398,7 +3774,7 @@ addon.options.args["Frames"] = {
                 [5] = "Incoming (Healing)",
                 --[6] = "Class Power",
                 [7] = "Special Effects (Procs)",
-                [8] = "Loot & Money",
+                [8] = "Loot, Currency & Money",
               },
               get = get2,
               set = set2,
@@ -3477,8 +3853,7 @@ addon.options.args["Frames"] = {
             enableCustomFade = {
               order = 21,
               type = 'toggle',
-              name = "Use Custom Fade (See |cffFF0000Warning|r)",
-              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
+              name = "Use Custom Fade",
               width = 'full',
               get = get2,
               set = set2_update,
@@ -3544,7 +3919,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 32, step = 1,
+              min = 6, max = 64, step = 1,
               get = get2,
               set = set2_update,
               disabled = isFrameItemDisabled,
@@ -3559,7 +3934,7 @@ addon.options.args["Frames"] = {
                 ['2OUTLINE'] = 'OUTLINE',
                 -- BUG: Setting font to monochrome AND above size 16 will crash WoW
                 -- http://us.battle.net/wow/en/forum/topic/6470967362
-                --['3MONOCHROME'] = 'MONOCHROME',
+                ['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -3583,8 +3958,7 @@ addon.options.args["Frames"] = {
           },
         },
 
-        -- TODO: Add Color Options to Class Power frame
-        --[[fontColors = {
+        fontColors = {
           order = 30,
           type = 'group',
           name = "Custom Colors",
@@ -3596,7 +3970,7 @@ addon.options.args["Frames"] = {
               fontSize = 'large',
             },
           },
-        },]]
+        },
 
         specialTweaks = {
           order = 40,
@@ -3624,13 +3998,123 @@ addon.options.args["Frames"] = {
               desc = "Show energy gained over time.",
               get = get2,
               set = set2,
-              width = "double",
             },
+            showEnergyType = {
+              order = 3,
+              type = 'toggle',
+              name = "Show Energy Type",
+              desc = "Show the type of energy that you are gaining.",
+              get = get2,
+              set = set2,
+            },
+
+            title1 = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDFilter Resources|r:",
+              fontSize = 'large',
+            },
+            title2 = {
+              type = 'description',
+              order = 11,
+              name = "Check the energies that you do not wish to be displayed for your character:",
+              fontSize = 'small',
+            },
+
+            disableResource_MANA = {
+              order = 20,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..MANA,
+              get = get2,
+              set = set2,
+              width = "full",
+            },
+            disableResource_RAGE = {
+              order = 21,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..RAGE,
+              get = get2,
+              set = set2,
+              width = "full",
+            },
+            disableResource_FOCUS = {
+              order = 22,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..FOCUS,
+              get = get2,
+              set = set2,
+              width = "full",
+            },
+            disableResource_ENERGY = {
+              order = 23,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..ENERGY,
+              get = get2,
+              set = set2,
+              width = "full",
+            },
+            disableResource_CHI = {
+              order = 24,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..CHI,
+              get = get2,
+              set = set2,
+              width = "full",
+            },
+            disableResource_RUNES = {
+              order = 25,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..RUNES,
+              get = get2,
+              set = set2,
+              width = "full",
+            },
+            disableResource_RUNIC_POWER = {
+              order = 26,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..RUNIC_POWER,
+              get = get2,
+              set = set2,
+              width = "full",
+            },
+            disableResource_SOUL_SHARDS = {
+              order = 27,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..SOUL_SHARDS,
+              get = get2,
+              set = set2,
+              width = "full",
+            },
+            disableResource_ECLIPSE_negative = {
+              order = 28,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..ECLIPSE.."|r (Negative)",
+              get = get2,
+              set = set2,
+              width = "full",
+            },
+            disableResource_ECLIPSE_positive = {
+              order = 28,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..ECLIPSE.."|r (Positive)",
+              get = get2,
+              set = set2,
+              width = "full",
+            },
+            disableResource_HOLY_POWER = {
+              order = 29,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..HOLY_POWER,
+              get = get2,
+              set = set2,
+              width = "full",
+            },
+
           },
         },
       },
     },
-    
+
     procs = {
       name = "|cffFFFFFFSpecial Effects|r |cff798BDD(Procs)|r",
       type = 'group',
@@ -3655,7 +4139,7 @@ addon.options.args["Frames"] = {
               name = "Enable",
               width = 'half',
               get = get2,
-              set = set2,
+              set = set2_update,
             },
             secondaryFrame = {
               type = 'select',
@@ -3671,7 +4155,7 @@ addon.options.args["Frames"] = {
                 [5] = "Incoming (Healing)",
                 [6] = "Class Power",
                 --[7] = "Special Effects (Procs)",
-                [8] = "Loot & Money",
+                [8] = "Loot, Currency & Money",
               },
               get = get2,
               set = set2,
@@ -3742,8 +4226,7 @@ addon.options.args["Frames"] = {
             enableCustomFade = {
               order = 21,
               type = 'toggle',
-              name = "Use Custom Fade (See |cffFF0000Warning|r)",
-              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
+              name = "Use Custom Fade",
               width = 'full',
               get = get2,
               set = set2_update,
@@ -3808,7 +4291,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 32, step = 1,
+              min = 6, max = 64, step = 1,
               get = get2,
               set = set2_update,
               disabled = isFrameItemDisabled,
@@ -3823,7 +4306,7 @@ addon.options.args["Frames"] = {
                 ['2OUTLINE'] = 'OUTLINE',
                 -- BUG: Setting font to monochrome AND above size 16 will crash WoW
                 -- http://us.battle.net/wow/en/forum/topic/6470967362
-                --['3MONOCHROME'] = 'MONOCHROME',
+                ['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -3889,9 +4372,9 @@ addon.options.args["Frames"] = {
 
       },
     },
-    
+
     loot = {
-      name = "|cffFFFFFFLoot & Money|r",
+      name = "|cffFFFFFFLoot, Currency & Money|r",
       type = 'group',
       order = 19,
       childGroups = 'tab',
@@ -3930,7 +4413,7 @@ addon.options.args["Frames"] = {
                 [5] = "Incoming (Healing)",
                 [6] = "Class Power",
                 [7] = "Special Effects (Procs)",
-                --[8] = "Loot & Money",
+                --[8] = "Loot, Currency & Money",
               },
               get = get2,
               set = set2,
@@ -4001,8 +4484,7 @@ addon.options.args["Frames"] = {
             enableCustomFade = {
               order = 31,
               type = 'toggle',
-              name = "Use Custom Fade (See |cffFF0000Warning|r)",
-              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
+              name = "Use Custom Fade",
               width = 'full',
               get = get2,
               set = set2_update,
@@ -4068,7 +4550,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 32, step = 1,
+              min = 6, max = 64, step = 1,
               get = get2,
               set = set2_update,
               disabled = isFrameItemDisabled,
@@ -4083,7 +4565,7 @@ addon.options.args["Frames"] = {
                 ['2OUTLINE'] = 'OUTLINE',
                 -- BUG: Setting font to monochrome AND above size 16 will crash WoW
                 -- http://us.battle.net/wow/en/forum/topic/6470967362
-                --['3MONOCHROME'] = 'MONOCHROME',
+                ['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -4160,8 +4642,16 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
-            showItemTypes = {
+            showCurrency = {
               order = 3,
+              type = 'toggle',
+              name = "Gained Currency",
+              desc = "Displays currecy that you gain.",
+              get = get2,
+              set = set2,
+            },
+            showItemTypes = {
+              order = 4,
               type = 'toggle',
               name = "Show Item Types",
               desc = "Formats the looted message to also include the type of item (e.g. Trade Goods, Armor, Junk, etc.).",
@@ -4169,7 +4659,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             showItemTotal = {
-              order = 4,
+              order = 5,
               type = 'toggle',
               name = "Total Items",
               desc = "Displays how many items you have in your bag.",
@@ -4177,7 +4667,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             showCrafted = {
-              order = 5,
+              order = 6,
               type = 'toggle',
               name = "Crafted Items",
               desc = "Displays items that you crafted.",
@@ -4185,7 +4675,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             showQuest = {
-              order = 6,
+              order = 7,
               type = 'toggle',
               name = "Quest Items",
               desc = "Displays items that pertain to a quest.",
@@ -4193,7 +4683,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             colorBlindMoney = {
-              order = 7,
+              order = 8,
               type = 'toggle',
               name = "Color Blind Mode",
               desc = "Displays money using letters G, S, and C instead of icons.",
@@ -4201,7 +4691,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             filterItemQuality = {
-              order = 8,
+              order = 9,
               type = 'select',
               name = "Filter Item Quality",
               desc = "Will not display any items that are below this quality (does not filter Quest or Crafted items).",

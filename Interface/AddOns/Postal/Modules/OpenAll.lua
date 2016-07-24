@@ -215,8 +215,8 @@ function Postal_OpenAll:ProcessNext()
 			     or sender:find(L["Thaumaturge Vashreen"]))	-- bonus roll w/ bags full (npc=54441)
 			   then
 				-- open attachments below
-			elseif msgItem and (openAllOverride or Postal.db.profile.OpenAll.Attachments) then
-				-- open attachments below
+			elseif openAllOverride or Postal.db.profile.OpenAll.Attachments then
+				-- open attachments and/or money below
 			else	-- skip it
 				mailIndex = mailIndex - 1
 				attachIndex = ATTACHMENTS_MAX_RECEIVE
@@ -270,7 +270,7 @@ function Postal_OpenAll:ProcessNext()
 		-- If inventory is full, check if the item to be looted can stack with an existing stack
 		local lootFlag = false
 		if attachIndex > 0 and invFull then
-			local name, itemTexture, count, quality, canUse = GetInboxItem(mailIndex, attachIndex)
+			local name, itemID, itemTexture, count, quality, canUse = GetInboxItem(mailIndex, attachIndex)
 			local link = GetInboxItemLink(mailIndex, attachIndex)
 			local itemID = strmatch(link, "item:(%d+)")
 			local stackSize = select(8, GetItemInfo(link))

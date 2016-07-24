@@ -47,6 +47,14 @@ do
 	popup:SetFrameStrata("DIALOG")
 	popup:Hide()
 
+	popup:EnableKeyboard(true)
+	popup:SetScript("OnKeyDown", function(self,key)
+		if GetBindingFromClick(key) == "TOGGLEGAMEMENU" then
+			popup:SetPropagateKeyboardInput(false) -- swallow escape
+			popup:Hide()
+                end
+        end)
+
 	local text = popup:CreateFontString(nil, "ARTWORK", "ChatFontNormal")
 	text:SetPoint("TOP", popup, "TOP", 0, -10)
 	text:SetText(L["Do you want to reset Skada?"])
@@ -65,6 +73,7 @@ do
 	close:SetPoint("BOTTOM", popup, "BOTTOM", 50, 0)
 	close:SetScript("OnClick", function(f) f:GetParent():Hide() end)
 	function Skada:ShowPopup()
+		popup:SetPropagateKeyboardInput(true)
 		popup:Show()
 	end
 end
@@ -765,7 +774,7 @@ local function sendchat(msg, chan, chantype)
 	elseif chantype == "whisper" then
 		-- To player.
 		SendChatMessage(msg, "WHISPER", nil, chan)
-	elseif chantype == "RealID" then
+	elseif chantype == "bnet" then
 		BNSendWhisper(chan,msg)
 	end
 end
@@ -942,7 +951,7 @@ function Skada:ZoneCheck()
 	local isinpvp = IsInPVP()
 
 	-- If we are entering an instance, and we were not previously in an instance, and we got this event before... and we have some data...
-	if isininstance and wasininstance ~= nil and not wasininstance and self.db.profile.reset.instance ~= 1 and self.total ~= nil then
+	if isininstance and wasininstance ~= nil and not wasininstance and self.db.profile.reset.instance ~= 1 and Skada:CanReset() then
 		if self.db.profile.reset.instance == 3 then
 			Skada:ShowPopup()
 		else
@@ -996,9 +1005,9 @@ local function check_for_join_and_leave()
 	if not IsInGroup() and wasinparty then
 		-- We left a party.
 
-		if Skada.db.profile.reset.leave == 3 then
+		if Skada.db.profile.reset.leave == 3 and Skada:CanReset() then
 			Skada:ShowPopup()
-		elseif Skada.db.profile.reset.leave == 2 then
+		elseif Skada.db.profile.reset.leave == 2 and Skada:CanReset() then
 			Skada:Reset()
 		end
 
@@ -1011,9 +1020,9 @@ local function check_for_join_and_leave()
 	if IsInGroup() and wasinparty == false then -- if nil this is first check after reload/relog
 		-- We joined a raid.
 
-		if Skada.db.profile.reset.join == 3 then
+		if Skada.db.profile.reset.join == 3 and Skada:CanReset() then
 			Skada:ShowPopup()
-		elseif Skada.db.profile.reset.join == 2 then
+		elseif Skada.db.profile.reset.join == 2 and Skada:CanReset() then
 			Skada:Reset()
 		end
 
@@ -1078,6 +1087,21 @@ local function createSet(setname)
 	for i, mode in ipairs(modes) do verify_set(mode, set) end
 
 	return set
+end
+
+function Skada:CanReset() -- returns true if we have actual data that can be cleared via :Reset()
+	local totalplayers = self.total and self.total.players
+	if totalplayers and next(totalplayers) then -- Total set contains data
+		return true
+	end
+	
+	for _,set in ipairs(self.char.sets) do
+		if not set.keep then -- have a non-persistent set (possibly un-kept since last reset)
+			return true
+		end
+	end
+
+	return false
 end
 
 function Skada:Reset()
@@ -1413,7 +1437,9 @@ local tentativehandle= nil
 function Skada:StartCombat()
     -- Reset automatic stop on wipe variables
     deathcounter = 0
-    _, startingmembers = self:GetGroupTypeAndCount()
+    local _, members = self:GetGroupTypeAndCount()
+    
+    startingmembers = members
     
 	-- Cancel cancelling combat if needed.
 	if tentativehandle ~= nil then
@@ -2426,19 +2452,19 @@ do
 		media:Register("statusbar", "TukTex",			[[Interface\Addons\Skada\statusbar\normTex]])
 
 		-- Some sounds (copied from Omen).
-		media:Register("sound", "Rubber Ducky", [[Sound\Doodad\Goblin_Lottery_Open01.wav]])
-		media:Register("sound", "Cartoon FX", [[Sound\Doodad\Goblin_Lottery_Open03.wav]])
-		media:Register("sound", "Explosion", [[Sound\Doodad\Hellfire_Raid_FX_Explosion05.wav]])
-		media:Register("sound", "Shing!", [[Sound\Doodad\PortcullisActive_Closed.wav]])
-		media:Register("sound", "Wham!", [[Sound\Doodad\PVP_Lordaeron_Door_Open.wav]])
-		media:Register("sound", "Simon Chime", [[Sound\Doodad\SimonGame_LargeBlueTree.wav]])
-		media:Register("sound", "War Drums", [[Sound\Event Sounds\Event_wardrum_ogre.wav]])
-		media:Register("sound", "Cheer", [[Sound\Event Sounds\OgreEventCheerUnique.wav]])
-		media:Register("sound", "Humm", [[Sound\Spells\SimonGame_Visual_GameStart.wav]])
-		media:Register("sound", "Short Circuit", [[Sound\Spells\SimonGame_Visual_BadPress.wav]])
-		media:Register("sound", "Fel Portal", [[Sound\Spells\Sunwell_Fel_PortalStand.wav]])
-		media:Register("sound", "Fel Nova", [[Sound\Spells\SeepingGaseous_Fel_Nova.wav]])
-		media:Register("sound", "You Will Die!", [[Sound\Creature\CThun\CThunYouWillDie.wav]])
+		media:Register("sound", "Rubber Ducky", [[Sound\Doodad\Goblin_Lottery_Open01.ogg]])
+		media:Register("sound", "Cartoon FX", [[Sound\Doodad\Goblin_Lottery_Open03.ogg]])
+		media:Register("sound", "Explosion", [[Sound\Doodad\Hellfire_Raid_FX_Explosion05.ogg]])
+		media:Register("sound", "Shing!", [[Sound\Doodad\PortcullisActive_Closed.ogg]])
+		media:Register("sound", "Wham!", [[Sound\Doodad\PVP_Lordaeron_Door_Open.ogg]])
+		media:Register("sound", "Simon Chime", [[Sound\Doodad\SimonGame_LargeBlueTree.ogg]])
+		media:Register("sound", "War Drums", [[Sound\Event Sounds\Event_wardrum_ogre.ogg]])
+		media:Register("sound", "Cheer", [[Sound\Event Sounds\OgreEventCheerUnique.ogg]])
+		media:Register("sound", "Humm", [[Sound\Spells\SimonGame_Visual_GameStart.ogg]])
+		media:Register("sound", "Short Circuit", [[Sound\Spells\SimonGame_Visual_BadPress.ogg]])
+		media:Register("sound", "Fel Portal", [[Sound\Spells\Sunwell_Fel_PortalStand.ogg]])
+		media:Register("sound", "Fel Nova", [[Sound\Spells\SeepingGaseous_Fel_Nova.ogg]])
+		media:Register("sound", "You Will Die!", [[Sound\Creature\CThun\CThunYouWillDie.ogg]])
 
 		-- DB
 		self.db = LibStub("AceDB-3.0"):New("SkadaDB", self.defaults, "Default")

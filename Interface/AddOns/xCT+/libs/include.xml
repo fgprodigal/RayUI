@@ -9,4 +9,5 @@
   <Include file="AceConfig-3.0\AceConfig-3.0.xml" />
   <Script  file="LibSharedMedia-3.0\LibSharedMedia-3.0.lua" />
   <Include file="AceGUI-3.0-SharedMediaWidgets\widget.xml" />
+  <Include file="UTF8\include.xml" />
 </Ui>

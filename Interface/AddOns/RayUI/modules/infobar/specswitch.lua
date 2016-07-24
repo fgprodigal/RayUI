@@ -215,7 +215,7 @@ local function LoadTalent()
 		local active = GetActiveSpecGroup(false, false)
 		local talent, loot = "", ""
 		if GetSpecialization(false, false, active) then
-			talent = format("|T%s:14:14:0:0:64:64:4:60:4:60|t", select(4, GetSpecializationInfo(GetSpecialization(false, false, active))))
+			talent = format("|T%s:14:14:0:0:64:64:4:60:4:60|t", select(4, GetSpecializationInfo(GetSpecialization(false, false, active))) or "")
 		end
 		local specialization = GetLootSpecialization()
 		if specialization == 0 then
@@ -258,7 +258,7 @@ local function LoadTalent()
 			return
 		end
 
-		if event ~= "PLAYER_ENTERING_WORLD" then
+		if spec:IsRegistered(self) then
 			C_Timer.After(0.25, function() spec:Refresh(self) end)
 		end
 		Spec_Update(self)

@@ -1,17 +1,17 @@
---[[   ____    ______      
+--[[   ____    ______
       /\  _`\ /\__  _\   __
- __  _\ \ \/\_\/_/\ \/ /_\ \___ 
+ __  _\ \ \/\_\/_/\ \/ /_\ \___
 /\ \/'\\ \ \/_/_ \ \ \/\___  __\
 \/>  </ \ \ \L\ \ \ \ \/__/\_\_/
  /\_/\_\ \ \____/  \ \_\  \/_/
  \//\/_/  \/___/    \/_/
- 
+
  [=====================================]
  [  Author: Dandraffbal-Stormreaver US ]
  [  xCT+ Version 4.x.x                 ]
- [  ©2014. All Rights Reserved.        ]
+ [  ©2016. All Rights Reserved.        ]
  [====================================]]
- 
+
 local ADDON_NAME, addon = ...
 
 -- Shorten my handle
@@ -41,10 +41,10 @@ x.colors = {
   spell_reactive = {1,.82,0},
   low_health = {1,.1,.1},
   low_mana = {1,.1,.1},
- 
+
   combat_begin = {1,.1,.1},
   combat_end = {.1,1,.1},
-  
+
   -- outgoing
   out_damage = {1,.82,0},
   out_damage_crit = {1,1,0},
@@ -54,7 +54,7 @@ x.colors = {
   spell_interrupt = {1,.5,0},
   spell_stolen = {.9,0,.9},
   party_kill = {.2,1,.2},
-  
+
   combo_points = {1,.82,0},
   combo_points_max = {0,.82,1},
 }
@@ -86,7 +86,7 @@ x.colorDB = {
   ['SpellSchool_Nature']   = { 0.30, 1.00, 0.30 },
   ['SpellSchool_Frost']    = { 0.50, 1.00, 1.00 },
   ['SpellSchool_Shadow']   = { 0.50, 0.50, 1.00 },
-  ['SpellSchool_Arcane']   = { 1.00, 0.50, 1.00 }, 
+  ['SpellSchool_Arcane']   = { 1.00, 0.50, 1.00 },
 }
 
 x.damagecolor = {

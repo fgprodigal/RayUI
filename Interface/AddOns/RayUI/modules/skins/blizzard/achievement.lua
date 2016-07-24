@@ -15,6 +15,7 @@ local function LoadSkin()
 	for i = 1, 4 do
 		select(i, AchievementFrameHeader:GetRegions()):Hide()
 	end
+	AchievementFrameHeader:StripTextures()
 	AchievementFrameHeaderRightDDLInset:SetAlpha(0)
 	select(2, AchievementFrameAchievements:GetChildren()):Hide()
 	AchievementFrameAchievementsBackground:Hide()
@@ -43,7 +44,12 @@ local function LoadSkin()
 	end)
 
 	AchievementFrameHeaderPoints:SetPoint("TOP", AchievementFrame, "TOP", 0, -6)
-	AchievementFrameFilterDropDown:SetPoint("TOPRIGHT", AchievementFrame, "TOPRIGHT", -98, 1)
+	S:ReskinInput(AchievementFrame.searchBox)
+	AchievementFrame.searchBox:ClearAllPoints()
+	AchievementFrame.searchBox:Point("BOTTOMRIGHT", AchievementFrameAchievementsContainer, "TOPRIGHT", -2, -2)
+	AchievementFrame.searchBox:Height(20)
+	AchievementFrameFilterDropDown:ClearAllPoints()
+	AchievementFrameFilterDropDown:Point("RIGHT", AchievementFrame.searchBox, "LEFT", 2, -2)
 	AchievementFrameFilterDropDownText:ClearAllPoints()
 	AchievementFrameFilterDropDownText:SetPoint("CENTER", -10, 1)
 

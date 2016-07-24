@@ -81,6 +81,7 @@ local function LoadFunc()
 			local border = CreateFrame("Frame", nil, frame)
 			border:SetAllPoints()
 			border:CreateShadow("Background")
+			border:SetFrameStrata("BACKGROUND")
 			border:SetFrameLevel(0)
 
 			local text = frame:CreateFontString(nil, "OVERLAY")

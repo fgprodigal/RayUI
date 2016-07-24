@@ -1,9 +1,9 @@
-## Interface: 60200
+## Interface: 70000
 ## Title: Postal
-## Version: v3.5.6
-## X-Build: 393
-## X-ReleaseDate: 2016-03-23T01:51:25Z
-## X-Revision: $Revision: 392 $
+## Version: v3.5.8
+## X-Build: 401
+## X-ReleaseDate: 2016-07-20T07:38:06Z
+## X-Revision: $Revision: 398 $
 ## Author: Xinhuan
 ## X-Credits: Ammo, Rabbit, Grennon, Mikk, oscarucb
 ## X-Category: Mail
@@ -14,9 +14,9 @@
 ## Notes-zhTW: Postal: 強化信箱功能。
 ## Notes-zhCN: Postal: 增强信箱功能
 ## Notes-ptBR: Postal: Apoio caixa reforçada
-## OptionalDeps: Ace3, !BlizzBugsSuck, !ClassColors, RayUI
+## OptionalDeps: Ace3, !BlizzBugsSuck, !ClassColors
 ## SavedVariables: Postal3DB
-## X-Curse-Packaged-Version: v3.5.6
+## X-Curse-Packaged-Version: v3.5.8
 ## X-Curse-Project-Name: Postal
 ## X-Curse-Project-ID: postal
 ## X-Curse-Repository-ID: wow/postal/mainline
@@ -48,5 +48,3 @@ Modules\Rake.lua
 Modules\BlackBook.lua
 Modules\DoNotWant.lua
 Modules\CarbonCopy.lua
-
-skin.lua

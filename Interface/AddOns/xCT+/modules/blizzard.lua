@@ -9,9 +9,16 @@
  [=====================================]
  [  Author: Dandraffbal-Stormreaver US ]
  [  xCT+ Version 4.x.x                 ]
- [  ©2014. All Rights Reserved.        ]
+ [  Â©2015. All Rights Reserved.        ]
  [====================================]]
  
+-- Dont do anything for Legion
+local build = select(4, GetBuildInfo())
+if build >= 70000 then return end
+
+
+-- TODO: Fix this up
+
 local ADDON_NAME, addon = ...
 local x = addon.engine
 
@@ -24,57 +31,46 @@ hooksecurefunc('CombatText_AddMessage', function(message, scrollFunction, r, g, 
   x:AddMessage("general", message, {r, g, b})
 end)
 
--- Move the options up
-local defaultFont, defaultSize = InterfaceOptionsCombatTextPanelTargetEffectsText:GetFont()
+hooksecurefunc(InterfaceOptionsCombatTextPanel, 'refresh', function(...)
+  -- @see InterfaceOptionsPanel_Refresh
+  local self = InterfaceOptionsCombatTextPanel
+  for _, control in pairs(self.controls) do
+    if control.type == CONTROLTYPE_DROPDOWN then
+      UIDropDownMenu_DisableDropDown(control)
+    else
+      control:Disable()
+    end
+  end
+end)
 
--- Show Combat Options Title
-local fsTitle = InterfaceOptionsCombatTextPanel:CreateFontString(nil, "OVERLAY")
-fsTitle:SetTextColor(1.00, 1.00, 1.00, 1.00)
-fsTitle:SetFont(defaultFont, defaultSize)
-fsTitle:SetText("|cff60A0FFPowered By |cffFF0000x|r|cff80F000CT|r+|r")
---fsTitle:SetPoint("TOPLEFT", 16, -90)
-fsTitle:SetPoint("TOPLEFT", 480, -16)
+local fsTitle, configButton
+InterfaceOptionsCombatTextPanel:HookScript('OnShow', function(self)
+  if not fsTitle then
+    -- Show Combat Options Title
+    fsTitle = self:CreateFontString(nil, "OVERLAY")
+    fsTitle:SetTextColor(1.00, 1.00, 1.00, 1.00)
+    fsTitle:SetFontObject(GameFontHighlightLeft)
+    fsTitle:SetText("|cff60A0FFPowered By |cffFF0000x|r|cff80F000CT|r+|r")
+    --fsTitle:SetPoint("TOPLEFT", 16, -90)
+    fsTitle:SetPoint("TOPLEFT", 480, -16)
+  end
 
--- Move the Effects and Floating Options
---[[InterfaceOptionsCombatTextPanelTargetEffects:ClearAllPoints()
-InterfaceOptionsCombatTextPanelTargetEffects:SetPoint("TOPLEFT", 314, -132)
-InterfaceOptionsCombatTextPanelEnableFCT:ClearAllPoints()
-InterfaceOptionsCombatTextPanelEnableFCT:SetPoint("TOPLEFT", 18, -132)
-
-InterfaceOptionsCombatTextPanelTargetDamage:ClearAllPoints()
-InterfaceOptionsCombatTextPanelTargetDamage:SetPoint("TOPLEFT", 18, -355) ]]
-
--- Hide Blizzard Pet Battle Options
-InterfaceOptionsCombatTextPanelPetBattle:Hide()
-
--- Hide Blizzard Combat Text Toggles
-InterfaceOptionsCombatTextPanelEnableFCT:Hide()
-InterfaceOptionsCombatTextPanelTargetEffects:Hide()
-InterfaceOptionsCombatTextPanelOtherTargetEffects:Hide()
-InterfaceOptionsCombatTextPanelDodgeParryMiss:Hide()
-InterfaceOptionsCombatTextPanelDamageReduction:Hide()
-InterfaceOptionsCombatTextPanelRepChanges:Hide()
-InterfaceOptionsCombatTextPanelReactiveAbilities:Hide()
-InterfaceOptionsCombatTextPanelFriendlyHealerNames:Hide()
-InterfaceOptionsCombatTextPanelCombatState:Hide()
-InterfaceOptionsCombatTextPanelComboPoints:Hide()
-InterfaceOptionsCombatTextPanelLowManaHealth:Hide()
-InterfaceOptionsCombatTextPanelEnergyGains:Hide()
-InterfaceOptionsCombatTextPanelPeriodicEnergyGains:Hide()
-InterfaceOptionsCombatTextPanelHonorGains:Hide()
-InterfaceOptionsCombatTextPanelAuras:Hide()
-InterfaceOptionsCombatTextPanelHealingAbsorbSelf:Hide()
-
--- Direction does NOT work with xCT+ at all
-InterfaceOptionsCombatTextPanelFCTDropDown:Hide()
-InterfaceOptionsCombatTextPanelTargetModeDropDown:Hide()
-
--- FCT Options
-InterfaceOptionsCombatTextPanelTargetDamage:Hide()
-InterfaceOptionsCombatTextPanelPeriodicDamage:Hide()
-InterfaceOptionsCombatTextPanelPetDamage:Hide()
-InterfaceOptionsCombatTextPanelHealing:Hide()
-InterfaceOptionsCombatTextPanelHealingAbsorbTarget:Hide()
+  if not configButton then
+    -- Create a button to delete profiles
+    configButton = CreateFrame("Button", nil, self, "UIPanelButtonTemplate")
+    configButton:ClearAllPoints()
+    configButton:SetPoint("TOPRIGHT", -36, -80)
+    configButton:SetSize(200, 30)
+    configButton:SetText("|cffFFFFFFOpen |r|cffFF0000x|r|cff80F000CT|r|cff60A0FF+|r |cffFFFFFFOptions...|r")
+    configButton:Show()
+    configButton:SetScript("OnClick", function(self)
+      InterfaceOptionsFrame_OnHide()
+      HideUIPanel(GameMenuFrame)
+      --LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME)
+      x:ShowConfigTool()
+    end)
+  end
+end)
 
 function x:UpdateBlizzardFCT()
   if self.db.profile.blizzardFCT.enabled then
@@ -93,24 +89,6 @@ CombatText:SetScript("OnLoad", nil)
 CombatText:SetScript("OnEvent", nil)
 CombatText:SetScript("OnUpdate", nil)
 
-
--- Create a button to delete profiles
-if not xCTCombatTextConfigButton then
-  CreateFrame("Button", "xCTCombatTextConfigButton", InterfaceOptionsCombatTextPanel, "UIPanelButtonTemplate")
-end
-
-xCTCombatTextConfigButton:ClearAllPoints()
-xCTCombatTextConfigButton:SetPoint("TOPRIGHT", -36, -80)
-xCTCombatTextConfigButton:SetSize(200, 30)
-xCTCombatTextConfigButton:SetText("|cffFFFFFFOpen |r|cffFF0000x|r|cff80F000CT|r|cff60A0FF+|r |cffFFFFFFOptions...|r")
-xCTCombatTextConfigButton:Show()
-xCTCombatTextConfigButton:SetScript("OnClick", function(self)
-  InterfaceOptionsFrameOkay:Click()
-  GameMenuButtonContinue:Click()
-  --LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME)
-  x:ShowConfigTool()
-end)
-
 -- Interface - Addons (Ace3 Blizzard Options)
 x.blizzardOptions = {
   name = "|cffFFFF00Combat Text - |r|cff60A0FFPowered By |cffFF0000x|r|cff80F000CT|r+|r",
@@ -121,7 +99,7 @@ x.blizzardOptions = {
       order = 1,
       type = 'execute',
       name = "Show Config",
-      func = function() InterfaceOptionsFrameOkay:Click(); GameMenuButtonContinue:Click(); x:ShowConfigTool() end,
+      func = function() InterfaceOptionsFrame_OnHide(); HideUIPanel(GameMenuFrame); x:ShowConfigTool() end,
     },
   },
 }

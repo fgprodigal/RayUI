@@ -281,7 +281,7 @@ function UF:PostCastStart(unit, name, rank, castid)
 
     self.unit = unit
 
-    if unit == "player" then
+--[[     if unit == "player" then
         local unitframe = R.global.UnitFrames
         local baseTicks = unitframe.ChannelTicks[name]
 
@@ -298,9 +298,7 @@ function UF:PostCastStart(unit, name, rank, castid)
         else
             UF:HideTicks(self)
         end
-    elseif unit == "player" then
-        UF:HideTicks(self)
-    end
+    end ]]
 end
 
 function UF:CustomCastTimeText(duration)
