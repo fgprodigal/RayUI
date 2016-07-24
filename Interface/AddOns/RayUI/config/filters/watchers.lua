@@ -559,10 +559,22 @@ R["Watcher"] = {
                 { spellID = 122510, unitId = "player", caster = "player", filter = "BUFF" },
                 --剑在人在
                 { spellID = 118038, unitId = "player", caster = "player", filter = "BUFF" },
-                --盾牌冲锋
-                { spellID = 156321, unitId = "player", caster = "player", filter = "BUFF" },
-                --盾牌冲锋
-                { spellID = 169667, unitId = "player", caster = "player", filter = "BUFF" },
+                --復仇
+                { spellID = 202574, unitId = "player", caster = "player", filter = "BUFF" },
+                --復仇
+                { spellID = 202573, unitId = "player", caster = "player", filter = "BUFF" },
+				--集中怒氣（防禦）
+                { spellID = 204488, unitId = "player", caster = "player", filter = "BUFF" },
+				--集中怒氣（武器）
+                { spellID = 207982, unitId = "player", caster = "player", filter = "BUFF" },
+				--破壞鐵球
+                { spellID = 215570, unitId = "player", caster = "player", filter = "BUFF" },
+				--激怒
+                { spellID = 184362, unitId = "player", caster = "player", filter = "BUFF" },
+				--壓制
+                { spellID = 60503, unitId = "player", caster = "player", filter = "BUFF" },
+				--天神下凡
+                { spellID = 107574, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -581,7 +593,7 @@ R["Watcher"] = {
                 --破膽怒吼
                 { spellID = 5246, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --巨人打击
-                { spellID = 167105, unitId = "target", caster = "player", filter = "DEBUFF" },
+                { spellID = 208086, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --感染之傷(德魯伊)
                 { spellID = 48484, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --挫志咆哮(德魯伊)
@@ -1235,14 +1247,7 @@ R["Watcher"] = {
                 setpoint = positions.player_buff_icon,
                 size = 28,
 
-                --淺察
-                { spellID = 84745, unitId = "player", caster = "player", filter = "BUFF" },
-                --中度洞察
-                { spellID = 84746, unitId = "player", caster = "player", filter = "BUFF" },
-                --深度洞察
-                { spellID = 84747, unitId = "player", caster = "player", filter = "BUFF" },
-                --手裏劍
-                { spellID = 137586, unitId = "player", caster = "player", filter = "BUFF" },
+
                 --無聲之刃
                 { spellID = 145193, unitId = "player", caster = "player", filter = "BUFF" },
             },
@@ -1266,7 +1271,7 @@ R["Watcher"] = {
                 direction = "LEFT",
                 setpoint = positions.player_proc_icon,
                 size = 38,
-
+						
                 --疾跑
                 { spellID = 2983, unitId = "player", caster = "player", filter = "BUFF" },
                 --暗影披風
@@ -1275,26 +1280,27 @@ R["Watcher"] = {
                 { spellID = 13750, unitId = "player", caster = "player", filter = "BUFF" },
                 --閃避
                 { spellID = 5277, unitId = "player", caster = "player", filter = "BUFF" },
+				--還擊
+                { spellID = 199754, unitId = "player", caster = "player", filter = "BUFF" },
                 --戰鬥就緒
                 { spellID = 74001, unitId = "player", caster = "player", filter = "BUFF" },
                 --毒化
                 { spellID = 32645, unitId = "player", caster = "player", filter = "BUFF" },
                 --極限殺戮
                 { spellID = 58426, unitId = "player", caster = "player", filter = "BUFF" },
-                --切割
+				--切割
                 { spellID = 5171, unitId = "player", caster = "player", filter = "BUFF" },
                 --偷天換日
                 { spellID = 57934, unitId = "player", caster = "player", filter = "BUFF" },
                 --偷天換日(傷害之後)
                 { spellID = 59628, unitId = "player", caster = "player", filter = "BUFF" },
-                --养精蓄锐
-                { spellID = 73651, unitId = "player", caster = "player", filter = "BUFF" },
+
                 --剑刃乱舞
                 { spellID = 13877, unitId = "player", caster = "player", filter = "BUFF" },
                 --佯攻
                 { spellID = 1966, unitId = "player", caster = "player", filter = "BUFF" },
                 --暗影之舞
-                { spellID = 51713, unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 185422, unitId = "player", caster = "player", filter = "BUFF" },
                 --敏銳大師
                 { spellID = 31665, unitId = "player", caster = "player", filter = "BUFF" },
                 --毀滅者之怒
@@ -1307,6 +1313,29 @@ R["Watcher"] = {
                 { spellID = 145249, unitId = "player", caster = "player", filter = "BUFF" },
                 --欺敵
                 { spellID = 115192, unitId = "player", caster = "player", filter = "BUFF" },
+				
+				--絕對方位
+                { spellID = 193359, unitId = "player", caster = "player", filter = "BUFF" },
+				--絕地寶藏
+                { spellID = 199600, unitId = "player", caster = "player", filter = "BUFF" },
+				--大好機會
+                { spellID = 195627, unitId = "player", caster = "player", filter = "BUFF" },
+				--側舷截擊
+                { spellID = 193356, unitId = "player", caster = "player", filter = "BUFF" },
+				--黑旗
+                { spellID = 199603, unitId = "player", caster = "player", filter = "BUFF" },
+				--大亂鬥
+                { spellID = 193358, unitId = "player", caster = "player", filter = "BUFF" },
+				--兇鯊海域
+                { spellID = 193357, unitId = "player", caster = "player", filter = "BUFF" },
+				--赤紅藥瓶
+                { spellID = 185311, unitId = "player", caster = "player", filter = "BUFF" },
+				--死亡徵兆
+                { spellID = 212283, unitId = "player", caster = "player", filter = "BUFF" },
+				--暗影之刃
+                { spellID = 121471, unitId = "player", caster = "player", filter = "BUFF" },
+				--矯捷
+                { spellID = 193538, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -1314,10 +1343,13 @@ R["Watcher"] = {
                 setpoint = positions.target_proc_icon,
                 size = 38,
 
+
                 --偷襲
                 { spellID = 1833, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --腎擊
                 { spellID = 408, unitId = "target", caster = "all", filter = "DEBUFF" },
+				--正中眉心
+                { spellID = 199804, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --致盲
                 { spellID = 2094, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --悶棍
@@ -1332,10 +1364,6 @@ R["Watcher"] = {
                 { spellID = 1776, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --出血
                 { spellID = 89775, unitId = "target", caster = "player", filter = "DEBUFF" },
-                --赤紅風暴
-                { spellID = 122233, unitId = "target", caster = "player", filter = "DEBUFF" },
-                --揭底之擊
-                { spellID = 84617, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --宿怨
                 { spellID = 79140, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --出血
@@ -1348,6 +1376,9 @@ R["Watcher"] = {
                 { spellID = 105593, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --暗影反射
                 { spellID = 156745, unitId = "target", caster = "player", filter = "DEBUFF" },
+				
+				--夜刃
+                { spellID = 195452, unitId = "target", caster = "all", filter = "DEBUFF" },
             },
             {
                 name = "焦点buff&debuff",
