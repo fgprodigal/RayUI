@@ -858,7 +858,10 @@ R["Watcher"] = {
                 { spellID = 20925, unitId = "target", caster = "player", filter = "BUFF" },
                 --譴責
                 { spellID = 31803, unitId = "target", caster = "player", filter = "DEBUFF" },
-            },
+
+				--虔信信標
+                { spellID = 156910, unitId = "target", caster = "player", filter = "BUFF" },
+			},
             {
                 name = "玩家重要buff&debuff",
                 direction = "LEFT",
@@ -899,10 +902,21 @@ R["Watcher"] = {
                 { spellID = 114637, unitId = "player", caster = "player", filter = "BUFF" },
                 --大十字軍
                 { spellID = 85416, unitId = "player", caster = "player", filter = "BUFF" },
-                --遠古諸王之光
-                { spellID = 86678, unitId = "player", caster = "all", filter = "BUFF" },
+                --遠古諸王守護者
+                { spellID = 86659, unitId = "player", caster = "all", filter = "BUFF" },
                 --道高一丈
                 { spellID = 87173, unitId = "player", caster = "player", filter = "BUFF" },
+				
+				--十字軍
+                { spellID = 224668, unitId = "player", caster = "player", filter = "BUFF" },
+				--正義怒火
+                { spellID = 209785, unitId = "player", caster = "player", filter = "BUFF" },
+				--以眼還眼
+                { spellID = 205191, unitId = "player", caster = "player", filter = "BUFF" },
+				 --神圣意圖
+                { spellID = 216413, unitId = "player", caster = "player", filter = "BUFF" },
+				 --熾熱殉難者
+                { spellID = 223316, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -922,6 +936,9 @@ R["Watcher"] = {
                 { spellID = 20170, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --問罪
                 { spellID = 2812, unitId = "target", caster = "player", filter = "DEBUFF" },
+				
+				--審判
+                { spellID = 197277, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
             {
                 name = "焦点buff&debuff",
@@ -950,6 +967,18 @@ R["Watcher"] = {
                 { spellID = 31821, filter = "CD" },
                 --聖佑術
                 { spellID = 498, filter = "CD" },
+				--神聖憤怒
+                { spellID = 210220, filter = "CD" },
+				--聖盾術
+                { spellID = 642, filter = "CD" },
+				--復仇之怒
+                { spellID = 31884, filter = "CD" },
+				--復仇之怒（奶騎）
+                { spellID = 31842, filter = "CD" },
+				--神圣复仇者
+                { spellID = 105809, filter = "CD" },
+				--遠古諸王守護者
+                { spellID = 86659, filter = "CD" },
 
                 -- 物品
                 -- 手套
@@ -1612,10 +1641,7 @@ R["Watcher"] = {
                 setpoint = positions.player_buff_icon,
                 size = 28,
 
-                --飄渺絕釀
-                { spellID = 128939, unitId = "player", caster = "player", filter = "BUFF" },
-                --虎眼絕釀
-                { spellID = 125195, unitId = "player", caster = "player", filter = "BUFF" },
+                
                 --回生迷霧
                 { spellID = 119611, unitId = "player", caster = "player", filter = "BUFF" },
                 --迷霧繚繞
@@ -1628,8 +1654,7 @@ R["Watcher"] = {
                 { spellID = 124274, unitId = "player", caster = "all", filter = "DEBUFF" },
                 --酒仙大緩勁
                 { spellID = 124273, unitId = "player", caster = "all", filter = "DEBUFF" },
-                --法力茶
-                { spellID = 115867, unitId = "player", caster = "player", filter = "BUFF" },
+                
             },
             {
                 name = "目标buff&debuff",
@@ -1660,20 +1685,35 @@ R["Watcher"] = {
                 { spellID = 115307, unitId = "player", caster = "player", filter = "BUFF" },
                 --護身氣勁
                 { spellID = 115295, unitId = "player", caster = "player", filter = "BUFF" },
-                --飄渺絕釀
-                { spellID = 115308, unitId = "player", caster = "player", filter = "BUFF" },
-                --虎眼絕釀
-                { spellID = 116740, unitId = "player", caster = "player", filter = "BUFF" },
+                
                 --乾坤挪移
                 { spellID = 125174, unitId = "player", caster = "player", filter = "BUFF" },
-                --蛟龍之誠
-                { spellID = 127722, unitId = "player", caster = "player", filter = "BUFF" },
+                --禪院教誨
+                { spellID = 202090, unitId = "player", caster = "player", filter = "BUFF" },
                 --精活迷霧
                 { spellID = 118674, unitId = "player", caster = "player", filter = "BUFF" },
                 --連段破:滅寂腿
                 { spellID = 116768, unitId = "player", caster = "player", filter = "BUFF" },
                 --連段破:虎掌
                 { spellID = 118864, unitId = "player", caster = "player", filter = "BUFF" },
+				
+                --连击
+                { spellID = 196741, unitId = "player", caster = "player", filter = "BUFF" },
+				--风火大地
+                { spellID = 137639, unitId = "player", caster = "player", filter = "BUFF" },
+				--冰心诀
+                { spellID = 152173, unitId = "player", caster = "player", filter = "BUFF" },
+				--聚雷茶
+                { spellID = 116680, unitId = "player", caster = "player", filter = "BUFF" },
+				--生生不息
+                { spellID = 197919, unitId = "player", caster = "player", filter = "BUFF" },
+				--生生不息
+                { spellID = 197916, unitId = "player", caster = "player", filter = "BUFF" },
+				--法力茶
+                { spellID = 197908, unitId = "player", caster = "player", filter = "BUFF" },
+				--金鐘絕釀
+                { spellID = 215479, unitId = "player", caster = "player", filter = "BUFF" },
+								
             },
             {
                 name = "目标重要buff&debuff",
@@ -1687,6 +1727,9 @@ R["Watcher"] = {
                 { spellID = 116330, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --旭日东升踢
                 { spellID = 130320, unitId = "target", caster = "player", filter = "DEBUFF" },
+				
+				--幽冥掌
+                { spellID = 115080, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
             {
                 name = "焦点buff&debuff",
