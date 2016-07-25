@@ -571,7 +571,7 @@ local function style(self)
 		self.LFDRole:SetTexture("Interface\\AddOns\\RayUI\\media\\lfd_role")
 	end
 
-	self.freebIndicators = true
+	-- self.freebIndicators = true
 	self.freebAfk = true
 
 	self.ResurrectIcon = self.Health:CreateTexture(nil, "OVERLAY")
