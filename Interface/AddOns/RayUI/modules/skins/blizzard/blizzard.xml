@@ -17,6 +17,7 @@
 	<Script file='character.lua'/>
 	<Script file='collections.lua'/>
 	<Script file='debugtools.lua'/>
+	<Script file='deathrecap.lua'/>
 	<Script file='dressup.lua'/>
 	<Script file='encounter.lua'/>
 	<Script file='friends.lua'/>

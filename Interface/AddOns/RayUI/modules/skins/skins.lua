@@ -323,7 +323,6 @@ end
 
 function S:ReskinScroll(f)
 	if not f then return end
-	local bu
 	if f:GetName() then
 		local frame = f:GetName()
 
@@ -333,7 +332,7 @@ function S:ReskinScroll(f)
 		if _G[frame.."Middle"] then _G[frame.."Middle"]:Hide() end
 		if _G[frame.."Bottom"] then _G[frame.."Bottom"]:Hide() end
 
-		bu = _G[frame.."ThumbTexture"]
+		local bu = _G[frame.."ThumbTexture"]
 		bu:SetAlpha(0)
 		bu:Width(17)
 
@@ -343,6 +342,10 @@ function S:ReskinScroll(f)
 		S:CreateBD(bu.bg, 0)
 		S:CreateBackdropTexture(f)
 		f.backdropTexture:SetInside(bu.bg, 1, 1)
+
+		local tex = S:CreateGradient(f)
+		tex:Point("TOPLEFT", bu.bg, 1, -1)
+		tex:Point("BOTTOMRIGHT", bu.bg, -1, 1)
 
 		local up = _G[frame.."ScrollUpButton"]
 		local down = _G[frame.."ScrollDownButton"]
@@ -415,7 +418,7 @@ function S:ReskinScroll(f)
 			end
 			
 			if f.thumbTexture then
-				bu = f.thumbTexture
+				local bu = f.thumbTexture
 				bu:SetAlpha(0)
 				bu:Width(17)
 
@@ -425,12 +428,13 @@ function S:ReskinScroll(f)
 				S:CreateBD(bu.bg, 0)
 				S:CreateBackdropTexture(f)
 				f.backdropTexture:SetInside(bu.bg, 1, 1)
+
+				local tex = S:CreateGradient(f)
+				tex:Point("TOPLEFT", bu.bg, 1, -1)
+				tex:Point("BOTTOMRIGHT", bu.bg, -1, 1)
 			end
 		end
 	end
-	local tex = S:CreateGradient(f)
-	tex:Point("TOPLEFT", bu.bg, 1, -1)
-	tex:Point("BOTTOMRIGHT", bu.bg, -1, 1)
 end
 
 function S:ReskinDropDown(f)

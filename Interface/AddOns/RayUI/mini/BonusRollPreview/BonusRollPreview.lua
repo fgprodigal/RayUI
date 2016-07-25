@@ -1,5 +1,5 @@
 local _, ns = ...
-local currentEncounterID
+local currentEncounterInfo
 local itemButtons = {}
 
 local BACKDROP = {
@@ -87,7 +87,8 @@ local function HookStartRoll(self, frame)
 end
 
 local function PositionDownwards()
-	return (GetScreenHeight() - (BonusRollFrame:GetTop() or 200)) < 345
+	return true
+	-- return (GetScreenHeight() - (BonusRollFrame:GetTop() or 200)) < 345
 end
 
 local collapsed
@@ -124,6 +125,7 @@ end
 
 local function HandlePosition()
 	Container:ClearAllPoints()
+
 	if(PositionDownwards()) then
 		Container:SetPoint("TOP", BonusRollFrame, "BOTTOM")
 
@@ -150,7 +152,7 @@ local function HandlePosition()
 end
 
 local function ItemButtonUpdate(self, elapsed)
-	if(IsModifiedClick("COMPAREITEMS") or (GetCVarBool("alwaysCompareItems") and not IsEquippedItem(self.itemID))) then
+	if(IsModifiedClick("COMPAREITEMS") or (GetCVarBool("alwaysCompareItems") and not IsEquippedItem(self.itemLink))) then
 		GameTooltip_ShowCompareItem()
 	else
 		ShoppingTooltip1:Hide()
@@ -232,29 +234,43 @@ local function GetItemLine(index)
 	return ItemButton
 end
 
+local resetTimer
+local function ResetEvents()
+	Container:UnregisterEvent("EJ_LOOT_DATA_RECIEVED")
+	Container:UnregisterEvent("EJ_DIFFICULTY_UPDATE")
+
+	if(EncounterJournal) then
+		EncounterJournal:RegisterEvent("EJ_LOOT_DATA_RECIEVED")
+		EncounterJournal:RegisterEvent("EJ_DIFFICULTY_UPDATE")
+	end
+
+	resetTimer = nil
+end
 function Container:Populate()
 	local numItems = 0
 	for index = 1, EJ_GetNumLoot() do
-		local name, texture, slot, itemClass, itemID, itemLink, encounterID = EJ_GetLootInfoByIndex(index)
-		if(encounterID == currentEncounterID and not ns.itemBlacklist[itemID]) then
+		local itemID, encounterID, name, texture, slot, armorType, itemLink = EJ_GetLootInfoByIndex(index)
+		if(not itemLink) then
+			-- Let the client receive the data
+			return
+		end
+
+		if(encounterID == currentEncounterInfo[1] and not ns.itemBlacklist[itemID]) then
 			numItems = numItems + 1
 
 			local ItemButton = GetItemLine(numItems)
 			ItemButton.Icon:SetTexture(texture)
 			ItemButton.Name:SetText(name)
 			ItemButton.Slot:SetText(slot)
-			ItemButton.Class:SetText(itemClass)
+			ItemButton.Class:SetText(armorType)
 
-			ItemButton.itemID = itemID
 			ItemButton.itemLink = itemLink
 
 			ItemButton:Show()
 		end
 	end
-	for i = numItems + 1, #itemButtons do
-	 	itemButtons[i]:Hide()
-	end
 
+	self:Hide()
 	self:SetHeight(math.min(250, math.max(50, 10 + (numItems * 40))))
 
 	if(numItems > 0) then
@@ -277,14 +293,17 @@ function Container:Populate()
 		self.Empty:Show()
 	end
 
-	if(EncounterJournal) then
-		EncounterJournal:RegisterEvent("EJ_LOOT_DATA_RECIEVED")
-		EncounterJournal:RegisterEvent("EJ_DIFFICULTY_UPDATE")
+	if(resetTimer) then
+		resetTimer:Cancel()
+		resetTimer = nil
 	end
+
+	resetTimer = C_Timer.NewTimer(2, ResetEvents)
 end
 
 function Container:Update()
 	if(EncounterJournal) then
+		EncounterJournal:UnregisterEvent("EJ_LOOT_DATA_RECIEVED")
 		EncounterJournal:UnregisterEvent("EJ_DIFFICULTY_UPDATE")
 	end
 
@@ -292,20 +311,19 @@ function Container:Update()
 		button:Hide()
 	end
 
-	local _, _, difficulty = GetInstanceInfo()
-	EJ_SetDifficulty(difficulty > 0 and difficulty or 4)
+	local encounterID, instanceID, difficulty = unpack(currentEncounterInfo)
+	EJ_SelectInstance(instanceID)
+	EJ_SelectEncounter(encounterID)
 
-	local currentInstance = EJ_GetCurrentInstance()
-	if(not currentInstance or currentInstance == 0) then
-		local oldMap = GetCurrentMapAreaID()
-		SetMapToCurrentZone()
-		currentInstance = ns.continents[GetCurrentMapContinent()]
-		SetMapByID(oldMap)
+	if(not difficulty) then
+		-- This should only ever happen in raids, everything else is hardcoded
+		difficulty = select(3, GetInstanceInfo())
 	end
 
-	EJ_SelectInstance(currentInstance)
-	EJ_SelectEncounter(currentEncounterID)
+	EJ_SetDifficulty(difficulty)
+end
 
+function Container:EJ_DIFFICULTY_UPDATE(event)
 	local _, _, classID = UnitClass("player")
 	EJ_SetLootFilter(classID, GetLootSpecialization() or GetSpecializationInfo(GetSpecialization() or 0) or 0)
 
@@ -313,27 +331,27 @@ function Container:Update()
 end
 
 function Container:EJ_LOOT_DATA_RECIEVED(event)
-	if(EncounterJournal) then
-		EncounterJournal:UnregisterEvent(event)
+	if(BonusRollFrame:IsShown()) then
+		self:Populate()
 	end
-
-	self:Populate()
 end
 
 function Container:PLAYER_LOOT_SPEC_UPDATED(event)
+	self:RegisterEvent("EJ_LOOT_DATA_RECIEVED")
+	self:RegisterEvent("EJ_DIFFICULTY_UPDATE")
 	self:Update()
 	HandlePosition()
 end
 
 function Container:SPELL_CONFIRMATION_PROMPT(event, spellID, confirmType, _, _, currencyID)
-	if(confirmType == CONFIRMATION_PROMPT_BONUS_ROLL) then
-		currentEncounterID = ns.encounterIDs[spellID]
-
-		if(currentEncounterID) then
+	if(confirmType == LE_SPELL_CONFIRMATION_PROMPT_TYPE_BONUS_ROLL) then
+		currentEncounterInfo = ns.encounterInfo[spellID]
+		if(currentEncounterInfo) then
 			local _, count = GetCurrencyInfo(currencyID)
 			if(count > 0) then
-				self:RegisterEvent("EJ_LOOT_DATA_RECIEVED")
 				self:RegisterEvent("PLAYER_LOOT_SPEC_UPDATED")
+				self:RegisterEvent("EJ_LOOT_DATA_RECIEVED")
+				self:RegisterEvent("EJ_DIFFICULTY_UPDATE")
 				self:Update()
 			end
 		else
@@ -343,9 +361,8 @@ function Container:SPELL_CONFIRMATION_PROMPT(event, spellID, confirmType, _, _, 
 end
 
 function Container:SPELL_CONFIRMATION_TIMEOUT()
-	currentEncounterID = nil
+	currentEncounterInfo = nil
 
-	self:UnregisterEvent("EJ_LOOT_DATA_RECIEVED")
 	self:UnregisterEvent("PLAYER_LOOT_SPEC_UPDATED")
 end
 
@@ -452,7 +469,7 @@ function Container:PLAYER_LOGIN()
 
 	local HandleBackground = Handle:CreateTexture(nil, "BACKGROUND")
 	HandleBackground:SetAllPoints()
-	HandleBackground:SetColorTexture(0, 0, 0, 0.8)
+	HandleBackground:SetTexture(0, 0, 0, 0.8)
 
 	local TopCenter = Handle:CreateTexture(nil, "BORDER")
 	TopCenter:SetPoint("TOP", 0, 4.5)

@@ -105,6 +105,7 @@ local function LoadSkin()
 	--Create new one with fixed template
 	TradeSkillFrame.RecipeList.scrollBar = CreateFrame("Slider", nil, TradeSkillFrame.RecipeList, "HybridScrollBarTemplateFixed")
 	S:ReskinScroll(TradeSkillFrame.RecipeList.scrollBar)
+	TradeSkillFrame.RecipeList.scrollBar:SetFrameLevel(TradeSkillFrame.RecipeList.scrollBar:GetFrameLevel()+1)
 	C_Timer.After(0.25, function()
 		--Scroll back to top
 		TradeSkillFrame.RecipeList.scrollBar:SetValue(1)

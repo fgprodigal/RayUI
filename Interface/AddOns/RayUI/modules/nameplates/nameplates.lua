@@ -149,13 +149,13 @@ function mod:SetTargetFrame(frame)
 		end		
 
 		if(targetExists and not UnitIsUnit(frame.unit, "player")) then
-			frame:SetAlpha(0.5)
+			frame:SetAlpha(0.6)
 		else
 			frame:SetAlpha(1)
 		end
 	else
 		if(targetExists and not UnitIsUnit(frame.unit, "player"))  then
-			frame:SetAlpha(0.5)
+			frame:SetAlpha(0.6)
 		else
 			frame:SetAlpha(1)
 		end

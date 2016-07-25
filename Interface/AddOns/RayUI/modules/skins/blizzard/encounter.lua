@@ -398,6 +398,7 @@ local function LoadSkin()
 	S:ReskinScroll(EncounterJournalEncounterFrameInfoLootScrollFrameScrollBar)
 	S:ReskinScroll(EncounterJournalEncounterFrameInfoBossesScrollFrameScrollBar)
 	S:ReskinScroll(EncounterJournalSearchResultsScrollFrameScrollBar)
+	S:ReskinDropDown(EncounterJournalInstanceSelectTierDropDown)
 end
 
 S:RegisterSkin("Blizzard_EncounterJournal", LoadSkin)

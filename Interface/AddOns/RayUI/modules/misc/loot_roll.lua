@@ -277,7 +277,7 @@ function M:LOOT_HISTORY_ROLL_CHANGED(event, itemIdx, playerIdx)
 end
 
 SlashCmdList["LFrames"] = function() 
-	local items = { 77949 }
+	local items = { 34334, 77949 }
 	for _, f in pairs(R.rollBars) do
 		f.rollid = nil
 		f:Hide()

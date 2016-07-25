@@ -1426,7 +1426,7 @@ R["Watcher"] = {
                 { spellID = 156745, unitId = "target", caster = "player", filter = "DEBUFF" },
 				
 				--夜刃
-                { spellID = 195452, unitId = "target", caster = "all", filter = "DEBUFF" },
+                { spellID = 195452, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
             {
                 name = "焦点buff&debuff",
