@@ -3,7 +3,7 @@ local M = R:GetModule("Misc")
 
 R.rollBars = {}
 local testMode = false
-local pos = "TOP"
+local pos = "BOTTOM"
 
 local function ClickRoll(frame)
 	RollOnLoot(frame.parent.rollid, frame.rolltype)
@@ -154,7 +154,6 @@ local function CreateRollFrame()
 	status:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", 2, 1)
 	status:CreateShadow("Background")
 	status:SetScript("OnUpdate", StatusUpdate)
-	status:SetFrameLevel(status:GetFrameLevel()-1)
 	status:SetStatusBarTexture(R["media"].normal)
 	status:SetStatusBarColor(.8, .8, .8, .9)
 	status.parent = frame
@@ -252,7 +251,6 @@ function M:START_LOOT_ROLL(event, rollid, time)
 
 	f:SetPoint("CENTER", WorldFrame, "CENTER")
 	f:Show()
-	AlertFrame_FixAnchors()
 
 	if M.db.autodez and UnitLevel('player') == MAX_PLAYER_LEVEL and quality == 2 and not bop then
 		if canDisenchant and IsSpellKnown(13262) then
@@ -279,7 +277,7 @@ function M:LOOT_HISTORY_ROLL_CHANGED(event, itemIdx, playerIdx)
 end
 
 SlashCmdList["LFrames"] = function() 
-	local items = { 32837, 19019, 77949, 34196 }
+	local items = { 77949 }
 	for _, f in pairs(R.rollBars) do
 		f.rollid = nil
 		f:Hide()
@@ -302,7 +300,6 @@ SlashCmdList["LFrames"] = function()
 			f.time = 100000000
 			f:Show()
 		end
-		AlertFrame_FixAnchors()
 	end
 end
 SLASH_LFrames1 = "/lframes"

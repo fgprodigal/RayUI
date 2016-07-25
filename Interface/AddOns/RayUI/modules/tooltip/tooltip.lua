@@ -415,7 +415,7 @@ function TT:SetStyle(tooltip)
 		tooltip:SetBackdrop(nil)
 		R:GetModule("Skins"):CreateStripesThin(tooltip)
 		tooltip:CreateShadow("Background")
-		-- tooltip.stripesthin:SetInside(tooltip)
+		tooltip.stripesthin:SetInside(tooltip)
 		tooltip.border:SetInside(tooltip)
 		tooltip.styled=true
 

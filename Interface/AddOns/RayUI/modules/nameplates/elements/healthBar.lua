@@ -57,7 +57,7 @@ function mod:UpdateElement_HealthColor(frame)
 					else -- not tanking at all
 						if(R.Role == "Tank") then
 							--Check if it is being tanked by an offtank.
-							if (IsInRaid() or IsInGroup()) and frame.isBeingTanked and self.db.threat.beingTankedByTank then
+							if (IsInRaid() or IsInGroup()) and frame.isBeingTanked then
 								r, g, b = tankedByTankR, tankedByTankG, tankedByTankB
 								scale = 0.8
 							else
@@ -65,7 +65,7 @@ function mod:UpdateElement_HealthColor(frame)
 								scale = 1.2
 							end
 						else
-							if (IsInRaid() or IsInGroup()) and frame.isBeingTanked and self.db.threat.beingTankedByTank then
+							if (IsInRaid() or IsInGroup()) and frame.isBeingTanked then
 								r, g, b = tankedByTankR, tankedByTankG, tankedByTankB
 								scale = 0.8
 							else

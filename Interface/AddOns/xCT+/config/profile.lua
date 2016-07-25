@@ -565,7 +565,7 @@ addon.defaults = {
 
       -- fonts
         ["font"] = "RayUI Normal",
-        ["fontSize"] = 25,
+        ["fontSize"] = 18,
         ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "CENTER",
 

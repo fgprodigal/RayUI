@@ -157,14 +157,24 @@ function S:GetOptions()
 	return options
 end
 
+function S:CreateGradient(f)
+	local tex = f:CreateTexture(nil, "BORDER")
+	tex:SetPoint("TOPLEFT", 1, -1)
+	tex:SetPoint("BOTTOMRIGHT", -1, 1)
+	tex:SetTexture([[Interface\AddOns\RayUI\media\gradient.tga"]])
+	tex:SetVertexColor(.3, .3, .3, .15)
+
+	return tex
+end
+
 function S:CreateStripesThin(f)
-	-- if not f then return end
-	-- f.stripesthin = f:CreateTexture(nil, "BACKGROUND", nil, 1)
-	-- f.stripesthin:SetAllPoints()
-	-- f.stripesthin:SetTexture([[Interface\AddOns\RayUI\media\StripesThin]], true)
-	-- f.stripesthin:SetHorizTile(true)
-	-- f.stripesthin:SetVertTile(true)
-	-- f.stripesthin:SetBlendMode("ADD")
+	if not f then return end
+	f.stripesthin = f:CreateTexture(nil, "BACKGROUND", nil, 1)
+	f.stripesthin:SetAllPoints()
+	f.stripesthin:SetTexture([[Interface\AddOns\RayUI\media\StripesThin]], true, true)
+	f.stripesthin:SetHorizTile(true)
+	f.stripesthin:SetVertTile(true)
+	f.stripesthin:SetBlendMode("ADD")
 end
 
 function S:CreateBackdropTexture(f)
@@ -200,7 +210,6 @@ function S:CreateBG(frame)
 	bg:Point("BOTTOMRIGHT", frame, 1, -1)
 	bg:SetTexture(R["media"].blank)
 	bg:SetVertexColor(0, 0, 0)
-	f.bg = bg
 
 	return bg
 end
@@ -247,7 +256,7 @@ end
 
 local function StartGlow(f)
 	if not f:IsEnabled() then return end
-	f:SetBackdropColor(r, g, b, .2)
+	f:SetBackdropColor(r, g, b, .5)
 	f:SetBackdropBorderColor(r, g, b)
 	if R.global.general.theme == "Shadow" then
 		f.glow:SetAlpha(1)
@@ -291,6 +300,8 @@ function S:Reskin(f, noGlow)
 		f:HookScript("OnEnter", StartGlow)
 		f:HookScript("OnLeave", StopGlow)
 	end
+
+	f.tex = S:CreateGradient(f)
 end
 
 function S:CreateTab(f)
@@ -312,6 +323,7 @@ end
 
 function S:ReskinScroll(f)
 	if not f then return end
+	local bu
 	if f:GetName() then
 		local frame = f:GetName()
 
@@ -321,7 +333,7 @@ function S:ReskinScroll(f)
 		if _G[frame.."Middle"] then _G[frame.."Middle"]:Hide() end
 		if _G[frame.."Bottom"] then _G[frame.."Bottom"]:Hide() end
 
-		local bu = _G[frame.."ThumbTexture"]
+		bu = _G[frame.."ThumbTexture"]
 		bu:SetAlpha(0)
 		bu:Width(17)
 
@@ -403,7 +415,7 @@ function S:ReskinScroll(f)
 			end
 			
 			if f.thumbTexture then
-				local bu = f.thumbTexture
+				bu = f.thumbTexture
 				bu:SetAlpha(0)
 				bu:Width(17)
 
@@ -416,6 +428,9 @@ function S:ReskinScroll(f)
 			end
 		end
 	end
+	local tex = S:CreateGradient(f)
+	tex:Point("TOPLEFT", bu.bg, 1, -1)
+	tex:Point("BOTTOMRIGHT", bu.bg, -1, 1)
 end
 
 function S:ReskinDropDown(f)
@@ -457,6 +472,10 @@ function S:ReskinDropDown(f)
 	bg:SetFrameLevel(f:GetFrameLevel()-1)
 	S:CreateBD(bg, 0)
 	S:CreateBackdropTexture(bg)
+
+	local gradient = S:CreateGradient(f)
+	gradient:Point("TOPLEFT", bg, 1, -1)
+	gradient:Point("BOTTOMRIGHT", bg, -1, 1)
 end
 
 local function colourClose(f)
@@ -491,6 +510,7 @@ function S:ReskinClose(f, a1, p, a2, x, y)
 
 	S:CreateBD(f, 0)
 	S:CreateBackdropTexture(f)
+	S:CreateGradient(f)
 
 	f:SetDisabledTexture(R["media"].gloss)
 	local dis = f:GetDisabledTexture()
@@ -540,8 +560,17 @@ function S:ReskinInput(f, height, width)
 	if f.Left then f.Left:Hide() end
 	if f.Middle then f.Middle:Hide() end
 	if f.Right then f.Right:Hide() end
-	S:CreateBD(f, 0)
+
+	local bd = CreateFrame("Frame", nil, f)
+	bd:Point("TOPLEFT", -2, 0)
+	bd:SetPoint("BOTTOMRIGHT")
+	bd:SetFrameLevel(f:GetFrameLevel()-1)
+	S:CreateBD(bd, 0)
 	S:CreateBackdropTexture(f)
+
+	local gradient = S:CreateGradient(f)
+	gradient:Point("TOPLEFT", bd, 1, -1)
+	gradient:Point("BOTTOMRIGHT", bd, -1, 1)
 
 	if height then f:Height(height) end
 	if width then f:Width(width) end
@@ -580,6 +609,9 @@ function S:ReskinCheck(f)
 	bd:SetInside(f, 4, 4)
 	bd:SetFrameLevel(f:GetFrameLevel())
 	S:CreateBD(bd, 0)
+
+	local tex = S:CreateGradient(f)
+	tex:SetInside(f, 5, 5)
 
 	local ch = f:GetCheckedTexture()
 	ch:SetDesaturated(true)

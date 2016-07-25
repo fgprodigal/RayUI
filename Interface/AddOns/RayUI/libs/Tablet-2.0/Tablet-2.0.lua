@@ -1233,7 +1233,7 @@ local function AcquireFrame(self, registration, data, detachedData)
 		tooltip.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 		tooltip.shadow:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 		S:CreateStripesThin(tooltip)
-		-- tooltip.stripesthin:SetInside(tooltip)
+		tooltip.stripesthin:SetInside(tooltip)
 
 		tooltip:SetScript("OnUpdate", function(this, elapsed)
 			if not tooltip.updating and (not tooltip.enteredFrame or (overFrame and not MouseIsOver(overFrame))) then

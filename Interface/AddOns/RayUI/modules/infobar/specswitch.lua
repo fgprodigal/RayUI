@@ -223,14 +223,14 @@ local function LoadTalent()
 			
 			if specIndex then
 				local specID, _, _, texture = GetSpecializationInfo(specIndex);
-				loot = format("|T%s:14:14:0:0:64:64:4:60:4:60|t", texture)
+				loot = format("|T%s:14:14:0:0:64:64:4:60:4:60|t", texture or "")
 			else
 				loot = "N/A"
 			end
 		else
 			local specID, _, _, texture = GetSpecializationInfoByID(specialization);
 			if specID then
-				loot = format("|T%s:14:14:0:0:64:64:4:60:4:60|t", texture)
+				loot = format("|T%s:14:14:0:0:64:64:4:60:4:60|t", texture or "")
 			else
 				loot = "N/A"
 			end
