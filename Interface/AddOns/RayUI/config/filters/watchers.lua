@@ -70,7 +70,7 @@ R["Watcher"] = {
                 --求生本能
                 { spellID = 61336, unitId = "player", caster = "player", filter = "BUFF" },
                 --節能施法
-                { spellID = 16870, unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 135700, unitId = "player", caster = "player", filter = "BUFF" },
                 --樹皮術
                 { spellID = 22812, unitId = "player", caster = "player", filter = "BUFF" },
                 --狂暴
@@ -86,9 +86,9 @@ R["Watcher"] = {
                 --星殞術
                 { spellID = 48505, unitId = "player", caster = "player", filter = "BUFF" },
                 --星穹大連線
-                { spellID = 112071, unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 194223, unitId = "player", caster = "player", filter = "BUFF" },
                 --化身:艾露恩之眷
-                { spellID = 117679, unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 102560, unitId = "player", caster = "player", filter = "BUFF" },
                 --野性之心
                 { spellID = 108294, unitId = "player", caster = "player", filter = "BUFF" },
                 --化身:丛林之王
@@ -113,12 +113,23 @@ R["Watcher"] = {
                 { spellID = 102558, unitId = "player", caster = "player", filter = "BUFF" },
                 --巨熊之力
                 { spellID = 159233, unitId = "player", caster = "player", filter = "BUFF" },
-                --尖牙与利爪
-                { spellID = 135286, unitId = "player", caster = "player", filter = "BUFF" },
-                --野蛮防御
-                { spellID = 132402, unitId = "player", caster = "player", filter = "BUFF" },
+
                 --落日余晖
                 { spellID = 155592, unitId = "player", caster = "player", filter = "BUFF" },
+				--伊露恩的守護者
+                { spellID = 213680, unitId = "player", caster = "player", filter = "BUFF" },
+				--鋼鐵毛皮
+                { spellID = 192081, unitId = "player", caster = "player", filter = "BUFF" },
+				--烏索爾的印記
+                { spellID = 192083, unitId = "player", caster = "player", filter = "BUFF" },
+				--伊露恩戰士
+                { spellID = 202425, unitId = "player", caster = "player", filter = "BUFF" },
+				--安希之賜
+                { spellID = 202739, unitId = "player", caster = "player", filter = "BUFF" },
+				--伊露恩的祝福
+                { spellID = 202737, unitId = "player", caster = "player", filter = "BUFF" },
+				--化身:生命之树
+                { spellID = 117679, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -140,14 +151,17 @@ R["Watcher"] = {
                 { spellID = 1079, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --割裂
                 { spellID = 33745, unitId = "target", caster = "player", filter = "DEBUFF" },
-                --痛擊
-                { spellID = 106830, unitId = "target", caster = "player", filter = "DEBUFF" },
+
                 --傷殘術
-                { spellID = 22570, unitId = "target", caster = "player", filter = "DEBUFF" },
+                { spellID = 203123, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --斜掠
                 { spellID = 155722, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --痛击
                 { spellID = 77758, unitId = "target", caster = "player", filter = "DEBUFF" },
+				--痛击（豹）
+                { spellID = 106830, unitId = "target", caster = "player", filter = "DEBUFF" },
+				--星光閃焰
+                { spellID = 202347, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
             {
                 name = "焦点buff&debuff",
@@ -219,11 +233,6 @@ R["Watcher"] = {
                 direction = "LEFT",
                 setpoint = positions.player_buff_icon,
                 size = 28,
-                --狙击训练
-                { spellID = 168811, unitId = "player", caster = "player", filter = "BUFF" },
-				--狙击训练；最近移动
-                { spellID = 168809, unitId = "player", caster = "player", filter = "BUFF" },
-
             },
             {
                 name = "目标buff&debuff",
@@ -231,8 +240,7 @@ R["Watcher"] = {
                 setpoint = positions.target_buff_icon,
                 size = 28,
 
-                --獵人印記
-                { spellID = 1130, unitId = "target", caster = "all", filter = "DEBUFF" },
+                
             },
             {
                 name = "玩家重要buff&debuff",
@@ -260,7 +268,27 @@ R["Watcher"] = {
                 --4T13
                 { spellID = 105919, unitId = "player", caster = "player", filter = "BUFF" },
                 --稳固集中
-                { spellID = 177668, unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 193534, unitId = "player", caster = "player", filter = "BUFF" },
+				
+				--野性守護
+                { spellID = 193530, unitId = "player", caster = "player", filter = "BUFF" },
+				--箭雨
+                { spellID = 194386, unitId = "player", caster = "player", filter = "BUFF" },
+				--獵豹守護
+                { spellID = 186257, unitId = "player", caster = "player", filter = "BUFF" },
+				--獵豹守護
+                { spellID = 186258, unitId = "player", caster = "player", filter = "BUFF" },
+				--標記目標
+                { spellID = 223138, unitId = "player", caster = "player", filter = "BUFF" },
+				--特技射擊
+                { spellID = 227272, unitId = "player", caster = "player", filter = "BUFF" },
+				--强擊
+                { spellID = 193526, unitId = "player", caster = "player", filter = "BUFF" },
+				--摩克納薩爾之道
+                { spellID = 201081, unitId = "player", caster = "player", filter = "BUFF" },
+				--貓鼬撕咬
+                { spellID = 190931, unitId = "player", caster = "player", filter = "BUFF" },
+
                 --擊殺命令
                 { spellID = 34026, filter = "CD" },
                 --爆裂射擊
@@ -282,6 +310,10 @@ R["Watcher"] = {
                 { spellID = 53301, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --黑鸦
                 { spellID = 131894, unitId = "target", caster = "player", filter = "DEBUFF" },
+				--獵人印記
+                { spellID = 185365, unitId = "target", caster = "all", filter = "DEBUFF" },
+				--割裂
+                { spellID = 185855, unitId = "target", caster = "all", filter = "DEBUFF" },
 
             },
             {
@@ -331,6 +363,8 @@ R["Watcher"] = {
                 { spellID = 131894, filter = "CD" },
                 --山貓衝刺
                 { spellID = 120697, filter = "CD" },
+				--强擊
+                { spellID = 193526, filter = "CD" },
 
                 -- 物品
                 -- 手套
@@ -378,7 +412,7 @@ R["Watcher"] = {
                 --寒冰護體
                 { spellID = 11426, unitId = "player", caster = "player", filter = "BUFF" },
                 --腦部凍結
-                { spellID = 57761, unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 190446, unitId = "player", caster = "player", filter = "BUFF" },
                 --升溫
                 { spellID = 48107, unitId = "player", caster = "player", filter = "BUFF" },
                 --咒法結界
@@ -401,6 +435,14 @@ R["Watcher"] = {
                 { spellID = 113862, unitId = "player", caster = "player", filter = "BUFF" },
                 --冰霜炸彈
                 { spellID = 112948, filter = "CD" },
+				--燃灼
+                { spellID = 190319, unitId = "player", caster = "player", filter = "BUFF" },
+				--浮冰
+                { spellID = 108839, unitId = "player", caster = "player", filter = "BUFF" },
+				--秘法加速
+                { spellID = 198924, unitId = "player", caster = "player", filter = "BUFF" },
+				--冰刺
+                { spellID = 199844, unitId = "player", caster = "player", filter = "BUFF" },
 
             },
             {
@@ -473,7 +515,13 @@ R["Watcher"] = {
                 { spellID = 45438, filter = "CD" },
                 --冰霜之球
                 { spellID = 84714, filter = "CD" },
-
+				--燃燒吧
+                { spellID = 205029, filter = "CD" },
+				--燃灼
+                { spellID = 190319, filter = "CD" },
+				
+				
+				
                 -- 物品
                 -- 手套
                 {slotID = 10, filter = "CD" },
