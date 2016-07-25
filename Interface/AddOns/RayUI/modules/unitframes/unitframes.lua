@@ -6,6 +6,16 @@ UF.modName = L["头像"]
 
 UF.Layouts = {}
 
+UF["classMaxResourceBar"] = {
+	["DEATHKNIGHT"] = 6,
+	["PALADIN"] = 5,
+	["WARLOCK"] = 5,
+	["MONK"] = 6,
+	["MAGE"] = 4,
+	["ROGUE"] = 8,
+	["DRUID"] = 5
+}
+
 function UF:GetOptions()
 	local options = {
 		colors = {

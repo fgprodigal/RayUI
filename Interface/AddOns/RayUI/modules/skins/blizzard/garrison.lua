@@ -244,10 +244,11 @@ local function LoadSkin()
 
 	local GarrisonMissionFrame = GarrisonMissionFrame
 
-	for i = 1, 18 do
+	for i = 1, 14 do
 		select(i, GarrisonMissionFrame:GetRegions()):Hide()
 	end
 
+	GarrisonMissionFrame.GarrCorners:StripTextures()
 	GarrisonMissionFrame.TitleText:Show()
 
 	S:CreateBD(GarrisonMissionFrame)
@@ -346,6 +347,7 @@ local function LoadSkin()
 
 			reward:GetRegions():Hide()
 
+			reward.IconBorder:Kill()
 			S:ReskinIcon(icon)
 		end
 	end)
@@ -465,19 +467,6 @@ local function LoadSkin()
 		bg:SetPoint("BOTTOMRIGHT", 0, 1)
 	end
 
-	-- Portraits
-
-	hooksecurefunc("GarrisonMissionFrame_SetFollowerPortrait", function(portraitFrame, followerInfo)
-		if not portraitFrame.styled then
-			restyleFollowerPortrait(portraitFrame)
-			portraitFrame.styled = true
-		end
-
-		local color = ITEM_QUALITY_COLORS[followerInfo.quality]
-
-		portraitFrame.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
-	end)
-
 	-- Mechanic tooltip
 
 	GarrisonMissionMechanicTooltip:SetBackdrop(nil)
@@ -512,7 +501,7 @@ local function LoadSkin()
 	
 	local GarrisonRecruitSelectFrame = GarrisonRecruitSelectFrame
 	
-	for i = 1, 18 do
+	for i = 1, 14 do
 		select(i, GarrisonRecruitSelectFrame:GetRegions()):Hide()
 	end
 	GarrisonRecruitSelectFrame.TitleText:Show()
@@ -564,7 +553,7 @@ local function LoadSkin()
  
 	local GarrisonBuildingFrame = GarrisonBuildingFrame
  
-	for i = 1, 18 do
+	for i = 1, 14 do
 		select(i, GarrisonBuildingFrame:GetRegions()):Hide()
 	end
 	
@@ -879,19 +868,7 @@ local function LoadSkin()
 			local portrait = button.PortraitFrame
 
 			if not button.restyled then
-				button.BG:Hide()
-				button.Selection:SetTexture("")
-				button.AbilitiesBG:SetTexture("")
-
 				S:CreateBD(button, .25)
-
-				button.BusyFrame:SetAllPoints()
-
-				local hl = button:GetHighlightTexture()
-				hl:SetColorTexture(r, g, b, .1)
-				hl:ClearAllPoints()
-				hl:SetPoint("TOPLEFT", 1, -1)
-				hl:SetPoint("BOTTOMRIGHT", -1, 1)
 
 				if portrait then
 					restyleFollowerPortrait(portrait)
@@ -900,12 +877,6 @@ local function LoadSkin()
 				end
 
 				button.restyled = true
-			end
-
-			if button.Selection:IsShown() then
-				button:SetBackdropColor(r, g, b, .2)
-			else
-				button:SetBackdropColor(0, 0, 0, .25)
 			end
 
 			if portrait then

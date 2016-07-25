@@ -158,13 +158,13 @@ function S:GetOptions()
 end
 
 function S:CreateStripesThin(f)
-	if not f then return end
-	f.stripesthin = f:CreateTexture(nil, "BACKGROUND", nil, 1)
-	f.stripesthin:SetAllPoints()
-	f.stripesthin:SetTexture([[Interface\AddOns\RayUI\media\StripesThin]], true)
-	f.stripesthin:SetHorizTile(true)
-	f.stripesthin:SetVertTile(true)
-	f.stripesthin:SetBlendMode("ADD")
+	-- if not f then return end
+	-- f.stripesthin = f:CreateTexture(nil, "BACKGROUND", nil, 1)
+	-- f.stripesthin:SetAllPoints()
+	-- f.stripesthin:SetTexture([[Interface\AddOns\RayUI\media\StripesThin]], true)
+	-- f.stripesthin:SetHorizTile(true)
+	-- f.stripesthin:SetVertTile(true)
+	-- f.stripesthin:SetBlendMode("ADD")
 end
 
 function S:CreateBackdropTexture(f)
@@ -200,6 +200,7 @@ function S:CreateBG(frame)
 	bg:Point("BOTTOMRIGHT", frame, 1, -1)
 	bg:SetTexture(R["media"].blank)
 	bg:SetVertexColor(0, 0, 0)
+	f.bg = bg
 
 	return bg
 end

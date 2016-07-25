@@ -3,24 +3,12 @@ local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, loc
 local UF = R:GetModule("UnitFrames")
 local oUF = RayUF or oUF
 
-UF["classMaxResourceBar"] = {
-	["DEATHKNIGHT"] = 6,
-	["PALADIN"] = 5,
-	["WARLOCK"] = 5,
-	["MONK"] = 6,
-	["MAGE"] = 4,
-	["ROGUE"] = 8,
-	["DRUID"] = 5
-}
-
 function UF:Configure_ClassBar(frame)
 	local bars = frame[frame.ClassBar]
 	if not bars then return end
 
 	bars.origParent = frame
-
-	frame.CLASSBAR_HEIGHT = 5
-	UF.ToggleResourceBar(bars)
+	frame.CLASSBAR_HEIGHT = frame.CLASSBAR_HEIGHT or 5
 	local CLASSBAR_WIDTH = 200
 	frame.BORDER = 1
 	frame.SPACING = -2
@@ -135,6 +123,8 @@ local function ToggleResourceBar(bars, overrideVisibility)
 			bars.text:SetAlpha(0)
 		end
 	end
+
+	frame.CLASSBAR_HEIGHT = (frame.USE_CLASSBAR and (frame.CLASSBAR_SHOWN and height) or 0)
 end
 UF.ToggleResourceBar = ToggleResourceBar --Make available to combobar
 
@@ -239,7 +229,7 @@ end
 function UF:Construct_AdditionalPowerBar(frame)
 	local additionalPower = CreateFrame('StatusBar', "AdditionalPowerBar", frame)
 	additionalPower:Point("BOTTOM", frame, "TOP", 0, 2)
-	additionalPower:SetFrameStrata("LOW")
+	additionalPower:SetFrameStrata("MEDIUM")
 	additionalPower:SetFrameLevel(additionalPower:GetFrameLevel() + 1)
 	additionalPower.colorPower = true
 	additionalPower.PostUpdate = UF.PostUpdateAdditionalPower
@@ -253,7 +243,7 @@ function UF:Construct_AdditionalPowerBar(frame)
 	additionalPower.bg:SetVertexColor(0, 0, 0)
 	additionalPower.bg.multiplier = .2
 
-	additionalPower.text = additionalPower:CreateFontString(nil, "OVERLAY")
+	additionalPower.text = frame:CreateFontString(nil, "OVERLAY")
 	additionalPower.text:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
 	additionalPower.text:SetShadowColor(0, 0, 0, 0.2)
 	additionalPower.text:SetShadowOffset(R.mult, -R.mult)
@@ -270,24 +260,27 @@ function UF:PostUpdateAdditionalPower(unit, min, max, event)
 	local powerValueText = powerValue:GetText()
 	local powerValueParent = powerValue:GetParent()
 
-	local color = RayUF["colors"].power["MANA"]
-	color = R:RGBToHex(color[1], color[2], color[3])
+	if event ~= "ElementDisable" then
+		local color = RayUF["colors"].power["MANA"]
+		color = R:RGBToHex(color[1], color[2], color[3])
 
-	--Attempt to remove |cFFXXXXXX color codes in order to determine if power text is really empty
-	if powerValueText then
-		local _, endIndex = strfind(powerValueText, "|cff")
-		if endIndex then
-			endIndex = endIndex + 7 --Add hex code
-			powerValueText = strsub(powerValueText, endIndex)
-			powerValueText = gsub(powerValueText, "%s+", "")
+		--Attempt to remove |cFFXXXXXX color codes in order to determine if power text is really empty
+		if powerValueText then
+			local _, endIndex = strfind(powerValueText, "|cff")
+			if endIndex then
+				endIndex = endIndex + 7 --Add hex code
+				powerValueText = strsub(powerValueText, endIndex)
+				powerValueText = gsub(powerValueText, "%s+", "")
+			end
 		end
+		self.text:ClearAllPoints()
+		self.text:SetParent(self)
+		self.text:Point("TOP", self, "BOTTOM", 0, 0)
+		self.text:SetFormattedText(color.."%d%%|r", floor(min / max * 100))
+
+		self:Show()
 	end
 
-	self.text:ClearAllPoints()
-	self.text:SetParent(self)
-	self.text:Point("TOP", self, "BOTTOM", 0, 0)
-	self.text:SetFormattedText(color.."%d%%|r", floor(min / max * 100))
-	self:Show()
 end
 
 function UF:PostVisibilityAdditionalPower(enabled, stateChanged)

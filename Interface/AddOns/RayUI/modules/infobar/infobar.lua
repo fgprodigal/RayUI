@@ -139,18 +139,18 @@ function IF:RegisterLDB()
 			end
 
 			if OnEnter then
-				infobar:HookScript("OnEnter", OnEnter)
+				infobar:SetScript("OnEnter", OnEnter)
 			end
 
 			if obj.OnLeave then
-				infobar:HookScript("OnLeave", function(self)
+				infobar:SetScript("OnLeave", function(self)
 					obj.OnLeave(self)
 					GameTooltip:Hide()
 				end)
 			end
 
 			if obj.OnClick then
-				infobar:HookScript("OnMouseDown", function(self, button)
+				infobar:SetScript("OnMouseDown", function(self, button)
 					obj.OnClick(self, button)
 				end)
 			end

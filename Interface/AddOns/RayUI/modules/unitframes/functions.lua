@@ -104,15 +104,10 @@ function UF:ConstructPowerBar(frame, bg, text)
     end
 
     if text then
-        local textframe = CreateFrame("Frame", nil, power)
-        textframe:SetAllPoints(frame)
-        textframe:SetFrameStrata(frame:GetFrameStrata())
-        textframe:SetFrameLevel(frame:GetFrameLevel()+5)
-
-        power.value = textframe:CreateFontString(nil, "OVERLAY")
+        power.value = frame.textframe:CreateFontString(nil, "OVERLAY")
         power.value:SetFont(R["media"].font, R["media"].fontsize - 1, R["media"].fontflag)
         power.value:SetJustifyH("LEFT")
-        power.value:SetParent(textframe)
+        power.value:SetParent(frame.textframe)
     end
 
     if self.db.powerColorClass == true then

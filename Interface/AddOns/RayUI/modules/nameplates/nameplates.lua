@@ -512,7 +512,7 @@ function mod:UpdateCVars()
 
 	SetCVar("nameplateOtherTopInset", -1)
 	SetCVar("nameplateOtherBottomInset", -1)
-	SetCVar("nameplateMaxDistance", 40)
+	SetCVar("nameplateMaxDistance", 50)
 end
 
 local function CopySettings(from, to)

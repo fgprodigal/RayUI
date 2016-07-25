@@ -204,6 +204,7 @@ function UF:DPSLayout(frame, unit)
 			frame.AdditionalPower = self:Construct_AdditionalPowerBar(frame)
 		end
 		frame.USE_CLASSBAR = true
+		frame.MAX_CLASS_BAR = 0
 
 --[[ 		if self.db.separateEnergy and R.myclass == "ROGUE" then
 			frame.CPoints:SetParent(RayUF_EnergyBar)
@@ -496,6 +497,11 @@ function UF:DPSLayout(frame, unit)
 		castbar.shadow:Hide()
 		castbar.bg:Hide()
 		frame.Castbar = castbar
+	end
+
+	if (unit and unit:find("boss%d") and self.db.showBossFrames == true) then
+		frame.MAX_CLASS_BAR = 0
+		frame.USE_CLASSBAR = true
 	end
 
 	if (unit and unit:find("arena%d") and self.db.showArenaFrames == true) then

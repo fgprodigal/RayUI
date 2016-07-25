@@ -322,12 +322,6 @@ function AB:HideBlizz()
 		_G["MultiCastActionButton"..i]:UnregisterAllEvents()
 		_G["MultiCastActionButton"..i]:SetAttribute("statehidden", true)
 	end
-
-	ActionBarController:UnregisterAllEvents()
-	ActionBarController:RegisterEvent("UPDATE_EXTRA_ACTIONBAR")
-
-	ActionBarController:UnregisterAllEvents()
-	ActionBarController:RegisterEvent('UPDATE_EXTRA_ACTIONBAR')
 	
 	MainMenuBar:EnableMouse(false)
 	MainMenuBar:SetAlpha(0)
@@ -364,12 +358,9 @@ function AB:HideBlizz()
 	IconIntroTracker:UnregisterAllEvents()
 	IconIntroTracker:Hide()
 	IconIntroTracker:SetParent(blizzHider)
+	TalentMicroButtonAlert:ClearAllPoints()
+	TalentMicroButtonAlert:SetPoint("BOTTOM", RayUI_InfoPanel_Talent, "TOP", 0, 30)
 
-	hooksecurefunc("TalentFrame_LoadUI", function()
-		PlayerTalentFrame:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-		TalentMicroButtonAlert:ClearAllPoints()
-		TalentMicroButtonAlert:SetPoint("BOTTOM", RayUI_InfoPanel_Talent, "TOP", 0, 30)
-	end)
 
 	InterfaceOptionsActionBarsPanelAlwaysShowActionBars:EnableMouse(false)
 	InterfaceOptionsActionBarsPanelLockActionBars:SetScale(0.0001)
