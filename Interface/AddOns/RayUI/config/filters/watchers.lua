@@ -95,8 +95,7 @@ R["Watcher"] = {
                 { spellID = 102543, unitId = "player", caster = "player", filter = "BUFF" },
                 --猛虎之怒
                 { spellID = 5217, unitId = "player", caster = "player", filter = "BUFF" },
-                --野蛮咆哮雕文
-                { spellID = 174544, unitId = "player", caster = "player", filter = "BUFF" },
+                
                 --血腥爪击
                 { spellID = 145152, unitId = "player", caster = "player", filter = "BUFF" },
                 --粉碎
@@ -311,9 +310,9 @@ R["Watcher"] = {
                 --黑鸦
                 { spellID = 131894, unitId = "target", caster = "player", filter = "DEBUFF" },
 				--獵人印記
-                { spellID = 185365, unitId = "target", caster = "all", filter = "DEBUFF" },
+                { spellID = 185365, unitId = "target", caster = "player", filter = "DEBUFF" },
 				--割裂
-                { spellID = 185855, unitId = "target", caster = "all", filter = "DEBUFF" },
+                { spellID = 185855, unitId = "target", caster = "player", filter = "DEBUFF" },
 
             },
             {
@@ -1011,10 +1010,11 @@ R["Watcher"] = {
                 { spellID = 6346, unitId = "player", caster = "all", filter = "BUFF" },
                 --預支時間
                 { spellID = 59889, unitId = "player", caster = "player", filter = "BUFF" },
-                --精神鞭笞雕文
-                { spellID = 120587, unitId = "player", caster = "player", filter = "BUFF" },
+                
                 --身心合一
                 { spellID = 65081, unitId = "player", caster = "all", filter = "BUFF" },
+				--身心合一（神牧）
+                { spellID = 214121, unitId = "player", caster = "all", filter = "BUFF" },
                 --天使之羽
                 { spellID = 121557, unitId = "player", caster = "all", filter = "BUFF" },
                 --幻影術
@@ -1036,23 +1036,19 @@ R["Watcher"] = {
                 { spellID = 139, unitId = "target", caster = "player", filter = "BUFF" },
                 --防護恐懼結界
                 { spellID = 6346, unitId = "target", caster = "all", filter = "BUFF" },
+				
+				--救贖
+                { spellID = 194384, unitId = "target", caster = "player", filter = "BUFF" },
             },
             {
                 name = "玩家重要buff&debuff",
                 direction = "LEFT",
                 setpoint = positions.player_proc_icon,
-                size = 38,
-
-                --機緣回復
-                { spellID = 63735, unitId = "player", caster = "player", filter = "BUFF" },
-                --佈道
-                { spellID = 81661, unitId = "player", caster = "player", filter = "BUFF" },
-                --大天使
-                { spellID = 81700, unitId = "player", caster = "player", filter = "BUFF" },
+                size = 38,              
+              
                 --影散
                 { spellID = 47585, unitId = "player", caster = "player", filter = "BUFF" },
-                --心靈鑚刺雕文
-                { spellID = 81292, unitId = "player", caster = "player", filter = "BUFF" },
+                
                 --暗影强化(4T16)
                 { spellID = 145180, unitId = "player", caster = "player", filter = "BUFF" },
                 --鬼魅幻影
@@ -1067,8 +1063,7 @@ R["Watcher"] = {
                 { spellID = 123254, unitId = "player", caster = "player", filter = "BUFF" },
                 --注入能量
                 { spellID = 10060, unitId = "player", caster = "player", filter = "BUFF" },
-                --神聖洞察
-                { spellID = 123267, unitId = "player", caster = "player", filter = "BUFF" },
+                
                 --幽暗洞察
                 { spellID = 124430, unitId = "player", caster = "player", filter = "BUFF" },
                 --精神護罩
@@ -1077,7 +1072,19 @@ R["Watcher"] = {
                 { spellID = 132573, unitId = "player", caster = "player", filter = "BUFF" },
                 --愈合之语(十层)
                 { spellID = 155363, unitId = "player", caster = "player", filter = "BUFF" },
-
+				
+				--狂喜
+                { spellID = 47536, unitId = "player", caster = "player", filter = "BUFF" },
+				--希望象徵
+                { spellID = 64901, unitId = "player", caster = "player", filter = "BUFF" },
+				--神化
+                { spellID = 200183, unitId = "player", caster = "player", filter = "BUFF" },
+				--聖潔
+                { spellID = 197030, unitId = "player", caster = "player", filter = "BUFF" },
+				--瘋狂殘念
+                { spellID = 197937, unitId = "player", caster = "player", filter = "BUFF" },
+				--虛空射綫
+                { spellID = 205372, unitId = "player", caster = "player", filter = "BUFF" },				
             },
             {
                 name = "目标重要buff&debuff",
@@ -1097,8 +1104,8 @@ R["Watcher"] = {
                 { spellID = 589, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --吸血之觸
                 { spellID = 34914, unitId = "target", caster = "player", filter = "DEBUFF" },
-                --噬靈瘟疫
-                { spellID = 158831, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --心靈炸彈
+                { spellID = 226943, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --心靈恐慌
                 { spellID = 64044, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --沉默
@@ -1111,6 +1118,7 @@ R["Watcher"] = {
                 { spellID = 152118, unitId = "target", caster = "all", filter = "BUFF" },
                 --虚空熵能
                 { spellID = 155361, unitId = "target", caster = "player", filter = "DEBUFF" },
+				
             },
             {
                 name = "焦点buff&debuff",
@@ -1157,6 +1165,13 @@ R["Watcher"] = {
                 { spellID = 10060, filter = "CD" },
                 --絕望禱言
                 { spellID = 19236, filter = "CD" },
+				
+				--狂喜
+                { spellID = 47536, filter = "CD" },
+				--希望象徵
+                { spellID = 64901, filter = "CD" },
+				--神化
+                { spellID = 200183, filter = "CD" },
 
                 -- 物品
                 -- 手套
@@ -1550,8 +1565,6 @@ R["Watcher"] = {
 
                 --血魄護盾
                 { spellID = 77535, unitId = "player", caster = "player", filter = "BUFF" },
-                --血魄轉化
-                { spellID = 45529, unitId = "player", caster = "player", filter = "BUFF" },
                 --血族之裔
                 { spellID = 55233, unitId = "player", caster = "player", filter = "BUFF" },
                 --穢邪力量
@@ -1569,11 +1582,11 @@ R["Watcher"] = {
                 --冰封之霧
                 { spellID = 59052, unitId = "player", caster = "player", filter = "BUFF" },
                 --骸骨之盾
-                { spellID = 49222, unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 195181, unitId = "player", caster = "player", filter = "BUFF" },
                 --冰霜之柱
                 { spellID = 51271, unitId = "player", caster = "player", filter = "BUFF" },
-                --血魄充能
-                { spellID = 114851, unitId = "player", caster = "player", filter = "BUFF" },
+                --血魄之鏡
+                { spellID = 206977, unitId = "player", caster = "player", filter = "BUFF" },
                 --黑暗救贖
                 { spellID = 101568, unitId = "player", caster = "player", filter = "BUFF" },
                 --寶寶能量
@@ -1582,6 +1595,14 @@ R["Watcher"] = {
                 { spellID = 63560, unitId = "pet", caster = "player", filter = "BUFF" },
                 --鮮血氣息
                 { spellID = 50421, unitId = "player", caster = "player", filter = "BUFF" },
+				
+				--滅體抹殺
+                { spellID = 207256, unitId = "player", caster = "player", filter = "BUFF" },
+				--靈魂收割者（加速）
+                { spellID = 215711, unitId = "player", caster = "player", filter = "BUFF" },
+				--冰結之爪
+                { spellID = 194879, unitId = "player", caster = "player", filter = "BUFF" },
+				
             },
             {
                 name = "目标重要buff&debuff",
@@ -1593,15 +1614,21 @@ R["Watcher"] = {
                 { spellID = 47476, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --血魄瘟疫
                 { spellID = 55078, unitId = "target", caster = "player", filter = "DEBUFF" },
+			    --膿瘡傷口
+                { spellID = 194310, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --冰霜熱疫
                 { spellID = 55095, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --召喚石像鬼
                 { spellID = 49206, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --死亡凋零
                 { spellID = 43265, unitId = "target", caster = "player", filter = "DEBUFF" },
+				--惡性瘟疫
+                { spellID = 191587, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --靈魂收割者
                 { spellID = 130736, unitId = "target", caster = "player", filter = "DEBUFF" },
                 { spellID = 114866, unitId = "target", caster = "player", filter = "DEBUFF" },
+				--血魄印記
+                { spellID = 206940, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
             {
                 name = "焦点buff&debuff",
@@ -1621,7 +1648,16 @@ R["Watcher"] = {
                 direction = function() return R:IsDeveloper() and "RIGHT" or "DOWN" end,
                 mode = function() return R:IsDeveloper() and "ICON" or "BAR" end,
                 setpoint = positions.cd_icon,
-
+				
+				-- 大軍
+                {slotID = 42650, filter = "CD" },
+				-- 黑暗仲裁者
+                {slotID = 207349, filter = "CD" },
+				--滅體抹殺
+                { spellID = 207256, filter = "CD" },
+				--符文武器
+                { spellID = 47568, filter = "CD" },
+				
                 -- 物品
                 -- 手套
                 {slotID = 10, filter = "CD" },
