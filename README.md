@@ -24,6 +24,8 @@
 - 保持你的 RP 中的 commits 清晰整洁
 - 在标题和正文中清楚的描述你的 PR 的目的和改动
 
+步骤：
+
 1. fork 这个库
 2. clone 你 fork 出来的库
 3. 创建一个 feature 分支 (`git checkout -b my-new-feature`)
@@ -60,6 +62,8 @@ Website: [rayui.cn](http://rayui.cn)
 - Rebase the newest master branch to your PR branch before make your pull request
 - Keep the commits in your PR clean and simple
 - Descripe your PR's purpose and detail in title and content
+
+Steps:
 
 1. Fork it
 2. Clone your fork repo
