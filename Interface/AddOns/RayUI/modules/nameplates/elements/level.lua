@@ -6,6 +6,7 @@ function mod:UpdateElement_Level(frame)
 	if(not self.db.units[frame.UnitType].showLevel and frame.UnitType ~= "PLAYER") then return end
 	if frame.UnitType == "PLAYER" and not self.db.units[frame.UnitType].showLevel then frame.Level:SetText() return end 
 	local level = UnitLevel(frame.displayedUnit)
+	local c = UnitClassification(frame.displayedUnit)
 
 	local r, g, b
 	if(level == -1 or not level) then
@@ -13,6 +14,8 @@ function mod:UpdateElement_Level(frame)
 		r, g, b = 0.9, 0, 0
 	else
 		local color = GetQuestDifficultyColor(level)
+		if strfind(c, "rare") then level = level .. "r" end
+		if strfind(c, "elite") then level = level .. "+" end
 		r, g, b = color.r, color.g, color.b
 	end
 	

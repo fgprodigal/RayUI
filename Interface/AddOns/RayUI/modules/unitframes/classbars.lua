@@ -328,8 +328,5 @@ function UF:PostUpdateVisibilityStagger(event, unit, isShown, stateChanged)
 	if(stateChanged) then
 		ToggleResourceBar(frame[frame.ClassBar])
 		UF:Configure_ClassBar(frame)
-		UF:Configure_HealthBar(frame)
-		UF:Configure_Power(frame)
-		UF:Configure_InfoPanel(frame, true) --2nd argument is to prevent it from setting template, which removes threat border
 	end
 end

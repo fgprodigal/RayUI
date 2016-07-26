@@ -194,7 +194,7 @@ function A:OnAttributeChanged(attribute, value)
 end
 
 function A:UpdateHeader(header)
-	header:SetAttribute("consolidateTo", (R.db.Misc.raidbuffreminder == true and R.db.Misc.consolidate == true) and 1 or 0)
+	header:SetAttribute("consolidateTo", 0)
 	header:SetAttribute("maxWraps", 1)
 	header:SetAttribute("sortMethod", "TIME")
 	header:SetAttribute("sortDirection", "+")
