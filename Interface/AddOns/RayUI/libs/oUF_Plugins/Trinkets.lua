@@ -41,7 +41,7 @@ local Update = function(self, event, ...)
 			end
 		end
 	elseif event == 'PLAYER_ENTERING_WORLD' then
-		CooldownFrame_Set(self.Trinket.cooldownFrame, 1, 1, , true, true)
+		CooldownFrame_Set(self.Trinket.cooldownFrame, 1, 1, true, true)
 	end
 	
 	if(self.Trinket.PostUpdate) then self.Trinket:PostUpdate(event) end
