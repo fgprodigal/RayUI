@@ -1163,7 +1163,7 @@ R["Watcher"] = {
                 --魔性征召
                 { spellID = 114925, unitId = "player", caster = "player", filter = "BUFF" },
                 --魔典：恶魔牺牲
-                { spellID = 108503, unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 196099, unitId = "player", caster = "player", filter = "BUFF" },
                 --恶魔法阵：召唤
                 { spellID = 48018, unitId = "player", caster = "player", filter = "BUFF" },
                 --灵魂石保存
@@ -1186,12 +1186,12 @@ R["Watcher"] = {
                 { spellID = 74434, unitId = "player", caster = "player", filter = "BUFF" },
                 --灵魂交换
                 { spellID = 86211, unitId = "player", caster = "player", filter = "BUFF" },
-                --黑暗灵魂：哀难
-                { spellID = 113860, unitId = "player", caster = "player", filter = "BUFF" },
+                --灵魂收割
+                { spellID = 196098, unitId = "player", caster = "player", filter = "BUFF" },
                 --熔火之心
                 { spellID = 140074, unitId = "player", caster = "player", filter = "BUFF" },
-                --恶魔协同
-                { spellID = 171982, unitId = "player", caster = "all", filter = "BUFF" },
+                --协同魔典
+                { spellID = 171975, unitId = "player", caster = "all", filter = "BUFF" },
                 --炽燃之怒(2T16)
                 { spellID = 145085, unitId = "player", caster = "player", filter = "BUFF" },
                 --黑暗灵魂：学识
@@ -1212,6 +1212,18 @@ R["Watcher"] = {
                 { spellID = 108508, unitId = "player", caster = "player", filter = "BUFF" },
                 --不灭决心
                 { spellID = 104773, unitId = "player", caster = "player", filter = "BUFF" },
+				--燃魂
+				{ spellID = 157698, unitId = "player", caster = "player", filter = "BUFF" },
+				--熔火之心
+				{ spellID = 140074, unitId = "player", caster = "player", filter = "BUFF" },
+				--恶魔箭
+				{ spellID = 157695, unitId = "player", caster = "player", filter = "DEBUFF" },
+                --法力分流
+                { spellID = 196104, unitId = "player", caster = "player", filter = "BUFF" },
+                --暗影启迪
+                { spellID = 196606, unitId = "player", caster = "player", filter = "BUFF" },
+                --魔性征召
+                { spellID = 205146, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -1250,6 +1262,14 @@ R["Watcher"] = {
                 { spellID = 30283, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --奴役惡魔
                 { spellID = 1098, unitId = "pet", caster = "player", filter = "DEBUFF" },
+                --生命虹吸
+                { spellID = 63106, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --诡异魅影
+                { spellID = 205179, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --暗影烈焰
+                { spellID = 205181, unitId = "target", caster = "player", filter = "DEBUFF" },
+                --暗影烈焰
+                { spellID = 196414, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
             {
                 name = "焦点buff&debuff",
@@ -2090,7 +2110,6 @@ R["Watcher"] = {
                 { spellID = 172106, unitId = "player", caster = "all", filter = "BUFF" },
                 -- 魔法增效
                 { spellID = 159916, unitId = "player", caster = "all", filter = "BUFF" },
-
                 --橙色多彩
                 -- 不屈之源钻 (耐力, 减伤)
                 { spellID = 137593, unitId = "player", caster = "all", filter = "BUFF" },
