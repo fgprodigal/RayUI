@@ -13,7 +13,7 @@ local function LoadSkin()
 		icon:SetTexCoord(.08, .92, .08, .92)
 		DeathRecapFrame["Recap"..i].SpellInfo.bg = S:CreateBG(DeathRecapFrame["Recap"..i].SpellInfo)
 		DeathRecapFrame["Recap"..i].SpellInfo.bg:SetOutside(icon)
-		icon:SetParent(DeathRecapFrame["Recap"..i].SpellInfo.bg)
+		icon:SetParent(DeathRecapFrame["Recap"..i].SpellInfo)
 	end
 
 	for i=1, DeathRecapFrame:GetNumChildren() do

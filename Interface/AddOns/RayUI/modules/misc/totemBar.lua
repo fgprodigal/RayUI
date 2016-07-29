@@ -11,7 +11,7 @@ local function Update(self,event)
 			M.totembar[i]:Show()
 			M.totembar[i].iconTexture:SetTexture(icon)
 			displayedTotems = displayedTotems + 1
-			CooldownFrame_SetTimer(M.totembar[i].cooldown, startTime, duration, 1)
+			CooldownFrame_Set(M.totembar[i].cooldown, startTime, duration, true, true)
 			
 			for d=1, MAX_TOTEMS do
 				if _G["TotemFrameTotem"..d.."IconTexture"]:GetTexture() == icon then
