@@ -1223,7 +1223,7 @@ R["Watcher"] = {
                 --熔火之心
                 { spellID = 140074, unitId = "player", caster = "player", filter = "BUFF" },
                 --协同魔典
-                { spellID = 171975, unitId = "player", caster = "all", filter = "BUFF" },
+                { spellID = 171982, unitId = "player", caster = "all", filter = "BUFF" },
                 --炽燃之怒(2T16)
                 { spellID = 145085, unitId = "player", caster = "player", filter = "BUFF" },
                 --黑暗灵魂：学识
