@@ -177,7 +177,7 @@ local function ItemButtonEnter(self)
 	else
 		GameTooltip:Point("TOPLEFT", BonusRollFrame, "BOTTOMLEFT", 0, -2)
 	end
-	GameTooltip:SetItemByID(self.itemID)
+	GameTooltip:SetHyperlink(self.itemLink)
 
 	self:SetScript("OnUpdate", ItemButtonUpdate)
 end

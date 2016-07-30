@@ -130,10 +130,7 @@ function UF:ConstructPortrait(frame)
     -- portrait:Point("BOTTOMRIGHT", frame.Health, "BOTTOMRIGHT", 0, 1)
     portrait:SetInside(frame.Health, 1, 1)
     portrait:SetAlpha(.2)
-    portrait.PostUpdate = function(frame)
-        frame:SetCamDistanceScale(1 - 0.01) --Blizzard bug fix
-        frame:SetCamDistanceScale(1)
-    end
+	portrait:SetCamDistanceScale(1)
     if frame.unit and frame.unit:find("boss") then
         portrait.PostUpdate = nil
     end
