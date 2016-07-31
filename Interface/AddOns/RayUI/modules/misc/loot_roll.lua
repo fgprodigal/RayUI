@@ -3,7 +3,7 @@ local M = R:GetModule("Misc")
 
 R.rollBars = {}
 local testMode = false
-local pos = "BOTTOM"
+local pos = "TOP"
 
 local function ClickRoll(frame)
 	RollOnLoot(frame.parent.rollid, frame.rolltype)

@@ -50,12 +50,12 @@ local function LoadSkin()
 	end
 
 	hooksecurefunc("ItemSocketingFrame_Update", function()
-		for i = 1, MAX_NUM_SOCKETS do
+		local num = GetNumSockets()
+		for i = 1, num do
 			local color = GEM_TYPE_INFO[GetSocketTypes(i)]
 			_G["ItemSocketingSocket"..i].glow:SetBackdropBorderColor(color.r, color.g, color.b)
 		end
 
-		local num = GetNumSockets()
 		if num == 3 then
 			ItemSocketingSocket1:SetPoint("BOTTOM", ItemSocketingFrame, "BOTTOM", -75, 39)
 		elseif num == 2 then
