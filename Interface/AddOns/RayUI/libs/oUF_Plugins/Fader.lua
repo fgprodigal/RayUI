@@ -8,6 +8,8 @@ local function Update(self)
 
 	local _, powerType = UnitPowerType(unit)
 	local power = UnitPower(unit)
+	local addcur = UnitPower('player', ADDITIONAL_POWER_BAR_INDEX)
+	local addmax = UnitPowerMax('player', ADDITIONAL_POWER_BAR_INDEX)
 
 	if
 		(UnitCastingInfo(unit) or UnitChannelInfo(unit)) or
@@ -16,7 +18,7 @@ local function Update(self)
 		UnitExists(( unit == "pet" and "player" or unit ) .. 'target') or
 		UnitHealth(unit) < UnitHealthMax(unit) or
 		((powerType == 'RAGE' or powerType == 'RUNIC_POWER') and power > 0) or
-		((powerType ~= 'RAGE' and powerType ~= 'RUNIC_POWER') and power < UnitPowerMax(unit)) or
+		((powerType ~= 'RAGE' and powerType ~= 'RUNIC_POWER') and power < UnitPowerMax(unit) and not (addmax>0 and addcur==addmax)) or
 		GetMouseFocus() == self
 	then
 	--	if self:GetAlpha() < (self.FadeMaxAlpha or 1) then
