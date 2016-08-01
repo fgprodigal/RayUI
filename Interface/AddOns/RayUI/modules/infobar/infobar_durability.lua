@@ -78,11 +78,16 @@ local function Durability_OnEnter(self)
 	GameTooltip:Show()
 end
 
+local function Durability_OnClick(self)
+	ToggleCharacter("PaperDollFrame")
+end
+
 do	-- Initialize
 	local info = {}
 
 	info.title = DURABILITY
 	info.icon = "Interface\\Icons\\trade_blacksmithing"
+	info.clickFunc = Durability_OnClick
 	info.events = { "PLAYER_ENTERING_WORLD", "UPDATE_INVENTORY_DURABILITY", "MERCHANT_SHOW" }
 	info.eventFunc = Durability_OnEvent
 	info.initFunc = Durability_OnEvent
