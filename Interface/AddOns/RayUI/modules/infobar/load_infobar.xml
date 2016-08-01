@@ -1,15 +1,165 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/">
+<Ui>
+	
 	<Script file="infobar.lua"/>
-	<Script file="infotext.lua"/>
-	<Script file="fps.lua"/>
-	<Script file="latency.lua"/>
-	<Script file="specswitch.lua"/>
-	<Script file="durability.lua"/>
-	<Script file="friend.lua"/>
-	<Script file="guild.lua"/>
-	<Script file="currency.lua"/>
-	<Script file="memory.lua"/>
-	<Script file="stat1.lua"/>
-	<Script file="stat2.lua"/>
-	<Script file="calltoarms.lua"/>
+
+	<Button name="RayUI_InfoBarButtonStyleTemplate" virtual="true">
+		<HitRectInsets left="6" right="6" top="6" bottom="6" />
+		<Size x="140" y="35" />		
+		<NormalTexture parentKey="Icon" hidden="true">
+			<Size x="19" y="19" />
+			<Anchors>
+				<Anchor point="TOPLEFT" x="8" y="-8" />
+			</Anchors>
+			<TexCoords left="0.075" right="0.925" top="0.075" bottom="0.925" />
+		</NormalTexture>
+		<HighlightTexture parentKey="Highlight">
+			<Anchors>
+				<Anchor point="TOPLEFT" x="8" y="-8" />
+				<Anchor point="BOTTOMRIGHT" x="-9" y="8" />
+			</Anchors>
+			<Color r="0.5" g="0.5" b="0.5" a="0.25" />
+		</HighlightTexture>
+		<ButtonText parentKey="Text">
+			<Anchors>
+				<Anchor point="TOPLEFT" x="8" y="-8" />
+				<Anchor point="BOTTOMRIGHT" x="-8" y="8" />
+			</Anchors>
+		</ButtonText>
+	</Button>
+
+	<Button name="RayUI_InfoBarButtonTemplate" inherits="RayUI_InfoBarButtonStyleTemplate" alpha="0" virtual="true">
+		<Scripts>
+			<OnLoad>
+				self:RegisterForClicks("AnyUp")
+				self.update = 0
+				self.interval = 1
+			</OnLoad>
+			<OnClick function="RayUI_InfoBarButton_OnClick" />
+			<OnEvent function="RayUI_InfoBarButton_OnEvent" />
+			<OnUpdate function="RayUI_InfoBarButton_OnUpdate" />
+			<OnEnter function="RayUI_InfoBarButton_OnEnter" />
+			<OnLeave function="RayUI_InfoBarButton_OnLeave" />
+		</Scripts>
+	</Button>
+	
+	<Button name="RayUI_InfoBarMenuButtonTemplate" inherits="RayUI_InfoBarButtonStyleTemplate" virtual="true">
+		<Scripts>
+			<OnLoad>
+				self.Highlight:SetPoint("TOPLEFT",28,-8)
+				self.Text:SetPoint("TOPLEFT",28,-8)
+			</OnLoad>
+			<OnClick function="RayUI_InfoBarMenuButton_OnClick" />
+		</Scripts>
+	</Button>
+
+	<Frame name="RayUI_InfoBarMenu" frameStrata="MEDIUM" toplevel="true" hidden="true" parent="UIParent">
+		<Size x="130" y="320" />
+		<Anchors>
+			<Anchor point="CENTER" />
+		</Anchors>
+		<Frames>
+			<Button parentKey="Button1" inherits="RayUI_InfoBarMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" x="-5" y="-15" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button2" inherits="RayUI_InfoBarMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button1" relativePoint="BOTTOM" x="0" y="5" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button3" inherits="RayUI_InfoBarMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button2" relativePoint="BOTTOM" x="0" y="5" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button4" inherits="RayUI_InfoBarMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button3" relativePoint="BOTTOM" x="0" y="5" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button5" inherits="RayUI_InfoBarMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button4" relativePoint="BOTTOM" x="0" y="5" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button6" inherits="RayUI_InfoBarMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button5" relativePoint="BOTTOM" x="0" y="5" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button7" inherits="RayUI_InfoBarMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button6" relativePoint="BOTTOM" x="0" y="5" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button8" inherits="RayUI_InfoBarMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button7" relativePoint="BOTTOM" x="0" y="5" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button9" inherits="RayUI_InfoBarMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button8" relativePoint="BOTTOM" x="0" y="5" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button10" inherits="RayUI_InfoBarMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button9" relativePoint="BOTTOM"  x="0" y="10"/>
+				</Anchors>
+			</Button>
+			<Button parentKey="Clear" inherits="RayUI_InfoBarMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" x="-5" y="0" />
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						self.Highlight:SetPoint("TOPLEFT",28,-8)
+						self.Text:SetPoint("TOPLEFT",28,-8)
+						self:SetNormalTexture("Interface\\Icons\\inv_pet_broom")
+					</OnLoad>
+					<OnClick>
+						RayUI_InfoBarButton_OnReset(self:GetParent().ref)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button parentKey="Close">
+				<Anchors>
+					<Anchor point="TOPRIGHT" x="5" y="2" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						self:GetParent():Hide()
+					</OnClick>
+				</Scripts>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				self:RegisterEvent("PLAYER_LOGIN")
+			</OnLoad>
+			<OnEvent function="RayUI_InfoBarMenu_OnInit" />
+			<OnHide>
+				local frame = self.ref
+				
+				if frame and not frame.infobarType then
+					frame:SetAlpha(0)
+				end
+			</OnHide>
+		</Scripts>
+	</Frame>
+
+	
+	<Script file="infobar_durability.lua"/>
+	<Script file="infobar_fps.lua"/>
+	<Script file="infobar_friends.lua"/>
+	<Script file="infobar_guild.lua"/>
+	<Script file="infobar_latency.lua"/>
+	<Script file="infobar_memory.lua"/>
+	<Script file="infobar_money.lua"/>
+	<Script file="infobar_talent.lua"/>
+	<!--Script file="infobar_currency.lua"/>
+	<Script file="infobar_artifact.lua"/>
+	<Script file="infobar_worldquests.lua"/-->	
+	
 </Ui>

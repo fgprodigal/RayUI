@@ -32,6 +32,45 @@ local function IsInspectFrameOpen()
 	return (InspectFrame and InspectFrame:IsShown()) or (Examiner and Examiner:IsShown())
 end
 
+local function CreateDivider(self,line)
+	self.divider[line] = CreateFrame("Frame",nil,self)
+	
+	local divider = self.divider[line]
+	divider:SetHeight(2)
+	divider.tex = divider:CreateTexture(nil,"BACKGROUND")
+	divider.tex:SetColorTexture(0,0,0)
+	divider.tex:SetHeight(1)
+	divider.tex:SetPoint("TOPLEFT")
+	divider.tex:SetPoint("TOPRIGHT")
+	divider.tex2 = divider:CreateTexture(nil,"BACKGROUND")
+	divider.tex2:SetColorTexture(1,1,1,0.2)
+	divider.tex2:SetHeight(1)
+	divider.tex2:SetPoint("BOTTOMLEFT")
+	divider.tex2:SetPoint("BOTTOMRIGHT")
+
+	return divider
+end
+
+local function AddDivider(self)
+	self:AddLine(" ")
+	
+	local line = self:NumLines()
+	local relativeTo = _G[self:GetName().."TextLeft"..line]
+	local divider = self.divider[line] or self:CreateDivider(line)
+
+	divider:ClearAllPoints()
+	divider:SetPoint("RIGHT",-10,0)
+	divider:SetPoint("LEFT",relativeTo,0,1)
+	divider:Show()
+end
+
+local function SetPrevLineJustify(self,justify)
+	local index = self:NumLines()
+	local line = _G[self:GetName().."TextLeft"..index]
+
+	self.justify[line] = justify
+end
+
 function TT:GetOptions()
 	local options = {
 		cursor = {
@@ -252,6 +291,22 @@ function TT:GameTooltip_OnUpdate(tooltip)
 	end
 end
 
+function TT:Hook_Reset(tooltip)
+	if tooltip.justify then
+		for line, justify in pairs(tooltip.justify) do
+			line:SetJustifyH("LEFT")
+		end
+		
+		tooltip.justify = {}
+	end
+
+	if tooltip.divider then
+		for line, divider in pairs(tooltip.divider) do
+			divider:Hide()
+		end
+	end
+end
+
 local function GetPlayerScore(unit)
 	local unitilvl = 0
 	local ilvl, ilvlAdd, equipped = 0, 0, 0
@@ -390,6 +445,12 @@ function TT:PLAYER_ENTERING_WORLD(event)
 	}
 
 	for _, tt in pairs(tooltips) do
+		tt.divider = {}
+		tt.justify = {}
+		tt.CreateDivider = CreateDivider
+		tt.AddDivider = AddDivider
+		tt.SetPrevLineJustify = SetPrevLineJustify
+
 		self:SetStyle(tt)
 		self:HookScript(tt, "OnShow", "SetStyle")
 	end
@@ -454,11 +515,14 @@ function TT:SetStyle(tooltip)
 		tooltip.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 		tooltip.shadow:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 	end
-	-- if tooltip.NumLines then
-	-- 	for index=1, tooltip:NumLines() do
-	-- 		-- _G[tooltip:GetName().."TextLeft"..index]:SetShadowOffset(R.mult, -R.mult)
-	-- 	end
-	-- end
+	if tooltip == GameTooltip then
+		for line, justify in pairs(tooltip.justify) do
+			local width = tooltip:GetWidth()-20
+
+			line:SetWidth(width)
+			line:SetJustifyH(justify)
+		end	
+	end
 	tooltip.needRefresh = true
 end
 
@@ -606,6 +670,7 @@ function TT:Initialize()
 	self:SecureHook("GameTooltip_SetDefaultAnchor")
 	self:SecureHook("GameTooltip_ShowStatusBar")
 	self:HookScript(GameTooltip, "OnUpdate", "GameTooltip_OnUpdate")
+	self:SecureHook(GameTooltip, "SetOwner", "Hook_Reset")
 
 	GameTooltip:HookScript("OnUpdate", function(self, elapsed)
 		if self:GetAnchorType() == "ANCHOR_CURSOR" then

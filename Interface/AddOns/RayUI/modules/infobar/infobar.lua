@@ -1,225 +1,375 @@
-﻿local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local IF = R:NewModule("InfoBar", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0", "AceTimer-3.0")
 local LDB = LibStub:GetLibrary("LibDataBroker-1.1")
 
-local bars = {}
-IF.InfoBarStatusColor = {{1, 0, 0}, {1, 1, 0}, {0, 0.4, 1}}
+local maxMenuButtons, infobarTypes, usedInfoBar = 10, {}, {}
 
-local height = 15
-local speed = 135
-IF.gap = 15
-
-function IF:CreateInfoPanel(name, width)
-	local panel = CreateFrame("Frame", name, RayUI_BottomInfoBar)
-	panel:SetSize(width, height - 1)
-	panel.Text = panel:CreateFontString(nil, "OVERLAY")
-	panel.Text:SetJustifyH("LEFT")
-	panel.Text:SetJustifyV("CENTER")
-	panel.Text:SetFont(R["media"].font, R["media"].fontsize - 1, R["media"].fontflag)
-	panel.Text:Point("LEFT", panel, "LEFT", 13, 0)
-	panel.Text:SetShadowColor(0, 0, 0, 0.4)
-	panel.Text:SetShadowOffset(R.mult, -R.mult)
-
-	local r, g, b = unpack(RayUF.colors.class[R.myclass])
-	panel.Indicator = panel:CreateTexture(nil, "OVERLAY")
-	panel.Indicator:SetAllPoints()
-	panel.Indicator:SetTexture("Interface\\AddOns\\RayUI\\media\\threat")
-	panel.Indicator:SetBlendMode("ADD")
-	panel.Indicator:SetVertexColor(r, g, b, .6)
-	panel.Indicator:Hide()
-
-	panel.Square = panel:CreateTexture(nil, "OVERLAY")
-	panel.Square:SetTexture(R.media.blank)
-	panel.Square:SetVertexColor(unpack(IF.InfoBarStatusColor[3]))
-	panel.Square:Point("LEFT", 5, 0)
-	panel.Square:Size(5, 5)
-	panel.Square.Bg = panel:CreateTexture(nil, "BORDER")
-	panel.Square.Bg:SetColorTexture(0, 0, 0)
-	panel.Square.Bg:Point("LEFT", 4, 0)
-	panel.Square.Bg:Size(7, 7)
-
-	panel:SetScript("OnEnter", function(self)
-		self.Indicator:Show()
-		if not IF.db.autoHide then return end
-		IF:CancelTimer(IF.Anim)
-	end)
-	panel:SetScript("OnLeave", function(self)
-		self.Indicator:Hide()
-		if not IF.db.autoHide then return end
-		IF:ReadyToSlideDown()
-	end)
-
-	return panel
+local function GetInfoBarList()
+	if not R.db["InfoBar"] then
+		R.db["InfoBar"] = {}
+	end
+	if not R.db["InfoBar"]["List"] then
+		R.db["InfoBar"]["List"] = {
+			"Framerate",
+			"Latency",
+			"Talent",
+			"Durability",
+			"Friends",
+			"Guild",
+			"Memory",
+			"Money",
+		}
+	end
+	return R.db["InfoBar"]["List"]
 end
 
-function IF:ReadyToSlideDown()
-	if not self.db.autoHide then return end
-	self:CancelTimer(self.Anim)
-	self.Anim = self:ScheduleTimer("SlideDown", 3)
+local function OpenMenu(infobar)
+	local padding, numShown = 20, 0
+	local menu = RayUI_InfoBarMenu
+	local oldRef = menu.ref
+
+	if oldRef and oldRef ~= infobar and not oldRef.infobarType then
+		menu.ref:SetAlpha(0)
+	end
+	
+	for i = 1, maxMenuButtons do
+		local button = menu["Button"..i]
+		button:Hide()
+	end
+	
+	for infobarType, info in pairs(infobarTypes) do
+		local isUsed = usedInfoBar[infobarType]
+		
+		if not isUsed then
+			numShown = numShown + 1
+			
+			-- Add InfoBar Button to the menu
+			local button = menu["Button"..numShown]
+
+			button.ref = infobar
+			button.infobarType = infobarType
+			button.info = info
+			button:SetNormalTexture(info.icon or "Interface\\Icons\\inv_misc_questionmark")
+			button:SetText(info.title)
+			button:Show()
+		end
+	end
+	
+	if numShown == 0 then
+		padding = padding - 10
+	end
+	
+	if infobar.infobarType then
+		padding = padding + 35
+		menu.Clear:Show()
+	else
+		menu.Clear:Hide()
+	end
+
+	menu.ref = infobar
+	menu:SetHeight(25 * numShown + padding)
+	menu:ClearAllPoints()
+	menu:SetPoint("BOTTOM",infobar,"TOP",0,5)
+	menu:Show()
+	
+	GameTooltip_Hide()
 end
 
-function IF:SlideDown()
-	local bottom = tonumber(R:Round(RayUI_BottomInfoBar:GetBottom()))
-	if bottom <= -height then return end
-	RayUI_BottomInfoBar:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 0)
-	R:Slide(RayUI_BottomInfoBar, "DOWN", height, speed)
+local function SetButton(button,index,infobarType,info,isInit)
+	button:SetAlpha(1)
+	button.infobarType = infobarType
+	button.clickFunc = info.clickFunc
+	button.onUpdate = info.onUpdate
+	button.tooltipFunc = info.tooltipFunc
+	button.eventFunc = info.eventFunc
+	button.registerLDBEvent = info.registerLDBEvent
+	button.unregisterLDBEvent = info.unregisterLDBEvent
+	button:SetText(info.title)
+
+	usedInfoBar[infobarType] = index
+
+	if type(info.events) == "table" then
+		for _, event in pairs(info.events) do
+			if event == "UNIT_AURA" or event == "UNIT_RESISTANCES"  or event == "UNIT_STATS" or event == "UNIT_ATTACK_POWER"
+				or event == "UNIT_RANGED_ATTACK_POWER" or event == "UNIT_TARGET" or event == "UNIT_SPELL_HASTE" then
+				button:RegisterUnitEvent(event, "player")
+			elseif event == 'COMBAT_LOG_EVENT_UNFILTERED' then
+				button:RegisterUnitEvent(event, UnitGUID("player"), UnitGUID("pet"))
+			else
+				button:RegisterEvent(event)
+			end
+		end
+	end
+
+	if button.registerLDBEvent then
+		button:registerLDBEvent()
+	end
+	-- Save Setting
+	if not isInit then
+		R.db["InfoBar"]["List"][index] = infobarType
+	end
+	
+	if info.initFunc then
+		info.initFunc(button)
+	end
+	
+	if info.icon then
+		button:SetNormalTexture(info.icon)
+		button.Text:SetPoint("TOPLEFT",28,-8)
+		button.Highlight:Point("TOPLEFT",28,-8)
+		button.Icon:Show()
+	else
+		button.Text:SetPoint("TOPLEFT",8,-8)
+		button.Highlight:Point("TOPLEFT",8,-8)
+		button.Icon:Hide()
+	end
+
+	button.Highlight:Point("BOTTOMRIGHT",-8,8)
 end
 
-function IF:SlideUp()
-	local bottom = tonumber(R:Round(RayUI_BottomInfoBar:GetBottom()))
-	if bottom >= 0 then return end
-	RayUI_BottomInfoBar:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, -height)
-	R:Slide(RayUI_BottomInfoBar, "UP", height, speed)
-end
+function RayUI_InfoBarButton_OnClick(self, button)
+	if button == "LeftButton" and self.clickFunc then
+		self.clickFunc(self)
+	end
 
-function IF:CheckAutoHide()
-	if not self.db.autoHide then return end
-	local x, y = GetCursorPosition()
-	local timeleft = self:TimeLeft(self.Anim)
-	if y > height and timeleft and timeleft <= 0 then
-		self:ReadyToSlideDown()
+	if button == "RightButton" then
+		OpenMenu(self)
 	end
 end
 
-function IF:RegisterLDB()
-	local lastbar = nil
-	for name, obj in LDB:DataObjectIterator() do
-		if obj.OnEnter or obj.OnTooltipShow then
-			local curFrame = nil
-			local infobar = IF:CreateInfoPanel("RayUI_InfoPanel_"..name, 80)
-			if not lastbar then
-				infobar:SetPoint("LEFT", RayUI_InfoPanel_Guild, "RIGHT", 0, 0)
-			else
-				infobar:SetPoint("LEFT", lastbar, "RIGHT", 0, 0)
-			end
-			lastbar = infobar
+function RayUI_InfoBarButton_OnEnter(self)
+	local menu = RayUI_InfoBarMenu
+	
+	if self.tooltipFunc and not menu:IsShown() then
+		self.tooltipFunc(self)
+	elseif not self.infobarType then
+		GameTooltip:SetOwner(self, "ANCHOR_TOP")
+		GameTooltip:AddLine(L["点击右键选择信息条"],1,1,1)
+		GameTooltip:Show()
+	end
+	
+	if self.infobarType then
+		self:SetAlpha(1)
+	else
+		self:SetAlpha(0.5)
+	end
+end
 
-			local function textUpdate(event, name, key, value, dataobj)
-				if value == nil or (string.len(value) >= 3) or value == 'n/a' or name == value then
-					curFrame.Text:SetText(value ~= 'n/a' and value or name)
-				else
-					curFrame.Text:SetText(name..': '..'|cffFFFFFF'..value..'|r')
-				end
-				curFrame:SetWidth(curFrame.Text:GetWidth() + IF.gap*2)
-				if curFrame:GetRight() + IF.gap > RayUI_InfoPanel_CallToArms:GetRight() - RayUI_InfoPanel_CallToArms:GetWidth() then
-					curFrame:Hide()
-				end
-			end
+function RayUI_InfoBarButton_OnLeave(self)
+	local menu = RayUI_InfoBarMenu
+	
+	if self.infobarType then
+		self:SetAlpha(1)
+	elseif menu:IsShown() and menu.ref == self then
+		self:SetAlpha(0.5)
+	else
+		self:SetAlpha(0)
+	end
+	
+	GameTooltip_Hide()
+end
 
-			local function OnEvent(self)
-				curFrame = self
-				LDB:RegisterCallback("LibDataBroker_AttributeChanged_"..name.."_text", textUpdate)
-				LDB:RegisterCallback("LibDataBroker_AttributeChanged_"..name.."_value", textUpdate)					
-				LDB.callbacks:Fire("LibDataBroker_AttributeChanged_"..name.."_text", name, nil, obj.text, obj)	
-			end
+function RayUI_InfoBarButton_OnUpdate(self, elapsed)
+	if self.onUpdate then
+		self.update = self.update + elapsed
 
-			infobar:RegisterEvent("PLAYER_ENTERING_WORLD")
-			infobar:SetScript("OnEvent", OnEvent)
-
-			local OnEnter = nil
-			if obj.OnTooltipShow then
-				OnEnter = function(self)
-					GameTooltip:SetOwner(infobar, "ANCHOR_NONE")
-					GameTooltip:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 0)
-					GameTooltip:ClearLines()
-					obj.OnTooltipShow(GameTooltip)
-					GameTooltip:Show()
-				end
-			end
-
-			if obj.OnEnter then
-				OnEnter = function(self)
-					GameTooltip:SetOwner(self, "ANCHOR_NONE")
-					GameTooltip:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 0)
-					GameTooltip:ClearLines()
-					GameTooltip:Hide()
-					obj.OnEnter(self)
-					GameTooltip:Show()
-				end
-			end
-
-			if OnEnter then
-				infobar:SetScript("OnEnter", OnEnter)
-			end
-
-			if obj.OnLeave then
-				infobar:SetScript("OnLeave", function(self)
-					obj.OnLeave(self)
-					GameTooltip:Hide()
-				end)
-			end
-
-			if obj.OnClick then
-				infobar:SetScript("OnMouseDown", function(self, button)
-					obj.OnClick(self, button)
-				end)
-			end
+		while self.update > self.interval do
+			self.onUpdate(self)
+			self.update = self.update - self.interval
 		end
 	end
 end
 
-function IF:PLAYER_LOGIN()
+function RayUI_InfoBarButton_OnEvent(self, event)
+	if self.eventFunc then
+		self.eventFunc(self, event)
+	end
+end
+
+function RayUI_InfoBarButton_OnReset(self,noSave)
+	local dataBase = GetInfoBarList()
+
+	if self.infobarType then
+		usedInfoBar[self.infobarType] = nil
+	end
+	if not noSave then
+		dataBase[self:GetID()] = nil
+	end
+	
+	self.infobarType = nil
+	self.clickFunc = nil
+	self.onUpdate = nil
+	self.tooltipFunc = nil
+	self.Text:SetPoint("TOPLEFT",8,-8)
+	self.Highlight:Point("TOPLEFT",8,-8)
+	self.Highlight:Point("BOTTOMRIGHT",-8,8)
+	self:SetText("")
+	self:SetNormalTexture("")
+	self.Icon:Hide()
+	self:SetAlpha(0)
+	self:UnregisterAllEvents()
+	if self.unregisterLDBEvent then self:unregisterLDBEvent() end
+	
+	RayUI_InfoBarMenu:Hide()
+end
+
+function RayUI_InfoBarMenu_OnInit(self)
+	local dataBase = GetInfoBarList()
+	
+	RayUI_RegisterLDB()
+
+	for index, infobarType in pairs(dataBase) do
+		local button = _G["RayUI_InfoBar"..index]
+		local info = infobarTypes[infobarType]
+		
+		if info then
+			SetButton(button,index,infobarType,info,true)
+		end
+	end
+
 	self:UnregisterEvent("PLAYER_LOGIN")
-	self:RegisterLDB()
+end
+
+function RayUI_InfoBarMenuButton_OnClick(self)
+	local button, infobarType, info = self.ref, self.infobarType, self.info
+	local index = button:GetID()
+	
+	-- Free Prev InfoBar
+	if button.infobarType then
+		usedInfoBar[button.infobarType] = nil
+	end
+
+	if button.unregisterLDBEvent then
+		button:unregisterLDBEvent()
+	end
+
+	SetButton(button,index,infobarType,info)
+	
+	RayUI_InfoBarMenu:Hide()
+end
+
+function RayUI_RegisterLDB()
+	for name, obj in LDB:DataObjectIterator() do
+		local info = {}
+
+		local OnEnter = nil
+		local OnLeave = nil
+		local curFrame = nil
+		if obj.OnTooltipShow then
+			function OnEnter(self)
+				GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, 0)
+				obj.OnTooltipShow(GameTooltip)
+				GameTooltip:Show()
+			end
+		end
+
+		if obj.OnEnter then
+			function OnEnter(self)
+				obj.OnEnter(self)
+				GameTooltip:ClearAllPoints()
+				GameTooltip:SetPoint("BOTTOM", self, "TOP")
+			end
+		end
+
+		if obj.OnLeave then
+			function OnLeave(self)
+				obj.OnLeave(self)
+			end
+		end
+
+		local function OnClick(self, button)
+			obj.OnClick(self, button)
+		end
+
+		local function textUpdate(event, name, key, value, dataobj)
+			if value == nil or (strlen(value) >= 3) or value == 'n/a' or name == value then
+				curFrame:SetText(value ~= 'n/a' and value or name)
+			else
+				curFrame:SetFormattedText("%s: |cffFFFFFF%s|r", name, value)
+			end
+		end
+
+		local function registerEvent(self)
+			curFrame = self
+			LDB.RegisterCallback(self,"LibDataBroker_AttributeChanged_"..name.."_text", textUpdate)
+			LDB.RegisterCallback(self,"LibDataBroker_AttributeChanged_"..name.."_value", textUpdate)
+			LDB.callbacks:Fire("LibDataBroker_AttributeChanged_"..name.."_text", name, nil, obj.text, obj)
+		end
+
+		local function unregisterEvent(self)
+			curFrame = self
+			LDB.UnregisterCallback(self,"LibDataBroker_AttributeChanged_"..name.."_text")
+			LDB.UnregisterCallback(self,"LibDataBroker_AttributeChanged_"..name.."_value")
+		end
+
+		info.title = name
+		info.icon = obj.icon
+		info.clickFunc = OnClick
+		info.tooltipFunc = OnEnter
+		info.registerLDBEvent = registerEvent
+		info.unregisterLDBEvent = unregisterEvent
+
+		IF:RegisterInfoBarType(name, info)
+	end
+end
+
+function IF:RegisterInfoBarType(infobarType, infobarInfo)
+	infobarTypes[infobarType] = infobarInfo
 end
 
 function IF:Initialize()
-	local menuFrame = CreateFrame("Frame", "RayUI_InfobarRightClickMenu", UIParent, "UIDropDownMenuTemplate")
-	local menuList = {
-		{
-			text = L["自动隐藏信息条"],
-			checked = function() return self.db.autoHide end,
-			func = function()
-				self.db.autoHide = not self.db.autoHide
-				if not self.db.autoHide then
-					self:CancelTimer(self.Anim)
-					self:SlideUp()
-				else
-					self:SlideDown()
-				end
-			end,
-		},
-	}
+	local r, g, b = unpack(RayUF.colors.class[R.myclass])
+	local font = CreateFont("RayUI_InfoBarFont")
+	font:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
+	font:SetTextColor(1, 1, 1)
+	font:SetShadowColor(0, 0, 0)
+	font:SetShadowOffset(R.mult, -R.mult)
 
-	local bottombar = CreateFrame("Frame", "RayUI_BottomInfoBar", UIParent)
-	bottombar:SetWidth(UIParent:GetWidth())
-	bottombar:SetHeight(height)
-	bottombar:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 0)
-	bottombar:CreateShadow("Background")
-
-	local trigger = CreateFrame("Frame", nil, UIParent)
-	trigger:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 0)
-	trigger:SetPoint("TOPRIGHT", UIParent, "BOTTOMRIGHT", 0, 5)
-	trigger:SetScript("OnEnter", function()
-		self:SlideUp()
-		self:CancelTimer(self.Anim)
-	end)
-
-	bottombar:SetScript("OnEnter", function()
-		self:CancelTimer(self.Anim)
-	end)
-
-	bottombar:SetScript("OnLeave", function()
-		self:ReadyToSlideDown()
-	end)
-
-	local function PopupMenu(_, btn)
-		if btn=="RightButton" then
-			EasyMenu(menuList, menuFrame, "cursor", 0, 50, "MENU", 1)
+	for i = 1, 8 do
+		local infoBar = CreateFrame("Button", "RayUI_InfoBar"..i, UIParent, "RayUI_InfoBarButtonTemplate")
+		infoBar:SetNormalFontObject(font)
+		infoBar:SetSize(140, 35)
+		infoBar:SetID(i)
+		if i == 1 then
+			infoBar:Point("BOTTOMLEFT", UIParent, "BOTTOM", -140 * 4 - 6 * 3 - 3, -5)
+		else
+			infoBar:Point("LEFT", _G["RayUI_InfoBar"..i-1], "RIGHT", 6, 0)
 		end
+		infoBar.Highlight:SetTexture("Interface\\AddOns\\RayUI\\media\\threat")
+		infoBar.Highlight:SetBlendMode("ADD")
+		infoBar.Highlight:SetVertexColor(r, g, b, .4)
+		infoBar.Background = CreateFrame("Frame", nil, infoBar)
+		infoBar.Background:SetInside(infoBar, 8, 8)
+		infoBar.Background:CreateShadow("Background")
 	end
 
-	bottombar:SetScript("OnMouseUp", PopupMenu)
-	trigger:SetScript("OnMouseUp", PopupMenu)
-
-	UIParent:HookScript("OnSizeChanged", function(self) bottombar:SetWidth(UIParent:GetWidth()) end)
-
-	if self.db.autoHide then
-		self.Anim = self:ScheduleTimer("SlideDown", 10)
+	for i = 1, maxMenuButtons do
+		local button = RayUI_InfoBarMenu["Button"..i]
+		button:SetNormalFontObject(font)
+		button:SetID(i)
+		button.Highlight:SetTexture("Interface\\AddOns\\RayUI\\media\\threat")
+		button.Highlight:SetBlendMode("ADD")
+		button.Highlight:SetVertexColor(r, g, b, .4)
+		button.Background = CreateFrame("Frame", nil, button)
+		button.Background:SetInside(button, 8, 8)
+		button.Background:CreateShadow("Background")
+	
+		if i > 1 then button:Point("TOP", RayUI_InfoBarMenu["Button"..i-1], "BOTTOM", 0, 10) end
 	end
-	self:ScheduleRepeatingTimer("CheckAutoHide", 1)
-	self:LoadInfoText()
-	self:RegisterEvent("PLAYER_LOGIN")
+
+	local clear = RayUI_InfoBarMenu.Clear
+	clear:SetNormalFontObject(font)
+	clear:SetText(L["清除"])
+	clear.Highlight:SetTexture("Interface\\AddOns\\RayUI\\media\\threat")
+	clear.Highlight:SetBlendMode("ADD")
+	clear.Highlight:SetVertexColor(r, g, b, .4)
+	clear.Background = CreateFrame("Frame", nil, clear)
+	clear.Background:SetInside(clear, 8, 8)
+	clear.Background:CreateShadow("Background")
+
+	local S = R:GetModule("Skins")
+	S:SetBD(RayUI_InfoBarMenu, -10, 0, 10, 0)
+	S:ReskinClose(RayUI_InfoBarMenu.Close, "TOPRIGHT", RayUI_InfoBarMenu, "TOPRIGHT", 8, -2)
 end
 
 R:RegisterModule(IF:GetName())

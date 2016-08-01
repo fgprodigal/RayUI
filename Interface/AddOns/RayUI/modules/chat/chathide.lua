@@ -57,7 +57,7 @@ function CH:MoveOut()
 	CH.ChatIn = false
 	ChatBG:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 15, 30)
 	R:Slide(ChatBG, "LEFT", CH.db.width + 15, 195)
-	UIFrameFadeOut(ChatBG, .7, 1, 0)
+	R:UIFrameFadeOut(ChatBG, .7, 1, 0)
 	ChatFrame1EditBox:Hide()
 end
 
@@ -66,7 +66,7 @@ function CH:MoveIn()
 	CH.ChatIn = true
 	ChatBG:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", -CH.db.width, 30)
 	R:Slide(ChatBG, "RIGHT", CH.db.width + 15, 195)
-	UIFrameFadeIn(ChatBG, .7, 0, 1)
+	R:UIFrameFadeIn(ChatBG, .7, 0, 1)
 end
 
 function CH:ToggleChat()
@@ -89,7 +89,7 @@ function CH:OnEvent(event, ...)
 		end
 		ChatBG:ClearAllPoints()
 		ChatBG:SetPoint("BOTTOMLEFT",UIParent,"BOTTOMLEFT",15,30)
-		UIFrameFadeIn(ChatBG, .7, 0, 1)
+		R:UIFrameFadeIn(ChatBG, .7, 0, 1)
 		CH.ChatIn = true
 		hasNew = false
 	end
@@ -155,7 +155,7 @@ function CH:AutoHide()
 			GameTooltip:AddLine(L["点击显示聊天栏"])
 		end
 		if not hasNew then
-			UIFrameFadeIn(self, 0.5, self:GetAlpha(), 1)
+			R:UIFrameFadeIn(self, 0.5, self:GetAlpha(), 1)
 		else
 			GameTooltip:AddLine(L["有新的悄悄话"])
 		end
@@ -163,7 +163,7 @@ function CH:AutoHide()
 	end)
 	ChatToggle:SetScript("OnLeave",function(self)
 		if not hasNew then
-			UIFrameFadeOut(self, 0.5, self:GetAlpha(), 0)
+			R:UIFrameFadeOut(self, 0.5, self:GetAlpha(), 0)
 		end
 		GameTooltip:Hide()
 	end)
@@ -181,7 +181,7 @@ function CH:AutoHide()
 			end
 			ChatBG:ClearAllPoints()
 			ChatBG:SetPoint("BOTTOMLEFT",UIParent,"BOTTOMLEFT",15,30)
-			UIFrameFadeIn(ChatBG, .7, 0, 1)
+			R:UIFrameFadeIn(ChatBG, .7, 0, 1)
 			CH.ChatIn = true
 			hasNew = false
 		end

@@ -65,6 +65,8 @@ L["该按键的绑定已全部取消"] = "All keybindings of this button cleared
 L["储存"] = "Save"
 L["放弃"] = "Discard"
 
+L["点击右键选择信息条"] = "Right-Click to open infobar list"
+L["清除"] = "Clear"
 L["自动隐藏信息条"] = "Auto hide infobar"
 L["没有公会"] = "No guild"
 L["免伤分析"] = "Avoidance Breakdown"
@@ -96,6 +98,8 @@ L["赚取:"] = "Earned:"
 L["花费:"] = "Spended:"
 L["赤字:"] = "Deficit:"
 L["利润:"] = "Profit:"
+L["全部服务器"] = "All realms"
+L["切换"] = "|cFF66FF00Click|r to switch display"
 
 L["正在吃喝."] = "Taking food."
 
