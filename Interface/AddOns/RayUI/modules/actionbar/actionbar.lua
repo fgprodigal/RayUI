@@ -359,7 +359,8 @@ function AB:HideBlizz()
 	IconIntroTracker:Hide()
 	IconIntroTracker:SetParent(blizzHider)
 	TalentMicroButtonAlert:ClearAllPoints()
-	TalentMicroButtonAlert:SetPoint("BOTTOM", RayUI_InfoPanel_Talent, "TOP", 0, 30)
+	TalentMicroButtonAlert:SetPoint("BOTTOM", RayUI_InfoPanel_Talent, "BOTTOM", 0, 50)
+	TalentMicroButtonAlert.Arrow:Kill()
 
 
 	InterfaceOptionsActionBarsPanelAlwaysShowActionBars:EnableMouse(false)
