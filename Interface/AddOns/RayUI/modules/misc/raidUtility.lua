@@ -19,23 +19,23 @@ local function LoadFunc()
 	S:CreateSD(RaidUtilityPanel)
 
 	local function DisbandRaidGroup()
-			if InCombatLockdown() then return end -- Prevent user error in combat
+		if InCombatLockdown() then return end -- Prevent user error in combat
 
-			if UnitInRaid("player") then
-				for i = 1, GetNumGroupMembers() do
-					local name, _, _, _, _, _, _, online = GetRaidRosterInfo(i)
-					if online and name ~= R.myname then
-						UninviteUnit(name)
-					end
-				end
-			else
-				for i = MAX_PARTY_MEMBERS, 1, -1 do
-					if UnitExists("party"..i) then
-						UninviteUnit(UnitName("party"..i))
-					end
+		if UnitInRaid("player") then
+			for i = 1, GetNumGroupMembers() do
+				local name, _, _, _, _, _, _, online = GetRaidRosterInfo(i)
+				if online and name ~= R.myname then
+					UninviteUnit(name)
 				end
 			end
-			LeaveParty()
+		else
+			for i = MAX_PARTY_MEMBERS, 1, -1 do
+				if UnitExists("party"..i) then
+					UninviteUnit(UnitName("party"..i))
+				end
+			end
+		end
+		LeaveParty()
 	end
 
 	SlashCmdList["GROUPDISBAND"] = function()
@@ -72,7 +72,8 @@ local function LoadFunc()
 		if text then
 			local t = b:CreateFontString(nil,"OVERLAY",b)
 			t:SetFont(R["media"].font,12)
-			t:SetPoint("CENTER")
+			t:SetPoint("TOPLEFT")
+			t:SetPoint("BOTTOMRIGHT")
 			t:SetJustifyH("CENTER")
 			t:SetText(text)
 			b:SetFontString(t)
@@ -172,9 +173,18 @@ local function LoadFunc()
 		CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton.SetPushedTexture = function() end
 		for i, button in pairs(buttons) do
 			local f = _G[button]
-			for i = 1, 3 do
-				select(i, f:GetRegions()):SetAlpha(0)
-			end
+			f.BottomLeft:SetAlpha(0)
+			f.BottomRight:SetAlpha(0)
+			f.BottomMiddle:SetAlpha(0)
+			f.TopMiddle:SetAlpha(0)
+			f.TopLeft:SetAlpha(0)
+			f.TopRight:SetAlpha(0)
+			f.MiddleLeft:SetAlpha(0)
+			f.MiddleRight:SetAlpha(0)
+			f.MiddleMiddle:SetAlpha(0)
+
+			f:SetHighlightTexture("")
+			f:SetDisabledTexture("")
 			S:Reskin(f)
 		end
 	end
