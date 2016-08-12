@@ -104,19 +104,8 @@ function UF:GetOptions()
 	return options
 end
 
-function UF:PLAYER_LOGIN(event)
-	if IsAddOnLoaded("Gnosis") or IsAddOnLoaded("AzCastBar") or IsAddOnLoaded("Quartz") then
-        local _, battleTag = BNGetInfo()
-        if battleTag == "Yvette#3829" then return end
-		for _, frame in pairs(oUF.objects) do
-			frame:DisableElement("Castbar")
-		end
-	end
-end
-
 function UF:Initialize()
     self:LoadUnitFrames()
-	self:RegisterEvent("PLAYER_LOGIN")
 end
 
 function UF:Info()

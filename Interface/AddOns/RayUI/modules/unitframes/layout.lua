@@ -191,6 +191,7 @@ function UF:DPSLayout(frame, unit)
 		-- ClassBar
 		frame.ClassIcons = self:Construct_ClassBar(frame)
 		frame.ClassBar = "ClassIcons"
+
 		if R.myclass == "DEATHKNIGHT" then
 			frame.Runes = self:Construct_DeathKnightResourceBar(frame)
 			frame.ClassBar = "Runes"

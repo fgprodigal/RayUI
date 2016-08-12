@@ -3,7 +3,7 @@ local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, loc
 local UF = R:GetModule("UnitFrames")
 local oUF = RayUF or oUF
 
-function UF:Configure_ClassBar(frame)
+function UF:Configure_ClassBar(frame, cur)
 	local bars = frame[frame.ClassBar]
 	if not bars then return end
 
@@ -16,7 +16,10 @@ function UF:Configure_ClassBar(frame)
 	bars:Width(CLASSBAR_WIDTH)
 	bars:Height(frame.CLASSBAR_HEIGHT)
 
-	if (frame.ClassBar == 'ClassIcons' or frame.ClassBar == 'Runes') then
+	if (frame.ClassBar == "ClassIcons" or frame.ClassBar == "Runes") then
+		if frame.ClassBar == "ClassIcons" and not cur then 
+			cur = 0
+		end
 		local maxClassBarButtons = max(UF.classMaxResourceBar[R.myclass] or 0, MAX_COMBO_POINTS)
 		for i = 1, maxClassBarButtons do
 			bars[i]:Hide()
@@ -73,7 +76,7 @@ function UF:Configure_ClassBar(frame)
 					bars[i]:SetStatusBarColor(r, g, b)
 				end
 				bars[i]:SetOrientation("HORIZONTAL")
-				-- bars[i]:Show()
+				if cur and cur >= i then bars[i]:Show() end
 			end
 		end
 	elseif (frame.ClassBar == "AdditionalPower" or frame.ClassBar == "Stagger") then
@@ -164,7 +167,7 @@ function UF:UpdateClassBar(cur, max, hasMaxChanged, powerType, event)
 	--Update this first, as we want to update the .bg colors after
 	if hasMaxChanged or event == "ClassPowerEnable" then
 		frame.MAX_CLASS_BAR = max
-		UF:Configure_ClassBar(frame)
+		UF:Configure_ClassBar(frame, cur)
 	end
 
 	local r, g, b
