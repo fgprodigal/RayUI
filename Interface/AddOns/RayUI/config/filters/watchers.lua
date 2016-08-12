@@ -1854,6 +1854,13 @@ R["Watcher"] = {
                { spellID = 177175, unitId = "player", caster = "player", filter = "BUFF" },
                -- 大法師的白熱強光 (敏捷)
                { spellID = 177172, unitId = "player", caster = "player", filter = "BUFF" },
+               
+			   --橙色戒指
+			   -- 尼萨姆斯 (全见者尼萨姆斯)
+			   { spellID = 187616, unitId = "player", caster = "player", filter = "BUFF" },
+			   -- 伊瑟拉鲁斯 (永恒之赐伊瑟拉鲁斯)
+			   { spellID = 187618, unitId = "player", caster = "player", filter = "BUFF" },
+				
                 -- 暗月卡牌
                 -- 玉珑圣物 (智力, 触发)
                 { spellID = 128985, unitId = "player", caster = "all", filter = "BUFF" },
