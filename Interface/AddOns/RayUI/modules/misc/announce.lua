@@ -61,8 +61,8 @@ local function LoadFunc()
 		end
 	end
 
-	announce:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
-	announce:SetScript('OnEvent', OnEvent)
+	announce:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	announce:SetScript("OnEvent", OnEvent)
 
 	-----------------------------------------------
 	-- enemy drinking(by Duffed)
@@ -246,21 +246,16 @@ local function LoadFunc()
 	CombatText:UnregisterEvent("PLAYER_REGEN_ENABLED")
 	CombatText:UnregisterEvent("PLAYER_REGEN_DISABLED")
 
-	-- SetCVar("fctCombatState", "1")
-	local a = CreateFrame ("Frame")
+	SetCVar("floatingCombatTextCombatState", "1")
+	local a = CreateFrame("Frame")
 	a:RegisterEvent("PLAYER_REGEN_ENABLED")
 	a:RegisterEvent("PLAYER_REGEN_DISABLED")
-	a:RegisterEvent("PLAYER_ENTERING_WORLD")
 	a:SetScript("OnEvent", function (self,event)
 		if (UnitIsDead("player")) then return end
-		if event == "PLAYER_REGEN_ENABLED" and(COMBAT_TEXT_SHOW_COMBAT_STATE=="1") then
-			-- allertrun("LEAVING COMBAT",0.1,1,0.1)
+		if event == "PLAYER_REGEN_ENABLED" then
 			allertrun(LEAVING_COMBAT.." !",0.1,1,0.1)
-		elseif event == "PLAYER_REGEN_DISABLED" and(COMBAT_TEXT_SHOW_COMBAT_STATE=="1") then
-			-- allertrun("ENTERING COMBAT",1,0.1,0.1)
+		elseif event == "PLAYER_REGEN_DISABLED" then
 			allertrun(ENTERING_COMBAT.." !",1,0.1,0.1)
-		elseif event == "PLAYER_ENTERING_WORLD" then
-			self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 		end
 	end)
 
