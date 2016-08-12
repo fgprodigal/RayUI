@@ -21,6 +21,7 @@ RayUF["colors"].class = {
 	["WARLOCK"]     = { 0.6,	0.47,		0.85 },
 	["WARRIOR"]     = { 0.9,	0.65,		0.45 },
 	["MONK"]        = { 0,		1,			0.59 },
+	["DEMONHUNTER"] = { 0.64,	0.19,		0.79 },
 }
 
 RayUF["colors"].reaction = {
