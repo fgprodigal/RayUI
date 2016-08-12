@@ -308,6 +308,10 @@ local roles = {
 		[2] = "Caster",
 		[3] = "Melee",	
 	},
+	DEMONHUNTER = {
+		[1] = "Melee",
+		[2] = "Tank",
+	},
 }
 
 local healingClasses = {

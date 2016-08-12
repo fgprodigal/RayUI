@@ -88,15 +88,10 @@ function MM:ButtonCollector()
 			for i = 1, btn:GetNumRegions() do 
 				local frame = select(i, btn:GetRegions())
 				if frame:GetObjectType() == "Texture" then 
-					local iconFile = frame:GetTexture()
-					if(iconFile ~= nil and (iconFile:find("Border") or iconFile:find("Background") or iconFile:find("AlphaMask"))) then 
-						frame:SetColorTexture(0,0,0,0)
-					else
-						frame:ClearAllPoints()
-						frame:SetAllPoints()
-						frame:SetTexCoord(0.1, 0.9, 0.1, 0.9 )
-						frame:SetDrawLayer("ARTWORK")
-					end 
+					frame:ClearAllPoints()
+					frame:SetAllPoints()
+					frame:SetTexCoord(0.1, 0.9, 0.1, 0.9 )
+					frame:SetDrawLayer("ARTWORK")
 				end 
 			end
 

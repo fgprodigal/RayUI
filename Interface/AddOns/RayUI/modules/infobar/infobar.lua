@@ -339,7 +339,8 @@ function IF:Initialize()
 		infoBar.Highlight:SetBlendMode("ADD")
 		infoBar.Highlight:SetVertexColor(r, g, b, .4)
 		infoBar.Background = CreateFrame("Frame", nil, infoBar)
-		infoBar.Background:SetInside(infoBar, 8, 8)
+		infoBar.Background:Point("BOTTOMLEFT", 8, 8)
+		infoBar.Background:Point("TOPRIGHT", -8, -18)
 		infoBar.Background:CreateShadow("Background")
 	end
 
