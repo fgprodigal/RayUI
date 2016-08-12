@@ -866,6 +866,29 @@ function CH:DisplayChatHistory()
 	end
 end
 
+local function OnArrowPressed(self, key)
+	if #self.historyLines == 0 then
+		return
+	end
+
+	if key == "UP" then
+		self.historyIndex = self.historyIndex - 1
+
+		if self.historyIndex < 1 then
+			self.historyIndex = #self.historyLines
+		end
+	elseif key == "DOWN" then
+		self.historyIndex = self.historyIndex + 1
+
+		if self.historyIndex > #self.historyLines then
+			self.historyIndex = 1
+		end
+	else
+		return
+	end
+	self:SetText(self.historyLines[self.historyIndex])
+end
+
 function CH:ApplyStyle(event, ...)
 	for _, frameName in pairs(CHAT_FRAMES) do
 		local cf = _G[frameName]
@@ -946,6 +969,11 @@ function CH:ApplyStyle(event, ...)
             eb:HookScript("OnHide", function(self)
                 editbox:Hide()
             end)
+
+			eb.historyLines = RayUICharacterData.ChatEditHistory
+			eb.historyIndex = 0
+			eb:HookScript("OnArrowPressed", OnArrowPressed)
+
             hooksecurefunc("ChatEdit_UpdateHeader", function()
                 local type = eb:GetAttribute("chatType")
                 if ( type == "CHANNEL" ) then
