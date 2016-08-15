@@ -21,7 +21,8 @@ end
 
 G.Raid.AuraWatch = {
 	PRIEST = {
-		ClassBuff(6788, "TOPRIGHT", {1, 0, 0}, true),	 -- Weakened Soul
+		--ClassBuff(6788, "TOPRIGHT", {1, 0, 0}, true),	 -- Weakened Soul
+		ClassBuff(194384, "TOPRIGHT", {1, 0, 0}, true),	 -- 救赎
 		ClassBuff(41635, "BOTTOMRIGHT", {0.2, 0.7, 0.2}),	 -- Prayer of Mending
 		ClassBuff(139, "BOTTOMLEFT", {0.4, 0.7, 0.2}), -- Renew
 		ClassBuff(152118, "BOTTOMLEFT", {0.4, 0.7, 0.2}), -- 意志洞悉
