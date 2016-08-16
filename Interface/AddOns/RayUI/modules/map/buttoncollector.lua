@@ -64,8 +64,9 @@ function MM:ButtonCollector()
 	-- MBCF.bg:SetGradientAlpha("VERTICAL", 0, 0, 0, 0, 0, 0, 0, .6)
 
 	function SetMinimapButton(btn)
-		if btn == nil or btn:GetName() == nil or btn:GetObjectType() ~= "Button" or btn:GetNumRegions() < 3 then return end
 		local name = btn:GetName()
+		local type = btn:GetObjectType()
+		if not name or not type then return end
 		if BlackList[name] then return end
 		btn:SetParent("MinimapButtonCollectFrame")
 		btn:SetPushedTexture(nil)
@@ -85,28 +86,85 @@ function MM:ButtonCollector()
 			if btn:HasScript("OnDragEnd") then 
 				btn.preset.DragEnd = btn:GetScript("OnDragEnd")
 			end
-			for i = 1, btn:GetNumRegions() do 
-				local frame = select(i, btn:GetRegions())
-				if frame:GetObjectType() == "Texture" then 
-					frame:ClearAllPoints()
-					frame:SetAllPoints()
-					frame:SetTexCoord(0.1, 0.9, 0.1, 0.9 )
-					frame:SetDrawLayer("ARTWORK")
-				end 
+
+			do	-- fix fuck up buttons
+				if btn == BattlegroundTargets_MinimapButton then
+					local pushed = btn:GetPushedTexture()
+					pushed:SetSize(mmbSize,mmbSize)
+					pushed:SetTexCoord(0,1,0,1)
+					pushed:ClearAllPoints()
+					pushed:SetPoint("CENTER")
+				end
+				if btn == BagSync_MinimapButton then
+					btn.texture = bgMinimapButtonTexture
+					btn.texture:SetTexture("Interface\\Icons\\inv_misc_bag_10_green")
+				end
 			end
 
+			do	-- setup highlight
+				local type = btn:GetObjectType()
+
+				if type == "Button" then
+					local highlight = btn:GetHighlightTexture()
+
+					if highlight then
+						highlight:ClearAllPoints()
+						highlight:SetPoint("TOPLEFT")
+						highlight:SetPoint("BOTTOMRIGHT")
+						highlight:SetColorTexture(1,1,1,0.25)
+					end
+				end
+
+				if type == "Frame" then
+					if not btn.highlight then
+						btn.highlight = btn:CreateTexture(nil,"OVERLAY")
+						btn.highlight:SetColorTexture(1,1,1,0.25)
+						btn.highlight:SetPoint("TOPLEFT")
+						btn.highlight:SetPoint("BOTTOMRIGHT")
+						btn.highlight:Hide()
+						
+						btn:HookScript("OnEnter",function(self)
+							print(1)
+							self.highlight:Show()
+						end)
+						btn:HookScript("OnLeave",function(self)
+							self.highlight:Hide()
+						end)
+					end
+				end
+			end
+
+			do	-- setup icon
+				local icon = btn.icon or btn.Icon or btn.texture or _G[btn:GetName().."Icon"] or _G[btn:GetName().."_Icon"] or btn:GetNormalTexture()
+				
+				if icon then
+					btn:HookScript("OnMouseDown", function()
+						icon:SetTexCoord(0,1,0,1)
+					end)
+					btn:HookScript("OnMouseUp", function()
+						icon:SetTexCoord(0.05,0.95,0.05,0.95)
+					end)
+
+					icon:SetTexCoord(0.05,0.95,0.05,0.95)
+					icon:ClearAllPoints()
+					icon:SetPoint("TOPLEFT")
+					icon:SetPoint("BOTTOMRIGHT")
+					icon.ClearAllPoints = function() end
+					icon.SetPoint = function() end
+				end
+			end
+
+			for _, region in pairs({btn:GetRegions()}) do
+				if region:GetObjectType() == "Texture" then
+					local file = tostring(region:GetTexture())
+
+					if file and (file:find("Border") or file:find("Background") or file:find("AlphaMask")) then
+						region:SetTexture("")
+					end
+				end
+			end
 			btn:Size(20,20)
 			btn:CreateShadow("Background")
-
-			if(name == "DBMMinimapButton") then
-				btn.Hide = R.dummy
-				btn:Show()
-				btn:SetNormalTexture("Interface\\Icons\\INV_Helmet_87")
-			end 
-
-			if(name == "SmartBuff_MiniMapButton") then 
-				btn:SetNormalTexture(select(3, GetSpellInfo(12051)))
-			end
 
 			btn.isStyled = true
 
