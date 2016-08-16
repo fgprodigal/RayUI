@@ -45,44 +45,52 @@ G.UnitFrames.aurafilters["Whitelist"] = {
 }
 
 G.UnitFrames.ChannelTicks = {
-	-- priest
-	[SpellName(15407)] = 3, -- mind flay
-	-- [SpellName(129197)] = 3, -- mind flay (insanity)
-	[SpellName(32000)] = 5, -- mind sear
-	[SpellName(47540)] = 3, -- penance, first tick instant
-	[SpellName(64843)] = 4, -- divine hymn
-
-	-- mage
-	-- [SpellName(10)] = 8, -- blizzard
-	[SpellName(5143)] = 5, -- arcane missiles
-	[SpellName(12051)] = 4, -- evocation
-
-	-- warlock
-	[SpellName(689)] = 3, -- drain life
-	[SpellName(4629)] = 4, -- rain of fire
-	-- [SpellName(1949)] = 15, -- hellfire
-	[SpellName(755)] = 3, -- health funnel
-	-- [SpellName(103103)] = 4, -- malefic grasp
-
-	-- druid
-	[SpellName(740)] = 4, -- tranquility
-	-- [SpellName(16914)] = 10, -- hurricane
-
-	-- monk
-	[SpellName(101546)] = 3, -- spinning crane kick
-	[SpellName(115175)] = 9, -- smoothing mist
+	--Warlock
+	[SpellName(689)] = 6, -- "Drain Life"
+	[SpellName(198590)] = 6, -- "Drain Soul"
+	-- [SpellName(108371)] = 6, -- "Harvest Life"
+	[SpellName(5740)] = 4, -- "Rain of Fire"
+	[SpellName(755)] = 6, -- Health Funnel
+	-- [SpellName(103103)] = 4, --Malefic Grasp
+	--Druid
+	--Priest
+	[SpellName(48045)] = 5, -- "Mind Sear"
+	[SpellName(179338)] = 5, -- "Searing insanity"
+	[SpellName(64843)] = 4, -- Divine Hymn
+	[SpellName(15407)] = 4, -- Mind Flay
+	--Mage
+	[SpellName(5143)] = 5, -- "Arcane Missiles"
+	[SpellName(12051)] = 3, -- "Evocation"
 }
 
+local priestTier17 = {115560,115561,115562,115563,115564}
 local f = CreateFrame("Frame")
 f:RegisterEvent("PLAYER_ENTERING_WORLD")
-f:SetScript("OnEvent", function(self)
-	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+f:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
+f:SetScript("OnEvent", function(self, event)
+	local class = select(2, UnitClass("player"))
+	if strlower(class) ~= "priest" then return end
 
-	local mfTicks = 3
-	if string.lower((UnitClass("player"))) == "priest" and IsSpellKnown(157223) then --Enhanced Mind Flay
-		mfTicks = 4
+	local penanceTicks = 3
+	local equippedPriestTier17 = 0
+	for _, item in pairs(priestTier17) do
+		if IsEquippedItem(item) then
+			equippedPriestTier17 = equippedPriestTier17 + 1
+		end
 	end
-
-	G.UnitFrames.ChannelTicks[SpellName(15407)] = mfTicks -- "Mind Flay"
-	-- G.UnitFrames.ChannelTicks[SpellName(129197)] = mfTicks -- "Mind Flay (Insanity)"
+	if equippedPriestTier17 >= 2 then
+		penanceTicks = 4
+	end
+	R.global.UnitFrames.ChannelTicks[SpellName(47540)] = penanceTicks --Penance
 end)
+
+G.UnitFrames.ChannelTicksSize = {
+	--Warlock
+	[SpellName(689)] = 1, -- "Drain Life"
+	[SpellName(198590)] = 1, -- "Drain Soul"
+}
+
+--Spells Effected By Haste
+G.UnitFrames.HastedChannelTicks = {
+
+}

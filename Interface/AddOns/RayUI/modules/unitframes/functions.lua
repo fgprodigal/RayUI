@@ -252,6 +252,9 @@ function UF:SetCastTicks(frame, numTicks, extraTick)
     frame.SafeZone:Hide()
 end
 
+local MageSpellName = GetSpellInfo(5143) --Arcane Missiles
+local MageBuffName = GetSpellInfo(166872) --4p T17 bonus proc for arcane
+
 function UF:PostCastStart(unit, name, rank, castid)
     if unit == "vehicle" then unit = "player" end
     local r, g, b
@@ -273,24 +276,59 @@ function UF:PostCastStart(unit, name, rank, castid)
 
     self.unit = unit
 
---[[     if unit == "player" then
+	if unit == "player" then
         local unitframe = R.global.UnitFrames
         local baseTicks = unitframe.ChannelTicks[name]
 
-        -- Detect channeling spell and if it's the same as the previously channeled one
-        if baseTicks and name == self.prevSpellCast then
-            self.chainChannel = true
-        elseif baseTicks then
-            self.chainChannel = nil
-            self.prevSpellCast = name
-        end
+		-- Detect channeling spell and if it's the same as the previously channeled one
+		if baseTicks and name == self.prevSpellCast then
+			self.chainChannel = true
+		elseif baseTicks then
+			self.chainChannel = nil
+			self.prevSpellCast = name
+		end
 
-        if baseTicks then
-            UF:SetCastTicks(self, baseTicks)
-        else
-            UF:HideTicks(self)
-        end
-    end ]]
+		if baseTicks and unitframe.ChannelTicksSize[name] and unitframe.HastedChannelTicks[name] then
+			local tickIncRate = 1 / baseTicks
+			local curHaste = UnitSpellHaste("player") * 0.01
+			local firstTickInc = tickIncRate / 2
+			local bonusTicks = 0
+			if curHaste >= firstTickInc then
+				bonusTicks = bonusTicks + 1
+			end
+
+			local x = tonumber(R:Round(firstTickInc + tickIncRate, 2))
+			while curHaste >= x do
+				x = tonumber(R:Round(firstTickInc + (tickIncRate * bonusTicks), 2))
+				if curHaste >= x then
+					bonusTicks = bonusTicks + 1
+				end
+			end
+
+			local baseTickSize = unitframe.ChannelTicksSize[name]
+			local hastedTickSize = baseTickSize / (1 + curHaste)
+			local extraTick = self.max - hastedTickSize * (baseTicks + bonusTicks)
+			local extraTickRatio = extraTick / hastedTickSize
+
+			UF:SetCastTicks(self, baseTicks + bonusTicks, extraTickRatio)
+		elseif baseTicks and unitframe.ChannelTicksSize[name] then
+			local curHaste = UnitSpellHaste("player") * 0.01
+			local baseTickSize = unitframe.ChannelTicksSize[name]
+			local hastedTickSize = baseTickSize / (1 +  curHaste)
+			local extraTick = self.max - hastedTickSize * (baseTicks)
+			local extraTickRatio = extraTick / hastedTickSize
+
+			UF:SetCastTicks(self, baseTicks, extraTickRatio)
+		elseif baseTicks then
+			local hasBuff = UnitBuff("player", MageBuffName)
+			if name == MageSpellName and hasBuff then
+				baseTicks = baseTicks + 5
+			end
+			UF:SetCastTicks(self, baseTicks)
+		else
+			UF:HideTicks(self)
+		end
+    end
 end
 
 function UF:CustomCastTimeText(duration)
