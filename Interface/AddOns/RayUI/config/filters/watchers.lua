@@ -1858,8 +1858,12 @@ R["Watcher"] = {
 			   --橙色戒指
 			   -- 尼萨姆斯 (全见者尼萨姆斯)
 			   { spellID = 187616, unitId = "player", caster = "player", filter = "BUFF" },
-			   -- 伊瑟拉鲁斯 (永恒之赐伊瑟拉鲁斯)
-			   { spellID = 187618, unitId = "player", caster = "player", filter = "BUFF" },
+			   -- 萨克图斯 (不动之印萨克图斯)
+			   { spellID = 187617, unitId = "player", caster = "player", filter = "BUFF" },
+ 			   -- 伊瑟拉鲁斯 (永恒之赐伊瑟拉鲁斯)
+ 			   { spellID = 187618, unitId = "player", caster = "player", filter = "BUFF" },
+			   -- 索拉苏斯 (岩石之心索拉苏斯)
+			   { spellID = 187619, unitId = "player", caster = "player", filter = "BUFF" },
 				
                 -- 暗月卡牌
                 -- 玉珑圣物 (智力, 触发)
