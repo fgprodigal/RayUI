@@ -4,7 +4,7 @@
 
 ## 链接
 
-网站：[rayui.cn](http://rayui.cn)
+网站：[rayui.me](http://rayui.me)
 
 ## 使用
 
@@ -39,7 +39,7 @@ Simple, functional, beautiful.
 
 ## Links
 
-Website: [rayui.cn](http://rayui.cn)
+Website: [rayui.me](http://rayui.me)
 
 ## Usage
 
