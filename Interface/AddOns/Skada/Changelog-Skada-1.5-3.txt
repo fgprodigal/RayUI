@@ -1,0 +1,152 @@
+------------------------------------------------------------------------
+r648 | zarnivoop | 2016-08-16 10:05:25 +0000 (Tue, 16 Aug 2016) | 1 line
+Changed paths:
+   A /tags/1.5-3 (from /trunk:647)
+
+Tagging as 1.5-3
+------------------------------------------------------------------------
+r647 | zarnivoop | 2016-08-15 14:37:43 +0000 (Mon, 15 Aug 2016) | 1 line
+Changed paths:
+   M /trunk/BarDisplay.lua
+
+fix for tooltip not hiding properly anymore
+------------------------------------------------------------------------
+r645 | zarnivoop | 2016-08-15 08:07:29 +0000 (Mon, 15 Aug 2016) | 1 line
+Changed paths:
+   M /trunk/BarDisplay.lua
+   M /trunk/Skada.lua
+
+fix for missing config on existing windows
+------------------------------------------------------------------------
+r643 | zarnivoop | 2016-08-14 19:56:09 +0000 (Sun, 14 Aug 2016) | 1 line
+Changed paths:
+   M /trunk/BarDisplay.lua
+   M /trunk/InlineDisplay.lua
+   M /trunk/Options.lua
+   M /trunk/Skada.lua
+
+fixed up inline display borders
+------------------------------------------------------------------------
+r642 | zarnivoop | 2016-08-14 18:22:55 +0000 (Sun, 14 Aug 2016) | 2 lines
+Changed paths:
+   M /trunk/BarDisplay.lua
+   M /trunk/BrokerDisplay.lua
+   M /trunk/InlineDisplay.lua
+   M /trunk/Options.lua
+   M /trunk/locale/enUS.lua
+
+window defaults improved (or at least, changed)
+window/title borders fixed for bar display; margins option removed (seemed to be completely broken anyway)
+------------------------------------------------------------------------
+r641 | zarnivoop | 2016-08-13 18:37:07 +0000 (Sat, 13 Aug 2016) | 1 line
+Changed paths:
+   M /trunk/locale/enUS.lua
+
+added a few missing localization strings
+------------------------------------------------------------------------
+r640 | zarnivoop | 2016-08-13 18:33:26 +0000 (Sat, 13 Aug 2016) | 1 line
+Changed paths:
+   A /trunk/BrokerDisplay.lua
+   M /trunk/InlineDisplay.lua
+   M /trunk/Options.lua
+   M /trunk/Skada.toc
+   M /trunk/locale/enUS.lua
+
+added a new LDB display system
+------------------------------------------------------------------------
+r639 | zarnivoop | 2016-08-13 18:31:19 +0000 (Sat, 13 Aug 2016) | 1 line
+Changed paths:
+   M /trunk/modules/Debuffs.lua
+
+fixed debuffs mode giving errors on new segment while showing a specific player
+------------------------------------------------------------------------
+r638 | zarnivoop | 2016-08-08 16:47:14 +0000 (Mon, 08 Aug 2016) | 1 line
+Changed paths:
+   M /trunk/InlineDisplay.lua
+
+fixed bar placements for Inline display
+------------------------------------------------------------------------
+r637 | zarnivoop | 2016-08-07 21:28:48 +0000 (Sun, 07 Aug 2016) | 1 line
+Changed paths:
+   M /trunk/BarDisplay.lua
+
+fixed BarDisplay's font flags not quite sticking (#431)
+------------------------------------------------------------------------
+r636 | zarnivoop | 2016-08-07 20:43:14 +0000 (Sun, 07 Aug 2016) | 1 line
+Changed paths:
+   M /trunk/BarDisplay.lua
+   M /trunk/InlineDisplay.lua
+   M /trunk/locale/enUS.lua
+
+added strata option for BarDisplay
+------------------------------------------------------------------------
+r635 | zarnivoop | 2016-08-07 20:31:19 +0000 (Sun, 07 Aug 2016) | 1 line
+Changed paths:
+   M /trunk/BarDisplay.lua
+   A /trunk/InlineDisplay.lua
+   M /trunk/Options.lua
+   M /trunk/Skada.lua
+   M /trunk/Skada.toc
+
+added new Inline display type (based on Skada Inline by gosuexac) - currently looks a little iffy if you are not using ElvUI
+------------------------------------------------------------------------
+r634 | zarnivoop | 2016-08-07 20:27:02 +0000 (Sun, 07 Aug 2016) | 1 line
+Changed paths:
+   M /trunk/lib/SpecializedLibBars-1.0/SpecializedLibBars-1.0.lua
+
+minor optimization for "always show self" option
+------------------------------------------------------------------------
+r632 | zarnivoop | 2016-07-26 19:49:13 +0000 (Tue, 26 Jul 2016) | 1 line
+Changed paths:
+   M /trunk/modules/Damage.lua
+
+fix for Warlock's Soul Effigy (untested)
+------------------------------------------------------------------------
+r631 | zarnivoop | 2016-07-26 18:15:50 +0000 (Tue, 26 Jul 2016) | 1 line
+Changed paths:
+   M /trunk/Skada.lua
+
+removed old module upgrade popup notice
+------------------------------------------------------------------------
+r630 | zarnivoop | 2016-07-26 18:01:44 +0000 (Tue, 26 Jul 2016) | 1 line
+Changed paths:
+   M /trunk/BarDisplay.lua
+   M /trunk/Options.lua
+   M /trunk/lib/SpecializedLibBars-1.0/SpecializedLibBars-1.0.lua
+   M /trunk/locale/enUS.lua
+
+added option to always show self
+------------------------------------------------------------------------
+r629 | oscarucb | 2016-07-25 09:13:29 +0000 (Mon, 25 Jul 2016) | 2 lines
+Changed paths:
+   M /trunk/Menus.lua
+
+fix ticket 455: lua error with old report settings
+
+------------------------------------------------------------------------
+r628 | stanzilla | 2016-07-22 22:37:07 +0000 (Fri, 22 Jul 2016) | 3 lines
+Changed paths:
+   M /trunk/lib/SpecializedLibBars-1.0/SpecializedLibBars-1.0.lua
+
+fix spell icons not showing
+
+patch by avi90
+------------------------------------------------------------------------
+r626 | stanzilla | 2016-07-19 18:31:17 +0000 (Tue, 19 Jul 2016) | 1 line
+Changed paths:
+   M /trunk/Skada.toc
+
+TOC Bump for 7.0
+------------------------------------------------------------------------
+r625 | oscarucb | 2016-05-05 18:50:28 +0000 (Thu, 05 May 2016) | 6 lines
+Changed paths:
+   M /trunk/Menus.lua
+   M /trunk/Skada.lua
+
+GUI improvements to the report dialog window
+Clamp to screen, auto-compute the window height
+Only show the whisper target name editbox for relevant channels
+Auto-trim whitespace from whisper targets, and improve error reporting for invalid entries
+Add an escape handler (also to the reset dialog)
+
+------------------------------------------------------------------------

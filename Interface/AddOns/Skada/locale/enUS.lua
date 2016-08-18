@@ -400,11 +400,6 @@ L["Instance"] = "Instance"
 L["Enemy healing done"] = "Enemy healing done"
 L["Enemy healing taken"] = "Enemy healing taken"
 
-L["Skada has changed!"] = true
-L["All Skada functionality is now in 1 addon folder."] = true
-L["Skada will |cFFFF0000NOT|r function properly until you delete the following AddOns:"] = true
-L["Click below and configure your '|cFFFF0000Disabled Modules|r'."] = true
-
 L["Stop"] = "Stop/Resume"
 L["Autostop"] = "Stop early on wipe"
 L["Autostop description"] = "Automatically stops the current segment after a certain amount of raid members have died."
@@ -422,3 +417,22 @@ L["Use role icons where applicable."] = true
 L["Overhealing spells"] = true
 
 L["Whisper Target"] = true
+
+L["Always show self"] = true
+L["Keeps the player shown last even if there is not enough space."] = true
+
+L["Strata"] = true
+L["This determines what other frames will be in front of the frame."] = true
+
+L["Fixed bar width"] = true
+L["If checked, bar width is fixed. Otherwise, bar width depends on the text width."] = true
+
+L["Text color"] = true
+L["Choose the default color."] = true
+L["Hint: Left-Click to set active mode."] = true
+L["Right-click to set active set."] = true
+L["Shift + Left-Click to open menu."] = true
+L["Title color"] = true
+L["The text color of the title."] = true
+L["Border color"] = true
+L["The color used for the border."] = true

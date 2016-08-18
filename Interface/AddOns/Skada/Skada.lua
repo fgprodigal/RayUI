@@ -570,6 +570,7 @@ function Window:DisplaySets()
 	self.selectedset = nil
 
 	self.metadata.title = L["Skada: Fights"]
+	self.display:SetTitle(self, self.metadata.title)
 
 	self.metadata.click = click_on_set
 	self.metadata.maxvalue = 1
@@ -612,7 +613,9 @@ function Skada:tcopy(to, from)
 end
 
 function Skada:CreateWindow(name, db, display)
+    local isnew = false
 	if not db then
+        isnew = true
 		db = {}
 		self:tcopy(db, Skada.windowdefaults)
 		table.insert(self.db.profile.windows, db)
@@ -646,17 +649,19 @@ function Skada:CreateWindow(name, db, display)
 		-- Set the window's display and call it's Create function.
 		window:SetDisplay(window.db.display or "bar")
 
-		window.display:Create(window)
+		window.display:Create(window, isnew)
 
 		table.insert(windows, window)
 
-		if window.db.set or window.db.mode then
+        -- Set initial view, set list.
+        window:DisplaySets()
+        
+        if isnew and find_mode(L["Damage"]) then
+            -- Default mode for new windows - will not fail if mode is disabled.
+            self:RestoreView(window, "current", L["Damage"])
+        elseif window.db.set or window.db.mode then
 			-- Restore view.
-			window:DisplaySets()
 			self:RestoreView(window, window.db.set, window.db.mode)
-		else
-			-- Set initial view, set list.
-			window:DisplaySets()
 		end
 	else
 		-- This window's display is missing.
@@ -2355,79 +2360,89 @@ function Skada:AddSubviewToTooltip(tooltip, win, mode, id, label)
 	end
 end
 
-do
-	--[[ XXX TEMP UPGRADE POPUP ]]
-	local tempPopup = function()
-		local tbl = {
-			SkadaCC = true,
-			SkadaDamage = true,
-			SkadaDamageTaken = true,
-			SkadaDeaths = true,
-			SkadaDebuffs = true,
-			SkadaDispels = true,
-			SkadaEnemies = true,
-			SkadaHealing = true,
-			SkadaPower = true,
-			SkadaThreat = true,
-		}
+-- Generic tooltip function for displays
+function Skada:ShowTooltip(win, id, label)
+	local t = GameTooltip
+	if Skada.db.profile.tooltips and (win.metadata.click1 or win.metadata.click2 or win.metadata.click3 or win.metadata.tooltip) then
+		Skada:SetTooltipPosition(t, win.bargroup)
+	    t:ClearLines()
 
-		local create
-		local concat = "\n"
-		for i = 1, GetNumAddOns() do
-			local name = GetAddOnInfo(i)
-			if tbl[name] then
-				create = true
-				concat = concat .. name .. "\n"
-				DisableAddOn(i)
+		local hasClick = win.metadata.click1 or win.metadata.click2 or win.metadata.click3
+
+	    -- Current mode's own tooltips.
+		if win.metadata.tooltip then
+			local numLines = t:NumLines()
+			win.metadata.tooltip(win, id, label, t)
+
+			-- Spacer
+			if t:NumLines() ~= numLines and hasClick then
+				t:AddLine(" ")
 			end
 		end
 
-		if create or not SkadaDB.hasUpgraded then
-			local frame = CreateFrame("Frame", "SkadaWarn", UIParent)
-
-			frame:SetBackdrop({bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background-Dark",
-				edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
-				tile = true, tileSize = 16, edgeSize = 16,
-				insets = {left = 1, right = 1, top = 1, bottom = 1}}
-			)
-			frame:SetSize(550, 420)
-			frame:SetPoint("CENTER", UIParent, "CENTER")
-			frame:SetFrameStrata("DIALOG")
-			frame:Show()
-
-			local title = frame:CreateFontString(nil, "ARTWORK", "GameFontNormalHuge")
-			title:SetPoint("TOP", frame, "TOP", 0, -12)
-			title:SetText(L["Skada has changed!"])
-
-			local text = frame:CreateFontString(nil, "ARTWORK", "ChatFontNormal")
-			text:SetPoint("CENTER", frame, "CENTER")
-			text:SetText(L["All Skada functionality is now in 1 addon folder."] .. (create and "\n\n" .. L["Skada will |cFFFF0000NOT|r function properly until you delete the following AddOns:"] ..concat or ""))
-
-			local btn = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
-			btn:SetWidth(110)
-			btn:SetHeight(20)
-			btn:SetPoint("BOTTOM", frame, "BOTTOM", 0, 8)
-			btn:SetText(OKAY)
-			btn:SetScript("OnClick", function(f)
-				f:GetParent():Hide()
-				if not create then
-					InterfaceOptionsFrame_OpenToCategory(Skada.optionsFrame) InterfaceOptionsFrame_OpenToCategory(Skada.optionsFrame)
-				end
-			end)
-
-			local ending = frame:CreateFontString(nil, "ARTWORK", "ChatFontNormal")
-			ending:SetPoint("TOP", btn, "TOP", 0, 30)
-			ending:SetText(create and "" or L["Click below and configure your '|cFFFF0000Disabled Modules|r'."])
-			if not create then
-				SkadaDB.hasUpgraded = true
+		-- Generic informative tooltips.
+		if Skada.db.profile.informativetooltips then
+			if win.metadata.click1 then
+				Skada:AddSubviewToTooltip(t, win, win.metadata.click1, id, label)
+			end
+			if win.metadata.click2 then
+				Skada:AddSubviewToTooltip(t, win, win.metadata.click2, id, label)
+			end
+			if win.metadata.click3 then
+				Skada:AddSubviewToTooltip(t, win, win.metadata.click3, id, label)
 			end
 		end
+
+		-- Current mode's own post-tooltips.
+		if win.metadata.post_tooltip then
+			local numLines = t:NumLines()
+			win.metadata.post_tooltip(win, id, label, t)
+
+			-- Spacer
+			if t:NumLines() ~= numLines and hasClick then
+				t:AddLine(" ")
+			end
+		end
+
+		-- Click directions.
+		if win.metadata.click1 then
+			t:AddLine(L["Click for"].." "..win.metadata.click1:GetName()..".", 0.2, 1, 0.2)
+		end
+		if win.metadata.click2 then
+			t:AddLine(L["Shift-Click for"].." "..win.metadata.click2:GetName()..".", 0.2, 1, 0.2)
+		end
+		if win.metadata.click3 then
+			t:AddLine(L["Control-Click for"].." "..win.metadata.click3:GetName()..".", 0.2, 1, 0.2)
+		end
+
+	    t:Show()
 	end
+end
+
+-- Generic border
+local borderbackdrop = {}
+function Skada:ApplyBorder(frame, texture, color, thickness, padtop, padbottom, padleft, padright)
+    if not frame.borderFrame then
+        frame.borderFrame = CreateFrame("Frame", nil, frame)
+        frame.borderFrame:SetFrameLevel(0)
+    end
+    frame.borderFrame:SetPoint("TOPLEFT", frame, -thickness - (padleft or 0), thickness + (padtop or 0))
+    frame.borderFrame:SetPoint("BOTTOMRIGHT", frame, thickness + (padright or 0), -thickness - (padbottom or 0))
+    if color then
+        frame.borderFrame:SetBackdropBorderColor(color.r, color.g, color.b, color.a)
+    end
+    if texture and thickness > 0 then
+        borderbackdrop.edgeFile = media:Fetch("border", texture)
+    else
+        borderbackdrop.edgeFile = nil
+    end
+    borderbackdrop.edgeSize = thickness
+    frame.borderFrame:SetBackdrop(borderbackdrop)
+end
+
+do
 
 	function Skada:OnInitialize()
-		-- XXX temp
-		self:ScheduleTimer(tempPopup, 1)
-
 		-- Register some SharedMedia goodies.
 		media:Register("font", "Adventure",				[[Interface\Addons\Skada\fonts\Adventure.ttf]])
 		media:Register("font", "ABF",					[[Interface\Addons\Skada\fonts\ABF.ttf]])
@@ -2504,9 +2519,6 @@ do
 			self.db.profile.total = nil
 			self.db.profile.sets = nil
 		end
-
-		-- XXX temp
-		self.db.profile.modulesToSkip = nil
 	end
 end
 

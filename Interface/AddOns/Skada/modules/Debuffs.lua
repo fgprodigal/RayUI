@@ -176,25 +176,27 @@ Skada:AddLoadableModule("Debuffs", function(Skada, L)
 			-- Calculate player max possible uptime.
 			local maxtime = Skada:PlayerActiveTime(set, player)
 
-			win.metadata.maxvalue = maxtime
-			for spellname, spell in pairs(player.auras) do
-				if spell.auratype == auratype then
-					local uptime = min(maxtime, spell.uptime)
+            if maxtime and maxtime > 0 then
+                win.metadata.maxvalue = maxtime
+                for spellname, spell in pairs(player.auras) do
+                    if spell.auratype == auratype then
+                        local uptime = min(maxtime, spell.uptime)
 
-					local d = win.dataset[nr] or {}
-					win.dataset[nr] = d
+                        local d = win.dataset[nr] or {}
+                        win.dataset[nr] = d
 
-					d.id = spell.name
-					d.value = uptime
-					d.label = spell.name
-					local _, _, icon = GetSpellInfo(spell.id)
-					d.icon = icon
-					d.spellid = spell.id
-					d.valuetext = ("%02.1f%%"):format(uptime / maxtime * 100)
+                        d.id = spell.name
+                        d.value = uptime
+                        d.label = spell.name
+                        local _, _, icon = GetSpellInfo(spell.id)
+                        d.icon = icon
+                        d.spellid = spell.id
+                        d.valuetext = ("%02.1f%%"):format(uptime / maxtime * 100)
 
-					nr = nr + 1
-				end
-			end
+                        nr = nr + 1
+                    end
+                end
+            end
 		end
 
 	end

@@ -10,8 +10,8 @@ Skada.windowdefaults = {
 	bartexture="BantoBar",
 	barfont="Accidental Presidency",
 	barfontflags="",
-	barfontsize=11,
-	barheight=15,
+	barfontsize=13,
+	barheight=18,
 	barwidth=240,
 	barorientation=1,
 	barcolor = {r = 0.3, g = 0.3, b = 0.8, a=1},
@@ -23,11 +23,12 @@ Skada.windowdefaults = {
 	classcolortext = false,
 	classicons = true,
 	roleicons = false,
+    showself = true,
 
 	buttons = {menu = true, reset = true, report = true, mode = true, segment = true},
 
-	title = {height = 15, font="Accidental Presidency", fontsize=11,margin=0, texture="Aluminium", bordertexture="None", borderthickness=2, color = {r=0.1,g=0.1,b=0.3,a=0.8}, fontflags = ""},
-	background = {margin=0, height=200, texture="Solid", bordertexture="None", borderthickness=0, color = {r=0,g=0,b=0.5,a=0.2}},
+	title = {textcolor = {r = 0.9, g = 0.9, b = 0.9, a = 1}, height = 20, font="Accidental Presidency", fontsize=13, texture="Armory", bordercolor = {r=0,g=0,b=0,a=1}, bordertexture="None", borderthickness=2, color = {r=0.3,g=0.3,b=0.3,a=1}, fontflags = ""},
+	background = {height=200, texture="Solid", bordercolor = {r=0,g=0,b=0,a=1}, bordertexture="Blizzard Party", borderthickness=2, color = {r=0,g=0,b=0,a=0.4}, tile = false, tilesize = 0, strata = "MEDIUM"},
 
 	reversegrowth=false,
 	modeincombat="",
@@ -44,7 +45,20 @@ Skada.windowdefaults = {
 	display = "bar",
 	snapto = true,
 	scale = 1,
-    version = 1
+    version = 1,
+    
+    -- Inline exclusive
+    isonnewline = false,
+    isusingclasscolors = true,
+    height = 30,
+    width = nil,
+    color = {r = 0.3, g = 0.3, b = 0.3, a = 0.6},
+    isusingelvuiskin = true,
+    issolidbackdrop = false,
+    fixedbarwidth = false,
+    
+    -- Broker exclusive
+    textcolor = {r = 0.9, g = 0.9, b = 0.9},
 }
 
 local windefaultscopy = {}
@@ -448,6 +462,19 @@ Skada.options = {
 							get=function() return Skada.db.profile.autostop end,
 							set=function() Skada.db.profile.autostop = not Skada.db.profile.autostop end,
 					},
+                
+					showself = {
+							type="toggle",
+							name=L["Always show self"],
+							desc=L["Keeps the player shown last even if there is not enough space."],
+							order=11,
+							get=function() return Skada.db.profile.showself end,
+							set=function() 
+                                Skada.db.profile.showself = not Skada.db.profile.showself
+                                Skada:ApplySettings()
+                            end,
+					},
+                
                 
 				}
 			},
