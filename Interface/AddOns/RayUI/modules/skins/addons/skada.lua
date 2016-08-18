@@ -99,7 +99,10 @@ local function SkinSkada()
 
 		skada:SetBackdrop(nil)
 		if not skada.shadow then
+			skada:StripTextures()
 			skada:CreateShadow("Background")
+			skada.shadow:SetFrameStrata("BACKGROUND")
+			if skada.borderFrame then skada.borderFrame:Kill() end
 		end
 		skada.border:ClearAllPoints()
 		if win.db.enabletitle then
