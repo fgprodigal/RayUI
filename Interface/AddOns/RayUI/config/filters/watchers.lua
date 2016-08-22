@@ -1823,6 +1823,102 @@ R["Watcher"] = {
                 {slotID = 14, filter = "CD" },
             },
         },
+        ["DEMONHUNTER"] = {
+            {
+                name = "玩家buff&debuff",
+                direction = "LEFT",
+                setpoint = positions.player_buff_icon,
+                size = 28,
+				
+				-- 献祭光环
+                { spellID = 178740, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 幽灵视觉
+                { spellID = 188501, unitId = "player", caster = "player", filter = "BUFF" }, 
+				-- 黑暗
+                { spellID = 209426, unitId = "player", caster = "all", filter = "BUFF" }, 
+            },
+            {
+                name = "目标buff&debuff",
+                direction = "RIGHT",
+                setpoint = positions.target_buff_icon,
+                size = 28,
+				
+				-- 烈焰咒符
+                { spellID = 204598, unitId = "target", caster = "player", filter = "DEBUFF" },
+            },
+            {
+                name = "玩家重要buff&debuff",
+                direction = "LEFT",
+                setpoint = positions.player_proc_icon,
+                size = 38,              
+              
+                -- 恶魔变形（浩劫）
+                { spellID = 187827, unitId = "player", caster = "player", filter = "BUFF" },
+				-- 恶魔变形（复仇）
+                { spellID = 162264, unitId = "player", caster = "player", filter = "BUFF" },
+				-- 强化结界
+                { spellID = 218256, unitId = "player", caster = "player", filter = "BUFF" },
+				-- 恶魔尖刺
+                { spellID = 203819, unitId = "player", caster = "player", filter = "BUFF" },
+            },
+            {
+                name = "目标重要buff&debuff",
+                direction = "RIGHT",
+                setpoint = positions.target_proc_icon,
+                size = 38,
+
+                -- 悲苦咒符
+                { spellID = 207685, unitId = "target", caster = "all", filter = "DEBUFF" },
+                -- 烈火烙印
+                { spellID = 207744, unitId = "target", caster = "player", filter = "DEBUFF" },			
+            },
+            {
+                name = "焦点buff&debuff",
+                direction = "UP",
+                setpoint = positions.focus_buff_icon,
+                size = 24,
+                mode = "BAR",
+                iconSide = "LEFT",
+                barWidth = 170,
+
+                -- 悲苦咒符
+                { spellID = 207685, unitId = "focus", caster = "all", filter = "DEBUFF" },
+ 
+            },
+            {
+                name = "CD",
+                iconSide = "LEFT",
+                size = 28,
+                barWidth = 170,
+                direction = function() return R:IsDeveloper() and "RIGHT" or "DOWN" end,
+                mode = function() return R:IsDeveloper() and "ICON" or "BAR" end,
+                setpoint = positions.cd_icon,
+
+                -- 恶魔变形（浩劫）
+                { spellID = 187827, filter = "CD" },
+				-- 恶魔变形（复仇））
+                { spellID = 191427, filter = "CD" },
+                -- 强化结界
+                { spellID = 218256, filter = "CD" },
+                -- 悲苦符咒
+                { spellID = 207684, filter = "CD" },
+                -- 烈火烙印
+                { spellID = 204021, filter = "CD" },
+				-- 幻影打击
+				{ spellID = 196718, filter = "CD" },
+
+                -- 物品
+                -- 手套
+                {slotID = 10, filter = "CD" },
+                -- 腰带
+                {slotID = 6, filter = "CD" },
+                -- 披风
+                {slotID = 15, filter = "CD" },
+                -- 饰品
+                {slotID = 13, filter = "CD" },
+                {slotID = 14, filter = "CD" },
+            },
+        },
         ["ALL"]={
             {
                 name = "玩家特殊buff&debuff",
