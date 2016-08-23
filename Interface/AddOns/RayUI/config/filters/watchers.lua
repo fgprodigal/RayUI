@@ -1883,7 +1883,6 @@ R["Watcher"] = {
 
                 -- 悲苦咒符
                 { spellID = 207685, unitId = "focus", caster = "all", filter = "DEBUFF" },
- 
             },
             {
                 name = "CD",
@@ -1896,7 +1895,7 @@ R["Watcher"] = {
 
                 -- 恶魔变形（浩劫）
                 { spellID = 187827, filter = "CD" },
-				-- 恶魔变形（复仇））
+				-- 恶魔变形（复仇）
                 { spellID = 191427, filter = "CD" },
                 -- 强化结界
                 { spellID = 218256, filter = "CD" },
