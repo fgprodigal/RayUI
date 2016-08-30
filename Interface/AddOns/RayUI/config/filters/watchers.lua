@@ -622,6 +622,8 @@ R["Watcher"] = {
                 { spellID = 60503, unitId = "player", caster = "player", filter = "BUFF" },
 				--天神下凡
                 { spellID = 107574, unitId = "player", caster = "player", filter = "BUFF" },
+                --无视苦痛
+				{ spellID = 190456, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
