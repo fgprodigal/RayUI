@@ -1,5 +1,4 @@
-
-Skada:AddLoadableModule("Healing", function(Skada, L)
+Skada:AddLoadableModule("Healing", nil, function(Skada, L)
 	if Skada.db.profile.modulesBlocked.Healing then return end
 
 	local mod = Skada:NewModule(L["Healing"])

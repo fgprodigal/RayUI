@@ -1,6 +1,8 @@
-local L = LibStub("AceLocale-3.0"):GetLocale("Skada", false) --localization
+local L = LibStub("AceLocale-3.0"):GetLocale("Skada", false)
 local Skada = Skada
-local mod = Skada:NewModule("InlineBarDisplay")
+local name = L["Inline bar display"]
+
+local mod = Skada:NewModule(name)
 local mybars = {}
 local barlibrary = {
     bars = {},
@@ -12,8 +14,9 @@ local ttactive = false
 local libwindow = LibStub("LibWindow-1.1")
 local media = LibStub("LibSharedMedia-3.0")
 
-mod.name = "Inline Bar Display"
-Skada.displays["inline"] = mod
+mod.name = name
+mod.description = L["Inline display is a horizontal window style."]
+Skada:AddDisplaySystem("inline", mod)
 
 function serial(val, name, skipnewlines, depth)
     skipnewlines = skipnewlines or false
@@ -45,49 +48,49 @@ function serial(val, name, skipnewlines, depth)
 end
 
 function mod:OnInitialize()
-    
+
 end
 
 local function BarLeave(bar)
-	local win, id, label = bar.win, bar.id, bar.text
-	if ttactive then
-		GameTooltip:Hide()
-		ttactive = false
-	end
+    local win, id, label = bar.win, bar.id, bar.text
+    if ttactive then
+        GameTooltip:Hide()
+        ttactive = false
+    end
 end
 
 local function showmode(win, id, label, mode)
-	-- Add current mode to window traversal history.
-	if win.selectedmode then
-		tinsert(win.history, win.selectedmode)
-	end
-	-- Call the Enter function on the mode.
-	if mode.Enter then
-		mode:Enter(win, id, label)
-	end
-	-- Display mode.
-	win:DisplayMode(mode)
+    -- Add current mode to window traversal history.
+    if win.selectedmode then
+        tinsert(win.history, win.selectedmode)
+    end
+    -- Call the Enter function on the mode.
+    if mode.Enter then
+        mode:Enter(win, id, label)
+    end
+    -- Display mode.
+    win:DisplayMode(mode)
 end
 
 local function BarClick(win, bar, button)
-	local id, label =  bar.valueid, bar.valuetext
-	local click1 = win.metadata.click1
-	local click2 = win.metadata.click2
-	local click3 = win.metadata.click3
-    
-	if button == "RightButton" and IsShiftKeyDown() then
-		Skada:OpenMenu(win)
-	elseif win.metadata.click then
-		win.metadata.click(win, id, label, button)
-	elseif button == "RightButton" then
-		win:RightClick()
-	elseif click2 and IsShiftKeyDown() then
-		showmode(win, id, label, click2)
-	elseif click3 and IsControlKeyDown() then
-		showmode(win, id, label, click3)
-	elseif click1 then
-		showmode(win, id, label, click1)
-	end
+    local id, label =  bar.valueid, bar.valuetext
+    local click1 = win.metadata.click1
+    local click2 = win.metadata.click2
+    local click3 = win.metadata.click3
+
+    if button == "RightButton" and IsShiftKeyDown() then
+        Skada:OpenMenu(win)
+    elseif win.metadata.click then
+        win.metadata.click(win, id, label, button)
+    elseif button == "RightButton" then
+        win:RightClick()
+    elseif click2 and IsShiftKeyDown() then
+        showmode(win, id, label, click2)
+    elseif click3 and IsControlKeyDown() then
+        showmode(win, id, label, click3)
+    elseif click1 then
+        showmode(win, id, label, click1)
+    end
 end
 
 function mod:Create(window, isnew)
@@ -103,7 +106,7 @@ function mod:Create(window, isnew)
         window.frame:SetPoint("LEFT", -1)
         if window.db.background.color.a==51/255 then window.db.background.color = {r=255, b=250/255, g=250/255, a=1 } end
     end
-        
+
     window.frame:EnableMouse()
     window.frame:SetScript("OnMouseDown", function(frame, button)
         if button == "RightButton" then
@@ -111,17 +114,32 @@ function mod:Create(window, isnew)
         end
     end)
 
-	-- Register with LibWindow-1.1.
-	libwindow.RegisterConfig(window.frame, window.db)
+    -- Register with LibWindow-1.1.
+    libwindow.RegisterConfig(window.frame, window.db)
 
-	-- Restore window position.
+    -- Restore window position.
     if isnew then
         libwindow.SavePosition(window.frame)
     else
         libwindow.RestorePosition(window.frame)
     end
-    libwindow.MakeDraggable(window.frame)
         
+    window.frame:EnableMouse(true)
+    window.frame:SetMovable(true)
+    window.frame:RegisterForDrag("LeftButton")
+    window.frame:SetScript("OnDragStart", function(frame)
+        if not window.db.barslocked then
+            GameTooltip:Hide()
+            frame.isDragging = true
+            frame:StartMoving()
+        end
+    end)
+    window.frame:SetScript("OnDragStop", function(frame)
+        frame:StopMovingOrSizing()
+        frame.isDragging = false
+        libwindow.SavePosition(frame)
+    end)        
+
     local titlebg = CreateFrame("Frame", "InlineTitleBackground", window.frame)
     local title = window.frame:CreateFontString("frameTitle", 6)
     title:SetTextColor(self:GetFontColor(window.db))
@@ -135,7 +153,7 @@ function mod:Create(window, isnew)
     title:SetHeight(window.db.height or 23)
     window.frame.fstitle = title
     window.frame.titlebg = titlebg
-        
+
     titlebg:SetAllPoints(title)
     titlebg:EnableMouse(true)
     titlebg:SetScript("OnMouseDown", function(frame, button)
@@ -215,7 +233,7 @@ function barlibrary:CreateBar(uuid, win)
     bar.inuse = false
     bar.value = 0
     bar.win = win
-        
+
     bar.bg = CreateFrame("Frame", "bg"..bar.uuid, win.frame)
     bar.label = bar.bg:CreateFontString("label"..bar.uuid)
     bar.label:SetFont(mod:GetFont(win.db))
@@ -228,6 +246,7 @@ function barlibrary:CreateBar(uuid, win)
     end)
     bar.bg:SetScript("OnEnter", function(frame, button)
         ttactive = true
+		Skada:SetTooltipPosition(GameTooltip, win.frame)
         Skada:ShowTooltip(win, bar.valueid, bar.valuetext)
     end)
     bar.bg:SetScript("OnLeave", function(frame, button)
@@ -236,13 +255,13 @@ function barlibrary:CreateBar(uuid, win)
             ttactive = false
         end
     end)
-        
+
     if uuid then
         self.nextuuid = self.nextuuid + 1
     end
     return bar
 end
-    
+
 function barlibrary:Deposit (_bar)
     --strip the bar of variables
     _bar.inuse = false
@@ -271,7 +290,7 @@ function barlibrary:Withdraw (win)--TODO: also pass parent and assign parent
             print("|c0033ff99SkadaInline|r: THIS SHOULD NEVER HAPPEN")
         end
         replacement = self:CreateBar(uuid, win)
-            
+
         --add the replacement bar to the end of the bar library
         table.insert(barlibrary.bars, replacement)
     end
@@ -317,7 +336,7 @@ function mod:UpdateBar(bar, bardata, db)
     bar.label:SetTextColor(mod:GetFontColor(db))
     bar.value = bardata.value
     bar.class = bardata.class
-    
+
     bar.valueid = bardata.id
     bar.valuetext = bardata.label
 
@@ -360,16 +379,16 @@ function mod:Update(win)
                 return bar1.value > bar2.value
             end
     end)
-    
+
     -- TODO: fixed bars
-        
+
     local yoffset = (win.db.height - win.db.barfontsize) / 2
     local left = win.frame.barstartx + 40
     for key, bar in pairs(mybars) do
         --set bar positions
         --TODO
         --bar.texture:SetTexture(255, 0, 0, 1.00)
-        
+
         bar.bg:SetFrameLevel(9)
         bar.bg:SetHeight(win.db.height)
         bar.bg:SetPoint("BOTTOMLEFT", win.frame, "BOTTOMLEFT", left, 0)
@@ -393,7 +412,7 @@ function mod:Update(win)
         end
     end
 end
-    
+
 function mod:Show(win)
     win.frame:Show()
 end
@@ -412,6 +431,7 @@ function mod:CreateBar(win, name, label, maxValue, icon, o)
     --print("mod:CreateBar():TODO")
     local bar = {}
     bar.win = win
+
 
     return bar
 end
@@ -436,9 +456,6 @@ function mod:ApplySettings(win)
     local f = win.frame
     local p = win.db
 
-    -- TODO: fix, this is not working
-    --f:SetMovable(p.barslocked)
-        
     --
     --bars
     --
@@ -450,14 +467,14 @@ function mod:ApplySettings(win)
         --bar.label:SetFont(p.barfont,p.barfontsize,p.barfontflags )
         bar.label:SetFont(self:GetFont(p))
         bar.label:SetTextColor(self:GetFontColor(p))
-            
+
         bar.bg:EnableMouse(not p.clickthrough)
     end
 
     f.menu:SetPoint("BOTTOMLEFT", f, "BOTTOMLEFT", 6, win.db.height/2-8)
-        
+
     f:EnableMouse(not p.clickthrough)
-    --print("SetFont", p.barfont, p.barfontsize, p.barfontflags)
+    f:SetScale(p.scale)
 
     --
     --ElvUI
@@ -501,7 +518,7 @@ function mod:ApplySettings(win)
         fbackdrop.tileSize = p.background.tilesize
         f:SetBackdrop(fbackdrop)
         f:SetBackdropColor(p.background.color.r,p.background.color.g,p.background.color.b,p.background.color.a)
-        if p.background.strata then f:SetFrameStrata(p.background.strata) end
+        f:SetFrameStrata(p.strata)
 
         Skada:ApplyBorder(f, p.background.bordertexture, p.background.bordercolor, p.background.borderthickness)
     end
@@ -535,22 +552,6 @@ function mod:AddDisplayOptions(win, options)
                     Skada:ApplySettings()
                 end,
                 order=0.05,
-            },
-            height = {
-                type = 'range',
-				name=L["Bar height"],
-				desc=L["The height of the bars."],
-                min=10,
-                max=math.floor(GetScreenHeight()),
-                step=1.0,
-                get = function()
-                    return db.height
-                end,
-                set = function(win,key)
-                    db.height = key
-                    Skada:ApplySettings()
-                end,
-                order=0.1,
             },
             barwidth = {
                 type = 'range',
@@ -624,31 +625,31 @@ function mod:AddDisplayOptions(win, options)
                 end,
                 order=3,
             },
-                
-			clickthrough = {
-			        type="toggle",
-			        name=L["Clickthrough"],
-			        desc=L["Disables mouse clicks on bars."],
-			        order=20,
-			        get=function() return db.clickthrough end,
-			        set=function()
-			        		db.clickthrough = not db.clickthrough
-		         			Skada:ApplySettings()
-			        	end,
-			},
-            
-			fixedbarwidth = {
-			        type="toggle",
-			        name=L["Fixed bar width"],
-			        desc=L["If checked, bar width is fixed. Otherwise, bar width depends on the text width."],
-			        order=21,
-			        get=function() return db.fixedbarwidth end,
-			        set=function()
-			        		db.fixedbarwidth = not db.fixedbarwidth
-		         			Skada:ApplySettings()
-			        	end,
-			},
-                
+
+            clickthrough = {
+                    type="toggle",
+                    name=L["Clickthrough"],
+                    desc=L["Disables mouse clicks on bars."],
+                    order=20,
+                    get=function() return db.clickthrough end,
+                    set=function()
+                            db.clickthrough = not db.clickthrough
+                            Skada:ApplySettings()
+                        end,
+            },
+
+            fixedbarwidth = {
+                    type="toggle",
+                    name=L["Fixed bar width"],
+                    desc=L["If checked, bar width is fixed. Otherwise, bar width depends on the text width."],
+                    order=21,
+                    get=function() return db.fixedbarwidth end,
+                    set=function()
+                            db.fixedbarwidth = not db.fixedbarwidth
+                            Skada:ApplySettings()
+                        end,
+            },
+
         }
     }
 
@@ -681,146 +682,6 @@ function mod:AddDisplayOptions(win, options)
             },
         },
     }
-
-    options.frameoptions = { --window bg frame
-        type = "group",
-        name = "Background",--TODO: localize
-        order = 2,
-        args = {
-            tile = {
-                type = 'toggle',
-                name = "Tile",
-                desc = "Tile the background texture. \nDefault: un-checked",
-                get = function() return db.background.tile end,
-                set = function(win,key)
-                    db.background.tile = key
-                    Skada:ApplySettings()
-                end,
-                order=1.2,
-            },
-
-            tilesize = {
-                type="range",
-                name="Tile size",
-                desc="The size of the texture pattern. \nDefault: 0",
-                min=0,
-                max=math.floor(GetScreenWidth()),
-                step=1.0,
-                get=function() return db.background.tilesize end,
-                set=function(win, val)
-                    db.background.tilesize = val
-                    Skada:ApplySettings()
-                end,
-                order=1.1,
-            },
-
-            texture = {
-                type = 'select',
-                dialogControl = 'LSM30_Background',
-                name = L["Background texture"],
-                desc = "The texture used as the background. \nDefault: Solid",
-                values = AceGUIWidgetLSMlists.background,
-                get = function() return db.background.texture end,
-                set = function(win,key)
-                    db.background.texture = key
-                    Skada:ApplySettings()
-                end,
-                order=1,
-            },
-
-			thickness = {
-				type="range",
-				name=L["Border thickness"],
-				desc=L["The thickness of the borders."],
-				min=0,
-				max=50,
-				step=0.5,
-				get=function() return db.background.borderthickness end,
-				set=function(win, val)
-							db.background.borderthickness = val
-		         			Skada:ApplySettings()
-						end,
-				order=2.2,
-			},
-            
-            bordertexture = {
-                type = 'select',
-                dialogControl = 'LSM30_Border',
-		         name = L["Border texture"],
-		         desc = L["The texture used for the border of the title."],
-                values = AceGUIWidgetLSMlists.border,
-                get = function() return db.background.bordertexture end,
-                set = function(win,key)
-                    db.background.bordertexture = key
-                    Skada:ApplySettings()
-                end,
-                order=2,
-            },
-                
-            bordercolor = {
-                type="color",
-				name=L["Border color"],
-				desc=L["The color used for the border."],
-                hasAlpha=true,
-                get=function()
-                    local c = db.background.bordercolor
-                    return c.r, c.g, c.b, c.a
-                end,
-                set=function(win, r, g, b, a)
-                    db.background.color = {["r"] = r, ["g"] = g, ["b"] = b, ["a"] = a or 1.0 }
-                    if db.background.bordercolor.a==0.2 then db.background.bordercolor.a=100 end
-                    Skada:ApplySettings()
-                end,
-                order=2.1,
-            },
-
-            width = {
-                type = 'range',
-                name = "Width",
-                min=100,
-                max=GetScreenWidth(),
-                step=1.0,
-                get = function()
-                    return db.width
-                end,
-                set = function(win,key)
-                    db.width = key
-                    Skada:ApplySettings()
-                end,
-                order=2,
-            },
-                
-            color = {
-                type="color",
-				name=L["Background color"],
-				desc=L["The color of the background."],
-                hasAlpha=true,
-                get=function()
-                    local c = db.background.color
-                    return c.r, c.g, c.b, c.a
-                end,
-                set=function(win, r, g, b, a)
-                    db.background.color = {["r"] = r, ["g"] = g, ["b"] = b, ["a"] = a or 1.0 }
-                    if db.background.color.a==0.2 then db.background.color.a=100 end
-                    Skada:ApplySettings()
-                end,
-                order=0,
-            },
-
-            strata = {
-                type="select",
-                name=L["Strata"],
-                desc=L["This determines what other frames will be in front of the frame."],
-                values = {["BACKGROUND"]="BACKGROUND", ["LOW"]="LOW", ["MEDIUM"]="MEDIUM", ["HIGH"]="HIGH", ["DIALOG"]="DIALOG", ["FULLSCREEN"]="FULLSCREEN", ["FULLSCREEN_DIALOG"]="FULLSCREEN_DIALOG"},
-                get=function() return db.background.strata end,
-                set=function(win, val)
-                    db.background.strata = val
-                    Skada:ApplySettings()
-                end,
-                order=5,
-            },
-
-
-        }
-    }
+        
+    options.frameoptions = Skada:FrameSettings(db, true)
 end

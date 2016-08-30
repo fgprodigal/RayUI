@@ -1,5 +1,4 @@
-
-Skada:AddLoadableModule("Overhealing", function(Skada, L)
+Skada:AddLoadableModule("Overhealing", nil, function(Skada, L)
 	if Skada.db.profile.modulesBlocked.Overhealing then return end
 
 	local mod = Skada:NewModule(L["Overhealing"])

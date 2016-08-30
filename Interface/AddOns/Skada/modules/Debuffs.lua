@@ -1,5 +1,4 @@
-
-Skada:AddLoadableModule("Debuffs", function(Skada, L)
+Skada:AddLoadableModule("Debuffs", nil, function(Skada, L)
 	if Skada.db.profile.modulesBlocked.Debuffs then return end
 
 	local mod = Skada:NewModule(L["Debuff uptimes"], "AceTimer-3.0")

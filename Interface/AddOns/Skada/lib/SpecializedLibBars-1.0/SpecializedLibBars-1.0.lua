@@ -821,15 +821,8 @@ end
 function barListPrototype:UpdateOrientationLayout()
 	local length, thickness = self.length, self.thickness
 	barListPrototype.super.SetWidth(self, length)
---		barListPrototype.super.SetHeight(self, thickness)
 	self.button:SetWidth(length)
---	self.button:SetHeight(thickness)
-
---	self.button:SetText(self.name)
 	self:ReverseGrowth(self.growup)
-	-- self.button:SetWidth(vertical and 15 or length)
-	-- self.button:SetHeight(vertical and length or 15)
-	-- self:SortBars()
 end
 
 function barListPrototype:SetLength(length)
@@ -994,7 +987,11 @@ do
 
 			-- Silly hack to fix icon positions. I should just rewrite the whole thing, really. WTB energy.
 			if showIcon and lastBar == self then
-				x1 = thickness
+                if orientation == 1 then
+                    x1 = thickness
+                else
+                    x2 = -thickness
+                end
 			end
 
 			if shown <= maxbars then

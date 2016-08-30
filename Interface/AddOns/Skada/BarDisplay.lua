@@ -18,7 +18,8 @@ local media = LibStub("LibSharedMedia-3.0")
 
 -- Add to Skada's enormous list of display providers.
 mod.name = L["Bar display"]
-Skada.displays["bar"] = mod
+mod.description = L["Bar display is the normal bar window used by most damage meters. It can be extensively styled."]
+Skada:AddDisplaySystem("bar", mod)
 
 -- Called when a Skada window starts using this display provider.
 function mod:Create(window)
@@ -160,6 +161,7 @@ local ttactive = false
 local function BarEnter(bar)
 	local win, id, label = bar.win, bar.id, bar.text
     ttactive = true
+    Skada:SetTooltipPosition(GameTooltip, win.bargroup)
     Skada:ShowTooltip(win, id, label)
 end
 
@@ -375,7 +377,11 @@ function mod:Update(win)
 			end
 
 			if win.metadata.showspots and Skada.db.profile.showranks and not data.ignore then
-				bar:SetLabel(("%2u. %s"):format(nr, data.label))
+                if win.db.barorientation == 1 then
+                    bar:SetLabel(("%2u. %s"):format(nr, data.label))
+                else
+                    bar:SetLabel(("%s %2u"):format(data.label, nr))
+                end
 			else
 				bar:SetLabel(data.label)
 			end
@@ -529,7 +535,7 @@ function mod:ApplySettings(win)
 		g:Unlock()
 	end
 
-    if p.background.strata then g:SetFrameStrata(p.background.strata) end
+    if p.strata then g:SetFrameStrata(p.strata) end
     
 	-- Header
 	local fo = CreateFont("TitleFont"..win.db.name)
@@ -568,8 +574,9 @@ function mod:ApplySettings(win)
 	g:ShowButton(L["Stop"], p.buttons.stop)
 
 	-- Window
-    local padtop = (p.enabletitle and p.title.height)
-    Skada:ApplyBorder(g, p.background.bordertexture, p.background.bordercolor, p.background.borderthickness, padtop)
+    local padtop = (p.enabletitle and not p.reversegrowth and p.title.height)
+    local padbottom = (p.enabletitle and p.reversegrowth and p.title.height)
+    Skada:ApplyBorder(g, p.background.bordertexture, p.background.bordercolor, p.background.borderthickness, padtop, padbottom)
     
 	windowbackdrop.bgFile = p.background.texturepath or media:Fetch("background", p.background.texture)
 	windowbackdrop.tile = false
@@ -1054,120 +1061,7 @@ function mod:AddDisplayOptions(win, options)
 		}
 	}
 
-	options.windowoptions = {
-		type = "group",
-		name = L["Window"],
-		order=2,
-		args = {
-
-		    texture = {
-		         type = 'select',
-		         dialogControl = 'LSM30_Background',
-		         name = L["Background texture"],
-		         desc = L["The texture used as the background."],
-		         values = AceGUIWidgetLSMlists.background,
-		         get = function() return db.background.texture end,
-		         set = function(win,key)
-	         				db.background.texture = key
-		         			Skada:ApplySettings()
-						end,
-				order=1,
-		    },
-            
-			color = {
-				type="color",
-				name=L["Background color"],
-				desc=L["The color of the background."],
-				hasAlpha=true,
-				get=function(i)
-						local c = db.background.color
-						return c.r, c.g, c.b, c.a
-					end,
-				set=function(i, r,g,b,a)
-						db.background.color = {["r"] = r, ["g"] = g, ["b"] = b, ["a"] = a}
-						Skada:ApplySettings()
-					end,
-				order=1.1,
-			},                        
-
-		    bordertexture = {
-		         type = 'select',
-		         dialogControl = 'LSM30_Border',
-		         name = L["Border texture"],
-		         desc = L["The texture used for the borders."],
-		         values = AceGUIWidgetLSMlists.border,
-		         get = function() return db.background.bordertexture end,
-		         set = function(win,key)
-	         				db.background.bordertexture = key
-		         			Skada:ApplySettings()
-						end,
-				order=2,
-		    },
-            
-		    bordercolor = {
-		         type = 'color',
-				 order=5,
-		         name = L["Border color"],
-		         desc = L["The color used for the border."],
-				hasAlpha=true,
-				get=function(i)
-						local c = db.background.bordercolor or {r=0,g=0,b=0,a=1}
-						return c.r, c.g, c.b, c.a
-					end,
-				set=function(i, r,g,b,a)
-						db.background.bordercolor = {["r"] = r, ["g"] = g, ["b"] = b, ["a"] = a}
-						Skada:ApplySettings()
-					end,
-				order=2.1,
-		    },
-
-			thickness = {
-				type="range",
-				name=L["Border thickness"],
-				desc=L["The thickness of the borders."],
-				min=0,
-				max=50,
-				step=0.5,
-				get=function() return db.background.borderthickness end,
-				set=function(win, val)
-							db.background.borderthickness = val
-		         			Skada:ApplySettings()
-						end,
-				order=3,
-			},
-
-			scale = {
-				type="range",
-				name=L["Scale"],
-				desc=L["Sets the scale of the window."],
-				min=0.1,
-				max=3,
-				step=0.01,
-				get=function() return db.scale end,
-				set=function(win, val)
-							db.scale = val
-		         			Skada:ApplySettings()
-						end,
-				order=3,
-			},
-
-            strata = {
-                type="select",
-                name=L["Strata"],
-                desc=L["This determines what other frames will be in front of the frame."],
-                values = {["BACKGROUND"]="BACKGROUND", ["LOW"]="LOW", ["MEDIUM"]="MEDIUM", ["HIGH"]="HIGH", ["DIALOG"]="DIALOG", ["FULLSCREEN"]="FULLSCREEN", ["FULLSCREEN_DIALOG"]="FULLSCREEN_DIALOG"},
-                get=function() return db.background.strata end,
-                set=function(win, val)
-                    db.background.strata = val
-                    Skada:ApplySettings()
-                end,
-                order=7,
-            },
-            
-
-		}
-	}
-
+	options.windowoptions = Skada:FrameSettings(db, false)
 end
 
 

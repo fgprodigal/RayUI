@@ -28,7 +28,19 @@ Skada.windowdefaults = {
 	buttons = {menu = true, reset = true, report = true, mode = true, segment = true},
 
 	title = {textcolor = {r = 0.9, g = 0.9, b = 0.9, a = 1}, height = 20, font="Accidental Presidency", fontsize=13, texture="Armory", bordercolor = {r=0,g=0,b=0,a=1}, bordertexture="None", borderthickness=2, color = {r=0.3,g=0.3,b=0.3,a=1}, fontflags = ""},
-	background = {height=200, texture="Solid", bordercolor = {r=0,g=0,b=0,a=1}, bordertexture="Blizzard Party", borderthickness=2, color = {r=0,g=0,b=0,a=0.4}, tile = false, tilesize = 0, strata = "MEDIUM"},
+	background = {
+        height=200,
+        texture="Solid",
+        bordercolor = {r=0,g=0,b=0,a=1}, 
+        bordertexture="Blizzard Party", 
+        borderthickness=2, 
+        color = {r=0,g=0,b=0,a=0.4}, 
+        tile = false, 
+        tilesize = 0, 
+    },
+    
+    strata = "LOW",
+    scale = 1,
 
 	reversegrowth=false,
 	modeincombat="",
@@ -51,7 +63,7 @@ Skada.windowdefaults = {
     isonnewline = false,
     isusingclasscolors = true,
     height = 30,
-    width = nil,
+    width = 600,
     color = {r = 0.3, g = 0.3, b = 0.3, a = 0.6},
     isusingelvuiskin = true,
     issolidbackdrop = false,
@@ -59,6 +71,7 @@ Skada.windowdefaults = {
     
     -- Broker exclusive
     textcolor = {r = 0.9, g = 0.9, b = 0.9},
+    useframe = true
 }
 
 local windefaultscopy = {}
@@ -73,9 +86,9 @@ Skada.defaults = {
 		setformat=3,
 		setnumber=true,
 		showranks=true,
-		setstokeep=10,
+		setstokeep=20,
 		tooltips=true,
-		tooltippos="default",
+		tooltippos="smart",
 		tooltiprows=3,
 		informativetooltips=true,
 		onlykeepbosses=false,
@@ -138,10 +151,11 @@ function Skada:AddColumnOptions(mod)
 	end
 end
 
-function Skada:AddLoadableModuleCheckbox(mod, name)
+function Skada:AddLoadableModuleCheckbox(mod, name, description)
 	local new = {
 		type = "toggle",
 		name = name,
+        desc=description,
 		order=1,
 	}
 	Skada.options.args.modules.args[mod] = new
@@ -272,7 +286,7 @@ Skada.options = {
 						type="select",
 						name=L["Tooltip position"],
 						desc=L["Position of the tooltips."],
-						values=	{["default"] = L["Default"], ["topright"] = L["Top right"], ["topleft"] = L["Top left"]},
+						values=	{["default"] = L["Default"], ["topright"] = L["Top right"], ["topleft"] = L["Top left"], ["smart"] = L["Smart"]},
 						get=function() return Skada.db.profile.tooltippos end,
 						set=function(self, opt) Skada.db.profile.tooltippos = opt end,
 						order=4,
@@ -418,7 +432,7 @@ Skada.options = {
 						name=L["Data segments to keep"],
 						desc=L["The number of fight segments to keep. Persistent segments are not included in this."],
 						min=0,
-						max=30,
+						max=99,
 						step=1,
 						get=function() return Skada.db.profile.setstokeep end,
 						set=function(self, val) Skada.db.profile.setstokeep = val end,
@@ -512,4 +526,3 @@ Skada.options = {
 			}
 	}
 }
-

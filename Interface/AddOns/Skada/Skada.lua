@@ -42,7 +42,7 @@ do
 		tile = true, tileSize = 16, edgeSize = 16,
 		insets = {left = 1, right = 1, top = 1, bottom = 1}}
 	)
-	popup:SetSize(250, 70)
+	popup:SetSize(250, 100)
 	popup:SetPoint("CENTER", UIParent, "CENTER")
 	popup:SetFrameStrata("DIALOG")
 	popup:Hide()
@@ -56,21 +56,21 @@ do
         end)
 
 	local text = popup:CreateFontString(nil, "ARTWORK", "ChatFontNormal")
-	text:SetPoint("TOP", popup, "TOP", 0, -10)
+	text:SetPoint("TOP", popup, "TOP", 0, -15)
 	text:SetText(L["Do you want to reset Skada?"])
 
 	local accept = CreateFrame("Button", nil, popup)
 	accept:SetNormalTexture("Interface\\Buttons\\UI-CheckBox-Check")
 	accept:SetHighlightTexture("Interface\\Buttons\\UI-CheckBox-Highlight", "ADD")
 	accept:SetSize(50, 50)
-	accept:SetPoint("BOTTOM", popup, "BOTTOM", -50, 0)
+	accept:SetPoint("BOTTOM", popup, "BOTTOM", -50, 5)
 	accept:SetScript("OnClick", function(f) Skada:Reset() f:GetParent():Hide() end)
 
 	local close = CreateFrame("Button", nil, popup)
 	close:SetNormalTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Up")
 	close:SetHighlightTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Highlight", "ADD")
 	close:SetSize(50, 50)
-	close:SetPoint("BOTTOM", popup, "BOTTOM", 50, 0)
+	close:SetPoint("BOTTOM", popup, "BOTTOM", 50, 5)
 	close:SetScript("OnClick", function(f) f:GetParent():Hide() end)
 	function Skada:ShowPopup()
 		popup:SetPropagateKeyboardInput(true)
@@ -601,14 +601,21 @@ function Window:RightClick(group, button)
 	end
 end
 
-function Skada:tcopy(to, from)
+function Skada:tcopy(to, from, ...)
 	for k,v in pairs(from) do
-	if(type(v)=="table") then
-		to[k] = {}
-		Skada:tcopy(to[k], v);
-	else
-		to[k] = v;
-	end
+    
+        local skip = false
+        if ... then
+            for i, j in ipairs(...) do if j == k then skip = true end end
+        end
+        if not skip then
+            if(type(v)=="table") then
+                to[k] = {}
+                Skada:tcopy(to[k], v, ...);
+            else
+                to[k] = v;
+            end
+        end
 	end
 end
 
@@ -1174,6 +1181,7 @@ function Skada:DeleteSet(set)
 			break
 		end
 	end
+    
 	self:Wipe()
 	self:UpdateDisplay(true)
 end
@@ -1677,6 +1685,8 @@ local RAID_FLAGS = bit.bor(COMBATLOG_OBJECT_AFFILIATION_MINE, COMBATLOG_OBJECT_A
 -- The flags are checked, and the flag value (say, that the SRC must be interesting, ie, one of the raid) is only checked once, regardless
 -- of how many modules are interested in the event. The check is also only done on the first flag that requires it.
 cleuFrame = CreateFrame("Frame") -- Dedicated event handler for a small performance improvement.
+Skada.cleuFrame = cleuFrame -- For tweaks
+
 cleuFrame:SetScript("OnEvent", function(frame, event, timestamp, eventtype, hideCaster, srcGUID, srcName, srcFlags, srcRaidFlags, dstGUID, dstName, dstFlags, dstRaidFlags, ...)
 	local src_is_interesting = nil
 	local dst_is_interesting = nil
@@ -2095,6 +2105,20 @@ local function scan_for_columns(mode)
 	end
 end
 
+-- Register a display system
+local numorder = 5
+function Skada:AddDisplaySystem(key, mod)
+    self.displays[key] = mod
+    if mod.description then
+        Skada.options.args.windows.args[key.."desc"] = {
+            type = "description",
+            name = mod.description,
+            order = numorder
+        }
+        numorder = numorder + 1
+    end
+end
+
 -- Register a mode.
 function Skada:AddMode(mode)
 	-- Ask mode to verify our sets.
@@ -2252,6 +2276,15 @@ function Skada:SetTooltipPosition(tooltip, frame)
 	elseif p == "topright" then
 		tooltip:SetOwner(frame, "ANCHOR_NONE")
 		tooltip:SetPoint("TOPLEFT", frame, "TOPRIGHT")
+	elseif p == "smart" and frame then
+        -- Choose anchor point depending on frame position
+        if frame:GetLeft() < (GetScreenWidth() / 2) then
+            tooltip:SetOwner(frame, "ANCHOR_NONE")
+            tooltip:SetPoint("TOPLEFT", frame, "TOPRIGHT", 10, 0)
+        else
+            tooltip:SetOwner(frame, "ANCHOR_NONE")
+            tooltip:SetPoint("TOPRIGHT", frame, "TOPLEFT", -10, 0)
+        end
 	end
 end
 
@@ -2364,7 +2397,6 @@ end
 function Skada:ShowTooltip(win, id, label)
 	local t = GameTooltip
 	if Skada.db.profile.tooltips and (win.metadata.click1 or win.metadata.click2 or win.metadata.click3 or win.metadata.tooltip) then
-		Skada:SetTooltipPosition(t, win.bargroup)
 	    t:ClearLines()
 
 		local hasClick = win.metadata.click1 or win.metadata.click2 or win.metadata.click3
@@ -2420,17 +2452,14 @@ function Skada:ShowTooltip(win, id, label)
 end
 
 -- Generic border
-local borderbackdrop = {}
 function Skada:ApplyBorder(frame, texture, color, thickness, padtop, padbottom, padleft, padright)
+    local borderbackdrop = {}
     if not frame.borderFrame then
         frame.borderFrame = CreateFrame("Frame", nil, frame)
         frame.borderFrame:SetFrameLevel(0)
     end
     frame.borderFrame:SetPoint("TOPLEFT", frame, -thickness - (padleft or 0), thickness + (padtop or 0))
     frame.borderFrame:SetPoint("BOTTOMRIGHT", frame, thickness + (padright or 0), -thickness - (padbottom or 0))
-    if color then
-        frame.borderFrame:SetBackdropBorderColor(color.r, color.g, color.b, color.a)
-    end
     if texture and thickness > 0 then
         borderbackdrop.edgeFile = media:Fetch("border", texture)
     else
@@ -2438,48 +2467,250 @@ function Skada:ApplyBorder(frame, texture, color, thickness, padtop, padbottom, 
     end
     borderbackdrop.edgeSize = thickness
     frame.borderFrame:SetBackdrop(borderbackdrop)
+    if color then
+        frame.borderFrame:SetBackdropBorderColor(color.r, color.g, color.b, color.a)
+    end
+end
+
+-- Generic frame settings
+function Skada:FrameSettings(db, include_dimensions)
+	local obj = {
+		type = "group",
+		name = L["Window"],
+		order=2,
+		args = {
+            
+            bgheader = {
+                type = "header",
+                name = L["Background"],
+                order=1
+            },
+            
+		    texture = {
+		         type = 'select',
+		         dialogControl = 'LSM30_Background',
+		         name = L["Background texture"],
+		         desc = L["The texture used as the background."],
+		         values = AceGUIWidgetLSMlists.background,
+		         get = function() return db.background.texture end,
+		         set = function(win,key)
+	         				db.background.texture = key
+		         			Skada:ApplySettings()
+						end,
+                width="double",
+				order=1.1
+		    },
+            
+            tile = {
+                type = 'toggle',
+                name = L["Tile"],
+                desc = L["Tile the background texture."],
+                get = function() return db.background.tile end,
+                set = function(win,key)
+                    db.background.tile = key
+                    Skada:ApplySettings()
+                end,
+                order=1.2
+            },
+
+            tilesize = {
+                type="range",
+                name=L["Tile size"],
+                desc=L["The size of the texture pattern."],
+                min=0,
+                max=math.floor(GetScreenWidth()),
+                step=1.0,
+                get=function() return db.background.tilesize end,
+                set=function(win, val)
+                    db.background.tilesize = val
+                    Skada:ApplySettings()
+                end,
+                order=1.3
+            },
+            
+            
+			color = {
+				type="color",
+				name=L["Background color"],
+				desc=L["The color of the background."],
+				hasAlpha=true,
+				get=function(i)
+						local c = db.background.color
+						return c.r, c.g, c.b, c.a
+					end,
+				set=function(i, r,g,b,a)
+						db.background.color = {["r"] = r, ["g"] = g, ["b"] = b, ["a"] = a}
+						Skada:ApplySettings()
+					end,
+				order=1.4
+			},                        
+
+            borderheader = {
+                type = "header",
+                name = L["Border"],
+                order=2
+            },
+            
+		    bordertexture = {
+		         type = 'select',
+		         dialogControl = 'LSM30_Border',
+		         name = L["Border texture"],
+		         desc = L["The texture used for the borders."],
+		         values = AceGUIWidgetLSMlists.border,
+		         get = function() return db.background.bordertexture end,
+		         set = function(win,key)
+	         				db.background.bordertexture = key
+		         			Skada:ApplySettings()
+						end,
+                width="double",
+				order=2.1
+		    },
+            
+		    bordercolor = {
+		         type = 'color',
+				 order=5,
+		         name = L["Border color"],
+		         desc = L["The color used for the border."],
+				hasAlpha=true,
+				get=function(i)
+						local c = db.background.bordercolor or {r=0,g=0,b=0,a=1}
+						return c.r, c.g, c.b, c.a
+					end,
+				set=function(i, r,g,b,a)
+						db.background.bordercolor = {["r"] = r, ["g"] = g, ["b"] = b, ["a"] = a}
+						Skada:ApplySettings()
+					end,
+				order=2.2
+		    },
+
+			thickness = {
+				type="range",
+				name=L["Border thickness"],
+				desc=L["The thickness of the borders."],
+				min=0,
+				max=50,
+				step=0.5,
+				get=function() return db.background.borderthickness end,
+				set=function(win, val)
+							db.background.borderthickness = val
+		         			Skada:ApplySettings()
+						end,
+				order=2.3
+			},
+
+            optionheader = {
+                type = "header",
+                name = L["General"],
+                order=4
+            },
+            
+			scale = {
+				type="range",
+				name=L["Scale"],
+				desc=L["Sets the scale of the window."],
+				min=0.1,
+				max=3,
+				step=0.01,
+				get=function() return db.scale end,
+				set=function(win, val)
+							db.scale = val
+		         			Skada:ApplySettings()
+						end,
+				order=4.1
+			},
+
+            strata = {
+                type="select",
+                name=L["Strata"],
+                desc=L["This determines what other frames will be in front of the frame."],
+                values = {["BACKGROUND"]="BACKGROUND", ["LOW"]="LOW", ["MEDIUM"]="MEDIUM", ["HIGH"]="HIGH", ["DIALOG"]="DIALOG", ["FULLSCREEN"]="FULLSCREEN", ["FULLSCREEN_DIALOG"]="FULLSCREEN_DIALOG"},
+                get=function() return db.strata end,
+                set=function(win, val)
+                    db.strata = val
+                    Skada:ApplySettings()
+                end,
+                order=4.2
+            },
+            
+
+		}
+	}
+    
+    if include_dimensions then
+        obj.args.width = {
+            type = 'range',
+            name = L["Width"],
+            min=100,
+            max=GetScreenWidth(),
+            step=1.0,
+            get = function() return db.width end,
+            set = function(win,key)
+                db.width = key
+                Skada:ApplySettings()
+            end,
+            order=4.3
+        }
+
+        obj.args.height = {
+            type = 'range',
+            name = L["Height"],
+            min=16,
+            max=400,
+            step=1.0,
+            get = function() return db.height end,
+            set = function(win,key)
+                db.height = key
+                Skada:ApplySettings()
+            end,
+            order=4.4
+        }
+    end
+    return obj
 end
 
 do
 
 	function Skada:OnInitialize()
 		-- Register some SharedMedia goodies.
-		media:Register("font", "Adventure",				[[Interface\Addons\Skada\fonts\Adventure.ttf]])
-		media:Register("font", "ABF",					[[Interface\Addons\Skada\fonts\ABF.ttf]])
-		media:Register("font", "Vera Serif",			[[Interface\Addons\Skada\fonts\VeraSe.ttf]])
-		media:Register("font", "Diablo",				[[Interface\Addons\Skada\fonts\Avqest.ttf]])
-		media:Register("font", "Accidental Presidency",	[[Interface\Addons\Skada\fonts\Accidental Presidency.ttf]])
-		media:Register("statusbar", "Aluminium",		[[Interface\Addons\Skada\statusbar\Aluminium]])
-		media:Register("statusbar", "Armory",			[[Interface\Addons\Skada\statusbar\Armory]])
-		media:Register("statusbar", "BantoBar",			[[Interface\Addons\Skada\statusbar\BantoBar]])
-		media:Register("statusbar", "Glaze2",			[[Interface\Addons\Skada\statusbar\Glaze2]])
-		media:Register("statusbar", "Gloss",			[[Interface\Addons\Skada\statusbar\Gloss]])
-		media:Register("statusbar", "Graphite",			[[Interface\Addons\Skada\statusbar\Graphite]])
-		media:Register("statusbar", "Grid",				[[Interface\Addons\Skada\statusbar\Grid]])
-		media:Register("statusbar", "Healbot",			[[Interface\Addons\Skada\statusbar\Healbot]])
-		media:Register("statusbar", "LiteStep",			[[Interface\Addons\Skada\statusbar\LiteStep]])
-		media:Register("statusbar", "Minimalist",		[[Interface\Addons\Skada\statusbar\Minimalist]])
-		media:Register("statusbar", "Otravi",			[[Interface\Addons\Skada\statusbar\Otravi]])
-		media:Register("statusbar", "Outline",			[[Interface\Addons\Skada\statusbar\Outline]])
-		media:Register("statusbar", "Perl",				[[Interface\Addons\Skada\statusbar\Perl]])
-		media:Register("statusbar", "Smooth",			[[Interface\Addons\Skada\statusbar\Smooth]])
-		media:Register("statusbar", "Round",			[[Interface\Addons\Skada\statusbar\Round]])
-		media:Register("statusbar", "TukTex",			[[Interface\Addons\Skada\statusbar\normTex]])
+		media:Register("font", "Adventure",				[[Interface\Addons\Skada\media\fonts\Adventure.ttf]])
+		media:Register("font", "ABF",					[[Interface\Addons\Skada\media\fonts\ABF.ttf]])
+		media:Register("font", "Vera Serif",			[[Interface\Addons\Skada\media\fonts\VeraSe.ttf]])
+		media:Register("font", "Diablo",				[[Interface\Addons\Skada\media\fonts\Avqest.ttf]])
+		media:Register("font", "Accidental Presidency",	[[Interface\Addons\Skada\media\fonts\Accidental Presidency.ttf]])
+		media:Register("statusbar", "Aluminium",      [[Interface\Addons\Skada\media\statusbar\Aluminium]])
+		media:Register("statusbar", "Armory",         [[Interface\Addons\Skada\media\statusbar\Armory]])
+		media:Register("statusbar", "BantoBar",       [[Interface\Addons\Skada\media\statusbar\BantoBar]])
+		media:Register("statusbar", "Glaze2",         [[Interface\Addons\Skada\media\statusbar\Glaze2]])
+		media:Register("statusbar", "Gloss",          [[Interface\Addons\Skada\media\statusbar\Gloss]])
+		media:Register("statusbar", "Graphite",       [[Interface\Addons\Skada\media\statusbar\Graphite]])
+		media:Register("statusbar", "Grid",           [[Interface\Addons\Skada\media\statusbar\Grid]])
+		media:Register("statusbar", "Healbot",        [[Interface\Addons\Skada\media\statusbar\Healbot]])
+		media:Register("statusbar", "LiteStep",       [[Interface\Addons\Skada\media\statusbar\LiteStep]])
+		media:Register("statusbar", "Minimalist",     [[Interface\Addons\Skada\media\statusbar\Minimalist]])
+		media:Register("statusbar", "Otravi",         [[Interface\Addons\Skada\media\statusbar\Otravi]])
+		media:Register("statusbar", "Outline",        [[Interface\Addons\Skada\media\statusbar\Outline]])
+		media:Register("statusbar", "Perl",           [[Interface\Addons\Skada\media\statusbar\Perl]])
+		media:Register("statusbar", "Smooth",         [[Interface\Addons\Skada\media\statusbar\Smooth]])
+		media:Register("statusbar", "Round",          [[Interface\Addons\Skada\media\statusbar\Round]])
+		media:Register("statusbar", "TukTex",         [[Interface\Addons\Skada\media\statusbar\normTex]])
+		media:Register("border", "Glow",              [[Interface\Addons\Skada\media\border\glowTex]])
+		media:Register("border", "Roth",              [[Interface\Addons\Skada\media\border\roth]])
+		media:Register("background", "Copper",        [[Interface\Addons\Skada\media\background\copper]])
 
 		-- Some sounds (copied from Omen).
-		media:Register("sound", "Rubber Ducky", [[Sound\Doodad\Goblin_Lottery_Open01.ogg]])
-		media:Register("sound", "Cartoon FX", [[Sound\Doodad\Goblin_Lottery_Open03.ogg]])
-		media:Register("sound", "Explosion", [[Sound\Doodad\Hellfire_Raid_FX_Explosion05.ogg]])
-		media:Register("sound", "Shing!", [[Sound\Doodad\PortcullisActive_Closed.ogg]])
-		media:Register("sound", "Wham!", [[Sound\Doodad\PVP_Lordaeron_Door_Open.ogg]])
-		media:Register("sound", "Simon Chime", [[Sound\Doodad\SimonGame_LargeBlueTree.ogg]])
-		media:Register("sound", "War Drums", [[Sound\Event Sounds\Event_wardrum_ogre.ogg]])
-		media:Register("sound", "Cheer", [[Sound\Event Sounds\OgreEventCheerUnique.ogg]])
-		media:Register("sound", "Humm", [[Sound\Spells\SimonGame_Visual_GameStart.ogg]])
-		media:Register("sound", "Short Circuit", [[Sound\Spells\SimonGame_Visual_BadPress.ogg]])
-		media:Register("sound", "Fel Portal", [[Sound\Spells\Sunwell_Fel_PortalStand.ogg]])
-		media:Register("sound", "Fel Nova", [[Sound\Spells\SeepingGaseous_Fel_Nova.ogg]])
-		media:Register("sound", "You Will Die!", [[Sound\Creature\CThun\CThunYouWillDie.ogg]])
+		media:Register("sound", "Rubber Ducky",       [[Sound\Doodad\Goblin_Lottery_Open01.ogg]])
+		media:Register("sound", "Cartoon FX",         [[Sound\Doodad\Goblin_Lottery_Open03.ogg]])
+		media:Register("sound", "Explosion",          [[Sound\Doodad\Hellfire_Raid_FX_Explosion05.ogg]])
+		media:Register("sound", "Shing!",             [[Sound\Doodad\PortcullisActive_Closed.ogg]])
+		media:Register("sound", "Wham!",              [[Sound\Doodad\PVP_Lordaeron_Door_Open.ogg]])
+		media:Register("sound", "Simon Chime",        [[Sound\Doodad\SimonGame_LargeBlueTree.ogg]])
+		media:Register("sound", "War Drums",          [[Sound\Event Sounds\Event_wardrum_ogre.ogg]])
+		media:Register("sound", "Cheer",              [[Sound\Event Sounds\OgreEventCheerUnique.ogg]])
+		media:Register("sound", "Humm",               [[Sound\Spells\SimonGame_Visual_GameStart.ogg]])
+		media:Register("sound", "Short Circuit",      [[Sound\Spells\SimonGame_Visual_BadPress.ogg]])
+		media:Register("sound", "Fel Portal",         [[Sound\Spells\Sunwell_Fel_PortalStand.ogg]])
+		media:Register("sound", "Fel Nova",           [[Sound\Spells\SeepingGaseous_Fel_Nova.ogg]])
+		media:Register("sound", "You Will Die!",      [[Sound\Creature\CThun\CThunYouWillDie.ogg]])
 
 		-- DB
 		self.db = LibStub("AceDB-3.0"):New("SkadaDB", self.defaults, "Default")
@@ -2553,12 +2784,23 @@ function Skada:OnEnable()
 	-- Instead of listening for callbacks on SharedMedia we simply wait a few seconds and then re-apply settings
 	-- to catch any missing media. Lame? Yes.
 	self:ScheduleTimer("ApplySettings", 2)
+    
+    -- Memory usage warning
+	self:ScheduleTimer("MemoryCheck", 3)
 end
 
-function Skada:AddLoadableModule(name, func)
+function Skada:MemoryCheck()
+    UpdateAddOnMemoryUsage()
+    local mem = GetAddOnMemoryUsage("Skada")
+    if mem > 30000 then
+        self:Print(L["Memory usage is high. You may want to reset Skada, and enable one of the automatic reset options."])
+    end
+end
+
+function Skada:AddLoadableModule(name, description, func)
 	if not self.moduleList then self.moduleList = {} end
 	self.moduleList[#self.moduleList+1] = func
-	self:AddLoadableModuleCheckbox(name, L[name])
+	self:AddLoadableModuleCheckbox(name, L[name], description and L[description])
 end
 
 

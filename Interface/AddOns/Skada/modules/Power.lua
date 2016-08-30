@@ -1,5 +1,4 @@
-
-Skada:AddLoadableModule("Power", function(Skada, L)
+Skada:AddLoadableModule("Power", nil, function(Skada, L)
 	if Skada.db.profile.modulesBlocked.Power then return end
 
 	local mod = Skada:NewModule(L["Mana gained"])

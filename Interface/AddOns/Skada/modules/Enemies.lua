@@ -1,5 +1,4 @@
-
-Skada:AddLoadableModule("Enemies", function(Skada, L)
+Skada:AddLoadableModule("Enemies", nil, function(Skada, L)
 	if Skada.db.profile.modulesBlocked.Enemies then return end
 
 	local done = Skada:NewModule(L["Enemy damage done"])
