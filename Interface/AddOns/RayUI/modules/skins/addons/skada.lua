@@ -101,10 +101,10 @@ local function SkinSkada()
 		if not skada.shadow then
 			skada:StripTextures()
 			skada:CreateShadow("Background")
-			skada.shadow:SetFrameStrata("BACKGROUND")
 			if skada.borderFrame then skada.borderFrame:Kill() end
 		end
 		skada.border:ClearAllPoints()
+		skada.shadow:SetFrameStrata("BACKGROUND")
 		if win.db.enabletitle then
 			skada.border:Point("TOPLEFT", win.bargroup.button, "TOPLEFT", -1, 1)
 		else
@@ -112,13 +112,14 @@ local function SkinSkada()
 		end
 		skada.border:Point("BOTTOMRIGHT", win.bargroup, "BOTTOMRIGHT", 1, -1)
 
-		win.bargroup.button:SetFrameStrata("MEDIUM")
-		win.bargroup.button:SetFrameLevel(5)
-		win.bargroup:SetFrameStrata("MEDIUM")
+		skada.button:SetFrameStrata("MEDIUM")
+		skada.button:SetFrameLevel(5)
+		skada:SetFrameStrata("MEDIUM")
 	end
 
 	hooksecurefunc(Skada, "UpdateDisplay", function(self)
 		for _,window in ipairs(self:GetWindows()) do
+			if window.bargroup.shadow then window.bargroup.shadow:SetFrameStrata("BACKGROUND") end
 			for i,v in pairs(window.bargroup:GetBars()) do
 				if not v.BarStyled then
 					v.label:ClearAllPoints()
