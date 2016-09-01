@@ -79,6 +79,10 @@ local function LoadSkin()
 			S:Reskin(child)
 		end
 	end
+
+	FrameStackTooltip:HookScript("OnShow", function(self)
+		self:SetScale(1.2)
+	end)
 end
 
 S:RegisterSkin("Blizzard_DebugTools", LoadSkin)

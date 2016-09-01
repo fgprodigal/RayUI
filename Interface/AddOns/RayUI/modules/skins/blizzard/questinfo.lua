@@ -70,6 +70,10 @@ local function LoadSkin()
 				end
 			end
 		end
+
+		if QuestInfoSealFrame.Text and QuestInfoSealFrame.Text:GetText() then
+			QuestInfoSealFrame.Text:SetText(gsub(QuestInfoSealFrame.Text:GetText(),"cff......","cffffffff"))
+		end
 	end
 
 	hooksecurefunc("QuestMapFrame_ShowQuestDetails", colourObjectivesText)
@@ -168,6 +172,8 @@ local function LoadSkin()
 
 	QuestInfoRewardsFrame.XPFrame.ReceiveText:SetTextColor(1, 1, 1)
 	QuestInfoRewardsFrame.XPFrame.ReceiveText.SetTextColor = R.dummy
+
+	QuestMapFrame.DetailsFrame.SealMaterialBG:Kill()
 end
 
 S:RegisterSkin("RayUI", LoadSkin)

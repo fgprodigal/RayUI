@@ -650,11 +650,13 @@ function S:SetBD(f, x, y, x2, y2)
 		bg:Point("TOPLEFT", x, y)
 		bg:Point("BOTTOMRIGHT", x2, y2)
 	end
-	bg:SetFrameLevel(f:GetFrameLevel())
+	local level = f:GetFrameLevel() - 1
+	if level < 0 then level = 0 end
+	bg:SetFrameLevel(level)
 	S:CreateBD(bg)
 	S:CreateSD(bg)
 	f:HookScript("OnShow", function()
-		bg:SetFrameLevel(f:GetFrameLevel())
+		bg:SetFrameLevel(level)
 	end)
 end
 

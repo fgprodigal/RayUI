@@ -10,7 +10,7 @@ local function LoadSkin()
 		select(i, QuestChoiceFrame:GetRegions()):Hide()
 	end
 
-    for i = 1, 2 do
+    for i = 1, 3 do
         local option = QuestChoiceFrame["Option"..i]
         local rewards = option.Rewards
         local icon = rewards.Item.Icon
@@ -35,6 +35,7 @@ local function LoadSkin()
     S:CreateSD(QuestChoiceFrame)
     S:Reskin(QuestChoiceFrame.Option1.OptionButton)
     S:Reskin(QuestChoiceFrame.Option2.OptionButton)
+    S:Reskin(QuestChoiceFrame.Option3.OptionButton)
     S:ReskinClose(QuestChoiceFrame.CloseButton)
 end
 

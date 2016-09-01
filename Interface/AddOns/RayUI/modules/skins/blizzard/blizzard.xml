@@ -4,6 +4,7 @@
 	<Script file='alerts.lua'/>
 	<Script file='alteration.lua'/>
 	<Script file='archaeology.lua'/>
+	<Script file='artifact.lua'/>
 	<Script file='auction.lua'/>
 	<Script file='bags.lua'/>
 	<Script file='barbershop.lua'/>
@@ -41,6 +42,7 @@
 	<Script file='merchant.lua'/>
 	<Script file='nonraid.lua'/>
 	<Script file='objectivetracker.lua'/>
+	<Script file='orderhall.lua'/>
 	<Script file='petbattle.lua'/>
 	<Script file='petition.lua'/>
 	<Script file='pve.lua'/>
@@ -54,6 +56,7 @@
 	<Script file='spellbook.lua'/>
 	<Script file='tabard.lua'/>
 	<Script file='talent.lua'/>
+	<Script file='talkinghead.lua'/>
 	<Script file='taxi.lua'/>
 	<Script file='timemanager.lua'/>
 	<Script file='trade.lua'/>
