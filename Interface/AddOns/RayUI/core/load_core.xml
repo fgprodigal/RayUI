@@ -8,4 +8,5 @@
 	<Script file="install.lua"/>
 	<Script file="bit.lua"/>
 	<Script file="options.lua"/>
+	<Script file="frame.lua"/>
 </Ui>

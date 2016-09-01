@@ -94,7 +94,7 @@ end
 
 local function CreatCopyFrame()
 	local S = R:GetModule("Skins")
-	frame = CreateFrame("Frame", "CopyFrame", UIParent)
+	frame = CreateFrame("Frame", "CopyChatFrame", UIParent)
 	table.insert(UISpecialFrames, frame:GetName())
 	S:SetBD(frame)
 	frame:SetScale(1)
@@ -144,7 +144,6 @@ local function CreatCopyFrame()
 	S:ReskinClose(close)
 	close:ClearAllPoints()
 	close:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -7, -5)
-	isf = true
 end
 
 local function GetLines(...)
@@ -160,13 +159,12 @@ local function GetLines(...)
 	return ct - 1
 end
 
-local function Copy(cf)
+function CH:CopyChat(cf)
 	local _, size = cf:GetFont()
 	FCF_SetChatWindowFontSize(cf, cf, 0.01)
 	local lineCt = GetLines(cf:GetRegions())
 	local text = table.concat(lines, "\n", 1, lineCt)
 	FCF_SetChatWindowFontSize(cf, cf, size)
-	if not isf then CreatCopyFrame() end
 	if frame:IsShown() then frame:Hide() return end
 	frame:Show()
 	editBox:SetText(text)
@@ -198,12 +196,12 @@ local function ChatCopyButtons(id)
 				if btn == "RightButton" then
 					ToggleFrame(ChatMenu)
 				else
-					Copy(cf)
+					CH:CopyChat(cf)
 				end
 			end)
 		else
 			button:SetScript("OnMouseUp", function(self, btn)
-				Copy(cf)
+				CH:CopyChat(cf)
 			end)
 		end
 
@@ -1149,6 +1147,8 @@ function CH:Initialize()
 	FriendsMicroButton:Hide()
 	FriendsMicroButton:Kill()
 
+	CreatCopyFrame()
+	CopyChatFrame:Hide()
 	if not _G["ChatBG"] then
 		local ChatBG = CreateFrame("Frame", "ChatBG", UIParent)
 		ChatBG:CreatePanel("Default", self.db.width, self.db.height, "BOTTOMLEFT",UIParent,"BOTTOMLEFT",15,30)
