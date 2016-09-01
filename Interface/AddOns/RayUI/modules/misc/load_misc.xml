@@ -24,4 +24,5 @@
 	<Script file="timerTracker.lua"/>
 	<Script file="totemBar.lua"/>
 	<Script file="vehicle.lua"/>
+	<Script file="talkinghead.lua"/>
 </Ui>
