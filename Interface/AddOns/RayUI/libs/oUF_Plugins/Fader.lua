@@ -17,8 +17,8 @@ local function Update(self)
 		(unit:find('target') and UnitExists(unit)) or
 		UnitExists(( unit == "pet" and "player" or unit ) .. 'target') or
 		UnitHealth(unit) < UnitHealthMax(unit) or
-		((powerType == 'RAGE' or powerType == 'RUNIC_POWER') and power > 0) or
-		((powerType ~= 'RAGE' and powerType ~= 'RUNIC_POWER') and power < UnitPowerMax(unit) and not (addmax>0 and addcur==addmax)) or
+		((powerType == 'RAGE' or powerType == 'RUNIC_POWER' or powerType == 'FURY' or powerType == 'PAIN') and power > 0) or
+		((powerType ~= 'RAGE' and powerType ~= 'RUNIC_POWER' and powerType ~= 'FURY' and powerType ~= 'PAIN') and power < UnitPowerMax(unit) and not (addmax>0 and addcur==addmax)) or
 		GetMouseFocus() == self
 	then
 	--	if self:GetAlpha() < (self.FadeMaxAlpha or 1) then
