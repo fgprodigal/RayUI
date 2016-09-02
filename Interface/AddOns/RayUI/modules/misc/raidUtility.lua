@@ -12,7 +12,7 @@ local function LoadFunc()
 	RaidUtilityPanel:SetHeight(panel_height)
 	RaidUtilityPanel:Width(230)
 	RaidUtilityPanel:SetFrameStrata("BACKGROUND")
-	RaidUtilityPanel:Point("TOP", UIParent, "TOP", 0, 1)
+	RaidUtilityPanel:Point("TOP", UIParent, "TOP", -300, 1)
 	RaidUtilityPanel:SetFrameLevel(3)
 	RaidUtilityPanel.toggled = false
 	S:CreateBD(RaidUtilityPanel)
@@ -87,7 +87,7 @@ local function LoadFunc()
 	end
 
 	--Show Button
-	CreateButton("ShowButton", UIParent, "UIMenuButtonStretchTemplate, SecureHandlerClickTemplate", 80, 18, "TOP", UIParent, "TOP", 0, 2, L["团队工具"], nil)
+	CreateButton("ShowButton", UIParent, "UIMenuButtonStretchTemplate, SecureHandlerClickTemplate", 80, 18, "TOP", UIParent, "TOP", -300, 2, L["团队工具"], nil)
 	ShowButton:SetFrameRef("RaidUtilityPanel", RaidUtilityPanel)
 	ShowButton:SetAttribute("_onclick", [=[self:Hide(); self:GetFrameRef("RaidUtilityPanel"):Show();]=])
 	ShowButton:SetScript("OnMouseUp", function(self) RaidUtilityPanel.toggled = true end)
