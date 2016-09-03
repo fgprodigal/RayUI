@@ -14,16 +14,13 @@ local function LoadSkin()
 	OrderHallCommandBar:ClearAllPoints()
 	OrderHallCommandBar:SetPoint("TOP")
 	OrderHallCommandBar:SetWidth(350)
-	--Dumb
 	OrderHallCommandBar.WorldMapButton:Kill()
-	-- OrderHallCommandBar.WorldMapButton:ClearAllPoints()
-	-- OrderHallCommandBar.WorldMapButton:SetPoint("RIGHT", OrderHallCommandBar, -5, -2)
 
 	-- MissionFrame
 	OrderHallMissionFrame.ClassHallIcon:Kill()
 	OrderHallMissionFrame:StripTextures()
+	OrderHallMissionFrame.GarrCorners:Hide()
 	S:SetBD(OrderHallMissionFrame)
-
 	S:ReskinClose(OrderHallMissionFrame.CloseButton)
 
 	for i = 1, 3 do 
@@ -39,80 +36,88 @@ local function LoadSkin()
 	S:ReskinClose(OrderHallMissionFrame.MissionTab.ZoneSupportMissionPage.CloseButton)
 	S:Reskin(OrderHallMissionFrame.MissionTab.ZoneSupportMissionPage.StartMissionButton)
 
-	for i, v in ipairs(OrderHallMissionFrame.MissionTab.MissionList.listScroll.buttons) do
-		local Button = _G["OrderHallMissionFrameMissionsListScrollFrameButton" .. i]
-		if Button and not Button.skinned then
+	for _, Button in pairs(OrderHallMissionFrame.MissionTab.MissionList.listScroll.buttons) do
+		if not Button.isSkinned then
 			Button:StripTextures()
-			Button:SetTemplate()
+			-- Button:SetTemplate()
 			S:Reskin(Button)
-			Button:SetBackdropBorderColor(0, 0, 0, 0)
 			Button.LocBG:Hide()
-			for i = 1, #Button.Rewards do
-				local Texture = Button.Rewards[i].Icon:GetTexture()
-
-				Button.Rewards[i]:StripTextures()
-				-- S:Reskin(Button.Rewards[i])
-				-- Button.Rewards[i]:CreateBackdrop()
-				Button.Rewards[i].Icon:SetTexture(Texture)
-				-- Button.Rewards[i].backdrop:ClearAllPoints()
-				-- Button.Rewards[i].backdrop:SetOutside(Button.Rewards[i].Icon)
-				Button.Rewards[i].Icon:SetTexCoord(.08, .92, .08, .92)
-			end
 			Button.isSkinned = true
 		end
 	end
 
-	-- Mission Tab
-	local follower = OrderHallMissionFrameFollowers
-	follower:StripTextures()
-	follower.MaterialFrame:StripTextures()
+	-- Followers
+	local FollowerList = OrderHallMissionFrame.FollowerList
+	local FollowerTab = OrderHallMissionFrame.FollowerTab
+	FollowerList:StripTextures()
+	FollowerList.MaterialFrame:StripTextures()
+	S:ReskinInput(FollowerList.SearchBox)
+	S:ReskinScroll(OrderHallMissionFrame.FollowerList.listScroll.scrollBar)
+	hooksecurefunc(FollowerList, "ShowFollower", function(self)
+		local abilities = self.followerTab.AbilitiesFrame.Abilities
+		if self.numAbilitiesStyled == nil then
+			self.numAbilitiesStyled = 1
+		end
+		local numAbilitiesStyled = self.numAbilitiesStyled
+		local ability = abilities[numAbilitiesStyled]
+		while ability do
+			local icon = ability.IconButton.Icon
+			S:ReskinIcon(icon)
+			icon:SetDrawLayer("BORDER", 0)
+			numAbilitiesStyled = numAbilitiesStyled + 1
+			ability = abilities[numAbilitiesStyled]
+		end
+		self.numAbilitiesStyled = numAbilitiesStyled
 
-	S:ReskinInput(follower.SearchBox)
-	S:ReskinClose(OrderHallMissionFrame.MissionTab.MissionPage.CloseButton)
-	S:Reskin(OrderHallMissionFrame.MissionTab.MissionPage.StartMissionButton)
-	S:ReskinScroll(OrderHallMissionFrameFollowersListScrollFrameScrollBar)
+		local weapon = self.followerTab.ItemWeapon
+		local armor = self.followerTab.ItemArmor
+		if not weapon.skinned then
+			S:ReskinIcon(weapon.Icon)
+			weapon.Border:SetTexture(nil)
+			weapon.skinned = true
+		end
+		if not armor.skinned then
+			S:ReskinIcon(armor.Icon)
+			armor.Border:SetTexture(nil)
+			armor.skinned = true
+		end
 
-	-- Follower Tab
-	local followerList = OrderHallMissionFrame.FollowerTab
-	followerList:StripTextures()
-	followerList.ModelCluster:StripTextures()
-	followerList.Class:SetSize(50, 43)
-	followerList.XPBar:StripTextures()
-	followerList.XPBar:SetStatusBarTexture(R["media"].gloss)
-	-- followerList.XPBar:CreateBackdrop()
+		local xpbar = self.followerTab.XPBar
+		xpbar:StripTextures()
+		xpbar:SetStatusBarTexture(R["media"].gloss)
+		-- xpbar:CreateShadow("Background")
+	end)
+	FollowerTab:StripTextures()
+	FollowerTab.Class:SetSize(50, 43)
+	FollowerTab.XPBar:StripTextures()
+	FollowerTab.XPBar:SetStatusBarTexture(.08, .92, .08, .92)
+	FollowerTab.XPBar:CreateShadow("Background")
 
-	-- Mission Stage
-	local mission = OrderHallMissionFrameMissions
-	mission.CompleteDialog:StripTextures()
-	mission.CompleteDialog:CreateShadow("Background")
-
-	S:Reskin(mission.CompleteDialog.BorderFrame.ViewButton)
+	-- Missions
+	local MissionTab = OrderHallMissionFrame.MissionTab
+	local MissionList = MissionTab.MissionList
+	local MissionPage = MissionTab.MissionPage
+	local ZoneSupportMissionPage = MissionTab.ZoneSupportMissionPage
+	S:ReskinScroll(MissionList.listScroll.scrollBar)
+	MissionList.CompleteDialog:StripTextures()
+	S:SetBD(MissionList.CompleteDialog)
+	S:Reskin(MissionList.CompleteDialog.BorderFrame.ViewButton)
+	MissionList:StripTextures()
+	MissionList.listScroll:StripTextures()
+	S:Reskin(OrderHallMissionFrameMissions.CombatAllyUI.InProgress.Unassign)
+	S:ReskinClose(MissionPage.CloseButton)
+	S:Reskin(MissionPage.StartMissionButton)
+	S:ReskinClose(ZoneSupportMissionPage.CloseButton)
+	S:Reskin(ZoneSupportMissionPage.StartMissionButton)
 	S:Reskin(OrderHallMissionFrame.MissionComplete.NextMissionButton)
 
 	-- TalentFrame
-	OrderHallTalentFrame:StripTextures()
-	OrderHallTalentFrame:CreateShadow("Background")
-	ClassHallTalentInset:StripTextures()
-	OrderHallTalentFrame.CurrencyIcon:SetAtlas("legionmission-icon-currency", false)
-
-	S:ReskinClose(OrderHallTalentFrameCloseButton)
-
-	-- Needs Review
-	-- Scouting Map Quest Choise
-	AdventureMapQuestChoiceDialog:StripTextures()
-	AdventureMapQuestChoiceDialog:CreateShadow("Background")
-
-	-- Quick Fix for the Font Color
-	AdventureMapQuestChoiceDialog.Details.Child.TitleHeader:SetTextColor(1, 1, 0)
-	AdventureMapQuestChoiceDialog.Details.Child.DescriptionText:SetTextColor(1, 1, 1)
-
-	AdventureMapQuestChoiceDialog.Details.Child.ObjectivesHeader:SetTextColor(1, 1, 0)
-	AdventureMapQuestChoiceDialog.Details.Child.ObjectivesText:SetTextColor(1, 1, 1)
-
-	S:ReskinClose(AdventureMapQuestChoiceDialog.CloseButton)
-	S:ReskinScroll(AdventureMapQuestChoiceDialog.Details.ScrollBar)
-	S:Reskin(AdventureMapQuestChoiceDialog.AcceptButton)
-	S:Reskin(AdventureMapQuestChoiceDialog.DeclineButton)
+	local TalentFrame = OrderHallTalentFrame
+	TalentFrame:StripTextures()
+	TalentFrame.LeftInset:StripTextures()
+	S:SetBD(TalentFrame)
+	TalentFrame.CurrencyIcon:SetAtlas("legionmission-icon-currency", false)
+	S:ReskinClose(TalentFrame.CloseButton)
 end
 
 S:RegisterSkin("Blizzard_OrderHallUI", LoadSkin)

@@ -6,6 +6,7 @@ local function LoadSkin()
 	TalkingHeadFrame.MainFrame:StripTextures()
 	TalkingHeadFrame.PortraitFrame:StripTextures()
 	TalkingHeadFrame.MainFrame.Model.PortraitBg:Hide()
+	TalkingHeadFrame:CreateShadow("Background")
 	
 	S:ReskinClose(TalkingHeadFrame.MainFrame.CloseButton)
 end

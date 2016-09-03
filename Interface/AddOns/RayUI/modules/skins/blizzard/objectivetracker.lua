@@ -32,11 +32,11 @@ local function LoadSkin()
 	for _, headerName in pairs({"QuestHeader", "AchievementHeader", "ScenarioHeader"}) do
 		local header = BlocksFrame[headerName]
 
-		header.Background:Hide()
+		header:StripTextures()
 		header.Text:FontTemplate(R["media"].font, R["media"].fontsize, "OUTLINE")
 	end
 
-	BONUS_OBJECTIVE_TRACKER_MODULE.Header.Background:Hide()
+	BONUS_OBJECTIVE_TRACKER_MODULE.Header:StripTextures()
 
 	hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, "SetBlockHeader", function(_, block)
 		if not block.headerStyled then

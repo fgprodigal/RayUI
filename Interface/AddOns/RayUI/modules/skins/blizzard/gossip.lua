@@ -35,7 +35,8 @@ local function LoadSkin()
 		end
 	end)
 
-	select(18, ItemTextFrame:GetRegions()):Hide()
+	ItemTextFrame:StripTextures(true)
+	ItemTextScrollFrameScrollBar:StripTextures()
 	InboxFrameBg:Hide()
 	ItemTextPrevPageButton:GetRegions():Hide()
 	ItemTextNextPageButton:GetRegions():Hide()

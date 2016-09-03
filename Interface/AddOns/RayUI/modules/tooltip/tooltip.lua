@@ -453,6 +453,7 @@ function TT:PLAYER_ENTERING_WORLD(event)
 
 		self:SetStyle(tt)
 		self:HookScript(tt, "OnShow", "SetStyle")
+		if tt.BackdropFrame then tt.BackdropFrame:Kill() end
 	end
 
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
