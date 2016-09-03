@@ -1,8 +1,6 @@
 local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local IF = R:GetModule("InfoBar")
 
-LoadAddOn("Blizzard_ArtifactUI")
-
 local classIcon = [[Interface\Icons\ability_monk_essencefont]]
 
 local function AddPerks()
@@ -75,15 +73,20 @@ local function Artifact_OnEnter(self)
 		GameTooltip:AddLine(title,r,g,b,false)
 		GameTooltip:SetPrevLineJustify("CENTER")
 		GameTooltip:AddDivider()
-		if points > 0 then
-			GameTooltip:AddDoubleLine("Available Trait Points:", points, 1,1,1, 1,1,1)
+		GameTooltip:AddLine(ARTIFACT_POWER_TOOLTIP_TITLE:format(BreakUpLargeNumbers(ArtifactWatchBar.totalXP), BreakUpLargeNumbers(ArtifactWatchBar.xp), BreakUpLargeNumbers(ArtifactWatchBar.xpForNextPoint)), 1, 1, 1)
+		if ArtifactWatchBar.numPointsAvailableToSpend > 0 then
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddLine(ARTIFACT_POWER_TOOLTIP_BODY:format(ArtifactWatchBar.numPointsAvailableToSpend), 0, 1, 0, true)
 		end
-		GameTooltip:AddDoubleLine("Next Trait Point in:", xpMax-xp, 1,1,1, 1,1,1)
 			
-		--AddPerks()
-		
+		AddPerks()
+
 		GameTooltip:Show()
 	end
+end
+
+local function Artifact_OnInit()
+	LoadAddOn("Blizzard_ArtifactUI")
 end
 
 do	-- Initialize
@@ -91,6 +94,7 @@ do	-- Initialize
 
 	info.title = ITEM_QUALITY6_DESC
 	info.icon = classIcon
+	info.initFunc = Artifact_OnInit
 	info.clickFunc = Artifact_OnClick
 	info.onUpdate = Artifact_OnUpdate
 	info.tooltipFunc = Artifact_OnEnter
