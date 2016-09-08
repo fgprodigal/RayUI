@@ -13,7 +13,8 @@ local function LoadSkin()
 	OrderHallCommandBar.AreaName:SetVertexColor(classColor.r, classColor.g, classColor.b)
 	OrderHallCommandBar:ClearAllPoints()
 	OrderHallCommandBar:SetPoint("TOP")
-	OrderHallCommandBar:SetWidth(350)
+	--OrderHallCommandBar:SetWidth(350)
+	OrderHallCommandBar:SetWidth(550)
 	OrderHallCommandBar.WorldMapButton:Kill()
 
 	-- MissionFrame
