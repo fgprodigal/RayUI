@@ -43,8 +43,8 @@ local function LoadSkin()
 	-- S:ReskinScroll(TradeSkillFrame.RecipeList.scrollBar) --This cannot be skinned due to issues on Blizzards end.
 	S:ReskinScroll(TradeSkillFrame.DetailsFrame.ScrollBar)
 
-	S:ReskinArrow(TradeSkillFrame.DetailsFrame.CreateMultipleInputBox.DecrementButton, "right")
-	S:ReskinArrow(TradeSkillFrame.DetailsFrame.CreateMultipleInputBox.IncrementButton, "left")
+	S:ReskinArrow(TradeSkillFrame.DetailsFrame.CreateMultipleInputBox.DecrementButton, "left")
+	S:ReskinArrow(TradeSkillFrame.DetailsFrame.CreateMultipleInputBox.IncrementButton, "right")
 	TradeSkillFrame.DetailsFrame.CreateMultipleInputBox.IncrementButton:Point("LEFT", TradeSkillFrame.DetailsFrame.CreateMultipleInputBox, "RIGHT", 4, 0)
 
 	hooksecurefunc(TradeSkillFrame.DetailsFrame, "RefreshDisplay", function()

@@ -139,6 +139,9 @@ local function LoadSkin()
 
 	S:ReskinScroll(QuestNPCModelTextScrollFrameScrollBar)
 	S:Reskin(QuestFrameDetailPanel.IgnoreButton)
+	S:Reskin(QuestFrameDetailPanel.UnignoreButton)
+	S:Reskin(QuestFrameProgressPanel.IgnoreButton)
+	S:Reskin(QuestFrameProgressPanel.UnignoreButton)
 end
 
 S:RegisterSkin("RayUI", LoadSkin)
