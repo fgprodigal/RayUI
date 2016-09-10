@@ -366,10 +366,11 @@ function TT:SetiLV()
 end
 
 function TT:GetQuality(ItemScore)
-	if ItemScore < 600 then
-		return 1, 1, 0.1
+	local avgItemLevel, avgItemLevelEquipped = GetAverageItemLevel()
+	if ItemScore < avgItemLevel then
+		return R:ColorGradient(ItemScore/avgItemLevel, 0.5, 0.5, 0.5, 1, 1, 0.1)
 	else
-		return R:ColorGradient((ItemScore - 600)/100, 1, 1, 0.1, 1, 0.1, 0.1)
+		return R:ColorGradient((ItemScore - avgItemLevel)/20, 1, 1, 0.1, 1, 0.1, 0.1)
 	end
 end
 
@@ -400,7 +401,7 @@ function TT:iLVSetUnit()
 	end
 	if UnitIsUnit(unit, "player") then
 		local unitilvl = GetPlayerScore("player")
-		local r, g, b = TT:GetQuality(unitilvl)
+		local r, g, b = 1, 1, 0.1
 		GameTooltip:AddDoubleLine(STAT_AVERAGE_ITEM_LEVEL, R:RGBToHex(r, g, b)..unitilvl, nil, nil, nil, 1, 1, 1)
 	elseif not cacheLoaded then
 		GameTooltip:AddDoubleLine(STAT_AVERAGE_ITEM_LEVEL, "...", nil, nil, nil, 1, 1, 1)
