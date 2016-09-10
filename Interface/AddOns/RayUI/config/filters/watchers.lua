@@ -1478,9 +1478,10 @@ R["Watcher"] = {
                 { spellID = 105593, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --暗影反射
                 { spellID = 156745, unitId = "target", caster = "player", filter = "DEBUFF" },
-				
 				--夜刃
                 { spellID = 195452, unitId = "target", caster = "player", filter = "DEBUFF" },
+				--鬼魅攻击
+                { spellID = 196937, unitId = "target", caster = "player", filter = "DEBUFF" },
             },
             {
                 name = "焦点buff&debuff",
