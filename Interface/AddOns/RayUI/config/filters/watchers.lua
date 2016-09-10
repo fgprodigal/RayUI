@@ -729,7 +729,9 @@ R["Watcher"] = {
                 { spellID = 30823, unitId = "player", caster = "player", filter = "BUFF" },
                 --冰怒
                 { spellID = 210714, unitId = "player", caster = "player", filter = "BUFF" },
-		--熔岩奔腾
+                --火舌
+                { spellID = 194084, unitId = "player", caster = "player", filter = "BUFF" },
+		            --熔岩奔腾
                 { spellID = 77762, unitId = "player", caster = "player", filter = "BUFF" },
                 --治療之潮
                 { spellID = 53390, unitId = "player", caster = "player", filter = "BUFF" },
