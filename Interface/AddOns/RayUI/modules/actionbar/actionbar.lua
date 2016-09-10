@@ -362,6 +362,10 @@ function AB:HideBlizz()
 	TalentMicroButtonAlert:SetPoint("BOTTOM", RayUI_InfoPanel_Talent, "BOTTOM", 0, 50)
 	TalentMicroButtonAlert.Arrow:Kill()
 
+	PossessBackground1:Kill()
+	PossessBackground2:Kill()
+	StanceBarLeft:Kill()
+	StanceBarRight:Kill()
 
 	InterfaceOptionsActionBarsPanelAlwaysShowActionBars:EnableMouse(false)
 	InterfaceOptionsActionBarsPanelLockActionBars:SetScale(0.0001)
