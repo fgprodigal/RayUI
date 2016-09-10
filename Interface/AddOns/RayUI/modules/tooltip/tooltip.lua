@@ -478,7 +478,8 @@ function TT:SetStyle(tooltip)
 		R:GetModule("Skins"):CreateStripesThin(tooltip)
 		tooltip:CreateShadow("Background")
 		tooltip.stripesthin:SetInside(tooltip)
-		tooltip.border:SetInside(tooltip)
+		--tooltip.border:SetInside(tooltip)
+		tooltip.border:SetInside(tooltip.BackdropFrame)
 		tooltip.styled=true
 
 		local getBackdrop = function()
