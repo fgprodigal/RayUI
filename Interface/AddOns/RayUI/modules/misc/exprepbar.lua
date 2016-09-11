@@ -128,18 +128,17 @@ local function LoadFunc()
 	xpBar:RegisterEvent("PLAYER_XP_UPDATE")
 	xpBar:RegisterEvent("UPDATE_EXHAUSTION")
 	xpBar:RegisterEvent("UPDATE_EXPANSION_LEVEL")
-	updateExp(xpBar)
+	xpBar:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 	repBar:SetScript("OnEvent", updateRep)
 	repBar:RegisterEvent("CHAT_MSG_COMBAT_FACTION_CHANGE")
 	repBar:RegisterEvent("UPDATE_FACTION")
 	repBar:RegisterEvent("PLAYER_ENTERING_WORLD")
-	updateRep(repBar)
 
 	artiBar:SetScript("OnEvent", updateArti)
 	artiBar:RegisterEvent("ARTIFACT_XP_UPDATE")
 	artiBar:RegisterEvent("UNIT_INVENTORY_CHANGED")
-	updateArti(artiBar)
+	artiBar:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 	-- Mouse events
 	xpBar:SetScript("OnEnter", function(self)
