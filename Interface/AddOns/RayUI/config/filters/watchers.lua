@@ -1865,6 +1865,8 @@ R["Watcher"] = {
                 { spellID = 218256, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 恶魔尖刺
                 { spellID = 203819, unitId = "player", caster = "player", filter = "BUFF" },
+				-- 势如破竹
+                { spellID = 208628, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -1875,7 +1877,9 @@ R["Watcher"] = {
                 -- 悲苦咒符
                 { spellID = 207685, unitId = "target", caster = "all", filter = "DEBUFF" },
                 -- 烈火烙印
-                { spellID = 207744, unitId = "target", caster = "player", filter = "DEBUFF" },			
+                { spellID = 207744, unitId = "target", caster = "player", filter = "DEBUFF" },	
+                -- 血滴子
+                { spellID = 207690, unitId = "target", caster = "player", filter = "DEBUFF" },			
             },
             {
                 name = "焦点buff&debuff",
