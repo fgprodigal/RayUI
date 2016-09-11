@@ -742,7 +742,7 @@ local function LoadSkin()
 	S:ReskinClose(BNToastFrameCloseButton)
 	BNToastFrame:HookScript("OnShow", function(self)
 		self:ClearAllPoints()
-		self:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", -3, -17)
+		self:SetPoint("TOPLEFT", RayUIArtiBar, "BOTTOMLEFT", 0, -5)
 	end)
 
 	ChatConfigFrameDefaultButton:SetWidth(125)

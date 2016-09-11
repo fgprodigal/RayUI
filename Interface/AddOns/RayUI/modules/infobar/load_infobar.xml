@@ -158,8 +158,8 @@
 	<Script file="infobar_memory.lua"/>
 	<Script file="infobar_money.lua"/>
 	<Script file="infobar_talent.lua"/>
-	<Script file="infobar_artifact.lua"/>
-	<!--Script file="infobar_currency.lua"/-->
+	<!--Script file="infobar_currency.lua"/>
+	<Script file="infobar_artifact.lua"/-->
 	<Script file="infobar_worldquests.lua"/>	
 	
 </Ui>
