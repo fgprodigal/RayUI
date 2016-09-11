@@ -131,10 +131,15 @@ local function LoadFunc()
 	end
 
 	local function updateArti(self)
-		local itemID, altItemID, name, icon, totalXP, pointsSpent, quality, artifactAppearanceID, appearanceModID, itemAppearanceID, altItemAppearanceID, altOnTop = C_ArtifactUI.GetEquippedArtifactInfo()
-		if not pointsSpent then return end
-		local numPointsAvailableToSpend, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP)
-		self:SetAnimatedValues(xp, 0, xpForNextPoint, numPointsAvailableToSpend + pointsSpent)
+		if HasArtifactEquipped() then
+			local itemID, altItemID, name, icon, totalXP, pointsSpent, quality, artifactAppearanceID, appearanceModID, itemAppearanceID, altItemAppearanceID, altOnTop = C_ArtifactUI.GetEquippedArtifactInfo()
+			if not pointsSpent then return end
+			local numPointsAvailableToSpend, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP)
+			self:SetAnimatedValues(xp, 0, xpForNextPoint, numPointsAvailableToSpend + pointsSpent)
+			self:Show()
+		else
+			self:Hide()
+		end
 	end
 
 	xpBar:SetScript("OnEvent", updateExp)
