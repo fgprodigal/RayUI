@@ -1,6 +1,6 @@
 ﻿local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local LSM = LibStub("LibSharedMedia-3.0")
-local LibItemUpgrade = LibStub("LibItemUpgradeInfo-1.0");
+local LibItemUpgrade = LibStub("LibItemUpgradeInfo-1.0")
 
 SlashCmdList["RELOAD"] = function() ReloadUI() end
 SLASH_RELOAD1 = "/rl"

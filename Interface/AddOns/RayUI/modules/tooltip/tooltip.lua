@@ -315,7 +315,12 @@ local function GetPlayerScore(unit)
 			if (i ~= 4) then
 				local iLink = GetInventoryItemLink(unit, i)
 				if (iLink) then
+					-- Artifact Fix
+					local name, _, itemRarity = GetItemInfo(iLink)
 					ilvlAdd = TT:GetItemScore(iLink)
+					if itemRarity == 6 and i == 17 and GetItemInfo(GetInventoryItemLink(unit, 16)) == name then
+						ilvlAdd = TT:GetItemScore(GetInventoryItemLink(unit, 16))
+					end
 					if ilvlAdd then
 						ilvl = ilvl + ilvlAdd
 					end
