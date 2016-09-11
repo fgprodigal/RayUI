@@ -46,7 +46,7 @@ local function Bar_OnHide(self)
 end
 
 local function CreateBar(name, anchorFrame, height)
-	local bar = CreateFrame("StatusBar", name, UIParent)
+	local bar = CreateFrame("StatusBar", name, UIParent, "AnimatedStatusBarTemplate")
 	bar:CreateShadow("Background")
 	bar:SetFrameLevel(3)
 	bar.shadow:SetFrameLevel(1)
@@ -54,7 +54,6 @@ local function CreateBar(name, anchorFrame, height)
 	bar.height = height
 	bar:SetStatusBarTexture(R.media.normal)
 	bar.anchorFrame = anchorFrame
-	R:SmoothBar(bar)
 	bar:SetScript("OnShow", Bar_OnShow)
 	bar:SetScript("OnHide", Bar_OnHide)
 	Bar_OnShow(bar)
@@ -64,6 +63,7 @@ end
 local function LoadFunc()
 	local xpBar = CreateBar("RayUIExpBar", Minimap, 8)
 	xpBar:SetStatusBarColor(.5, 0, .75)
+	xpBar:SetAnimatedTextureColors(0.0, 0.39, 0.88, 1.0)
 
 	local restedxpBar = CreateFrame("StatusBar", nil, xpBar)
 	restedxpBar:SetAllPoints()
@@ -86,8 +86,7 @@ local function LoadFunc()
 			self:Hide()
 			restedxpBar:Hide()
 		else
-			self:SetMinMaxValues(min(0, XP), maxXP)
-			self:SetValue(XP)
+			self:SetAnimatedValues(XP, 0, maxXP, UnitLevel("player"))
 
 			if restXP then
 				restedxpBar:Show()
@@ -102,14 +101,29 @@ local function LoadFunc()
 
 	local function updateRep(self)
 		if GetWatchedFactionInfo() then
-			local name, rank, minRep, maxRep, value, factionID = GetWatchedFactionInfo()
-			local friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
-			self:SetMinMaxValues(minRep, maxRep)
-			self:SetValue(value)
+			local name, rank, min, max, value, factionID = GetWatchedFactionInfo()
+			local level
+			if ( ReputationWatchBar.friendshipID ) then
+				local friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
+				level = GetFriendshipReputationRanks(factionID)
+				if ( nextFriendThreshold ) then
+					min, max, value = friendThreshold, nextFriendThreshold, friendRep
+				else
+					min, max, value = 0, 1, 1
+					isCappedFriendship = true
+				end
+			else
+				level = rank
+			end
+			max = max - min
+			value = value - min
+			min = 0
+			self:SetAnimatedValues(value, min, max, level)
 			if friendID then
 				rank = 8
 			end
 			self:SetStatusBarColor(unpack(RayUF["colors"].reaction[rank]))
+			self:SetAnimatedTextureColors(unpack(RayUF["colors"].reaction[rank]))
 			self:Show()
 		else
 			self:Hide()
@@ -118,9 +132,9 @@ local function LoadFunc()
 
 	local function updateArti(self)
 		local itemID, altItemID, name, icon, totalXP, pointsSpent, quality, artifactAppearanceID, appearanceModID, itemAppearanceID, altItemAppearanceID, altOnTop = C_ArtifactUI.GetEquippedArtifactInfo()
+		if not pointsSpent then return end
 		local numPointsAvailableToSpend, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP)
-		self:SetMinMaxValues(0, xpForNextPoint)
-		self:SetValue(xp)
+		self:SetAnimatedValues(xp, 0, xpForNextPoint, numPointsAvailableToSpend + pointsSpent)
 	end
 
 	xpBar:SetScript("OnEvent", updateExp)
