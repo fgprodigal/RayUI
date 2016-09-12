@@ -12,8 +12,7 @@ local function LoadFunc()
 	RaidUtilityPanel:SetHeight(panel_height)
 	RaidUtilityPanel:Width(230)
 	RaidUtilityPanel:SetFrameStrata("BACKGROUND")
-	--RaidUtilityPanel:Point("TOP", UIParent, "TOP", -300, 1)
-	RaidUtilityPanel:Point("TOP", UIParent, "TOP", -450, 1)
+	RaidUtilityPanel:Point("TOP", UIParent, "TOP", 0, 1)
 	RaidUtilityPanel:SetFrameLevel(3)
 	RaidUtilityPanel.toggled = false
 	S:CreateBD(RaidUtilityPanel)
@@ -88,17 +87,16 @@ local function LoadFunc()
 	end
 
 	--Show Button
-	--CreateButton("ShowButton", UIParent, "UIMenuButtonStretchTemplate, SecureHandlerClickTemplate", 80, 18, "TOP", UIParent, "TOP", -300, 2, L["团队工具"], nil)
-	CreateButton("ShowButton", UIParent, "UIMenuButtonStretchTemplate, SecureHandlerClickTemplate", 80, 18, "TOP", UIParent, "TOP", -450, 2, L["团队工具"], nil)
-	ShowButton:SetFrameRef("RaidUtilityPanel", RaidUtilityPanel)
-	ShowButton:SetAttribute("_onclick", [=[self:Hide(); self:GetFrameRef("RaidUtilityPanel"):Show();]=])
-	ShowButton:SetScript("OnMouseUp", function(self) RaidUtilityPanel.toggled = true end)
+	CreateButton("RaidUtilityShowButton", UIParent, "UIMenuButtonStretchTemplate, SecureHandlerClickTemplate", 80, 18, "TOP", UIParent, "TOP", 0, 2, L["团队工具"], nil)
+	RaidUtilityShowButton:SetFrameRef("RaidUtilityPanel", RaidUtilityPanel)
+	RaidUtilityShowButton:SetAttribute("_onclick", [=[self:Hide(); self:GetFrameRef("RaidUtilityPanel"):Show();]=])
+	RaidUtilityShowButton:SetScript("OnMouseUp", function(self) RaidUtilityPanel.toggled = true end)
 
 	--Close Button
-	CreateButton("CloseButton", RaidUtilityPanel, "UIMenuButtonStretchTemplate, SecureHandlerClickTemplate", 80, 18, "TOP", RaidUtilityPanel, "BOTTOM", 0, -1, CLOSE, nil)
-	CloseButton:SetFrameRef("ShowButton", ShowButton)
-	CloseButton:SetAttribute("_onclick", [=[self:GetParent():Hide(); self:GetFrameRef("ShowButton"):Show();]=])
-	CloseButton:SetScript("OnMouseUp", function(self) RaidUtilityPanel.toggled = false end)
+	CreateButton("RaidUtilityCloseButton", RaidUtilityPanel, "UIMenuButtonStretchTemplate, SecureHandlerClickTemplate", 80, 18, "TOP", RaidUtilityPanel, "BOTTOM", 0, -1, CLOSE, nil)
+	RaidUtilityCloseButton:SetFrameRef("RaidUtilityShowButton", RaidUtilityShowButton)
+	RaidUtilityCloseButton:SetAttribute("_onclick", [=[self:GetParent():Hide(); self:GetFrameRef("RaidUtilityShowButton"):Show();]=])
+	RaidUtilityCloseButton:SetScript("OnMouseUp", function(self) RaidUtilityPanel.toggled = false end)
 
 	--Disband Raid button
 	CreateButton("DisbandRaidButton", RaidUtilityPanel, "UIMenuButtonStretchTemplate", RaidUtilityPanel:GetWidth() * 0.8, R:Scale(18), "TOP", RaidUtilityPanel, "TOP", 0, R:Scale(-5), L["解散队伍"], nil)
@@ -168,8 +166,8 @@ local function LoadFunc()
 			"RoleCheckButton",
 			"ReadyCheckButton",
 			"RaidControlButton",
-			"ShowButton",
-			"CloseButton"
+			"RaidUtilityShowButton",
+			"RaidUtilityCloseButton"
 		}
 		CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton.SetNormalTexture = function() end
 		CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton.SetPushedTexture = function() end
@@ -200,14 +198,14 @@ local function LoadFunc()
 
 		if CheckRaidStatus() then
 			if RaidUtilityPanel.toggled == true then
-				ShowButton:Hide()
+				RaidUtilityShowButton:Hide()
 				RaidUtilityPanel:Show()
 			else
-				ShowButton:Show()
+				RaidUtilityShowButton:Show()
 				RaidUtilityPanel:Hide()
 			end
 		else
-			ShowButton:Hide()
+			RaidUtilityShowButton:Hide()
 			RaidUtilityPanel:Hide()
 		end
 

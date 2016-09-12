@@ -17,6 +17,19 @@ local function LoadSkin()
 	OrderHallCommandBar:SetWidth(550)
 	OrderHallCommandBar.WorldMapButton:Kill()
 
+	RaidUtilityShowButton:SetPoint("TOP", OrderHallCommandBar, "BOTTOM", 0, 2)
+	RaidUtilityPanel:Point("TOP", OrderHallCommandBar, "BOTTOM", 0, 1)
+
+	OrderHallCommandBar:HookScript("OnShow", function(self)
+		RaidUtilityShowButton:SetPoint("TOP", self, "BOTTOM", 0, 0)
+		RaidUtilityPanel:Point("TOP", self, "BOTTOM", 0, 0)
+	end)
+
+	OrderHallCommandBar:HookScript("OnHide", function(self)
+		RaidUtilityShowButton:SetPoint("TOP", UIParent, "TOP", 0, 2)
+		RaidUtilityPanel:Point("TOP", UIParent, "TOP", 0, 1)
+	end)
+
 	-- MissionFrame
 	OrderHallMissionFrame.ClassHallIcon:Kill()
 	OrderHallMissionFrame:StripTextures()
