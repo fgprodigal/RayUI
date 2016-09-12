@@ -226,6 +226,26 @@ local function LoadSkin()
 		frame.Background:Kill()
 	end)	
 
+	hooksecurefunc(InvasionAlertSystem, "setUpFunction", function(frame)
+		if not frame.bg then
+			frame.bg = CreateFrame("Frame", nil, frame)
+			frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 4, 4)
+			frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -7, 6)
+			frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+			S:CreateBD(frame.bg)
+		end
+	end)	
+
+	hooksecurefunc(WorldQuestCompleteAlertSystem, "setUpFunction", function(frame)
+		if not frame.bg then
+			frame.bg = CreateFrame("Frame", nil, frame)
+			frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 10, -6)
+			frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -14, 6)
+			frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+			S:CreateBD(frame.bg)
+		end
+	end)
+
 	-- Digsite completion alert
 
 	do
@@ -346,6 +366,142 @@ local function LoadSkin()
 		frame.BaseQualityBorder:SetVertexColor(frame.BaseQualityItemName:GetTextColor())
 		frame.UpgradeQualityBorder:SetVertexColor(frame.UpgradeQualityItemName:GetTextColor())
 	end)
+
+	--[[ STATIC SKINNING ]]--
+	--Scenario Legion Invasion Alert Frame
+	local frame = ScenarioLegionInvasionAlertFrame
+	frame.bg = CreateFrame("Frame", nil, frame)
+	frame.bg:Point("TOPLEFT", frame, "TOPLEFT", -2, -6)
+	frame.bg:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 6)
+	frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+	S:CreateBD(frame.bg)
+	--Background contains the item border too, so have to remove it
+	local region, icon = frame:GetRegions()
+	if region and region:GetObjectType() == "Texture"then
+		if region:GetAtlas() == "legioninvasion-Toast-Frame" then
+			region:Kill()
+		end
+	end
+	-- Icon border
+	if icon and icon:GetObjectType() == "Texture"then
+		if icon:GetTexture() == "Interface\\Icons\\Ability_Warlock_DemonicPower" then
+			icon:SetDrawLayer("ARTWORK")
+			icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+			S:CreateBG(icon)
+		end
+	end
+
+	-- World Quest Complete Alert
+	frame = WorldQuestCompleteAlertFrame
+	frame.bg = CreateFrame("Frame", nil, frame)
+	frame.bg:Point("TOPLEFT", frame, "TOPLEFT", -2, -6)
+	frame.bg:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 6)
+	frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+	S:CreateBD(frame.bg)
+	-- Background
+	for i = 1, frame:GetNumRegions() do
+		local region = select(i, frame:GetRegions())
+		if region:GetObjectType() == "Texture" then
+			if region:GetTexture() == "Interface\\LFGFrame\\UI-LFG-DUNGEONTOAST" then
+				region:Kill()
+			end
+		end
+	end
+	--Icon
+	frame.QuestTexture:SetTexCoord(.08, .92, .08, .92)
+	frame.QuestTexture:SetDrawLayer("ARTWORK")
+	S:CreateBG(frame.QuestTexture)
+
+	--Legendary Item Alert
+	frame = LegendaryItemAlertFrame
+	frame.Background:Kill()
+	frame.Background2:Kill()
+	frame.Background3:Kill()
+	frame.Ring1:Kill()
+	frame.Particles3:Kill()
+	frame.Particles2:Kill()
+	frame.Particles1:Kill()
+	--Icon
+	frame.Icon:SetTexCoord(.08, .92, .08, .92)
+	frame.Icon:SetDrawLayer("ARTWORK")
+	S:CreateBG(frame.Icon)
+	--Create Backdrop
+	frame.bg = CreateFrame("Frame", nil, frame)
+	frame.bg:Point("TOPLEFT", frame, "TOPLEFT", 20, -20)
+	frame.bg:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -20, 20)
+	frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+	S:CreateBD(frame.bg)
+
+	-- Garrison follower alert
+	local frame = GarrisonFollowerAlertFrame
+	frame.FollowerBG:SetAlpha(0)
+	frame.DieIcon:SetAlpha(0)
+	--Background
+	for i = 1, frame:GetNumRegions() do
+		local region = select(i, frame:GetRegions())
+		if region:GetObjectType() == "Texture" then
+			if region:GetAtlas() == "Garr_MissionToast" then
+				region:Kill()
+			end 
+		end
+	end
+	--Create Backdrop
+	frame.bg = CreateFrame("Frame", nil, frame)
+	frame.bg:Point("TOPLEFT", frame, "TOPLEFT", 16, -3)
+	frame.bg:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -16, 16)
+	frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+	S:CreateBD(frame.bg)
+
+	frame.PortraitFrame.PortraitRing:Hide()
+	frame.PortraitFrame.PortraitRingQuality:SetTexture("")
+	frame.PortraitFrame.LevelBorder:SetAlpha(0)
+
+	local level = frame.PortraitFrame.Level
+	level:ClearAllPoints()
+	level:Point("BOTTOM", frame.PortraitFrame, 0, 12)
+
+	local squareBG = CreateFrame("Frame", nil, frame.PortraitFrame)
+	squareBG:SetFrameLevel(frame.PortraitFrame:GetFrameLevel()-1)
+	squareBG:Point("TOPLEFT", 3, -3)
+	squareBG:Point("BOTTOMRIGHT", -3, 11)
+	squareBG:SetTemplate("Default")
+	frame.PortraitFrame.squareBG = squareBG
+
+	local cover = frame.PortraitFrame.PortraitRingCover
+	if cover then
+		cover:SetColorTexture(0, 0, 0)
+		cover:SetAllPoints(squareBG)
+	end
+
+	-- Garrison ship mission alert
+	frame = GarrisonShipMissionAlertFrame
+	frame.Background:Kill()
+	--Icon
+	frame.MissionType:SetTexCoord(.08, .92, .08, .92)
+	frame.MissionType:SetDrawLayer("ARTWORK")
+	S:CreateBG(frame.MissionType)
+	--Create Backdrop
+	frame.bg = CreateFrame("Frame", nil, frame)
+	frame.bg:Point("TOPLEFT", frame, "TOPLEFT", 8, -2)
+	frame.bg:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -6, 2)
+	frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+	S:CreateBD(frame.bg)
+	
+	-- Garrison random mission alert
+	frame = GarrisonRandomMissionAlertFrame
+	frame.Background:Kill()
+	frame.Blank:Kill()
+	frame.IconBG:Kill()
+	--Icon
+	frame.MissionType:SetTexCoord(.08, .92, .08, .92)
+	frame.MissionType:SetDrawLayer("ARTWORK")
+	S:CreateBG(frame.MissionType)
+	--Create Backdrop
+	frame.bg = CreateFrame("Frame", nil, frame)
+	frame.bg:Point("TOPLEFT", frame, "TOPLEFT", 8, -2)
+	frame.bg:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -6, 2)
+	frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+	S:CreateBD(frame.bg)
 
 	AlertFrame:ClearAllPoints()
 	AlertFrame:SetAllPoints(AlertFrameHolder)
