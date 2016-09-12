@@ -71,7 +71,9 @@ local function LoadFunc()
 	restedxpBar:SetStatusBarColor(0, .4, .8)
 	restedxpBar:SetFrameLevel(2)
 
-	local repBar = CreateBar("RayUIRepBar", xpBar, 8)
+	local honorBar = CreateBar("RayUIHonorBar", xpBar, 8)
+
+	local repBar = CreateBar("RayUIRepBar", honorBar, 8)
 
 	local artiBar = CreateBar("RayUIArtiBar", repBar, 8)
 	artiBar:SetStatusBarColor(.901, .8, .601)
@@ -96,6 +98,33 @@ local function LoadFunc()
 				restedxpBar:Hide()
 			end
 			self:Show()
+		end
+	end
+
+	local function updateHonor(self)
+		local level = UnitHonorLevel("player")
+		local levelmax = GetMaxPlayerHonorLevel()
+		if UnitLevel("player") < MAX_PLAYER_LEVEL or level == levelmax then
+			self:Hide()
+		else
+			self:Show()
+			local current = UnitHonor("player")
+			local max = UnitHonorMax("player")
+			
+			if (level == levelmax) then
+				self:SetAnimatedValues(1, 0, 1, level)
+			else
+				self:SetAnimatedValues(current, 0, max, level)
+			end	
+
+			local exhaustionStateID = GetHonorRestState()
+			if (exhaustionStateID == 1) then
+				self:SetStatusBarColor(1.0, 0.71, 0)
+				self:SetAnimatedTextureColors(1.0, 0.71, 0)
+			else
+				self:SetStatusBarColor(1.0, 0.24, 0)
+				self:SetAnimatedTextureColors(1.0, 0.24, 0)
+			end
 		end
 	end
 
@@ -149,6 +178,11 @@ local function LoadFunc()
 	xpBar:RegisterEvent("UPDATE_EXPANSION_LEVEL")
 	xpBar:RegisterEvent("PLAYER_ENTERING_WORLD")
 
+	honorBar:SetScript("OnEvent", updateHonor)
+	honorBar:RegisterEvent("HONOR_XP_UPDATE")
+	honorBar:RegisterEvent("HONOR_PRESTIGE_UPDATE")
+	honorBar:RegisterEvent("PLAYER_ENTERING_WORLD")
+
 	repBar:SetScript("OnEvent", updateRep)
 	repBar:RegisterEvent("CHAT_MSG_COMBAT_FACTION_CHANGE")
 	repBar:RegisterEvent("UPDATE_FACTION")
@@ -177,12 +211,49 @@ local function LoadFunc()
 		GameTooltip:Hide()
 	end)
 
+	honorBar:SetScript("OnEnter", function(self)
+		GameTooltip:ClearLines()
+		GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -5)
+
+		local current = UnitHonor("player");
+		local max = UnitHonorMax("player");
+		local level = UnitHonorLevel("player")
+		local levelmax = GetMaxPlayerHonorLevel()
+
+		GameTooltip:AddLine(HONOR)
+		GameTooltip:SetPrevLineJustify("CENTER")
+		GameTooltip:AddDivider()
+
+		if (CanPrestige()) then
+			GameTooltip:AddLine(PVP_HONOR_PRESTIGE_AVAILABLE)
+			GameTooltip:AddDivider()
+		end
+		GameTooltip:AddDoubleLine(HONOR_LEVEL_LABEL:gsub("%%d",""), level, 1, 1, 1)
+		GameTooltip:AddLine(" ")
+
+		if (CanPrestige()) then
+			GameTooltip:AddLine(PVP_HONOR_PRESTIGE_AVAILABLE);
+		elseif (level == levelmax) then
+			GameTooltip:AddLine(MAX_HONOR_LEVEL);
+		else
+			GameTooltip:AddDoubleLine(HONOR_BAR:gsub("%%d/%%d",""), format('%d / %d (%d%%)', current, max, current/max * 100), 1, 1, 1)
+			GameTooltip:AddDoubleLine(L["剩余"], format("%d (%d%%)", max - current, (max - current) / max * 100), 1, 1, 1)
+		end
+		GameTooltip:Show()
+	end)
+
+	honorBar:SetScript("OnLeave", function()
+		GameTooltip:Hide()
+	end)
+
 	repBar:SetScript("OnEnter", function(self)
 		local name, rank, start, cap, value, factionID = GetWatchedFactionInfo()
 		local friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -5)
-		GameTooltip:ClearLines()		
-		GameTooltip:AddDoubleLine(REPUTATION, name, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b)
+		GameTooltip:ClearLines()
+		GameTooltip:AddLine(name)
+		GameTooltip:SetPrevLineJustify("CENTER")
+		GameTooltip:AddDivider()
 		if friendID then
 			rank = 8
 			GameTooltip:AddDoubleLine(STANDING, friendTextLevel, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, RayUF["colors"].reaction[rank][1], RayUF["colors"].reaction[rank][2], RayUF["colors"].reaction[rank][3])
