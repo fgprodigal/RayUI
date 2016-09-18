@@ -3,7 +3,6 @@ local S = R:GetModule("Skins")
 
 local function LoadSkin()
 	ScriptErrorsFrame:SetParent(UIParent)
-	ScriptErrorsFrame:SetSize(386, 274)
 	ScriptErrorsFrame:DisableDrawLayer("OVERLAY")
 	ScriptErrorsFrameTitleBG:Hide()
 	ScriptErrorsFrameDialogBG:Hide()
@@ -50,10 +49,11 @@ local function LoadSkin()
 	S:CreateBD(bg, .6)
 
 	S:ReskinClose(ScriptErrorsFrameClose)
+	S:Reskin(ScriptErrorsFrame.close)
 	S:ReskinScroll(ScriptErrorsFrameScrollFrameScrollBar)
-	S:Reskin(select(4, ScriptErrorsFrame:GetChildren()))
-	S:Reskin(select(5, ScriptErrorsFrame:GetChildren()))
-	S:Reskin(select(6, ScriptErrorsFrame:GetChildren()))
+	S:Reskin(ScriptErrorsFrame.reload)
+	S:ReskinArrow(ScriptErrorsFrame.previous, "left")
+	S:ReskinArrow(ScriptErrorsFrame.next, "right")
 
 	local texs = {
 		"TopLeft",
@@ -71,13 +71,6 @@ local function LoadSkin()
 	for i=1, #texs do
 		_G["ScriptErrorsFrame"..texs[i]]:SetTexture(nil)
 		_G["EventTraceFrame"..texs[i]]:SetTexture(nil)
-	end
-
-	for i=1, ScriptErrorsFrame:GetNumChildren() do
-		local child = select(i, ScriptErrorsFrame:GetChildren())
-		if child:GetObjectType() == "Button" and not child:GetName() then
-			S:Reskin(child)
-		end
 	end
 
 	FrameStackTooltip:HookScript("OnShow", function(self)

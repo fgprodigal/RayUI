@@ -1,10 +1,8 @@
---------------------------------------------------------------------------
--- move vehicle indicator
---------------------------------------------------------------------------
 local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local M = R:GetModule("Misc")
+local mod = M:NewModule("VehicleMove")
 
-local function LoadFunc()
+function mod:Initialize()
 	hooksecurefunc(VehicleSeatIndicator,"SetPoint",function(_,_,parent) -- vehicle seat indicator
 		if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
 			VehicleSeatIndicator:ClearAllPoints()
@@ -18,4 +16,4 @@ local function LoadFunc()
 	end)
 end
 
-M:RegisterMiscModule("VehicleMove", LoadFunc)
+M:RegisterMiscModule(mod:GetName())

@@ -1,6 +1,6 @@
---Raid Utility by Elv22
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB
+local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local M = R:GetModule("Misc")
+local mod = M:NewModule("RaidCD", "AceEvent-3.0")
 
 local filter = COMBATLOG_OBJECT_AFFILIATION_RAID + COMBATLOG_OBJECT_AFFILIATION_PARTY + COMBATLOG_OBJECT_AFFILIATION_MINE
 local timer = 0
@@ -21,7 +21,7 @@ local function FormatTime(time)
 	end
 end
  
-function M:UpdateRaidCDPositions()
+function mod:UpdateRaidCDPositions()
 	for i = 1, #bars do
 		bars[i]:ClearAllPoints()
 		if i == 1 then
@@ -44,7 +44,7 @@ local function StopTimer(bar)
 	bar:SetScript("OnUpdate", nil)
 	bar:Hide()
 	tremove(bars, bar.id)
-	M:UpdateRaidCDPositions()
+	mod:UpdateRaidCDPositions()
 end
 
 local function StopAllTimer()
@@ -151,10 +151,10 @@ local function StartTimer(name, spellId)
 	bar:SetScript("OnMouseDown", OnMouseDown)
 	bar.id = #bars+1
 	bars[#bars+1] = bar
-	M:UpdateRaidCDPositions()
+	mod:UpdateRaidCDPositions()
 end
 
-function M:COMBAT_LOG_EVENT_UNFILTERED(event, ...)
+function mod:COMBAT_LOG_EVENT_UNFILTERED(event, ...)
 	local timestamp, eventType, _, _, fromplayer, sourceFlags, _, _, toplayer, _, _, spellId = ...
 	if bit.band(sourceFlags, filter) == 0 then return end
 	if G.Misc.RaidCDs[spellId] and spellEvents[eventType] then
@@ -162,14 +162,14 @@ function M:COMBAT_LOG_EVENT_UNFILTERED(event, ...)
 	end
 end
 
-function M:ZONE_CHANGED_NEW_AREA()
+function mod:ZONE_CHANGED_NEW_AREA()
 	if select(2, IsInInstance()) == "arena" then
 		StopAllTimer()
 	end
 end
 
 local bossfight
-function M:INSTANCE_ENCOUNTER_ENGAGE_UNIT()
+function mod:INSTANCE_ENCOUNTER_ENGAGE_UNIT()
 	if not UnitExists("boss1") then return end
 
 	if not bossfight then
@@ -192,36 +192,36 @@ local function checkForWipe()
 		bossfight=false
 		StopAllTimer()
 	end
-	if not w then M:ScheduleTimer(checkForWipe, 2) end
+	if not w then mod:ScheduleTimer(checkForWipe, 2) end
 end
 
-function M:PLAYER_REGEN_ENABLED()
+function mod:PLAYER_REGEN_ENABLED()
 	checkForWipe()
 end
 
-function M:EnableRaidCD()
-    M:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-    M:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-    M:RegisterEvent("INSTANCE_ENCOUNTER_ENGAGE_UNIT")
-    M:RegisterEvent("PLAYER_REGEN_ENABLED")
+function mod:EnableRaidCD()
+    self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+    self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+    self:RegisterEvent("INSTANCE_ENCOUNTER_ENGAGE_UNIT")
+    self:RegisterEvent("PLAYER_REGEN_ENABLED")
 end
 
-function M:DisableRaidCD()
-    M:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-    M:UnregisterEvent("ZONE_CHANGED_NEW_AREA")
-    M:UnregisterEvent("INSTANCE_ENCOUNTER_ENGAGE_UNIT")
-    M:UnregisterEvent("PLAYER_REGEN_ENABLED")
+function mod:DisableRaidCD()
+    self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+    self:UnregisterEvent("ZONE_CHANGED_NEW_AREA")
+    self:UnregisterEvent("INSTANCE_ENCOUNTER_ENGAGE_UNIT")
+    self:UnregisterEvent("PLAYER_REGEN_ENABLED")
     StopAllTimer()
 end
 
-local function LoadFunc()
+function mod:Initialize()
 	local RaidCDAnchor = CreateFrame("Frame", "RaidCDAnchor", UIParent)
 	RaidCDAnchor:Point("BOTTOMLEFT", UIParent, "BOTTOMLEFT", R.db.Chat.width + 25, 30)
 	RaidCDAnchor:SetSize(M.db.raidcdwidth + 24, 20)
 	R:CreateMover(RaidCDAnchor, "RaidCDMover", L["团队冷却锚点"], true, nil)
 
     if not M.db.raidcd then return end
-    M:EnableRaidCD()
+    self:EnableRaidCD()
 end
 
-M:RegisterMiscModule("RaidCD", LoadFunc)
+M:RegisterMiscModule(mod:GetName())

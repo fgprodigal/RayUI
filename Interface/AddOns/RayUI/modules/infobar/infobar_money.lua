@@ -65,7 +65,6 @@ local function SortMoney(a,b)
 	end
 end
 
-
 local function Money_OnEvent(self)
 	self:SetText(GetMoneyString(GetMoney()))
 end

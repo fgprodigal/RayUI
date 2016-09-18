@@ -1,5 +1,6 @@
-﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB
+﻿local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local M = R:GetModule("Misc")
+local mod = M:NewModule("TotemBar", "AceEvent-3.0")
 
 local eventFrame = CreateFrame("Frame")
 
@@ -8,26 +9,26 @@ local function Update(self,event)
 	for i=1, MAX_TOTEMS do
 		local haveTotem, name, startTime, duration, icon = GetTotemInfo(i);
 		if haveTotem and icon and icon ~= "" then
-			M.totembar[i]:Show()
-			M.totembar[i].iconTexture:SetTexture(icon)
+			mod.totembar[i]:Show()
+			mod.totembar[i].iconTexture:SetTexture(icon)
 			displayedTotems = displayedTotems + 1
-			CooldownFrame_Set(M.totembar[i].cooldown, startTime, duration, true, true)
+			CooldownFrame_Set(mod.totembar[i].cooldown, startTime, duration, true, true)
 			
 			for d=1, MAX_TOTEMS do
 				if _G["TotemFrameTotem"..d.."IconTexture"]:GetTexture() == icon then
 					_G["TotemFrameTotem"..d]:ClearAllPoints();
-					_G["TotemFrameTotem"..d]:SetParent(M.totembar[i].holder);
-					_G["TotemFrameTotem"..d]:SetAllPoints(M.totembar[i].holder);		
+					_G["TotemFrameTotem"..d]:SetParent(mod.totembar[i].holder);
+					_G["TotemFrameTotem"..d]:SetAllPoints(mod.totembar[i].holder);		
 				end		
 			end
 		else
-			M.totembar[i]:Hide()
+			mod.totembar[i]:Hide()
 		end
 	end
 end
 
-function M:ToggleTotemEnable()
-	if self.db.totembar.enable then
+function mod:ToggleTotemEnable()
+	if M.db.totembar.enable then
 		self.totembar:Show()
 		eventFrame:RegisterEvent("PLAYER_TOTEM_UPDATE", Update)
 		eventFrame:RegisterEvent("PLAYER_ENTERING_WORLD", Update)
@@ -40,8 +41,8 @@ function M:ToggleTotemEnable()
 	end
 end
 
-function M:PositionAndSizeTotem()
-	local db = self.db.totembar
+function mod:PositionAndSizeTotem()
+	local db = M.db.totembar
 
 	for i=1, MAX_TOTEMS do
 		local button = self.totembar[i]
@@ -85,10 +86,10 @@ function M:PositionAndSizeTotem()
 	Update()
 end
 
-local function LoadFunc()	
+function mod:Initialize()
 	local bar = CreateFrame("Frame", "RayUI_TotemBar", UIParent)
 	bar:SetPoint("TOPRIGHT", RayUIActionBar1, "TOPLEFT", -4, 0)
-	M.totembar = bar;
+	self.totembar = bar;
 	
 	for i=1, MAX_TOTEMS do
 		local frame = CreateFrame("Button", bar:GetName().."Totem"..i, bar)
@@ -107,13 +108,13 @@ local function LoadFunc()
 		frame.cooldown = CreateFrame("Cooldown", frame:GetName().."Cooldown", frame, "CooldownFrameTemplate")
 		frame.cooldown:SetReverse(true)
 		frame.cooldown:SetInside(2)
-		M.totembar[i] = frame
+		self.totembar[i] = frame
 	end
 	
-	M:ToggleTotemEnable()
-	M:PositionAndSizeTotem()
+	self:ToggleTotemEnable()
+	self:PositionAndSizeTotem()
 
 	R:CreateMover(bar, "TotemBarMover", L["图腾条"]);
 end
 
-M:RegisterMiscModule("TotemBar", LoadFunc)
+M:RegisterMiscModule(mod:GetName())

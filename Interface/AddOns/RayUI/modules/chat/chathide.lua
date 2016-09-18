@@ -58,7 +58,7 @@ function CH:MoveOut()
 	ChatBG:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 15, 30)
 	R:Slide(ChatBG, "LEFT", CH.db.width + 15, 195)
 	R:UIFrameFadeOut(ChatBG, .7, 1, 0)
-	ChatFrame1EditBox:Hide()
+	ChatEdit_ClearChat(ChatFrame1EditBox)
 end
 
 function CH:MoveIn()

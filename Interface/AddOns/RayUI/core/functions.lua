@@ -189,7 +189,7 @@ function R:InitializeModules()
 			local module = self:GetModule(self["RegisteredModules"][i])
 			if (self.db[self["RegisteredModules"][i]] == nil or self.db[self["RegisteredModules"][i]].enable ~= false) and module.Initialize then
 				local _, catch = pcall(module.Initialize, module)
-				if catch and GetCVarBool("scriptErrors") == 1 then
+				if catch and GetCVarBool("scriptErrors") then
 					ScriptErrorsFrame_OnError(catch, false)
 				end
 			end

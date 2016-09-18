@@ -1,7 +1,8 @@
 local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local M = R:GetModule("Misc")
+local mod = M:NewModule("TalkingHead", "AceEvent-3.0")
 
-local function ScaleTalkingHeadFrame()
+function mod:ScaleTalkingHeadFrame()
 	local scale = 1
 	local width = TalkingHeadFrame:GetWidth() * scale
 	local height = TalkingHeadFrame:GetHeight() * scale
@@ -19,7 +20,7 @@ local function ScaleTalkingHeadFrame()
 	end
 end
 
-local function InitializeTalkingHead()
+function mod:InitializeTalkingHead()
 	--Prevent WoW from moving the frame around
 	TalkingHeadFrame.ignoreFramePositionManager = true
 	UIPARENT_MANAGED_FRAME_POSITIONS["TalkingHeadFrame"] = nil
@@ -39,20 +40,20 @@ local function InitializeTalkingHead()
 	end
 end
 
-local function LoadFunc()
+function mod:PLAYER_ENTERING_WORLD(event)
+	self:UnregisterEvent(event)
+	TalkingHead_LoadUI()
+	self:InitializeTalkingHead()
+	self:ScaleTalkingHeadFrame()
+end
+
+function mod:Initialize()
 	if IsAddOnLoaded("Blizzard_TalkingHeadUI") then
-		InitializeTalkingHead()
-		ScaleTalkingHeadFrame()
+		self:InitializeTalkingHead()
+		self:ScaleTalkingHeadFrame()
 	else
-		local f = CreateFrame("Frame")
-		f:RegisterEvent("PLAYER_ENTERING_WORLD")
-		f:SetScript("OnEvent", function(self, event)
-			self:UnregisterEvent(event)
-			TalkingHead_LoadUI();
-			InitializeTalkingHead()
-			ScaleTalkingHeadFrame()
-		end)
+		self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	end
 end
 
-M:RegisterMiscModule("TalkingHead", LoadFunc)
+M:RegisterMiscModule(mod:GetName())

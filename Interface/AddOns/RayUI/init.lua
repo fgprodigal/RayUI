@@ -17,6 +17,8 @@ Engine[4] = AddOn.DF["global"]
 
 _G[AddOnName] = Engine
 
+BINDING_HEADER_RAYUI = GetAddOnMetadata(..., "Title")
+
 function AddOn:OnProfileChanged(event, database, newProfileKey)
 	StaticPopup_Show("CFG_RELOAD")
 end

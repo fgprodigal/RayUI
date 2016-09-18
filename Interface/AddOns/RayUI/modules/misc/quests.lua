@@ -1,24 +1,25 @@
 ﻿local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local M = R:GetModule("Misc")
+local mod = M:NewModule("Quest", "AceEvent-3.0", "AceHook-3.0")
 
-local function LoadFunc()
-	--显示任务等级
-	function questlevel()
-		if ENABLE_COLORBLIND_MODE == "1" then return end
-		local numEntries, numQuests = GetNumQuestLogEntries()
-		local titleIndex = 1
-	
-		for i = 1, numEntries do
-			local title, level, suggestedGroup, isHeader, isCollapsed, isComplete, frequency, questID, startEvent, displayQuestID, isOnMap, hasLocalPOI, isTask, isStory = GetQuestLogTitle(i)
-			local titleButton = QuestLogQuests_GetTitleButton(titleIndex)
-			if title and (not isHeader) and titleButton.questID == questID then
-				titleButton.Text:SetText("[" .. level .. "] " .. title)
-				titleButton.Check:SetPoint("LEFT", titleButton.Text, titleButton.Text:GetWrappedWidth() + 2, 0);
-				titleIndex = titleIndex + 1
-			end
+function mod:QuestLogQuests_Update()
+	if ENABLE_COLORBLIND_MODE == "1" then return end
+	local numEntries, numQuests = GetNumQuestLogEntries()
+	local titleIndex = 1
+
+	for i = 1, numEntries do
+		local title, level, suggestedGroup, isHeader, isCollapsed, isComplete, frequency, questID, startEvent, displayQuestID, isOnMap, hasLocalPOI, isTask, isStory = GetQuestLogTitle(i)
+		local titleButton = QuestLogQuests_GetTitleButton(titleIndex)
+		if title and (not isHeader) and titleButton.questID == questID then
+			titleButton.Text:SetText("[" .. level .. "] " .. title)
+			titleButton.Check:SetPoint("LEFT", titleButton.Text, titleButton.Text:GetWrappedWidth() + 2, 0);
+			titleIndex = titleIndex + 1
 		end
 	end
-	hooksecurefunc("QuestLogQuests_Update", questlevel)
+end
+
+function mod:Initialize()
+	self:SecureHook("QuestLogQuests_Update")
 
 	if not M.db.quest then return end
     local QuickQuest = CreateFrame("Frame")
@@ -410,4 +411,4 @@ local function LoadFunc()
     QuestInfoDescriptionText.SetAlphaGradient = function() return false end
 end
 
-M:RegisterMiscModule("Quest", LoadFunc)
+M:RegisterMiscModule(mod:GetName())

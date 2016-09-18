@@ -1,7 +1,8 @@
 local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local M = R:GetModule("Misc")
+local mod = M:NewModule("ObjectiveTracker", "AceEvent-3.0")
 
-local function LoadFunc()
+function mod:Initialize()
 	local screenheight = GetScreenHeight()
 	local ObjectiveTrackerFrameHolder = CreateFrame("Frame", "ObjectiveTrackerFrameHolder", UIParent)
 	ObjectiveTrackerFrameHolder:SetWidth(260)
@@ -23,4 +24,4 @@ local function LoadFunc()
 	end)
 end
 
-M:RegisterMiscModule("ObjectiveTracker", LoadFunc)
+M:RegisterMiscModule(mod:GetName())

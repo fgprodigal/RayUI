@@ -1,13 +1,125 @@
 local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local M = R:GetModule("Misc")
+local mod = M:NewModule("Mirror", "AceEvent-3.0")
 
 ---------------------------------------------------------------------
 -- original by haste, edited for Elvui :), styled for RayUI
 ---------------------------------------------------------------------
-local function LoadFunc()
-	local settings = {}
 
-	local _DEFAULTS = {
+local settings, _DEFAULTS = {}
+local barPool = {}
+
+local function loadPosition(self)
+	local pos = settings.position[self.type]
+	local p1, frame, p2, x, y = strsplit("#", pos)
+
+	return self:SetPoint(p1, frame, p2, R:Scale(x), R:Scale(y))
+end
+
+local function OnUpdate(self, elapsed)
+	if(self.paused) then return end
+
+	self:SetValue(GetMirrorTimerProgress(self.type) / 1e3)
+end
+
+local function Start(self, value, maxvalue, scale, paused, text)
+	if(paused > 0) then
+		self.paused = 1
+	elseif(self.paused) then
+		self.paused = nil
+	end
+
+	self.text:SetText(text)
+
+	self:SetMinMaxValues(0, maxvalue / 1e3)
+	self:SetValue(value / 1e3)
+
+	if(not self:IsShown()) then self:Show() end
+end
+
+function mod:Spawn(type)
+	if(barPool[type]) then return barPool[type] end
+	local frame = CreateFrame("StatusBar", nil, UIParent)
+
+	frame:SetScript("OnUpdate", OnUpdate)
+
+	local r, g, b = unpack(settings.colors[type])
+
+	local bg = frame:CreateTexture(nil, "BACKGROUND")
+	bg:SetAllPoints(frame)
+	bg:SetTexture(R["media"].blank)
+	bg:SetVertexColor(r * .2, g * .2, b * .2)
+
+	local border = CreateFrame("Frame", nil, frame)
+	border:SetAllPoints()
+	border:CreateShadow("Background")
+	border:SetFrameStrata("BACKGROUND")
+	border:SetFrameLevel(0)
+
+	local text = frame:CreateFontString(nil, "OVERLAY")
+	text:SetFont(R["media"].font, R["media"].fontsize, "THINOUTLINE")
+
+	text:SetJustifyH"CENTER"
+	text:SetTextColor(1, 1, 1)
+
+	text:SetPoint("LEFT", frame)
+	text:SetPoint("RIGHT", frame)
+	text:SetPoint("TOP", frame)
+	text:SetPoint("BOTTOM", frame)
+
+	frame:SetSize(settings.width, settings.height)
+
+	frame:SetStatusBarTexture(settings.texture)
+	frame:SetStatusBarColor(r, g, b)
+
+	local spark = frame:CreateTexture(nil, "OVERLAY")
+	spark:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]
+	spark:SetBlendMode("ADD")
+	spark:SetAlpha(.8)
+	spark:Point("TOPLEFT", frame:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
+	spark:Point("BOTTOMRIGHT", frame:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
+
+	frame.type = type
+	frame.text = text
+
+	frame.Start = Start
+	frame.Stop = Stop
+
+	loadPosition(frame)
+
+	barPool[type] = frame
+	return frame
+end
+
+function mod:PauseAll(val)
+	for _, bar in next, barPool do
+		bar.paused = val
+	end
+end
+
+function mod:PLAYER_ENTERING_WORLD()
+	for i=1, MIRRORTIMER_NUMTIMERS do
+		local type, value, maxvalue, scale, paused, text = GetMirrorTimerInfo(i)
+		if(type ~= "UNKNOWN") then
+			self:Spawn(type):Start(value, maxvalue, scale, paused, text)
+		end
+	end
+end
+
+function mod:MIRROR_TIMER_START(event, type, value, maxvalue, scale, paused, text)
+	return self:Spawn(type):Start(value, maxvalue, scale, paused, text)
+end
+
+function mod:MIRROR_TIMER_STOP(event, type)
+	return self:Spawn(type):Hide()
+end
+
+function mod:MIRROR_TIMER_PAUSE(event, duration)
+	return self:PauseAll((duration > 0 and duration) or nil)
+end
+
+function mod:Initialize()
+	_DEFAULTS = {
 		width = R:Scale(220),
 		height = R:Scale(18),
 		texture = R["media"].normal,
@@ -24,139 +136,19 @@ local function LoadFunc()
 		}
 	}
 
-	do
-		settings = setmetatable(settings, {__index = _DEFAULTS})
-		for k,v in next, settings do
-			if(type(v) == "table") then
-				settings[k] = setmetatable(settings[k], {__index = _DEFAULTS[k]})
-			end
+	settings = setmetatable(settings, {__index = _DEFAULTS})
+	for k,v in next, settings do
+		if(type(v) == "table") then
+			settings[k] = setmetatable(settings[k], {__index = _DEFAULTS[k]})
 		end
 	end
 
-	local Spawn, PauseAll
-	do
-		local barPool = {}
+	self:RegisterEvent("PLAYER_ENTERING_WORLD")
+	self:RegisterEvent("MIRROR_TIMER_START")
+	self:RegisterEvent("MIRROR_TIMER_STOP")
+	self:RegisterEvent("MIRROR_TIMER_PAUSE")
 
-		local loadPosition = function(self)
-			local pos = settings.position[self.type]
-			local p1, frame, p2, x, y = strsplit("#", pos)
-
-			return self:SetPoint(p1, frame, p2, R:Scale(x), R:Scale(y))
-		end
-
-		local OnUpdate = function(self, elapsed)
-			if(self.paused) then return end
-
-			self:SetValue(GetMirrorTimerProgress(self.type) / 1e3)
-		end
-
-		local Start = function(self, value, maxvalue, scale, paused, text)
-			if(paused > 0) then
-				self.paused = 1
-			elseif(self.paused) then
-				self.paused = nil
-			end
-
-			self.text:SetText(text)
-
-			self:SetMinMaxValues(0, maxvalue / 1e3)
-			self:SetValue(value / 1e3)
-
-			if(not self:IsShown()) then self:Show() end
-		end
-
-		function Spawn(type)
-			if(barPool[type]) then return barPool[type] end
-			local frame = CreateFrame("StatusBar", nil, UIParent)
-
-			frame:SetScript("OnUpdate", OnUpdate)
-
-			local r, g, b = unpack(settings.colors[type])
-
-			local bg = frame:CreateTexture(nil, "BACKGROUND")
-			bg:SetAllPoints(frame)
-			bg:SetTexture(R["media"].blank)
-			bg:SetVertexColor(r * .2, g * .2, b * .2)
-
-			local border = CreateFrame("Frame", nil, frame)
-			border:SetAllPoints()
-			border:CreateShadow("Background")
-			border:SetFrameStrata("BACKGROUND")
-			border:SetFrameLevel(0)
-
-			local text = frame:CreateFontString(nil, "OVERLAY")
-			text:SetFont(R["media"].font, R["media"].fontsize, "THINOUTLINE")
-
-			text:SetJustifyH"CENTER"
-			text:SetTextColor(1, 1, 1)
-
-			text:SetPoint("LEFT", frame)
-			text:SetPoint("RIGHT", frame)
-			text:SetPoint("TOP", frame)
-			text:SetPoint("BOTTOM", frame)
-
-			frame:SetSize(settings.width, settings.height)
-
-			frame:SetStatusBarTexture(settings.texture)
-			frame:SetStatusBarColor(r, g, b)
-
-			local spark = frame:CreateTexture(nil, "OVERLAY")
-			spark:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]
-			spark:SetBlendMode("ADD")
-			spark:SetAlpha(.8)
-			spark:Point("TOPLEFT", frame:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
-			spark:Point("BOTTOMRIGHT", frame:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
-
-			frame.type = type
-			frame.text = text
-
-			frame.Start = Start
-			frame.Stop = Stop
-
-			loadPosition(frame)
-
-			barPool[type] = frame
-			return frame
-		end
-
-		function PauseAll(val)
-			for _, bar in next, barPool do
-				bar.paused = val
-			end
-		end
-	end
-
-	local frame = CreateFrame"Frame"
-	frame:SetScript("OnEvent", function(self, event, ...)
-		return self[event](self, ...)
-	end)
-
-	function frame:PLAYER_ENTERING_WORLD()
-		for i=1, MIRRORTIMER_NUMTIMERS do
-			local type, value, maxvalue, scale, paused, text = GetMirrorTimerInfo(i)
-			if(type ~= "UNKNOWN") then
-				Spawn(type):Start(value, maxvalue, scale, paused, text)
-			end
-		end
-	end
-	frame:RegisterEvent"PLAYER_ENTERING_WORLD"
-
-	function frame:MIRROR_TIMER_START(type, value, maxvalue, scale, paused, text)
-		return Spawn(type):Start(value, maxvalue, scale, paused, text)
-	end
-	frame:RegisterEvent"MIRROR_TIMER_START"
-
-	function frame:MIRROR_TIMER_STOP(type)
-		return Spawn(type):Hide()
-	end
-	frame:RegisterEvent"MIRROR_TIMER_STOP"
-
-	function frame:MIRROR_TIMER_PAUSE(duration)
-		return PauseAll((duration > 0 and duration) or nil)
-	end
-	frame:RegisterEvent"MIRROR_TIMER_PAUSE"
-
-	UIParent:UnregisterEvent"MIRROR_TIMER_START"
+	UIParent:UnregisterEvent("MIRROR_TIMER_START")
 end
 
-M:RegisterMiscModule("Mirror", LoadFunc)
+M:RegisterMiscModule(mod:GetName())

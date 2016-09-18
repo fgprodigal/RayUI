@@ -1,0 +1,5 @@
+<Bindings>
+  <Binding name="RAIDMARKER" runOnUp="true" category="BINDING_HEADER_RAYUI">
+    RaidMark_HotkeyPressed(keystate)
+  </Binding>
+</Bindings>

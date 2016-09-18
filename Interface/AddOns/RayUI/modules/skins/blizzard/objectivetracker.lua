@@ -54,8 +54,29 @@ local function LoadSkin()
 		local itemButton = block.itemButton
 
 		if itemButton and not itemButton.styled then
-			itemButton:SetNormalTexture("")
-			itemButton:SetPushedTexture("")
+			itemButton:SetNormalTexture(nil)
+			itemButton:StyleButton(true)
+			itemButton:CreateShadow("Background")
+
+			itemButton.HotKey:ClearAllPoints()
+			itemButton.HotKey:SetPoint("TOP", itemButton, -1, 0)
+			itemButton.HotKey:SetJustifyH("CENTER")
+			itemButton.HotKey:FontTemplate(R["media"].font, R["media"].fontsize, "OUTLINE")
+
+			itemButton.icon:SetTexCoord(.08, .92, .08, .92)
+			S:CreateBG(itemButton)
+
+			itemButton.styled = true
+		end
+	end)
+
+	hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddObjective", function(_, block)
+		local itemButton = block.itemButton
+
+		if itemButton and not itemButton.styled then
+			itemButton:SetNormalTexture(nil)
+			itemButton:StyleButton(true)
+			itemButton:CreateShadow("Background")
 
 			itemButton.HotKey:ClearAllPoints()
 			itemButton.HotKey:SetPoint("TOP", itemButton, -1, 0)

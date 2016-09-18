@@ -1,5 +1,6 @@
 local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local M = R:GetModule("Misc")
+local mod = M:NewModule("LootRoll", "AceEvent-3.0")
 
 R.rollBars = {}
 local testMode = false
@@ -208,7 +209,7 @@ local function GetFrame()
 	return f
 end
 
-function M:START_LOOT_ROLL(event, rollid, time)
+function mod:START_LOOT_ROLL(event, rollid, time)
 	if cancelled_rolls[rollid] then return end
 
 	local f = GetFrame()
@@ -261,7 +262,7 @@ function M:START_LOOT_ROLL(event, rollid, time)
 	end
 end
 
-function M:LOOT_HISTORY_ROLL_CHANGED(event, itemIdx, playerIdx)
+function mod:LOOT_HISTORY_ROLL_CHANGED(event, itemIdx, playerIdx)
 	local rollID, itemLink, numPlayers, isDone, winnerIdx, isMasterLoot = C_LootHistory.GetItem(itemIdx);
 	local name, class, rollType, roll, isWinner = C_LootHistory.GetPlayerInfo(itemIdx, playerIdx);
 
@@ -276,39 +277,39 @@ function M:LOOT_HISTORY_ROLL_CHANGED(event, itemIdx, playerIdx)
 	end
 end
 
-SlashCmdList["LFrames"] = function() 
-	local items = { 34334, 77949 }
-	for _, f in pairs(R.rollBars) do
-		f.rollid = nil
-		f:Hide()
-	end
-	if testMode then
-		testMode = false
-	else
-		testMode = true
-		for i = 1, 3 do
-			local f = GetFrame()
-			local item = items[math.random(1,#items)]
-			local quality, _, _, _, _, _, _, texture = select(3, GetItemInfo(item))
-			local r, g, b = GetItemQualityColor(quality)
-			f.button:SetNormalTexture(texture)
-			f.button:GetNormalTexture():SetTexCoord(.1, .9, .1, .9)
-			f.fsloot:SetVertexColor(r, g, b)
-			f.fsloot:SetText(GetItemInfo(item))
-			f.status:SetStatusBarColor(r, g, b)
-			f.rollid = i
-			f.time = 100000000
-			f:Show()
-		end
-	end
-end
-SLASH_LFrames1 = "/lframes"
-
-local function LoadFunc()
+function mod:Initialize()
 	UIParent:UnregisterEvent("START_LOOT_ROLL")
 	UIParent:UnregisterEvent("CANCEL_LOOT_ROLL")
-	M:RegisterEvent("START_LOOT_ROLL")
-	M:RegisterEvent("LOOT_HISTORY_ROLL_CHANGED")
+	self:RegisterEvent("START_LOOT_ROLL")
+	self:RegisterEvent("LOOT_HISTORY_ROLL_CHANGED")
+
+	SlashCmdList["LFrames"] = function() 
+		local items = { 34334, 77949 }
+		for _, f in pairs(R.rollBars) do
+			f.rollid = nil
+			f:Hide()
+		end
+		if testMode then
+			testMode = false
+		else
+			testMode = true
+			for i = 1, 3 do
+				local f = GetFrame()
+				local item = items[math.random(1,#items)]
+				local quality, _, _, _, _, _, _, texture = select(3, GetItemInfo(item))
+				local r, g, b = GetItemQualityColor(quality)
+				f.button:SetNormalTexture(texture)
+				f.button:GetNormalTexture():SetTexCoord(.1, .9, .1, .9)
+				f.fsloot:SetVertexColor(r, g, b)
+				f.fsloot:SetText(GetItemInfo(item))
+				f.status:SetStatusBarColor(r, g, b)
+				f.rollid = i
+				f.time = 100000000
+				f:Show()
+			end
+		end
+	end
+	SLASH_LFrames1 = "/lframes"
 end
 
-M:RegisterMiscModule("LootRoll", LoadFunc)
+M:RegisterMiscModule(mod:GetName())

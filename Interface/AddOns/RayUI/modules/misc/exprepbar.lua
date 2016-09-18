@@ -1,5 +1,6 @@
 local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local M = R:GetModule("Misc")
+local mod = M:NewModule("Exprepbar", "AceEvent-3.0")
 
 local function AddPerks()
 	if not IsAddOnLoaded("Blizzard_ArtifactUI") then LoadAddOn("Blizzard_ArtifactUI") end
@@ -45,7 +46,7 @@ local function Bar_OnHide(self)
 	self:SetPoint("TOPRIGHT", self.anchorFrame, "BOTTOMRIGHT", 0, self.height)
 end
 
-local function CreateBar(name, anchorFrame, height)
+function mod:CreateBar(name, anchorFrame, height)
 	local bar = CreateFrame("StatusBar", name, UIParent, "AnimatedStatusBarTemplate")
 	bar:CreateShadow("Background")
 	bar:SetFrameLevel(3)
@@ -60,141 +61,25 @@ local function CreateBar(name, anchorFrame, height)
 	return bar
 end
 
-local function LoadFunc()
-	local xpBar = CreateBar("RayUIExpBar", Minimap, 8)
-	xpBar:SetStatusBarColor(.5, 0, .75)
-	xpBar:SetAnimatedTextureColors(0.0, 0.39, 0.88, 1.0)
+function mod:CreateExpBar()
+	self.ExpBar = self:CreateBar("RayUIExpBar", Minimap, 8)
+	self.ExpBar:SetStatusBarColor(.5, 0, .75)
+	self.ExpBar:SetAnimatedTextureColors(0.0, 0.39, 0.88, 1.0)
 
-	local restedxpBar = CreateFrame("StatusBar", nil, xpBar)
-	restedxpBar:SetAllPoints()
-	restedxpBar:SetStatusBarTexture(R.media.normal)
-	restedxpBar:SetStatusBarColor(0, .4, .8)
-	restedxpBar:SetFrameLevel(2)
+	self.ExpBar.RestedExpBar = CreateFrame("StatusBar", nil, self.ExpBar)
+	self.ExpBar.RestedExpBar:SetAllPoints()
+	self.ExpBar.RestedExpBar:SetStatusBarTexture(R.media.normal)
+	self.ExpBar.RestedExpBar:SetStatusBarColor(0, .4, .8)
+	self.ExpBar.RestedExpBar:SetFrameLevel(2)
 
-	local honorBar = CreateBar("RayUIHonorBar", xpBar, 8)
+	self.ExpBar:SetScript("OnEvent", self.UpdateExpBar)
+	self.ExpBar:RegisterEvent("PLAYER_LEVEL_UP")
+	self.ExpBar:RegisterEvent("PLAYER_XP_UPDATE")
+	self.ExpBar:RegisterEvent("UPDATE_EXHAUSTION")
+	self.ExpBar:RegisterEvent("UPDATE_EXPANSION_LEVEL")
+	self.ExpBar:RegisterEvent("PLAYER_ENTERING_WORLD")
 
-	local repBar = CreateBar("RayUIRepBar", honorBar, 8)
-
-	local artiBar = CreateBar("RayUIArtiBar", repBar, 8)
-	artiBar:SetStatusBarColor(.901, .8, .601)
-
-	-- Update function
-	local function updateExp(self)
-		local XP, maxXP = UnitXP("player"), UnitXPMax("player")
-		local restXP = GetXPExhaustion()
-		local maxLevel = MAX_PLAYER_LEVEL_TABLE[GetExpansionLevel()]
-
-		if UnitLevel("player") == maxLevel then
-			self:Hide()
-			restedxpBar:Hide()
-		else
-			self:SetAnimatedValues(XP, 0, maxXP, UnitLevel("player"))
-
-			if restXP then
-				restedxpBar:Show()
-				restedxpBar:SetMinMaxValues(min(0, XP), maxXP)
-				restedxpBar:SetValue(XP+restXP)
-			else
-				restedxpBar:Hide()
-			end
-			self:Show()
-		end
-	end
-
-	local function updateHonor(self)
-		local level = UnitHonorLevel("player")
-		local levelmax = GetMaxPlayerHonorLevel()
-		if UnitLevel("player") < MAX_PLAYER_LEVEL or level == levelmax then
-			self:Hide()
-		else
-			self:Show()
-			local current = UnitHonor("player")
-			local max = UnitHonorMax("player")
-			
-			if (level == levelmax) then
-				self:SetAnimatedValues(1, 0, 1, level)
-			else
-				self:SetAnimatedValues(current, 0, max, level)
-			end	
-
-			local exhaustionStateID = GetHonorRestState()
-			if (exhaustionStateID == 1) then
-				self:SetStatusBarColor(1.0, 0.71, 0)
-				self:SetAnimatedTextureColors(1.0, 0.71, 0)
-			else
-				self:SetStatusBarColor(1.0, 0.24, 0)
-				self:SetAnimatedTextureColors(1.0, 0.24, 0)
-			end
-		end
-	end
-
-	local function updateRep(self)
-		if GetWatchedFactionInfo() then
-			local name, rank, min, max, value, factionID = GetWatchedFactionInfo()
-			local level
-			if ( ReputationWatchBar.friendshipID ) then
-				local friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
-				level = GetFriendshipReputationRanks(factionID)
-				if ( nextFriendThreshold ) then
-					min, max, value = friendThreshold, nextFriendThreshold, friendRep
-				else
-					min, max, value = 0, 1, 1
-					isCappedFriendship = true
-				end
-			else
-				level = rank
-			end
-			max = max - min
-			value = value - min
-			min = 0
-			self:SetAnimatedValues(value, min, max, level)
-			if friendID then
-				rank = 8
-			end
-			self:SetStatusBarColor(unpack(RayUF["colors"].reaction[rank]))
-			self:SetAnimatedTextureColors(unpack(RayUF["colors"].reaction[rank]))
-			self:Show()
-		else
-			self:Hide()
-		end
-	end
-
-	local function updateArti(self)
-		if HasArtifactEquipped() then
-			local itemID, altItemID, name, icon, totalXP, pointsSpent, quality, artifactAppearanceID, appearanceModID, itemAppearanceID, altItemAppearanceID, altOnTop = C_ArtifactUI.GetEquippedArtifactInfo()
-			if not pointsSpent then return end
-			local numPointsAvailableToSpend, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP)
-			self:SetAnimatedValues(xp, 0, xpForNextPoint, numPointsAvailableToSpend + pointsSpent)
-			self:Show()
-		else
-			self:Hide()
-		end
-	end
-
-	xpBar:SetScript("OnEvent", updateExp)
-	xpBar:RegisterEvent("PLAYER_LEVEL_UP")
-	xpBar:RegisterEvent("PLAYER_XP_UPDATE")
-	xpBar:RegisterEvent("UPDATE_EXHAUSTION")
-	xpBar:RegisterEvent("UPDATE_EXPANSION_LEVEL")
-	xpBar:RegisterEvent("PLAYER_ENTERING_WORLD")
-
-	honorBar:SetScript("OnEvent", updateHonor)
-	honorBar:RegisterEvent("HONOR_XP_UPDATE")
-	honorBar:RegisterEvent("HONOR_PRESTIGE_UPDATE")
-	honorBar:RegisterEvent("PLAYER_ENTERING_WORLD")
-
-	repBar:SetScript("OnEvent", updateRep)
-	repBar:RegisterEvent("CHAT_MSG_COMBAT_FACTION_CHANGE")
-	repBar:RegisterEvent("UPDATE_FACTION")
-	repBar:RegisterEvent("PLAYER_ENTERING_WORLD")
-
-	artiBar:SetScript("OnEvent", updateArti)
-	artiBar:RegisterEvent("ARTIFACT_XP_UPDATE")
-	artiBar:RegisterEvent("UNIT_INVENTORY_CHANGED")
-	artiBar:RegisterEvent("PLAYER_ENTERING_WORLD")
-
-	-- Mouse events
-	xpBar:SetScript("OnEnter", function(self)
+	self.ExpBar:SetScript("OnEnter", function(self)
 		local min, max = UnitXP("player"), UnitXPMax("player")
 		local rest = GetXPExhaustion()
 
@@ -207,11 +92,42 @@ local function LoadFunc()
 		GameTooltip:Show()
 	end)
 
-	xpBar:SetScript("OnLeave", function()
+	self.ExpBar:SetScript("OnLeave", function()
 		GameTooltip:Hide()
 	end)
+end
 
-	honorBar:SetScript("OnEnter", function(self)
+function mod:UpdateExpBar()
+	local XP, maxXP = UnitXP("player"), UnitXPMax("player")
+	local restXP = GetXPExhaustion()
+	local maxLevel = MAX_PLAYER_LEVEL_TABLE[GetExpansionLevel()]
+
+	if UnitLevel("player") == maxLevel then
+		self:Hide()
+		self.RestedExpBar:Hide()
+	else
+		self:SetAnimatedValues(XP, 0, maxXP, UnitLevel("player"))
+
+		if restXP then
+			self.RestedExpBar:Show()
+			self.RestedExpBar:SetMinMaxValues(min(0, XP), maxXP)
+			self.RestedExpBar:SetValue(XP+restXP)
+		else
+			self.RestedExpBar:Hide()
+		end
+		self:Show()
+	end
+end
+
+function mod:CreateHonorBar()
+	self.HonorBar = self:CreateBar("RayUIHonorBar", self.ExpBar, 8)
+
+	self.HonorBar:SetScript("OnEvent", self.UpdateHonorBar)
+	self.HonorBar:RegisterEvent("HONOR_XP_UPDATE")
+	self.HonorBar:RegisterEvent("HONOR_PRESTIGE_UPDATE")
+	self.HonorBar:RegisterEvent("PLAYER_ENTERING_WORLD")
+
+	self.HonorBar:SetScript("OnEnter", function(self)
 		GameTooltip:ClearLines()
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -5)
 
@@ -242,11 +158,47 @@ local function LoadFunc()
 		GameTooltip:Show()
 	end)
 
-	honorBar:SetScript("OnLeave", function()
+	self.HonorBar:SetScript("OnLeave", function()
 		GameTooltip:Hide()
 	end)
+end
 
-	repBar:SetScript("OnEnter", function(self)
+function mod:UpdateHonorBar()
+	local level = UnitHonorLevel("player")
+	local levelmax = GetMaxPlayerHonorLevel()
+	if UnitLevel("player") < MAX_PLAYER_LEVEL or level == levelmax then
+		self:Hide()
+	else
+		self:Show()
+		local current = UnitHonor("player")
+		local max = UnitHonorMax("player")
+		
+		if (level == levelmax) then
+			self:SetAnimatedValues(1, 0, 1, level)
+		else
+			self:SetAnimatedValues(current, 0, max, level)
+		end	
+
+		local exhaustionStateID = GetHonorRestState()
+		if (exhaustionStateID == 1) then
+			self:SetStatusBarColor(1.0, 0.71, 0)
+			self:SetAnimatedTextureColors(1.0, 0.71, 0)
+		else
+			self:SetStatusBarColor(1.0, 0.24, 0)
+			self:SetAnimatedTextureColors(1.0, 0.24, 0)
+		end
+	end
+end
+
+function mod:CreateRepBar()
+	self.RepBar = self:CreateBar("RayUIRepBar", self.HonorBar, 8)
+
+	self.RepBar:SetScript("OnEvent", self.UpdateRepBar)
+	self.RepBar:RegisterEvent("CHAT_MSG_COMBAT_FACTION_CHANGE")
+	self.RepBar:RegisterEvent("UPDATE_FACTION")
+	self.RepBar:RegisterEvent("PLAYER_ENTERING_WORLD")
+
+	self.RepBar:SetScript("OnEnter", function(self)
 		local name, rank, start, cap, value, factionID = GetWatchedFactionInfo()
 		local friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -5)
@@ -265,16 +217,57 @@ local function LoadFunc()
 		GameTooltip:Show()
 	end)
 
-	repBar:SetScript("OnLeave", function()
+	self.RepBar:SetScript("OnLeave", function()
 		GameTooltip:Hide()
 	end)
 
-	repBar:SetScript("OnMouseUp", function(self)
+	self.RepBar:SetScript("OnMouseUp", function(self)
 		GameTooltip:Hide()
 		ToggleCharacter("ReputationFrame")
 	end)
+end
 
-	artiBar:SetScript("OnEnter", function(self)
+function mod:UpdateRepBar()
+	if GetWatchedFactionInfo() then
+		local name, rank, min, max, value, factionID = GetWatchedFactionInfo()
+		local level
+		if ( ReputationWatchBar.friendshipID ) then
+			local friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
+			level = GetFriendshipReputationRanks(factionID)
+			if ( nextFriendThreshold ) then
+				min, max, value = friendThreshold, nextFriendThreshold, friendRep
+			else
+				min, max, value = 0, 1, 1
+				isCappedFriendship = true
+			end
+		else
+			level = rank
+		end
+		max = max - min
+		value = value - min
+		min = 0
+		self:SetAnimatedValues(value, min, max, level)
+		if friendID then
+			rank = 8
+		end
+		self:SetStatusBarColor(unpack(RayUF["colors"].reaction[rank]))
+		self:SetAnimatedTextureColors(unpack(RayUF["colors"].reaction[rank]))
+		self:Show()
+	else
+		self:Hide()
+	end
+end
+
+function mod:CreateArtiBar()
+	self.ArtiBar = self:CreateBar("RayUIArtiBar", self.RepBar, 8)
+	self.ArtiBar:SetStatusBarColor(.901, .8, .601)
+
+	self.ArtiBar:SetScript("OnEvent", self.UpdateArtiBar)
+	self.ArtiBar:RegisterEvent("ARTIFACT_XP_UPDATE")
+	self.ArtiBar:RegisterEvent("UNIT_INVENTORY_CHANGED")
+	self.ArtiBar:RegisterEvent("PLAYER_ENTERING_WORLD")
+
+	self.ArtiBar:SetScript("OnEnter", function(self)
 		if HasArtifactEquipped() then
 			local title,r,g,b = select(2, C_ArtifactUI.GetEquippedArtifactArtInfo())
 			local name, icon, totalXP, pointsSpent = select(3, C_ArtifactUI.GetEquippedArtifactInfo())
@@ -296,11 +289,11 @@ local function LoadFunc()
 		end
 	end)
 
-	artiBar:SetScript("OnLeave", function()
+	self.ArtiBar:SetScript("OnLeave", function()
 		GameTooltip:Hide()
 	end)
 
-	artiBar:SetScript("OnMouseUp", function(self)
+	self.ArtiBar:SetScript("OnMouseUp", function(self)
 		if not ArtifactFrame or not ArtifactFrame:IsShown() then
 			ShowUIPanel(SocketInventoryItem(16))
 		elseif ArtifactFrame and ArtifactFrame:IsShown() then
@@ -309,4 +302,23 @@ local function LoadFunc()
 	end)
 end
 
-M:RegisterMiscModule("Exprepbar", LoadFunc)
+function mod:UpdateArtiBar()
+	if HasArtifactEquipped() then
+		local itemID, altItemID, name, icon, totalXP, pointsSpent, quality, artifactAppearanceID, appearanceModID, itemAppearanceID, altItemAppearanceID, altOnTop = C_ArtifactUI.GetEquippedArtifactInfo()
+		if not pointsSpent then return end
+		local numPointsAvailableToSpend, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP)
+		self:SetAnimatedValues(xp, 0, xpForNextPoint, numPointsAvailableToSpend + pointsSpent)
+		self:Show()
+	else
+		self:Hide()
+	end
+end
+
+function mod:Initialize()
+	self:CreateExpBar()
+	self:CreateHonorBar()
+	self:CreateRepBar()
+	self:CreateArtiBar()
+end
+
+M:RegisterMiscModule(mod:GetName())

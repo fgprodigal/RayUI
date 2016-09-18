@@ -42,4 +42,4 @@ local function LoadSkin()
 	end
 end
 
-S:RegisterSkin("Blizzard_ChallengesUI", LoadSkin)
+-- S:RegisterSkin("Blizzard_ChallengesUI", LoadSkin)

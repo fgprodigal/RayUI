@@ -9,14 +9,12 @@
 	<Script file="durability.lua"/>
 	<Script file="exprepbar.lua"/>
 	<Script file="focuser.lua"/>
-	<Script file="hattrick.lua"/>
 	<Script file="invite.lua"/>
 	<Script file="loot_roll.lua"/>
 	<Script file="merchant.lua"/>
 	<Script file="mirror.lua"/>
 	<Script file="objectivetracker.lua"/>
 	<Script file="quests.lua"/>
-	<Script file="raidBuffReminder.lua"/>
 	<Script file="raidCD.lua"/>
 	<Script file="raidmarker.lua"/>
 	<Script file="raidUtility.lua"/>

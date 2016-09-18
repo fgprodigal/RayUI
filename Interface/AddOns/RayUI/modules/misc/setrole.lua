@@ -1,5 +1,6 @@
 ﻿local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local M = R:GetModule("Misc")
+local mod = M:NewModule("SetRole", "AceEvent-3.0")
 local S = R:GetModule("Skins")
 
 local t = {
@@ -8,7 +9,7 @@ local t = {
 	["Tank"] = "TANK",
 }
 
-function M:SetRole()
+function mod:SetRole()
 	local spec = GetSpecialization()
 	if UnitLevel("player") >= 10 and not InCombatLockdown() then
 		if spec == nil and UnitGroupRolesAssigned("player") ~= "NONE" then
@@ -29,13 +30,10 @@ function M:SetRole()
 	end
 end
 
-local function LoadFunc()
-	R.RegisterCallback(M, "RoleChanged", "SetRole")
-	
-	local f = CreateFrame("Frame")
-	f:RegisterEvent("GROUP_ROSTER_UPDATE")
-	f:SetScript("OnEvent", M.SetRole)
+function mod:Initialize()
+	R.RegisterCallback(mod, "RoleChanged", "SetRole")
+	self:RegisterEvent("GROUP_ROSTER_UPDATE", "SetRole")
 	RolePollPopup:SetScript("OnShow", function() StaticPopupSpecial_Hide(RolePollPopup) end)
 end
 
-M:RegisterMiscModule("SetRole", LoadFunc)
+M:RegisterMiscModule(mod:GetName())

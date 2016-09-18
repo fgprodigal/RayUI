@@ -1,9 +1,61 @@
---Raid Utility by Elv22
 local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local M = R:GetModule("Misc")
+local mod = M:NewModule("RaidUtility", "AceEvent-3.0")
 local S = R:GetModule("Skins")
 
-local function LoadFunc()
+local function CheckRaidStatus()
+	local inInstance, instanceType = IsInInstance()
+	if ((GetNumSubgroupMembers() > 0 and not UnitInRaid("player")) or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) and not (inInstance and (instanceType == "pvp" or instanceType == "arena")) then
+		return true
+	else
+		return false
+	end
+end
+
+function mod:CreateButton(name, parent, template, width, height, point, relativeto, point2, xOfs, yOfs, text, texture)
+	local b = CreateFrame("Button", name, parent, template)
+	b:SetWidth(width)
+	b:SetHeight(height)
+	b:SetPoint(point, relativeto, point2, xOfs, yOfs)
+	b:EnableMouse(true)
+	if text then
+		local t = b:CreateFontString(nil,"OVERLAY",b)
+		t:SetFont(R["media"].font,12)
+		t:SetPoint("TOPLEFT")
+		t:SetPoint("BOTTOMRIGHT")
+		t:SetJustifyH("CENTER")
+		t:SetText(text)
+		b:SetFontString(t)
+	elseif texture then
+		local t = b:CreateTexture(nil,"OVERLAY",nil)
+		t:SetTexture(texture)
+		t:SetPoint("TOPLEFT", b, "TOPLEFT", R.mult, -R.mult)
+		t:SetPoint("BOTTOMRIGHT", b, "BOTTOMRIGHT", -R.mult, R.mult)
+	end
+	b:SetFrameStrata("HIGH")
+end
+
+local function DisbandRaidGroup()
+	if InCombatLockdown() then return end -- Prevent user error in combat
+
+	if UnitInRaid("player") then
+		for i = 1, GetNumGroupMembers() do
+			local name, _, _, _, _, _, _, online = GetRaidRosterInfo(i)
+			if online and name ~= R.myname then
+				UninviteUnit(name)
+			end
+		end
+	else
+		for i = MAX_PARTY_MEMBERS, 1, -1 do
+			if UnitExists("party"..i) then
+				UninviteUnit(UnitName("party"..i))
+			end
+		end
+	end
+	LeaveParty()
+end
+
+function mod:Initialize()
 	local panel_height = ((R:Scale(5)*5) + (R:Scale(20)*5))
 
 	--Create main frame
@@ -18,88 +70,20 @@ local function LoadFunc()
 	S:CreateBD(RaidUtilityPanel)
 	S:CreateSD(RaidUtilityPanel)
 
-	local function DisbandRaidGroup()
-		if InCombatLockdown() then return end -- Prevent user error in combat
-
-		if UnitInRaid("player") then
-			for i = 1, GetNumGroupMembers() do
-				local name, _, _, _, _, _, _, online = GetRaidRosterInfo(i)
-				if online and name ~= R.myname then
-					UninviteUnit(name)
-				end
-			end
-		else
-			for i = MAX_PARTY_MEMBERS, 1, -1 do
-				if UnitExists("party"..i) then
-					UninviteUnit(UnitName("party"..i))
-				end
-			end
-		end
-		LeaveParty()
-	end
-
-	SlashCmdList["GROUPDISBAND"] = function()
-		StaticPopup_Show("DISBAND_RAID")
-	end
-	SLASH_GROUPDISBAND1 = '/rd'
-
-	StaticPopupDialogs["DISBAND_RAID"] = {
-		text = L["是否确定解散队伍?"],
-		button1 = ACCEPT,
-		button2 = CANCEL,
-		OnAccept = DisbandRaidGroup,
-		timeout = 0,
-		whileDead = 1,
-	}
-
-	--Check if We are Raid Leader or Raid Officer
-	local function CheckRaidStatus()
-		local inInstance, instanceType = IsInInstance()
-		if ((GetNumSubgroupMembers() > 0 and not UnitInRaid("player")) or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) and not (inInstance and (instanceType == "pvp" or instanceType == "arena")) then
-			return true
-		else
-			return false
-		end
-	end
-
-	-- Function to create buttons in this module
-	local function CreateButton(name, parent, template, width, height, point, relativeto, point2, xOfs, yOfs, text, texture)
-		local b = CreateFrame("Button", name, parent, template)
-		b:SetWidth(width)
-		b:SetHeight(height)
-		b:SetPoint(point, relativeto, point2, xOfs, yOfs)
-		b:EnableMouse(true)
-		if text then
-			local t = b:CreateFontString(nil,"OVERLAY",b)
-			t:SetFont(R["media"].font,12)
-			t:SetPoint("TOPLEFT")
-			t:SetPoint("BOTTOMRIGHT")
-			t:SetJustifyH("CENTER")
-			t:SetText(text)
-			b:SetFontString(t)
-		elseif texture then
-			local t = b:CreateTexture(nil,"OVERLAY",nil)
-			t:SetTexture(texture)
-			t:SetPoint("TOPLEFT", b, "TOPLEFT", R.mult, -R.mult)
-			t:SetPoint("BOTTOMRIGHT", b, "BOTTOMRIGHT", -R.mult, R.mult)
-		end
-		b:SetFrameStrata("HIGH")
-	end
-
 	--Show Button
-	CreateButton("RaidUtilityShowButton", UIParent, "UIMenuButtonStretchTemplate, SecureHandlerClickTemplate", 80, 18, "TOP", UIParent, "TOP", 0, 2, L["团队工具"], nil)
+	self:CreateButton("RaidUtilityShowButton", UIParent, "UIMenuButtonStretchTemplate, SecureHandlerClickTemplate", 80, 18, "TOP", UIParent, "TOP", 0, 2, L["团队工具"], nil)
 	RaidUtilityShowButton:SetFrameRef("RaidUtilityPanel", RaidUtilityPanel)
 	RaidUtilityShowButton:SetAttribute("_onclick", [=[self:Hide(); self:GetFrameRef("RaidUtilityPanel"):Show();]=])
 	RaidUtilityShowButton:SetScript("OnMouseUp", function(self) RaidUtilityPanel.toggled = true end)
 
 	--Close Button
-	CreateButton("RaidUtilityCloseButton", RaidUtilityPanel, "UIMenuButtonStretchTemplate, SecureHandlerClickTemplate", 80, 18, "TOP", RaidUtilityPanel, "BOTTOM", 0, -1, CLOSE, nil)
+	self:CreateButton("RaidUtilityCloseButton", RaidUtilityPanel, "UIMenuButtonStretchTemplate, SecureHandlerClickTemplate", 80, 18, "TOP", RaidUtilityPanel, "BOTTOM", 0, -1, CLOSE, nil)
 	RaidUtilityCloseButton:SetFrameRef("RaidUtilityShowButton", RaidUtilityShowButton)
 	RaidUtilityCloseButton:SetAttribute("_onclick", [=[self:GetParent():Hide(); self:GetFrameRef("RaidUtilityShowButton"):Show();]=])
 	RaidUtilityCloseButton:SetScript("OnMouseUp", function(self) RaidUtilityPanel.toggled = false end)
 
 	--Disband Raid button
-	CreateButton("DisbandRaidButton", RaidUtilityPanel, "UIMenuButtonStretchTemplate", RaidUtilityPanel:GetWidth() * 0.8, R:Scale(18), "TOP", RaidUtilityPanel, "TOP", 0, R:Scale(-5), L["解散队伍"], nil)
+	self:CreateButton("DisbandRaidButton", RaidUtilityPanel, "UIMenuButtonStretchTemplate", RaidUtilityPanel:GetWidth() * 0.8, R:Scale(18), "TOP", RaidUtilityPanel, "TOP", 0, R:Scale(-5), L["解散队伍"], nil)
 	DisbandRaidButton:SetScript("OnMouseUp", function(self)
 		if CheckRaidStatus() then
 			StaticPopup_Show("DISBAND_RAID")
@@ -107,7 +91,7 @@ local function LoadFunc()
 	end)
 
 	--Role Check button
-	CreateButton("RoleCheckButton", RaidUtilityPanel, "UIMenuButtonStretchTemplate", RaidUtilityPanel:GetWidth() * 0.8, R:Scale(18), "TOP", DisbandRaidButton, "BOTTOM", 0, R:Scale(-5), ROLE_POLL, nil)
+	self:CreateButton("RoleCheckButton", RaidUtilityPanel, "UIMenuButtonStretchTemplate", RaidUtilityPanel:GetWidth() * 0.8, R:Scale(18), "TOP", DisbandRaidButton, "BOTTOM", 0, R:Scale(-5), ROLE_POLL, nil)
 	RoleCheckButton:SetScript("OnMouseUp", function(self)
 		if CheckRaidStatus() then
 			InitiateRolePoll()
@@ -115,19 +99,19 @@ local function LoadFunc()
 	end)
 
 	--MainTank Button
-	CreateButton("MainTankButton", RaidUtilityPanel, "SecureActionButtonTemplate, UIMenuButtonStretchTemplate", (DisbandRaidButton:GetWidth() / 2) - R:Scale(2), R:Scale(18), "TOPLEFT", RoleCheckButton, "BOTTOMLEFT", 0, R:Scale(-5), MAINTANK, nil)
+	self:CreateButton("MainTankButton", RaidUtilityPanel, "SecureActionButtonTemplate, UIMenuButtonStretchTemplate", (DisbandRaidButton:GetWidth() / 2) - R:Scale(2), R:Scale(18), "TOPLEFT", RoleCheckButton, "BOTTOMLEFT", 0, R:Scale(-5), MAINTANK, nil)
 	MainTankButton:SetAttribute("type", "maintank")
 	MainTankButton:SetAttribute("unit", "target")
 	MainTankButton:SetAttribute("action", "toggle")
 
 	--MainAssist Button
-	CreateButton("MainAssistButton", RaidUtilityPanel, "SecureActionButtonTemplate, UIMenuButtonStretchTemplate", (DisbandRaidButton:GetWidth() / 2) - R:Scale(2), R:Scale(18), "TOPRIGHT", RoleCheckButton, "BOTTOMRIGHT", 0, R:Scale(-5), MAINASSIST, nil)
+	self:CreateButton("MainAssistButton", RaidUtilityPanel, "SecureActionButtonTemplate, UIMenuButtonStretchTemplate", (DisbandRaidButton:GetWidth() / 2) - R:Scale(2), R:Scale(18), "TOPRIGHT", RoleCheckButton, "BOTTOMRIGHT", 0, R:Scale(-5), MAINASSIST, nil)
 	MainAssistButton:SetAttribute("type", "mainassist")
 	MainAssistButton:SetAttribute("unit", "target")
 	MainAssistButton:SetAttribute("action", "toggle")
 
 	--Ready Check button
-	CreateButton("ReadyCheckButton", RaidUtilityPanel, "UIMenuButtonStretchTemplate", RoleCheckButton:GetWidth() * 0.75, R:Scale(18), "TOPLEFT", MainTankButton, "BOTTOMLEFT", 0, R:Scale(-5), READY_CHECK, nil)
+	self:CreateButton("ReadyCheckButton", RaidUtilityPanel, "UIMenuButtonStretchTemplate", RoleCheckButton:GetWidth() * 0.75, R:Scale(18), "TOPLEFT", MainTankButton, "BOTTOMLEFT", 0, R:Scale(-5), READY_CHECK, nil)
 	ReadyCheckButton:SetScript("OnMouseUp", function(self)
 		if CheckRaidStatus() then
 			DoReadyCheck()
@@ -151,7 +135,7 @@ local function LoadFunc()
 	CompactRaidFrameManagerDisplayFrameLeaderOptionsInitiateRolePoll:SetPoint("BOTTOMRIGHT", CompactRaidFrameManagerDisplayFrameLeaderOptionsInitiateReadyCheck, "TOPRIGHT", 0, 1)
 
 	--Raid Control Panel
-	CreateButton("RaidControlButton", RaidUtilityPanel, "UIMenuButtonStretchTemplate", RoleCheckButton:GetWidth(), R:Scale(18), "TOPLEFT", ReadyCheckButton, "BOTTOMLEFT", 0, R:Scale(-5), RAID_CONTROL, nil)
+	self:CreateButton("RaidControlButton", RaidUtilityPanel, "UIMenuButtonStretchTemplate", RoleCheckButton:GetWidth(), R:Scale(18), "TOPLEFT", ReadyCheckButton, "BOTTOMLEFT", 0, R:Scale(-5), RAID_CONTROL, nil)
 	RaidControlButton:SetScript("OnMouseUp", function(self)
 		ToggleFriendsFrame(4)
 	end)
@@ -219,6 +203,20 @@ local function LoadFunc()
 	LeadershipCheck:RegisterEvent("GROUP_ROSTER_UPDATE")
 	LeadershipCheck:RegisterEvent("PLAYER_ENTERING_WORLD")
 	LeadershipCheck:SetScript("OnEvent", ToggleRaidUtil)
+
+	SlashCmdList["GROUPDISBAND"] = function()
+		StaticPopup_Show("DISBAND_RAID")
+	end
+	SLASH_GROUPDISBAND1 = '/rd'
+
+	StaticPopupDialogs["DISBAND_RAID"] = {
+		text = L["是否确定解散队伍?"],
+		button1 = ACCEPT,
+		button2 = CANCEL,
+		OnAccept = DisbandRaidGroup,
+		timeout = 0,
+		whileDead = 1,
+	}
 end
 
-M:RegisterMiscModule("RaidUtility", LoadFunc)
+M:RegisterMiscModule(mod:GetName())
