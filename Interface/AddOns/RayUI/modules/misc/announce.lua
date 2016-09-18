@@ -3,18 +3,32 @@ local M = R:GetModule("Misc")
 local mod = M:NewModule("Announce", "AceEvent-3.0")
 local LSM = LibStub("LibSharedMedia-3.0")
 
+local iconsize = 24
+
 function mod:COMBAT_LOG_EVENT_UNFILTERED(event, timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, ...)
-	if (eventType=="SPELL_DISPEL" or eventType=="SPELL_STOLEN" or eventType=="SPELL_INTERRUPT" or eventType=="SPELL_DISPEL_FAILED") and band(sourceFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE then
+	if (eventType=="SPELL_DISPEL" or eventType=="SPELL_STOLEN" or eventType=="SPELL_INTERRUPT" or eventType=="SPELL_DISPEL_FAILED") and (sourceGUID == UnitGUID("player") or sourceGUID == UnitGUID("pet")) then
 		local _, _, _, id, effect, _, etype = ...
 		local msg = _G["ACTION_" .. eventType]
 		local color
 		local icon =GetSpellTexture(id)
 
 		if eventType=="SPELL_INTERRUPT" then
+			local inRaid, inPartyLFG = IsInRaid(), IsPartyLFG()
 			if IsInGroup() then
-				if IsPartyLFG() then
+				--Skirmish/non-rated arenas need to use INSTANCE_CHAT but IsPartyLFG() returns "false"
+				local _, instanceType = IsInInstance()
+				if instanceType and instanceType == "arena" then
+					local skirmish = IsArenaSkirmish()
+					local _, isRegistered = IsActiveBattlefieldArena()
+					if skirmish or not isRegistered then
+						inPartyLFG = true
+					end
+					inRaid = false --IsInRaid() returns true for arenas and they should not be considered a raid
+				end
+
+				if inPartyLFG then
 					SendChatMessage(msg..": "..destName.." \124cff71d5ff\124Hspell:"..id.."\124h["..effect.."]\124h\124r!", "INSTANCE_CHAT")
-				elseif IsInRaid() then
+				elseif inRaid then
 					SendChatMessage(msg..": "..destName.." \124cff71d5ff\124Hspell:"..id.."\124h["..effect.."]\124h\124r!", "RAID")
 				else
 					SendChatMessage(msg..": "..destName.." \124cff71d5ff\124Hspell:"..id.."\124h["..effect.."]\124h\124r!", "PARTY")
@@ -28,9 +42,9 @@ function mod:COMBAT_LOG_EVENT_UNFILTERED(event, timestamp, eventType, hideCaster
 			color={1,0,.5}
 		end
 		if icon then
-			announceMessages:AddMessage(msg .. ": " .. effect .. " \124T"..icon..":"..iconsize..":"..iconsize..":0:0:64:64:5:59:5:59\124t",unpack(color))
+			self.announceMessages:AddMessage(msg .. ": " .. effect .. " \124T"..icon..":"..iconsize..":"..iconsize..":0:0:64:64:5:59:5:59\124t",unpack(color))
 		else
-			announceMessages:AddMessage(msg .. ": " .. effect ,unpack(color))
+			self.announceMessages:AddMessage(msg .. ": " .. effect ,unpack(color))
 		end
 	end
 end
@@ -223,32 +237,24 @@ function mod:AlertRun(f,r,g,b)
 	flowingframe:Show()
 end
 
+local function CreateMessageFrame(name)
+	local f = CreateFrame("ScrollingMessageFrame", name, UIParent)
+	f:SetHeight(80)
+	f:SetWidth(500)
+	f:SetPoint("CENTER", 0, 120)
+	f:SetFrameStrata("HIGH")
+	f:SetTimeVisible(1.5)
+	f:SetFadeDuration(1.5)
+	f:SetMaxLines(3)
+	f:SetFont(R["media"].font, 20, "OUTLINE")
+	f:SetShadowOffset(1.5,-1.5)
+	return f
+end
+
 function mod:Initialize()
 	if not M.db.anounce then return end
-	local announce = CreateFrame("Frame")
-	local band = bit.band
-	local font = R["media"].font -- HOOG0555.ttf
-	local fontflag = "OUTLINE" -- for pixelfont stick to this else OUTLINE or THINOUTLINE
-	local fontsize = 20 -- font size
-	local iconsize = 24
-	local COMBATLOG_OBJECT_AFFILIATION_MINE = COMBATLOG_OBJECT_AFFILIATION_MINE
 
-	-- Frame function
-	local function CreateMessageFrame(name)
-		local f = CreateFrame("ScrollingMessageFrame", name, UIParent)
-		f:SetHeight(80)
-		f:SetWidth(500)
-		f:SetPoint("CENTER", 0, 120)
-		f:SetFrameStrata("HIGH")
-		f:SetTimeVisible(1.5)
-		f:SetFadeDuration(1.5)
-		f:SetMaxLines(3)
-		f:SetFont(font, fontsize, fontflag)
-		f:SetShadowOffset(1.5,-1.5)
-		return f
-	end
-
-	local announceMessages = CreateMessageFrame("fDispelFrame")
+	mod.announceMessages = CreateMessageFrame("fDispelFrame")
 
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
