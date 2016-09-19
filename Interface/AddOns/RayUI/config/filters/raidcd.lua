@@ -1,4 +1,4 @@
-﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB
+﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 
 G.Misc.RaidCDs = {
 	[740] = 180,  -- 宁静 

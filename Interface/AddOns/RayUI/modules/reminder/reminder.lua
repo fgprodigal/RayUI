@@ -1,4 +1,4 @@
-local R, L, P = unpack(select(2, ...))
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local RM = R:NewModule("Reminder", "AceTimer-3.0")
 RM.CreatedReminders = {}
 

@@ -1,4 +1,4 @@
-local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB, GlobalDB
 local RC = LibStub("LibRangeCheck-2.0")
 local UF = R:GetModule("UnitFrames")
 local oUF = RayUF or oUF

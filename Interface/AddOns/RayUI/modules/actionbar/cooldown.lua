@@ -1,4 +1,4 @@
-local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local AB = R:GetModule("ActionBar")
 
 local DAY, HOUR, MINUTE = 86400, 3600, 60 --used for formatting text

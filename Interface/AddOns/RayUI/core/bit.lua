@@ -1,4 +1,4 @@
-﻿local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB, GlobalDB
 
 if bit.bnot(0) ~= 0xFFFFFFFF then
     local _bnot = bit.bnot

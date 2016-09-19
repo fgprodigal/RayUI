@@ -1,4 +1,4 @@
-local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB, GlobalDB
 local RW = R:NewModule("Watcher", "AceEvent-3.0")
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 

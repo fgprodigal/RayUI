@@ -1,4 +1,4 @@
-local R, L, P = unpack(RayUI) --Import: Engine, Locales, ProfileDB
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local B = R:GetModule("Bags")
 
 local bankBags = {BANK_CONTAINER}

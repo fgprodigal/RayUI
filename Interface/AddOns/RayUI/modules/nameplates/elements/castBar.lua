@@ -1,4 +1,4 @@
-local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB, GlobalDB
 local mod = R:GetModule('NamePlates')
 local LSM = LibStub("LibSharedMedia-3.0")
 function mod:UpdateElement_CastBarOnUpdate(elapsed)

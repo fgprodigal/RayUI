@@ -1,7 +1,7 @@
 -----------------------------------------------------
 -- Credit Tukz, Elv
 -----------------------------------------------------
-local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB, GlobalDB
 local LSM = LibStub("LibSharedMedia-3.0")
 
 local function Size(frame, width, height)

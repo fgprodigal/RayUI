@@ -1,4 +1,4 @@
-﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB
+﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 
 local function SpellName(id)
     local name = GetSpellInfo(id)

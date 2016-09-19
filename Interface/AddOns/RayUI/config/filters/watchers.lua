@@ -1,4 +1,4 @@
-local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB, GlobalDB
 
 local positions = {
     player_buff_icon    = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 80 },	-- "玩家buff&debuff"

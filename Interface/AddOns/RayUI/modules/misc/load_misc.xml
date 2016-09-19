@@ -15,7 +15,6 @@
 	<Script file="mirror.lua"/>
 	<Script file="objectivetracker.lua"/>
 	<Script file="quests.lua"/>
-	<Script file="raidCD.lua"/>
 	<Script file="raidmarker.lua"/>
 	<Script file="raidUtility.lua"/>
 	<Script file="setrole.lua"/>

@@ -1,4 +1,4 @@
-local R, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB, GlobalDB
 local S = R:NewModule("Skins", "AceEvent-3.0")
 local LSM = LibStub("LibSharedMedia-3.0")
 S.modName = L["插件美化"]
