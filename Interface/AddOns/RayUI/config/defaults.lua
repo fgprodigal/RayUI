@@ -463,6 +463,7 @@ P["Misc"]={
 	auction = true,
 	autodez = true,
 	autorelease = true,
+	autoscreenshot = true,
 	merchant = true,
 		poisons = true,
 	quest = true,

@@ -4,6 +4,7 @@
 	<Script file="announce.lua"/>
 	<Script file="auction.lua"/>
 	<Script file="autorelease.lua"/>
+	<Script file="autoscreenshot.lua"/>
 	<Script file="bubbles.lua"/>
 	<Script file="debugTools.lua"/>
 	<Script file="durability.lua"/>
