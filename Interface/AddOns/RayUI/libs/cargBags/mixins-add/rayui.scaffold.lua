@@ -80,6 +80,14 @@ local function ItemButton_Update(self, item)
 		self.border:SetBackdropBorderColor(unpack(RayUI[1]["media"].bordercolor))
 	end
 
+	if (self.JunkIcon) then
+		if (item.rarity) and (item.rarity == LE_ITEM_QUALITY_POOR and not item.noValue) then
+			self.JunkIcon:Show()
+		else
+			self.JunkIcon:Hide()
+		end
+	end
+
 	if(C_NewItems.IsNewItem(item.bagID, item.slotID)) then
 		ActionButton_ShowOverlayGlow(self)
 	else

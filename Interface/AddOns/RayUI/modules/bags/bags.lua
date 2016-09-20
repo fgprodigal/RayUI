@@ -100,9 +100,9 @@ function B:Initialize()
 		local onlyBank =		function(item) return item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11 and not CheckEquipmentSet(item) and item.type ~= consumable end
 		local onlyReagent =		function(item) return item.bagID == -3 end
 		local onlyBagSets =		function(item) return CheckEquipmentSet(item) and not (item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11) end
-		local onlyBagConsumables =		function(item) return item.type == consumable and not (item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11) end
+		local onlyBagConsumables =		function(item) return item.type == consumable and item.rarity ~= LE_ITEM_QUALITY_POOR and not (item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11) end
 		local onlyBankSets =	function(item) return CheckEquipmentSet(item) and not (item.bagID >= 0 and item.bagID <= 4) end
-		local onlyBankConsumables =		function(item) return item.type == consumable and not (item.bagID >= 0 and item.bagID <= 4) end
+		local onlyBankConsumables =		function(item) return item.type == consumabl and item.rarity ~= LE_ITEM_QUALITY_POORe and not (item.bagID >= 0 and item.bagID <= 4) end
 		local onlyRareEpics =	function(item) return item.rarity and item.rarity > 3 end
 		local onlyEpics =		function(item) return item.rarity and item.rarity > 3 end
 		local hideJunk =		function(item) return not item.rarity or item.rarity > 0 end

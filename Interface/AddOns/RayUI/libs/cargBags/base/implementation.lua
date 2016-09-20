@@ -309,7 +309,7 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 	local clink = GetContainerItemLink(bagID, slotID)
 
 	if(clink) then
-		i.texture, i.count, i.locked, i.quality, i.readable = GetContainerItemInfo(bagID, slotID)
+		i.texture, i.count, i.locked, i.quality, i.readable, _, _, _, i.noValue = GetContainerItemInfo(bagID, slotID)
 		i.cdStart, i.cdFinish, i.cdEnable = GetContainerItemCooldown(bagID, slotID)
 		i.isQuestItem, i.questID, i.questActive = GetContainerItemQuestInfo(bagID, slotID)
 		i.isInSet, i.setName = GetContainerItemEquipmentSetInfo(bagID, slotID)
