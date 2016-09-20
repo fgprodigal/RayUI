@@ -29,7 +29,7 @@ local function LoadSkin()
             frame.NameBorderLeft:Hide()
             frame.NameBorderRight:Hide()
             frame.NameBorderMid:Hide()
-            frame.IconBorder:Hide()
+            frame.IconBorder:Kill()
 
             frame.Icon:SetTexCoord(.08, .92, .08, .92)
             frame.Icon:SetDrawLayer("ARTWORK")

@@ -83,7 +83,7 @@ local function LoadSkin()
 		end
 
 		local function CreateLootSlot(self, id)
-			local slot = CreateFrame("Button", nil, self, "ItemButtonTemplate")
+			local slot = CreateFrame("Button", nil, self)
 			slot:SetPoint("TOPLEFT", 3, -20 - (id - 1) * (slotsize + 5))
 			slot:SetSize(slotsize, slotsize)
 			slot:SetBackdrop({
