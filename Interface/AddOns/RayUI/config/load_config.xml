@@ -2,8 +2,6 @@
 	<Script file="defaults.lua"/>
 	<Script file="addons.lua"/>
     <Script file="filters\watchers.lua"/>
-	<Script file="filters\reminders.lua"/>
     <Script file="filters\raid.lua"/>
-    <Script file="filters\raidcd.lua"/>
     <Script file="filters\unitframes.lua"/>
 </Ui>
