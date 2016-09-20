@@ -1,4 +1,4 @@
-﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB, GlobalDB
+﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local MM = R:NewModule("MiniMap", "AceEvent-3.0", "AceHook-3.0")
 MM.modName = L["小地图"]
 
