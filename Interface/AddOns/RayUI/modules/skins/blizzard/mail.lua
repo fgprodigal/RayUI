@@ -1,4 +1,4 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB, GlobalDB
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
@@ -127,16 +127,19 @@ local function LoadSkin()
 	end
 
 	for i = 1, ATTACHMENTS_MAX_SEND do
-		local button = _G["SendMailAttachment"..i]
-		local ic = _G["OpenMailAttachmentButton"..i.."IconTexture"]
+		local bu = _G["SendMailAttachment"..i]
+		local border = bu.IconBorder
 
-		button:StripTextures()
-		button:StyleButton(true)
-		ic:SetTexCoord(.08, .92, .08, .92)
+		bu:GetRegions():Hide()
 
-		local bg = CreateFrame("Frame", nil, button)
-		bg:Point("TOPLEFT", -1, 1)
-		bg:Point("BOTTOMRIGHT", 1, -1)
+		border:SetTexture(R["media"].blank)
+		border:SetPoint("TOPLEFT", -1, 1)
+		border:SetPoint("BOTTOMRIGHT", 1, -1)
+		border:SetDrawLayer("BACKGROUND")
+
+		local bg = CreateFrame("Frame", nil, bu)
+		bg:SetPoint("TOPLEFT", -1, 1)
+		bg:SetPoint("BOTTOMRIGHT", 1, -1)
 		bg:SetFrameLevel(0)
 		S:CreateBD(bg, .25)
 	end
@@ -144,32 +147,23 @@ local function LoadSkin()
 	for i = 1, ATTACHMENTS_MAX_RECEIVE do
 		local bu = _G["OpenMailAttachmentButton"..i]
 		local ic = _G["OpenMailAttachmentButton"..i.."IconTexture"]
+		local border = bu.IconBorder
 
-		bu:StripTextures()
-		bu:StyleButton(true)
+		bu:SetNormalTexture("")
+		bu:SetPushedTexture("")
 		ic:SetTexCoord(.08, .92, .08, .92)
 
+		border:SetTexture(R["media"].blank)
+		border:SetPoint("TOPLEFT", -1, 1)
+		border:SetPoint("BOTTOMRIGHT", 1, -1)
+		border:SetDrawLayer("BACKGROUND")
+
 		local bg = CreateFrame("Frame", nil, bu)
-		bg:Point("TOPLEFT", -1, 1)
-		bg:Point("BOTTOMRIGHT", 1, -1)
+		bg:SetPoint("TOPLEFT", -1, 1)
+		bg:SetPoint("BOTTOMRIGHT", 1, -1)
 		bg:SetFrameLevel(0)
 		S:CreateBD(bg, .25)
 	end
-
-	for i = 1, ATTACHMENTS_MAX_RECEIVE do
-			local bu = _G["OpenMailAttachmentButton"..i]
-			local ic = _G["OpenMailAttachmentButton"..i.."IconTexture"]
-
-			bu:SetNormalTexture("")
-			bu:SetPushedTexture("")
-			ic:SetTexCoord(.08, .92, .08, .92)
-
-			local bg = CreateFrame("Frame", nil, bu)
-			bg:Point("TOPLEFT", -1, 1)
-			bg:Point("BOTTOMRIGHT", 1, -1)
-			bg:SetFrameLevel(0)
-			S:CreateBD(bg, .25)
-		end
 
 	hooksecurefunc("SendMailFrame_Update", function()
 		for i = 1, ATTACHMENTS_MAX_SEND do

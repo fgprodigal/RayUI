@@ -1,4 +1,4 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB, GlobalDB
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
@@ -12,6 +12,7 @@ local function LoadSkin()
 	TradeSkillFrame.RankFrame.SetStatusBarColor = R.dummy
 	TradeSkillFrame.RankFrame:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
 	TradeSkillFrame.FilterButton:StripTextures(true)
+	S:CreateBDFrame(TradeSkillFrame.RankFrame)
 	S:Reskin(TradeSkillFrame.FilterButton)
 	TradeSkillFrame.LinkToButton:GetNormalTexture():SetTexCoord(0.25, 0.7, 0.37, 0.75)
 	TradeSkillFrame.LinkToButton:GetPushedTexture():SetTexCoord(0.25, 0.7, 0.45, 0.8)

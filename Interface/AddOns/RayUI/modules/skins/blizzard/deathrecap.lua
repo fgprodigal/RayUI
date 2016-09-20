@@ -1,12 +1,13 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB, GlobalDB
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
 	DeathRecapFrame:StripTextures()
 	S:ReskinClose(DeathRecapFrame.CloseXButton)
 	S:SetBD(DeathRecapFrame)
+	S:Reskin(select(8, DeathRecapFrame:GetChildren())) -- bottom close button has no parentKey
 
-	for i=1, 5 do
+	for i = 1, NUM_DEATH_RECAP_EVENTS do
 		local iconBorder = DeathRecapFrame["Recap"..i].SpellInfo.IconBorder
 		local icon = DeathRecapFrame["Recap"..i].SpellInfo.Icon
 		iconBorder:SetAlpha(0)

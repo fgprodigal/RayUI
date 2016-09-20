@@ -1,6 +1,7 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file='misc.lua'/>
 	<Script file='achievement.lua'/>
+	<Script file='adventuremap.lua'/>
 	<Script file='alerts.lua'/>
 	<Script file='alteration.lua'/>
 	<Script file='archaeology.lua'/>
@@ -21,6 +22,7 @@
 	<Script file='deathrecap.lua'/>
 	<Script file='dressup.lua'/>
 	<Script file='encounter.lua'/>
+	<Script file='flightmap.lua'/>
 	<Script file='friends.lua'/>
 	<Script file='garrison.lua'/>
 	<Script file='gmsurvey.lua'/>
@@ -33,7 +35,7 @@
 	<Script file='inspect.lua'/>
 	<Script file='itemsocketing.lua'/>
 	<Script file='itemupgrade.lua'/>
-	<Script file='lfguild.lua'/>
+	<Script file='lookingforguild.lua'/>
 	<Script file='loot.lua'/>
 	<Script file='loothistory.lua'/>
 	<Script file='lossofcontrol.lua'/>
@@ -52,7 +54,6 @@
 	<Script file='questinfo.lua'/>
 	<Script file='questmap.lua'/>
 	<Script file='raid.lua'/>
-	<Script file='reforging.lua'/>
 	<Script file='spellbook.lua'/>
 	<Script file='tabard.lua'/>
 	<Script file='talent.lua'/>

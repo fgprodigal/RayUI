@@ -1,4 +1,4 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB, GlobalDB
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
@@ -38,6 +38,13 @@ local function LoadSkin()
 	select(2, PaperDollSidebarTabs:GetRegions()):Hide()
 	select(6, PaperDollEquipmentManagerPaneEquipSet:GetRegions()):Hide()
 
+	CharacterStatsPane.ItemLevelCategory.Background:Hide()
+	S:CreateBD(CharacterStatsPane.ItemLevelCategory, .5)
+	CharacterStatsPane.AttributesCategory.Background:Hide()
+	S:CreateBD(CharacterStatsPane.AttributesCategory, .5)
+	CharacterStatsPane.EnhancementsCategory.Background:Hide()
+	S:CreateBD(CharacterStatsPane.EnhancementsCategory, .5)
+
 	S:ReskinClose(CharacterFrameCloseButton)
 	S:ReskinScroll(CharacterStatsPaneScrollBar)
 	S:ReskinScroll(PaperDollTitlesPaneScrollBar)
@@ -72,6 +79,23 @@ local function LoadSkin()
 
 	EquipmentFlyoutFrameButtons:DisableDrawLayer("BACKGROUND")
 	EquipmentFlyoutFrameButtons:DisableDrawLayer("ARTWORK")
+
+	-- [[ CharacterModelFrameControlFrame Button ]]
+	CharacterModelFrameControlFrame:DisableDrawLayer("BACKGROUND")
+	local buttons = {
+		"ZoomIn",
+		"ZoomOut",
+		"Pan",
+		"RotateLeft",
+		"RotateRight",
+		"RotateReset",
+	}
+	for i = 1, #buttons do
+		local cb = _G["CharacterModelFrameControlFrame"..buttons[i].."Button"]
+		_G["CharacterModelFrameControlFrame"..buttons[i].."ButtonBg"]:Hide()
+
+		S:Reskin(cb)
+	end
 
 	-- [[ Stats pane ]]
 

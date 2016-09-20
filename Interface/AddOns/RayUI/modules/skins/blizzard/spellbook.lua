@@ -1,4 +1,4 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB, GlobalDB
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
@@ -17,16 +17,6 @@ local function LoadSkin()
 		self.spellString:SetTextColor(1, 1, 1);
 		self.subSpellString:SetTextColor(1, 1, 1)
 	end)
-
-	local lightbds = {
-		"SecondaryProfession1",
-		"SecondaryProfession2",
-		"SecondaryProfession3",
-		"SecondaryProfession4"
-	}
-	for i = 1, #lightbds do
-		S:CreateBD(_G[lightbds[i]], .25)
-	end
 
 	for i = 1, 5 do
 		S:CreateTab(_G["SpellBookFrameTabButton"..i])
@@ -49,19 +39,29 @@ local function LoadSkin()
 	end
 
 	hooksecurefunc("SpellButton_UpdateButton", function(self)
+		if SpellBookFrame.bookType == BOOKTYPE_PROFESSION then return end
+
 		local slot, slotType = SpellBook_GetSpellBookSlot(self)
 		local name = self:GetName()
 		local subSpellString = _G[name.."SubSpellName"]
 
+		local isOffSpec = self.offSpecID ~= 0 and SpellBookFrame.bookType == BOOKTYPE_SPELL
+
 		subSpellString:SetTextColor(1, 1, 1)
+
 		if slotType == "FUTURESPELL" then
 			local level = GetSpellAvailableLevel(slot, SpellBookFrame.bookType)
-			if (level and level > UnitLevel("player")) then
-				self.RequiredLevelString:SetTextColor(.7, .7, .7)
+			if level and level > UnitLevel("player") then
 				self.SpellName:SetTextColor(.7, .7, .7)
 				subSpellString:SetTextColor(.7, .7, .7)
 			end
+		else
+			if slotType == "SPELL" and isOffSpec then
+				subSpellString:SetTextColor(.7, .7, .7)
+			end
 		end
+
+		self.RequiredLevelString:SetTextColor(.7, .7, .7)
 
 		local ic = _G[name.."IconTexture"]
 		if not ic.bg then return end
@@ -70,43 +70,32 @@ local function LoadSkin()
 		else
 			ic.bg:Hide()
 		end
-		if self.shine then
-			self.shine:SetAllPoints()
-		end
-		if _G[name.."AutoCastable"] then
-			_G[name.."AutoCastable"]:SetSize(75, 75)
-		end
-		for i = 1, SPELLS_PER_PAGE do
-			local bu = _G["SpellButton"..i]
-			local ic = _G["SpellButton"..i.."IconTexture"]
-
-			if _G["SpellButton"..i.."Highlight"] then
-				_G["SpellButton"..i.."Highlight"]:SetColorTexture(1, 1, 1, 0.3)
-				_G["SpellButton"..i.."Highlight"]:ClearAllPoints()
-				_G["SpellButton"..i.."Highlight"]:SetAllPoints(ic)
-			end
-
-			if ic:GetTexture() then
-				_G["SpellButton"..i.."TextBackground2"]:Show()
-			else
-				_G["SpellButton"..i.."TextBackground2"]:Hide()
-			end
-		end		
 	end)
 
-	for i = 1, 5 do
-		local tab = _G["SpellBookSkillLineTab"..i]
-		tab:StripTextures()
-		local a1, p, a2, x, y = tab:GetPoint()
-		tab:Point(a1, p, a2, x + 11, y)
-		S:CreateBG(tab)
-		S:CreateSD(tab, 5, 0, 0, 0, 1, 1)
-		_G["SpellBookSkillLineTab"..i.."TabardIconFrame"]:SetTexCoord(.08, .92, .08, .92)
-		select(4, tab:GetRegions()):SetTexCoord(.08, .92, .08, .92)
+	SpellBookSkillLineTab1:SetPoint("TOPLEFT", SpellBookSideTabsFrame, "TOPRIGHT", 5, -36)
 
-		tab:StyleButton(true)
-		tab:SetPushedTexture(nil)
-	end
+	hooksecurefunc("SpellBookFrame_UpdateSkillLineTabs", function()
+		for i = 1, GetNumSpellTabs() do
+			local tab = _G["SpellBookSkillLineTab"..i]
+
+			if not tab.styled then
+				tab:GetRegions():Hide()
+				tab:SetCheckedTexture(S["media"].checked)
+
+				S:CreateBG(tab)
+				S:CreateSD(tab, 5, 0, 0, 0, 1, 1)
+
+				local nt = tab:GetNormalTexture()
+				if nt then
+					nt:SetTexCoord(.08, .92, .08, .92)
+				end
+
+				tab.styled = true
+			end
+		end
+	end)
+
+	-- professions
 
 	local professions = {
 		"PrimaryProfession1",
@@ -119,6 +108,13 @@ local function LoadSkin()
 
 	for _, button in pairs(professions) do
 		local bu = _G[button]
+
+		local bg = CreateFrame("Frame", nil, bu)
+		bg:SetPoint("TOPLEFT")
+		bg:Point("BOTTOMRIGHT", 0, -4)
+		bg:SetFrameLevel(0)
+		S:CreateBD(bg, .25)
+
 		bu.professionName:SetTextColor(1, 1, 1)
 		bu.missingHeader:SetTextColor(1, 1, 1)
 		bu.missingText:SetTextColor(1, 1, 1)
@@ -142,6 +138,18 @@ local function LoadSkin()
 		bg:Point("BOTTOMRIGHT", 1, -1)
 		bg:SetFrameLevel(bu:GetFrameLevel()-1)
 		S:CreateBD(bg, .25)
+	end
+
+	for i = 1, 2 do
+		local br = _G["PrimaryProfession"..i.."IconBorder"]
+		local icon = _G["PrimaryProfession"..i.."Icon"]
+		local ulb = _G["PrimaryProfession"..i.."UnlearnButton"]
+
+		br:Hide()
+		S:ReskinIcon(icon)
+
+		ulb:ClearAllPoints()
+		ulb:SetPoint("RIGHT", _G["PrimaryProfession"..i.."ProfessionName"], "LEFT", -2, 0)
 	end
 
 	local professionbuttons = {
@@ -175,15 +183,6 @@ local function LoadSkin()
 			icon:Point("BOTTOMRIGHT", -2, 2)
 			S:CreateBG(icon)
 		end
-	end
-
-	for i = 1, 2 do
-		local bu = _G["PrimaryProfession"..i]
-		local bg = CreateFrame("Frame", nil, bu)
-		bg:SetPoint("TOPLEFT")
-		bg:Point("BOTTOMRIGHT", 0, -4)
-		bg:SetFrameLevel(0)
-		S:CreateBD(bg, .25)
 	end
 
 	SpellBookFrameTutorialButton.Ring:Hide()

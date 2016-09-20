@@ -1,11 +1,11 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB, GlobalDB
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
 	MerchantFrame:StripTextures(true)
-	MerchantBuyBackItem:StripTextures(true)
-
-	S:ReskinPortraitFrame(MerchantFrame, true)
+ 	MerchantBuyBackItem:StripTextures(true)
+ 
+ 	S:ReskinPortraitFrame(MerchantFrame, true)
 	MerchantExtraCurrencyInset:StripTextures()
 	MerchantExtraCurrencyBg:StripTextures()	
 	MerchantFrameInset:StripTextures()

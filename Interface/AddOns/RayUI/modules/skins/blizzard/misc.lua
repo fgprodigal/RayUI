@@ -1,4 +1,4 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB, GlobalDB
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
@@ -95,6 +95,7 @@ local function LoadSkin()
 		"InterfaceOptionsSocialPanelTwitterLoginButton",
 		"ChatConfigFrameOkayButton",
 		"ChatConfigFrameDefaultButton",
+		"ChatConfigFrameRedockButton",
 		"StackSplitOkayButton",
 		"StackSplitCancelButton",
 		"GameMenuButtonHelp",
@@ -116,7 +117,9 @@ local function LoadSkin()
 		"RolePollPopupAcceptButton",
 		"GhostFrame",
 		"InterfaceOptionsHelpPanelResetTutorials",
-		"SideDressUpModelResetButton"
+		"SideDressUpModelResetButton",
+		"InterfaceOptionsDisplayPanelResetTutorials",
+		"InterfaceOptionsSocialPanelRedockChat"
 	}
 
 	for i = 1, #buttons do
@@ -436,10 +439,7 @@ local function LoadSkin()
 		"Graphics_LiquidDetailDropDown",
 		"Graphics_SunshaftsDropDown",
 		"Graphics_ParticleDensityDropDown",
-		"Graphics_ViewDistanceDropDown",
-		"Graphics_EnvironmentalDetailDropDown",
 		"Graphics_DepthEffectsDropDown",
-		"Graphics_GroundClutterDropDown",
 		"Graphics_SSAODropDown",
 		"Graphics_DepthEffectsDropDown",
 		"Graphics_LightingQualityDropDown",
@@ -459,8 +459,15 @@ local function LoadSkin()
 		"Advanced_BufferingDropDown",
 		"Advanced_LagDropDown",
 		"Advanced_HardwareCursorDropDown",
+		"Advanced_MultisampleAntiAliasingDropDown",
+		"Advanced_MultisampleAlphaTest",
+		"Advanced_PostProcessAntiAliasingDropDown",
+		"Advanced_ResampleQualityDropDown",
+		"Advanced_GraphicsAPIDropDown",
+		"Advanced_PhysicsInteractionDropDown",
 		"AudioOptionsSoundPanelHardwareDropDown",
 		"AudioOptionsSoundPanelSoundChannelsDropDown",
+		"AudioOptionsSoundPanelSoundCacheSizeDropDown",
 		"AudioOptionsVoicePanelInputDeviceDropDown",
 		"AudioOptionsVoicePanelChatModeDropDown",
 		"AudioOptionsVoicePanelOutputDeviceDropDown",
@@ -475,6 +482,9 @@ local function LoadSkin()
 		"InterfaceOptionsCombatPanelLossOfControlDisarmDropDown",
 		"InterfaceOptionsCombatPanelLossOfControlRootDropDown",
 		"InterfaceOptionsDisplayPanelOutlineDropDown",
+		"InterfaceOptionsDisplayPanelSelfHighlightDropDown",
+		"InterfaceOptionsDisplayPanelDisplayDropDown",
+		"InterfaceOptionsDisplayPanelChatBubblesDropDown",
 		"InterfaceOptionsObjectivesPanelQuestSorting",
 		"InterfaceOptionsSocialPanelChatStyle",
 		"InterfaceOptionsSocialPanelTimestamps",
@@ -489,7 +499,10 @@ local function LoadSkin()
 		"InterfaceOptionsStatusTextPanelDisplayDropDown",
 		"InterfaceOptionsCameraPanelStyleDropDown",
 		"InterfaceOptionsMousePanelClickMoveStyleDropDown",
-		"InterfaceOptionsAccessibilityPanelColorFilterDropDown"
+		"InterfaceOptionsAccessibilityPanelColorFilterDropDown",
+		"CompactUnitFrameProfilesProfileSelector",
+		"CompactUnitFrameProfilesGeneralOptionsFrameSortByDropdown",
+		"CompactUnitFrameProfilesGeneralOptionsFrameHealthTextDropdown"
 	}
 	for i = 1, #dropdowns do
 		S:ReskinDropDown(_G[dropdowns[i]])
@@ -497,6 +510,9 @@ local function LoadSkin()
 
 	local sliders = {
 		"Graphics_Quality",
+		"Graphics_ViewDistanceSlider",
+		"Graphics_EnvironmentalDetailSlider",
+		"Graphics_GroundClutterSlider",
 		"Advanced_UIScaleSlider",
 		"Advanced_MaxFPSSlider",
 		"Advanced_MaxFPSBKSlider",
@@ -592,12 +608,25 @@ local function LoadSkin()
 		"InterfaceOptionsControlsPanelAutoLootCorpse",
 		"InterfaceOptionsControlsPanelInteractOnLeftClick",
 		"InterfaceOptionsCombatPanelTargetOfTarget",
-		"InterfaceOptionsCombatPanelAutoSelfCast",
+		"InterfaceOptionsCombatPanelFlashLowHealthWarning",
 		"InterfaceOptionsCombatPanelLossOfControl",
+		"InterfaceOptionsCombatPanelEnableFloatingCombatText",
+		"InterfaceOptionsCombatPanelAutoSelfCast",
 		"InterfaceOptionsDisplayPanelRotateMinimap",
+		"InterfaceOptionsDisplayPanelAJAlerts",
+		"InterfaceOptionsDisplayPanelShowTutorials",
 		"InterfaceOptionsSocialPanelProfanityFilter",
 		"InterfaceOptionsSocialPanelSpamFilter",
 		"InterfaceOptionsSocialPanelGuildMemberAlert",
+		"InterfaceOptionsSocialPanelBlockTrades",
+		"InterfaceOptionsSocialPanelBlockGuildInvites",
+		"InterfaceOptionsSocialPanelBlockChatChannelInvites",
+		"InterfaceOptionsSocialPanelShowAccountAchievments",
+		"InterfaceOptionsSocialPanelOnlineFriends",
+		"InterfaceOptionsSocialPanelOfflineFriends",
+		"InterfaceOptionsSocialPanelBroadcasts",
+		"InterfaceOptionsSocialPanelFriendRequests",
+		"InterfaceOptionsSocialPanelShowToastWindow",
 		"InterfaceOptionsSocialPanelEnableTwitter",
 		"InterfaceOptionsActionBarsPanelBottomLeft",
 		"InterfaceOptionsActionBarsPanelBottomRight",
@@ -606,16 +635,6 @@ local function LoadSkin()
 		"InterfaceOptionsActionBarsPanelLockActionBars",
 		"InterfaceOptionsActionBarsPanelAlwaysShowActionBars",
 		"InterfaceOptionsActionBarsPanelCountdownCooldowns",
-		"InterfaceOptionsNamesPanelMyName",
-		"InterfaceOptionsNamesPanelFriendlyPlayerNames",
-		"InterfaceOptionsNamesPanelGuilds",
-		"InterfaceOptionsNamesPanelGuildTitles",
-		"InterfaceOptionsNamesPanelTitles",
-		"InterfaceOptionsNamesPanelNonCombatCreature",
-		"InterfaceOptionsNamesPanelEnemyPlayerNames",
-		"InterfaceOptionsNamesPanelEnemyPets",
-		"InterfaceOptionsNamesPanelEnemyGuardians",
-		"InterfaceOptionsNamesPanelEnemyTotems",
 		"InterfaceOptionsNamesPanelUnitNameplatesEnemyMinus",
 		"InterfaceOptionsCombatTextPanelTargetDamage",
 		"InterfaceOptionsCombatTextPanelPeriodicDamage",
@@ -654,12 +673,12 @@ local function LoadSkin()
 		"InterfaceOptionsBuffsPanelCastableBuffs",
 		"InterfaceOptionsBuffsPanelConsolidateBuffs",
 		"InterfaceOptionsBuffsPanelShowAllEnemyDebuffs",
-		"InterfaceOptionsBattlenetPanelOnlineFriends",
-		"InterfaceOptionsBattlenetPanelOfflineFriends",
-		"InterfaceOptionsBattlenetPanelBroadcasts",
-		"InterfaceOptionsBattlenetPanelFriendRequests",
-		"InterfaceOptionsBattlenetPanelConversations",
-		"InterfaceOptionsBattlenetPanelShowToastWindow",
+		"InterfaceOptionsNamesPanelMyName",
+		"InterfaceOptionsNamesPanelNonCombatCreature",
+		"InterfaceOptionsNamesPanelFriendlyPlayerNames",
+		"InterfaceOptionsNamesPanelFriendlyMinions",
+		"InterfaceOptionsNamesPanelEnemyPlayerNames",
+		"InterfaceOptionsNamesPanelEnemyMinions",
 		"InterfaceOptionsCameraPanelFollowTerrain",
 		"InterfaceOptionsCameraPanelHeadBob",
 		"InterfaceOptionsCameraPanelWaterCollision",
@@ -668,11 +687,9 @@ local function LoadSkin()
 		"InterfaceOptionsMousePanelEnableMouseSpeed",
 		"InterfaceOptionsMousePanelClickToMove",
 		"InterfaceOptionsMousePanelWoWMouse",
-		"InterfaceOptionsHelpPanelShowTutorials",
-		"InterfaceOptionsHelpPanelEnhancedTooltips",
-		"InterfaceOptionsHelpPanelShowLuaErrors",
-		"InterfaceOptionsHelpPanelColorblindMode",
-		"InterfaceOptionsHelpPanelMovePad"
+		"InterfaceOptionsAccessibilityPanelMovePad",
+		"InterfaceOptionsAccessibilityPanelCinematicSubtitles",
+		"InterfaceOptionsAccessibilityPanelColorblindMode"
 	}
 	for i = 1, #checkboxes do
 		S:ReskinCheck(_G[checkboxes[i]])
@@ -687,7 +704,8 @@ local function LoadSkin()
 		"InterfaceOptionsCameraPanelMaxDistanceSlider",
 		"InterfaceOptionsCameraPanelFollowSpeedSlider",
 		"InterfaceOptionsMousePanelMouseSensitivitySlider",
-		"InterfaceOptionsMousePanelMouseLookSpeedSlider"
+		"InterfaceOptionsMousePanelMouseLookSpeedSlider",
+		"InterfaceOptionsAccessibilityPanelColorblindStrengthSlider"
 	}
 	for i = 1, #sliders do
 		S:ReskinSlider(_G[sliders[i]])
@@ -732,7 +750,7 @@ local function LoadSkin()
 		"HelpFrameTicketScrollFrame",
 		"HelpFrameGM_ResponseScrollFrame1",
 		"HelpFrameGM_ResponseScrollFrame2",
-		"GuildRegistrarFrameEditBox",
+		"GuildRegistrarFrameEditBox"
 	}
 	for i = 1, #lightbds do
 		S:CreateBD(_G[lightbds[i]], .25)
@@ -742,11 +760,12 @@ local function LoadSkin()
 	S:ReskinClose(BNToastFrameCloseButton)
 	BNToastFrame:HookScript("OnShow", function(self)
 		self:ClearAllPoints()
-		self:SetPoint("TOPLEFT", RayUIArtiBar, "BOTTOMLEFT", 0, -5)
+		self:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", -3, -17)
 	end)
 
 	ChatConfigFrameDefaultButton:SetWidth(125)
 	ChatConfigFrameDefaultButton:SetPoint("TOPLEFT", ChatConfigCategoryFrame, "BOTTOMLEFT", 0, -4)
+	ChatConfigFrameRedockButton:SetPoint("TOPLEFT", ChatConfigCategoryFrame, "BOTTOMLEFT", 127, -4)
 	ChatConfigFrameOkayButton:SetPoint("TOPRIGHT", ChatConfigBackgroundFrame, "BOTTOMRIGHT", 0, -4)
 
 	TicketStatusFrame:ClearAllPoints()

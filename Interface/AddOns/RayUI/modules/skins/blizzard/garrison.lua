@@ -1,4 +1,4 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB, GlobalDB
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
@@ -556,6 +556,7 @@ local function LoadSkin()
 	for i = 1, 14 do
 		select(i, GarrisonBuildingFrame:GetRegions()):Hide()
 	end
+	GarrisonBuildingFrame.GarrCorners:Hide()
 	
 	GarrisonBuildingFrame.TitleText:Show()
 	S:CreateBD(GarrisonBuildingFrame)
@@ -732,6 +733,7 @@ local function LoadSkin()
 
 	GarrisonShipyardFrame:StripTextures(true)
 	GarrisonShipyardFrame.BorderFrame:StripTextures(true)
+	GarrisonShipyardFrame.BorderFrame.GarrCorners:Hide()
 	
 	S:CreateBD(GarrisonShipyardFrame)
 
@@ -953,7 +955,12 @@ local function LoadSkin()
 					S:CreateTab(GarrisonMissionFrameTab4)
 				end
 
-				S:ReskinClose(MissionPage.CloseButton)
+				local cb = GarrisonMissionFrame.MissionTab.MissionPage.CloseButton
+				S:ReskinClose(cb)
+				cb:Point("TOPRIGHT", -14, -4)
+
+				S:CreateTab(GarrisonShipyardFrameTab3)
+				S:CreateTab(GarrisonLandingPageTab4)
 
 				self:UnregisterEvent("ADDON_LOADED")
 			end

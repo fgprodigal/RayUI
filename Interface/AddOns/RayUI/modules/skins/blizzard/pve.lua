@@ -1,15 +1,15 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB, GlobalDB
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
 	local r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b
 	PVEFrame:DisableDrawLayer("ARTWORK")
 	PVEFrameLeftInset:DisableDrawLayer("BORDER")
-	PVEFrameBlueBg:Hide()
-	PVEFrameLeftInsetBg:Hide()
-	PVEFrame.shadows:Hide()
-	select(24, PVEFrame:GetRegions()):Hide()
-	select(25, PVEFrame:GetRegions()):Hide()
+	PVEFrameBlueBg:Kill()
+	PVEFrameLeftInsetBg:Kill()
+	PVEFrame.shadows:Kill()
+	select(24, PVEFrame:GetRegions()):Kill()
+	select(25, PVEFrame:GetRegions()):Kill()
 
 	PVEFrameTab2:SetPoint("LEFT", PVEFrameTab1, "RIGHT", -15, 0)
 	PVEFrameTab3:SetPoint("LEFT", PVEFrameTab2, "RIGHT", -15, 0)
@@ -85,6 +85,9 @@ local function LoadSkin()
 	S:ReskinCheck(LFDQueueFrameRoleButtonHealer:GetChildren())
 	S:ReskinCheck(LFDQueueFrameRoleButtonDPS:GetChildren())
 	S:ReskinCheck(LFDQueueFrameRoleButtonLeader:GetChildren())
+	for i = 1, 20 do
+		S:ReskinCheck(_G["LFDQueueFrameSpecificListButton"..i.."EnableButton"])
+	end
 	S:ReskinCheck(RaidFinderQueueFrameRoleButtonTank:GetChildren())
 	S:ReskinCheck(RaidFinderQueueFrameRoleButtonHealer:GetChildren())
 	S:ReskinCheck(RaidFinderQueueFrameRoleButtonDPS:GetChildren())
@@ -420,13 +423,18 @@ local function LoadSkin()
 	S:Reskin(EntryCreation.CancelButton)
 	S:CreateBD(EntryCreation.Description, 0)
 	S:ReskinInput(EntryCreation.Name)
+	S:ReskinInput(EntryCreation.Description)
 	S:ReskinInput(EntryCreation.ItemLevel.EditBox)
+	S:ReskinInput(EntryCreation.HonorLevel.EditBox)
 	S:ReskinInput(EntryCreation.VoiceChat.EditBox)
 	S:ReskinDropDown(EntryCreation.CategoryDropDown)
 	S:ReskinDropDown(EntryCreation.GroupDropDown)
 	S:ReskinDropDown(EntryCreation.ActivityDropDown)
 	S:ReskinCheck(EntryCreation.ItemLevel.CheckButton)
+	S:ReskinCheck(EntryCreation.HonorLevel.CheckButton)
 	S:ReskinCheck(EntryCreation.VoiceChat.CheckButton)
+
+	S:ReskinCheck(LFGListFrame.ApplicationViewer.AutoAcceptButton)
 
 	-- Activity finder
 

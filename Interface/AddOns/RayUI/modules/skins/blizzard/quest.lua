@@ -1,4 +1,4 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB, GlobalDB
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
@@ -85,6 +85,10 @@ local function LoadSkin()
 	for _, questButton in pairs({"QuestFrameAcceptButton", "QuestFrameDeclineButton", "QuestFrameCompleteQuestButton", "QuestFrameCompleteButton", "QuestFrameGoodbyeButton", "QuestFrameGreetingGoodbyeButton"}) do
 		S:Reskin(_G[questButton])
 	end
+	S:Reskin(QuestFrameDetailPanel.IgnoreButton)
+	S:Reskin(QuestFrameDetailPanel.UnignoreButton)
+	S:Reskin(QuestFrameProgressPanel.IgnoreButton)
+	S:Reskin(QuestFrameProgressPanel.UnignoreButton)
 
 	S:ReskinScroll(QuestProgressScrollFrameScrollBar)
 	S:ReskinScroll(QuestRewardScrollFrameScrollBar)
@@ -138,10 +142,22 @@ local function LoadSkin()
 	end)
 
 	S:ReskinScroll(QuestNPCModelTextScrollFrameScrollBar)
-	S:Reskin(QuestFrameDetailPanel.IgnoreButton)
-	S:Reskin(QuestFrameDetailPanel.UnignoreButton)
-	S:Reskin(QuestFrameProgressPanel.IgnoreButton)
-	S:Reskin(QuestFrameProgressPanel.UnignoreButton)
+
+	--[[ Item text ]]
+	
+	select(18, ItemTextFrame:GetRegions()):Hide()
+	ItemTextFramePageBg:SetAlpha(0)
+	ItemTextPrevPageButton:GetRegions():Hide()
+	ItemTextNextPageButton:GetRegions():Hide()
+	ItemTextMaterialTopLeft:SetAlpha(0)
+	ItemTextMaterialTopRight:SetAlpha(0)
+	ItemTextMaterialBotLeft:SetAlpha(0)
+	ItemTextMaterialBotRight:SetAlpha(0)
+	ItemTextScrollFrameScrollBar:Hide()
+
+	S:ReskinPortraitFrame(ItemTextFrame, true)
+	S:ReskinArrow(ItemTextPrevPageButton, "left")
+	S:ReskinArrow(ItemTextNextPageButton, "right")
 end
 
 S:RegisterSkin("RayUI", LoadSkin)

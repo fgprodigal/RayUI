@@ -1,8 +1,10 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB, GlobalDB
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
-	BarberShopFrame:GetRegions():Hide()
+	for i = 1, 3 do
+		select(i, BarberShopFrame:GetRegions()):Hide()
+	end
 	BarberShopFrameMoneyFrame:GetRegions():Hide()
 	BarberShopAltFormFrameBackground:Hide()
 	BarberShopAltFormFrameBorder:Hide()

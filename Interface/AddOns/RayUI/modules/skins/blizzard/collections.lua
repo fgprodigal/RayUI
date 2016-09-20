@@ -1,4 +1,4 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB, GlobalDB
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local S = R:GetModule("Skins")
 
 local ToyBoxFilterFixerFilter = false
@@ -215,7 +215,7 @@ local function LoadSkin()
 		select(i, card.xpBar:GetRegions()):Hide()
 	end
 
-	-- card.xpBar:SetStatusBarTexture(R["media"].gloss)
+	card.xpBar:SetStatusBarTexture(R["media"].gloss)
 	S:CreateBDFrame(card.xpBar, .25)
 
 	PetJournalPetCardHealthFramehealthStatusBarLeft:Hide()
@@ -223,7 +223,7 @@ local function LoadSkin()
 	PetJournalPetCardHealthFramehealthStatusBarMiddle:Hide()
 	PetJournalPetCardHealthFramehealthStatusBarBGMiddle:Hide()
 
-	-- card.HealthFrame.healthBar:SetStatusBarTexture(R["media"].gloss)
+	card.HealthFrame.healthBar:SetStatusBarTexture(R["media"].gloss)
 	S:CreateBDFrame(card.HealthFrame.healthBar, .25)
 
 	for i = 1, 6 do
@@ -273,7 +273,7 @@ local function LoadSkin()
 			select(i, bu.xpBar:GetRegions()):Hide()
 		end
 
-		-- bu.xpBar:SetStatusBarTexture(R["media"].gloss)
+		bu.xpBar:SetStatusBarTexture(R["media"].gloss)
 		S:CreateBDFrame(bu.xpBar, .25)
 
 		_G["PetJournalLoadoutPet"..i.."HealthFramehealthStatusBarLeft"]:Hide()
@@ -281,7 +281,7 @@ local function LoadSkin()
 		_G["PetJournalLoadoutPet"..i.."HealthFramehealthStatusBarMiddle"]:Hide()
 		_G["PetJournalLoadoutPet"..i.."HealthFramehealthStatusBarBGMiddle"]:Hide()
 
-		-- bu.healthFrame.healthBar:SetStatusBarTexture(R["media"].gloss)
+		bu.healthFrame.healthBar:SetStatusBarTexture(R["media"].gloss)
 		S:CreateBDFrame(bu.healthFrame.healthBar, .25)
 
 		for j = 1, 3 do
@@ -468,6 +468,14 @@ local function LoadSkin()
 
 	S:CreateBDFrame(progressBar, .25)
 
+	-- ModelRC
+
+	for i = 1, 3 do
+		for j = 1, 6 do
+			ModelsFrame["ModelR"..i.."C"..j]:GetRegions():Hide()
+		end
+	end
+
 	-- [[ Wardrobe ]]
 
 	local WardrobeFrame = WardrobeFrame
@@ -505,6 +513,25 @@ local function LoadSkin()
 			S:ReskinIcon(slot.Icon)
 		end
 	end
+
+	-- [[ WardrobeTransmogFrameControlFrame Button ]]
+	WardrobeTransmogFrameControlFrame:DisableDrawLayer("BACKGROUND")
+	local buttons = {
+		"ZoomIn",
+		"ZoomOut",
+		"Pan",
+		"RotateLeft",
+		"RotateRight",
+		"RotateReset",
+	}
+	for i = 1, #buttons do
+		local cb = _G["WardrobeTransmogFrameControlFrame"..buttons[i].."Button"]
+		_G["WardrobeTransmogFrameControlFrame"..buttons[i].."ButtonBg"]:Hide()
+
+		S:Reskin(cb)
+	end
+
+	S:Reskin(WardrobeTransmogFrame.Model.ClearAllPendingButton)
 end
 
 S:RegisterSkin("Blizzard_Collections", LoadSkin)

@@ -1,4 +1,4 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB, GlobalDB
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
@@ -46,6 +46,23 @@ local function LoadSkin()
 	SideDressUpModel.bg:SetPoint("BOTTOMRIGHT", 1, -1)
 	SideDressUpModel.bg:SetFrameLevel(SideDressUpModel:GetFrameLevel()-1)
 	S:CreateBD(SideDressUpModel.bg)
+
+	-- [[ DressUpModelControlFrame Button ]]
+	DressUpModelControlFrame:DisableDrawLayer("BACKGROUND")
+	local buttons = {
+		"ZoomIn",
+		"ZoomOut",
+		"Pan",
+		"RotateLeft",
+		"RotateRight",
+		"RotateReset",
+	}
+	for i = 1, #buttons do
+		local cb = _G["DressUpModelControlFrame"..buttons[i].."Button"]
+		_G["DressUpModelControlFrame"..buttons[i].."ButtonBg"]:Hide()
+
+		S:Reskin(cb)
+	end
 end
 
 S:RegisterSkin("RayUI", LoadSkin)

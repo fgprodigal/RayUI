@@ -1,4 +1,4 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB, GlobalDB
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
@@ -35,6 +35,9 @@ local function LoadSkin()
 	BorderFrame.CloseButton:SetPoint("TOPRIGHT", -9, -6)
 
 	WorldMapLevelDropDown:SetPoint("TOPLEFT", -14, 2)
+
+	WorldMapPlayerUpperIcon:SetTexture("Interface\\AddOns\\RayUI\\media\\MinimapArrow")
+	WorldMapPlayerLowerIcon:SetTexture("Interface\\AddOns\\RayUI\\media\\MinimapArrow")
 
 	-- [[ Size up / down buttons ]]
 

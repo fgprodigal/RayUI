@@ -1,4 +1,4 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB, GlobalDB
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
@@ -294,6 +294,9 @@ local function LoadSkin()
 
 	S:ReskinPortraitFrame(WowTokenGameTimeTutorial, true)
 	S:Reskin(StoreButton)
+
+	WowTokenGameTimeTutorial.LeftDisplay.Label:SetVertexColor(1, 1, 1)
+	WowTokenGameTimeTutorial.RightDisplay.Label:SetVertexColor(1, 1, 1)
 
 	-- Token
 
