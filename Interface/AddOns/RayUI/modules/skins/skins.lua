@@ -787,6 +787,30 @@ function S:ReskinExpandOrCollapse(f)
 	f.plus:SetVertexColor(1, 1, 1)
 end
 
+function S:ReskinGarrisonPortrait(portrait, isTroop)
+	portrait:SetSize(portrait.Portrait:GetSize())
+	S:CreateBD(portrait, 1)
+
+	portrait.Portrait:ClearAllPoints()
+	portrait.Portrait:SetPoint("TOPLEFT")
+
+	portrait.PortraitRing:Hide()
+	portrait.PortraitRingQuality:SetTexture(nil)
+	portrait.PortraitRingCover:SetTexture(nil)
+	portrait.LevelBorder:SetAlpha(0)
+
+	if not isTroop then
+		local lvlBG = portrait:CreateTexture(nil, "BORDER")
+		lvlBG:SetColorTexture(0, 0, 0, 0.5)
+		lvlBG:SetPoint("TOPLEFT", portrait, "BOTTOMLEFT", 1, 12)
+		lvlBG:SetPoint("BOTTOMRIGHT", portrait, -1, 1)
+
+		local level = portrait.Level
+		level:ClearAllPoints()
+		level:SetPoint("CENTER", lvlBG)
+	end
+end
+
 function S:RegisterSkin(name, loadFunc)
 	if name == 'RayUI' then
 		tinsert(self.SkinFuncs["RayUI"], loadFunc)
