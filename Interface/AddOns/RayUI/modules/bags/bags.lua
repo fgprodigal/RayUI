@@ -3,6 +3,7 @@ local B = R:NewModule("Bags", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0")
 local S = R:GetModule("Skins")
 
 local cargBags = select(2, ...).cargBags
+local consumable = AUCTION_CATEGORY_CONSUMABLES
 
 B.modName = L["背包"]
 
@@ -79,6 +80,10 @@ local function CheckEquipmentSet(item)
 	return false
 end
 
+function B:IsConsumableItem(item)
+	return item.type == AUCTION_CATEGORY_CONSUMABLES and item.rarity ~= LE_ITEM_QUALITY_POOR
+end
+
 function B:Initialize()
 	if B.db.bagWidth > 20 then B.db.bagWidth = 10 end
 	if B.db.bankWidth > 20 then B.db.bankWidth = 12 end
@@ -93,16 +98,15 @@ function B:Initialize()
 
 	local f = {}
 	function RayUI_ContainerFrame:OnInit()
-		local consumable = AUCTION_CATEGORY_CONSUMABLES
 		-- The filters control which items go into which container
 		local INVERTED = -1 -- with inverted filters (using -1), everything goes into this bag when the filter returns false
-		local onlyBags = function(item) return item.bagID >= 0 and item.bagID <= 4 and not CheckEquipmentSet(item) and item.type ~= consumable end
-		local onlyBank =		function(item) return item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11 and not CheckEquipmentSet(item) and item.type ~= consumable end
+		local onlyBags = function(item) return item.bagID >= 0 and item.bagID <= 4 and not CheckEquipmentSet(item) and not B:IsConsumableItem(item) end
+		local onlyBank =		function(item) return item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11 and not CheckEquipmentSet(item) and not B:IsConsumableItem(item) end
 		local onlyReagent =		function(item) return item.bagID == -3 end
 		local onlyBagSets =		function(item) return CheckEquipmentSet(item) and not (item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11) end
-		local onlyBagConsumables =		function(item) return item.type == consumable and item.rarity ~= LE_ITEM_QUALITY_POOR and not (item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11) end
+		local onlyBagConsumables =		function(item) return B:IsConsumableItem(item) and not (item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11) end
 		local onlyBankSets =	function(item) return CheckEquipmentSet(item) and not (item.bagID >= 0 and item.bagID <= 4) end
-		local onlyBankConsumables =		function(item) return item.type == consumabl and item.rarity ~= LE_ITEM_QUALITY_POORe and not (item.bagID >= 0 and item.bagID <= 4) end
+		local onlyBankConsumables =		function(item) return B:IsConsumableItem(item) and not (item.bagID >= 0 and item.bagID <= 4) end
 		local onlyRareEpics =	function(item) return item.rarity and item.rarity > 3 end
 		local onlyEpics =		function(item) return item.rarity and item.rarity > 3 end
 		local hideJunk =		function(item) return not item.rarity or item.rarity > 0 end
@@ -374,7 +378,6 @@ function B:Initialize()
 			setname:SetFont(R["media"].font, R["media"].fontsize, "THINOUTLINE")
 			setname:SetText(string.format(EQUIPMENT_SETS,' '))
 		elseif name == "Consumables" or name == "BankConsumables" then
-			local consumable = AUCTION_CATEGORY_CONSUMABLES
 			local setname = self:CreateFontString(nil,"OVERLAY")
 			setname:SetPoint("TOPLEFT", self, "TOPLEFT",5,-5)
 			setname:SetFont(R["media"].font, R["media"].fontsize, "THINOUTLINE")
