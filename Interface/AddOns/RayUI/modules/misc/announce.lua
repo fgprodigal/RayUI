@@ -13,26 +13,10 @@ function mod:COMBAT_LOG_EVENT_UNFILTERED(event, timestamp, eventType, hideCaster
 		local icon =GetSpellTexture(id)
 
 		if eventType=="SPELL_INTERRUPT" then
-			local inRaid, inPartyLFG = IsInRaid(), IsPartyLFG()
-			if IsInGroup() then
-				--Skirmish/non-rated arenas need to use INSTANCE_CHAT but IsPartyLFG() returns "false"
-				local _, instanceType = IsInInstance()
-				if instanceType and instanceType == "arena" then
-					local skirmish = IsArenaSkirmish()
-					local _, isRegistered = IsActiveBattlefieldArena()
-					if skirmish or not isRegistered then
-						inPartyLFG = true
-					end
-					inRaid = false --IsInRaid() returns true for arenas and they should not be considered a raid
-				end
-
-				if inPartyLFG then
-					SendChatMessage(msg..": "..destName.." \124cff71d5ff\124Hspell:"..id.."\124h["..effect.."]\124h\124r!", "INSTANCE_CHAT")
-				elseif inRaid then
-					SendChatMessage(msg..": "..destName.." \124cff71d5ff\124Hspell:"..id.."\124h["..effect.."]\124h\124r!", "RAID")
-				else
-					SendChatMessage(msg..": "..destName.." \124cff71d5ff\124Hspell:"..id.."\124h["..effect.."]\124h\124r!", "PARTY")
-				end
+			if IsInRaid() then
+				SendChatMessage(msg..": "..destName.." \124cff71d5ff\124Hspell:"..id..":0\124h["..effect.."]\124h\124r!", (not IsInRaid(LE_PARTY_CATEGORY_HOME) and IsInRaid(LE_PARTY_CATEGORY_INSTANCE)) and "INSTANCE_CHAT" or "RAID")
+			elseif IsInGroup() then
+				SendChatMessage(msg..": "..destName.." \124cff71d5ff\124Hspell:"..id..":0\124h["..effect.."]\124h\124r!", (not IsInGroup(LE_PARTY_CATEGORY_HOME) and IsInGroup(LE_PARTY_CATEGORY_INSTANCE)) and "INSTANCE_CHAT" or "PARTY")
 			end
 		end
 
