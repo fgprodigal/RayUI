@@ -79,21 +79,31 @@ local function LoadSkin()
 			local tab = _G["SpellBookSkillLineTab"..i]
 
 			if not tab.styled then
-				tab:GetRegions():Hide()
-				tab:SetCheckedTexture(S["media"].checked)
-
-				S:CreateBG(tab)
-				S:CreateSD(tab, 5, 0, 0, 0, 1, 1)
-
-				local nt = tab:GetNormalTexture()
-				if nt then
-					nt:SetTexCoord(.08, .92, .08, .92)
+				tab:StripTextures()
+				-- Avoid a lua error when using the character boost. The spells are learned through "combat training" and are not ready to be skinned.
+				if tab:GetNormalTexture() then
+					tab:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
 				end
+				tab.pushed = true
+				tab:CreateShadow("Background")
+				tab:StyleButton(true)
+				hooksecurefunc(tab:GetHighlightTexture(), "SetTexture", function(self, texPath)
+					if texPath ~= nil then
+						self:SetPushedTexture(nil)
+					end
+				end)
+
+				hooksecurefunc(tab:GetCheckedTexture(), "SetTexture", function(self, texPath)
+					if texPath ~= nil then
+						self:SetHighlightTexture(nil)
+					end
+				end)
 
 				tab.styled = true
 			end
 		end
 	end)
+	SpellBookFrame_UpdateSkillLineTabs()
 
 	-- professions
 
