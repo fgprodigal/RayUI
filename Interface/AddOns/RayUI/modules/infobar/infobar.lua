@@ -180,9 +180,9 @@ function RayUI_InfoBarButton_OnUpdate(self, elapsed)
 	end
 end
 
-function RayUI_InfoBarButton_OnEvent(self, event)
+function RayUI_InfoBarButton_OnEvent(self, event, ...)
 	if self.eventFunc then
-		self.eventFunc(self, event)
+		self.eventFunc(self, event, ...)
 	end
 end
 

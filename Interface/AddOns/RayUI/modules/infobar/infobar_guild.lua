@@ -12,6 +12,8 @@ local PlayerStatusValToStr = {
 local displayString = string.join("", GUILD, ": %d|r")
 local noGuildString = string.join("", "", L["没有公会"])
 local GuildSection = {}
+local resendRequest = false
+local FRIEND_ONLINE
 
 local function Guild_TabletClickFunc(name)
 	if not name then return end
@@ -179,12 +181,36 @@ local function Guild_OnClick(self)
 	end
 end
 
-local function Guild_OnEvent(self)
-	if IsInGuild() then
-		self:SetText(GUILD..": "..select(3, GetNumGuildMembers()))
-	else
-		self:SetText(LOOKINGFORGUILD)
-	end
+local eventHandlers = {
+	["CHAT_MSG_SYSTEM"] = function(self, arg1)
+		if arg1 and arg1:find(FRIEND_ONLINE) then
+			resendRequest = true
+		end
+	end,
+	["PLAYER_ENTERING_WORLD"] = function (self, arg1)
+		if not GuildFrame and IsInGuild() then
+			LoadAddOn("Blizzard_GuildUI")
+			GuildRoster()
+		end
+	end,
+	["GUILD_ROSTER_UPDATE"] = function (self)
+		if(resendRequest) then
+			resendRequest = false
+			return GuildRoster()
+		end
+	end,
+	["PLAYER_GUILD_UPDATE"] = function (self, arg1)
+		GuildRoster()
+	end,
+	["GUILD_MOTD"] = function (self, arg1)
+	end,
+}
+
+local function Guild_OnEvent(self, event, ...)
+	if not FRIEND_ONLINE then FRIEND_ONLINE = select(2, strsplit("cff00ffff", ERR_FRIEND_ONLINE_SS, 2)) end
+
+	eventHandlers[event](self, select(1, ...))
+	self:SetText(GUILD..": "..select(3, GetNumGuildMembers()))
 end
 
 local function Guild_OnEnter(self)
@@ -226,7 +252,6 @@ do	-- Initialize
 	info.clickFunc = Guild_OnClick
 	info.events = { "PLAYER_ENTERING_WORLD", "CHAT_MSG_SYSTEM", "GUILD_ROSTER_UPDATE", "PLAYER_GUILD_UPDATE", "GUILD_MOTD" }
 	info.eventFunc = Guild_OnEvent
-	info.initFunc = Guild_OnEvent
 	info.tooltipFunc = Guild_OnEnter
 	
 	IF:RegisterInfoBarType("Guild", info)
