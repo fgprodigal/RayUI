@@ -3,7 +3,7 @@ local M = R:GetModule("Misc")
 local mod = M:NewModule("AutoScreeshot", "AceEvent-3.0")
 
 function mod:TakeScreenshot(event, ...)
-	Screenshot()
+	C_Timer.After(1.2, Screenshot)
 end
 
 function mod:Initialize()
