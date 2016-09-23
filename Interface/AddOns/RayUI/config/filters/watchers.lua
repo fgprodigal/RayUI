@@ -1076,7 +1076,9 @@ R["Watcher"] = {
 				--瘋狂殘念
                 { spellID = 197937, unitId = "player", caster = "player", filter = "BUFF" },
 				--虛空射綫
-                { spellID = 205372, unitId = "player", caster = "player", filter = "BUFF" },				
+                { spellID = 205372, unitId = "player", caster = "player", filter = "BUFF" },
+                --虚空形态				
+				{ spellID = 194249, unitId = "player", caster = "player", filter = "BUFF" },
             },
             {
                 name = "目标重要buff&debuff",
