@@ -648,6 +648,14 @@ function CH:OnHyperlinkLeave(frame, linkData, link)
 	end
 end
 
+function CH:ScrollToBottom(frame)
+	frame:ScrollToBottom()
+
+	self:CancelTimer(frame.ScrollTimer, true)
+
+	_G[frame:GetName().."ButtonFrameBottomButton"]:Hide()
+end
+
 function CH:OnMouseScroll(frame, dir)
     local bb = _G[frame:GetName().."ButtonFrameBottomButton"]
 	if dir > 0 then
@@ -658,6 +666,12 @@ function CH:OnMouseScroll(frame, dir)
 			frame:ScrollUp()
 			frame:ScrollUp()
 		end
+
+		if frame.ScrollTimer then
+				CH:CancelTimer(frame.ScrollTimer, true)
+			end
+
+		frame.ScrollTimer = CH:ScheduleTimer("ScrollToBottom", 15, frame)
 	elseif dir < 0 then
 		if IsShiftKeyDown() then
 			frame:ScrollToBottom()
