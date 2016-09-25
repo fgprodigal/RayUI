@@ -17,4 +17,4 @@ local function LoadSkin()
     S:Reskin(PetitionFrameCancelButton)
 end
 
-S:RegisterSkin("RayUI", LoadSkin)
+S:AddCallback("Petition", LoadSkin)

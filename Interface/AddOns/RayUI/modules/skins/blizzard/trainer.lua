@@ -97,4 +97,4 @@ local function LoadSkin()
 	S:ReskinDropDown(ClassTrainerFrameFilterDropDown)
 end
 
-S:RegisterSkin("Blizzard_TrainerUI", LoadSkin)
+S:AddCallbackForAddon("Blizzard_TrainerUI", "Trainer", LoadSkin)

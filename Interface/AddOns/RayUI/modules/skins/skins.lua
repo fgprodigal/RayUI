@@ -3,8 +3,9 @@ local S = R:NewModule("Skins", "AceEvent-3.0")
 local LSM = LibStub("LibSharedMedia-3.0")
 S.modName = L["插件美化"]
 
-S.SkinFuncs = {}
-S.SkinFuncs["RayUI"] = {}
+S.allowBypass = {}
+S.addonCallbacks = {}
+S.nonAddonCallbacks = {}
 
 local alpha
 local backdropcolorr, backdropcolorg, backdropcolorb
@@ -811,54 +812,112 @@ function S:ReskinGarrisonPortrait(portrait, isTroop)
 	end
 end
 
-function S:RegisterSkin(name, loadFunc)
-	if name == 'RayUI' then
-		tinsert(self.SkinFuncs["RayUI"], loadFunc)
-	else
-		self.SkinFuncs[name] = loadFunc
+--Add callback for skin that relies on another addon.
+--These events will be fired when the addon is loaded.
+function S:AddCallbackForAddon(addonName, eventName, loadFunc, forceLoad, bypass)
+	if not addonName or type(addonName) ~= "string" then
+		R:Print("Invalid argument #1 to S:AddCallbackForAddon (string expected)")
+		return
+	elseif not eventName or type(eventName) ~= "string" then
+		R:Print("Invalid argument #2 to S:AddCallbackForAddon (string expected)")
+		return
+	elseif not loadFunc or type(loadFunc) ~= "function" then
+		R:Print("Invalid argument #3 to S:AddCallbackForAddon (function expected)")
+		return
 	end
+
+	if bypass then
+		self.allowBypass[addonName] = true
+	end
+
+	--Create an event registry for this addon, so that we can fire multiple events when this addon is loaded
+	if not self.addonCallbacks[addonName] then
+		self.addonCallbacks[addonName] = {}
+	end
+	
+	if self.addonCallbacks[addonName][eventName] then
+		--Don't allow a registered callback to be overwritten
+		R:Print("Invalid argument #2 to S:AddCallbackForAddon (event name is already registered, please use a unique event name)")
+		return
+	end
+
+	--Register loadFunc to be called when event is fired
+	R.RegisterCallback(R, eventName, loadFunc)
+
+	if forceLoad then
+		R.callbacks:Fire(eventName)
+	else
+		--Insert eventName in this addons' registry
+		self.addonCallbacks[addonName][eventName] = true
+	end
+end
+
+--Add callback for skin that does not rely on a another addon.
+--These events will be fired when the Skins module is initialized.
+function S:AddCallback(eventName, loadFunc)
+	if not eventName or type(eventName) ~= "string" then
+		R:Print("Invalid argument #1 to S:AddCallback (string expected)")
+		return
+	elseif not loadFunc or type(loadFunc) ~= "function" then
+		R:Print("Invalid argument #2 to S:AddCallback (function expected)")
+		return
+	end
+
+	if self.nonAddonCallbacks[eventName] then
+		--Don't allow a registered callback to be overwritten
+		R:Print("Invalid argument #1 to S:AddCallback (event name is already registered, please use a unique event name)")
+		return
+	end
+
+	--Add event name to registry
+	self.nonAddonCallbacks[eventName] = true
+
+	--Register loadFunc to be called when event is fired
+	R.RegisterCallback(R, eventName, loadFunc)
 end
 
 function S:ADDON_LOADED(event, addon)
 	if IsAddOnLoaded("Skinner") or IsAddOnLoaded("Aurora") or addon == "RayUI" then return end
-	if self.SkinFuncs[addon] then
-		self.SkinFuncs[addon]()
-		self.SkinFuncs[addon] = nil
-	end
-end
-
-function S:PLAYER_ENTERING_WORLD(event, addon)
-	if IsAddOnLoaded("Skinner") or IsAddOnLoaded("Aurora") then return end
-	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-	for t, skinfunc in pairs(self.SkinFuncs["RayUI"]) do
-		if skinfunc then
-			local _, catch = pcall(skinfunc)
-			if(catch and GetCVarBool("scriptErrors") == true) then
-				ScriptErrorsFrame_OnError(catch, false)
+	if self.allowBypass[addon] then
+		if S.addonCallbacks[addon] then
+			--Fire events to the skins that rely on this addon
+			for event in pairs(S.addonCallbacks[addon]) do
+				S.addonCallbacks[addon][event] = nil
+				R.callbacks:Fire(event)
 			end
 		end
+		return
 	end
-	wipe(self.SkinFuncs["RayUI"])
+
+	if S.addonCallbacks[addon] then
+		for event in pairs(S.addonCallbacks[addon]) do
+			S.addonCallbacks[addon][event] = nil
+			R.callbacks:Fire(event)
+		end
+	end
 end
 
 function S:Initialize()
 	backdropfadecolorr, backdropfadecolorg, backdropfadecolorb, alpha = unpack(R["media"].backdropfadecolor)
 	backdropcolorr, backdropcolorg, backdropcolorb = unpack(R["media"].backdropcolor)
 	bordercolorr, bordercolorg, bordercolorb = unpack(R["media"].bordercolor)
-	for addon, loadFunc in pairs(self.SkinFuncs) do
-		if addon ~= "RayUI" then
-			if IsAddOnLoaded(addon) then
-				self.SkinFuncs[addon] = nil
-				local _, catch = pcall(loadFunc)
-				if(catch and GetCVarBool("scriptErrors") == true) then
-					ScriptErrorsFrame_OnError(catch, false)
-				end
+
+	--Fire events for Blizzard addons that are already loaded
+	for addon, events in pairs(self.addonCallbacks) do
+		if IsAddOnLoaded(addon) then
+			for event in pairs(events) do
+				self.addonCallbacks[addon][event] = nil
+				R.callbacks:Fire(event)
 			end
 		end
 	end
+	--Fire event for all skins that doesn't rely on a Blizzard addon
+	for eventName in pairs(self.nonAddonCallbacks) do
+		self.addonCallbacks[eventName] = nil
+		R.callbacks:Fire(eventName)
+	end
 
 	S:RegisterEvent("ADDON_LOADED")
-	S:RegisterEvent("PLAYER_ENTERING_WORLD")
 end
 
 function S:Info()

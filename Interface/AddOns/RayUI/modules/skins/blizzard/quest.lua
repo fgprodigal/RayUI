@@ -160,4 +160,4 @@ local function LoadSkin()
 	S:ReskinArrow(ItemTextNextPageButton, "right")
 end
 
-S:RegisterSkin("RayUI", LoadSkin)
+S:AddCallback("Quest", LoadSkin)

@@ -3,7 +3,6 @@
 	<Script file='achievement.lua'/>
 	<Script file='adventuremap.lua'/>
 	<Script file='alerts.lua'/>
-	<Script file='alteration.lua'/>
 	<Script file='archaeology.lua'/>
 	<Script file='artifact.lua'/>
 	<Script file='auction.lua'/>

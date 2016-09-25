@@ -67,4 +67,4 @@ local function LoadSkin()
 	S:ReskinInput(GuildFinderRequestMembershipFrameInputFrame)
 end
 
-S:RegisterSkin("Blizzard_LookingForGuildUI", LoadSkin)
+S:AddCallbackForAddon("Blizzard_LookingForGuildUI", "LookingForGuild", LoadSkin)

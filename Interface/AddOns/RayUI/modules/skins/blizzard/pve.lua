@@ -455,4 +455,4 @@ local function LoadSkin()
 	S:ReskinScroll(LFGListEntryCreationSearchScrollFrameScrollBar)
 end
 
-S:RegisterSkin("RayUI", LoadSkin)
+S:AddCallback("PVE", LoadSkin)

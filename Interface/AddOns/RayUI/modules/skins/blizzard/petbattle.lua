@@ -427,4 +427,4 @@ end)
     end)
 end
 
-S:RegisterSkin("RayUI", LoadSkin)
+S:AddCallback("PetBattle", LoadSkin)

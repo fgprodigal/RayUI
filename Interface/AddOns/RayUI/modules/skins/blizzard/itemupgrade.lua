@@ -51,4 +51,4 @@ local function LoadSkin()
 	S:Reskin(ItemUpgradeFrameUpgradeButton)
 end
 
-S:RegisterSkin("Blizzard_ItemUpgradeUI", LoadSkin)
+S:AddCallbackForAddon("Blizzard_ItemUpgradeUI", "ItemUpgrade", LoadSkin)

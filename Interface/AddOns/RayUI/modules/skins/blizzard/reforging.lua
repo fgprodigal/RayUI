@@ -63,4 +63,4 @@ local function LoadSkin()
 	ReforgingFrameRestoreButton:SetPoint("LEFT", ReforgingFrameMoneyFrame, "RIGHT", 0, 1)
 end
 
-S:RegisterSkin("Blizzard_ReforgingUI", LoadSkin)
+S:AddCallbackForAddon("Blizzard_ReforgingUI", "Reforging", LoadSkin)

@@ -26,4 +26,4 @@ local function SkinBugSack()
 	end)
 end
 
-S:RegisterSkin("BugSack", SkinBugSack)
+S:AddCallbackForAddon("BugSack", "BugSack", SkinBugSack)

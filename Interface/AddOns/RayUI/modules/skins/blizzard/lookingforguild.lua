@@ -80,4 +80,4 @@ local function LoadSkin()
 	end
 end
 
-S:RegisterSkin("Blizzard_LookingForGuildUI", LoadSkin)
+S:AddCallbackForAddon("Blizzard_LookingForGuildUI", "LookingForGuild", LoadSkin)

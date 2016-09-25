@@ -38,4 +38,4 @@ local function LoadSkin()
 	S:ReskinClose(QuestChoiceFrame.CloseButton)
 end
 
-S:RegisterSkin("Blizzard_QuestChoice", LoadSkin)
+S:AddCallbackForAddon("Blizzard_QuestChoice", "QuestChoice", LoadSkin)

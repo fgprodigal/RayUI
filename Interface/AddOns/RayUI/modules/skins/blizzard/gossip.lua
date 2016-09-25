@@ -71,4 +71,4 @@ local function LoadSkin()
     S:CreateBD(NPCFriendshipStatusBar.bd, .25)
 end
 
-S:RegisterSkin("RayUI", LoadSkin)
+S:AddCallback("Gossip", LoadSkin)

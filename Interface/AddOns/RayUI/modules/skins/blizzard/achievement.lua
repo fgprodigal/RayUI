@@ -325,4 +325,4 @@ local function LoadSkin()
 	S:ReskinDropDown(AchievementFrameFilterDropDown)
 end
 
-S:RegisterSkin("Blizzard_AchievementUI", LoadSkin)
+S:AddCallbackForAddon("Blizzard_AchievementUI", "Achievement", LoadSkin)

@@ -229,4 +229,4 @@ local function LoadSkin()
 	S:ReskinClose(RecruitAFriendSentFrameCloseButton)
 end
 
-S:RegisterSkin("RayUI", LoadSkin)
+S:AddCallback("Friends", LoadSkin)

@@ -1,7 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="ace3.lua"/>
 	<Script file="acp.lua"/>
-	<Script file="atlasloot.lua"/>
 	<Script file="bigwigs.lua"/>
 	<Script file="bugsack.lua"/>
 	<Script file="clique.lua"/>

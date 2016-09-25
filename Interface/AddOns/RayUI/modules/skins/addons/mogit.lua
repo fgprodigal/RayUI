@@ -54,4 +54,4 @@ local function SkinMogIt()
 	end
 end
 
-S:RegisterSkin("MogIt", SkinMogIt)
+S:AddCallbackForAddon("MogIt", "MogIt", SkinMogIt)

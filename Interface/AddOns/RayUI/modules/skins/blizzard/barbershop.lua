@@ -31,4 +31,4 @@ local function LoadSkin()
 	S:SetBD(BarberShopBannerFrame, 25, -80, -20, 75)
 end
 
-S:RegisterSkin("Blizzard_BarbershopUI", LoadSkin)
+S:AddCallbackForAddon("Blizzard_BarbershopUI", "Barbershop", LoadSkin)

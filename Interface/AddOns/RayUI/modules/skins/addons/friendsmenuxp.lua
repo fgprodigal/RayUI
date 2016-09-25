@@ -14,4 +14,4 @@ local function SkinFriendsMenuXP()
 	end
 end
 
-S:RegisterSkin("RayUI", SkinFriendsMenuXP)
+S:AddCallback("FriendsMenuXP", SkinFriendsMenuXP)

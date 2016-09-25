@@ -22,4 +22,4 @@ local function SkinExtraCD()
 	end)
 end
 
-S:RegisterSkin("ExtraCD", SkinExtraCD)
+S:AddCallbackForAddon("ExtraCD", "ExtraCD", SkinExtraCD)

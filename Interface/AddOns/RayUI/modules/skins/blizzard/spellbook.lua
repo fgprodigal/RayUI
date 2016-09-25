@@ -199,4 +199,4 @@ local function LoadSkin()
 	SpellBookFrameTutorialButton:SetPoint("TOPLEFT", SpellBookFrame, "TOPLEFT", -12, 12)
 end
 
-S:RegisterSkin("RayUI", LoadSkin)
+S:AddCallback("SpellBook", LoadSkin)

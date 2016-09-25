@@ -283,4 +283,4 @@ local function LoadSkin()
     end
 end
 
-S:RegisterSkin("Blizzard_GuildUI", LoadSkin)
+S:AddCallbackForAddon("Blizzard_GuildUI", "Guild", LoadSkin)

@@ -89,4 +89,4 @@ local function LoadSkin()
 	S:ReskinInput(VoidItemSearchBox)
 end
 
-S:RegisterSkin("Blizzard_VoidStorageUI", LoadSkin)
+S:AddCallbackForAddon("Blizzard_VoidStorageUI", "VoidStorage", LoadSkin)

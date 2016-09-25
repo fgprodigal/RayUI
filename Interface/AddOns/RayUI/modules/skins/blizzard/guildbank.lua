@@ -140,4 +140,4 @@ local function LoadSkin()
 	hooksecurefunc("GuildBankFrame_Update", ColorBorder)
 end
 
-S:RegisterSkin("Blizzard_GuildBankUI", LoadSkin)
+S:AddCallbackForAddon("Blizzard_GuildBankUI", "GuildBank", LoadSkin)

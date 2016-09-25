@@ -57,4 +57,4 @@ local function LoadSkin()
 	S:ReskinInput(GuildControlUIRankSettingsFrameGoldBox, 20)
 end
 
-S:RegisterSkin("Blizzard_GuildControlUI", LoadSkin)
+S:AddCallbackForAddon("Blizzard_GuildControlUI", "GuildControl", LoadSkin)

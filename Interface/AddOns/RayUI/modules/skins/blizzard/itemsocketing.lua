@@ -66,4 +66,4 @@ local function LoadSkin()
 	end)
 end
 
-S:RegisterSkin("Blizzard_ItemSocketingUI", LoadSkin)
+S:AddCallbackForAddon("Blizzard_ItemSocketingUI", "ItemSocketing", LoadSkin)

@@ -18,4 +18,4 @@ local function LoadSkin()
     S:Reskin(GuildRegistrarFrameCancelButton)
 end
 
-S:RegisterSkin("RayUI", LoadSkin)
+S:AddCallback("GuildRegistrar", LoadSkin)

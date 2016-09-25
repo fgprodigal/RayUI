@@ -101,4 +101,4 @@ local function SkinNumeration()
 	Numeration.windowsettings.lineheight = 16
 end
 
-S:RegisterSkin("Numeration", SkinNumeration)
+S:AddCallbackForAddon("Numeration", "Numeration", SkinNumeration)

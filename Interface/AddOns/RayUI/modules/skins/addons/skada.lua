@@ -222,4 +222,4 @@ local function SkinSkada()
 	end)
 end
 
-S:RegisterSkin("Skada", SkinSkada)
+S:AddCallbackForAddon("Skada", "Skada", SkinSkada)

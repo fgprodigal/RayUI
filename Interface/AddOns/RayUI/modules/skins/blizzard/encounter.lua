@@ -634,4 +634,4 @@ local function LoadSkin()
 	end)
 end
 
-S:RegisterSkin("Blizzard_EncounterJournal", LoadSkin)
+S:AddCallbackForAddon("Blizzard_EncounterJournal", "EncounterJournal", LoadSkin)

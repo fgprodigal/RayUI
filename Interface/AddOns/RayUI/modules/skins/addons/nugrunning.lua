@@ -145,4 +145,4 @@ local function SkinNugRunning()
 	NRunDB_Global.localNames = true
 end
 
-S:RegisterSkin("NugRunning", SkinNugRunning)
+S:AddCallbackForAddon("NugRunning", "NugRunning", SkinNugRunning)

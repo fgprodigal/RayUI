@@ -12,4 +12,4 @@ local function LoadSkin()
     S:ReskinClose(TaxiFrame.CloseButton, "TOPRIGHT", TaxiRouteMap, "TOPRIGHT", -4, -4)
 end
 
-S:RegisterSkin("RayUI", LoadSkin)
+S:AddCallback("Taxi", LoadSkin)

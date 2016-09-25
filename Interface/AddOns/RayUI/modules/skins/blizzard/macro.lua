@@ -85,4 +85,4 @@ local function LoadSkin()
 	S:ReskinScroll(MacroPopupScrollFrameScrollBar)
 end
 
-S:RegisterSkin("Blizzard_MacroUI", LoadSkin)
+S:AddCallbackForAddon("Blizzard_MacroUI", "Macro", LoadSkin)

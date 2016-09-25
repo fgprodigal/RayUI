@@ -70,4 +70,4 @@ local function SkinACP()
 	end)
 end
 
-S:RegisterSkin("ACP", SkinACP)
+S:AddCallbackForAddon("ACP", "ACP", SkinACP)

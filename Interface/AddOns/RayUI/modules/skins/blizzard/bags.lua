@@ -41,4 +41,4 @@ local function LoadSkin()
 	hooksecurefunc(TokenFrameContainer, "update", updateButtons)
 end
 
-S:RegisterSkin("RayUI", LoadSkin)
+S:AddCallback("Bags", LoadSkin)

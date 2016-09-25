@@ -102,4 +102,4 @@ local function LoadSkin()
 	end)
 end
 
-S:RegisterSkin("Blizzard_BlackMarketUI", LoadSkin)
+S:AddCallbackForAddon("Blizzard_BlackMarketUI", "BlackMarket", LoadSkin)

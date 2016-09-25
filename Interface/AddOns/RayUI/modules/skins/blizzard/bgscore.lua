@@ -22,4 +22,4 @@ local function LoadSkin()
 	S:ReskinClose(WorldStateScoreFrameCloseButton)
 end
 
-S:RegisterSkin("RayUI", LoadSkin)
+S:AddCallback("WorldStateScore", LoadSkin)

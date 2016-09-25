@@ -175,4 +175,4 @@ local function LoadSkin()
 	S:CreateBD(HonorFrame.XPBar.Levelbg, .5)
 end
 
-S:RegisterSkin("Blizzard_PVPUI", LoadSkin)
+S:AddCallbackForAddon("Blizzard_PVPUI", "PVP", LoadSkin)

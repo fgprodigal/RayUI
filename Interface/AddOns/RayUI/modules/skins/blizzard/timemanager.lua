@@ -29,4 +29,4 @@ local function LoadSkin()
     S:ReskinClose(StopwatchCloseButton, "TOPRIGHT", StopwatchFrame, "TOPRIGHT", -2, -2)
 end
 
-S:RegisterSkin("Blizzard_TimeManager", LoadSkin)
+S:AddCallbackForAddon("Blizzard_TimeManager", "TimeManager", LoadSkin)

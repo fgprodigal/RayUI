@@ -25,4 +25,4 @@ local function LoadSkin()
     S:Reskin(TabardFrameCancelButton)
 end
 
-S:RegisterSkin("RayUI", LoadSkin)
+S:AddCallback("Tabard", LoadSkin)

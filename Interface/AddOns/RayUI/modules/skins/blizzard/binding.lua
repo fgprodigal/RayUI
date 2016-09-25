@@ -63,4 +63,4 @@ local function LoadSkin()
 	line:SetColorTexture(1, 1, 1, .2)
 end
 
-S:RegisterSkin("Blizzard_BindingUI", LoadSkin)
+S:AddCallbackForAddon("Blizzard_BindingUI", "Binding", LoadSkin)

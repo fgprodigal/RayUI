@@ -524,4 +524,4 @@ local function LoadSkin()
 	SLASH_TEST_ACHIEVEMENT1 = "/testalerts"
 end
 
-S:RegisterSkin("RayUI", LoadSkin)
+S:AddCallback("Alerts", LoadSkin)

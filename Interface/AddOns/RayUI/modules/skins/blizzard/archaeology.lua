@@ -84,4 +84,4 @@ local function LoadSkin()
 	ArcheologyDigsiteProgressBar:SetPoint("TOP", UIParent, "TOP", 0, 100)
 end
 
-S:RegisterSkin("Blizzard_ArchaeologyUI", LoadSkin)
+S:AddCallbackForAddon("Blizzard_ArchaeologyUI", "Archaeology", LoadSkin)

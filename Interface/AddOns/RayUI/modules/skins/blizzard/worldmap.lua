@@ -125,4 +125,4 @@ local function LoadSkin()
 	TrackingOptions.Button.Border:Hide()
 end
 
-S:RegisterSkin("RayUI", LoadSkin)
+S:AddCallback("WorldMap", LoadSkin)

@@ -63,4 +63,4 @@ local function LoadSkin()
 	ArtifactFrame.PerksTabButton:SetPoint("TOPLEFT", ArtifactFrame, "BOTTOMLEFT", 11, 2)
 end
 
-S:RegisterSkin("Blizzard_ArtifactUI", LoadSkin)
+S:AddCallbackForAddon("Blizzard_ArtifactUI", "Artifact", LoadSkin)

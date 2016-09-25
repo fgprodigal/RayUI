@@ -940,4 +940,4 @@ local function LoadSkin()
 	SplashFrame.TopCloseButton:SetPoint("TOPRIGHT", SplashFrame, "TOPRIGHT", -18, -18)
 end
 
-S:RegisterSkin("RayUI", LoadSkin)
+S:AddCallback("Misc", LoadSkin)

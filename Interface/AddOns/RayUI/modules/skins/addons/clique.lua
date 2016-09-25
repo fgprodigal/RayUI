@@ -23,4 +23,4 @@ local function SkinClique()
 	CliqueConfigPage1ButtonOptions_LeftSeparator:Kill()
 end
 
-S:RegisterSkin("Clique", SkinClique)
+S:AddCallbackForAddon("Clique", "Clique", SkinClique)

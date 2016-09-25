@@ -262,4 +262,15 @@ local function SkinAce3()
 	end
 end
 
-S:RegisterSkin("RayUI", SkinAce3)
+local function attemptSkin()
+	local AceGUI = LibStub("AceGUI-3.0", true)
+	if AceGUI and (AceGUI.RegisterAsContainer ~= RegisterAsContainer or AceGUI.RegisterAsWidget ~= RegisterAsWidget) then
+		SkinAce3()
+	end
+end
+
+local f = CreateFrame("Frame")
+f:RegisterEvent("ADDON_LOADED")
+f:SetScript("OnEvent", attemptSkin)
+
+S:AddCallback("Ace3", attemptSkin)

@@ -18,4 +18,4 @@ local function LoadSkin()
 	RaidInfoFrame:SetPoint("TOPLEFT", RaidFrame, "TOPRIGHT", 1, -28)
 end
 
-S:RegisterSkin("RayUI", LoadSkin)
+S:AddCallback("RaidInfo", LoadSkin)

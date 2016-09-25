@@ -17,4 +17,4 @@ local function LoadSkin()
     --LossOfControlFrame_SetUpDisplay(LossOfControlFrame, true, 1, 408, "HeHe", select(3,GetSpellInfo(408)), time(), 6, 6, lockoutSchool, 1, 1)
 end
 
-S:RegisterSkin("RayUI", LoadSkin)
+S:AddCallback("LossControl", LoadSkin)

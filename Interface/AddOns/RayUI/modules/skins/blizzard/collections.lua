@@ -534,4 +534,4 @@ local function LoadSkin()
 	S:Reskin(WardrobeTransmogFrame.Model.ClearAllPendingButton)
 end
 
-S:RegisterSkin("Blizzard_Collections", LoadSkin)
+S:AddCallbackForAddon("Blizzard_Collections", "Collections", LoadSkin)

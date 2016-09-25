@@ -138,4 +138,4 @@ local function LoadSkin()
 	QuestLogPopupDetailFrame.ShareButton:SetPoint("RIGHT", QuestLogPopupDetailFrame.TrackButton, "LEFT", -1, 0)
 end
 
-S:RegisterSkin("RayUI", LoadSkin)
+S:AddCallback("QuestMap", LoadSkin)

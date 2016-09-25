@@ -114,4 +114,4 @@ local function LoadSkin()
 	end)
 end
 
-S:RegisterSkin("Blizzard_TradeSkillUI", LoadSkin)
+S:AddCallbackForAddon("Blizzard_TradeSkillUI", "TradeSkill", LoadSkin)

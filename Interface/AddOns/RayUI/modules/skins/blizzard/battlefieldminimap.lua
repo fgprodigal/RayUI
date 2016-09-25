@@ -8,4 +8,4 @@ local function LoadSkin()
 	BattlefieldMinimapCloseButton:Hide()
 end
 
-S:RegisterSkin("Blizzard_BattlefieldMinimap", LoadSkin)
+S:AddCallbackForAddon("Blizzard_BattlefieldMinimap", "BattlefieldMinimap", LoadSkin)

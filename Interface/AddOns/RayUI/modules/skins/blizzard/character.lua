@@ -383,4 +383,4 @@ local function LoadSkin()
 	end
 end
 
-S:RegisterSkin("RayUI", LoadSkin)
+S:AddCallback("Character", LoadSkin)

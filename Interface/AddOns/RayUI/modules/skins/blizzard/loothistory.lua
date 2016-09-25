@@ -52,4 +52,4 @@ local function LoadSkin()
     end
 end
 
-S:RegisterSkin("RayUI", LoadSkin)
+S:AddCallback("LootHistory", LoadSkin)

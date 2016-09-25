@@ -314,4 +314,4 @@ local function LoadSkin()
 	end
 end
 
-S:RegisterSkin("Blizzard_AuctionUI", LoadSkin)
+S:AddCallbackForAddon("Blizzard_AuctionUI", "Auction", LoadSkin)

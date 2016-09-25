@@ -23,4 +23,4 @@ local function LoadSkin()
 	S:ReskinScroll(GMSurveyScrollFrameScrollBar)
 end
 
-S:RegisterSkin("Blizzard_GMSurveyUI", LoadSkin)
+S:AddCallbackForAddon("Blizzard_GMSurveyUI", "GMSurvey", LoadSkin)

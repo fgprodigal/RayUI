@@ -229,4 +229,4 @@ local function LoadSkin()
 	QuestInfoSealFrame.Text:SetShadowOffset(0.6, -0.6)
 end
 
-S:RegisterSkin("RayUI", LoadSkin)
+S:AddCallback("QuestInfo", LoadSkin)

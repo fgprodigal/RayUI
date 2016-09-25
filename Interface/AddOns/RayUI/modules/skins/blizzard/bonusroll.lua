@@ -71,4 +71,4 @@ local function LoadSkin()
 	S:CreateBG(BonusRollFrame.SpecIcon)
 end
 
-S:RegisterSkin("RayUI", LoadSkin)
+S:AddCallback("BonusRoll", LoadSkin)
