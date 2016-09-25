@@ -690,6 +690,13 @@ function TT:Initialize()
 		end
 	end)
 
+	--World Quest Reward Icon
+	WorldMapTooltip.ItemTooltip.IconBorder:SetAlpha(0)
+	WorldMapTooltip.ItemTooltip.Icon:SetTexCoord(0.8, .92, .08, .92)
+	WorldMapTooltip.ItemTooltip:CreateShadow("Background")
+	WorldMapTooltip.ItemTooltip.Count:ClearAllPoints()
+	WorldMapTooltip.ItemTooltip.Count:SetPoint("BOTTOMRIGHT", WorldMapTooltip.ItemTooltip.Icon, "BOTTOMRIGHT", 0, 2)
+
 	self:RegisterEvent("MODIFIER_STATE_CHANGED")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 
