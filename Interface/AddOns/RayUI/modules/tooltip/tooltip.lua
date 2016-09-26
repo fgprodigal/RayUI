@@ -692,8 +692,10 @@ function TT:Initialize()
 
 	--World Quest Reward Icon
 	WorldMapTooltip.ItemTooltip.IconBorder:SetAlpha(0)
-	WorldMapTooltip.ItemTooltip.Icon:SetTexCoord(0.8, .92, .08, .92)
-	WorldMapTooltip.ItemTooltip:CreateShadow("Background")
+	WorldMapTooltip.ItemTooltip.Icon:SetTexCoord(0.08, .92, .08, .92)
+	WorldMapTooltip.ItemTooltip.b = CreateFrame("Frame", nil, WorldMapTooltip.ItemTooltip)
+	WorldMapTooltip.ItemTooltip.b:SetAllPoints(WorldMapTooltip.ItemTooltip.Icon)
+	WorldMapTooltip.ItemTooltip.b:CreateShadow("Background")
 	WorldMapTooltip.ItemTooltip.Count:ClearAllPoints()
 	WorldMapTooltip.ItemTooltip.Count:SetPoint("BOTTOMRIGHT", WorldMapTooltip.ItemTooltip.Icon, "BOTTOMRIGHT", 0, 2)
 
