@@ -14,7 +14,6 @@ local function LoadSkin()
 	QuestScrollFrame.Background:Hide()
 
 	S:CreateBD(QuestScrollFrame.StoryTooltip)
-	S:Reskin(QuestScrollFrame.ViewAll)
 	S:ReskinScroll(QuestScrollFrame.ScrollBar)
 
 	-- Story header

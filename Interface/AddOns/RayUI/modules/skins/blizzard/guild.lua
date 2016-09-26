@@ -113,7 +113,7 @@ local function LoadSkin()
     GuildRecruitmentCommentFrame:ClearAllPoints()
     GuildRecruitmentCommentFrame:SetPoint("TOPLEFT", GuildRecruitmentLevelFrame, "BOTTOMLEFT", 0, 1)
     S:ReskinCheck(GuildRosterShowOfflineButton)
-    for i = 1, 7 do
+    for i = 1, 6 do
         S:ReskinCheck(_G["GuildNewsFilterButton"..i])
     end
 

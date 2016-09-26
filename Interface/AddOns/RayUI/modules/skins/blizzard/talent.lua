@@ -20,8 +20,6 @@ local function LoadSkin()
 		select(i, PlayerTalentFrameSpecializationSpellScrollFrameScrollChild:GetRegions()):Hide()
 	end
 
-	S:CreateBG(PlayerTalentFrameTalentsClearInfoFrame)
-
 	PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.Seperator:SetColorTexture(1, 1, 1)
 	PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.Seperator:SetAlpha(.2)
 
@@ -218,7 +216,6 @@ local function LoadSkin()
 
 	S:ReskinPortraitFrame(PlayerTalentFrame, true)
 	S:Reskin(PlayerTalentFrameSpecializationLearnButton)
-	S:Reskin(PlayerTalentFrameTalentsLearnButton)
 	S:Reskin(PlayerTalentFrameActivateButton)
 	S:Reskin(PlayerTalentFramePetSpecializationLearnButton)
 

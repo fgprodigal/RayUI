@@ -204,8 +204,6 @@ local function LoadSkin()
 	S:Reskin(send)
 	S:Reskin(cancel)
 
-	S:ReskinScroll(BattleTagInviteFrameScrollFrameScrollBar)
-
 	FriendsTabHeaderRecruitAFriendButton:SetTemplate("Default")
 	FriendsTabHeaderRecruitAFriendButton:StyleButton(true)
 	FriendsTabHeaderRecruitAFriendButtonIcon:SetDrawLayer("OVERLAY")

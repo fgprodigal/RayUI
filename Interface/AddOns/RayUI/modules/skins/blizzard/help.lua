@@ -44,14 +44,11 @@ local function LoadSkin()
 		"ReportCheatingDialogCancelButton",
 		"HelpFrameAccountSecurityOpenTicket",
 		"HelpFrameCharacterStuckStuck",
-		"HelpFrameOpenTicketHelpTopIssues",
-		"HelpFrameOpenTicketHelpOpenTicket",
 		"HelpFrameKnowledgebaseSearchButton",
 		"HelpFrameGM_ResponseNeedMoreHelp",
 		"HelpFrameGM_ResponseCancel",
 		"GMChatOpenLog",
 		"HelpFrameKnowledgebaseNavBarHomeButton",
-		"HelpFrameOpenTicketHelpItemRestoration"
 	}
 	for i = 1, #buttons do
 		local button = _G[buttons[i]]

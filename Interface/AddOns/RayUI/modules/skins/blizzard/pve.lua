@@ -64,7 +64,6 @@ local function LoadSkin()
 	S:CreateTab(PVEFrameTab3)
 
 	S:Reskin(LFDQueueFrameFindGroupButton)
-	S:Reskin(LFDQueueFrameCancelButton)
 	S:Reskin(LFDRoleCheckPopupAcceptButton)
 	S:Reskin(LFDRoleCheckPopupDeclineButton)
 	S:Reskin(LFDQueueFramePartyBackfillBackfillButton)
@@ -85,7 +84,7 @@ local function LoadSkin()
 	S:ReskinCheck(LFDQueueFrameRoleButtonHealer:GetChildren())
 	S:ReskinCheck(LFDQueueFrameRoleButtonDPS:GetChildren())
 	S:ReskinCheck(LFDQueueFrameRoleButtonLeader:GetChildren())
-	for i = 1, 20 do
+	for i = 1, 15 do
 		S:ReskinCheck(_G["LFDQueueFrameSpecificListButton"..i.."EnableButton"])
 	end
 	S:ReskinCheck(RaidFinderQueueFrameRoleButtonTank:GetChildren())
@@ -216,7 +215,6 @@ local function LoadSkin()
 	RaidFinderFrameButtonBottomBorder:Hide()
 
 	S:Reskin(RaidFinderFrameFindRaidButton)
-	S:Reskin(RaidFinderFrameCancelButton)
 	S:Reskin(RaidFinderQueueFrameIneligibleFrameLeaveQueueButton)
 	S:ReskinDropDown(RaidFinderQueueFrameSelectionDropDown)
 	S:ReskinClose(RaidParentFrameCloseButton)
@@ -231,9 +229,6 @@ local function LoadSkin()
 
 	S:Reskin(ScenarioQueueFrameFindGroupButton)
 	S:ReskinDropDown(ScenarioQueueFrameTypeDropDown)
-
-	-- Raid frame (social frame)
-	S:Reskin(RaidFrameRaidBrowserButton)
 
 	-- Looking for raid
 	LFRBrowseFrameRoleInset:DisableDrawLayer("BORDER")

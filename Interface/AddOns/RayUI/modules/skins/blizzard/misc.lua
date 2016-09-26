@@ -3,7 +3,6 @@ local S = R:GetModule("Skins")
 
 local function LoadSkin()
 	local r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b
-
 	GameFontBlackMedium:SetTextColor(1, 1, 1)
 	InvoiceTextFontNormal:SetTextColor(1, 1, 1)
 	InvoiceTextFontSmall:SetTextColor(1, 1, 1)
@@ -107,7 +106,6 @@ local function LoadSkin()
 		"GameMenuButtonLogout",
 		"GameMenuButtonQuit",
 		"GameMenuButtonContinue",
-		"GameMenuButtonMacOptions",
 		"GameMenuButtonAddons",
 		"GameMenuButtonWhatsNew",
 		"ColorPickerOkayButton",
@@ -116,7 +114,6 @@ local function LoadSkin()
 		"GuildInviteFrameDeclineButton",
 		"RolePollPopupAcceptButton",
 		"GhostFrame",
-		"InterfaceOptionsHelpPanelResetTutorials",
 		"SideDressUpModelResetButton",
 		"InterfaceOptionsDisplayPanelResetTutorials",
 		"InterfaceOptionsSocialPanelRedockChat"
@@ -451,11 +448,7 @@ local function LoadSkin()
 		"RaidGraphics_LiquidDetailDropDown",
 		"RaidGraphics_SunshaftsDropDown",
 		"RaidGraphics_ParticleDensityDropDown",
-		"RaidGraphics_ViewDistanceDropDown",
-		"RaidGraphics_EnvironmentalDetailDropDown",
-		"RaidGraphics_GroundClutterDropDown",
 		"RaidGraphics_SSAODropDown",
-		"RaidGraphics_RefractionDropDown",
 		"Advanced_BufferingDropDown",
 		"Advanced_LagDropDown",
 		"Advanced_HardwareCursorDropDown",
@@ -476,33 +469,21 @@ local function LoadSkin()
 		"InterfaceOptionsControlsPanelAutoLootKeyDropDown",
 		"InterfaceOptionsCombatPanelFocusCastKeyDropDown",
 		"InterfaceOptionsCombatPanelSelfCastKeyDropDown",
-		"InterfaceOptionsCombatPanelLossOfControlFullDropDown",
-		"InterfaceOptionsCombatPanelLossOfControlSilenceDropDown",
-		"InterfaceOptionsCombatPanelLossOfControlInterruptDropDown",
-		"InterfaceOptionsCombatPanelLossOfControlDisarmDropDown",
-		"InterfaceOptionsCombatPanelLossOfControlRootDropDown",
 		"InterfaceOptionsDisplayPanelOutlineDropDown",
 		"InterfaceOptionsDisplayPanelSelfHighlightDropDown",
 		"InterfaceOptionsDisplayPanelDisplayDropDown",
 		"InterfaceOptionsDisplayPanelChatBubblesDropDown",
-		"InterfaceOptionsObjectivesPanelQuestSorting",
 		"InterfaceOptionsSocialPanelChatStyle",
 		"InterfaceOptionsSocialPanelTimestamps",
 		"InterfaceOptionsSocialPanelWhisperMode",
-		"InterfaceOptionsSocialPanelBnWhisperMode",
-		"InterfaceOptionsSocialPanelConversationMode",
 		"InterfaceOptionsActionBarsPanelPickupActionKeyDropDown",
 		"InterfaceOptionsNamesPanelNPCNamesDropDown",
 		"InterfaceOptionsNamesPanelUnitNameplatesMotionDropDown",
-		"InterfaceOptionsCombatTextPanelTargetModeDropDown",
-		"InterfaceOptionsCombatTextPanelFCTDropDown",
-		"InterfaceOptionsStatusTextPanelDisplayDropDown",
 		"InterfaceOptionsCameraPanelStyleDropDown",
 		"InterfaceOptionsMousePanelClickMoveStyleDropDown",
 		"InterfaceOptionsAccessibilityPanelColorFilterDropDown",
 		"CompactUnitFrameProfilesProfileSelector",
 		"CompactUnitFrameProfilesGeneralOptionsFrameSortByDropdown",
-		"CompactUnitFrameProfilesGeneralOptionsFrameHealthTextDropdown"
 	}
 	for i = 1, #dropdowns do
 		S:ReskinDropDown(_G[dropdowns[i]])
@@ -518,7 +499,6 @@ local function LoadSkin()
 		"Advanced_MaxFPSBKSlider",
 		"Advanced_RenderScaleSlider",
 		"Advanced_GammaSlider",
-		"AudioOptionsSoundPanelSoundQuality",
 		"AudioOptionsSoundPanelMasterVolume",
 		"AudioOptionsSoundPanelSoundVolume",
 		"AudioOptionsSoundPanelMusicVolume",
@@ -636,57 +616,16 @@ local function LoadSkin()
 		"InterfaceOptionsActionBarsPanelAlwaysShowActionBars",
 		"InterfaceOptionsActionBarsPanelCountdownCooldowns",
 		"InterfaceOptionsNamesPanelUnitNameplatesEnemyMinus",
-		"InterfaceOptionsCombatTextPanelTargetDamage",
-		"InterfaceOptionsCombatTextPanelPeriodicDamage",
-		"InterfaceOptionsCombatTextPanelPetDamage",
-		"InterfaceOptionsCombatTextPanelHealing",
-		"InterfaceOptionsCombatTextPanelHealingAbsorbTarget",
-		"InterfaceOptionsCombatTextPanelTargetEffects",
-		"InterfaceOptionsCombatTextPanelOtherTargetEffects",
-		"InterfaceOptionsCombatTextPanelEnableFCT",
-		"InterfaceOptionsCombatTextPanelDodgeParryMiss",
-		"InterfaceOptionsCombatTextPanelDamageReduction",
-		"InterfaceOptionsCombatTextPanelRepChanges",
-		"InterfaceOptionsCombatTextPanelReactiveAbilities",
-		"InterfaceOptionsCombatTextPanelFriendlyHealerNames",
-		"InterfaceOptionsCombatTextPanelCombatState",
-		"InterfaceOptionsCombatTextPanelHealingAbsorbSelf",
-		"InterfaceOptionsCombatTextPanelComboPoints",
-		"InterfaceOptionsCombatTextPanelLowManaHealth",
-		"InterfaceOptionsCombatTextPanelEnergyGains",
-		"InterfaceOptionsCombatTextPanelPeriodicEnergyGains",
-		"InterfaceOptionsCombatTextPanelHonorGains",
-		"InterfaceOptionsCombatTextPanelAuras",
-		"InterfaceOptionsCombatTextPanelPetBattle",
-		"InterfaceOptionsStatusTextPanelPlayer",
-		"InterfaceOptionsStatusTextPanelPet",
-		"InterfaceOptionsStatusTextPanelParty",
-		"InterfaceOptionsStatusTextPanelTarget",
-		"InterfaceOptionsStatusTextPanelAlternateResource",
-		"InterfaceOptionsStatusTextPanelXP",
-		"InterfaceOptionsUnitFramePanelPartyPets",
-		"InterfaceOptionsUnitFramePanelArenaEnemyFrames",
-		"InterfaceOptionsUnitFramePanelArenaEnemyCastBar",
-		"InterfaceOptionsUnitFramePanelArenaEnemyPets",
-		"InterfaceOptionsUnitFramePanelFullSizeFocusFrame",
-		"InterfaceOptionsBuffsPanelDispellableDebuffs",
-		"InterfaceOptionsBuffsPanelCastableBuffs",
-		"InterfaceOptionsBuffsPanelConsolidateBuffs",
-		"InterfaceOptionsBuffsPanelShowAllEnemyDebuffs",
 		"InterfaceOptionsNamesPanelMyName",
 		"InterfaceOptionsNamesPanelNonCombatCreature",
 		"InterfaceOptionsNamesPanelFriendlyPlayerNames",
 		"InterfaceOptionsNamesPanelFriendlyMinions",
 		"InterfaceOptionsNamesPanelEnemyPlayerNames",
 		"InterfaceOptionsNamesPanelEnemyMinions",
-		"InterfaceOptionsCameraPanelFollowTerrain",
-		"InterfaceOptionsCameraPanelHeadBob",
 		"InterfaceOptionsCameraPanelWaterCollision",
-		"InterfaceOptionsCameraPanelSmartPivot",
 		"InterfaceOptionsMousePanelInvertMouse",
 		"InterfaceOptionsMousePanelEnableMouseSpeed",
 		"InterfaceOptionsMousePanelClickToMove",
-		"InterfaceOptionsMousePanelWoWMouse",
 		"InterfaceOptionsAccessibilityPanelMovePad",
 		"InterfaceOptionsAccessibilityPanelCinematicSubtitles",
 		"InterfaceOptionsAccessibilityPanelColorblindMode"
@@ -697,10 +636,8 @@ local function LoadSkin()
 
 	local sliders = {
 		"InterfaceOptionsCombatPanelSpellAlertOpacitySlider",
-		"InterfaceOptionsCombatPanelMaxSpellStartRecoveryOffset",
 		"CompactUnitFrameProfilesGeneralOptionsFrameHeightSlider",
 		"CompactUnitFrameProfilesGeneralOptionsFrameWidthSlider",
-		"InterfaceOptionsBattlenetPanelToastDurationSlider",
 		"InterfaceOptionsCameraPanelMaxDistanceSlider",
 		"InterfaceOptionsCameraPanelFollowSpeedSlider",
 		"InterfaceOptionsMousePanelMouseSensitivitySlider",
@@ -714,7 +651,6 @@ local function LoadSkin()
 	S:Reskin(CompactUnitFrameProfilesSaveButton)
 	S:Reskin(CompactUnitFrameProfilesDeleteButton)
 	S:Reskin(CompactUnitFrameProfilesGeneralOptionsFrameResetPositionButton)
-	S:Reskin(InterfaceOptionsHelpPanelResetTutorials)
 
 	CompactUnitFrameProfilesGeneralOptionsFrameAutoActivateBG:Hide()
 
@@ -747,7 +683,6 @@ local function LoadSkin()
 		"ChatConfigOtherSettingsSystem",
 		"ChatConfigOtherSettingsPVP",
 		"ChatConfigOtherSettingsCreature",
-		"HelpFrameTicketScrollFrame",
 		"HelpFrameGM_ResponseScrollFrame1",
 		"HelpFrameGM_ResponseScrollFrame2",
 		"GuildRegistrarFrameEditBox"
@@ -770,52 +705,6 @@ local function LoadSkin()
 
 	TicketStatusFrame:ClearAllPoints()
 	TicketStatusFrame:SetPoint("TOP", UIParent, "TOP", 0, -20)
-
-	--[[ if IsMacClient() then
-		S:CreateBD(MacOptionsFrame)
-		MacOptionsFrameHeader:SetTexture("")
-		MacOptionsFrameHeader:ClearAllPoints()
-		MacOptionsFrameHeader:SetPoint("TOP", MacOptionsFrame, 0, 0)
-
-		S:CreateBD(MacOptionsFrameMovieRecording, .25)
-		S:CreateBD(MacOptionsITunesRemote, .25)
-
-		S:Reskin(MacOptionsButtonKeybindings)
-		S:Reskin(MacOptionsButtonCompress)
-		S:Reskin(MacOptionsFrameCancel)
-		S:Reskin(MacOptionsFrameOkay)
-		S:Reskin(MacOptionsFrameDefaults)
-
-		S:ReskinDropDown(MacOptionsFrameResolutionDropDown)
-		S:ReskinDropDown(MacOptionsFrameFramerateDropDown)
-		S:ReskinDropDown(MacOptionsFrameCodecDropDown)
-		for i = 1, 10 do
-			if _G["MacOptionsFrameCheckButton"..i] then
-				S:ReskinCheck(_G["MacOptionsFrameCheckButton"..i])
-			end
-		end
-		S:ReskinSlider(MacOptionsFrameQualitySlider)
-
-		MacOptionsButtonCompress:SetWidth(136)
-
-		MacOptionsFrameCancel:SetWidth(96)
-		MacOptionsFrameCancel:SetHeight(22)
-		MacOptionsFrameCancel:ClearAllPoints()
-		MacOptionsFrameCancel:SetPoint("LEFT", MacOptionsButtonKeybindings, "RIGHT", 107, 0)
-
-		MacOptionsFrameOkay:SetWidth(96)
-		MacOptionsFrameOkay:SetHeight(22)
-		MacOptionsFrameOkay:ClearAllPoints()
-		MacOptionsFrameOkay:SetPoint("LEFT", MacOptionsButtonKeybindings, "RIGHT", 5, 0)
-
-		MacOptionsButtonKeybindings:SetWidth(96)
-		MacOptionsButtonKeybindings:SetHeight(22)
-		MacOptionsButtonKeybindings:ClearAllPoints()
-		MacOptionsButtonKeybindings:SetPoint("LEFT", MacOptionsFrameDefaults, "RIGHT", 5, 0)
-
-		MacOptionsFrameDefaults:SetWidth(96)
-		MacOptionsFrameDefaults:SetHeight(22)
-	end ]]
 
 	SideDressUpModel:HookScript("OnShow", function(self)
 		self:ClearAllPoints()

@@ -159,6 +159,7 @@ function S:GetOptions()
 end
 
 function S:CreateGradient(f)
+	assert(f, "doesn't exist!")
 	local tex = f:CreateTexture(nil, "BORDER")
 	tex:SetPoint("TOPLEFT", 1, -1)
 	tex:SetPoint("BOTTOMRIGHT", -1, 1)
@@ -169,7 +170,7 @@ function S:CreateGradient(f)
 end
 
 function S:CreateStripesThin(f)
-	if not f then return end
+	assert(f, "doesn't exist!")
 	f.stripesthin = f:CreateTexture(nil, "BACKGROUND", nil, 1)
 	f.stripesthin:SetAllPoints()
 	f.stripesthin:SetTexture([[Interface\AddOns\RayUI\media\StripesThin]], true, true)
@@ -179,7 +180,7 @@ function S:CreateStripesThin(f)
 end
 
 function S:CreateBackdropTexture(f)
-	if not f then return end
+	assert(f, "doesn't exist!")
 	local tex = f:CreateTexture(nil, "BACKGROUND")
 	tex:SetDrawLayer("BACKGROUND", 1)
 	tex:SetInside(f, 1, 1)
@@ -191,7 +192,7 @@ function S:CreateBackdropTexture(f)
 end
 
 function S:CreateBD(f, a)
-	if not f then return end
+	assert(f, "doesn't exist!")
 	f:SetBackdrop({
 		bgFile = R["media"].blank,
 		edgeFile = R["media"].blank,
@@ -202,7 +203,7 @@ function S:CreateBD(f, a)
 end
 
 function S:CreateBG(frame)
-	if not frame then return end
+	assert(frame, "doesn't exist!")
 	local f = frame
 	if frame:GetObjectType() == "Texture" then f = frame:GetParent() end
 
@@ -216,7 +217,7 @@ function S:CreateBG(frame)
 end
 
 function S:CreateSD(parent, size, r, g, b, alpha, offset)
-	if not parent then return end
+	assert(parent, "doesn't exist!")
 	S:CreateStripesThin(parent)
 
 	if R.global.general.theme~="Shadow" then return end
@@ -233,7 +234,7 @@ function S:CreateSD(parent, size, r, g, b, alpha, offset)
 end
 
 function S:CreatePulse(frame, speed, alpha, mult)
-	if not frame then return end
+	assert(frame, "doesn't exist!")
 	frame.speed = .02
 	frame.mult = mult or 1
 	frame.alpha = alpha or 1
@@ -266,7 +267,6 @@ local function StartGlow(f)
 end
 
 local function StopGlow(f)
-	if not f then return end
 	f:SetBackdropColor(0, 0, 0, 0)
 	f:SetBackdropBorderColor(bordercolorr, bordercolorg, bordercolorb)
 	f.glow:SetScript("OnUpdate", nil)
@@ -274,7 +274,7 @@ local function StopGlow(f)
 end
 
 function S:Reskin(f, noGlow)
-	if not f then return end
+	assert(f, "doesn't exist!")
 	f:SetNormalTexture("")
 	f:SetHighlightTexture("")
 	f:SetPushedTexture("")
@@ -306,7 +306,7 @@ function S:Reskin(f, noGlow)
 end
 
 function S:CreateTab(f)
-	if not f then return end
+	assert(f, "doesn't exist!")
 	f:DisableDrawLayer("BACKGROUND")
 
 	local bg = CreateFrame("Frame", nil, f)
@@ -323,7 +323,7 @@ function S:CreateTab(f)
 end
 
 function S:ReskinScroll(f)
-	if not f then return end
+	assert(f, "doesn't exist!")
 	if f:GetName() then
 		local frame = f:GetName()
 
@@ -439,7 +439,7 @@ function S:ReskinScroll(f)
 end
 
 function S:ReskinDropDown(f)
-	if not f then return end
+	assert(f, "doesn't exist!")
 	local frame = f:GetName()
 
 	local left = _G[frame.."Left"]
@@ -498,7 +498,7 @@ local function clearClose(f)
 end
 
 function S:ReskinClose(f, a1, p, a2, x, y)
-	if not f then return end
+	assert(f, "doesn't exist!")
 	f:Size(17, 17)
 
 	if not a1 then
@@ -554,7 +554,7 @@ function S:ReskinClose(f, a1, p, a2, x, y)
 end
 
 function S:ReskinInput(f, height, width)
-	if not f then return end
+	assert(f, "doesn't exist!")
 	local frame = f:GetName()
 	if frame then
 		if _G[frame.."Left"] then _G[frame.."Left"]:Hide() end
@@ -582,7 +582,7 @@ function S:ReskinInput(f, height, width)
 end
 
 function S:ReskinArrow(f, direction)
-	if not f then return end
+	assert(f, "doesn't exist!")
 	f:Size(18, 18)
 	S:Reskin(f)
 
@@ -599,7 +599,7 @@ function S:ReskinArrow(f, direction)
 end
 
 function S:ReskinCheck(f)
-	if not f then return end
+	assert(f, "doesn't exist!")
 	f:SetNormalTexture("")
 	f:SetPushedTexture("")
 	f:SetHighlightTexture(R["media"].blank)
@@ -624,7 +624,7 @@ function S:ReskinCheck(f)
 end
 
 function S:ReskinSlider(f)
-	if not f then return end
+	assert(f, "doesn't exist!")
 	f:SetBackdrop(nil)
 	f.SetBackdrop = R.dummy
 
@@ -642,7 +642,7 @@ function S:ReskinSlider(f)
 end
 
 function S:SetBD(f, x, y, x2, y2)
-	if not f then return end
+	assert(f, "doesn't exist!")
 	local bg = CreateFrame("Frame", nil, f)
 	if not x then
 		bg:SetPoint("TOPLEFT")
@@ -662,6 +662,7 @@ function S:SetBD(f, x, y, x2, y2)
 end
 
 function S:ReskinPortraitFrame(f, isButtonFrame)
+	assert(f, "doesn't exist!")
 	local name = f:GetName()
 
 	_G[name.."Bg"]:Hide()
@@ -693,6 +694,7 @@ function S:ReskinPortraitFrame(f, isButtonFrame)
 end
 
 function S:CreateBDFrame(f, a)
+	assert(f, "doesn't exist!")
 	local frame
 	if f:GetObjectType() == "Texture" then
 		frame = f:GetParent()
@@ -711,6 +713,7 @@ function S:CreateBDFrame(f, a)
 end
 
 function S:ReskinFilterButton(f)
+	assert(f, "doesn't exist!")
 	f.TopLeft:Hide()
 	f.TopRight:Hide()
 	f.BottomLeft:Hide()
@@ -743,6 +746,7 @@ S.colourArrow = colourArrow
 S.clearArrow = clearArrow
 
 function S:ReskinNavBar(f)
+	assert(f, "doesn't exist!")
 	local overflowButton = f.overflowButton
 	if not f.GetRegions then return end
 
@@ -765,11 +769,13 @@ function S:ReskinNavBar(f)
 end
 
 function S:ReskinIcon(icon)
+	assert(icon, "doesn't exist!")
 	icon:SetTexCoord(.08, .92, .08, .92)
 	S:CreateBG(icon)
 end
 
 function S:ReskinExpandOrCollapse(f)
+	assert(f, "doesn't exist!")
 	f:SetSize(13, 13)
 
 	S:Reskin(f)
@@ -789,6 +795,7 @@ function S:ReskinExpandOrCollapse(f)
 end
 
 function S:ReskinGarrisonPortrait(portrait, isTroop)
+	assert(portrait, "doesn't exist!")
 	portrait:SetSize(portrait.Portrait:GetSize())
 	S:CreateBD(portrait, 1)
 

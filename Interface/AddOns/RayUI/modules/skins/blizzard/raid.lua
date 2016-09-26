@@ -3,7 +3,6 @@ local S = R:GetModule("Skins")
 
 local function LoadSkin()
 	ReadyCheckFrame:HookScript("OnShow", function(self) if UnitIsUnit("player", self.initiator) then self:Hide() end end)
-	S:Reskin(RaidFrameReadyCheckButton)
 	S:Reskin(ReadyCheckFrameYesButton)
 	S:Reskin(ReadyCheckFrameNoButton)
 	S:ReskinCheck(RaidFrameAllAssistCheckButton)

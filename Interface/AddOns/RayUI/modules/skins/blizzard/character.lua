@@ -46,12 +46,10 @@ local function LoadSkin()
 	S:CreateBD(CharacterStatsPane.EnhancementsCategory, .5)
 
 	S:ReskinClose(CharacterFrameCloseButton)
-	S:ReskinScroll(CharacterStatsPaneScrollBar)
 	S:ReskinScroll(PaperDollTitlesPaneScrollBar)
 	S:ReskinScroll(PaperDollEquipmentManagerPaneScrollBar)
 	S:ReskinScroll(ReputationListScrollFrameScrollBar)
 	S:ReskinScroll(GearManagerDialogPopupScrollFrameScrollBar)
-	S:ReskinArrow(CharacterFrameExpandButton, "left")
 	S:Reskin(PaperDollEquipmentManagerPaneEquipSet)
 	S:Reskin(PaperDollEquipmentManagerPaneSaveSet)
 	S:Reskin(GearManagerDialogPopupOkay)
@@ -73,7 +71,7 @@ local function LoadSkin()
 		end
 	end)
 
-	for i = 1, 4 do
+	for i = 1, 3 do
 		S:CreateTab(_G["CharacterFrameTab"..i])
 	end
 

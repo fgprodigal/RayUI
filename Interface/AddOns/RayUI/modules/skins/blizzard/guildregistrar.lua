@@ -5,9 +5,8 @@ local function LoadSkin()
     GuildRegistrarFrameTop:Hide()
     GuildRegistrarFrameBottom:Hide()
     GuildRegistrarFrameMiddle:Hide()
-    select(19, GuildRegistrarFrame:GetRegions()):Hide()
-    select(6, GuildRegistrarFrameEditBox:GetRegions()):Hide()
-    select(7, GuildRegistrarFrameEditBox:GetRegions()):Hide()
+    GuildRegistrarFrameEditBox:StripTextures()
+	GuildRegistrarGreetingFrame:StripTextures()
 
     GuildRegistrarFrameEditBox:SetHeight(20)
 
