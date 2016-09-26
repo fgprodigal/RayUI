@@ -16,6 +16,13 @@ function MM:PositionButtonCollector(self, screenQuadrant)
 	-- MBCF:SetAlpha(0)
 	MBCF:ClearAllPoints()
 	screenQuadrant = screenQuadrant or R:GetScreenQuadrant(self)
+	if BaudErrorFrameMinimapButton then
+		BaudErrorFrameMinimapButton:SetFrameStrata("DIALOG")
+		BaudErrorFrameMinimapButton:ClearAllPoints()
+		BaudErrorFrameMinimapButton:SetPoint("RIGHT", Minimap, "RIGHT", -2, 0)
+		BaudErrorFrameMinimapButton.ClearAllPoints = R.dummy
+		BaudErrorFrameMinimapButton.SetPoint = R.dummy
+	end
 	for i =1, #buttons do
 		buttons[i]:ClearAllPoints()
 		if i == 1 then
@@ -40,7 +47,7 @@ function MM:PositionButtonCollector(self, screenQuadrant)
 end
 
 function MM:ButtonCollector()
-	local BlackList = { 
+	local BlackList = {
 		["MiniMapTracking"] = true,
 		["MiniMapVoiceChatFrame"] = true,
 		["MiniMapWorldMapButton"] = true,
@@ -174,7 +181,12 @@ function MM:ButtonCollector()
 		end
 		btn:Size(23,23)
 		btn:CreateShadow("Background")
-		tinsert(buttons, btn)
+		if btn:GetName() ~= "BaudErrorFrameMinimapButton" then
+			tinsert(buttons, btn)
+		else
+			btn.shadow:SetBackdropColor(0.8, 0.2, 0.2, 0.4)
+			R:GetModule("Skins"):CreatePulse(btn.shadow, 1, 1)
+		end
 		btn.isSkinned = true
 	end
 

@@ -13,6 +13,7 @@
 
 /Interface/AddOns*/*
 /Interface/AddOns/RayUI/core/test.lua
+!/Interface/AddOns/!BaudErrorFrame/
 !/Interface/AddOns/Foglight/
 !/Interface/AddOns/IntelliMount/
 !/Interface/AddOns/ncShadow/
