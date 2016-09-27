@@ -199,8 +199,7 @@ local function LoadSkin()
 			S:CreateBD(frame.bg)
 
 			-- Icon border
-			frame.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-			S:CreateBG(frame.Icon)
+			S:ReskinIcon(frame.Icon)
 		end
 		frame.Icon:SetDrawLayer("BORDER")
 		frame.Background:Kill()
@@ -219,12 +218,11 @@ local function LoadSkin()
 
 			-- Icon border
 			frame.Icon:SetDrawLayer("ARTWORK")
-			frame.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-			S:CreateBG(frame.Icon)
+			S:ReskinIcon(frame.Icon)
 		end
 		frame.IconBorder:Kill()
 		frame.Background:Kill()
-	end)	
+	end)
 
 	hooksecurefunc(InvasionAlertSystem, "setUpFunction", function(frame)
 		if not frame.bg then
@@ -234,7 +232,7 @@ local function LoadSkin()
 			frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
 			S:CreateBD(frame.bg)
 		end
-	end)	
+	end)
 
 	hooksecurefunc(WorldQuestCompleteAlertSystem, "setUpFunction", function(frame)
 		if not frame.bg then
@@ -244,6 +242,21 @@ local function LoadSkin()
 			frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
 			S:CreateBD(frame.bg)
 		end
+	end)
+
+	//We can test this through /run NewRecipeLearnedAlertSystem:ShowAlert(2330)
+	hooksecurefunc(NewRecipeLearnedAlertSystem, "setUpFunction", function(frame)
+		if not frame.bg then
+			select(1,frame:GetRegions()):Kill()
+			frame.bg = CreateFrame("Frame", nil, frame)
+			frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 10, -6)
+			frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -14, 6)
+			frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+			S:CreateBD(frame.bg)
+		end
+		frame.Icon:SetMask(nil)
+		frame.Icon:SetDrawLayer("ARTWORK")
+		S:ReskinIcon(frame.Icon)
 	end)
 
 	-- Digsite completion alert
@@ -271,9 +284,8 @@ local function LoadSkin()
 		frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
 		S:CreateBD(frame.bg)
 
-		icon:SetTexCoord(.08, .92, .08, .92)
 		icon:SetDrawLayer("ARTWORK")
-		S:CreateBG(icon)
+		S:ReskinIcon(icon)
 	end
 
 	-- Garrison mission alert
@@ -352,8 +364,7 @@ local function LoadSkin()
 
 			frame.Background:Hide()
 
-			frame.Icon:SetTexCoord(.08, .92, .08, .92)
-			S:CreateBG(frame.icon)
+			S:ReskinIcon(frame.icon)
 			frame.Icon:SetDrawLayer("BORDER", 5)
 			frame.Icon:ClearAllPoints()
 			frame.Icon:SetPoint("CENTER", frame.BaseQualityBorder)
@@ -386,8 +397,7 @@ local function LoadSkin()
 	if icon and icon:GetObjectType() == "Texture"then
 		if icon:GetTexture() == "Interface\\Icons\\Ability_Warlock_DemonicPower" then
 			icon:SetDrawLayer("ARTWORK")
-			icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-			S:CreateBG(icon)
+			S:ReskinIcon(icon)
 		end
 	end
 
@@ -408,9 +418,8 @@ local function LoadSkin()
 		end
 	end
 	--Icon
-	frame.QuestTexture:SetTexCoord(.08, .92, .08, .92)
 	frame.QuestTexture:SetDrawLayer("ARTWORK")
-	S:CreateBG(frame.QuestTexture)
+	S:ReskinIcon(frame.QuestTexture)
 
 	--Legendary Item Alert
 	frame = LegendaryItemAlertFrame
@@ -422,9 +431,8 @@ local function LoadSkin()
 	frame.Particles2:Kill()
 	frame.Particles1:Kill()
 	--Icon
-	frame.Icon:SetTexCoord(.08, .92, .08, .92)
 	frame.Icon:SetDrawLayer("ARTWORK")
-	S:CreateBG(frame.Icon)
+	S:ReskinIcon(frame.Icon)
 	--Create Backdrop
 	frame.bg = CreateFrame("Frame", nil, frame)
 	frame.bg:Point("TOPLEFT", frame, "TOPLEFT", 20, -20)
@@ -477,9 +485,8 @@ local function LoadSkin()
 	frame = GarrisonShipMissionAlertFrame
 	frame.Background:Kill()
 	--Icon
-	frame.MissionType:SetTexCoord(.08, .92, .08, .92)
 	frame.MissionType:SetDrawLayer("ARTWORK")
-	S:CreateBG(frame.MissionType)
+	S:ReskinIcon(frame.MissionType)
 	--Create Backdrop
 	frame.bg = CreateFrame("Frame", nil, frame)
 	frame.bg:Point("TOPLEFT", frame, "TOPLEFT", 8, -2)
@@ -493,9 +500,21 @@ local function LoadSkin()
 	frame.Blank:Kill()
 	frame.IconBG:Kill()
 	--Icon
-	frame.MissionType:SetTexCoord(.08, .92, .08, .92)
 	frame.MissionType:SetDrawLayer("ARTWORK")
-	S:CreateBG(frame.MissionType)
+	S:ReskinIcon(frame.MissionType)
+	--Create Backdrop
+	frame.bg = CreateFrame("Frame", nil, frame)
+	frame.bg:Point("TOPLEFT", frame, "TOPLEFT", 8, -2)
+	frame.bg:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -6, 2)
+	frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+	S:CreateBD(frame.bg)
+
+	-- Garrison random mission alert
+	frame = GarrisonTalentAlertFrame
+	select(1,GarrisonTalentAlertFrame:GetRegions()):Kill()
+	--Icon
+	frame.Icon:SetDrawLayer("ARTWORK")
+	S:ReskinIcon(frame.Icon)
 	--Create Backdrop
 	frame.bg = CreateFrame("Frame", nil, frame)
 	frame.bg:Point("TOPLEFT", frame, "TOPLEFT", 8, -2)
@@ -512,6 +531,7 @@ local function LoadSkin()
 		AchievementAlertSystem:ShowAlert(5780)
 		AchievementAlertSystem:ShowAlert(5000)
 		CriteriaAlertSystem:ShowAlert(5780)
+		NewRecipeLearnedAlertSystem:ShowAlert(2330)
 		-- AlertFrame_AnimateIn(DungeonCompletionAlertFrame1)
 		-- AlertFrame_AnimateIn(ScenarioAlertFrame1)
 
