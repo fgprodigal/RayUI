@@ -691,7 +691,7 @@ function TT:Initialize()
 	end)
 
 	--World Quest Reward Icon
-	WorldMapTooltip.ItemTooltip.IconBorder:SetAlpha(0)
+	WorldMapTooltip.ItemTooltip.IconBorder:Kill()
 	WorldMapTooltip.ItemTooltip.Icon:SetTexCoord(0.08, .92, .08, .92)
 	WorldMapTooltip.ItemTooltip.b = CreateFrame("Frame", nil, WorldMapTooltip.ItemTooltip)
 	WorldMapTooltip.ItemTooltip.b:SetAllPoints(WorldMapTooltip.ItemTooltip.Icon)
