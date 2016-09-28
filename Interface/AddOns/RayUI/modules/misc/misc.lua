@@ -291,21 +291,11 @@ function M:Initialize()
 	for _, name in pairs(self.Modules) do
 		local module = self:GetModule(name, true)
 		if module then
-			module:Initialize()
+			local _, catch = pcall(module.Initialize, module)
+			R:ThrowError(catch)
 		else
 			table.insert(errList, name)
 		end
-	end
-	if #errList > 0 then
-		for i = 1, #errList do
-			if i == 1 then
-				errText = "Misc Modules: " .. errList[i]
-			else
-				errText = errText .. ", " .. errList[i]
-			end
-		end
-		errText = errText .. " not loaded"
-		R:Print(errText)
 	end
 end
 

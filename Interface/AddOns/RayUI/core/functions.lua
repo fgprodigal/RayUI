@@ -189,9 +189,7 @@ function R:InitializeModules()
 			local module = self:GetModule(self["RegisteredModules"][i])
 			if (self.db[self["RegisteredModules"][i]] == nil or self.db[self["RegisteredModules"][i]].enable ~= false) and module.Initialize then
 				local _, catch = pcall(module.Initialize, module)
-				if catch and GetCVarBool("scriptErrors") then
-					ScriptErrorsFrame_OnError(catch, false)
-				end
+				self:ThrowError(catch)
 			end
 		end
 	end
@@ -864,6 +862,18 @@ function R:IsDeveloper()
 		end
 	end
 	return false
+end
+
+function R:ThrowError(err)
+	if err and GetCVarBool("scriptErrors") then
+		if IsAddOnLoaded("!BugGrabber") then
+			geterrorhandler()(err)
+		elseif BaudErrorFrameHandler then
+			BaudErrorFrameHandler(err)
+		else
+			ScriptErrorsFrame_OnError(err, false)
+		end
+	end
 end
 
 function R:ADDON_LOADED(event, addon)
