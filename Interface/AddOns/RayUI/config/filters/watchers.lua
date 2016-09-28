@@ -71,6 +71,7 @@ R["Watcher"] = {
                 { spellID = 61336, unitId = "player", caster = "player", filter = "BUFF" },
                 --節能施法
                 { spellID = 135700, unitId = "player", caster = "player", filter = "BUFF" },
+                { spellID = 16870, unitId = "player", caster = "player", filter = "BUFF" },
                 --樹皮術
                 { spellID = 22812, unitId = "player", caster = "player", filter = "BUFF" },
                 --狂暴
