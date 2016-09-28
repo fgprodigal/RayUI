@@ -244,7 +244,7 @@ local function LoadSkin()
 		end
 	end)
 
-	//We can test this through /run NewRecipeLearnedAlertSystem:ShowAlert(2330)
+	-- We can test this through /run NewRecipeLearnedAlertSystem:ShowAlert(2330)
 	hooksecurefunc(NewRecipeLearnedAlertSystem, "setUpFunction", function(frame)
 		if not frame.bg then
 			select(1,frame:GetRegions()):Kill()
