@@ -365,6 +365,7 @@ function AB:HideBlizz()
 	PossessBackground1:Kill()
 	PossessBackground2:Kill()
 	StanceBarLeft:Kill()
+	StanceBarMiddle:Kill()
 	StanceBarRight:Kill()
 
 	InterfaceOptionsActionBarsPanelAlwaysShowActionBars:EnableMouse(false)
