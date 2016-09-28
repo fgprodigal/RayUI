@@ -8,6 +8,7 @@ local function SkinBaudErrorFrame()
 	S:Reskin(BaudErrorFrameCloseButton)
 	S:Reskin(BaudErrorFrameReloadUIButton)
 	S:ReskinScroll(BaudErrorFrameDetailScrollFrameScrollBar)
+	S:ReskinScroll(BaudErrorFrameListScrollBoxScrollBarScrollBar)
 end
 
 S:AddCallbackForAddon("!BaudErrorFrame", "BaudErrorFrame", SkinBaudErrorFrame)

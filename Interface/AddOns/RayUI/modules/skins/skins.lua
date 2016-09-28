@@ -771,7 +771,7 @@ end
 function S:ReskinIcon(icon)
 	assert(icon, "doesn't exist!")
 	icon:SetTexCoord(.08, .92, .08, .92)
-	S:CreateBG(icon)
+	icon.bg = S:CreateBG(icon)
 end
 
 function S:ReskinExpandOrCollapse(f)
