@@ -12,7 +12,7 @@
 			</Anchor>
 			<Anchor point="RIGHT">
 				<Offset>
-					<AbsDimension x="-13"/>
+					<AbsDimension x="-21"/>
 				</Offset>
 			</Anchor>
 		</Anchors>
@@ -78,7 +78,7 @@
 		  </OnUpdate>
 		</Scripts>
 	  </Button>
-	<Frame name="BaudErrorFrame" toplevel="true" frameStrata="DIALOG" enableMouse="true" parent="UIParent" hidden="true">
+	<Frame name="BaudErrorFrame" toplevel="true" frameStrata="DIALOG" enableMouse="true" parent="UIParent" hidden="true" movable="true">
 		<Size>
 			<AbsDimension x="600" y="500"/>
 		</Size>
@@ -130,12 +130,12 @@
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
-							<AbsDimension x="40" y="-40"/>
+							<AbsDimension x="20" y="-40"/>
 						</Offset>
 					</Anchor>
 					<Anchor point="RIGHT">
 						<Offset>
-							<AbsDimension x="-40"/>
+							<AbsDimension x="-20"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -176,7 +176,7 @@
 						</Anchors>
 						<Scripts>
 							<OnVerticalScroll>
-								FauxScrollFrame_OnVerticalScroll(16, BaudErrorFrameScrollBar_Update);
+								FauxScrollFrame_OnVerticalScroll(self, offset, 16, BaudErrorFrameScrollBar_Update);
 							</OnVerticalScroll>
 						</Scripts>
 					</ScrollFrame>
@@ -192,7 +192,7 @@
 							</Anchor>
 							<Anchor point="RIGHT">
 								<Offset>
-									<AbsDimension x="-8"/>
+									<AbsDimension x="-21"/>
 								</Offset>
 							</Anchor>
 						</Anchors>
@@ -219,17 +219,17 @@
 			</Frame>
 			<Frame name="$parentDetailScrollBox">
 				<Size>
-					<AbsDimension x="500" y="258"/>
+					<AbsDimension x="500" y="250"/>
 				</Size>
 				<Anchors>
 					<Anchor point="BOTTOMLEFT">
 						<Offset>
-							<AbsDimension x="40" y="40"/>
+							<AbsDimension x="20" y="40"/>
 						</Offset>
 					</Anchor>
 					<Anchor point="RIGHT">
 						<Offset>
-							<AbsDimension x="-40"/>
+							<AbsDimension x="-20"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -274,10 +274,10 @@
 						<ScrollChild>
 							<EditBox name="BaudErrorFrameEditBox" autoFocus="false" multiLine="true">
 								<Size>
-									<AbsDimension x="466" y="250"/>
+									<AbsDimension x="550" y="250"/>
 								</Size>
 								<TextInsets>
-									<AbsInset left="4" right="4" top="4" bottom="4"/>
+									<AbsInset left="4" right="21" top="4" bottom="4"/>
 								</TextInsets>
 								<FontString inherits="ChatFontNormal"/>
 								<Scripts>
@@ -296,7 +296,7 @@
 						<Scripts>
 							<OnLoad>
 								ScrollFrame_OnLoad(self);
-								self.scrollBarHideable = 1;
+								self.scrollBarHideable = true;
 								getglobal(self:GetName().."ScrollBar"):Hide();
 							</OnLoad>
 						</Scripts>
@@ -314,7 +314,7 @@
 				<Anchors>
 					<Anchor point="BOTTOMLEFT">
 						<Offset>
-							<AbsDimension x="50" y="16"/>
+							<AbsDimension x="20" y="10"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -331,7 +331,7 @@
 				<Anchors>
 					<Anchor point="BOTTOMRIGHT">
 						<Offset>
-							<AbsDimension x="-50" y="16"/>
+							<AbsDimension x="-20" y="10"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -372,6 +372,13 @@
 			<OnHide>
 				BaudErrorFrame_OnHide();
 			</OnHide>
+			<OnMouseDown>
+				self:StartMoving();
+			</OnMouseDown>
+			<OnMouseUp>
+				self:StopMovingOrSizing();
+				self:SetUserPlaced(false);
+			</OnMouseUp>
 		</Scripts>
 	</Frame>
 </Ui>
