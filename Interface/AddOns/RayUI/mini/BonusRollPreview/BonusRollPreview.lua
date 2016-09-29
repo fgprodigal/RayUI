@@ -130,22 +130,10 @@ local function HandlePosition()
 		Container:SetPoint("TOP", BonusRollFrame, "BOTTOM")
 
 		Handle.Arrow:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-down-active")
-		Handle.TopCenter:Hide()
-		Handle.TopRight:Hide()
-		Handle.TopLeft:Hide()
-		Handle.BottomCenter:Show()
-		Handle.BottomRight:Show()
-		Handle.BottomLeft:Show()
 	else
 		Container:SetPoint("BOTTOM", BonusRollFrame, "TOP")
 
 		Handle.Arrow:SetTexture("Interface\\AddOns\\RayUI\\media\\arrow-up-active")
-		Handle.TopCenter:Show()
-		Handle.TopRight:Show()
-		Handle.TopLeft:Show()
-		Handle.BottomCenter:Hide()
-		Handle.BottomRight:Hide()
-		Handle.BottomLeft:Hide()
 	end
 
 	HandleClick()
@@ -466,50 +454,6 @@ function Container:PLAYER_LOGIN()
 	Handle.Arrow:Size(8, 8)
 	Handle.Arrow:SetPoint("CENTER")
 	Handle.Arrow:SetVertexColor(1, 1, 1)
-
-	local HandleBackground = Handle:CreateTexture(nil, "BACKGROUND")
-	HandleBackground:SetAllPoints()
-	HandleBackground:SetTexture(0, 0, 0, 0.8)
-
-	local TopCenter = Handle:CreateTexture(nil, "BORDER")
-	TopCenter:SetPoint("TOP", 0, 4.5)
-	TopCenter:SetSize(24, 12)
-	TopCenter:SetTexture([[Interface\RaidFrame\RaidPanel-UpperMiddle]])
-	Handle.TopCenter = TopCenter
-
-	local TopRight = Handle:CreateTexture(nil, "BORDER")
-	TopRight:SetPoint("TOPRIGHT", 4, 4)
-	TopRight:SetSize(24, 20)
-	TopRight:SetTexture([[Interface\RaidFrame\RaidPanel-UpperRight]])
-	TopRight:SetTexCoord(0, 1, 0, 0.8)
-	Handle.TopRight = TopRight
-
-	local TopLeft = Handle:CreateTexture(nil, "BORDER")
-	TopLeft:SetPoint("TOPLEFT", -4, 4)
-	TopLeft:SetSize(24, 20)
-	TopLeft:SetTexture([[Interface\RaidFrame\RaidPanel-UpperLeft]])
-	TopLeft:SetTexCoord(0, 1, 0, 0.8)
-	Handle.TopLeft = TopLeft
-
-	local BottomCenter = Handle:CreateTexture(nil, "BORDER")
-	BottomCenter:SetPoint("BOTTOM", 0, -9)
-	BottomCenter:SetSize(24, 12)
-	BottomCenter:SetTexture([[Interface\RaidFrame\RaidPanel-BottomMiddle]])
-	Handle.BottomCenter = BottomCenter
-
-	local BottomRight = Handle:CreateTexture(nil, "BORDER")
-	BottomRight:SetPoint("BOTTOMRIGHT", 4, -6)
-	BottomRight:SetSize(24, 22)
-	BottomRight:SetTexture([[Interface\RaidFrame\RaidPanel-BottomRight]])
-	BottomRight:SetTexCoord(0, 1, 0.1, 1)
-	Handle.BottomRight = BottomRight
-
-	local BottomLeft = Handle:CreateTexture(nil, "BORDER")
-	BottomLeft:SetPoint("BOTTOMLEFT", -4, -6)
-	BottomLeft:SetSize(24, 22)
-	BottomLeft:SetTexture([[Interface\RaidFrame\RaidPanel-BottomLeft]])
-	BottomLeft:SetTexCoord(0, 1, 0.1, 1)
-	Handle.BottomLeft = BottomLeft
 
 	Hotspot:SetAllPoints(BonusRollFrame.SpecIcon)
 	Hotspot:SetScript("OnEnter", HotspotEnter)
