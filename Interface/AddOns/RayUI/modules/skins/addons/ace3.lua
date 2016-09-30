@@ -269,8 +269,4 @@ local function attemptSkin()
 	end
 end
 
-local f = CreateFrame("Frame")
-f:RegisterEvent("ADDON_LOADED")
-f:SetScript("OnEvent", attemptSkin)
-
 S:AddCallback("Ace3", attemptSkin)
