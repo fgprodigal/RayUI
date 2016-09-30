@@ -12,7 +12,12 @@
 2. 在复制新内容之前删除旧的 `Interface` 文件夹
 3. 不要管 `.gitignore, README.md` 这些文件，只把 `Interface` 文件夹复制到你的 WOW 目录的 `addons` 文件夹下
 
+## 提交Bug
+
+[点击提交Bug](https://gitlab.com/fgprodigal/RayUI/issues/new)
+
 ## 贡献
+
 [点击查看贡献代码的方法](https://gitlab.com/fgprodigal/RayUI/blob/master/CONTRIBUTING.md)
 
 ---
@@ -31,5 +36,10 @@ Website: [rayui.me](http://rayui.me)
 2. Delete the old `Interface` directory before copy.
 3. Leave the `.gitignore, README.md` files, copy the `Interface` directory to `your_wow_path/addons/`
 
+## Reporting Issues
+
+[click to report issues](https://gitlab.com/fgprodigal/RayUI/issues/new)
+
 ## Contributing
+
 [click to see how to contribute your code](https://gitlab.com/fgprodigal/RayUI/blob/master/CONTRIBUTING.md)
