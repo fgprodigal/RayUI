@@ -1,6 +1,16 @@
 ﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 
+--Cache global variables
+--Lua functions
+local unpack = unpack
+
+--WoW API / Variables
+local GetLocale = GetLocale
+local ReloadUI = ReloadUI
+local GameTooltip_Hide = GameTooltip_Hide
+local StaticPopup_Show = StaticPopup_Show
+
 R.Options = {
 	type = "group",
 	name = AddOnName,

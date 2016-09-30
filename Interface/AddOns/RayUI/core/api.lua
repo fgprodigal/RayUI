@@ -4,6 +4,22 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local LSM = LibStub("LibSharedMedia-3.0")
 
+local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+
+--Cache global variables
+--Lua functions
+local _G = _G
+local type = type
+local hooksecurefunc = hooksecurefunc
+local unpack = unpack
+local select = select
+local getmetatable = getmetatable
+
+--WoW API / Variables
+local CreateFrame = CreateFrame
+local UIFrameFadeIn = UIFrameFadeIn
+local UIFrameFadeOut = UIFrameFadeOut
+
 local function Size(frame, width, height)
 	frame:SetSize(R:Scale(width), R:Scale(height or width))
 end
@@ -107,7 +123,7 @@ local function SetTemplate(f, t, glossTex)
         alpha = 0
 	end
 
-	f:SetBackdropColor(backdropfadecolorr, backdropfadecolorg, backdropfadecolorb, alpha)
+	f:SetBackdropColor(r, g, b, alpha)
 	f:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 end
 

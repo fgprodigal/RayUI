@@ -9,7 +9,7 @@ local FrameStackTooltip_Toggle = FrameStackTooltip_Toggle
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: SLASH_FRAME1, SLASH_FRAMELIST1, SLASH_TEXLIST1, FRAME, ChatFrame1
--- GLOBALS: FrameStackTooltip, UIParentLoadAddOn, CopyChatFrame, ElvUI
+-- GLOBALS: FrameStackTooltip, UIParentLoadAddOn, CopyChatFrame, RayUI
 
 --[[
 	Command to grab frame information when mouseing over a frame

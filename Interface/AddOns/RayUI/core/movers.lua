@@ -2,8 +2,33 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local AddOnName = ...
 local AceConfig = LibStub("AceConfigDialog-3.0")
-local gridSize = 50
 
+--Cache global variables
+--Lua functions
+local _G = _G
+local string = string
+local ipairs = ipairs
+local floor = floor
+local tonumber = tonumber
+local type = type
+local pairs = pairs
+
+--WoW API / Variables
+local InCombatLockdown = InCombatLockdown
+local CreateFrame = CreateFrame
+local GetScreenWidth = GetScreenWidth
+local GetScreenHeight = GetScreenHeight
+local PlaySound = PlaySound
+local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT
+local RESET = RESET
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: UIParent, GameTooltip, UIDropDownMenu_SetSelectedValue, UIDropDownMenu_Initialize
+-- GLOBALS: UIDropDownMenu_CreateInfo, UIDropDownMenu_AddButton, EditBox_ClearFocus, SquareButton_SetIcon
+-- GLOBALS: RayUIMoverPopupWindow, GameFontNormal, RayUIMoverPopupWindowDropDown
+
+local grid, nudgeWindow
+local gridSize = 50
 R.CreatedMovers = {}
 local selectedValue = "GENERAL"
 local MoverTypes = {
@@ -47,7 +72,7 @@ local function MoverTypes_Initialize()
 	UIDropDownMenu_SetSelectedValue(RayUIMoverPopupWindowDropDown, selectedValue)
 end
 
-function CreateGrid() 
+local function CreateGrid() 
 	grid = CreateFrame("Frame", "AlignGrid", UIParent) 
 	grid.boxSize = gridSize
 	grid:SetAllPoints(UIParent) 
@@ -110,7 +135,7 @@ local function ShowGrid()
 	end
 end
 
-function HideGrid()
+local function HideGrid()
 	if grid then
 		grid:Hide()
 	end
@@ -141,15 +166,15 @@ local function UpdateNudgeFrame(mover)
 	x = R:Round(x, 0)
 	y = R:Round(y, 0)
 
-	MoverNudgeWindow.xOffset:SetText(x)
-	MoverNudgeWindow.yOffset:SetText(y)
-	MoverNudgeWindow.xOffset.currentValue = x
-	MoverNudgeWindow.yOffset.currentValue = y
-	MoverNudgeWindow.title:SetText(mover.textstring)
+	nudgeWindow.xOffset:SetText(x)
+	nudgeWindow.yOffset:SetText(y)
+	nudgeWindow.xOffset.currentValue = x
+	nudgeWindow.yOffset.currentValue = y
+	nudgeWindow.title:SetText(mover.textstring)
 end
 
 local function AssignFrameToNudge(self)
-	MoverNudgeWindow.child = self
+	nudgeWindow.child = self
 	UpdateNudgeFrame(self)
 end
 
@@ -168,11 +193,11 @@ local function GetXYOffset(position)
 end
 
 local function HideNudgeWindow()
-	MoverNudgeWindow:Hide()
+	nudgeWindow:Hide()
 end
 
 local function ShowNudgeWindow()
-	local mover = MoverNudgeWindow.child
+	local mover = nudgeWindow.child
 	local screenWidth, screenHeight, screenCenter = UIParent:GetRight(), UIParent:GetTop(), UIParent:GetCenter()
 	local x, y = mover:GetCenter()
 
@@ -203,15 +228,15 @@ local function ShowNudgeWindow()
 	end
 	
 	local coordX, coordY = GetXYOffset(inversePoint)
-	MoverNudgeWindow:ClearAllPoints()
-	MoverNudgeWindow:SetPoint(point, mover, inversePoint, coordX, coordY)
-	MoverNudgeWindow.title:SetText(mover.textstring)
-	MoverNudgeWindow:Show()
+	nudgeWindow:ClearAllPoints()
+	nudgeWindow:SetPoint(point, mover, inversePoint, coordX, coordY)
+	nudgeWindow.title:SetText(mover.textstring)
+	nudgeWindow:Show()
 	UpdateNudgeFrame(mover)
 end
 
 local function SetNudge()
-	local mover = MoverNudgeWindow.child
+	local mover = nudgeWindow.child
 
 	local screenWidth, screenHeight, screenCenter = UIParent:GetRight(), UIParent:GetTop(), UIParent:GetCenter()
 	local x, y = mover:GetCenter()
@@ -232,8 +257,8 @@ local function SetNudge()
 		point = point.."LEFT"
 	end
 	
-	x = tonumber(MoverNudgeWindow.xOffset.currentValue)
-	y = tonumber(MoverNudgeWindow.yOffset.currentValue)
+	x = tonumber(nudgeWindow.xOffset.currentValue)
+	y = tonumber(nudgeWindow.yOffset.currentValue)
 
 	mover:ClearAllPoints()
 	mover:Point(point, UIParent, point, x, y)
@@ -343,31 +368,31 @@ local function CreatePopup()
 	
 	UIDropDownMenu_Initialize(moverTypes, MoverTypes_Initialize)
 
-	local nudgeFrame = CreateFrame("Frame", "MoverNudgeWindow", UIParent)
-	nudgeFrame:SetFrameStrata("DIALOG")
-	nudgeFrame:SetWidth(200)
-	nudgeFrame:SetHeight(110)
-	nudgeFrame:CreateShadow("Background")
-	nudgeFrame:Point("TOP", RayUIMoverPopupWindow, "BOTTOM", 0, -15)
-	nudgeFrame:SetFrameLevel(100)
-	nudgeFrame:Hide()
-	nudgeFrame:EnableMouse(true)
-	nudgeFrame:SetClampedToScreen(true)
-	RayUIMoverPopupWindow:HookScript("OnHide", function() MoverNudgeWindow:Hide() end)
+	nudgeWindow = CreateFrame("Frame", "MoverNudgeWindow", UIParent)
+	nudgeWindow:SetFrameStrata("DIALOG")
+	nudgeWindow:SetWidth(200)
+	nudgeWindow:SetHeight(110)
+	nudgeWindow:CreateShadow("Background")
+	nudgeWindow:Point("TOP", RayUIMoverPopupWindow, "BOTTOM", 0, -15)
+	nudgeWindow:SetFrameLevel(100)
+	nudgeWindow:Hide()
+	nudgeWindow:EnableMouse(true)
+	nudgeWindow:SetClampedToScreen(true)
+	RayUIMoverPopupWindow:HookScript("OnHide", function() nudgeWindow:Hide() end)
 
-	local desc = nudgeFrame:CreateFontString("ARTWORK")
+	local desc = nudgeWindow:CreateFontString("ARTWORK")
 	desc:SetFontObject("GameFontHighlight")
 	desc:SetJustifyV("TOP")
 	desc:SetJustifyH("CENTER")
 	desc:SetPoint("TOPLEFT", 18, -15)
 	desc:SetPoint("BOTTOMRIGHT", -18, 28)
-	nudgeFrame.title = desc
+	nudgeWindow.title = desc
 	
-	local header = CreateFrame("Button", nil, nudgeFrame)
+	local header = CreateFrame("Button", nil, nudgeWindow)
 	header:SetTemplate("Default", true)
 	header:SetWidth(100)
 	header:SetHeight(25)
-	header:SetPoint("CENTER", nudgeFrame, "TOP")
+	header:SetPoint("CENTER", nudgeWindow, "TOP")
 	header:SetFrameLevel(header:GetFrameLevel() + 2)
 
 	local title = header:CreateFontString("OVERLAY")
@@ -375,7 +400,7 @@ local function CreatePopup()
 	title:SetPoint("CENTER", header, "CENTER")
 	title:SetText(L["微调"])
 	
-	local xOffset = CreateFrame("EditBox", nudgeFrame:GetName().."XEditBox", nudgeFrame, "InputBoxTemplate")
+	local xOffset = CreateFrame("EditBox", nudgeWindow:GetName().."XEditBox", nudgeWindow, "InputBoxTemplate")
 	xOffset:Width(50)
 	xOffset:Height(17)
 	xOffset:SetAutoFocus(false)
@@ -405,11 +430,11 @@ local function CreatePopup()
 	xOffset.text = xOffset:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	xOffset.text:SetPoint("RIGHT", xOffset, "LEFT", -4, 0)
 	xOffset.text:SetText("X:")	
-	xOffset:SetPoint("BOTTOMRIGHT", nudgeFrame, "CENTER", -6, 8)
-	nudgeFrame.xOffset = xOffset
+	xOffset:SetPoint("BOTTOMRIGHT", nudgeWindow, "CENTER", -6, 8)
+	nudgeWindow.xOffset = xOffset
 	S:ReskinInput(xOffset)
 	
-	local yOffset = CreateFrame("EditBox", nudgeFrame:GetName().."YEditBox", nudgeFrame, "InputBoxTemplate")
+	local yOffset = CreateFrame("EditBox", nudgeWindow:GetName().."YEditBox", nudgeWindow, "InputBoxTemplate")
 	yOffset:Width(50)
 	yOffset:Height(17)
 	yOffset:SetAutoFocus(false)
@@ -439,23 +464,23 @@ local function CreatePopup()
 	yOffset.text = yOffset:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	yOffset.text:SetPoint("RIGHT", yOffset, "LEFT", -4, 0)
 	yOffset.text:SetText("Y:")	
-	yOffset:SetPoint("BOTTOMLEFT", nudgeFrame, "CENTER", 16, 8)
-	nudgeFrame.yOffset = yOffset
+	yOffset:SetPoint("BOTTOMLEFT", nudgeWindow, "CENTER", 16, 8)
+	nudgeWindow.yOffset = yOffset
 	S:ReskinInput(yOffset)	
 	
-	local resetButton = CreateFrame("Button", nudgeFrame:GetName().."ResetButton", nudgeFrame, "UIPanelButtonTemplate")
+	local resetButton = CreateFrame("Button", nudgeWindow:GetName().."ResetButton", nudgeWindow, "UIPanelButtonTemplate")
 	resetButton:SetText(RESET)
-	resetButton:SetPoint("TOP", nudgeFrame, "CENTER", 0, 2)
+	resetButton:SetPoint("TOP", nudgeWindow, "CENTER", 0, 2)
 	resetButton:Size(100, 25)
 	resetButton:SetScript("OnClick", function()
-		if MoverNudgeWindow.child.name then
-			R:ResetMovers(MoverNudgeWindow.child.textstring)
+		if nudgeWindow.child.name then
+			R:ResetMovers(nudgeWindow.child.textstring)
 		end
 	end)
 	S:Reskin(resetButton)
 	
-	local upButton = CreateFrame("Button", nudgeFrame:GetName().."UpButton", nudgeFrame, "UIPanelSquareButton")
-	upButton:SetPoint("BOTTOMRIGHT", nudgeFrame, "BOTTOM", -6, 4)
+	local upButton = CreateFrame("Button", nudgeWindow:GetName().."UpButton", nudgeWindow, "UIPanelSquareButton")
+	upButton:SetPoint("BOTTOMRIGHT", nudgeWindow, "BOTTOM", -6, 4)
 	upButton:SetScript("OnClick", function()
 		yOffset:SetText(yOffset.currentValue + 1)
 		yOffset:GetScript("OnEnterPressed")(yOffset)
@@ -463,8 +488,8 @@ local function CreatePopup()
 	SquareButton_SetIcon(upButton, "UP");
 	S:Reskin(upButton)
 	
-	local downButton = CreateFrame("Button", nudgeFrame:GetName().."DownButton", nudgeFrame, "UIPanelSquareButton")
-	downButton:SetPoint("BOTTOMLEFT", nudgeFrame, "BOTTOM", 6, 4)
+	local downButton = CreateFrame("Button", nudgeWindow:GetName().."DownButton", nudgeWindow, "UIPanelSquareButton")
+	downButton:SetPoint("BOTTOMLEFT", nudgeWindow, "BOTTOM", 6, 4)
 	downButton:SetScript("OnClick", function()
 		yOffset:SetText(yOffset.currentValue - 1)
 		yOffset:GetScript("OnEnterPressed")(yOffset)
@@ -472,7 +497,7 @@ local function CreatePopup()
 	SquareButton_SetIcon(downButton, "DOWN");
 	S:Reskin(downButton)
 
-	local leftButton = CreateFrame("Button", nudgeFrame:GetName().."LeftButton", nudgeFrame, "UIPanelSquareButton")
+	local leftButton = CreateFrame("Button", nudgeWindow:GetName().."LeftButton", nudgeWindow, "UIPanelSquareButton")
 	leftButton:SetPoint("RIGHT", upButton, "LEFT", -6, 0)
 	leftButton:SetScript("OnClick", function()
 		xOffset:SetText(xOffset.currentValue - 1)
@@ -481,7 +506,7 @@ local function CreatePopup()
 	SquareButton_SetIcon(leftButton, "LEFT");
 	S:Reskin(leftButton)		
 	
-	local rightButton = CreateFrame("Button", nudgeFrame:GetName().."RightButton", nudgeFrame, "UIPanelSquareButton")
+	local rightButton = CreateFrame("Button", nudgeWindow:GetName().."RightButton", nudgeWindow, "UIPanelSquareButton")
 	rightButton:SetPoint("LEFT", downButton, "RIGHT", 6, 0)
 	rightButton:SetScript("OnClick", function()
 		xOffset:SetText(xOffset.currentValue + 1)
@@ -596,7 +621,7 @@ local function CreateMover(parent, name, text, overlay, postdrag, ignoreSizeChan
 
 	f:SetScript("OnMouseUp", function(self, btn)
 		if btn=="RightButton" then
-			if MoverNudgeWindow.child == self and MoverNudgeWindow:IsShown() then
+			if nudgeWindow.child == self and nudgeWindow:IsShown() then
 				HideNudgeWindow()
 			else
 				AssignFrameToNudge(self)

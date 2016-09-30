@@ -1,4 +1,19 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+
+--Cache global variables
+--Lua functions
+local unpack = unpack
+
+--WoW API / Variables
+local CreateFrame = CreateFrame
+local PlaySoundKitID = PlaySoundKitID
+local LevelUpDisplay = LevelUpDisplay
+local StaticPopup_Show = StaticPopup_Show
+local LEVEL_UP_TYPE_SCENARIO = LEVEL_UP_TYPE_SCENARIO
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: UIParent, NORMAL_FONT_COLOR, RayUILayoutChooser
+
 local hooked = false
 
 local function ShowFinish(text, subtext)

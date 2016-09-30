@@ -2,6 +2,63 @@
 local LSM = LibStub("LibSharedMedia-3.0")
 local LibItemUpgrade = LibStub("LibItemUpgradeInfo-1.0")
 
+--Cache global variables
+--Lua functions
+local string = string
+local math = math
+local tinsert = tinsert
+local type = type
+local next = next
+local pairs = pairs
+local collectgarbage = collectgarbage
+local pcall = pcall
+local error = error
+local wipe = wipe
+local select = select
+local tostring = tostring
+local tremove = tremove
+local table = table
+local floor = floor
+local unpack = unpack
+local tonumber = tonumber
+local geterrorhandler = geterrorhandler
+
+--WoW API / Variables
+local ReloadUI = ReloadUI
+local GetAddOnInfo = GetAddOnInfo
+local CreateFrame = CreateFrame
+local GetNumAddOns = GetNumAddOns
+local DisableAddOn = DisableAddOn
+local RequestTimePlayed = RequestTimePlayed
+local SetCVar = SetCVar
+local InCombatLockdown = InCombatLockdown
+local HideUIPanel = HideUIPanel
+local GetSpecialization = GetSpecialization
+local GetCombatRatingBonus = GetCombatRatingBonus
+local GetDodgeChance = GetDodgeChance
+local GetParryChance = GetParryChance
+local UnitLevel = UnitLevel
+local UnitStat = UnitStat
+local UnitAttackPower = UnitAttackPower
+local GetScreenWidth = GetScreenWidth
+local GetScreenHeight = GetScreenHeight
+local GetItemInfo = GetItemInfo
+local GetFunctionCPUUsage = GetFunctionCPUUsage
+local GetCVar = GetCVar
+local GetCVarBool = GetCVarBool
+local IsAddOnLoaded = IsAddOnLoaded
+local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
+local QuestDifficulty_Trivial = QuestDifficulty_Trivial
+local GameMenuFrame = GameMenuFrame
+local GameMenuButtonContinue = GameMenuButtonContinue
+local COMBAT_RATING_RESILIENCE_PLAYER_DAMAGE_TAKEN = COMBAT_RATING_RESILIENCE_PLAYER_DAMAGE_TAKEN
+local FIRST_NUMBER_CAP = FIRST_NUMBER_CAP
+local SECOND_NUMBER_CAP = SECOND_NUMBER_CAP
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: UIParent, LibStub, MAX_PLAYER_LEVEL, ScriptErrorsFrame_OnError, BaudErrorFrameHandler, UISpecialFrames
+-- GLOBALS: QuestDifficultyColors, Advanced_UIScaleSlider, Advanced_UseUIScale, RayUIConfigTutorial, RayUIWarningFrameScrollScrollBar
+
 SlashCmdList["RELOAD"] = function() ReloadUI() end
 SLASH_RELOAD1 = "/rl"
 
