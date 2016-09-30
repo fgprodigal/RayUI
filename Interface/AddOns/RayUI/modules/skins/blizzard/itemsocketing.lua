@@ -22,7 +22,7 @@ local function LoadSkin()
 	title:SetPoint("TOP", 0, -5)
 
 	S:Reskin(ItemSocketingSocketButton)
-	S:ReskinClose(ItemSocketingCloseButton, "TOPRIGHT", ItemSocketingFrame, "TOPRIGHT", -6, -12)
+	S:ReskinClose(ItemSocketingFrameCloseButton, "TOPRIGHT", ItemSocketingFrame, "TOPRIGHT", -6, -12)
 	S:ReskinScroll(ItemSocketingScrollFrameScrollBar)
 	for i = 1, MAX_NUM_SOCKETS  do
 		local button = _G["ItemSocketingSocket"..i]
