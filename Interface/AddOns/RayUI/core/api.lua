@@ -4,8 +4,6 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local LSM = LibStub("LibSharedMedia-3.0")
 
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-
 --Cache global variables
 --Lua functions
 local _G = _G
