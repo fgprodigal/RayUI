@@ -1,6 +1,33 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local AB = R:GetModule("ActionBar")
 
+--Cache global variables
+--Lua functions
+local _G = _G
+local ceil = ceil
+
+--WoW API / Variables
+local CreateFrame = CreateFrame
+local IsPetAttackAction = IsPetAttackAction
+local GetPetActionInfo = GetPetActionInfo
+local PetActionButton_StartFlash = PetActionButton_StartFlash
+local PetActionButton_StopFlash = PetActionButton_StopFlash
+local AutoCastShine_AutoCastStart = AutoCastShine_AutoCastStart
+local AutoCastShine_AutoCastStop = AutoCastShine_AutoCastStop
+local GetPetActionSlotUsable = GetPetActionSlotUsable
+local SetDesaturation = SetDesaturation
+local PetHasActionBar = PetHasActionBar
+local hooksecurefunc = hooksecurefunc
+local PetActionBar_UpdateCooldowns = PetActionBar_UpdateCooldowns
+local UnregisterStateDriver = UnregisterStateDriver
+local UIFrameFadeIn = UIFrameFadeIn
+local UIFrameFadeOut = UIFrameFadeOut
+local RegisterStateDriver = RegisterStateDriver
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: UIParent, PetActionBarFrame, NUM_PET_ACTION_SLOTS, RayUIActionBarHider
+-- GLOBALS: RayUIPetBar
+
 function AB:CreateBarPet()
 	local num = NUM_PET_ACTION_SLOTS
     local buttonsize = self.db.barpet.buttonsize
@@ -91,13 +118,13 @@ function AB:CreateBarPet()
 	bar:RegisterEvent("UNIT_PET")
 	bar:RegisterEvent("UNIT_FLAGS")
 	bar:RegisterEvent("UNIT_AURA")
-	bar:SetScript("OnEvent", function(self, event, ...)
+	bar:SetScript("OnEvent", function(self, event, arg1, ...)
 		if event == "PLAYER_LOGIN" then
 			-- bug reported by Affli on t12 BETA
 			PetActionBarFrame.showgrid = 1 -- hack to never hide pet button. :X
             RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists]hide;[pet,novehicleui,nobonusbar:5]show;hide")
 			hooksecurefunc("PetActionBar_Update", PetBarUpdate)
-		elseif event == "PET_BAR_UPDATE" or event == "UNIT_PET" and arg1 == "player" 
+		elseif event == "PET_BAR_UPDATE" or event == "UNIT_PET" and arg1 == "player"
 		or event == "PLAYER_CONTROL_LOST" or event == "PLAYER_CONTROL_GAINED" or event == "PLAYER_FARSIGHT_FOCUS_CHANGED" or event == "UNIT_FLAGS"
 		or arg1 == "pet" and (event == "UNIT_AURA") then
 			PetBarUpdate()
@@ -108,7 +135,7 @@ function AB:CreateBarPet()
 
     self["Handled"]["barpet"] = bar
     self:UpdatePetBar()
-	R:CreateMover(bar, "PetBarMover", L["宠物动作条锚点"], true, nil, "ALL,ACTIONBARS")  
+	R:CreateMover(bar, "PetBarMover", L["宠物动作条锚点"], true, nil, "ALL,ACTIONBARS")
 end
 
 function AB:UpdatePetBar()
@@ -125,11 +152,11 @@ function AB:UpdatePetBar()
 		self.db.barpet.autohide = false
 		bar:SetAlpha(0)
 		bar:SetScript("OnEnter", function(self) UIFrameFadeIn(bar,0.5,bar:GetAlpha(),1) end)
-		bar:SetScript("OnLeave", function(self) UIFrameFadeOut(bar,0.5,bar:GetAlpha(),0) end)  
+		bar:SetScript("OnLeave", function(self) UIFrameFadeOut(bar,0.5,bar:GetAlpha(),0) end)
 	else
 		bar:SetAlpha(1)
 		bar:SetScript("OnEnter", nil)
-		bar:SetScript("OnLeave", nil)  
+		bar:SetScript("OnLeave", nil)
     end
 
     if self.db.barpet.autohide then

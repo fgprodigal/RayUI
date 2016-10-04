@@ -1,6 +1,17 @@
 ﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local AB = R:GetModule("ActionBar")
 
+--Cache global variables
+--Lua functions
+local _G = _G
+
+--WoW API / Variables
+local CreateFrame = CreateFrame
+local HasExtraActionBar = HasExtraActionBar
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: UIParent, ExtraActionBarFrame, ZoneAbilityFrame
+
 function R:TestBossButton()
 	if ExtraActionBarFrame:IsShown() then
 		ExtraActionBarFrame.intro:Stop()
@@ -60,7 +71,7 @@ function AB:CreateExtraButton()
 		-- button:Show()
 		button.pushed = true
 		button.checked = true
-		
+
         button:StyleButton(true)
 		button:CreateShadow("Background")
 		button.Cooldown:SetFrameLevel(button:GetFrameLevel()+2)

@@ -3,6 +3,55 @@ local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, 
 local AB = R:NewModule("ActionBar", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 local LAB = LibStub("LibActionButton-1.0")
 
+--Cache global variables
+--Lua functions
+local _G = _G
+local string = string
+local select = select
+local pairs = pairs
+local hooksecurefunc = hooksecurefunc
+local format = string.format
+local ceil = math.ceil
+local gsub = string.gsub
+local strfind = string.find
+
+--WoW API / Variables
+local SetCVar = SetCVar
+local RegisterStateDriver = RegisterStateDriver
+local GetBindingKey = GetBindingKey
+local UnitExists = UnitExists
+local VehicleExit = VehicleExit
+local GetActionCooldown = GetActionCooldown
+local GetShapeshiftFormCooldown = GetShapeshiftFormCooldown
+local CooldownFrame_Set = CooldownFrame_Set
+local CreateFrame = CreateFrame
+local InCombatLockdown = InCombatLockdown
+local GetMouseFocus = GetMouseFocus
+local SetClampedTextureRotation = SetClampedTextureRotation
+local PetDismiss = PetDismiss
+local GetFlyoutID = GetFlyoutID
+local GetNumFlyouts = GetNumFlyouts
+local GetFlyoutInfo = GetFlyoutInfo
+local UnregisterStateDriver = UnregisterStateDriver
+local SetActionBarToggles = SetActionBarToggles
+local ClearOverrideBindings = ClearOverrideBindings
+local SetOverrideBindingClick = SetOverrideBindingClick
+local IsEquippedAction = IsEquippedAction
+local C_PetBattlesIsInBattle = C_PetBattles.IsInBattle
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: InterfaceOptionsActionBarsPanelAlwaysShowActionBars, InterfaceOptionsActionBarsPanelLockActionBars, InterfaceOptionsActionBarsPanelBottomRight
+-- GLOBALS: InterfaceOptionsActionBarsPanelBottomLeft, InterfaceOptionsActionBarsPanelRightTwo, InterfaceOptionsActionBarsPanelRight
+-- GLOBALS: UIParent, SpellFlyout, NUM_PET_ACTION_SLOTS, NUM_ACTIONBAR_BUTTONS
+-- GLOBALS: MainMenuBar, MultiBarLeft, MultiBarRight, MainMenuExpBar, SpellFlyoutHorizontalBackground
+-- GLOBALS: SpellFlyoutVerticalBackground, SpellFlyoutBackgroundEnd, NUM_STANCE_SLOTS, NUM_POSSESS_SLOTS
+-- GLOBALS: MultiBarBottomLeft, MultiBarBottomRight, ReputationWatchBar, MainMenuBarArtFrame
+-- GLOBALS: OverrideActionBar, MultiCastActionBarFrame, IconIntroTracker, TalentMicroButtonAlert
+-- GLOBALS: PossessBackground1, PossessBackground2, StanceBarLeft, StanceBarMiddle, StanceBarRight
+-- GLOBALS: ActionBar1Mover, RayUIActionBarHider, RayUI_InfoPanel_Talent
+-- GLOBALS: KEY_BUTTON3, KEY_PAGEUP, KEY_PAGEDOWN, KEY_SPACE, KEY_INSERT, KEY_HOME
+-- GLOBALS: KEY_DELETE, KEY_MOUSEWHEELUP, KEY_MOUSEWHEELDOWN, visibility
+
 AB.modName = L["动作条"]
 AB["Handled"] = {}
 AB["Skinned"] = {}
@@ -289,7 +338,7 @@ function AB:HideBlizz()
 		_G["ActionButton" .. i]:Hide()
 		_G["ActionButton" .. i]:UnregisterAllEvents()
 		_G["ActionButton" .. i]:SetAttribute("statehidden", true)
-	
+
 		_G["MultiBarBottomLeftButton" .. i]:Hide()
 		_G["MultiBarBottomLeftButton" .. i]:UnregisterAllEvents()
 		_G["MultiBarBottomLeftButton" .. i]:SetAttribute("statehidden", true)
@@ -297,38 +346,38 @@ function AB:HideBlizz()
 		_G["MultiBarBottomRightButton" .. i]:Hide()
 		_G["MultiBarBottomRightButton" .. i]:UnregisterAllEvents()
 		_G["MultiBarBottomRightButton" .. i]:SetAttribute("statehidden", true)
-		
+
 		_G["MultiBarRightButton" .. i]:Hide()
 		_G["MultiBarRightButton" .. i]:UnregisterAllEvents()
 		_G["MultiBarRightButton" .. i]:SetAttribute("statehidden", true)
-		
+
 		_G["MultiBarLeftButton" .. i]:Hide()
 		_G["MultiBarLeftButton" .. i]:UnregisterAllEvents()
 		_G["MultiBarLeftButton" .. i]:SetAttribute("statehidden", true)
-		
+
 		if _G["VehicleMenuBarActionButton" .. i] then
 			_G["VehicleMenuBarActionButton" .. i]:Hide()
 			_G["VehicleMenuBarActionButton" .. i]:UnregisterAllEvents()
 			_G["VehicleMenuBarActionButton" .. i]:SetAttribute("statehidden", true)
 		end
-		
+
 		if _G["OverrideActionBarButton"..i] then
 			_G["OverrideActionBarButton"..i]:Hide()
 			_G["OverrideActionBarButton"..i]:UnregisterAllEvents()
 			_G["OverrideActionBarButton"..i]:SetAttribute("statehidden", true)
 		end
-		
+
 		_G["MultiCastActionButton"..i]:Hide()
 		_G["MultiCastActionButton"..i]:UnregisterAllEvents()
 		_G["MultiCastActionButton"..i]:SetAttribute("statehidden", true)
 	end
-	
+
 	MainMenuBar:EnableMouse(false)
 	MainMenuBar:SetAlpha(0)
 	MainMenuExpBar:UnregisterAllEvents()
 	MainMenuExpBar:Hide()
 	MainMenuExpBar:SetParent(blizzHider)
-	
+
 	for i=1, MainMenuBar:GetNumChildren() do
 		local child = select(i, MainMenuBar:GetChildren())
 		if child then
@@ -340,7 +389,7 @@ function AB:HideBlizz()
 
 	ReputationWatchBar:UnregisterAllEvents()
 	ReputationWatchBar:Hide()
-	ReputationWatchBar:SetParent(blizzHider)	
+	ReputationWatchBar:SetParent(blizzHider)
 
 	MainMenuBarArtFrame:UnregisterEvent("ACTIONBAR_PAGE_CHANGED")
 	MainMenuBarArtFrame:UnregisterEvent("ADDON_LOADED")
@@ -350,7 +399,7 @@ function AB:HideBlizz()
 	OverrideActionBar:UnregisterAllEvents()
 	OverrideActionBar:Hide()
 	OverrideActionBar:SetParent(blizzHider)
-	
+
 	MultiCastActionBarFrame:UnregisterAllEvents()
 	MultiCastActionBarFrame:Hide()
 	MultiCastActionBarFrame:SetParent(blizzHider)
@@ -404,7 +453,7 @@ function AB:UpdateButtonConfig(bar, buttonName)
 	bar.buttonConfig.colors.range = { 1, 0.3, 0.1 }
 	bar.buttonConfig.colors.mana = { 0.1, 0.3, 1 }
 	bar.buttonConfig.colors.hp = { 0.1, 0.3, 1 }
-	
+
 	for i, button in pairs(bar.buttons) do
 		bar.buttonConfig.keyBoundTarget = format(buttonName.."%d", i)
 		button.keyBoundTarget = bar.buttonConfig.keyBoundTarget
@@ -412,7 +461,7 @@ function AB:UpdateButtonConfig(bar, buttonName)
 		button:SetAttribute("buttonlock", true)
 		button:SetAttribute("checkselfcast", true)
 		button:SetAttribute("checkfocuscast", true)
-		
+
 		button:UpdateConfig(bar.buttonConfig)
 	end
 end
@@ -430,7 +479,7 @@ function AB:CreateBar(id)
 		for k = 1, 14 do
 			bar.buttons[i]:SetState(k, "action", (k - 1) * 12 + i)
 		end
-		
+
 		if i == 12 then
 			bar.buttons[i]:SetState(12, "custom", AB.customExitButton)
 		end
@@ -442,11 +491,11 @@ function AB:CreateBar(id)
 	else
 		bar:SetAttribute("hasTempBar", false)
 	end
-	
+
 	bar:SetAttribute("_onstate-page", [[
 		if HasTempShapeshiftActionBar() and self:GetAttribute("hasTempBar") then
 			newstate = GetTempShapeshiftBarIndex() or newstate
-		end	
+		end
 
 		if newstate ~= 0 then
 			self:SetAttribute("state", newstate)
@@ -479,7 +528,7 @@ function AB:UpdatePositionAndSize(barName)
 	local page = self:GetPage(barName, self["barDefaults"][barName].page, self["barDefaults"][barName].conditions)
 	if AB["barDefaults"]["bar"..bar.id].conditions:find("[form,noform]") then
 		bar:SetAttribute("hasTempBar", true)
-		
+
 		local newCondition = page
 		newCondition = gsub(AB["barDefaults"]["bar"..bar.id].conditions, " %[form,noform%] 0; ", "")
 		bar:SetAttribute("newCondition", newCondition)
@@ -579,10 +628,10 @@ end
 function AB:ReassignBindings(event)
 	self:UnregisterEvent("PLAYER_REGEN_DISABLED")
 
-	if InCombatLockdown() then return end	
+	if InCombatLockdown() then return end
 	for _, bar in pairs(self["Handled"]) do
 		if not bar or not bar.buttons then return end
-		
+
 		ClearOverrideBindings(bar)
 		for i = 1, #bar.buttons do
 			local button = (bar.bindButtons.."%d"):format(i)
@@ -598,10 +647,10 @@ function AB:ReassignBindings(event)
 end
 
 function AB:RemoveBindings()
-	if InCombatLockdown() then return end	
+	if InCombatLockdown() then return end
 	for _, bar in pairs(self["Handled"]) do
 		if not bar then return end
-		
+
 		ClearOverrideBindings(bar)
 	end
 
@@ -654,7 +703,7 @@ function AB:Initialize()
 	self:RegisterEvent("PET_BATTLE_OPENING_DONE", "RemoveBindings")
 	self:PLAYER_ENTERING_WORLD()
 
-	if C_PetBattles.IsInBattle() then
+	if C_PetBattlesIsInBattle() then
 		self:RemoveBindings()
 	else
 		self:ReassignBindings()
@@ -794,7 +843,7 @@ function AB:Style(button)
 			Icon:SetTexCoord(.08, .92, .08, .92)
 			Icon:SetAllPoints()
 		end
-	end	
+	end
 
 	if button.style then
 		button.style:SetDrawLayer("BACKGROUND", -7)
@@ -910,29 +959,29 @@ function AB:StyleFlyout(button)
 		arrowDistance = 2
 	end
 
-	if button:GetParent() and button:GetParent():GetParent() and button:GetParent():GetParent():GetName() and button:GetParent():GetParent():GetName() == "SpellBookSpellIconsFrame" then 
-		return 
+	if button:GetParent() and button:GetParent():GetParent() and button:GetParent():GetParent():GetName() and button:GetParent():GetParent():GetName() == "SpellBookSpellIconsFrame" then
+		return
 	end
 
 	if button:GetParent() then
 		local point = R:GetScreenQuadrant(button:GetParent())
 		if point == "UNKNOWN" then return end
-		
+
 		if strfind(point, "TOP") then
 			button.FlyoutArrow:ClearAllPoints()
 			button.FlyoutArrow:SetPoint("BOTTOM", button, "BOTTOM", 0, -arrowDistance)
 			SetClampedTextureRotation(button.FlyoutArrow, 180)
-			if not combat then button:SetAttribute("flyoutDirection", "DOWN") end			
+			if not combat then button:SetAttribute("flyoutDirection", "DOWN") end
 		elseif point == "RIGHT" then
 			button.FlyoutArrow:ClearAllPoints()
 			button.FlyoutArrow:SetPoint("LEFT", button, "LEFT", -arrowDistance, 0)
 			SetClampedTextureRotation(button.FlyoutArrow, 270)
-			if not combat then button:SetAttribute("flyoutDirection", "LEFT") end		
+			if not combat then button:SetAttribute("flyoutDirection", "LEFT") end
 		elseif point == "LEFT" then
 			button.FlyoutArrow:ClearAllPoints()
 			button.FlyoutArrow:SetPoint("RIGHT", button, "RIGHT", arrowDistance, 0)
 			SetClampedTextureRotation(button.FlyoutArrow, 90)
-			if not combat then button:SetAttribute("flyoutDirection", "RIGHT") end				
+			if not combat then button:SetAttribute("flyoutDirection", "RIGHT") end
 		elseif point == "CENTER" or strfind(point, "BOTTOM") then
 			button.FlyoutArrow:ClearAllPoints()
 			button.FlyoutArrow:SetPoint("TOP", button, "TOP", 0, arrowDistance)
