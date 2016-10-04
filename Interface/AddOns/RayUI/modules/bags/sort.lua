@@ -1,6 +1,44 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local B = R:GetModule("Bags")
 
+--Cache global variables
+--Lua functions
+local ipairs, pairs, tonumber, select, unpack, math = ipairs, pairs, tonumber, select, unpack, math
+local table, bit, string = table, bit, string
+local tinsert, tremove, tsort, twipe = table.insert, table.remove, table.sort, table.wipe
+local floor = math.floor
+local band = bit.band
+local match, gmatch, find = string.match, string.gmatch, string.find
+
+--WoW API / Variables
+local GetTime = GetTime
+local InCombatLockdown = InCombatLockdown
+local GetItemInfo = GetItemInfo
+local GetAuctionItemClasses = GetAuctionItemClasses
+local GetAuctionItemSubClasses = GetAuctionItemSubClasses
+local GetContainerItemID = GetContainerItemID
+local GetGuildBankItemInfo = GetGuildBankItemInfo
+local GetContainerItemInfo = GetContainerItemInfo
+local GetGuildBankItemLink = GetGuildBankItemLink
+local GetContainerItemLink = GetContainerItemLink
+local PickupGuildBankItem = PickupGuildBankItem
+local PickupContainerItem = PickupContainerItem
+local SplitGuildBankItem = SplitGuildBankItem
+local SplitContainerItem = SplitContainerItem
+local GetGuildBankTabInfo = GetGuildBankTabInfo
+local GetContainerNumSlots = GetContainerNumSlots
+local GetContainerNumFreeSlots = GetContainerNumFreeSlots
+local ContainerIDToInventoryID = ContainerIDToInventoryID
+local GetInventoryItemLink = GetInventoryItemLink
+local GetItemFamily = GetItemFamily
+local GetCursorInfo = GetCursorInfo
+local QueryGuildBankTab = QueryGuildBankTab
+local GetCurrentGuildBankTab = GetCurrentGuildBankTab
+local C_PetJournalGetPetInfoBySpeciesID = C_PetJournal.GetPetInfoBySpeciesID
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: LE_ITEM_CLASS_ARMOR, LE_ITEM_CLASS_WEAPON
+
 local bankBags = {BANK_CONTAINER}
 local MAX_MOVE_TIME = 1.25
 for i = NUM_BAG_SLOTS + 1, NUM_BAG_SLOTS + NUM_BANKBAGSLOTS do
@@ -44,7 +82,7 @@ local specialtyBags = {}
 local emptySlots = {}
 
 local moveRetries = 0
-local movesUnderway, lastItemID, lockStop
+local movesUnderway, lastItemID, lockStop, lastDestination, lastMove
 local moveTracker = {}
 
 local inventorySlots = {
@@ -139,8 +177,8 @@ local function DefaultSort(a, b)
 	if (not aID) or (not bID) then return aID end
 
 	if bagPetIDs[a] and bagPetIDs[b] then
-		local aName, _, aType = C_PetJournal.GetPetInfoBySpeciesID(aID);
-		local bName, _, bType = C_PetJournal.GetPetInfoBySpeciesID(bID);
+		local aName, _, aType = C_PetJournalGetPetInfoBySpeciesID(aID);
+		local bName, _, bType = C_PetJournalGetPetInfoBySpeciesID(bID);
 
 		if aType and bType and aType ~= bType then
 			return aType > bType
@@ -322,15 +360,15 @@ function B:GetNumSlots(bag, role)
 	return 0
 end
 
-local function ConvertLinkToID(link) 
+local function ConvertLinkToID(link)
 	if not link then return; end
-	
+
 	if tonumber(string.match(link, "item:(%d+)")) then
 		return tonumber(string.match(link, "item:(%d+)"))
 	else
 		return tonumber(string.match(link, "battlepet:(%d+)")), true
 	end
-end 
+end
 
 local function DefaultCanMove()
 	return true
@@ -443,7 +481,7 @@ function B.Stack(sourceBags, targetBags, canMove)
 				if bagIDs[sourceSlot] and bagIDs[targetedSlot] == itemID and targetedSlot ~= sourceSlot and not (bagStacks[targetedSlot] == bagMaxStacks[targetedSlot]) and not sourceUsed[targetedSlot] then
 					B:AddMove(sourceSlot, targetedSlot)
 					sourceUsed[sourceSlot] = true
-					
+
 					if bagStacks[targetedSlot] == bagMaxStacks[targetedSlot] then
 						targetItems[itemID] = (targetItems[itemID] > 1) and (targetItems[itemID] - 1) or nil
 					end
@@ -457,9 +495,9 @@ function B.Stack(sourceBags, targetBags, canMove)
 		end
 	end
 
-	wipe(targetItems)
-	wipe(targetSlots)
-	wipe(sourceUsed)
+	twipe(targetItems)
+	twipe(targetSlots)
+	twipe(sourceUsed)
 end
 
 function B.Sort(bags, sorter, invertDirection)
@@ -469,7 +507,7 @@ function B.Sort(bags, sorter, invertDirection)
 		local bagSlot = B:Encode_BagSlot(bag, slot)
 		initialOrder[bagSlot] = i
 		table.insert(bagSorted, bagSlot)
-	end	
+	end
 
 	table.sort(bagSorted, sorter)
 
@@ -494,11 +532,11 @@ function B.Sort(bags, sorter, invertDirection)
 			end
 			i = i + 1
 		end
-		wipe(bagLocked)
+		twipe(bagLocked)
 	end
 
-	wipe(bagSorted)
-	wipe(initialOrder)	
+	twipe(bagSorted)
+	twipe(initialOrder)
 end
 
 function B.FillBags(from, to)
@@ -513,7 +551,7 @@ function B.FillBags(from, to)
 	end
 
 	B.Fill(from, to)
-	wipe(specialtyBags)	
+	twipe(specialtyBags)
 end
 
 function B.Fill(sourceBags, targetBags, reverse, canMove)
@@ -540,7 +578,7 @@ function B.Fill(sourceBags, targetBags, reverse, canMove)
 			B:AddMove(bagSlot, tremove(emptySlots, 1))
 		end
 	end
-	wipe(emptySlots)
+	twipe(emptySlots)
 end
 
 function B.SortBags(...)
@@ -559,26 +597,26 @@ function B.SortBags(...)
 				B.Stack(bagCache["Normal"], sortedBags)
 				B.Fill(bagCache["Normal"], sortedBags, B.db.sortInverted)
 				B.Sort(sortedBags, nil, B.db.sortInverted)
-				wipe(sortedBags)
+				twipe(sortedBags)
 			end
 		end
 
 		if bagCache["Normal"] then
 			B.Stack(bagCache["Normal"], bagCache["Normal"], B.IsPartial)
 			B.Sort(bagCache["Normal"], nil, B.db.sortInverted)
-			wipe(bagCache["Normal"])
+			twipe(bagCache["Normal"])
 		end
-		wipe(bagCache)
-		wipe(bagGroups)
+		twipe(bagCache)
+		twipe(bagGroups)
 	end
 end
 
 function B:StartStacking()
-	wipe(bagMaxStacks)
-	wipe(bagStacks)
-	wipe(bagIDs)
-	wipe(bagPetIDs)
-	wipe(moveTracker)
+	twipe(bagMaxStacks)
+	twipe(bagStacks)
+	twipe(bagIDs)
+	twipe(bagPetIDs)
+	twipe(moveTracker)
 
 	if #moves > 0 then
 		self.SortUpdateTimer:Show()
@@ -588,8 +626,8 @@ function B:StartStacking()
 end
 
 function B:StopStacking(message)
-	wipe(moves)
-	wipe(moveTracker)
+	twipe(moves)
+	twipe(moveTracker)
 	moveRetries, lastItemID, lockStop, lastDestination, lastMove = 0, nil, nil, nil, nil
 	self.SortUpdateTimer:Hide()
 	if message then
@@ -601,13 +639,13 @@ function B:DoMove(move)
 	if GetCursorInfo() == "item" then
 		return false, 'cursorhasitem'
 	end
-	
+
 	local source, target = B:DecodeMove(move)
 	local sourceBag, sourceSlot = B:Decode_BagSlot(source)
 	local targetBag, targetSlot = B:Decode_BagSlot(target)
 	local _, sourceCount, sourceLocked = B:GetItemInfo(sourceBag, sourceSlot)
 	local _, targetCount, targetLocked = B:GetItemInfo(targetBag, targetSlot)
-	
+
 	if sourceLocked or targetLocked then
 		return false, "source/target_locked"
 	end
@@ -622,8 +660,8 @@ function B:DoMove(move)
 			return B:StopStacking(L["出了点问题, 请重试!"])
 		end
 	end
-	
-	local stackSize = select(8, GetItemInfo(sourceItemID))	
+
+	local stackSize = select(8, GetItemInfo(sourceItemID))
 	if (sourceItemID == targetItemID) and (targetCount ~= stackSize) and ((targetCount + sourceCount) > stackSize) then
 		B:SplitItem(sourceBag, sourceSlot, stackSize - targetCount)
 	else
@@ -703,11 +741,11 @@ function B:DoMoves()
 	end
 
 	lastItemID, lockStop, lastDestination, lastMove = nil, nil, nil, nil
-	wipe(moveTracker)
+	twipe(moveTracker)
 
 	local start, success, moveID, targetID, moveSource, moveTarget, wasGuild
 	start = GetTime()
-	if #moves > 0 then 
+	if #moves > 0 then
 		for i = #moves, 1, -1 do
 			success, moveID, moveSource, targetID, moveTarget, wasGuild = B:DoMove(moves[i])
 			if not success then
@@ -725,7 +763,7 @@ function B:DoMoves()
 				WAIT_TIME = wasGuild and 0.3 or 0;
 				return
 			end
-		end 
+		end
 	end
 	B:StopStacking()
 end
@@ -750,7 +788,7 @@ function B:CommandDecorator(func, groupsDefaults)
 			return
 		end
 
-		wipe(bagGroups)
+		twipe(bagGroups)
 		if not groups or #groups == 0 then
 			groups = groupsDefaults
 		end
@@ -772,7 +810,7 @@ function B:CommandDecorator(func, groupsDefaults)
 		if func(unpack(bagGroups)) == false then
 			return
 		end
-		wipe(bagGroups)
+		twipe(bagGroups)
 		B:StartStacking()
 	end
 end

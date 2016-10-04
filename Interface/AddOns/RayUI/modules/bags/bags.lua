@@ -2,6 +2,29 @@ local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, 
 local B = R:NewModule("Bags", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0")
 local S = R:GetModule("Skins")
 
+--Cache global variables
+--Lua functions
+local _G = _G
+local string = string
+local select = select
+
+--WoW API / Variables
+local CreateFrame = CreateFrame
+local GetContainerNumFreeSlots = GetContainerNumFreeSlots
+local SortReagentBankBags = SortReagentBankBags
+local DepositReagentBank = DepositReagentBank
+local IsReagentBankUnlocked = IsReagentBankUnlocked
+local CloseBankFrame = CloseBankFrame
+local CloseAllBags = CloseAllBags
+local PlaySound = PlaySound
+local StaticPopup_Show = StaticPopup_Show
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: UIParent, GameTooltip, EQUIPMENT_SETS, AUCTION_CATEGORY_CONSUMABLES, LE_ITEM_QUALITY_POOR
+-- GLOBALS: TradeFrame, BankFrame, ReagentBankFrame, RayUI_ContainerFrameItemSets, RayUI_ContainerFrameConsumables
+-- GLOBALS: RayUI_ContainerFrameBankItemSets, RayUI_ContainerFrameBankConsumables, SEARCH, REAGENT_BANK
+-- GLOBALS: REAGENTBANK_DEPOSIT, BANK, BANKSLOTPURCHASE, REAGENT_BANK_HELP
+
 local cargBags = select(2, ...).cargBags
 local consumable = AUCTION_CATEGORY_CONSUMABLES
 
@@ -15,13 +38,13 @@ function B:GetOptions()
 			name = L["背包格大小"],
 			min = 15, max = 45, step = 1,
 			set = function(info, value) R.db.Bags[ info[#info] ] = value B:Layout() end,
-		},			
+		},
 		sortInverted = {
 			order = 7,
 			type = "toggle",
 			name = L["逆序整理"],
 			set = function(info, value) R.db.Bags[ info[#info] ] = value end,
-		},				
+		},
 		bagWidth = {
 			order = 8,
 			type = "range",
@@ -253,7 +276,7 @@ function B:Initialize()
 		end
 	end
 
-	-- OnCreate is called every time a new container is created 
+	-- OnCreate is called every time a new container is created
 	function MyContainer:OnCreate(name, settings)
 		settings = settings or {}
 		self.Settings = settings
@@ -272,7 +295,7 @@ function B:Initialize()
 			self:SetMovable(true)
 			self:RegisterForClicks("LeftButton", "RightButton")
 			self:SetScript("OnMouseDown", function()
-				self:ClearAllPoints() 
+				self:ClearAllPoints()
 				self:StartMoving()
 			end)
 		end
@@ -333,7 +356,7 @@ function B:Initialize()
 			local searchText = infoFrame:CreateFontString(nil, "OVERLAY")
 			searchText:SetPoint("LEFT", infoFrame, "LEFT", 0, 0)
 			searchText:SetFont(R["media"].font, R["media"].fontsize)
-			searchText:SetText(SEARCH) -- our searchbar comes up when we click on infoFrame		
+			searchText:SetText(SEARCH) -- our searchbar comes up when we click on infoFrame
 
 			local search = self:SpawnPlugin("SearchBar", infoFrame)
 			search.highlightFunction = highlightFunction -- same as above, only for search
@@ -365,12 +388,12 @@ function B:Initialize()
 			closebutton:ClearAllPoints()
 			closebutton:SetPoint("TOPRIGHT", -6, -3)
 
-			closebutton:SetScript("OnClick", function(self) 
-				if RayUI_ContainerFrame:AtBank() and self.name == "Bank" then 
-					CloseBankFrame() 
-				else 
-					CloseAllBags() 
-				end 
+			closebutton:SetScript("OnClick", function(self)
+				if RayUI_ContainerFrame:AtBank() and self.name == "Bank" then
+					CloseBankFrame()
+				else
+					CloseAllBags()
+				end
 			end)
 		elseif name == "ItemSets" or name == "BankItemSets" then
 			local setname = self:CreateFontString(nil,"OVERLAY")
@@ -387,7 +410,7 @@ function B:Initialize()
 			reagentname:SetPoint("TOPLEFT", self, "TOPLEFT",5,-5)
 			reagentname:SetFont(R["media"].font, R["media"].fontsize, "THINOUTLINE")
 			reagentname:SetText(REAGENT_BANK)
-			
+
 			local closebutton = CreateFrame("Button", nil, self)
 			closebutton:SetFrameLevel(30)
 			closebutton:SetSize(14,14)
@@ -395,12 +418,12 @@ function B:Initialize()
 			closebutton:ClearAllPoints()
 			closebutton:SetPoint("TOPRIGHT", -6, -3)
 
-			closebutton:SetScript("OnClick", function(self) 
-				if RayUI_ContainerFrame:AtBank() then 
+			closebutton:SetScript("OnClick", function(self)
+				if RayUI_ContainerFrame:AtBank() then
 					CloseBankFrame()
-				end 
+				end
 			end)
-			
+
 			--Sort Button
 			self.sortButton = CreateFrame("Button", nil, self)
 			self.sortButton:Point("TOPLEFT", self, "TOPLEFT", 5, -24)
@@ -416,7 +439,7 @@ function B:Initialize()
 			self.sortButton:SetScript("OnLeave", B.Tooltip_Hide)
 			self.sortButton:SetScript("OnClick", SortReagentBankBags)
 			S:CreateBG(self.sortButton)
-			
+
 			--Deposit Button
 			self.depositButton = CreateFrame("Button", nil, self)
 			self.depositButton:Point("LEFT", self.sortButton, "RIGHT", 3, 0)
