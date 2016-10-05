@@ -382,7 +382,7 @@ function mod:UpdateInVehicle(frame, noEvents)
 end
 
 function mod:UpdateElement_All(frame, unit, noTargetFrame)
-    if(self.db.units[frame.UnitType].healthbar.enable) then
+    if (self.db.units[frame.UnitType].healthbar.enable or frame.isTarget) then
         mod:UpdateElement_MaxHealth(frame)
         mod:UpdateElement_Health(frame)
         mod:UpdateElement_HealthColor(frame)
@@ -402,9 +402,9 @@ function mod:UpdateElement_All(frame, unit, noTargetFrame)
     mod:UpdateElement_HealerIcon(frame)
     mod:UpdateElement_Name(frame)
     mod:UpdateElement_Level(frame)
-	mod:UpdateElement_Elite(frame)
-	mod:UpdateElement_Detection(frame)
-	mod:UpdateElement_NPCTitle(frame)
+    mod:UpdateElement_Elite(frame)
+    mod:UpdateElement_Detection(frame)
+    mod:UpdateElement_NPCTitle(frame)
 
     if(not noTargetFrame) then --infinite loop lol
         mod:SetTargetFrame(frame)

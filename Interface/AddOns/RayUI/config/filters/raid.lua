@@ -81,6 +81,10 @@ G.Raid.AuraWatch = {
 	DEATHKNIGHT = {},
 }
 
+G.ReverseTimer = {
+
+}
+
 G.Raid.RaidDebuffs = {
 	-- Ascending aura timer
 	-- Add spells to this list to have the aura time count up from 0

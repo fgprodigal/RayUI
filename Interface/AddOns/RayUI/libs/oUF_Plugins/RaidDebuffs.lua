@@ -207,7 +207,7 @@ local function UpdateDebuff(self, name, icon, count, debuffType, duration, endTi
 			end
 		end
 
-		if spellId and select(1, unpack(ElvUI)).ReverseTimer[spellId] then
+		if spellId and select(1, unpack(RayUI)).ReverseTimer[spellId] then
 			f.reverse = true
 		else
 			f.reverse = nil
