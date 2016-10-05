@@ -1,5 +1,12 @@
 ﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 
+--Cache global variables
+--Lua functions
+local unpack = unpack
+
+--WoW API / Variables
+local GetSpellInfo = GetSpellInfo
+
 local function ClassBuff(id, point, color, anyUnit, onlyShowMissing)
 	local r, g, b = unpack(color)
 	return {["enabled"] = true, ["id"] = id, ["point"] = point, ["color"] = {["r"] = r, ["g"] = g, ["b"] = b}, ["anyUnit"] = anyUnit, ["onlyShowMissing"] = onlyShowMissing}
@@ -98,7 +105,6 @@ G.Raid.RaidDebuffs = {
 	instances = {
 		[1094] = {
 			-- The Emerald Nightmare
-
 			-- Nythendra
 				[204504] = Defaults(), -- Infested
 				[205043] = Defaults(), -- Infested mind
@@ -117,14 +123,10 @@ G.Raid.RaidDebuffs = {
 				[215489] = Defaults(), -- Venomous Pool
 
 			-- Il'gynoth, Heart of the Corruption
-				[210279] = Defaults(), -- Creeping Nightmares
-				[213162] = Defaults(), -- Nightmare Blast
-				[212681] = Defaults(), -- Cleansed Ground
-				[210315] = Defaults(), -- Nightmare Brambles
-				[211507] = Defaults(), -- Nightmare Javelin
-				[211471] = Defaults(), -- Scorned Touch
+				[208929] = Defaults(), -- Spew Corruption
+				[210984] = Defaults(), -- Eye of Fate
+				[209469] = Defaults(5), -- Touch of Corruption
 				[208697] = Defaults(), -- Mind Flay
-				[215143] = Defaults(), -- Cursed Blood
 
 			-- Ursoc
 				[198108] = Defaults(), -- Unbalanced
@@ -139,12 +141,12 @@ G.Raid.RaidDebuffs = {
 				[203121] = Defaults(), -- Mark of Taerar
 				[203125] = Defaults(), -- Mark of Emeriss
 				[203124] = Defaults(), -- Mark of Lethon
-				[204731] = Defaults(), -- Wasting Dread
-				[203110] = Defaults(), -- Slumbering Nightmare
-				[207681] = Defaults(), -- Nightmare Bloom
-				[205341] = Defaults(), -- Sleeping Fog
-				[203770] = Defaults(), -- Defiled Vines
-				[203787] = Defaults(), -- Volatile Infection
+				[204731] = Defaults(5), -- Wasting Dread
+				[203110] = Defaults(5), -- Slumbering Nightmare
+				[207681] = Defaults(5), -- Nightmare Bloom
+				[205341] = Defaults(5), -- Sleeping Fog
+				[203770] = Defaults(5), -- Defiled Vines
+				[203787] = Defaults(5), -- Volatile Infection
 
 			-- Cenarius
 				[210279] = Defaults(), -- Creeping Nightmares
@@ -171,7 +173,6 @@ G.Raid.RaidDebuffs = {
 		},
 		[1088] = {
 			-- The Nighthold
-
 			-- Skorpyron
 				[204766] = Defaults(), -- Energy Surge
 				[214718] = Defaults(), -- Acidic Fragments
@@ -281,13 +282,13 @@ G.Raid.RaidDebuffs = {
 				[208802] = Defaults(), -- Soul Corrosion
 				[212686] = Defaults(), -- Flames of Sargeras
 		},
-		[1026] = { 
+		[1026] = {
 			-- Hellfire Citadel
 
 			-- Hellfire Assault
 				[184369] = Defaults(5), -- Howling Axe (Target)
 				[180079] = Defaults(5), -- Felfire Munitions
-			
+
 			-- Iron Reaver
 				[179897] = Defaults(5), -- Blitz
 				[185978] = Defaults(5), -- Firebomb Vulnerability
@@ -295,11 +296,11 @@ G.Raid.RaidDebuffs = {
 				[182280] = Defaults(5), -- Artillery (Target)
 				[182074] = Defaults(5), -- Immolation
 				[182001] = Defaults(5), -- Unstable Orb
-			
+
 			-- Kormrok
 				[187819] = Defaults(5), -- Crush
 				[181345] = Defaults(5), -- Foul Crush
-			
+
 			-- Hellfire High Council
 				[184360] = Defaults(5), -- Fel Rage
 				[184449] = Defaults(5), -- Mark of the Necromancer
@@ -308,12 +309,12 @@ G.Raid.RaidDebuffs = {
 				[185066] = Defaults(5), -- Mark of the Necromancer
 				[184676] = Defaults(5), -- Mark of the Necromancer
 				[184652] = Defaults(5), -- Reap
-			
+
 			-- Kilrogg Deadeye
 				[181488] = Defaults(5), -- Vision of Death
 				[188929] = Defaults(5), -- Heart Seeker (Target)
 				[180389] = Defaults(5), -- Heart Seeker (DoT)
-			
+
 			-- Gorefiend
 				[179867] = Defaults(5), -- Gorefiend's Corruption
 				[181295] = Defaults(5), -- Digest
@@ -321,7 +322,7 @@ G.Raid.RaidDebuffs = {
 				[179864] = Defaults(5), -- Shadow of Death
 				[179909] = Defaults(5), -- Shared Fate (self root)
 				[179908] = Defaults(5), -- Shared Fate (other players root)
-			
+
 			-- Shadow-Lord Iskar
 				[181957] = Defaults(5), -- Phantasmal Winds
 				[182200] = Defaults(5), -- Fel Chakram
@@ -332,26 +333,26 @@ G.Raid.RaidDebuffs = {
 				[182600] = Defaults(5), -- Fel Fire
 				[179219] = Defaults(5), -- Phantasmal Fel Bomb
 				[181753] = Defaults(5), -- Fel Bomb
-			
+
 			-- Soulbound Construct (Socrethar)
 				[182038] = Defaults(5), -- Shattered Defenses
 				[188666] = Defaults(5), -- Eternal Hunger (Add fixate, Mythic only)
 				[189627] = Defaults(5), -- Volatile Fel Orb (Fixated)
 				[180415] = Defaults(5), -- Fel Prison
-			
+
 			-- Tyrant Velhari
 				[185237] = Defaults(5), -- Touch of Harm
 				[185238] = Defaults(5), -- Touch of Harm
 				[185241] = Defaults(5), -- Edict of Condemnation
 				[180526] = Defaults(5), -- Font of Corruption
-			
+
 			-- Fel Lord Zakuun
 				[181508] = Defaults(5), -- Seed of Destruction
 				[181653] = Defaults(5), -- Fel Crystals (Too Close)
 				[179428] = Defaults(5), -- Rumbling Fissure (Soak)
 				[182008] = Defaults(5), -- Latent Energy (Cannot soak)
 				[179407] = Defaults(5), -- Disembodied (Player in Shadow Realm)
-			
+
 			-- Xhul'horac
 				[188208] = Defaults(5), -- Ablaze
 				[186073] = Defaults(5), -- Felsinged
@@ -359,7 +360,7 @@ G.Raid.RaidDebuffs = {
 				[186500] = Defaults(5), -- Chains of Fel
 				[186063] = Defaults(5), -- Wasting Void
 				[186333] = Defaults(5), -- Void Surge
-			
+
 			-- Mannoroth
 				[181275] = Defaults(5), -- Curse of the Legion
 				[181099] = Defaults(5), -- Mark of Doom
@@ -367,7 +368,7 @@ G.Raid.RaidDebuffs = {
 				[182006] = Defaults(5), -- Empowered Mannoroth's Gaze
 				[181841] = Defaults(5), -- Shadowforce
 				[182088] = Defaults(5), -- Empowered Shadowforce
-			
+
 			-- Archimonde
 				[184964] = Defaults(5), -- Shackled Torment
 				[186123] = Defaults(5), -- Wrought Chaos
@@ -379,97 +380,97 @@ G.Raid.RaidDebuffs = {
 				[189895] = Defaults(5), -- Void Star Fixate
 				[190049] = Defaults(5), -- Nether Corruption
 		 },
-		[988] = { 
-			-- 黑石铸造厂 
-			--格鲁尔 
-			
-			[155080] = Defaults(4), -- 煉獄切割 分担组DOT 
-			[155078] = Defaults(3), -- 压迫打击 普攻坦克易伤 
-			[162322] = Defaults(5), -- 炼狱打击 吃刀坦克易伤 
-			[155506] = Defaults(2), -- 石化 
+		[988] = {
+			-- 黑石铸造厂
+			--格鲁尔
 
-			--奥尔高格 
-			
-			[156203] = Defaults(5), -- 呕吐黑石 远程躲 
-			[156374] = Defaults(5), -- 爆炸裂片 近战躲 
-			[156297] = Defaults(3), -- 酸液洪流 副坦克易伤 
-			[173471] = Defaults(4), -- 酸液巨口 主坦克DOT 
-			[155900] = Defaults(2), -- 翻滚之怒 击倒 
+			[155080] = Defaults(4), -- 煉獄切割 分担组DOT
+			[155078] = Defaults(3), -- 压迫打击 普攻坦克易伤
+			[162322] = Defaults(5), -- 炼狱打击 吃刀坦克易伤
+			[155506] = Defaults(2), -- 石化
 
-			--爆裂熔炉 
-			
-			[156932] = Defaults(5), -- 崩裂 
-			[178279] = Defaults(4), -- 炸弹 
-			[155192] = Defaults(4), -- 炸弹 
-			[176121] = Defaults(6), -- 不稳定的火焰 点名八码爆炸 
-			[155196] = Defaults(2), -- 锁定 
-			[155743] = Defaults(5), -- 熔渣池 
-			[155240] = Defaults(3), -- 淬火 坦克易伤 
-			[155242] = Defaults(3), -- 高热 三层换坦 
-			[155225] = Defaults(5), -- 熔化 点名 
-			[155223] = Defaults(5), -- 熔化 
+			--奥尔高格
 
-			--汉斯加尔与弗兰佐克 
-			
-			[157139] = Defaults(3), -- 折脊碎椎 跳跃易伤 
-			[160838] = Defaults(2), -- 干扰怒吼 
-			[160845] = Defaults(2), -- 干扰怒吼 
-			[160847] = Defaults(2), -- 干扰怒吼 
-			[160848] = Defaults(2), -- 干扰怒吼 
-			[155818] = Defaults(4), -- 灼热燃烧 场地边缘的火 
+			[156203] = Defaults(5), -- 呕吐黑石 远程躲
+			[156374] = Defaults(5), -- 爆炸裂片 近战躲
+			[156297] = Defaults(3), -- 酸液洪流 副坦克易伤
+			[173471] = Defaults(4), -- 酸液巨口 主坦克DOT
+			[155900] = Defaults(2), -- 翻滚之怒 击倒
 
-			--缚火者卡格拉兹 
-			
-			[154952] = Defaults(3), -- 锁定 
-			[155074] = Defaults(1), -- 焦灼吐息 坦克易伤 
-			[155049] = Defaults(2), -- 火焰链接 
-			[154932] = Defaults(4), -- 熔岩激流 点名分摊 
-			[155277] = Defaults(5), -- 炽热光辉 点名AOE 
-			[155314] = Defaults(1), -- 岩浆猛击 冲锋火线 
-			[163284] = Defaults(2), -- 升腾烈焰 坦克DOT 
+			--爆裂熔炉
 
-			--克罗莫格 
-			
-			[156766] = Defaults(1), -- 扭曲护甲 坦克易伤 
-			[157059] = Defaults(2), -- 纠缠之地符文 
-			[161839] = Defaults(3), -- 破碎大地符文 
-			[161923] = Defaults(3), -- 破碎大地符文 
+			[156932] = Defaults(5), -- 崩裂
+			[178279] = Defaults(4), -- 炸弹
+			[155192] = Defaults(4), -- 炸弹
+			[176121] = Defaults(6), -- 不稳定的火焰 点名八码爆炸
+			[155196] = Defaults(2), -- 锁定
+			[155743] = Defaults(5), -- 熔渣池
+			[155240] = Defaults(3), -- 淬火 坦克易伤
+			[155242] = Defaults(3), -- 高热 三层换坦
+			[155225] = Defaults(5), -- 熔化 点名
+			[155223] = Defaults(5), -- 熔化
+
+			--汉斯加尔与弗兰佐克
+
+			[157139] = Defaults(3), -- 折脊碎椎 跳跃易伤
+			[160838] = Defaults(2), -- 干扰怒吼
+			[160845] = Defaults(2), -- 干扰怒吼
+			[160847] = Defaults(2), -- 干扰怒吼
+			[160848] = Defaults(2), -- 干扰怒吼
+			[155818] = Defaults(4), -- 灼热燃烧 场地边缘的火
+
+			--缚火者卡格拉兹
+
+			[154952] = Defaults(3), -- 锁定
+			[155074] = Defaults(1), -- 焦灼吐息 坦克易伤
+			[155049] = Defaults(2), -- 火焰链接
+			[154932] = Defaults(4), -- 熔岩激流 点名分摊
+			[155277] = Defaults(5), -- 炽热光辉 点名AOE
+			[155314] = Defaults(1), -- 岩浆猛击 冲锋火线
+			[163284] = Defaults(2), -- 升腾烈焰 坦克DOT
+
+			--克罗莫格
+
+			[156766] = Defaults(1), -- 扭曲护甲 坦克易伤
+			[157059] = Defaults(2), -- 纠缠之地符文
+			[161839] = Defaults(3), -- 破碎大地符文
+			[161923] = Defaults(3), -- 破碎大地符文
 
 			--兽王达玛克
-			
-			[154960] = Defaults(4), -- 长矛钉刺 
-			[155061] = Defaults(1), -- 狂乱撕扯 狼阶段流血 
-			[162283] = Defaults(1), -- 狂乱撕扯 BOSS继承的流血 
-			[154989] = Defaults(3), -- 炼狱吐息 
-			[154981] = Defaults(5), -- 爆燃 秒驱 
-			[155030] = Defaults(2), -- 炽燃利齿 龙阶段坦克易伤 
-			[155236] = Defaults(2), -- 碾碎护甲 象阶段坦克易伤 
-			[155499] = Defaults(3), -- 高热弹片 
-			[155657] = Defaults(4), -- 烈焰灌注 
-			[159044] = Defaults(1), -- 强震 
-			[162277] = Defaults(1), -- 强震 
 
-			--主管索戈尔 
-			
-			[155921] = Defaults(2), -- 点燃 坦克易伤 
-			[165195] = Defaults(4), -- 实验型脉冲手雷 
-			[156310] = Defaults(3), -- 熔岩震击 
-			[159481] = Defaults(3), -- 延时攻城炸弹 
-			[164380] = Defaults(2), -- 燃烧 
-			[164280] = Defaults(2), -- 热能冲击 
+			[154960] = Defaults(4), -- 长矛钉刺
+			[155061] = Defaults(1), -- 狂乱撕扯 狼阶段流血
+			[162283] = Defaults(1), -- 狂乱撕扯 BOSS继承的流血
+			[154989] = Defaults(3), -- 炼狱吐息
+			[154981] = Defaults(5), -- 爆燃 秒驱
+			[155030] = Defaults(2), -- 炽燃利齿 龙阶段坦克易伤
+			[155236] = Defaults(2), -- 碾碎护甲 象阶段坦克易伤
+			[155499] = Defaults(3), -- 高热弹片
+			[155657] = Defaults(4), -- 烈焰灌注
+			[159044] = Defaults(1), -- 强震
+			[162277] = Defaults(1), -- 强震
 
-			--钢铁女武神 
-			
-			[156631] = Defaults(2), -- 急速射击 
-			[164271] = Defaults(3), -- 穿透射击 
-			[158601] = Defaults(1), -- 主炮轰击 
-			[156214] = Defaults(4), -- 震颤暗影 
-			[158315] = Defaults(2), -- 暗影猎杀 
-			[159724] = Defaults(3), -- 鲜血仪式 
-			[158010] = Defaults(2), -- 浸血觅心者 
-			[158692] = Defaults(1), -- 致命投掷 
-			[158702] = Defaults(2), -- 锁定 
-			[158683] = Defaults(3), -- 堕落之血 
+			--主管索戈尔
+
+			[155921] = Defaults(2), -- 点燃 坦克易伤
+			[165195] = Defaults(4), -- 实验型脉冲手雷
+			[156310] = Defaults(3), -- 熔岩震击
+			[159481] = Defaults(3), -- 延时攻城炸弹
+			[164380] = Defaults(2), -- 燃烧
+			[164280] = Defaults(2), -- 热能冲击
+
+			--钢铁女武神
+
+			[156631] = Defaults(2), -- 急速射击
+			[164271] = Defaults(3), -- 穿透射击
+			[158601] = Defaults(1), -- 主炮轰击
+			[156214] = Defaults(4), -- 震颤暗影
+			[158315] = Defaults(2), -- 暗影猎杀
+			[159724] = Defaults(3), -- 鲜血仪式
+			[158010] = Defaults(2), -- 浸血觅心者
+			[158692] = Defaults(1), -- 致命投掷
+			[158702] = Defaults(2), -- 锁定
+			[158683] = Defaults(3), -- 堕落之血
 
 			--Blackhand
 			[156096] = Defaults(5), --MARKEDFORDEATH
@@ -481,73 +482,73 @@ G.Raid.RaidDebuffs = {
 			[156888] = Defaults(5), --OVERHEATED
 			[157000] = Defaults(2), --ATTACHSLAGBOMBS
 		},
-		[994] = { 
-            --悬槌堡 
-            -- 1 卡加斯 
-   
-            [158986] = Defaults(2), -- 冲锋 
-            [159178] = Defaults(5), -- 迸裂创伤         
-            [162497] = Defaults(3), -- 搜寻猎物       
-            [163130] = Defaults(3), -- 着火 
-   
-            -- 2 屠夫 
-   
-            [156151] = Defaults(3), -- 捶肉槌 
-            [156147] = Defaults(5), -- 切肉刀           
-            [156152] = Defaults(3), -- 龟裂创伤         
-            [163046] = Defaults(4), -- 白鬼硫酸 
-   
-            -- 3 泰克图斯 
+		[994] = {
+            --悬槌堡
+            -- 1 卡加斯
 
-            [162346] = Defaults(4),  -- 晶化弹幕  点名 
-            [162370] = Defaults(3), -- 晶化弹幕   踩到 
-   
-            -- 4  布兰肯斯波 
-     
-            [163242] = Defaults(5), -- 感染孢子 
-            [159426] = Defaults(5), -- 回春孢子 
-            [163241] = Defaults(4), -- 溃烂 
-            [159220] = Defaults(2),  -- 死疽吐息   
-            [160179] = Defaults(2),  -- 蚀脑真菌 
-            [165223] = Defaults(6), -- 爆裂灌注 
-            [163666] = Defaults(3), -- 脉冲高热 
-   
-            -- 5  独眼魔双子 
-   
-            [155569] = Defaults(3), -- 受伤 
-            [158241] = Defaults(4), -- 烈焰   
-            [163372] = Defaults(4), -- 奥能动荡 
-            [167200] = Defaults(3), -- 奥术致伤 
-            [163297] = Defaults(3), -- 扭曲奥能 
+            [158986] = Defaults(2), -- 冲锋
+            [159178] = Defaults(5), -- 迸裂创伤
+            [162497] = Defaults(3), -- 搜寻猎物
+            [163130] = Defaults(3), -- 着火
 
-   
-            -- 6 克拉戈 
-   
-            [172813] = Defaults(5), -- 魔能散射：冰霜 
-            [162185] = Defaults(5), -- 魔能散射：火焰 
-            [162184] = Defaults(3), -- 魔能散射：暗影 
-            [162186] = Defaults(2), -- 魔能散射：奥术 
-            [161345] = Defaults(2), -- 压制力场 
-            [161242] = Defaults(3), -- 废灵标记 
-            [172886] = Defaults(4), -- 废灵璧垒 
-            [172895] = Defaults(4), -- 魔能散射：邪能  点名 
-            [172917] = Defaults(4), -- 魔能散射：邪能  踩到 
-            [163472] = Defaults(2), -- 统御之力 
-   
-            -- 7 元首 
-   
-            [157763] = Defaults(3),  -- 锁定         
-            [159515] = Defaults(4), -- 狂莽突击         
-            [156225] = Defaults(4), -- 烙印       
-            [164004] = Defaults(4), -- 烙印：偏移         
-            [164006] = Defaults(4), -- 烙印：强固         
-            [164005] = Defaults(4), -- 烙印：复制         
-            [158605] = Defaults(2), -- 混沌标记         
-            [164176] = Defaults(2), -- 混沌标记：偏移           
-            [164178] = Defaults(2), -- 混沌标记：强固         
-            [164191] = Defaults(2), -- 混沌标记：复制 
-   
-        }, 
+            -- 2 屠夫
+
+            [156151] = Defaults(3), -- 捶肉槌
+            [156147] = Defaults(5), -- 切肉刀
+            [156152] = Defaults(3), -- 龟裂创伤
+            [163046] = Defaults(4), -- 白鬼硫酸
+
+            -- 3 泰克图斯
+
+            [162346] = Defaults(4),  -- 晶化弹幕  点名
+            [162370] = Defaults(3), -- 晶化弹幕   踩到
+
+            -- 4  布兰肯斯波
+
+            [163242] = Defaults(5), -- 感染孢子
+            [159426] = Defaults(5), -- 回春孢子
+            [163241] = Defaults(4), -- 溃烂
+            [159220] = Defaults(2),  -- 死疽吐息
+            [160179] = Defaults(2),  -- 蚀脑真菌
+            [165223] = Defaults(6), -- 爆裂灌注
+            [163666] = Defaults(3), -- 脉冲高热
+
+            -- 5  独眼魔双子
+
+            [155569] = Defaults(3), -- 受伤
+            [158241] = Defaults(4), -- 烈焰
+            [163372] = Defaults(4), -- 奥能动荡
+            [167200] = Defaults(3), -- 奥术致伤
+            [163297] = Defaults(3), -- 扭曲奥能
+
+
+            -- 6 克拉戈
+
+            [172813] = Defaults(5), -- 魔能散射：冰霜
+            [162185] = Defaults(5), -- 魔能散射：火焰
+            [162184] = Defaults(3), -- 魔能散射：暗影
+            [162186] = Defaults(2), -- 魔能散射：奥术
+            [161345] = Defaults(2), -- 压制力场
+            [161242] = Defaults(3), -- 废灵标记
+            [172886] = Defaults(4), -- 废灵璧垒
+            [172895] = Defaults(4), -- 魔能散射：邪能  点名
+            [172917] = Defaults(4), -- 魔能散射：邪能  踩到
+            [163472] = Defaults(2), -- 统御之力
+
+            -- 7 元首
+
+            [157763] = Defaults(3),  -- 锁定
+            [159515] = Defaults(4), -- 狂莽突击
+            [156225] = Defaults(4), -- 烙印
+            [164004] = Defaults(4), -- 烙印：偏移
+            [164006] = Defaults(4), -- 烙印：强固
+            [164005] = Defaults(4), -- 烙印：复制
+            [158605] = Defaults(2), -- 混沌标记
+            [164176] = Defaults(2), -- 混沌标记：偏移
+            [164178] = Defaults(2), -- 混沌标记：强固
+            [164191] = Defaults(2), -- 混沌标记：复制
+
+        },
 		[953] = {
 			--Siege of Orgrimmar
 			--Immerseus
@@ -764,12 +765,12 @@ G.Raid.RaidDebuffs = {
 			-- Heart of Fear
 			-- Imperial Vizier Zor'lok
 			[122761] = Defaults(7), -- Exhale
-			[122760] = Defaults(7), -- Exhale			
+			[122760] = Defaults(7), -- Exhale
 			[123812] = Defaults(7), --Pheromones of Zeal
 			[122740] = Defaults(7), --Convert (MC)
 			[122706] = Defaults(7), --Noise Cancelling (AMZ)
 			-- Blade Lord Ta'yak
-			[123180] = Defaults(7), -- Wind Step			
+			[123180] = Defaults(7), -- Wind Step
 			[123474] = Defaults(7), --Overwhelming Assault
 			[122949] = Defaults(7), --Unseen Strike
 			[124783] = Defaults(7), --Storm Unleashed
@@ -777,7 +778,7 @@ G.Raid.RaidDebuffs = {
 			[123081] = Defaults(8), --Pungency
 			[122774] = Defaults(7), --Crush
 			-- [123423] = Defaults(8), --Weak Points
-			-- Wind Lord Mel'jarak			
+			-- Wind Lord Mel'jarak
 			[121881] = Defaults(8), --Amber Prison
 			[122055] = Defaults(7), --Residue
 			[122064] = Defaults(7), --Corrosive Resin
@@ -812,7 +813,7 @@ G.Raid.RaidDebuffs = {
 			[122151] = Defaults(8), --Voodoo Doll
 			[116161] = Defaults(7), --Crossed Over
 			[116278] = Defaults(7), --Soul Sever
-			-- The Spirit Kings			
+			-- The Spirit Kings
 			--Meng the Demented
 			[117708] = Defaults(7), --Maddening Shout
 			--Subetai the Swift
