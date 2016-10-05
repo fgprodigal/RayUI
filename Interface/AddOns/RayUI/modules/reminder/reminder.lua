@@ -325,7 +325,7 @@ function RM:ReminderIcon_OnEvent(event, unit)
 	end
 
 	if not db.disableSound and self:GetAlpha() == 1 then
-		if not RM.SoundThrottled then
+		if not RM.SoundThrottled and RM.initialized then
 			RM.SoundThrottled = true
 			PlaySoundFile(R["media"].warning)
 			RM:ScheduleTimer("ThrottleSound", 10)
@@ -401,6 +401,7 @@ end
 
 function RM:Initialize()
 	RM:CheckForNewReminders()
+	C_Timer.After(1, function() RM.initialized = true end)
 end
 
 R:RegisterModule(RM:GetName())
