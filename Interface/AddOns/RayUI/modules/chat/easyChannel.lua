@@ -1,6 +1,23 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local CH = R:GetModule("Chat")
 
+--Cache global variables
+--Lua functions
+local select, pairs, ipairs = select, pairs, ipairs
+local strsub = string.sub
+local tostring = tostring
+
+--WoW API / Variables
+local IsInGroup = IsInGroup
+local IsInRaid = IsInRaid
+local IsInInstance = IsInInstance
+local IsInGuild = IsInGuild
+local IsShiftKeyDown = IsShiftKeyDown
+local ChatEdit_UpdateHeader = ChatEdit_UpdateHeader
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: RayUITabChannelTutorial
+
 local cycles = {
 	{
         chatType = "SAY",   --SAY
@@ -24,6 +41,7 @@ local cycles = {
     },
     {
         chatType = "GUILD",   --工会
+        use = function(self, editbox) return IsInGuild() end,
         use = function(self, editbox) return IsInGuild() end,
     },
 --[[     {

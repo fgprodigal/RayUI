@@ -1,6 +1,14 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local CH = R:GetModule("Chat")
 
+--Cache global variables
+--Lua functions
+local pairs = pairs
+
+--WoW API / Variables
+local UnitName = UnitName
+local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
+
 ----------------------------------------------------------------------------------
 -- 屏蔽关键字
 ----------------------------------------------------------------------------------

@@ -2,6 +2,69 @@
 local CH = R:NewModule("Chat", "AceEvent-3.0", "AceHook-3.0", "AceTimer-3.0", "AceConsole-3.0")
 CH.modName = L["聊天栏"]
 
+--Cache global variables
+--Lua functions
+local _G = _G
+local GetTime, time = GetTime, time
+local select, pairs, ipairs, unpack = select, pairs, ipairs, unpack
+local string, math, table = string, math, table
+local strsub, strlen, format, strsplit = string.sub, string.len, string.format, string.split
+local tostring = tostring
+local type = type
+local tonumber = tonumber
+
+--WoW API / Variables
+local CreateFrame = CreateFrame
+local SetCVar = SetCVar
+local InCombatLockdown = InCombatLockdown
+local IsMouseButtonDown = IsMouseButtonDown
+local BNGetFriendInfoByID = BNGetFriendInfoByID
+local BNGetGameAccountInfo = BNGetGameAccountInfo
+local ChangeChatColor = ChangeChatColor
+local ToggleChatColorNamesByClassGroup = ToggleChatColorNamesByClassGroup
+local Ambiguate = Ambiguate
+local GetPlayerInfoByGUID = GetPlayerInfoByGUID
+local FCF_SetChatWindowFontSize = FCF_SetChatWindowFontSize
+local FCF_GetChatWindowInfo = FCF_GetChatWindowInfo
+local FCF_SavePositionAndDimensions = FCF_SavePositionAndDimensions
+local FCF_OpenNewWindow = FCF_OpenNewWindow
+local FCF_SetWindowAlpha = FCF_SetWindowAlpha
+local FCF_SetLocked = FCF_SetLocked
+local FCF_DockFrame = FCF_DockFrame
+local FCF_Close = FCF_Close
+local FCFDock_SelectWindow = FCFDock_SelectWindow
+local GetChatWindowSavedPosition = GetChatWindowSavedPosition
+local ToggleFrame = ToggleFrame
+local ShowUIPanel = ShowUIPanel
+local HideUIPanel = HideUIPanel
+local IsShiftKeyDown = IsShiftKeyDown
+local IsControlKeyDown = IsControlKeyDown
+local BetterDate = BetterDate
+local GetChatWindowInfo = GetChatWindowInfo
+local ChatFrame_AddMessageGroup = ChatFrame_AddMessageGroup
+local ChatFrame_MessageEventHandler = ChatFrame_MessageEventHandler
+local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
+local ChatFrame_RemoveAllMessageGroups = ChatFrame_RemoveAllMessageGroups
+local UIFrameFadeIn = UIFrameFadeIn
+local GetMouseFocus = GetMouseFocus
+local ChatEdit_ChooseBoxForSend = ChatEdit_ChooseBoxForSend
+local ChatEdit_ActivateChat = ChatEdit_ActivateChat
+local StaticPopup_Show = StaticPopup_Show
+local hooksecurefunc = hooksecurefunc
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: UIParent, GameTooltip, CHAT_TIMESTAMP_FORMAT, LOCALIZED_CLASS_NAMES_FEMALE, LOCALIZED_CLASS_NAMES_MALE
+-- GLOBALS: RayUICharacterData, CHAT_FRAME_TEXTURES, ChatFrame1, ItemRefTooltip, ChatFrameMenuButton
+-- GLOBALS: FriendsMicroButton, ChatTypeInfo, UISpecialFrames, CopyScrollScrollBar, ChatFontNormal
+-- GLOBALS: ChatMenu, CHAT_FRAMES, RayUIChatBG, INTERFACE_ACTION_BLOCKED, COMBATLOG, CombatLogQuickButtonFrame_Custom
+-- GLOBALS: SELECTED_CHAT_FRAME, DEFAULT_CHAT_FRAME, WHISPER, GENERAL_CHAT_DOCK, PET_BATTLE_COMBAT_LOG
+-- GLOBALS: CopyChatFrame, GeneralDockManager, CHAT_INSTANCE_CHAT_GET, CHAT_INSTANCE_CHAT_LEADER_GET
+-- GLOBALS: CHAT_BN_WHISPER_GET, CHAT_GUILD_GET, CHAT_OFFICER_GET, CHAT_PARTY_GET, CHAT_PARTY_GUIDE_GET
+-- GLOBALS: CHAT_PARTY_LEADER_GET, CHAT_RAID_GET, CHAT_RAID_LEADER_GET, CHAT_RAID_WARNING_GET, CHAT_SAY_GET
+-- GLOBALS: CHAT_WHISPER_GET, CHAT_YELL_GET, ERR_FRIEND_ONLINE_SS, ERR_FRIEND_OFFLINE_S, TIMESTAMP_FORMAT_HHMM
+-- GLOBALS: TIMESTAMP_FORMAT_HHMMSS, TIMESTAMP_FORMAT_HHMMSS_24HR, TIMESTAMP_FORMAT_HHMMSS_AMPM
+-- GLOBALS: TIMESTAMP_FORMAT_HHMM_24HR, TIMESTAMP_FORMAT_HHMM_AMPM, CHAT_FRAME_TAB_NORMAL_NOMOUSE_ALPHA, CHAT_FRAME_TAB_SELECTED_NOMOUSE_ALPHA
+
 local ChatHistoryEvent = CreateFrame("Frame")
 local tokennum, matchTable = 1, {}
 local currentLink
@@ -635,7 +698,7 @@ function CH:OnHyperlinkEnter(frame, linkData, link)
 	if CH.LinkHoverShow[t] then
 		ShowUIPanel(GameTooltip)
 		-- GameTooltip:SetOwner(UIParent, "ANCHOR_CURSOR")
-		GameTooltip:SetOwner(ChatBG, "ANCHOR_TOPLEFT", 0, 80)
+		GameTooltip:SetOwner(RayUIChatBG, "ANCHOR_TOPLEFT", 0, 80)
 		GameTooltip:SetHyperlink(link)
 		GameTooltip:Show()
 	end
@@ -742,23 +805,29 @@ function CH:AddMessage(text, ...)
 	return self.OldAddMessage(self, text, ...)
 end
 
-function CH:SetChatPosition()
+function CH:SetChatPosition(override)
+	if ((InCombatLockdown() and not override and self.initialMove) or (IsMouseButtonDown("LeftButton") and not override)) then return end
 	for i = 1, #CHAT_FRAMES do
-		if _G["ChatFrame"..i] == COMBATLOG then
-			_G["ChatFrame"..i]:ClearAllPoints()
-			_G["ChatFrame"..i]:SetPoint("TOPLEFT", _G["ChatBG"], "TOPLEFT", 2,  -CombatLogQuickButtonFrame_Custom:GetHeight())
-			_G["ChatFrame"..i]:SetPoint("BOTTOMRIGHT", _G["ChatBG"], "BOTTOMRIGHT", -2, 4)
+		local chat = _G[format("ChatFrame%d", i)]
+		local tab = _G[format("ChatFrame%sTab", i)]
+		if chat == COMBATLOG then
+			chat:ClearAllPoints()
+			chat:SetPoint("TOPLEFT", _G["RayUIChatBG"], "TOPLEFT", 2,  -CombatLogQuickButtonFrame_Custom:GetHeight())
+			chat:SetPoint("BOTTOMRIGHT", _G["RayUIChatBG"], "BOTTOMRIGHT", -2, 4)
 		else
-			_G["ChatFrame"..i]:ClearAllPoints()
-			_G["ChatFrame"..i]:SetPoint("TOPLEFT", _G["ChatBG"], "TOPLEFT", 2, -2)
-			_G["ChatFrame"..i]:SetPoint("BOTTOMRIGHT", _G["ChatBG"], "BOTTOMRIGHT", -2, 4)
+			chat:ClearAllPoints()
+			chat:SetPoint("TOPLEFT", _G["RayUIChatBG"], "TOPLEFT", 2, -2)
+			chat:SetPoint("BOTTOMRIGHT", _G["RayUIChatBG"], "BOTTOMRIGHT", -2, 4)
 		end
-		FCF_SavePositionAndDimensions(_G["ChatFrame"..i])
+		FCF_SavePositionAndDimensions(chat, true)
+		tab:SetParent(_G["RayUIChatBG"])
+		chat:SetParent(_G["RayUIChatBG"])
 		local _, _, _, _, _, _, shown, _, docked, _ = GetChatWindowInfo(i)
 		if shown and not docked then
-			FCF_DockFrame(_G["ChatFrame"..i])
+			FCF_DockFrame(chat)
 		end
 	end
+	self.initialMove = true
 end
 
 local function updateFS(self, inc, flags, ...)
@@ -909,7 +978,7 @@ function CH:ApplyStyle(event, ...)
             local eb = _G[frameName.."EditBox"]
             local i = cf:GetID()
 
-            cf:SetParent(ChatBG)
+            cf:SetParent(RayUIChatBG)
             local ebParts = {"Left", "Mid", "Right", "Middle"}
             for j = 1, #CHAT_FRAME_TEXTURES do
                 _G[frameName..CHAT_FRAME_TEXTURES[j]]:SetTexture(nil)
@@ -960,7 +1029,7 @@ function CH:ApplyStyle(event, ...)
             _G[frameName.."TabText"]:SetFont(R["media"].font, 13)
             local editbox = CreateFrame("Frame", nil, UIParent)
             editbox:Height(22)
-            editbox:SetWidth(ChatBG:GetWidth())
+            editbox:SetWidth(RayUIChatBG:GetWidth())
             editbox:SetPoint("BOTTOMLEFT", cf, "TOPLEFT",  -2, 6)
             editbox:CreateShadow("Background")
             editbox:Hide()
@@ -973,7 +1042,7 @@ function CH:ApplyStyle(event, ...)
             eb:HookScript("OnShow", function(self)
                 editbox.wpos = 100
                 editbox.wspeed = 600
-                editbox.wlimit = ChatBG:GetWidth()
+                editbox.wlimit = RayUIChatBG:GetWidth()
                 editbox.wmod = 1
                 editbox:SetScript("OnUpdate", R.simple_width)
                 UIFrameFadeIn(editbox, .3, 0, 1)
@@ -1028,6 +1097,7 @@ function CH:ApplyStyle(event, ...)
             cf.styled = true
         end
 	end
+	CH:SetChatPosition(true)
 end
 
 function CH:SetChat()
@@ -1147,6 +1217,12 @@ function CH:PET_BATTLE_CLOSE()
 	end
 end
 
+function CH:ON_FCF_SavePositionAndDimensions(_, noLoop)
+	if not noLoop then
+		CH:SetChatPosition()
+	end
+end
+
 function CH:Initialize()
 	if not RayUICharacterData.ChatEditHistory then
 		RayUICharacterData.ChatEditHistory = {}
@@ -1157,16 +1233,15 @@ function CH:Initialize()
 	end
 
 	ChatFrameMenuButton:Kill()
-	ChatFrameMenuButton:SetScript("OnShow", kill)
 	FriendsMicroButton:Hide()
 	FriendsMicroButton:Kill()
 
 	CreatCopyFrame()
 	CopyChatFrame:Hide()
-	if not _G["ChatBG"] then
-		local ChatBG = CreateFrame("Frame", "ChatBG", UIParent)
-		ChatBG:CreatePanel("Default", self.db.width, self.db.height, "BOTTOMLEFT",UIParent,"BOTTOMLEFT",15,30)
-		GeneralDockManager:SetParent(ChatBG)
+	if not _G["RayUIChatBG"] then
+		local RayUIChatBG = CreateFrame("Frame", "RayUIChatBG", UIParent)
+		RayUIChatBG:CreatePanel("Default", self.db.width, self.db.height, "BOTTOMLEFT",UIParent,"BOTTOMLEFT",15,30)
+		GeneralDockManager:SetParent(RayUIChatBG)
 	end
 
 	CHAT_INSTANCE_CHAT_GET = "|Hchannel:INSTANCE|h".."[I]".."|h %s:\32"
@@ -1219,6 +1294,7 @@ function CH:Initialize()
 	self:SecureHook("FCF_StartAlertFlash")
 	self:SecureHook("FCF_StopAlertFlash")
     self:SecureHook("FCF_Tab_OnClick")
+	self:SecureHook("FCF_SavePositionAndDimensions", "ON_FCF_SavePositionAndDimensions")
 
 	local events = {
 		"CHAT_MSG_BATTLEGROUND", "CHAT_MSG_BATTLEGROUND_LEADER",
@@ -1245,7 +1321,6 @@ function CH:Initialize()
 	self:DamageMeterFilter()
 	self:EasyChannel()
     self:EnableDumpTool()
-	self:ScheduleRepeatingTimer("SetChatPosition", 1)
 	self:RawHook("SetItemRef", true)
 	self:RawHook("GetColoredName", true)
 
@@ -1267,14 +1342,8 @@ function CH:Initialize()
 	ChatHistoryEvent:RegisterEvent("CHAT_MSG_WHISPER")
 	ChatHistoryEvent:RegisterEvent("CHAT_MSG_WHISPER_INFORM")
 	ChatHistoryEvent:RegisterEvent("CHAT_MSG_YELL")
-    -- ChatHistoryEvent:RegisterEvent("PLAYER_LOGIN")
 	ChatHistoryEvent:SetScript("OnEvent", function(self, event, ...)
-        if event =="PLAYER_LOGIN" then
-            ChatHistoryEvent:UnregisterEvent("PLAYER_LOGIN")
-            CH:DisplayChatHistory()
-        else
-            CH:SaveChatHistory(event, ...)
-        end
+        CH:SaveChatHistory(event, ...)
 	end)
     CH:DisplayChatHistory()
 
