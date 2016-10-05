@@ -31,18 +31,18 @@ local function OpenMenu(infobar)
 	if oldRef and oldRef ~= infobar and not oldRef.infobarType then
 		menu.ref:SetAlpha(0)
 	end
-	
+
 	for i = 1, maxMenuButtons do
 		local button = menu["Button"..i]
 		button:Hide()
 	end
-	
+
 	for infobarType, info in pairs(infobarTypes) do
 		local isUsed = usedInfoBar[infobarType]
-		
+
 		if not isUsed then
 			numShown = numShown + 1
-			
+
 			-- Add InfoBar Button to the menu
 			local button = menu["Button"..numShown]
 
@@ -54,11 +54,11 @@ local function OpenMenu(infobar)
 			button:Show()
 		end
 	end
-	
+
 	if numShown == 0 then
 		padding = padding - 10
 	end
-	
+
 	if infobar.infobarType then
 		padding = padding + 35
 		menu.Clear:Show()
@@ -71,7 +71,7 @@ local function OpenMenu(infobar)
 	menu:ClearAllPoints()
 	menu:SetPoint("BOTTOM",infobar,"TOP",0,5)
 	menu:Show()
-	
+
 	GameTooltip_Hide()
 end
 
@@ -108,11 +108,11 @@ local function SetButton(button,index,infobarType,info,isInit)
 	if not isInit then
 		R.db["InfoBar"]["List"][index] = infobarType
 	end
-	
+
 	if info.initFunc then
 		info.initFunc(button)
 	end
-	
+
 	if info.icon then
 		button:SetNormalTexture(info.icon)
 		button.Text:SetPoint("TOPLEFT",28,-8)
@@ -139,7 +139,7 @@ end
 
 function RayUI_InfoBarButton_OnEnter(self)
 	local menu = RayUI_InfoBarMenu
-	
+
 	if self.tooltipFunc and not menu:IsShown() then
 		self.tooltipFunc(self)
 	elseif not self.infobarType then
@@ -147,7 +147,7 @@ function RayUI_InfoBarButton_OnEnter(self)
 		GameTooltip:AddLine(L["点击右键选择信息条"],1,1,1)
 		GameTooltip:Show()
 	end
-	
+
 	if self.infobarType then
 		self:SetAlpha(1)
 	else
@@ -157,7 +157,7 @@ end
 
 function RayUI_InfoBarButton_OnLeave(self)
 	local menu = RayUI_InfoBarMenu
-	
+
 	if self.infobarType then
 		self:SetAlpha(1)
 	elseif menu:IsShown() and menu.ref == self then
@@ -165,7 +165,7 @@ function RayUI_InfoBarButton_OnLeave(self)
 	else
 		self:SetAlpha(0)
 	end
-	
+
 	GameTooltip_Hide()
 end
 
@@ -195,7 +195,7 @@ function RayUI_InfoBarButton_OnReset(self,noSave)
 	if not noSave then
 		dataBase[self:GetID()] = nil
 	end
-	
+
 	self.infobarType = nil
 	self.clickFunc = nil
 	self.onUpdate = nil
@@ -209,19 +209,19 @@ function RayUI_InfoBarButton_OnReset(self,noSave)
 	self:SetAlpha(0)
 	self:UnregisterAllEvents()
 	if self.unregisterLDBEvent then self:unregisterLDBEvent() end
-	
+
 	RayUI_InfoBarMenu:Hide()
 end
 
 function RayUI_InfoBarMenu_OnInit(self)
 	local dataBase = GetInfoBarList()
-	
+
 	RayUI_RegisterLDB()
 
 	for index, infobarType in pairs(dataBase) do
 		local button = _G["RayUI_InfoBar"..index]
 		local info = infobarTypes[infobarType]
-		
+
 		if info then
 			SetButton(button,index,infobarType,info,true)
 		end
@@ -233,7 +233,7 @@ end
 function RayUI_InfoBarMenuButton_OnClick(self)
 	local button, infobarType, info = self.ref, self.infobarType, self.info
 	local index = button:GetID()
-	
+
 	-- Free Prev InfoBar
 	if button.infobarType then
 		usedInfoBar[button.infobarType] = nil
@@ -244,7 +244,7 @@ function RayUI_InfoBarMenuButton_OnClick(self)
 	end
 
 	SetButton(button,index,infobarType,info)
-	
+
 	RayUI_InfoBarMenu:Hide()
 end
 
@@ -326,12 +326,12 @@ function IF:Initialize()
 	font:SetShadowOffset(R.mult, -R.mult)
 
 	for i = 1, 8 do
-		local infoBar = CreateFrame("Button", "RayUI_InfoBar"..i, UIParent, "RayUI_InfoBarButtonTemplate")
+		local infoBar = CreateFrame("Button", "RayUI_InfoBar"..i, R.UIParent, "RayUI_InfoBarButtonTemplate")
 		infoBar:SetNormalFontObject(font)
 		infoBar:SetSize(140, 35)
 		infoBar:SetID(i)
 		if i == 1 then
-			infoBar:Point("BOTTOMLEFT", UIParent, "BOTTOM", -140 * 4 - 6 * 3 - 3, -5)
+			infoBar:Point("BOTTOMLEFT", R.UIParent, "BOTTOM", -140 * 4 - 6 * 3 - 3, -5)
 		else
 			infoBar:Point("LEFT", _G["RayUI_InfoBar"..i-1], "RIGHT", 6, 0)
 		end
@@ -354,7 +354,7 @@ function IF:Initialize()
 		button.Background = CreateFrame("Frame", nil, button)
 		button.Background:SetInside(button, 8, 8)
 		button.Background:CreateShadow("Background")
-	
+
 		if i > 1 then button:Point("TOP", RayUI_InfoBarMenu["Button"..i-1], "BOTTOM", 0, 10) end
 	end
 

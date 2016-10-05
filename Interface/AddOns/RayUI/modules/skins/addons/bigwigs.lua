@@ -1,5 +1,5 @@
 --[[
-Author: Affli@RU-Howling Fjord, 
+Author: Affli@RU-Howling Fjord,
 Modified: Elv
 All rights reserved.
 ]]--
@@ -27,7 +27,7 @@ local function SkinBigWigs()
 		local bg = bar:Get("bigwigs:rayui:barbg")
 		if bg then
 			bg:ClearAllPoints()
-			bg:SetParent(UIParent)
+			bg:SetParent(R.UIParent)
 			bg:Hide()
 			freebg[#freebg + 1] = bg
 		end
@@ -36,7 +36,7 @@ local function SkinBigWigs()
 		local ibg = bar:Get("bigwigs:rayui:iconbg")
 		if ibg then
 			ibg:ClearAllPoints()
-			ibg:SetParent(UIParent)
+			ibg:SetParent(R.UIParent)
 			ibg:Hide()
 			freebg[#freebg + 1] = ibg
 		end
@@ -173,7 +173,7 @@ local function SkinBigWigs()
 	local function PositionBWAnchor()
 		if not BigWigsAnchor then return end
 		BigWigsAnchor:ClearAllPoints()
-		BigWigsAnchor:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -5, 8)
+		BigWigsAnchor:Point("BOTTOMRIGHT", R.UIParent, "BOTTOMRIGHT", -5, 8)
 	end
 
 

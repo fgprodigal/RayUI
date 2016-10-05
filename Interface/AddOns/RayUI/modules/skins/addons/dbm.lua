@@ -1,5 +1,5 @@
 --[[
-Author: Affli@RU-Howling Fjord, 
+Author: Affli@RU-Howling Fjord,
 Modified: Elv
 All rights reserved.
 ]]--
@@ -24,7 +24,7 @@ local function SkinDBM()
 		end
 		if self.secAnchor then
 			self.secAnchor:ClearAllPoints()
-			self.secAnchor:SetPoint("BOTTOM", UIParent, "BOTTOM", - self.options.HugeWidth/2 - 80, 650)
+			self.secAnchor:SetPoint("BOTTOM", R.UIParent, "BOTTOM", - self.options.HugeWidth/2 - 80, 650)
 		end
 	end
 

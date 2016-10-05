@@ -23,7 +23,7 @@ local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT
 local RESET = RESET
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: UIParent, GameTooltip, UIDropDownMenu_SetSelectedValue, UIDropDownMenu_Initialize
+-- GLOBALS: RayUIParent, GameTooltip, UIDropDownMenu_SetSelectedValue, UIDropDownMenu_Initialize
 -- GLOBALS: UIDropDownMenu_CreateInfo, UIDropDownMenu_AddButton, EditBox_ClearFocus, SquareButton_SetIcon
 -- GLOBALS: RayUIMoverPopupWindow, GameFontNormal, RayUIMoverPopupWindowDropDown
 
@@ -48,7 +48,7 @@ end
 
 local function GetPoint(obj)
 	local point, anchor, secondaryPoint, x, y = obj:GetPoint()
-	if not anchor then anchor = UIParent end
+	if not anchor then anchor = RayUIParent end
 
 	return string.format("%s\031%s\031%s\031%d\031%d", point, anchor:GetName(), secondaryPoint, R:Round(x), R:Round(y))
 end
@@ -62,7 +62,7 @@ end
 local function MoverTypes_Initialize()
 	local info = UIDropDownMenu_CreateInfo()
 	info.func = MoverTypes_OnClick
-	
+
 	for _, moverTypes in ipairs(MoverTypes) do
 		info.text = L[moverTypes]
 		info.value = moverTypes
@@ -72,10 +72,10 @@ local function MoverTypes_Initialize()
 	UIDropDownMenu_SetSelectedValue(RayUIMoverPopupWindowDropDown, selectedValue)
 end
 
-local function CreateGrid() 
-	grid = CreateFrame("Frame", "AlignGrid", UIParent) 
+local function CreateGrid()
+	grid = CreateFrame("Frame", "AlignGrid", R.UIParent)
 	grid.boxSize = gridSize
-	grid:SetAllPoints(UIParent) 
+	grid:SetAllPoints(R.UIParent)
 	grid:Show()
 
 	local size = 1
@@ -86,36 +86,36 @@ local function CreateGrid()
 	local wStep = width / gridSize
 	local hStep = height / gridSize
 
-	for i = 0, gridSize do 
-		local tx = grid:CreateTexture(nil, "BACKGROUND") 
-		if i == gridSize / 2 then 
-			tx:SetColorTexture(1, 0, 0) 
-		else 
-			tx:SetColorTexture(0, 0, 0) 
+	for i = 0, gridSize do
+		local tx = grid:CreateTexture(nil, "BACKGROUND")
+		if i == gridSize / 2 then
+			tx:SetColorTexture(1, 0, 0)
+		else
+			tx:SetColorTexture(0, 0, 0)
 		end
 		tx:Width(size)
-		tx:SetPoint("TOPLEFT", grid, "TOPLEFT", i*wStep - (size/2), 0) 
-		tx:SetPoint("BOTTOMLEFT", grid, "BOTTOMLEFT", i*wStep - (size/2), 0) 
-	end 
+		tx:SetPoint("TOPLEFT", grid, "TOPLEFT", i*wStep - (size/2), 0)
+		tx:SetPoint("BOTTOMLEFT", grid, "BOTTOMLEFT", i*wStep - (size/2), 0)
+	end
 	height = GetScreenHeight()
-	
+
 	do
-		local tx = grid:CreateTexture(nil, "BACKGROUND") 
+		local tx = grid:CreateTexture(nil, "BACKGROUND")
 		tx:SetColorTexture(1, 0, 0)
 		tx:Height(size)
 		tx:SetPoint("TOPLEFT", grid, "TOPLEFT", 0, -(height/2) + (size/2))
 		tx:SetPoint("TOPRIGHT", grid, "TOPRIGHT", 0, -(height/2) + (size/2))
 	end
-	
+
 	for i = 1, floor((height/2)/hStep) do
-		local tx = grid:CreateTexture(nil, "BACKGROUND") 
+		local tx = grid:CreateTexture(nil, "BACKGROUND")
 		tx:SetColorTexture(0, 0, 0)
 
 		tx:Height(size)
 		tx:SetPoint("TOPLEFT", grid, "TOPLEFT", 0, -(height/2+i*hStep) + (size/2))
 		tx:SetPoint("TOPRIGHT", grid, "TOPRIGHT", 0, -(height/2+i*hStep) + (size/2))
-		
-		tx = grid:CreateTexture(nil, "BACKGROUND") 
+
+		tx = grid:CreateTexture(nil, "BACKGROUND")
 		tx:SetColorTexture(0, 0, 0)
 
 		tx:Height(size)
@@ -142,7 +142,7 @@ local function HideGrid()
 end
 
 local function UpdateNudgeFrame(mover)
-	local screenWidth, screenHeight, screenCenter = UIParent:GetRight(), UIParent:GetTop(), UIParent:GetCenter()
+	local screenWidth, screenHeight, screenCenter = R.UIParent:GetRight(), R.UIParent:GetTop(), R.UIParent:GetCenter()
 	local x, y = mover:GetCenter()
 
 	local LEFT = screenWidth / 3
@@ -154,7 +154,7 @@ local function UpdateNudgeFrame(mover)
 	else
 		y = mover:GetBottom()
 	end
-	
+
 	if x >= RIGHT then
 		x = mover:GetRight() - screenWidth
 	elseif x <= LEFT then
@@ -162,7 +162,7 @@ local function UpdateNudgeFrame(mover)
 	else
 		x = x - screenCenter
 	end
-	
+
 	x = R:Round(x, 0)
 	y = R:Round(y, 0)
 
@@ -180,7 +180,7 @@ end
 
 local function GetXYOffset(position)
 	local x, y = 1, 1
-	
+
 	if position == "TOP" or position == "TOPLEFT" or position == "TOPRIGHT" then
 		return 0, y
 	elseif position == "BOTTOM" or position == "BOTTOMLEFT" or position == "BOTTOMRIGHT" then
@@ -198,7 +198,7 @@ end
 
 local function ShowNudgeWindow()
 	local mover = nudgeWindow.child
-	local screenWidth, screenHeight, screenCenter = UIParent:GetRight(), UIParent:GetTop(), UIParent:GetCenter()
+	local screenWidth, screenHeight, screenCenter = R.UIParent:GetRight(), R.UIParent:GetTop(), R.UIParent:GetCenter()
 	local x, y = mover:GetCenter()
 
 	local LEFT = screenWidth / 3
@@ -214,7 +214,7 @@ local function ShowNudgeWindow()
 		inversePoint = "TOP"
 		y = mover:GetBottom()
 	end
-	
+
 	if x >= RIGHT then
 		point = "RIGHT"
 		inversePoint = "LEFT"
@@ -226,7 +226,7 @@ local function ShowNudgeWindow()
 	else
 		x = x - screenCenter
 	end
-	
+
 	local coordX, coordY = GetXYOffset(inversePoint)
 	nudgeWindow:ClearAllPoints()
 	nudgeWindow:SetPoint(point, mover, inversePoint, coordX, coordY)
@@ -238,7 +238,7 @@ end
 local function SetNudge()
 	local mover = nudgeWindow.child
 
-	local screenWidth, screenHeight, screenCenter = UIParent:GetRight(), UIParent:GetTop(), UIParent:GetCenter()
+	local screenWidth, screenHeight, screenCenter = R.UIParent:GetRight(), R.UIParent:GetTop(), R.UIParent:GetCenter()
 	local x, y = mover:GetCenter()
 	local point
 	local LEFT = screenWidth / 3
@@ -250,24 +250,24 @@ local function SetNudge()
 	else
 		point = "BOTTOM"
 	end
-	
+
 	if x >= RIGHT then
 		point = point.."RIGHT"
 	elseif x <= LEFT then
 		point = point.."LEFT"
 	end
-	
+
 	x = tonumber(nudgeWindow.xOffset.currentValue)
 	y = tonumber(nudgeWindow.yOffset.currentValue)
 
 	mover:ClearAllPoints()
-	mover:Point(point, UIParent, point, x, y)
-	R:SaveMoverPosition(mover.name)	
+	mover:Point(point, R.UIParent, point, x, y)
+	R:SaveMoverPosition(mover.name)
 end
 
 local function CreatePopup()
 	local S = R:GetModule("Skins")
-	local f = CreateFrame("Frame", "RayUIMoverPopupWindow", UIParent)
+	local f = CreateFrame("Frame", "RayUIMoverPopupWindow", R.UIParent)
 	f:SetFrameStrata("DIALOG")
 	f:SetToplevel(true)
 	f:EnableMouse(true)
@@ -305,7 +305,7 @@ local function CreatePopup()
 
 	lock:SetScript("OnClick", function(self)
 		R:ToggleConfigMode(true)
-		AceConfig["Open"](AceConfig,"RayUI") 
+		AceConfig["Open"](AceConfig,"RayUI")
 		selectedValue = "GENERAL"
 		UIDropDownMenu_SetSelectedValue(RayUIMoverPopupWindowDropDown, selectedValue)
 	end)
@@ -343,7 +343,7 @@ local function CreatePopup()
 		EditBox_ClearFocus(self)
 		self:SetText(gridSize)
 	end)
-	
+
 	align.text = align:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	align.text:SetPoint("RIGHT", align, "LEFT", -4, 0)
 	align.text:SetText(L["网格数"])
@@ -363,12 +363,12 @@ local function CreatePopup()
 	S:ReskinDropDown(moverTypes)
 	moverTypes.text = moverTypes:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	moverTypes.text:SetPoint("RIGHT", moverTypes, "LEFT", 2, 2)
-	moverTypes.text:SetText(L["模式"])	
-	
-	
+	moverTypes.text:SetText(L["模式"])
+
+
 	UIDropDownMenu_Initialize(moverTypes, MoverTypes_Initialize)
 
-	nudgeWindow = CreateFrame("Frame", "MoverNudgeWindow", UIParent)
+	nudgeWindow = CreateFrame("Frame", "MoverNudgeWindow", R.UIParent)
 	nudgeWindow:SetFrameStrata("DIALOG")
 	nudgeWindow:SetWidth(200)
 	nudgeWindow:SetHeight(110)
@@ -387,7 +387,7 @@ local function CreatePopup()
 	desc:SetPoint("TOPLEFT", 18, -15)
 	desc:SetPoint("BOTTOMRIGHT", -18, 28)
 	nudgeWindow.title = desc
-	
+
 	local header = CreateFrame("Button", nil, nudgeWindow)
 	header:SetTemplate("Default", true)
 	header:SetWidth(100)
@@ -399,7 +399,7 @@ local function CreatePopup()
 	title:FontTemplate()
 	title:SetPoint("CENTER", header, "CENTER")
 	title:SetText(L["微调"])
-	
+
 	local xOffset = CreateFrame("EditBox", nudgeWindow:GetName().."XEditBox", nudgeWindow, "InputBoxTemplate")
 	xOffset:Width(50)
 	xOffset:Height(17)
@@ -426,14 +426,14 @@ local function CreatePopup()
 		EditBox_ClearFocus(self)
 		self:SetText(R:Round(xOffset.currentValue))
 	end)
-	
+
 	xOffset.text = xOffset:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	xOffset.text:SetPoint("RIGHT", xOffset, "LEFT", -4, 0)
-	xOffset.text:SetText("X:")	
+	xOffset.text:SetText("X:")
 	xOffset:SetPoint("BOTTOMRIGHT", nudgeWindow, "CENTER", -6, 8)
 	nudgeWindow.xOffset = xOffset
 	S:ReskinInput(xOffset)
-	
+
 	local yOffset = CreateFrame("EditBox", nudgeWindow:GetName().."YEditBox", nudgeWindow, "InputBoxTemplate")
 	yOffset:Width(50)
 	yOffset:Height(17)
@@ -460,14 +460,14 @@ local function CreatePopup()
 		EditBox_ClearFocus(self)
 		self:SetText(R:Round(yOffset.currentValue))
 	end)
-	
+
 	yOffset.text = yOffset:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	yOffset.text:SetPoint("RIGHT", yOffset, "LEFT", -4, 0)
-	yOffset.text:SetText("Y:")	
+	yOffset.text:SetText("Y:")
 	yOffset:SetPoint("BOTTOMLEFT", nudgeWindow, "CENTER", 16, 8)
 	nudgeWindow.yOffset = yOffset
-	S:ReskinInput(yOffset)	
-	
+	S:ReskinInput(yOffset)
+
 	local resetButton = CreateFrame("Button", nudgeWindow:GetName().."ResetButton", nudgeWindow, "UIPanelButtonTemplate")
 	resetButton:SetText(RESET)
 	resetButton:SetPoint("TOP", nudgeWindow, "CENTER", 0, 2)
@@ -478,7 +478,7 @@ local function CreatePopup()
 		end
 	end)
 	S:Reskin(resetButton)
-	
+
 	local upButton = CreateFrame("Button", nudgeWindow:GetName().."UpButton", nudgeWindow, "UIPanelSquareButton")
 	upButton:SetPoint("BOTTOMRIGHT", nudgeWindow, "BOTTOM", -6, 4)
 	upButton:SetScript("OnClick", function()
@@ -487,7 +487,7 @@ local function CreatePopup()
 	end)
 	SquareButton_SetIcon(upButton, "UP");
 	S:Reskin(upButton)
-	
+
 	local downButton = CreateFrame("Button", nudgeWindow:GetName().."DownButton", nudgeWindow, "UIPanelSquareButton")
 	downButton:SetPoint("BOTTOMLEFT", nudgeWindow, "BOTTOM", 6, 4)
 	downButton:SetScript("OnClick", function()
@@ -504,8 +504,8 @@ local function CreatePopup()
 		xOffset:GetScript("OnEnterPressed")(xOffset)
 	end)
 	SquareButton_SetIcon(leftButton, "LEFT");
-	S:Reskin(leftButton)		
-	
+	S:Reskin(leftButton)
+
 	local rightButton = CreateFrame("Button", nudgeWindow:GetName().."RightButton", nudgeWindow, "UIPanelSquareButton")
 	rightButton:SetPoint("LEFT", downButton, "RIGHT", 6, 0)
 	rightButton:SetScript("OnClick", function()
@@ -526,7 +526,7 @@ local function CreateMover(parent, name, text, overlay, postdrag, ignoreSizeChan
 
 	local point, anchor, secondaryPoint, x, y = string.split("\031", GetPoint(parent))
 
-	local f = CreateFrame("Button", name, UIParent)
+	local f = CreateFrame("Button", name, R.UIParent)
 	f:SetFrameLevel(parent:GetFrameLevel() + 1)
 	f:SetWidth(parent:GetWidth())
 	f:SetHeight(parent:GetHeight())
@@ -538,7 +538,7 @@ local function CreateMover(parent, name, text, overlay, postdrag, ignoreSizeChan
 	end
 	if R.db["movers"] and R.db["movers"][name] then
 		if type(R.db["movers"][name]) == "table" then
-			f:SetPoint(R.db["movers"][name]["p"], UIParent, R.db["movers"][name]["p2"], R.db["movers"][name]["p3"], R.db["movers"][name]["p4"])
+			f:SetPoint(R.db["movers"][name]["p"], R.UIParent, R.db["movers"][name]["p2"], R.db["movers"][name]["p3"], R.db["movers"][name]["p4"])
 			R.db["movers"][name] = GetPoint(f)
 			f:ClearAllPoints()
 		end
@@ -550,23 +550,23 @@ local function CreateMover(parent, name, text, overlay, postdrag, ignoreSizeChan
 	end
 	S:Reskin(f)
 	f:RegisterForDrag("LeftButton")
-	f:SetScript("OnDragStart", function(self) 
+	f:SetScript("OnDragStart", function(self)
 		if InCombatLockdown() then R:Print(ERR_NOT_IN_COMBAT) return end
-		self:StartMoving() 
+		self:StartMoving()
 	end)
 
-	f:SetScript("OnDragStop", function(self) 
+	f:SetScript("OnDragStop", function(self)
 		if InCombatLockdown() then R:Print(ERR_NOT_IN_COMBAT) return end
 		self:StopMovingOrSizing()
 
-		local screenWidth, screenHeight, screenCenter = UIParent:GetRight(), UIParent:GetTop(), UIParent:GetCenter()
+		local screenWidth, screenHeight, screenCenter = R.UIParent:GetRight(), R.UIParent:GetTop(), R.UIParent:GetCenter()
 		local x, y = self:GetCenter()
 		local point
-		
+
 		local LEFT = screenWidth / 3
 		local RIGHT = screenWidth * 2 / 3
 		local TOP = screenHeight / 2
-		
+
 		if y >= TOP then
 			point = "TOP"
 			y = -(screenHeight - self:GetTop())
@@ -574,7 +574,7 @@ local function CreateMover(parent, name, text, overlay, postdrag, ignoreSizeChan
 			point = "BOTTOM"
 			y = self:GetBottom()
 		end
-		
+
 		if x >= RIGHT then
 			point = point.."RIGHT"
 			x = self:GetRight() - screenWidth
@@ -586,10 +586,10 @@ local function CreateMover(parent, name, text, overlay, postdrag, ignoreSizeChan
 		end
 
 		self:ClearAllPoints()
-		self:Point(point, UIParent, point, x, y)
+		self:Point(point, R.UIParent, point, x, y)
 
 		R:SaveMoverPosition(name)
-		
+
 		if postdrag ~= nil and type(postdrag) == "function" then
 			postdrag(self, R:GetScreenQuadrant(self))
 		end
@@ -629,7 +629,7 @@ local function CreateMover(parent, name, text, overlay, postdrag, ignoreSizeChan
 			end
 		end
 	end)
-	f:HookScript("OnEnter", function(self) 
+	f:HookScript("OnEnter", function(self)
 		self.text:SetTextColor(self:GetBackdropBorderColor())
 	end)
 	f:HookScript("OnLeave", function(self)
@@ -653,7 +653,7 @@ end
 function R:CreateMover(parent, name, text, overlay, postdrag, moverTypes, ignoreSizeChange)
 	if not moverTypes then moverTypes = "ALL,GENERAL" end
 
-	if R.CreatedMovers[name] == nil then 
+	if R.CreatedMovers[name] == nil then
 		R.CreatedMovers[name] = {}
 		R.CreatedMovers[name]["parent"] = parent
 		R.CreatedMovers[name]["text"] = text
@@ -687,24 +687,24 @@ function R:ToggleConfigMode(override, moverType)
 		if not RayUIMoverPopupWindow then
 			CreatePopup()
 		end
-		
+
 		RayUIMoverPopupWindow:Show()
 		ShowGrid()
-		AceConfig["Close"](AceConfig, "RayUI") 
-		GameTooltip:Hide()		
+		AceConfig["Close"](AceConfig, "RayUI")
+		GameTooltip:Hide()
 		R.ConfigurationMode = true
 	else
 		if RayUIMoverPopupWindow then
 			RayUIMoverPopupWindow:Hide()
-		end	
+		end
 		HideGrid()
 		R.ConfigurationMode = false
 	end
-	
+
 	if type(moverType) ~= "string" then
 		moverType = nil
 	end
-	
+
 	self:ToggleMovers(R.ConfigurationMode, moverType or "GENERAL")
 end
 
@@ -729,35 +729,35 @@ function R:ResetMovers(arg)
 			local point, anchor, secondaryPoint, x, y = string.split("\031", R.CreatedMovers[name]["point"])
 			f:ClearAllPoints()
 			f:SetPoint(point, anchor, secondaryPoint, x, y)
-			
+
 			for key, value in pairs(R.CreatedMovers[name]) do
 				if key == "postdrag" and type(value) == "function" then
 					value(f, R:GetScreenQuadrant(f))
 				end
 			end
-		end	
+		end
 		self.db.movers = nil
 	else
 		for name, _ in pairs(R.CreatedMovers) do
 			for key, value in pairs(R.CreatedMovers[name]) do
 				local mover
 				if key == "text" then
-					if arg == value then 
+					if arg == value then
 						local f = _G[name]
 						local point, anchor, secondaryPoint, x, y = string.split("\031", R.CreatedMovers[name]["point"])
 						f:ClearAllPoints()
-						f:SetPoint(point, anchor, secondaryPoint, x, y)				
-						
+						f:SetPoint(point, anchor, secondaryPoint, x, y)
+
 						if self.db.movers then
 							self.db.movers[name] = nil
 						end
-						
+
 						if R.CreatedMovers[name]["postdrag"] ~= nil and type(R.CreatedMovers[name]["postdrag"]) == "function" then
 							R.CreatedMovers[name]["postdrag"](f, R:GetScreenQuadrant(f))
 						end
 					end
 				end
-			end	
+			end
 		end
 	end
 end
@@ -774,7 +774,7 @@ function R:SetMoversPositions()
 			point, anchor, secondaryPoint, x, y = string.split("\031", R.CreatedMovers[name]["point"])
 			f:ClearAllPoints()
 			f:SetPoint(point, anchor, secondaryPoint, x, y)
-		end		
+		end
 	end
 end
 

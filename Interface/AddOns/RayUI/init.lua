@@ -1,4 +1,15 @@
-﻿local AddOnName, Engine = ...
+﻿--Cache global variables
+--Lua functions
+local _G = _G
+local pairs = pairs
+
+--WoW API / Variables
+local ToggleHelpFrame = ToggleHelpFrame
+local StaticPopup_Show = StaticPopup_Show
+local InCombatLockdown = InCombatLockdown
+local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT
+
+local AddOnName, Engine = ...
 local AddOn = LibStub("AceAddon-3.0"):NewAddon(AddOnName, "AceConsole-3.0", "AceEvent-3.0", "AceHook-3.0")
 local Locale = LibStub("AceLocale-3.0"):GetLocale(AddOnName, false)
 local AceConfig = LibStub("AceConfig-3.0")

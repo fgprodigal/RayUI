@@ -30,7 +30,7 @@ function mod:RaidMarkShowIcons()
 	end
 	local X, Y = GetCursorPosition()
 	local Scale = UIParent:GetEffectiveScale()
-	self.RaidMarkFrame:SetPoint("CENTER", UIParent, "BOTTOMLEFT", X / Scale, Y / Scale)
+	self.RaidMarkFrame:SetPoint("CENTER", R.UIParent, "BOTTOMLEFT", X / Scale, Y / Scale)
 	self.RaidMarkFrame:Show()
 end
 
@@ -61,7 +61,7 @@ function RaidMark_HotkeyPressed(keystate)
 end
 
 function mod:Initialize()
-	local RaidMarkFrame = CreateFrame("Frame", nil, UIParent)
+	local RaidMarkFrame = CreateFrame("Frame", nil, R.UIParent)
 	RaidMarkFrame:EnableMouse(true)
 	RaidMarkFrame:SetSize(100, 100)
 	RaidMarkFrame:SetFrameStrata("DIALOG")

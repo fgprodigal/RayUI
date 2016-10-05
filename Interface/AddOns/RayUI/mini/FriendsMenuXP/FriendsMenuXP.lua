@@ -571,7 +571,7 @@ end
 --deal with the hot-key click function.
 function FriendsMenuXP_InitiateMaskButton()
     --Create a "mask button", to block the click to ChatHyperlink.
-    local button = CreateFrame("Button", "ChatLinkMaskButton", UIParent, "SecureActionButtonTemplate");
+    local button = CreateFrame("Button", "ChatLinkMaskButton", RayUIParent, "SecureActionButtonTemplate");
     button:RegisterForClicks("AnyUp");
     button:SetWidth(30); button:SetHeight(10);
 
@@ -679,7 +679,7 @@ function FriendsMenuXP_OnUpdate(self, elapsed)
             y = y / scale
         end
         ChatLinkMaskButton:ClearAllPoints()
-        ChatLinkMaskButton:SetPoint("TOPLEFT",UIParent,"TOPLEFT", x-15, y - UIParent:GetTop() + 5)
+        ChatLinkMaskButton:SetPoint("TOPLEFT",RayUIParent,"TOPLEFT", x-15, y - RayUIParent:GetTop() + 5)
 
         ChatLinkMaskButton:Show();
     else

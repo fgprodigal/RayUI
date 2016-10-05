@@ -36,24 +36,24 @@ end
 function WM:SetLargeWorldMap()
 	if InCombatLockdown() then return end
 
-	WorldMapFrame:SetParent(UIParent)
+	WorldMapFrame:SetParent(R.UIParent)
 	WorldMapFrame:EnableKeyboard(false)
 	WorldMapFrame:SetScale(1)
 	WorldMapFrame:EnableMouse(true)
-	
+
 	if WorldMapFrame:GetAttribute("UIPanelLayout-area") ~= "center" then
 		SetUIPanelAttribute(WorldMapFrame, "area", "center");
 	end
-	
+
 	if WorldMapFrame:GetAttribute("UIPanelLayout-allowOtherPanels") ~= true then
-		SetUIPanelAttribute(WorldMapFrame, "allowOtherPanels", true)	
+		SetUIPanelAttribute(WorldMapFrame, "allowOtherPanels", true)
 	end
 
 	WorldMapFrameSizeUpButton:Hide()
-	WorldMapFrameSizeDownButton:Show()	
+	WorldMapFrameSizeDownButton:Show()
 
 	WorldMapFrame:ClearAllPoints()
-	WorldMapFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 100)
+	WorldMapFrame:SetPoint("CENTER", R.UIParent, "CENTER", 0, 100)
 	WorldMapFrame:SetSize(1002, 668)
 end
 
@@ -61,12 +61,12 @@ function WM:SetSmallWorldMap()
 	if InCombatLockdown() then return; end
 
 	WorldMapFrameSizeUpButton:Show()
-	WorldMapFrameSizeDownButton:Hide()	
+	WorldMapFrameSizeDownButton:Hide()
 end
 
 function WM:PLAYER_REGEN_ENABLED()
 	WorldMapFrameSizeDownButton:Enable()
-	WorldMapFrameSizeUpButton:Enable()	
+	WorldMapFrameSizeUpButton:Enable()
 end
 
 function WM:PLAYER_REGEN_DISABLED()
@@ -80,13 +80,13 @@ function WM:UpdateCoords()
 	local x, y = GetPlayerMapPosition("player")
 	x = R:Round(100 * x, 2)
 	y = R:Round(100 * y, 2)
-	
+
 	if x ~= 0 and y ~= 0 then
 		CoordsHolder.playerCoords:SetText(PLAYER..": "..x..", "..y)
 	else
 		CoordsHolder.playerCoords:SetText(nil)
 	end
-	
+
 	local scale = WorldMapDetailFrame:GetEffectiveScale()
 	local width = WorldMapDetailFrame:GetWidth()
 	local height = WorldMapDetailFrame:GetHeight()
@@ -121,11 +121,11 @@ function WM:Initialize()
 	CoordsHolder.mouseCoords:SetText(MOUSE_LABEL..":   0, 0")
 	CoordsHolder.playerCoords:SetPoint("BOTTOMLEFT", WorldMapFrame.UIElementsFrame, "BOTTOMLEFT", 5, 5)
 	CoordsHolder.mouseCoords:SetPoint("BOTTOMLEFT", CoordsHolder.playerCoords, "TOPLEFT")
-	
+
 	self:ScheduleRepeatingTimer("UpdateCoords", 0.05)
 
 	BlackoutWorld:SetTexture(nil)
-	self:SecureHook("WorldMap_ToggleSizeDown", "SetSmallWorldMap")	
+	self:SecureHook("WorldMap_ToggleSizeDown", "SetSmallWorldMap")
 	self:SecureHook("WorldMap_ToggleSizeUp", "SetLargeWorldMap")
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")

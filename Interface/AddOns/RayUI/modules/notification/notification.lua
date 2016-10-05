@@ -178,10 +178,10 @@ SLASH_TESTNOTIFICATION1 = "/testnotification"
 
 function NF:Initialize()
 	local S = R:GetModule("Skins")
-	f = CreateFrame("Frame", "RayUINotifications", UIParent)
+	f = CreateFrame("Frame", "RayUINotifications", R.UIParent)
 	f:SetFrameStrata("FULLSCREEN_DIALOG")
 	f:SetSize(bannerWidth, 50)
-	f:SetPoint("TOP", UIParent, "TOP")
+	f:SetPoint("TOP", R.UIParent, "TOP")
 	f:Hide()
 	f:SetAlpha(0.1)
 	f:SetScale(0.1)
@@ -295,7 +295,7 @@ function NF:PLAYER_REGEN_ENABLED()
 	for i = 1, 11 do
 		if GetInventoryItemLink("player", Slots[i][1]) ~= nil then
 			current, max = GetInventoryItemDurability(Slots[i][1])
-			if current then 
+			if current then
 				Slots[i][3] = current/max
 			end
 		end
@@ -310,7 +310,7 @@ function NF:PLAYER_REGEN_ENABLED()
 	end
 end
 
-local numInvites = 0 
+local numInvites = 0
 local function GetGuildInvites()
 	local numGuildInvites = 0
 	local _, currentMonth = CalendarGetDate()

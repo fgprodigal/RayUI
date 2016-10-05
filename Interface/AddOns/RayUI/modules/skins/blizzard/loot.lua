@@ -50,7 +50,7 @@ local function LoadSkin()
 
 		local slotsize = 36
 		lootSlots = {}
-		local anchorframe = CreateFrame("Frame", "ItemLoot", UIParent)
+		local anchorframe = CreateFrame("Frame", "ItemLoot", R.UIParent)
 		anchorframe:SetSize(200, 15)
 		anchorframe:SetPoint("TOPLEFT", 300, -300)
 
@@ -172,12 +172,12 @@ local function LoadSkin()
 				lootSlot.quest:Show()
 				ActionButton_ShowOverlayGlow(lootSlot)
 			elseif ( questId or isQuestItem ) then
-				lootSlot.quest:Hide()	
+				lootSlot.quest:Hide()
 				ActionButton_ShowOverlayGlow(lootSlot)
 			else
 				lootSlot.quest:Hide()
 				ActionButton_HideOverlayGlow(lootSlot)
-			end		
+			end
 			if R:IsItemUnusable(GetLootSlotLink(id)) or locked then
 				lootSlot.texture:SetVertexColor(RED_FONT_COLOR.r, RED_FONT_COLOR.g, RED_FONT_COLOR.b)
 			else
@@ -255,7 +255,7 @@ local function LoadSkin()
 			end
 		end
 
-		local loot = CreateFrame("Frame", nil, UIParent)
+		local loot = CreateFrame("Frame", nil, R.UIParent)
 		loot:SetScript("OnEvent", OnEvent)
 		loot:RegisterEvent("LOOT_OPENED")
 		loot:RegisterEvent("LOOT_SLOT_CLEARED")

@@ -16,10 +16,10 @@ local CanExitVehicle = CanExitVehicle
 local ActionBarController_GetCurrentActionBarState = ActionBarController_GetCurrentActionBarState
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: UIParent, LE_ACTIONBAR_STATE_MAIN
+-- GLOBALS: LE_ACTIONBAR_STATE_MAIN
 
 function AB:CreateVehicleExit()
-	local holder = CreateFrame("Frame", nil, UIParent, "SecureHandlerStateTemplate")
+	local holder = CreateFrame("Frame", nil, R.UIParent, "SecureHandlerStateTemplate")
 	holder:SetHeight(AB.db.buttonsize)
 	holder:SetWidth(AB.db.buttonsize)
 

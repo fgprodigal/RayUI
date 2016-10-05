@@ -42,7 +42,7 @@ local C_PetBattlesIsInBattle = C_PetBattles.IsInBattle
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: InterfaceOptionsActionBarsPanelAlwaysShowActionBars, InterfaceOptionsActionBarsPanelLockActionBars, InterfaceOptionsActionBarsPanelBottomRight
 -- GLOBALS: InterfaceOptionsActionBarsPanelBottomLeft, InterfaceOptionsActionBarsPanelRightTwo, InterfaceOptionsActionBarsPanelRight
--- GLOBALS: UIParent, SpellFlyout, NUM_PET_ACTION_SLOTS, NUM_ACTIONBAR_BUTTONS
+-- GLOBALS: SpellFlyout, NUM_PET_ACTION_SLOTS, NUM_ACTIONBAR_BUTTONS
 -- GLOBALS: MainMenuBar, MultiBarLeft, MultiBarRight, MainMenuExpBar, SpellFlyoutHorizontalBackground
 -- GLOBALS: SpellFlyoutVerticalBackground, SpellFlyoutBackgroundEnd, NUM_STANCE_SLOTS, NUM_POSSESS_SLOTS
 -- GLOBALS: MultiBarBottomLeft, MultiBarBottomRight, ReputationWatchBar, MainMenuBarArtFrame
@@ -468,7 +468,7 @@ end
 
 function AB:CreateBar(id)
 	local point, anchor, attachTo, x, y = string.split(",", self["DefaultPosition"]["bar"..id])
-	local bar = CreateFrame("Frame", "RayUIActionBar"..id, UIParent, "SecureHandlerStateTemplate")
+	local bar = CreateFrame("Frame", "RayUIActionBar"..id, R.UIParent, "SecureHandlerStateTemplate")
 	bar:Point(point, anchor, attachTo, x, y)
 	bar.id = id
 	bar.buttons = {}
@@ -543,7 +543,7 @@ function AB:UpdatePositionAndSize(barName)
 	if not self.db.bar2.enable and not self.db.bar3.enable and not ( R.db.movers and R.db.movers.ActionBar1Mover ) then
 		local bar = ActionBar1Mover or self["Handled"]["bar1"]
 		bar:ClearAllPoints()
-		bar:Point("BOTTOM", UIParent, "BOTTOM", 0, 235)
+		bar:Point("BOTTOM", R.UIParent, "BOTTOM", 0, 235)
 	elseif not ( R.db.movers and R.db.movers.ActionBar1Mover ) then
 		local bar = ActionBar1Mover or self["Handled"]["bar1"]
 		local point, anchor, attachTo, x, y = string.split(",", self["DefaultPosition"]["bar1"])
@@ -568,7 +568,7 @@ function AB:UpdatePositionAndSize(barName)
 	if self.db[barName].autohide then
 		bar:SetParent(RayUIActionBarHider)
 	else
-		bar:SetParent(UIParent)
+		bar:SetParent(R.UIParent)
 	end
 
 	local button, lastButton, lastColumnButton
@@ -661,11 +661,11 @@ function AB:Initialize()
 	SetActionBarToggles(1, 1, 1, 1)
 
 	self["DefaultPosition"] = {
-		bar1 = "BOTTOM,UIParent,BOTTOM,"..(-3*AB.db.bar1.buttonsize - 3*AB.db.bar1.buttonspacing)..",235",
+		bar1 = "BOTTOM,RayUIParent,BOTTOM,"..(-3*AB.db.bar1.buttonsize - 3*AB.db.bar1.buttonspacing)..",235",
 		bar2 = "BOTTOM,ActionBar1Mover,TOP,0,"..AB.db.bar2.buttonspacing,
 		bar3 = "BOTTOMLEFT,ActionBar1Mover,BOTTOMRIGHT,"..AB.db.bar3.buttonspacing..",0",
-		bar4 = "LEFT,UIParent,LEFT,15,0",
-		bar5 = "RIGHT,UIParent,RIGHT,-15,0",
+		bar4 = "LEFT,RayUIParent,LEFT,15,0",
+		bar5 = "RIGHT,RayUIParent,RIGHT,-15,0",
 	}
 	for i =1, 5 do
 		self:CreateBar(i)

@@ -9,7 +9,7 @@ function mod:Initialize()
 			if VehicleSeatMover then
 				VehicleSeatIndicator:Point("LEFT", VehicleSeatMover, "LEFT", 0, 0)
 			else
-				VehicleSeatIndicator:Point("LEFT", UIParent, "LEFT", 45, 120)
+				VehicleSeatIndicator:Point("LEFT", R.UIParent, "LEFT", 45, 120)
 				R:CreateMover(VehicleSeatIndicator, "VehicleSeatMover", L["载具指示锚点"])
 			end
 		end

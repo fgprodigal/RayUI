@@ -12,7 +12,7 @@ local StaticPopup_Show = StaticPopup_Show
 local LEVEL_UP_TYPE_SCENARIO = LEVEL_UP_TYPE_SCENARIO
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: UIParent, NORMAL_FONT_COLOR, RayUILayoutChooser
+-- GLOBALS: NORMAL_FONT_COLOR, RayUILayoutChooser
 
 local hooked = false
 
@@ -53,13 +53,13 @@ function R:SetLayout(layout)
 	if layout == "healer" then
 		R:ResetMovers()
 		R.db.movers = {}
-		R.db.movers.RayUF_playerMover = "BOTTOMRIGHTUIParentBOTTOM-190390"
-		R.db.movers.RayUF_targetMover = "BOTTOMLEFTUIParentBOTTOM190390"
+		R.db.movers.RayUF_playerMover = "BOTTOMRIGHTRayUIParentBOTTOM-190390"
+		R.db.movers.RayUF_targetMover = "BOTTOMLEFTRayUIParentBOTTOM190390"
 		R.db.movers.RayUF_petMover = "TOPLEFTRayUF_playerMoverBOTTOMLEFT0-60"
-		R.db.movers.RayUFRaid15_1Mover = "BOTTOMUIParentBOTTOM0180"
+		R.db.movers.RayUFRaid15_1Mover = "BOTTOMRayUIParentBOTTOM0180"
 		R.db.movers.RayUFRaid15_2Mover = "BOTTOMRayUFRaid15_1MoverTOP0"..R.db.Raid.spacing
 		R.db.movers.RayUFRaid15_3Mover = "BOTTOMRayUFRaid15_2MoverTOP0"..R.db.Raid.spacing
-		R.db.movers.RayUFRaid25_1Mover = "BOTTOMUIParentBOTTOM0150"
+		R.db.movers.RayUFRaid25_1Mover = "BOTTOMRayUIParentBOTTOM0150"
 		R.db.movers.RayUFRaid25_2Mover = "BOTTOMRayUFRaid25_1MoverTOP0"..R.db.Raid.spacing
 		R.db.movers.RayUFRaid25_3Mover = "BOTTOMRayUFRaid25_2MoverTOP0"..R.db.Raid.spacing
 		R.db.movers.RayUFRaid25_4Mover = "BOTTOMRayUFRaid25_3MoverTOP0"..R.db.Raid.spacing
@@ -67,25 +67,25 @@ function R:SetLayout(layout)
 		R.db.movers.RayUFRaid40_6Mover = "BOTTOMRayUFRaid25_5MoverTOP0"..R.db.Raid.spacing
 		R.db.movers.RayUFRaid40_7Mover = "BOTTOMRayUFRaid40_6MoverTOP0"..R.db.Raid.spacing
 		R.db.movers.RayUFRaid40_8Mover = "BOTTOMRayUFRaid40_7MoverTOP0"..R.db.Raid.spacing
-		R.db.movers.PlayerCastBarMover = "BOTTOMUIParentBOTTOM0130"
-		R.db.movers.VengeanceBarMover = "BOTTOMUIParentBOTTOM0140"
-		R.db.movers.ActionBar1Mover = "BOTTOMUIParentBOTTOM"..(-3*R.db.ActionBar.buttonsize-3*R.db.ActionBar.buttonspacing).."50"
+		R.db.movers.PlayerCastBarMover = "BOTTOMRayUIParentBOTTOM0130"
+		R.db.movers.VengeanceBarMover = "BOTTOMRayUIParentBOTTOM0140"
+		R.db.movers.ActionBar1Mover = "BOTTOMRayUIParentBOTTOM"..(-3*R.db.ActionBar.buttonsize-3*R.db.ActionBar.buttonspacing).."50"
 		R.db.movers.ActionBar5Mover = "TOPRIGHTActionBar4MoverTOPLEFT"..-R.db.ActionBar.buttonspacing.."0"
 		R.db.movers.PetBarMover = "BOTTOMLEFTActionBar2MoverBOTTOMRIGHT"..R.db.ActionBar.buttonspacing.."0"
-		R.db.movers.AltPowerBarMover = "BOTTOMRIGHTUIParentBOTTOMRIGHT-36085"
+		R.db.movers.AltPowerBarMover = "BOTTOMRIGHTRayUIParentBOTTOMRIGHT-36085"
 		R.db.Raid.horizontal = true
 		R.db.Raid.growth = "UP"
 		StaticPopup_Show("CFG_RELOAD")
 	elseif layout == "dps" then
 		R:ResetMovers()
 		R.db.movers = {}
-		R.db.movers.ArenaHeaderMover = "TOPLEFTUIParentBOTTOM450460"
-		R.db.movers.BossHeaderMover = "TOPLEFTUIParentBOTTOM450460"
+		R.db.movers.ArenaHeaderMover = "TOPLEFTRayUIParentBOTTOM450460"
+		R.db.movers.BossHeaderMover = "TOPLEFTRayUIParentBOTTOM450460"
 		R.db.movers.RayUF_focusMover = "BOTTOMRIGHTRayUF_playerTOPLEFT-2050"
-		R.db.movers.RayUFRaid15_1Mover = "BOTTOMLEFTUIParentBOTTOMLEFT15235"
-		R.db.movers.RayUFRaid25_1Mover = "BOTTOMLEFTUIParentBOTTOMLEFT15235"
+		R.db.movers.RayUFRaid15_1Mover = "BOTTOMLEFTRayUIParentBOTTOMLEFT15235"
+		R.db.movers.RayUFRaid25_1Mover = "BOTTOMLEFTRayUIParentBOTTOMLEFT15235"
 		R.db.movers.RayUFRaid40_6Mover = "TOPLEFTRayUFRaid25_5MoverTOPRIGHT"..R.db.Raid.spacing.."0"
-		R.db.movers.ActionBar4Mover = "RIGHTUIParentRIGHT-490"
+		R.db.movers.ActionBar4Mover = "RIGHTRayUIParentRIGHT-490"
 		R.db.Raid.horizontal = false
 		R.db.Raid.growth = "RIGHT"
 		StaticPopup_Show("CFG_RELOAD")
@@ -104,7 +104,7 @@ end
 function R:ChooseLayout()
 	if not RayUILayoutChooser then
 		local S = R:GetModule("Skins")
-		local f = CreateFrame("Frame", "RayUILayoutChooser", UIParent)
+		local f = CreateFrame("Frame", "RayUILayoutChooser", R.UIParent)
 		f:SetFrameStrata("TOOLTIP")
 		f:Size(500, 250)
 		f:Point("CENTER")
@@ -175,7 +175,7 @@ f:SetScript("OnEvent", function(self)
 	self:UnregisterAllEvents("PLAYER_ENTERING_WORLD")
 	if R.db.movers and R.db.movers.ActionBar5Mover == "TOPRIGHTActionBar4MoverTOPLEFT"..-R.db.ActionBar.buttonspacing.."0" and not R.db.movers.ActionBar4Mover then
 		R.db.movers.ActionBar5Mover = nil
-		R.db.movers.ActionBar4Mover = "RIGHTUIParentRIGHT-490"
+		R.db.movers.ActionBar4Mover = "RIGHTRayUIParentRIGHT-490"
 		R:SetMoversPositions()
 	end
 end)

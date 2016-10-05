@@ -13,13 +13,13 @@ local function Update(self,event)
 			mod.totembar[i].iconTexture:SetTexture(icon)
 			displayedTotems = displayedTotems + 1
 			CooldownFrame_Set(mod.totembar[i].cooldown, startTime, duration, true, true)
-			
+
 			for d=1, MAX_TOTEMS do
 				if _G["TotemFrameTotem"..d.."IconTexture"]:GetTexture() == icon then
 					_G["TotemFrameTotem"..d]:ClearAllPoints();
 					_G["TotemFrameTotem"..d]:SetParent(mod.totembar[i].holder);
-					_G["TotemFrameTotem"..d]:SetAllPoints(mod.totembar[i].holder);		
-				end		
+					_G["TotemFrameTotem"..d]:SetAllPoints(mod.totembar[i].holder);
+				end
 			end
 		else
 			mod.totembar[i]:Hide()
@@ -60,37 +60,37 @@ function mod:PositionAndSizeTotem()
 				button:SetPoint("TOP", self.totembar, "TOP", 0, 0)
 			elseif prevButton then
 				button:SetPoint("TOP", prevButton, "BOTTOM", 0, -db.spacing)
-			end		
-		elseif db.growthDirection == "HORIZONTAL" and db.sortDirection == "DESCENDING" then	
+			end
+		elseif db.growthDirection == "HORIZONTAL" and db.sortDirection == "DESCENDING" then
 			if i == 1 then
 				button:SetPoint("RIGHT", self.totembar, "RIGHT", 0, 0)
 			elseif prevButton then
 				button:SetPoint("RIGHT", prevButton, "LEFT", -db.spacing, 0)
-			end		
+			end
 		else
 			if i == 1 then
 				button:SetPoint("BOTTOM", self.totembar, "BOTTOM", 0, 0)
 			elseif prevButton then
 				button:SetPoint("BOTTOM", prevButton, "TOP", 0, db.spacing)
-			end			
+			end
 		end
 	end
 
 	if db.growthDirection == "HORIZONTAL" then
 		self.totembar:Width(db.size*(MAX_TOTEMS) + db.spacing*(MAX_TOTEMS) + db.spacing)
-		self.totembar:Height(db.size + db.spacing*2)	
+		self.totembar:Height(db.size + db.spacing*2)
 	else
 		self.totembar:Height(db.size*(MAX_TOTEMS) + db.spacing*(MAX_TOTEMS) + db.spacing)
-		self.totembar:Width(db.size + db.spacing*2)		
+		self.totembar:Width(db.size + db.spacing*2)
 	end
 	Update()
 end
 
 function mod:Initialize()
-	local bar = CreateFrame("Frame", "RayUI_TotemBar", UIParent)
+	local bar = CreateFrame("Frame", "RayUI_TotemBar", R.UIParent)
 	bar:SetPoint("TOPRIGHT", RayUIActionBar1, "TOPLEFT", -4, 0)
 	self.totembar = bar;
-	
+
 	for i=1, MAX_TOTEMS do
 		local frame = CreateFrame("Button", bar:GetName().."Totem"..i, bar)
 		frame:SetID(i)
@@ -100,17 +100,17 @@ function mod:Initialize()
 		frame.holder = CreateFrame("Frame", nil, frame)
 		frame.holder:SetAlpha(0)
 		frame.holder:SetAllPoints()
-		
+
 		frame.iconTexture = frame:CreateTexture(nil, "ARTWORK")
 		frame.iconTexture:SetInside(2)
 		frame.iconTexture:SetTexCoord(.08, .92, .08, .92)
-		
+
 		frame.cooldown = CreateFrame("Cooldown", frame:GetName().."Cooldown", frame, "CooldownFrameTemplate")
 		frame.cooldown:SetReverse(true)
 		frame.cooldown:SetInside(2)
 		self.totembar[i] = frame
 	end
-	
+
 	self:ToggleTotemEnable()
 	self:PositionAndSizeTotem()
 

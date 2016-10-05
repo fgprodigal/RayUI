@@ -2,7 +2,7 @@ local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, 
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
-	ScriptErrorsFrame:SetParent(UIParent)
+	ScriptErrorsFrame:SetParent(R.UIParent)
 	ScriptErrorsFrame:DisableDrawLayer("OVERLAY")
 	ScriptErrorsFrameTitleBG:Hide()
 	ScriptErrorsFrameDialogBG:Hide()
@@ -28,7 +28,7 @@ local function LoadSkin()
 	tex:SetTexture(R["media"].gloss)
 	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 
-	FrameStackTooltip:SetParent(UIParent)
+	FrameStackTooltip:SetParent(R.UIParent)
 	FrameStackTooltip:SetFrameStrata("TOOLTIP")
 	FrameStackTooltip:SetBackdrop(nil)
 
@@ -38,7 +38,7 @@ local function LoadSkin()
 	bg:SetFrameLevel(FrameStackTooltip:GetFrameLevel()-1)
 	S:CreateBD(bg, .6)
 
-	EventTraceTooltip:SetParent(UIParent)
+	EventTraceTooltip:SetParent(R.UIParent)
 	EventTraceTooltip:SetFrameStrata("TOOLTIP")
 	EventTraceTooltip:SetBackdrop(nil)
 

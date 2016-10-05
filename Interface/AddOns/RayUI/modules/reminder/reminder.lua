@@ -7,7 +7,7 @@ function RM:PlayerHasFilteredBuff(frame, db, checkPersonal)
 		if value == true then
 			local name = GetSpellInfo(buff);
 			local _, _, icon, _, _, _, _, unitCaster, _, _, _ = UnitBuff("player", name)
-			
+
 			if checkPersonal then
 				if (name and icon and unitCaster == "player") then
 					return true
@@ -28,20 +28,20 @@ function RM:PlayerHasFilteredDebuff(frame, db)
 		if value == true then
 			local name = GetSpellInfo(debuff)
 			local _, _, icon, _, _, _, _, unitCaster, _, _, _ = UnitDebuff("player", name)
-		
+
 			if (name and icon) then
 				return true
 			end
 		end
 	end
-	
+
 	return false;
 end
 
 function RM:CanSpellBeUsed(id)
 	local name = GetSpellInfo(id)
 	local start, duration, enabled = GetSpellCooldown(name)
-	if enabled == 0 or start == nil or duration == nil then 
+	if enabled == 0 or start == nil or duration == nil then
 		return false
 	elseif start > 0 and duration > 1.5 then	--On Cooldown
 		return false
@@ -65,9 +65,9 @@ function RM:ReminderIcon_OnUpdate(elapsed)
 			else
 				self.cooldown:Hide()
 			end
-					
-			if RM:CanSpellBeUsed(db.CDSpell) and filterCheck then				
-				if db.OnCooldown == "HIDE" then				
+
+			if RM:CanSpellBeUsed(db.CDSpell) and filterCheck then
+				if db.OnCooldown == "HIDE" then
 					RM:UpdateColors(self, db.CDSpell)
 					RM.ReminderIcon_OnEvent(self)
 				else
@@ -76,27 +76,27 @@ function RM:ReminderIcon_OnUpdate(elapsed)
 			elseif filterCheck then
 				if db.OnCooldown == "HIDE" then
 					self:SetAlpha(db.cdFade or 0)
-				else					
+				else
 					RM:UpdateColors(self, db.CDSpell)
 					RM.ReminderIcon_OnEvent(self)
 				end
 			else
 				self:SetAlpha(0)
-			end	
-			
+			end
+
 			self.elapsed = 0
-			return			
+			return
 		end
-	
+
 		if db.spellGroup then
 			for buff, value in pairs(db.spellGroup) do
-				if value == true and RM:CanSpellBeUsed(buff) then				
+				if value == true and RM:CanSpellBeUsed(buff) then
 					self:SetScript("OnUpdate", nil)
 					RM.ReminderIcon_OnEvent(self)
 				end
-			end		
+			end
 		end
-	
+
 		self.elapsed = 0
 	else
 		self.elapsed = (self.elapsed or 0) + elapsed
@@ -106,9 +106,9 @@ end
 function RM:FilterCheck(frame, isReverse)
 	local _, instanceType = IsInInstance()
 	local roleCheck, treeCheck, combatCheck, instanceCheck, PVPCheck
-	
+
 	local db = P["Reminder"].filters[R.myclass][frame.groupName]
-	
+
 	if db.role then
 		if db.role == R.Role or db.role == "ANY" then
 			roleCheck = true
@@ -128,7 +128,7 @@ function RM:FilterCheck(frame, isReverse)
 	else
 		treeCheck = true
 	end
-	
+
 	if db.combat then
 		if InCombatLockdown() then
 			combatCheck = true
@@ -138,7 +138,7 @@ function RM:FilterCheck(frame, isReverse)
 	else
 		combatCheck = true
 	end
-	
+
 	if db.instance and (instanceType == "party" or instanceType == "raid") then
 		instanceCheck = true
 	else
@@ -150,12 +150,12 @@ function RM:FilterCheck(frame, isReverse)
 	else
 		PVPCheck = nil
 	end
-	
+
 	if not db.pvp and not db.instance then
 		PVPCheck = true
 		instanceCheck = true
 	end
-	
+
 	if isReverse and (combatCheck or instanceCheck or PVPCheck) then
 		return true
 	elseif roleCheck and treeCheck and (combatCheck or instanceCheck or PVPCheck) then
@@ -167,30 +167,30 @@ end
 
 function RM:ReminderIcon_OnEvent(event, unit)
 	if (event == "UNIT_AURA" and unit ~= "player") then return; end
-	
+
 	local db = P["Reminder"].filters[R.myclass][self.groupName]
-	
+
 	self.cooldown:Hide()
 	self:SetAlpha(0)
 	self.icon:SetTexture(nil)
 
-	if not db or not db.enable or (not db.spellGroup and not db.weaponCheck and not db.CDSpell) or UnitIsDeadOrGhost("player") then 
+	if not db or not db.enable or (not db.spellGroup and not db.weaponCheck and not db.CDSpell) or UnitIsDeadOrGhost("player") then
 		self:SetScript("OnUpdate", nil)
 		self:SetAlpha(0)
-		self.icon:SetTexture(nil);	
-		
+		self.icon:SetTexture(nil);
+
 		if not db then
 			RM.CreatedReminders[self.groupName] = nil
 		end
-		return; 
+		return;
 	end
-	
+
 	--Level Check
 	if db.level and UnitLevel("player") < db.level and not self.ForceShow then return; end
-	
+
 	--Negate Spells Check
 	if db.negateGroup and RM:PlayerHasFilteredBuff(self, db.negateGroup) and not self.ForceShow then return; end
-	
+
 	local hasOffhandWeapon = OffhandHasWeapon()
 	local hasMainHandEnchant, _, _, hasOffHandEnchant, _, _ = GetWeaponEnchantInfo()
 	local hasBuff, hasDebuff
@@ -203,11 +203,11 @@ function RM:ReminderIcon_OnEvent(event, unit)
 					self:SetScript("OnUpdate", RM.ReminderIcon_OnUpdate)
 					return
 				end
-				
+
 				if (usable or nomana) or not db.strictFilter or self.ForceShow then
 					self.icon:SetTexture(select(3, GetSpellInfo(db.spellGroup.defaultIcon)))
 					break
-				end		
+				end
 			end
 		end
 
@@ -223,62 +223,62 @@ function RM:ReminderIcon_OnEvent(event, unit)
 				self:RegisterEvent("PLAYER_REGEN_ENABLED")
 				self:RegisterEvent("PLAYER_REGEN_DISABLED")
 			end
-			
+
 			if db.instance or db.pvp then
 				self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 			end
-			
+
 			if db.role then
 				self:RegisterEvent("UNIT_INVENTORY_CHANGED")
 			end
-		end	
-		
+		end
+
 		hasBuff, hasDebuff = RM:PlayerHasFilteredBuff(self, db.spellGroup, db.personal), RM:PlayerHasFilteredDebuff(self, db.spellGroup)
 	end
-	
+
 	if db.weaponCheck then
 		self:UnregisterAllEvents()
 		self:RegisterEvent("UNIT_INVENTORY_CHANGED")
-		
+
 		if not hasOffhandWeapon and hasMainHandEnchant then
 			self.icon:SetTexture(GetInventoryItemTexture("player", 16))
 		else
 			if not hasOffHandEnchant then
 				self.icon:SetTexture(GetInventoryItemTexture("player", 17))
 			end
-			
+
 			if not hasMainHandEnchant then
 				self.icon:SetTexture(GetInventoryItemTexture("player", 16))
 			end
 		end
-		
+
 		if db.combat then
 			self:RegisterEvent("PLAYER_REGEN_ENABLED")
 			self:RegisterEvent("PLAYER_REGEN_DISABLED")
 		end
-		
+
 		if db.instance or db.pvp then
 			self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 		end
-		
+
 		if db.role then
 			self:RegisterEvent("UNIT_INVENTORY_CHANGED")
 		end
 	end
-	
+
 	if db.CDSpell then
 		if type(db.CDSpell) == "boolean" then return; end
 		local name = GetSpellInfo(db.CDSpell)
 		local usable, nomana = IsUsableSpell(name)
 		if not usable then return; end
-		
+
 		self:SetScript("OnUpdate", RM.ReminderIcon_OnUpdate)
-		
+
 		self.icon:SetTexture(select(3, GetSpellInfo(db.CDSpell)))
 
 		self:UnregisterAllEvents()
 	end
-	
+
 	if self.ForceShow and self.icon:GetTexture() then
 		self:SetAlpha(1)
 		return
@@ -286,7 +286,7 @@ function RM:ReminderIcon_OnEvent(event, unit)
 		print("Attempted to show a reminder icon that does not have any spells. You must add a spell first.")
 		return
 	end
-	
+
 	if not self.icon:GetTexture() or UnitInVehicle("player") then return; end
 
 	local filterCheck = RM:FilterCheck(self)
@@ -298,7 +298,7 @@ function RM:ReminderIcon_OnEvent(event, unit)
 		end
 		return
 	end
-	
+
 	local activeTree = GetSpecialization()
 	if db.spellGroup and not db.weaponCheck then
 		if filterCheck and ((not hasBuff) and (not hasDebuff)) and not db.reverseCheck then
@@ -313,7 +313,7 @@ function RM:ReminderIcon_OnEvent(event, unit)
 			if not hasOffhandWeapon and not hasMainHandEnchant then
 				self:SetAlpha(1)
 				self.icon:SetTexture(GetInventoryItemTexture("player", 16))
-			elseif hasOffhandWeapon and (not hasMainHandEnchant or not hasOffHandEnchant) then				
+			elseif hasOffhandWeapon and (not hasMainHandEnchant or not hasOffHandEnchant) then
 				if not hasMainHandEnchant then
 					self.icon:SetTexture(GetInventoryItemTexture("player", 16))
 				else
@@ -323,7 +323,7 @@ function RM:ReminderIcon_OnEvent(event, unit)
 			end
 		end
 	end
-	
+
 	if not db.disableSound and self:GetAlpha() == 1 then
 		if not RM.SoundThrottled then
 			RM.SoundThrottled = true
@@ -350,14 +350,14 @@ function RM:ToggleIcon(name)
 	else
 		frame.ForceShow = nil
 	end
-	
+
 	RM.ReminderIcon_OnEvent(frame)
 end
 
 function RM:CreateReminder(name, index)
 	if self.CreatedReminders[name] then return end
 
-	local frame = CreateFrame("Button", "ReminderIcon"..index, UIParent)
+	local frame = CreateFrame("Button", "ReminderIcon"..index, R.UIParent)
 	frame:CreateShadow("Background")
 	frame:Size(57, 57)
 	frame.groupName = name
@@ -368,9 +368,9 @@ function RM:CreateReminder(name, index)
 	frame.icon:SetAllPoints()
 	frame:EnableMouse(false)
 	frame:SetAlpha(0)
-	
+
 	local cd = CreateFrame("Cooldown", nil, frame)
-	cd:SetAllPoints(frame.icon)	
+	cd:SetAllPoints(frame.icon)
 	frame.cooldown = cd
 
 	frame:RegisterUnitEvent("UNIT_AURA", "player")

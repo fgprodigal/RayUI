@@ -39,7 +39,7 @@ end
 
 function mod:Spawn(type)
 	if(barPool[type]) then return barPool[type] end
-	local frame = CreateFrame("StatusBar", nil, UIParent)
+	local frame = CreateFrame("StatusBar", nil, R.UIParent)
 
 	frame:SetScript("OnUpdate", OnUpdate)
 
@@ -124,9 +124,9 @@ function mod:Initialize()
 		height = R:Scale(18),
 		texture = R["media"].normal,
 		position = {
-			["BREATH"] = "TOP#UIParent#TOP#0#-96",
-			["EXHAUSTION"] = "TOP#UIParent#TOP#0#-119",
-			["FEIGNDEATH"] = "TOP#UIParent#TOP#0#-142",
+			["BREATH"] = "TOP#RayUIParent#TOP#0#-96",
+			["EXHAUSTION"] = "TOP#RayUIParent#TOP#0#-119",
+			["FEIGNDEATH"] = "TOP#RayUIParent#TOP#0#-142",
 		},
 		colors = {
 			EXHAUSTION = {1, .9, 0},

@@ -10,7 +10,7 @@ showErrorButton:Hide()
 showErrorButton:Size(15, 15)
 showErrorButton:SetPoint("RIGHT", -1, 0)
 showErrorButton:SetScript("OnClick", function(self)
-	ScriptErrorsFrame:SetParent(UIParent)
+	ScriptErrorsFrame:SetParent(R.UIParent)
 	D.MessagePrinted = nil
 	self:Hide()
 end)
@@ -19,7 +19,7 @@ function D:ModifyErrorFrame()
 	ScriptErrorsFrameScrollFrameText.cursorOffset = 0
 	ScriptErrorsFrameScrollFrameText.cursorHeight = 0
 	ScriptErrorsFrameScrollFrameText:SetScript("OnEditFocusGained", nil)
-	
+
 	local function ScriptErrors_UnHighlightText()
 		ScriptErrorsFrameScrollFrameText:HighlightText(0, 0)
 	end
@@ -33,11 +33,11 @@ function D:ModifyErrorFrame()
 
 	ScriptErrorsFrame:Size(500, 300)
 	ScriptErrorsFrameScrollFrame:Size(ScriptErrorsFrame:GetWidth() - 45, ScriptErrorsFrame:GetHeight() - 71)
-	
+
 	local BUTTON_WIDTH = 75
 	local BUTTON_HEIGHT = 24
 	local BUTTON_SPACING = 2
-	
+
 	-- Add a first button
 	local firstButton = CreateFrame("Button", nil, ScriptErrorsFrame, "UIPanelButtonTemplate")
 	firstButton:Point("LEFT", ScriptErrorsFrame.reload, "RIGHT", BUTTON_SPACING, 0)
@@ -74,10 +74,10 @@ function D:ScriptErrorsFrame_UpdateButtons()
 	else
 		if ( numErrors == 1 ) then
 			ScriptErrorsFrame.lastButton:Disable()
-			ScriptErrorsFrame.firstButton:Disable()		
+			ScriptErrorsFrame.firstButton:Disable()
 		else
 			ScriptErrorsFrame.lastButton:Enable()
-			ScriptErrorsFrame.firstButton:Enable()				
+			ScriptErrorsFrame.firstButton:Enable()
 		end
 	end
 end
@@ -102,7 +102,7 @@ end
 
 function D:ShowScriptErrorsFrame()
 	ScriptErrorsFrame:Show()
-	ScriptErrorsFrame:SetParent(UIParent)
+	ScriptErrorsFrame:SetParent(R.UIParent)
 end
 
 function D:Initialize()

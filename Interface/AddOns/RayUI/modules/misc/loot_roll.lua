@@ -103,7 +103,7 @@ local function CreateRollButton(parent, ntex, ptex, htex, rolltype, tiptext, ...
 end
 
 local function CreateRollFrame()
-	local frame = CreateFrame("Frame", nil, UIParent)
+	local frame = CreateFrame("Frame", nil, R.UIParent)
 	frame:Width(328)
 	frame:Height(22)
 	frame:SetBackdropColor(unpack(R["media"].backdropcolor))
@@ -283,7 +283,7 @@ function mod:Initialize()
 	self:RegisterEvent("START_LOOT_ROLL")
 	self:RegisterEvent("LOOT_HISTORY_ROLL_CHANGED")
 
-	SlashCmdList["LFrames"] = function() 
+	SlashCmdList["LFrames"] = function()
 		local items = { 34334, 77949 }
 		for _, f in pairs(R.rollBars) do
 			f.rollid = nil

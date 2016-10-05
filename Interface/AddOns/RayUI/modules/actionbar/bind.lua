@@ -34,7 +34,7 @@ local GameTooltip_ShowCompareItem = GameTooltip_ShowCompareItem
 -- GLOBALS: GameTooltip, SpellBookFrame, ShoppingTooltip1, StanceButton1
 -- GLOBALS: PetActionButton1, MacroFrameTab1Text, ActionButton1, StanceButton1
 
-local bind = CreateFrame("Frame", "HoverBind", UIParent)
+local bind = CreateFrame("Frame", "HoverBind", R.UIParent)
 
 function AB:ActivateBindMode()
 	bind.active = true

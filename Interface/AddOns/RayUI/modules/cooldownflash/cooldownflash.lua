@@ -6,7 +6,7 @@ local cooldowns, animating, watching = { }, { }, { }
 local GetTime = GetTime
 local testtable
 
-local DCP = CreateFrame("frame", nil, UIParent)
+local DCP = CreateFrame("frame", nil, R.UIParent)
 DCP:SetAlpha(0)
 DCP:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
 DCP.TextFrame = DCP:CreateFontString(nil, "ARTWORK")
@@ -92,14 +92,14 @@ local function OnUpdate(_,update)
                 cooldowns[i] = nil
             end
         end
-        
+
         elapsed = 0
         if (#animating == 0 and tcount(watching) == 0 and tcount(cooldowns) == 0) then
             DCP:SetScript("OnUpdate", nil)
             return
         end
     end
-    
+
     if (#animating > 0) then
         runtimer = runtimer + update
         if (runtimer > (CF.db.fadeInTime + CF.db.holdTime + CF.db.fadeOutTime)) then
@@ -240,8 +240,8 @@ function CF:Initialize()
     if self.db.enable then
         self:EnableCooldownFlash()
     end
-    DCP:SetPoint("CENTER", UIParent, "CENTER")
-	R:CreateMover(DCP, "CooldownFlashMover", L["中部冷却闪光"], true, nil)  
+    DCP:SetPoint("CENTER", R.UIParent, "CENTER")
+	R:CreateMover(DCP, "CooldownFlashMover", L["中部冷却闪光"], true, nil)
     R.Options.args.CooldownFlash.args.toggle.set = function(info, v)
         CF.db.enable = v
         if v then
@@ -338,8 +338,8 @@ function CF:GetOptions()
             name = L["测试"],
             type = "execute",
             func = function()
-                tinsert(animating,testtable) 
-                DCP:SetScript("OnUpdate", OnUpdate) 
+                tinsert(animating,testtable)
+                DCP:SetScript("OnUpdate", OnUpdate)
             end,
             hidden = function() return not R.db.CooldownFlash.enable end,
         }

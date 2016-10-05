@@ -25,7 +25,7 @@ local UIFrameFadeOut = UIFrameFadeOut
 local RegisterStateDriver = RegisterStateDriver
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: UIParent, PetActionBarFrame, NUM_PET_ACTION_SLOTS, RayUIActionBarHider
+-- GLOBALS: PetActionBarFrame, NUM_PET_ACTION_SLOTS, RayUIActionBarHider
 -- GLOBALS: RayUIPetBar
 
 function AB:CreateBarPet()
@@ -33,8 +33,8 @@ function AB:CreateBarPet()
     local buttonsize = self.db.barpet.buttonsize
     local buttonspacing = self.db.barpet.buttonspacing
 
-	local bar = CreateFrame("Frame","RayUIPetBar",UIParent, "SecureHandlerStateTemplate")
-	bar:Point("BOTTOM", "UIParent", "BOTTOM", 0, 185)
+	local bar = CreateFrame("Frame","RayUIPetBar", R.UIParent, "SecureHandlerStateTemplate")
+	bar:Point("BOTTOM", R.UIParent, "BOTTOM", 0, 185)
 
 	PetActionBarFrame:SetParent(bar)
 	PetActionBarFrame:EnableMouse(false)
@@ -162,7 +162,7 @@ function AB:UpdatePetBar()
     if self.db.barpet.autohide then
         bar:SetParent(RayUIActionBarHider)
     else
-        bar:SetParent(UIParent)
+        bar:SetParent(R.UIParent)
     end
 
     local button, lastButton, lastColumnButton

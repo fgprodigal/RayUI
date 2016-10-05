@@ -5,32 +5,32 @@ local mod = M:NewModule("Exprepbar", "AceEvent-3.0")
 local function AddPerks()
 	if not IsAddOnLoaded("Blizzard_ArtifactUI") then LoadAddOn("Blizzard_ArtifactUI") end
 	local forceHide, header
-	
+
 	if not ArtifactFrame:IsShown() then
 		forceHide = true
 		SocketInventoryItem(16)
 	end
-	
+
 	for i, powerID in ipairs(C_ArtifactUI.GetPowers()) do
 		--local spellID, cost, currentRank, maxRank, bonusRanks, x, y, prereqsMet, isStart, isGoldMedal, isFinal = C_ArtifactUI.GetPowerInfo(powerID)
 		local spellID, _, rank, maxRank, bonus = C_ArtifactUI.GetPowerInfo(powerID)
 		local isStart = select(9, C_ArtifactUI.GetPowerInfo(powerID))
 		local r,g,b = 1,1,1
-		
+
 		if bonus > 0 then
 			r,g,b = 0.4,1,0
 		end
-		
+
 		if rank > 0 and not isStart then
 			if not header then
 				header = true
 				GameTooltip:AddDivider()
 			end
-			
+
 			GameTooltip:AddDoubleLine(GetSpellInfo(spellID), rank.."/"..maxRank, 1,1,1, r,g,b)
 		end
-	end	
-	
+	end
+
 	if ArtifactFrame:IsShown() and forceHide then
 		HideUIPanel(ArtifactFrame)
 	end
@@ -47,7 +47,7 @@ local function Bar_OnHide(self)
 end
 
 function mod:CreateBar(name, anchorFrame, height)
-	local bar = CreateFrame("StatusBar", name, UIParent, "AnimatedStatusBarTemplate")
+	local bar = CreateFrame("StatusBar", name, R.UIParent, "AnimatedStatusBarTemplate")
 	bar:CreateShadow("Background")
 	bar:SetFrameLevel(3)
 	bar.shadow:SetFrameLevel(1)
@@ -172,12 +172,12 @@ function mod:UpdateHonorBar()
 		self:Show()
 		local current = UnitHonor("player")
 		local max = UnitHonorMax("player")
-		
+
 		if (level == levelmax) then
 			self:SetAnimatedValues(1, 0, 1, level)
 		else
 			self:SetAnimatedValues(current, 0, max, level)
-		end	
+		end
 
 		local exhaustionStateID = GetHonorRestState()
 		if (exhaustionStateID == 1) then

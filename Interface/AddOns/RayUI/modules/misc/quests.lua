@@ -356,7 +356,7 @@ function mod:Initialize()
         atMail = false
     end)
 
-	local questTip = CreateFrame("GameTooltip", "QuickQuestTip", UIParent, "GameTooltipTemplate")
+	local questTip = CreateFrame("GameTooltip", "QuickQuestTip", R.UIParent, "GameTooltipTemplate")
 	local questLevel = string.gsub(ITEM_MIN_LEVEL, "%%d", "(%%d+)")
 
 	local function GetQuestItemLevel()
@@ -374,7 +374,7 @@ function mod:Initialize()
         for slot = 1, GetContainerNumSlots(bag) do
             local _, id, active = GetContainerItemQuestInfo(bag, slot)
             if(id and not active and not IsQuestFlaggedCompleted(id) and not ignoredItems[id]) then
-                questTip:SetOwner(UIParent, "ANCHOR_NONE")
+                questTip:SetOwner(R.UIParent, "ANCHOR_NONE")
                 questTip:ClearLines()
                 questTip:SetBagItem(bag, slot)
 				questTip:Show()

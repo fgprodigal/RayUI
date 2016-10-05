@@ -17,7 +17,7 @@ function RA:Hex(r, g, b)
 end
 
 -- Unit Menu
-local dropdown = CreateFrame("Frame", "RayUFRaidDropDown", UIParent, "UIDropDownMenuTemplate")
+local dropdown = CreateFrame("Frame", "RayUFRaidDropDown", R.UIParent, "UIDropDownMenuTemplate")
 
 local function menu(self)
 	dropdown:SetParent(self)
@@ -197,14 +197,14 @@ function RA:UpdateHealth(hp)
 	hp:SetOrientation("HORIZONTAL")
 	hp.bg:SetTexture(R["media"].normal)
 	hp.freebSmooth = UF.db.smooth
-	hp.colorReaction = nil	
+	hp.colorReaction = nil
 	hp.colorClass = nil
 	if UF.db.healthColorClass then
-		hp.colorReaction = true	
+		hp.colorReaction = true
 		hp.colorClass = true
 		hp.bg.multiplier = .2
 	elseif not UF.db.smoothColor then
-		hp.colorReaction = true	
+		hp.colorReaction = true
 		hp.colorClass = true
 		hp.bg.multiplier = .8
 	else
@@ -261,10 +261,10 @@ function RA:UpdatePower(power)
 	power:SetOrientation("HORIZONTAL")
 	power.bg:SetTexture(R["media"].normal)
 	power.colorClass = nil
-	power.colorReaction = nil	
+	power.colorReaction = nil
 	power.colorPower = nil
 	if UF.db.powerColorClass then
-		power.colorReaction = true	
+		power.colorReaction = true
 		power.colorClass = true
 		power.bg.multiplier = .2
 	else
@@ -324,17 +324,17 @@ local function UpdateAuraWatch(frame)
 	local buffs = {}
 	local auras = frame.AuraWatch
 	auras:Show()
-	
+
 	if not R.global["Raid"].AuraWatch[R.myclass] then R.global["Raid"].AuraWatch[R.myclass] = {} end
-	
+
 	if frame.unit == "pet" and R.global["Raid"].AuraWatch.PET then
 		for _, value in pairs(R.global["Raid"].AuraWatch.PET) do
 			tinsert(buffs, value)
-		end	
+		end
 	else
 		for _, value in pairs(R.global["Raid"].AuraWatch[R.myclass]) do
 			tinsert(buffs, value)
-		end	
+		end
 	end
 
 	if auras.icons then
@@ -347,14 +347,14 @@ local function UpdateAuraWatch(frame)
 					end
 				end
 			end
-			
+
 			if not matchFound then
 				auras.icons[spell]:Hide()
 				auras.icons[spell] = nil
 			end
 		end
 	end
-	
+
 	for _, spell in pairs(buffs) do
 		local icon
 		if spell["id"] then
@@ -376,7 +376,7 @@ local function UpdateAuraWatch(frame)
 				else
 					icon.presentAlpha = 1
 					icon.missingAlpha = 0
-				end		
+				end
 				icon:Width(RA.db.indicatorsize)
 				icon:Height(RA.db.indicatorsize)
 				icon:ClearAllPoints()
@@ -386,42 +386,42 @@ local function UpdateAuraWatch(frame)
 					icon.icon = icon:CreateTexture(nil, "BORDER");
 					icon.icon:SetAllPoints(icon);
 				end
-				
+
 				icon.icon:SetTexture(R["media"].blank);
 
 				if (spell["color"]) then
 					icon.icon:SetVertexColor(spell["color"].r, spell["color"].g, spell["color"].b);
 				else
 					icon.icon:SetVertexColor(0.8, 0.8, 0.8);
-				end			
-				
+				end
+
 				if not icon.cd then
 					icon.cd = CreateFrame("Cooldown", nil, icon, "CooldownFrameTemplate")
 					icon.cd:SetAllPoints(icon)
 					icon.cd:SetReverse(true)
 					icon.cd:SetFrameLevel(icon:GetFrameLevel())
 				end
-				
+
 				if not icon.border then
 					icon.border = icon:CreateTexture(nil, "BACKGROUND")
 					icon.border:SetOutside(icon, 1, 1)
 					icon.border:SetTexture(R["media"].blank)
 					icon.border:SetVertexColor(0, 0, 0)
 				end
-				
+
 				if not icon.count then
 					icon.count = icon:CreateFontString(nil, "OVERLAY")
 					icon.count:Point("CENTER", unpack(counterOffsets[spell["point"]]))
 				end
 				icon.count:SetFont(R["media"].font, RA.db.indicatorsize + 4, "THINOUTLINE")
 				--icon.count:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
-				
+
 				if spell["enabled"] then
 					auras.icons[spell.id] = icon
 					if auras.watched then
 						auras.watched[spell.id] = icon
 					end
-				else	
+				else
 					auras.icons[spell.id] = nil
 					if auras.watched then
 						auras.watched[spell.id] = nil
@@ -432,7 +432,7 @@ local function UpdateAuraWatch(frame)
 			end
 		end
 	end
-	
+
 	if frame.AuraWatch.Update then
 		frame.AuraWatch.Update(frame)
 	end
@@ -598,16 +598,16 @@ local function style(self)
 	self.RaidDebuffs:SetPoint("BOTTOM", self)
 	self.RaidDebuffs:CreateShadow("Background")
 	self.RaidDebuffs:Size(RA.db.aurasize, RA.db.aurasize-4)
-	
+
 	self.RaidDebuffs.icon = self.RaidDebuffs:CreateTexture(nil, "OVERLAY")
 	self.RaidDebuffs.icon:SetTexCoord(.08, .92, .28, .72)
 	self.RaidDebuffs.icon:SetInside(nil, 1, 1)
-	
+
 	self.RaidDebuffs.count = self.RaidDebuffs:CreateFontString(nil, "OVERLAY")
 	self.RaidDebuffs.count:SetFont(R["media"].font, 12, "OUTLINE")
 	self.RaidDebuffs.count:SetJustifyH("RIGHT")
 	self.RaidDebuffs.count:SetPoint("BOTTOMRIGHT", 4, -2)
-	
+
 	self.RaidDebuffs.time = self.RaidDebuffs:CreateFontString(nil, "OVERLAY")
 	self.RaidDebuffs.time:SetFont(R["media"].font, 12, "OUTLINE")
 	self.RaidDebuffs.time:SetJustifyH("CENTER")
@@ -779,7 +779,7 @@ function RA:SpawnHeader(name, group, layout)
 	end
 
 	local header = oUF:SpawnHeader(name, nil, "raid",
-	"oUF-initialConfigFunction", ([[self:SetWidth(%d); self:SetHeight(%d);]]):format(R:Scale(width), R:Scale(height)), 
+	"oUF-initialConfigFunction", ([[self:SetWidth(%d); self:SetHeight(%d);]]):format(R:Scale(width), R:Scale(height)),
 	"xOffset", xoff,
 	"yOffset", yoff,
 	"point", point,
@@ -800,7 +800,7 @@ function RA:SpawnHeader(name, group, layout)
 		header:SetAttribute("minHeight", R:Scale(height)*5 + R:Scale(RA.db.spacing)*4)
 		header:SetAttribute("minWidth", R:Scale(width))
 	end
-	RegisterAttributeDriver(header, "state-visibility", "hide")	
+	RegisterAttributeDriver(header, "state-visibility", "hide")
 
 	header:RegisterEvent("PLAYER_ENTERING_WORLD")
 	header:RegisterEvent("ZONE_CHANGED_NEW_AREA")
@@ -835,7 +835,7 @@ function RA:SpawnRaid()
 	for i=1, 3 do
 		local group = self:SpawnHeader("RayUFRaid15_"..i, i, 15)
 		if i == 1 then
-			group:Point("TOPLEFT", UIParent, "BOTTOMRIGHT", - RA.db.width*1.3*3 -  RA.db.spacing*2 - 50, 461)
+			group:Point("TOPLEFT", R.UIParent, "BOTTOMRIGHT", - RA.db.width*1.3*3 -  RA.db.spacing*2 - 50, 461)
 		else
 			group:Point(pos, raid15[i-1], posRel, colX or 0, colY or 0)
 		end
@@ -848,7 +848,7 @@ function RA:SpawnRaid()
 	for i=1, 5 do
 		local group = self:SpawnHeader("RayUFRaid25_"..i, i, 25)
 		if i == 1 then
-			group:Point("TOPLEFT", UIParent, "BOTTOMRIGHT", - RA.db.width*5 -  RA.db.spacing*4 - 50, 422)
+			group:Point("TOPLEFT", R.UIParent, "BOTTOMRIGHT", - RA.db.width*5 -  RA.db.spacing*4 - 50, 422)
 		else
 			group:Point(pos, raid25[i-1], posRel, colX or 0, colY or 0)
 		end

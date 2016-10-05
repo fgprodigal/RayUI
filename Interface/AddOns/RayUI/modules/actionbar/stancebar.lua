@@ -14,23 +14,23 @@ local UIFrameFadeOut = UIFrameFadeOut
 local hooksecurefunc = hooksecurefunc
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: NUM_STANCE_SLOTS, NUM_POSSESS_SLOTS, UIParent, RayUIActionBarHider
+-- GLOBALS: NUM_STANCE_SLOTS, NUM_POSSESS_SLOTS, RayUIActionBarHider
 -- GLOBALS: StanceBarFrame, PossessBarFrame, StanceButton1
 
 function AB:CreateStanceBar()
 	local num = NUM_STANCE_SLOTS
 	local num2 = NUM_POSSESS_SLOTS
 
-	local bar = CreateFrame("Frame","RayUIStanceBar",UIParent, "SecureHandlerStateTemplate")
+	local bar = CreateFrame("Frame","RayUIStanceBar", R.UIParent, "SecureHandlerStateTemplate")
 	bar:SetWidth(AB.db.buttonsize*num+AB.db.buttonspacing*(num-1))
 	bar:SetHeight(AB.db.buttonsize)
-	bar:SetPoint("BOTTOMLEFT", "UIParent", "BOTTOMLEFT", 15, 202)
+	bar:SetPoint("BOTTOMLEFT", R.UIParent, "BOTTOMLEFT", 15, 202)
 	bar:SetScale(AB.db.barscale)
 
 	if self.db.stancebarfade then
 		bar:SetParent(RayUIActionBarHider)
 	else
-		bar:SetParent(UIParent)
+		bar:SetParent(R.UIParent)
 	end
 
 	R:CreateMover(bar, "StanceBarMover", L["职业条锚点"], true, nil, "ALL,ACTIONBARS")

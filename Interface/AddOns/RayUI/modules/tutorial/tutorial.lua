@@ -340,14 +340,14 @@ end
 
 function T:InitTutorial()
 	-- MainHelpPlateButton
-	rTB = CreateFrame("Button", "RayUITutorialButton", UIParent, "MainHelpPlateButton")
-	rTB:SetPoint("CENTER", UIParent, "CENTER", 0, -38)
+	rTB = CreateFrame("Button", "RayUITutorialButton", R.UIParent, "MainHelpPlateButton")
+	rTB:SetPoint("CENTER", R.UIParent, "CENTER", 0, -38)
 	rTB:Hide()
 
 	-- Dark BG
-	local tBG = CreateFrame("Frame", "RayUITutorialBG", UIParent)
-	tBG:SetParent(UIParent)
-	tBG:SetPoint("CENTER", UIParent, "CENTER")
+	local tBG = CreateFrame("Frame", "RayUITutorialBG", R.UIParent)
+	tBG:SetParent(R.UIParent)
+	tBG:SetPoint("CENTER", R.UIParent, "CENTER")
 	tBG:SetFrameStrata("BACKGROUND")
 	tBG:SetFrameLevel(0)
 	tBG:SetWidth(UIParent:GetWidth() + 2000)
@@ -358,7 +358,7 @@ function T:InitTutorial()
 	tBG:SetBackdropColor(0, 0, 0, 0.4)
 
 	-- Buttons
-	local btnOpen = createTextButton("RayUITutorialButtonOpen", UIParent)
+	local btnOpen = createTextButton("RayUITutorialButtonOpen", R.UIParent)
 	btnOpen:SetPoint("CENTER", parent, "CENTER", 0, 0)
 	btnOpen:SetText(ButtonTexts.tutorial)
 	btnOpen:SetAttribute("type", "macro")

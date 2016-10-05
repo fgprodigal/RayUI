@@ -75,10 +75,10 @@ local function SetMinimapButton(btn)
 	btn.preset.FrameStrata = btn:GetFrameStrata()
 	btn.preset.FrameLevel = btn:GetFrameLevel()
 	btn.preset.Scale = btn:GetScale()
-	if btn:HasScript("OnDragStart") then 
+	if btn:HasScript("OnDragStart") then
 		btn.preset.DragStart = btn:GetScript("OnDragStart")
-	end 
-	if btn:HasScript("OnDragEnd") then 
+	end
+	if btn:HasScript("OnDragEnd") then
 		btn.preset.DragEnd = btn:GetScript("OnDragEnd")
 	end
 
@@ -103,7 +103,7 @@ local function SetMinimapButton(btn)
 				btn.highlight:SetPoint("TOPLEFT")
 				btn.highlight:SetPoint("BOTTOMRIGHT")
 				btn.highlight:Hide()
-				
+
 				btn:HookScript("OnEnter",function(self)
 					self.highlight:Show()
 				end)
@@ -191,7 +191,7 @@ function MM:PositionButtonCollector(self, screenQuadrant)
 end
 
 function MM:ButtonCollector()
-	MBCF = CreateFrame("Frame", "MinimapButtonCollectFrame", UIParent)
+	MBCF = CreateFrame("Frame", "MinimapButtonCollectFrame", R.UIParent)
 	if select(3, Minimap:GetPoint()):upper():find("TOP") then
 		MBCF:SetPoint("BOTTOMLEFT", Minimap, "TOPLEFT", 0, 5)
 	else
@@ -206,7 +206,7 @@ function MM:ButtonCollector()
 	MinimapButtonCollect:RegisterEvent("ADDON_LOADED")
 	MinimapButtonCollect:SetScript("OnEvent", function(self)
 		GrabMinimapButtons()
-		if #buttons == 0 then 
+		if #buttons == 0 then
 			MBCF:Hide()
 		end
 		MM:PositionButtonCollector(Minimap)
@@ -217,7 +217,7 @@ function MM:ButtonCollector()
 		Time = Time + elasped
 		if Time > 1 then
 			GrabMinimapButtons()
-			if #buttons == 0 then 
+			if #buttons == 0 then
 				MBCF:Hide()
 			end
 			MM:PositionButtonCollector(Minimap)

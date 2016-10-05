@@ -3,6 +3,7 @@
 local _G = _G
 local print, tostring, select = print, tostring, select
 local format = format
+
 --WoW API / Variables
 local GetMouseFocus = GetMouseFocus
 local FrameStackTooltip_Toggle = FrameStackTooltip_Toggle
@@ -128,11 +129,11 @@ local function GetPoint(frame)
 	else
 		frame = GetMouseFocus()
 	end
-	
+
 	local point, relativeTo, relativePoint, xOffset, yOffset = frame:GetPoint()
 	local frameName = frame.GetName and frame:GetName() or "nil"
 	local relativeToName = relativeTo.GetName and relativeTo:GetName() or "nil"
-	
+
 	print(frameName, point, relativeToName, relativePoint, xOffset, yOffset)
 end
 

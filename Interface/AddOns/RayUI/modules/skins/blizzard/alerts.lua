@@ -2,10 +2,10 @@ local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, 
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
-	local AlertFrameHolder = CreateFrame("Frame", "AlertFrameHolder", UIParent)
+	local AlertFrameHolder = CreateFrame("Frame", "AlertFrameHolder", R.UIParent)
 	AlertFrameHolder:SetWidth(180)
 	AlertFrameHolder:SetHeight(20)
-	AlertFrameHolder:SetPoint("CENTER", UIParent, "CENTER", 0, 150)
+	AlertFrameHolder:SetPoint("CENTER", R.UIParent, "CENTER", 0, 150)
 
 	--[[ SKINNING FUNCTIONS ]]--
 	local function SkinAchievementAlert(frame)
@@ -48,7 +48,7 @@ local function LoadSkin()
 				frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", -2, -6)
 				frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 6)
 				frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
-				
+
 
 				if not frame.dungeonTexture.b then
 					frame.dungeonTexture.b = CreateFrame("Frame", nil, frame)
@@ -100,7 +100,7 @@ local function LoadSkin()
 			end
 			-- Background
 			for i=1, GuildChallengeAlertFrame:GetNumRegions() do
-				local region = select(i, GuildChallengeAlertFrame:GetRegions()) 
+				local region = select(i, GuildChallengeAlertFrame:GetRegions())
 				if region:GetObjectType() == "Texture" then
 					if region:GetTexture() == "Interface\\GuildFrame\\GuildChallenges" then
 						region:Kill()
@@ -110,7 +110,7 @@ local function LoadSkin()
 			GuildChallengeAlertFrameEmblemBorder:Kill()
 			S:CreateBD(frame.bg)
 			SetLargeGuildTabardTextures("player", GuildChallengeAlertFrameEmblemIcon, nil, nil)
-		end	
+		end
 	end
 
 	local function SkinScenarioAlert(frame)
@@ -153,7 +153,7 @@ local function LoadSkin()
 			S:CreateBD(frame.bg)
 		end
 	end
-	
+
 	local function SkinCriteriaAlert(frame)
 		if frame then
 			if not frame.bg then
@@ -394,7 +394,7 @@ local function LoadSkin()
 			if region:GetObjectType() == "Texture" then
 				if region:GetAtlas() == "Garr_MissionToast" then
 					region:Kill()
-				end 
+				end
 			end
 		end
 		frame.FollowerBG:SetAlpha(0)
@@ -514,7 +514,7 @@ local function LoadSkin()
 		frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
 		S:CreateBD(frame.bg)
 	end
-	
+
 	-- Garrison random mission alert
 	do
 		local frame = GarrisonRandomMissionAlertFrame

@@ -123,7 +123,7 @@ local function LoadSkin()
 		bg:SetFrameLevel(button:GetFrameLevel() - 1)
 
 		for _, reward in pairs(button.Rewards) do
-			reward:GetRegions():Hide()
+			reward.IconBorder:Kill()
 			S:ReskinIcon(reward.Icon)
 		end
 

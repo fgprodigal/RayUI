@@ -83,7 +83,7 @@ local function SkinNumeration()
 		end
 	end
 
-	Numeration.windowsettings.pos = { "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -15, 30 }
+	Numeration.windowsettings.pos = { "BOTTOMRIGHT", R.UIParent, "BOTTOMRIGHT", -15, 30 }
 	Numeration.windowsettings.width = 250
 	Numeration.windowsettings.maxlines = 7
 	Numeration.windowsettings.backgroundalpha = 0

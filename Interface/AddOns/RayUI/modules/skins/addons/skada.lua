@@ -14,9 +14,9 @@ local function SkinSkada()
 	local AcceptFrame
 	function Skada:ShowPopup()
 		if not AcceptFrame then
-			AcceptFrame = CreateFrame("Frame", "AcceptFrame", UIParent)
+			AcceptFrame = CreateFrame("Frame", "AcceptFrame", R.UIParent)
 			S:SetBD(AcceptFrame)
-			AcceptFrame:SetPoint("CENTER", UIParent, "CENTER")
+			AcceptFrame:SetPoint("CENTER", R.UIParent, "CENTER")
 			AcceptFrame:SetFrameStrata("DIALOG")
 			AcceptFrame.Text = AcceptFrame:CreateFontString(nil, "OVERLAY")
 			AcceptFrame.Text:SetFont(R["media"].font, 14)
@@ -176,10 +176,10 @@ local function SkinSkada()
 	local windows = {}
 	function EmbedSkada()
 		if #windows == 1 then
-			EmbedWindow(windows[1], windowWidth, 140/bars - barSpacing, 140, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -15, 30)
+			EmbedWindow(windows[1], windowWidth, 140/bars - barSpacing, 140, "BOTTOMRIGHT", R.UIParent, "BOTTOMRIGHT", -15, 30)
 		elseif #windows == 2 then
-			EmbedWindow(windows[1], windowWidth*3/4, 140/bars - barSpacing, 140, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -15, 30)
-			EmbedWindow(windows[2], windowWidth*3/4, 140/bars - barSpacing, 140, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", - windowWidth*3/4 - 25, 30)
+			EmbedWindow(windows[1], windowWidth*3/4, 140/bars - barSpacing, 140, "BOTTOMRIGHT", R.UIParent, "BOTTOMRIGHT", -15, 30)
+			EmbedWindow(windows[2], windowWidth*3/4, 140/bars - barSpacing, 140, "BOTTOMRIGHT", R.UIParent, "BOTTOMRIGHT", - windowWidth*3/4 - 25, 30)
 		end
 	end
 

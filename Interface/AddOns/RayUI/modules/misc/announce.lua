@@ -95,9 +95,9 @@ end
 
 local updaterun = CreateFrame("Frame")
 
-local flowingframe = CreateFrame("Frame",nil,UIParent)
+local flowingframe = CreateFrame("Frame",nil,R.UIParent)
 flowingframe:SetFrameStrata("HIGH")
-flowingframe:SetPoint("CENTER",UIParent,0, 140) -- where we want the textframe
+flowingframe:SetPoint("CENTER",R.UIParent,0, 140) -- where we want the textframe
 flowingframe:SetHeight(64)
 
 local flowingtext = flowingframe:CreateFontString(nil,"OVERLAY")
@@ -222,7 +222,7 @@ function mod:AlertRun(f,r,g,b)
 end
 
 local function CreateMessageFrame(name)
-	local f = CreateFrame("ScrollingMessageFrame", name, UIParent)
+	local f = CreateFrame("ScrollingMessageFrame", name, R.UIParent)
 	f:SetHeight(80)
 	f:SetWidth(500)
 	f:SetPoint("CENTER", 0, 120)

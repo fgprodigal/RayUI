@@ -355,7 +355,7 @@ end
 
 function watcherPrototype:SetPosition(num)
 	if not self.button[num] then return end
-	if num == 1 then 
+	if num == 1 then
 		self.button[num]:ClearAllPoints()
 		self.button[num]:SetPoint("CENTER", self.parent, "CENTER", 0, 0)
 	elseif self.direction == "LEFT" then
@@ -484,9 +484,9 @@ function RW:NewWatcher(data)
 		end
 	end
 
-	module.holder = CreateFrame("Frame", nil, UIParent)
+	module.holder = CreateFrame("Frame", nil, R.UIParent)
 	module.holder:SetSize(module.size, module.size)
-	module.parent = CreateFrame("Frame", module.name, UIParent)
+	module.parent = CreateFrame("Frame", module.name, R.UIParent)
 	module.parent:SetAllPoints(holder)
 
 	module:RegisterEvent("PLAYER_ENTERING_WORLD", "OnEvent")

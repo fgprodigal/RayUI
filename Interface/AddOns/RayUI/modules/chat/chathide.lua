@@ -14,7 +14,7 @@ local InCombatLockdown = InCombatLockdown
 local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: UIParent, RayUIChatBG, ChatFrame1EditBox, RayUIChatToggle, GameTooltip, ChatTypeInfo
+-- GLOBALS: RayUIChatBG, ChatFrame1EditBox, RayUIChatToggle, GameTooltip, ChatTypeInfo
 
 local isMoving = false
 local hasNew = false
@@ -70,7 +70,7 @@ local on_update = R.simple_move
 function CH:MoveOut()
     isMoving = true
     CH.ChatIn = false
-    RayUIChatBG:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 15, 30)
+    RayUIChatBG:SetPoint("BOTTOMLEFT", R.UIParent, "BOTTOMLEFT", 15, 30)
     -- R:Slide(RayUIChatBG, "LEFT", CH.db.width + 15, 195)
     R:UIFrameFadeOut(RayUIChatBG, .5, 1, 0)
     ChatEdit_ClearChat(ChatFrame1EditBox)
@@ -79,8 +79,8 @@ end
 function CH:MoveIn()
     isMoving = true
     CH.ChatIn = true
-    -- RayUIChatBG:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", -CH.db.width, 30)
-    RayUIChatBG:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 15, 30)
+    -- RayUIChatBG:SetPoint("BOTTOMLEFT", R.UIParent, "BOTTOMLEFT", -CH.db.width, 30)
+    RayUIChatBG:SetPoint("BOTTOMLEFT", R.UIParent, "BOTTOMLEFT", 15, 30)
     -- R:Slide(RayUIChatBG, "RIGHT", CH.db.width + 15, 195)
     R:UIFrameFadeIn(RayUIChatBG, .5, 0, 1)
 end
@@ -104,7 +104,7 @@ function CH:OnEvent(event, ...)
             RayUIChatBG:SetScript("OnUpdate", nil)
         end
         RayUIChatBG:ClearAllPoints()
-        RayUIChatBG:SetPoint("BOTTOMLEFT",UIParent,"BOTTOMLEFT",15,30)
+        RayUIChatBG:SetPoint("BOTTOMLEFT",R.UIParent,"BOTTOMLEFT",15,30)
         R:UIFrameFadeIn(RayUIChatBG, .7, 0, 1)
         CH.ChatIn = true
         hasNew = false
@@ -159,8 +159,8 @@ function CH:AutoHide()
         end
         self:RegisterEvent("PLAYER_REGEN_DISABLED", "OnEvent")
     end
-    local RayUIChatToggle = CreateFrame("Frame", "RayUIChatToggle", UIParent)
-    RayUIChatToggle:CreatePanel("Default", 15, 140, "BOTTOMLEFT",UIParent,"BOTTOMLEFT", 0,30)
+    local RayUIChatToggle = CreateFrame("Frame", "RayUIChatToggle", R.UIParent)
+    RayUIChatToggle:CreatePanel("Default", 15, 140, "BOTTOMLEFT",R.UIParent,"BOTTOMLEFT", 0,30)
     RayUIChatToggle:SetAlpha(0)
     RayUIChatToggle:SetScript("OnEnter",function(self)
             GameTooltip:SetOwner(self, "ANCHOR_RIGHT", 0, 0)
@@ -196,7 +196,7 @@ function CH:AutoHide()
                     RayUIChatBG:SetScript("OnUpdate", nil)
                 end
                 RayUIChatBG:ClearAllPoints()
-                RayUIChatBG:SetPoint("BOTTOMLEFT",UIParent,"BOTTOMLEFT",15,30)
+                RayUIChatBG:SetPoint("BOTTOMLEFT",R.UIParent,"BOTTOMLEFT",15,30)
                 R:UIFrameFadeIn(RayUIChatBG, .7, 0, 1)
                 CH.ChatIn = true
                 hasNew = false

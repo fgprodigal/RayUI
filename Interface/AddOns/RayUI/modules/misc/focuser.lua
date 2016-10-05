@@ -35,7 +35,7 @@ function mod:PLAYER_REGEN_ENABLED()
 end
 
 function mod:Initialize()
-	local FocuserButton = CreateFrame("CheckButton", "FocuserButton", UIParent, "SecureActionButtonTemplate")
+	local FocuserButton = CreateFrame("CheckButton", "FocuserButton", R.UIParent, "SecureActionButtonTemplate")
 	FocuserButton:SetAttribute("type1","macro")
 	FocuserButton:SetAttribute("macrotext","/focus mouseover")
 	SetOverrideBindingClick(FocuserButton, true, modifier.."-BUTTON"..mouseButton, "FocuserButton")

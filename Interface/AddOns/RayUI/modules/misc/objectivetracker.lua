@@ -4,10 +4,10 @@ local mod = M:NewModule("ObjectiveTracker", "AceEvent-3.0")
 
 function mod:Initialize()
 	local screenheight = GetScreenHeight()
-	local ObjectiveTrackerFrameHolder = CreateFrame("Frame", "ObjectiveTrackerFrameHolder", UIParent)
+	local ObjectiveTrackerFrameHolder = CreateFrame("Frame", "ObjectiveTrackerFrameHolder", R.UIParent)
 	ObjectiveTrackerFrameHolder:SetWidth(260)
 	ObjectiveTrackerFrameHolder:SetHeight(22)
-	ObjectiveTrackerFrameHolder:SetPoint("RIGHT", UIParent, "RIGHT", -80, 290)
+	ObjectiveTrackerFrameHolder:SetPoint("RIGHT", R.UIParent, "RIGHT", -80, 290)
 
 	R:CreateMover(ObjectiveTrackerFrameHolder, "WatchFrameMover", L["任务追踪锚点"], true)
 	ObjectiveTrackerFrameHolder:SetAllPoints(WatchFrameMover)

@@ -53,7 +53,7 @@ local StaticPopup_Show = StaticPopup_Show
 local hooksecurefunc = hooksecurefunc
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: UIParent, GameTooltip, CHAT_TIMESTAMP_FORMAT, LOCALIZED_CLASS_NAMES_FEMALE, LOCALIZED_CLASS_NAMES_MALE
+-- GLOBALS: GameTooltip, CHAT_TIMESTAMP_FORMAT, LOCALIZED_CLASS_NAMES_FEMALE, LOCALIZED_CLASS_NAMES_MALE
 -- GLOBALS: RayUICharacterData, CHAT_FRAME_TEXTURES, ChatFrame1, ItemRefTooltip, ChatFrameMenuButton
 -- GLOBALS: FriendsMicroButton, ChatTypeInfo, UISpecialFrames, CopyScrollScrollBar, ChatFontNormal
 -- GLOBALS: ChatMenu, CHAT_FRAMES, RayUIChatBG, INTERFACE_ACTION_BLOCKED, COMBATLOG, CombatLogQuickButtonFrame_Custom
@@ -157,11 +157,11 @@ end
 
 local function CreatCopyFrame()
 	local S = R:GetModule("Skins")
-	frame = CreateFrame("Frame", "CopyChatFrame", UIParent)
+	frame = CreateFrame("Frame", "CopyChatFrame", R.UIParent)
 	table.insert(UISpecialFrames, frame:GetName())
 	S:SetBD(frame)
 	frame:SetScale(1)
-	frame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
+	frame:SetPoint("CENTER", R.UIParent, "CENTER", 0, 0)
 	frame:Size(400,400)
 	frame:Hide()
 	frame:EnableMouse(true)
@@ -697,7 +697,7 @@ function CH:OnHyperlinkEnter(frame, linkData, link)
 	local t = linkData:match("^(.-):")
 	if CH.LinkHoverShow[t] then
 		ShowUIPanel(GameTooltip)
-		-- GameTooltip:SetOwner(UIParent, "ANCHOR_CURSOR")
+		-- GameTooltip:SetOwner(R.UIParent, "ANCHOR_CURSOR")
 		GameTooltip:SetOwner(RayUIChatBG, "ANCHOR_TOPLEFT", 0, 80)
 		GameTooltip:SetHyperlink(link)
 		GameTooltip:Show()
@@ -1027,7 +1027,7 @@ function CH:ApplyStyle(event, ...)
             cf:SetClampedToScreen(false)
             cf:SetClampRectInsets(0,0,0,0)
             _G[frameName.."TabText"]:SetFont(R["media"].font, 13)
-            local editbox = CreateFrame("Frame", nil, UIParent)
+            local editbox = CreateFrame("Frame", nil, R.UIParent)
             editbox:Height(22)
             editbox:SetWidth(RayUIChatBG:GetWidth())
             editbox:SetPoint("BOTTOMLEFT", cf, "TOPLEFT",  -2, 6)
@@ -1037,7 +1037,7 @@ function CH:ApplyStyle(event, ...)
             eb:ClearAllPoints()
             eb:Point("TOPLEFT", editbox, 2, 6)
             eb:Point("BOTTOMRIGHT", editbox, -2, -3)
-            eb:SetParent(UIParent)
+            eb:SetParent(R.UIParent)
             eb:Hide()
             eb:HookScript("OnShow", function(self)
                 editbox.wpos = 100
@@ -1189,7 +1189,7 @@ function CH:SetItemRef(link, text, button, chatFrame)
 		local meterID = tonumber(id)
 		ShowUIPanel(ItemRefTooltip)
 		if not ItemRefTooltip:IsShown() then
-			ItemRefTooltip:SetOwner(UIParent, "ANCHOR_PRESERVE")
+			ItemRefTooltip:SetOwner(R.UIParent, "ANCHOR_PRESERVE")
 		end
 		ItemRefTooltip:ClearLines()
 		ItemRefTooltip:AddLine(CH.meters[meterID].title)
@@ -1239,8 +1239,8 @@ function CH:Initialize()
 	CreatCopyFrame()
 	CopyChatFrame:Hide()
 	if not _G["RayUIChatBG"] then
-		local RayUIChatBG = CreateFrame("Frame", "RayUIChatBG", UIParent)
-		RayUIChatBG:CreatePanel("Default", self.db.width, self.db.height, "BOTTOMLEFT",UIParent,"BOTTOMLEFT",15,30)
+		local RayUIChatBG = CreateFrame("Frame", "RayUIChatBG", R.UIParent)
+		RayUIChatBG:CreatePanel("Default", self.db.width, self.db.height, "BOTTOMLEFT",R.UIParent,"BOTTOMLEFT",15,30)
 		GeneralDockManager:SetParent(RayUIChatBG)
 	end
 

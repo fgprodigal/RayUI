@@ -10,7 +10,7 @@ local CreateFrame = CreateFrame
 local HasExtraActionBar = HasExtraActionBar
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: UIParent, ExtraActionBarFrame, ZoneAbilityFrame
+-- GLOBALS: ExtraActionBarFrame, ZoneAbilityFrame
 
 function R:TestBossButton()
 	if ExtraActionBarFrame:IsShown() then
@@ -31,11 +31,11 @@ function R:TestBossButton()
 end
 
 function AB:CreateExtraButton()
-	local holder = CreateFrame("Frame", nil, UIParent)
-	holder:Point("CENTER", UIParent, "BOTTOM", 500, 510)
+	local holder = CreateFrame("Frame", nil, R.UIParent)
+	holder:Point("CENTER", R.UIParent, "BOTTOM", 500, 510)
 	holder:Size(ExtraActionBarFrame:GetSize())
 
-	local draenorholder = CreateFrame("Frame", nil, UIParent)
+	local draenorholder = CreateFrame("Frame", nil, R.UIParent)
 	draenorholder:Point("BOTTOM", ExtraActionBarFrame, "TOP", 0, 20)
 	draenorholder:Size(ExtraActionBarFrame:GetSize())
 

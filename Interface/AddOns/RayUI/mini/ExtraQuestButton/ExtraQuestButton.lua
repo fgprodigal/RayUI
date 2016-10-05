@@ -1,4 +1,4 @@
-local Button = CreateFrame("Button", "ExtraQuestButton", UIParent, "SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate")
+local Button = CreateFrame("Button", "ExtraQuestButton", RayUIParent, "SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate")
 RegisterStateDriver(Button, "visible", "[extrabar] hide; show")
 local DefaultExtraActionStyle = "Interface\\ExtraButton\\ChampionLight"
 Button:SetAttribute("_onattributechanged", [[

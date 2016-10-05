@@ -23,7 +23,7 @@ local RegisterStateDriver = RegisterStateDriver
 local InCombatLockdown = InCombatLockdown
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: UIParent, RayUIPlayerDebuffs, RayUIPlayerBuffs, NORMAL_FONT_COLOR_CODE, DebuffTypeColor, AurasHolder
+-- GLOBALS: RayUIPlayerDebuffs, RayUIPlayerBuffs, NORMAL_FONT_COLOR_CODE, DebuffTypeColor, AurasHolder
 -- GLOBALS: BuffFrame, TemporaryEnchantFrame, InterfaceOptionsFrameCategoriesButton12
 
 A.modName = L["BUFF"]
@@ -244,7 +244,7 @@ function A:CreateAuraHeader(filter)
     local name
     if filter == "HELPFUL" then name = "RayUIPlayerBuffs" else name = "RayUIPlayerDebuffs" end
 
-    local header = CreateFrame("Frame", name, UIParent, "SecureAuraHeaderTemplate")
+    local header = CreateFrame("Frame", name, R.UIParent, "SecureAuraHeaderTemplate")
     header:SetClampedToScreen(true)
     header:SetAttribute("template", "RayUIAuraTemplate30")
     header:SetAttribute("unit", "player")
@@ -300,13 +300,13 @@ function A:Initialize()
     TemporaryEnchantFrame:Kill()
     InterfaceOptionsFrameCategoriesButton12:SetScale(0.0001)
 
-    local AurasHolder = CreateFrame("Frame", "AurasHolder", UIParent)
+    local AurasHolder = CreateFrame("Frame", "AurasHolder", R.UIParent)
     AurasHolder:Height(R:Scale(buttonsize)*4 + R:Scale(spacing)*3)
     AurasHolder:Width(R:Scale(buttonsize)*buffsperrow + R:Scale(spacing)*(buffsperrow-1))
     AurasHolder:SetFrameStrata("BACKGROUND")
     AurasHolder:SetClampedToScreen(true)
     AurasHolder:SetAlpha(0)
-    AurasHolder:Point("TOPRIGHT", UIParent, "TOPRIGHT", -14, -53)
+    AurasHolder:Point("TOPRIGHT", R.UIParent, "TOPRIGHT", -14, -53)
     R:CreateMover(AurasHolder, "AurasMover", L["Buff锚点"], true, A.PostDrag)
 
     self.BuffFrame = self:CreateAuraHeader("HELPFUL")

@@ -59,19 +59,19 @@ function mod:Initialize()
 	local panel_height = ((R:Scale(5)*5) + (R:Scale(20)*5))
 
 	--Create main frame
-	local RaidUtilityPanel = CreateFrame("Frame", "RaidUtilityPanel", UIParent)
+	local RaidUtilityPanel = CreateFrame("Frame", "RaidUtilityPanel", R.UIParent)
 	RaidUtilityPanel:SetFrameLevel(1)
 	RaidUtilityPanel:SetHeight(panel_height)
 	RaidUtilityPanel:Width(230)
 	RaidUtilityPanel:SetFrameStrata("BACKGROUND")
-	RaidUtilityPanel:Point("TOP", UIParent, "TOP", 0, 1)
+	RaidUtilityPanel:Point("TOP", R.UIParent, "TOP", 0, 1)
 	RaidUtilityPanel:SetFrameLevel(3)
 	RaidUtilityPanel.toggled = false
 	S:CreateBD(RaidUtilityPanel)
 	S:CreateSD(RaidUtilityPanel)
 
 	--Show Button
-	self:CreateButton("RaidUtilityShowButton", UIParent, "UIMenuButtonStretchTemplate, SecureHandlerClickTemplate", 80, 18, "TOP", UIParent, "TOP", 0, 2, L["团队工具"], nil)
+	self:CreateButton("RaidUtilityShowButton", R.UIParent, "UIMenuButtonStretchTemplate, SecureHandlerClickTemplate", 80, 18, "TOP", R.UIParent, "TOP", 0, 2, L["团队工具"], nil)
 	RaidUtilityShowButton:SetFrameRef("RaidUtilityPanel", RaidUtilityPanel)
 	RaidUtilityShowButton:SetAttribute("_onclick", [=[self:Hide(); self:GetFrameRef("RaidUtilityPanel"):Show();]=])
 	RaidUtilityShowButton:SetScript("OnMouseUp", function(self) RaidUtilityPanel.toggled = true end)

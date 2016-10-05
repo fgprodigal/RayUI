@@ -123,7 +123,7 @@ function MM:SkinMiniMap()
 		return "SQUARE"
 	end
 	Minimap:SetMaskTexture("Interface\\Buttons\\WHITE8X8")
-	local zoneTextFrame = CreateFrame("Frame", nil, UIParent)
+	local zoneTextFrame = CreateFrame("Frame", nil, R.UIParent)
 	zoneTextFrame:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 0, 10)
 	zoneTextFrame:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 0, 10)
 	zoneTextFrame:SetHeight(19)
@@ -170,7 +170,7 @@ function MM:CheckMail()
 end
 
 function MM:CreateMenu()
-	local menuFrame = CreateFrame("Frame", "RayUI_MinimapRightClickMenu", UIParent, "UIDropDownMenuTemplate")
+	local menuFrame = CreateFrame("Frame", "RayUI_MinimapRightClickMenu", R.UIParent, "UIDropDownMenuTemplate")
 	local menuList = {
 		{text = CHARACTER_BUTTON, notCheckable = true,
 		func = function() ToggleCharacter("PaperDollFrame") end},
@@ -181,7 +181,7 @@ function MM:CreateMenu()
 			if not PlayerTalentFrame then
 				TalentFrame_LoadUI()
 			end
-			
+
 			if not PlayerTalentFrame:IsShown() then
 				ShowUIPanel(PlayerTalentFrame)
 			else
@@ -250,9 +250,9 @@ function MM:CreateMenu()
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", "CheckMail")
 	MM:HookScript(MiniMapMailFrame, "OnHide", "CheckMail")
 	MM:HookScript(MiniMapMailFrame, "OnShow", "CheckMail")
-	Minimap.shadow:SetBackdrop( { 
+	Minimap.shadow:SetBackdrop( {
 		edgeFile = R["media"].glow,
-        bgFile = R["media"].blank, 
+        bgFile = R["media"].blank,
 		edgeSize = R:Scale(4),
         tile = false,
         tileSize = 0,
@@ -278,10 +278,10 @@ function MM:Initialize()
 
 		if ( BlizzardStopwatchOptions.position ) then
 			StopwatchFrame:ClearAllPoints()
-			StopwatchFrame:SetPoint("CENTER", "UIParent", "BOTTOMLEFT", BlizzardStopwatchOptions.position.x, BlizzardStopwatchOptions.position.y)
+			StopwatchFrame:SetPoint("CENTER", R.UIParent, "BOTTOMLEFT", BlizzardStopwatchOptions.position.x, BlizzardStopwatchOptions.position.y)
 			StopwatchFrame:SetUserPlaced(true)
 		else
-			StopwatchFrame:SetPoint("TOPRIGHT", "UIParent", "TOPRIGHT", -250, -300)
+			StopwatchFrame:SetPoint("TOPRIGHT", R.UIParent, "TOPRIGHT", -250, -300)
 		end
 	end
 	self:SkinMiniMap()
@@ -289,7 +289,7 @@ function MM:Initialize()
 	self:ButtonCollector()
 	self:RawHook("TimeManagerClockButton_UpdateTooltip", true)
 	Minimap:ClearAllPoints()
-	Minimap:Point("TOPLEFT", "UIParent", "TOPLEFT", 10, -20)
+	Minimap:Point("TOPLEFT", R.UIParent, "TOPLEFT", 10, -20)
 	Minimap:SetFrameLevel(10)
 	local clockFrame, clockTime = TimeManagerClockButton:GetRegions()
 	clockFrame:Hide()

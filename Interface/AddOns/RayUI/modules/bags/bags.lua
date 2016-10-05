@@ -20,7 +20,7 @@ local PlaySound = PlaySound
 local StaticPopup_Show = StaticPopup_Show
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: UIParent, GameTooltip, EQUIPMENT_SETS, AUCTION_CATEGORY_CONSUMABLES, LE_ITEM_QUALITY_POOR
+-- GLOBALS: GameTooltip, EQUIPMENT_SETS, AUCTION_CATEGORY_CONSUMABLES, LE_ITEM_QUALITY_POOR
 -- GLOBALS: TradeFrame, BankFrame, ReagentBankFrame, RayUI_ContainerFrameItemSets, RayUI_ContainerFrameConsumables
 -- GLOBALS: RayUI_ContainerFrameBankItemSets, RayUI_ContainerFrameBankConsumables, SEARCH, REAGENT_BANK
 -- GLOBALS: REAGENTBANK_DEPOSIT, BANK, BANKSLOTPURCHASE, REAGENT_BANK_HELP
@@ -86,11 +86,11 @@ function B:CloseBags()
 	cargBags.blizzard:Hide()
 end
 
-local equipSetTip = CreateFrame("GameTooltip", "RayUICheckEquipSetTip", UIParent, "GameTooltipTemplate")
+local equipSetTip = CreateFrame("GameTooltip", "RayUICheckEquipSetTip", R.UIParent, "GameTooltipTemplate")
 
 local function CheckEquipmentSet(item)
 	if not item.bagID or not item.slotID then return false end
-	equipSetTip:SetOwner(UIParent, "ANCHOR_NONE")
+	equipSetTip:SetOwner(R.UIParent, "ANCHOR_NONE")
 	equipSetTip:ClearLines()
 	equipSetTip:SetBagItem(item.bagID, item.slotID)
 	equipSetTip:Show()
@@ -143,7 +143,7 @@ function B:Initialize()
 			Movable = true,
 		})
 		f.main:SetFilter(onlyBags, true)
-		f.main:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -55, 30) -- bagpack position
+		f.main:SetPoint("BOTTOMRIGHT", R.UIParent, "BOTTOMRIGHT", -55, 30) -- bagpack position
 
 		-- Bank frame and bank bags
 		f.bank = MyContainer:New("Bank", {

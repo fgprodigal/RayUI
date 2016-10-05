@@ -81,7 +81,7 @@ local function LoadSkin()
 	S:CreateBG(ArchaeologyFrameArtifactPageIcon)
 
 	ArcheologyDigsiteProgressBar:ClearAllPoints()
-	ArcheologyDigsiteProgressBar:SetPoint("TOP", UIParent, "TOP", 0, 100)
+	ArcheologyDigsiteProgressBar:SetPoint("TOP", R.UIParent, "TOP", 0, 100)
 end
 
 S:AddCallbackForAddon("Blizzard_ArchaeologyUI", "Archaeology", LoadSkin)

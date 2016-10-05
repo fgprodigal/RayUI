@@ -120,7 +120,7 @@ function UF:DPSLayout(frame, unit)
 		-- Separated Energy Bar
 		if self.db.separateEnergy and R.myclass == "ROGUE" then
 			local EnergyBarHolder = CreateFrame("Frame", nil, frame)
-			EnergyBarHolder:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 311)
+			EnergyBarHolder:SetPoint("BOTTOM", R.UIParent, "BOTTOM", 0, 311)
 			EnergyBarHolder:Size(ENERGY_WIDTH, ENERGY_HEIGHT + 13)
 			local EnergyBar = CreateFrame("Statusbar", "RayUF_EnergyBar", EnergyBarHolder)
 			EnergyBar:SetStatusBarTexture(R["media"].normal)
@@ -157,7 +157,7 @@ function UF:DPSLayout(frame, unit)
 		-- CastBar
 		local castbar = self:ConstructCastBar(frame)
 		castbar:ClearAllPoints()
-		castbar:Point("BOTTOM",UIParent,"BOTTOM",0,305)
+		castbar:Point("BOTTOM",R.UIParent,"BOTTOM",0,305)
 		castbar:Width(350)
 		castbar:Height(7)
 		castbar.Text:ClearAllPoints()
@@ -351,7 +351,7 @@ function UF:DPSLayout(frame, unit)
 		-- CastBar
 		local castbar = self:ConstructCastBar(frame)
 		castbar:ClearAllPoints()
-		castbar:Point("CENTER", UIParent, "CENTER", 0, 100)
+		castbar:Point("CENTER", R.UIParent, "CENTER", 0, 100)
 		castbar:Width(250)
 		castbar:Height(5)
 		castbar.Text:ClearAllPoints()
@@ -361,7 +361,7 @@ function UF:DPSLayout(frame, unit)
 		castbar.Iconbg:Size(25, 25)
 		castbar.Iconbg:ClearAllPoints()
 		castbar.Iconbg:SetPoint("BOTTOM", castbar, "TOP", 0, 5)
-		castbar:SetParent(UIParent)
+		castbar:SetParent(R.UIParent)
 		frame.Castbar = castbar
 
 		-- Debuffs
@@ -507,7 +507,7 @@ function UF:DPSLayout(frame, unit)
 
 	if (unit and unit:find("arena%d") and self.db.showArenaFrames == true) then
 		if not frame.prepFrame then
-			frame.prepFrame = CreateFrame("Frame", frame:GetName().."PrepFrame", UIParent)
+			frame.prepFrame = CreateFrame("Frame", frame:GetName().."PrepFrame", R.UIParent)
 			frame.prepFrame:SetFrameStrata("BACKGROUND")
 			frame.prepFrame:SetAllPoints(frame)
 			frame.prepFrame.Health = CreateFrame("StatusBar", nil, frame.prepFrame)
@@ -631,14 +631,14 @@ function UF:LoadUnitFrames()
 
 	-- Player
 	local player = oUF:Spawn("player", "RayUF_player")
-	player:Point("BOTTOMRIGHT", UIParent, "BOTTOM", -80, 390)
+	player:Point("BOTTOMRIGHT", R.UIParent, "BOTTOM", -80, 390)
 	player:Size(PLAYER_WIDTH, PLAYER_HEIGHT)
 	player:Show()
 	R:CreateMover(player, player:GetName().."Mover", "玩家头像", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	-- Target
 	local target = oUF:Spawn("target", "RayUF_target")
-	target:Point("BOTTOMLEFT", UIParent, "BOTTOM", 80, 390)
+	target:Point("BOTTOMLEFT", R.UIParent, "BOTTOM", 80, 390)
 	target:Size(TARGET_WIDTH, TARGET_HEIGHT)
 	target:Show()
 	R:CreateMover(target, target:GetName().."Mover", "目标头像", nil, nil, "ALL,RAID15,RAID25,RAID40")
@@ -672,8 +672,8 @@ function UF:LoadUnitFrames()
 	R:CreateMover(focustarget, focustarget:GetName().."Mover", "焦点目标头像", nil, nil, "ALL,RAID15,RAID25,RAID40")
 
 	if self.db.showArenaFrames and not IsAddOnLoaded("Gladius") then
-		local ArenaHeader = CreateFrame("Frame", nil, UIParent)
-		ArenaHeader:Point("TOPRIGHT", UIParent, "RIGHT", -110, 200)
+		local ArenaHeader = CreateFrame("Frame", nil, R.UIParent)
+		ArenaHeader:Point("TOPRIGHT", R.UIParent, "RIGHT", -110, 200)
 		ArenaHeader:Width(BOSS_WIDTH)
 		ArenaHeader:Height(R:Scale(BOSS_HEIGHT)*5 + R:Scale(36)*4)
 		local arena = {}
@@ -691,8 +691,8 @@ function UF:LoadUnitFrames()
 	end
 
 	if self.db.showBossFrames then
-		local BossHeader = CreateFrame("Frame", nil, UIParent)
-		BossHeader:Point("TOPRIGHT", UIParent, "RIGHT", -80, 200)
+		local BossHeader = CreateFrame("Frame", nil, R.UIParent)
+		BossHeader:Point("TOPRIGHT", R.UIParent, "RIGHT", -80, 200)
 		BossHeader:Width(BOSS_WIDTH)
 		BossHeader:Height(R:Scale(BOSS_HEIGHT)*MAX_BOSS_FRAMES + R:Scale(36)*(MAX_BOSS_FRAMES-1))
 		local boss = {}

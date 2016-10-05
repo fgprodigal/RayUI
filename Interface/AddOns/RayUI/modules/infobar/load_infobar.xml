@@ -1,10 +1,10 @@
 <Ui>
-	
+
 	<Script file="infobar.lua"/>
 
 	<Button name="RayUI_InfoBarButtonStyleTemplate" virtual="true">
 		<HitRectInsets left="6" right="6" top="6" bottom="6" />
-		<Size x="140" y="35" />		
+		<Size x="140" y="35" />
 		<NormalTexture parentKey="Icon" hidden="true">
 			<Size x="19" y="19" />
 			<Anchors>
@@ -41,7 +41,7 @@
 			<OnLeave function="RayUI_InfoBarButton_OnLeave" />
 		</Scripts>
 	</Button>
-	
+
 	<Button name="RayUI_InfoBarMenuButtonTemplate" inherits="RayUI_InfoBarButtonStyleTemplate" virtual="true">
 		<Scripts>
 			<OnLoad>
@@ -52,7 +52,7 @@
 		</Scripts>
 	</Button>
 
-	<Frame name="RayUI_InfoBarMenu" frameStrata="MEDIUM" toplevel="true" hidden="true" parent="UIParent">
+	<Frame name="RayUI_InfoBarMenu" frameStrata="MEDIUM" toplevel="true" hidden="true" parent="RayUIParent">
 		<Size x="130" y="320" />
 		<Anchors>
 			<Anchor point="CENTER" />
@@ -141,7 +141,7 @@
 			<OnEvent function="RayUI_InfoBarMenu_OnInit" />
 			<OnHide>
 				local frame = self.ref
-				
+
 				if frame and not frame.infobarType then
 					frame:SetAlpha(0)
 				end
@@ -149,7 +149,7 @@
 		</Scripts>
 	</Frame>
 
-	
+
 	<Script file="infobar_durability.lua"/>
 	<Script file="infobar_fps.lua"/>
 	<Script file="infobar_friends.lua"/>
@@ -160,6 +160,6 @@
 	<Script file="infobar_talent.lua"/>
 	<!--Script file="infobar_currency.lua"/>
 	<Script file="infobar_artifact.lua"/>
-	<Script file="infobar_worldquests.lua"/-->	
-	
+	<Script file="infobar_worldquests.lua"/-->
+
 </Ui>

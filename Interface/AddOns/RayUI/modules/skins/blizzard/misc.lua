@@ -704,7 +704,7 @@ local function LoadSkin()
 	ChatConfigFrameOkayButton:SetPoint("TOPRIGHT", ChatConfigBackgroundFrame, "BOTTOMRIGHT", 0, -4)
 
 	TicketStatusFrame:ClearAllPoints()
-	TicketStatusFrame:SetPoint("TOP", UIParent, "TOP", 0, -20)
+	TicketStatusFrame:SetPoint("TOP", R.UIParent, "TOP", 0, -20)
 
 	SideDressUpModel:HookScript("OnShow", function(self)
 		self:ClearAllPoints()
