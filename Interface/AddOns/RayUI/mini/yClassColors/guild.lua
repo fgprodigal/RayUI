@@ -1,6 +1,18 @@
-
 local _, ns = ...
 local ycc = ns.ycc
+
+--Cache global variables
+--Lua functions
+local ipairs = ipairs
+
+--WoW API / Variables
+local GetCVar = GetCVar
+local GetRealZoneText = GetRealZoneText
+local GuildRosterContainer = GuildRosterContainer
+local GetGuildTradeSkillInfo = GetGuildTradeSkillInfo
+local GetGuildRosterInfo = GetGuildRosterInfo
+local hooksecurefunc = hooksecurefunc
+
 local _VIEW
 
 local function setview(view)
@@ -17,7 +29,7 @@ local function update()
         if(button:IsShown() and button.online and button.guildIndex) then
             if(_VIEW == 'tradeskill') then
                 local skillID, isCollapsed, iconTexture, headerName, numOnline, numVisible, numPlayers, playerDisplayName, playerFullName, class, online, zone, skill, classFileName, isMobile, isAway = GetGuildTradeSkillInfo(button.guildIndex)
-                if((not headerName) and playerName) then
+                if((not headerName) and playerDisplayName) then
                     -- button.string1:SetText(ycc.classColor[classFileName] .. playerName)
                     local c = ycc.classColorRaw[classFileName]
                     button.string1:SetTextColor(c.r, c.g, c.b)
@@ -56,13 +68,12 @@ end
 
 local loaded = false
 hooksecurefunc('GuildFrame_LoadUI', function()
-    if(loaded) then
-        return
-    else
-        loaded = true
-        hooksecurefunc('GuildRoster_SetView', setview)
-        hooksecurefunc('GuildRoster_Update', update)
-        hooksecurefunc(GuildRosterContainer, 'update', update)
-    end
-end)
-
+        if(loaded) then
+            return
+        else
+            loaded = true
+            hooksecurefunc('GuildRoster_SetView', setview)
+            hooksecurefunc('GuildRoster_Update', update)
+            hooksecurefunc(GuildRosterContainer, 'update', update)
+        end
+    end)

@@ -1,6 +1,20 @@
-
 local _, ns = ...
 local ycc = ns.ycc
+
+--Cache global variables
+--Lua functions
+local format = string.format
+
+--WoW API / Variables
+local HybridScrollFrame_GetOffset = HybridScrollFrame_GetOffset
+local GetRealZoneText = GetRealZoneText
+local GetFriendInfo = GetFriendInfo
+local BNGetFriendInfo = BNGetFriendInfo
+local BNGetGameAccountInfo = BNGetGameAccountInfo
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: FriendsFrameFriendsScrollFrame, FRIENDS_BUTTON_TYPE_WOW, BNET_CLIENT_WOW, FRIENDS_BUTTON_TYPE_BNET
+-- GLOBALS: FRIENDS_WOW_NAME_COLOR_CODE
 
 local WHITE = {r = 1, g = 1, b = 1}
 local FRIENDS_LEVEL_TEMPLATE = FRIENDS_LEVEL_TEMPLATE:gsub('%%d', '%%s')
@@ -13,7 +27,7 @@ local function friendsFrame()
     local playerArea = GetRealZoneText()
 
     for i = 1, #buttons do
-        local nameText, infoText
+        local nameText, infoText, button, index
         button = buttons[i]
         index = offset + i
         if(button:IsShown()) then
@@ -21,7 +35,7 @@ local function friendsFrame()
                 local name, level, class, area, connected, status, note = GetFriendInfo(button.id)
                 if(connected) then
                     nameText = ycc.classColor[class] .. name.."|r, "..format(FRIENDS_LEVEL_TEMPLATE, ycc.diffColor[level] .. level .. '|r', class)
-                    if(areaName == playerArea) then
+                    if(area == playerArea) then
                         infoText = format('|cff00ff00%s|r', area)
                     end
                 end
@@ -31,7 +45,7 @@ local function friendsFrame()
                     local hasFocus, toonName, client, realmName, realmID, faction, race, class, guild, zoneName, level, gameText, broadcastText, broadcastTime = BNGetGameAccountInfo(toonID)
                     if(presenceName and toonName and class) then
                         nameText = presenceName .. ' ' .. FRIENDS_WOW_NAME_COLOR_CODE..'('..
-                                    ycc.classColor[class] .. toonName .. FRIENDS_WOW_NAME_COLOR_CODE .. ')'
+                        ycc.classColor[class] .. toonName .. FRIENDS_WOW_NAME_COLOR_CODE .. ')'
                         if(zoneName == playerArea) then
                             infoText = format('|cff00ff00%s|r', zoneName)
                         end
@@ -50,5 +64,3 @@ local function friendsFrame()
 end
 hooksecurefunc(FriendsFrameFriendsScrollFrame, 'update', friendsFrame)
 hooksecurefunc('FriendsFrame_UpdateFriends', friendsFrame)
-
-
