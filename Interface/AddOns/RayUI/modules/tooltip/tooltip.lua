@@ -42,7 +42,6 @@ local GetItemQualityColor = GetItemQualityColor
 local UnitClassification = UnitClassification
 local UnitCreatureType = UnitCreatureType
 local GetQuestDifficultyColor = GetQuestDifficultyColor
-local GameTooltip_UnitColor = GameTooltip_UnitColor
 local UnitRace = UnitRace
 local GetGuildInfo = GetGuildInfo
 local IsInGuild = IsInGuild
@@ -66,7 +65,7 @@ local GetCursorPosition = GetCursorPosition
 -- GLOBALS: ItemRefTooltip, ItemRefShoppingTooltip1, ItemRefShoppingTooltip2, ItemRefShoppingTooltip3, ShoppingTooltip1
 -- GLOBALS: ShoppingTooltip2, ShoppingTooltip3, WorldMapCompareTooltip1, WorldMapCompareTooltip2, WorldMapCompareTooltip3
 -- GLOBALS: ChatMenu, EmoteMenu, LanguageMenu, QuestDifficultyColors, YOU, TARGET, GameTooltipTextLeft2, GameTooltipTextLeft1, PLAYER
--- GLOBALS: AFK, DND, LEVEL, PVP_ENABLED, FACTION_HORDE, FACTION_ALLIANCE, VoiceMacroMenu
+-- GLOBALS: AFK, DND, LEVEL, PVP_ENABLED, FACTION_HORDE, FACTION_ALLIANCE, VoiceMacroMenu, GameTooltip_UnitColor
 
 local TalentFrame = CreateFrame("Frame", nil)
 TalentFrame:Hide()
