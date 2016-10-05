@@ -2,6 +2,32 @@ local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, 
 local RM = R:NewModule("Reminder", "AceTimer-3.0")
 RM.CreatedReminders = {}
 
+--Cache global variables
+--Lua functions
+local select, pairs, type = select, pairs, type
+
+--WoW API / Variables
+local CreateFrame = CreateFrame
+local InCombatLockdown = InCombatLockdown
+local IsInInstance = IsInInstance
+local UnitBuff = UnitBuff
+local UnitDebuff = UnitDebuff
+local GetSpellInfo = GetSpellInfo
+local GetSpellCooldown = GetSpellCooldown
+local UnitIsDeadOrGhost = UnitIsDeadOrGhost
+local GetSpecialization = GetSpecialization
+local UnitLevel = UnitLevel
+local OffhandHasWeapon = OffhandHasWeapon
+local GetWeaponEnchantInfo = GetWeaponEnchantInfo
+local IsUsableSpell = IsUsableSpell
+local GetInventoryItemTexture = GetInventoryItemTexture
+local UnitInVehicle = UnitInVehicle
+local PlaySoundFile = PlaySoundFile
+local C_Timer = C_Timer
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: RayUF_player
+
 function RM:PlayerHasFilteredBuff(frame, db, checkPersonal)
 	for buff, value in pairs(db) do
 		if value == true then
@@ -283,7 +309,7 @@ function RM:ReminderIcon_OnEvent(event, unit)
 		self:SetAlpha(1)
 		return
 	elseif self.ForceShow then
-		print("Attempted to show a reminder icon that does not have any spells. You must add a spell first.")
+		R:Print("Attempted to show a reminder icon that does not have any spells. You must add a spell first.")
 		return
 	end
 
