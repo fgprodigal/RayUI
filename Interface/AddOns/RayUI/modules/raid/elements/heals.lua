@@ -3,17 +3,38 @@ local RA = R:GetModule("Raid")
 
 local oUF = RayUF or oUF
 
+--Cache global variables
+--Lua functions
+local floor = math.floor
+local format = string.format
+
+--WoW API / Variables
+local UnitPower = UnitPower
+local UnitPowerMax = UnitPowerMax
+local UnitAlternatePowerTextureInfo = UnitAlternatePowerTextureInfo
+local UnitIsAFK = UnitIsAFK
+local UnitIsDead = UnitIsDead
+local UnitIsGhost = UnitIsGhost
+local UnitIsConnected = UnitIsConnected
+local UnitClass = UnitClass
+local UnitHealth = UnitHealth
+local UnitHealthMax = UnitHealthMax
+local UnitGetIncomingHeals = UnitGetIncomingHeals
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: ALTERNATE_POWER_INDEX
+
 local numberize = RA.numberize
 local colorCache = RA.colorCache
 
 oUF.Tags.Methods['RayUIRaid:altpower'] = function(u)
-	local cur = UnitPower(u, ALTERNATE_POWER_INDEX)
+    local cur = UnitPower(u, ALTERNATE_POWER_INDEX)
     if cur > 0 then
-	    local max = UnitPowerMax(u, ALTERNATE_POWER_INDEX)
+        local max = UnitPowerMax(u, ALTERNATE_POWER_INDEX)
         local per = floor(cur/max*100)
 
         local tPath, r, g, b = UnitAlternatePowerTextureInfo(u, 2)
-    
+
         if not r then
             r, g, b = 1, 1, 1
         end
@@ -54,7 +75,7 @@ oUF.Tags.Methods['RayUIRaid:def'] = function(u)
                 return color..(RA.db.deficit and "-"..numberize(max-cur) or numberize(cur)).."|r"
             end
         end
-    end 
+    end
 end
 oUF.Tags.Events['RayUIRaid:def'] = 'UNIT_MAXHEALTH UNIT_HEALTH UNIT_HEALTH_FREQUENT UNIT_CONNECTION PLAYER_FLAGS_CHANGED '..oUF.Tags.Events['RayUIRaid:altpower']
 

@@ -3,23 +3,31 @@ local RA = R:GetModule("Raid")
 
 local oUF = RayUF or oUF
 
--- oUF range element with code sniplets from TomTom
-
-local _FRAMES = {}
-local OnRangeFrame
-local update = .20
-
-local UnitInRange, UnitIsConnected = UnitInRange, UnitIsConnected
-local SetMapToCurrentZone, WorldMapFrame = SetMapToCurrentZone, WorldMapFrame
-local GetPlayerMapPosition, GetPlayerFacing = GetPlayerMapPosition, GetPlayerFacing
-
-local select, next = select, next
+--Cache global variables
+--Lua functions
+local select, next, type, table = select, next, type, table
 local pi = math.pi
 local twopi = pi * 2
 local atan2 = math.atan2
 local modf = math.modf
 local abs = math.abs
 local floor = floor
+
+--WoW API / Variables
+local CreateFrame = CreateFrame
+local UnitInRange, UnitIsConnected = UnitInRange, UnitIsConnected
+local SetMapToCurrentZone, WorldMapFrame = SetMapToCurrentZone, WorldMapFrame
+local GetPlayerMapPosition, GetPlayerFacing = GetPlayerMapPosition, GetPlayerFacing
+local IsInGroup = IsInGroup
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS:
+
+-- oUF range element with code sniplets from TomTom
+
+local _FRAMES = {}
+local OnRangeFrame
+local update = .20
 
 local function ColorGradient(perc, ...)
     local num = select("#", ...)
@@ -96,7 +104,7 @@ local function GetBearing(unit)
 end
 
 function RA:arrow(object, unit)
-    if not object.OoR then return end 
+    if not object.OoR then return end
     local bearing = GetBearing(unit)
 
     if bearing then
@@ -114,7 +122,7 @@ local OnRangeUpdate = function(self, elapsed)
                 local range = object.freebRange
                 if UnitIsConnected(object.unit) and not UnitInRange(object.unit) and IsInGroup() then
                     -- if(object:GetAlpha() == range.insideAlpha) then
-                        -- object:SetAlpha(range.outsideAlpha)
+                    -- object:SetAlpha(range.outsideAlpha)
                     -- end
 
                     object.OoR = true
@@ -126,10 +134,10 @@ local OnRangeUpdate = function(self, elapsed)
                             object.freebarrow:Hide()
                         end
                     end
-                -- elseif(object:GetAlpha() ~= range.insideAlpha) then
+                    -- elseif(object:GetAlpha() ~= range.insideAlpha) then
                     -- object:SetAlpha(range.insideAlpha)
                     -- if object.freebarrow:IsShown() then
-                        -- object.freebarrow:Hide()
+                    -- object.freebarrow:Hide()
                     -- end
                 else
                     object.OoR = false

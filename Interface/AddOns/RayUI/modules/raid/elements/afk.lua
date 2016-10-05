@@ -3,8 +3,16 @@ local RA = R:GetModule("Raid")
 
 local oUF = RayUF or oUF
 
+--Cache global variables
+--Lua functions
 local GetTime = GetTime
 local floor = floor
+
+--WoW API / Variables
+local UnitName = UnitName
+local UnitIsAFK = UnitIsAFK
+local UnitIsConnected = UnitIsConnected
+
 local timer = {}
 
 local AfkTime = function(s)

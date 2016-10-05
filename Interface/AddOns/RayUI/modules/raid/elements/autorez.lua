@@ -3,10 +3,17 @@ local RA = R:GetModule("Raid")
 
 local oUF = RayUF or oUF
 
+--Cache global variables
+--Lua functions
+--WoW API / Variables
+local GetSpellInfo = GetSpellInfo
+local UnitClass = UnitClass
+local IsAddOnLoaded = IsAddOnLoaded
+
 local classList = {
     ["DRUID"] = {
         combat = GetSpellInfo(20484), -- Rebirth
-        ooc = GetSpellInfo(50769), -- Revive    
+        ooc = GetSpellInfo(50769), -- Revive
     },
 
     ["WARLOCK"] = {
@@ -28,9 +35,9 @@ local classList = {
 
     ["DEATHKNIGHT"] = {
         combat = GetSpellInfo(61999), -- Raise Ally
-	},
+    },
 
-	["MONK"] = {
+    ["MONK"] = {
         ooc = GetSpellInfo(115178), -- Resuscitate
     },
 }
@@ -55,11 +62,11 @@ local function macroBody(class)
 end
 
 local function macroBody2()
-	return "/stopmacro [dead,@mouseover]\n/cast [help,nodead,@mouseover]"..GetSpellInfo(53563)
+    return "/stopmacro [dead,@mouseover]\n/cast [help,nodead,@mouseover]"..GetSpellInfo(53563)
 end
 
 local function macroBody3()
-	return "/stopmacro [dead,@mouseover]\n/cast [help,nodead,@mouseover]"..GetSpellInfo(6940)
+    return "/stopmacro [dead,@mouseover]\n/cast [help,nodead,@mouseover]"..GetSpellInfo(6940)
 end
 
 local Enable = function(self)
@@ -69,12 +76,12 @@ local Enable = function(self)
     if classList[class] and not IsAddOnLoaded("Clique") then
         self:SetAttribute("type3", "macro")
         self:SetAttribute("macrotext3", macroBody(class))
-		if R.myname == "Divineseraph" and R.myclass =="PALADIN" then
-			self:SetAttribute("alt-type3", "macro")
-			self:SetAttribute("alt-macrotext3", macroBody2())
-			self:SetAttribute("ctrl-type3", "macro")
-			self:SetAttribute("ctrl-macrotext3", macroBody3())
-		end
+        if R.myname == "Divineseraph" and R.myclass =="PALADIN" then
+            self:SetAttribute("alt-type3", "macro")
+            self:SetAttribute("alt-macrotext3", macroBody2())
+            self:SetAttribute("ctrl-type3", "macro")
+            self:SetAttribute("ctrl-macrotext3", macroBody3())
+        end
     end
 end
 
