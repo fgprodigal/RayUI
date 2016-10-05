@@ -99,7 +99,7 @@ P["NamePlates"]={
         ['FRIENDLY_PLAYER'] = {
             ["minions"] = false,
             ['healthbar'] = {
-                ['enable'] = false,
+                ['enable'] = true,
                 ['healPrediction'] = true,
                 ['glowStyle'] = "TARGET_THREAT",
             },
@@ -126,7 +126,7 @@ P["NamePlates"]={
                 },
             },
             ['debuffs'] = {
-                ['enable'] = true,
+                ['enable'] = false,
                 ['numAuras'] = 4,
                 ['baseHeight'] = 20,
                 ['filters'] = {

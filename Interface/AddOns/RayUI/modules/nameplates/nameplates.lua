@@ -475,14 +475,13 @@ function mod:OnEvent(event, unit, ...)
         end
     elseif ( event == "UNIT_ENTERED_VEHICLE" or event == "UNIT_EXITED_VEHICLE" or event == "UNIT_PET" ) then
         mod:UpdateInVehicle(self)
-        mod:UpdateElement_All(self)
+        mod:UpdateElement_All(self, unit, true)
     else
         mod:UpdateElement_Cast(self, event, unit, ...)
     end
 end
 
 function mod:RegisterEvents(frame, unit)
-    local unit = frame.unit;
     local displayedUnit;
     if ( unit ~= frame.displayedUnit ) then
         displayedUnit = frame.displayedUnit;
@@ -527,7 +526,7 @@ function mod:RegisterEvents(frame, unit)
 
         frame:RegisterEvent("PLAYER_ENTERING_WORLD");
 
-        if(self.db.units[frame.UnitType].buffs.enable and self.db.units[frame.UnitType].debuffs.enable) then
+        if(self.db.units[frame.UnitType].buffs.enable or self.db.units[frame.UnitType].debuffs.enable) then
             frame:RegisterUnitEvent("UNIT_AURA", unit, displayedUnit)
         end
         frame:RegisterEvent("RAID_TARGET_UPDATE")
