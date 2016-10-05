@@ -2,6 +2,22 @@ local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, 
 local T = R:NewModule("Tutorial", "AceEvent-3.0")
 local ADDON_NAME = ...
 
+--Cache global variables
+--Lua functions
+local _G = _G
+local select = select
+
+--WoW API / Variables
+local CreateFrame = CreateFrame
+local HelpPlate_GetButton = HelpPlate_GetButton
+local HelpPlate_IsShowing = HelpPlate_IsShowing
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: RayUITutorial_HelpPlate_AnimateOnFinished, RayUITutorial_HelpPlate_Hide, RayUIShowTutorial_Stage1
+-- GLOBALS: GameFontHighlightLeft, RayUITutorialWindow, UIParent, GameFontNormal, GameFontHighlight, CLOSE
+-- GLOBALS: GameMenuFrame, RayUIConfigButton, ChatFrame1EditBox, HELP_PLATE_BUTTONS, HelpPlate, RayUI_HelpPlate
+-- GLOBALS: RayUITutorialButton, RayUITutorialButtonOpen, RayUITutorialBG, NumberFontNormal
+
 T.TutorialList = {
 	L["到 https://github.com/fgprodigal/RayUI 创建issue来反馈问题"],
 	L["找不到微型菜单? 中键点击小地图试试"],
@@ -359,7 +375,7 @@ function T:InitTutorial()
 
 	-- Buttons
 	local btnOpen = createTextButton("RayUITutorialButtonOpen", R.UIParent)
-	btnOpen:SetPoint("CENTER", parent, "CENTER", 0, 0)
+	btnOpen:SetPoint("CENTER", R.UIParent, "CENTER", 0, 0)
 	btnOpen:SetText(ButtonTexts.tutorial)
 	btnOpen:SetAttribute("type", "macro")
 	btnOpen:SetAttribute("macrotext", "/testuf r25\n/tar "..R.myname.."\n/focus\n/run RayUIShowTutorial_Stage1()\n/run RayUITutorialButtonClose:Show()\n/run RayUITutorialButtonOpen:Hide()")
@@ -377,7 +393,7 @@ function T:InitTutorial()
 	-- end)
 
 	local btnClose = createTextButton("RayUITutorialButtonClose", HelpPlate)
-	btnClose:SetPoint("CENTER", parent, "CENTER", 0, 0)
+	btnClose:SetPoint("CENTER", HelpPlate, "CENTER", 0, 0)
 	btnClose:SetText(ButtonTexts.finished)
 	btnClose:SetAttribute("type", "macro")
 	btnClose:SetAttribute("macrotext", "/testuf r25\n/clearfocus\n/cleartarget\n/run RayUITutorial_HelpPlate_Hide()\n/run RayUITutorialButtonClose:Hide()\n/run UIFrameFadeOut(RayUITutorialBG, 0.3, 0.5, 0)\n/run RayUI[1].global.Tutorial.tutorialdone = true")
