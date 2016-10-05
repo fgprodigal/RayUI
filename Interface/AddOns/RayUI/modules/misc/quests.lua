@@ -2,80 +2,141 @@
 local M = R:GetModule("Misc")
 local mod = M:NewModule("Quest", "AceEvent-3.0", "AceHook-3.0")
 
-function mod:QuestLogQuests_Update()
-	if ENABLE_COLORBLIND_MODE == "1" then return end
-	local numEntries, numQuests = GetNumQuestLogEntries()
-	local titleIndex = 1
+--Cache global variables
+--Lua functions
+local _G = _G
+local string, unpack, select, table = string, unpack, select, table
+local tonumber, pairs = tonumber, pairs
 
-	for i = 1, numEntries do
-		local title, level, suggestedGroup, isHeader, isCollapsed, isComplete, frequency, questID, startEvent, displayQuestID, isOnMap, hasLocalPOI, isTask, isStory = GetQuestLogTitle(i)
-		local titleButton = QuestLogQuests_GetTitleButton(titleIndex)
-		if title and (not isHeader) and titleButton.questID == questID then
-			titleButton.Text:SetText("[" .. level .. "] " .. title)
-			titleButton.Check:SetPoint("LEFT", titleButton.Text, titleButton.Text:GetWrappedWidth() + 2, 0);
-			titleIndex = titleIndex + 1
-		end
-	end
+--WoW API / Variables
+local CreateFrame = CreateFrame
+local GetNumQuestLogEntries = GetNumQuestLogEntries
+local GetQuestLogTitle = GetQuestLogTitle
+local QuestLogQuests_GetTitleButton = QuestLogQuests_GetTitleButton
+local AcceptQuest = AcceptQuest
+local GetNumAutoQuestPopUps = GetNumAutoQuestPopUps
+local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
+local C_Timer = C_Timer
+local QuestInfoDescriptionText = QuestInfoDescriptionText
+local IsShiftKeyDown = IsShiftKeyDown
+local GetNumTrackingTypes = GetNumTrackingTypes
+local GetTrackingInfo = GetTrackingInfo
+local UnitGUID = UnitGUID
+local GetNumActiveQuests = GetNumActiveQuests
+local GetActiveTitle = GetActiveTitle
+local SelectActiveQuest = SelectActiveQuest
+local GetNumAvailableQuests = GetNumAvailableQuests
+local IsAvailableQuestTrivial = IsAvailableQuestTrivial
+local SelectAvailableQuest = SelectAvailableQuest
+local GetGossipActiveQuests = GetGossipActiveQuests
+local GetGossipAvailableQuests = GetGossipAvailableQuests
+local GetNumGossipActiveQuests = GetNumGossipActiveQuests
+local SelectGossipActiveQuest = SelectGossipActiveQuest
+local GetNumGossipAvailableQuests = GetNumGossipAvailableQuests
+local SelectGossipAvailableQuest = SelectGossipAvailableQuest
+local GetNumGossipOptions = GetNumGossipOptions
+local SelectGossipOption = SelectGossipOption
+local GetInstanceInfo = GetInstanceInfo
+local GetGossipOptions = GetGossipOptions
+local StaticPopup_Hide = StaticPopup_Hide
+local QuestGetAutoAccept = QuestGetAutoAccept
+local CloseQuest = CloseQuest
+local IsQuestCompletable = IsQuestCompletable
+local GetNumQuestItems = GetNumQuestItems
+local GetQuestItemLink = GetQuestItemLink
+local CompleteQuest = CompleteQuest
+local GetNumQuestChoices = GetNumQuestChoices
+local GetQuestReward = GetQuestReward
+local GetItemInfo = GetItemInfo
+local GetQuestItemInfo = GetQuestItemInfo
+local QuestInfoRewardsFrame = QuestInfoRewardsFrame
+local GetAutoQuestPopUp = GetAutoQuestPopUp
+local GetQuestLogIndexByID = GetQuestLogIndexByID
+local ShowQuestComplete = ShowQuestComplete
+local GetContainerNumSlots = GetContainerNumSlots
+local GetContainerItemQuestInfo = GetContainerItemQuestInfo
+local IsQuestFlaggedCompleted = IsQuestFlaggedCompleted
+local UnitLevel = UnitLevel
+local UseContainerItem = UseContainerItem
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: ENABLE_COLORBLIND_MODE, ITEM_MIN_LEVEL, ERR_QUEST_ALREADY_DONE, ERR_QUEST_FAILED_LOW_LEVEL
+-- GLOBALS: ERR_QUEST_NEED_PREREQS, MINIMAP_TRACKING_TRIVIAL_QUESTS, QuestFrame
+
+function mod:QuestLogQuests_Update()
+    if ENABLE_COLORBLIND_MODE == "1" then return end
+    local numEntries, numQuests = GetNumQuestLogEntries()
+    local titleIndex = 1
+
+    for i = 1, numEntries do
+        local title, level, suggestedGroup, isHeader, isCollapsed, isComplete, frequency, questID, startEvent, displayQuestID, isOnMap, hasLocalPOI, isTask, isStory = GetQuestLogTitle(i)
+        local titleButton = QuestLogQuests_GetTitleButton(titleIndex)
+        if title and (not isHeader) and titleButton.questID == questID then
+            titleButton.Text:SetText("[" .. level .. "] " .. title)
+            titleButton.Check:SetPoint("LEFT", titleButton.Text, titleButton.Text:GetWrappedWidth() + 2, 0);
+            titleIndex = titleIndex + 1
+        end
+    end
 end
 
 function mod:Initialize()
-	self:SecureHook("QuestLogQuests_Update")
+    self:SecureHook("QuestLogQuests_Update")
 
-	if not M.db.quest then return end
+    if not M.db.quest then return end
     local QuickQuest = CreateFrame("Frame")
     QuickQuest:SetScript("OnEvent", function(self, event, ...) self[event](...) end)
 
-	local DelayHandler
-	do
-		local currentInfo = {}
+    local DelayHandler
+    do
+        local currentInfo = {}
 
-		local function TimerCallback()
-			DelayHandler(unpack(currentInfo))
-		end
+        local function TimerCallback()
+            DelayHandler(unpack(currentInfo))
+        end
 
-		local delayed = true
-		function DelayHandler(func, ...)
-			if(delayed) then
-				delayed = false
+        local delayed = true
+        function DelayHandler(func, ...)
+            if(delayed) then
+                delayed = false
 
-				table.wipe(currentInfo)
-				table.insert(currentInfo, func)
+                table.wipe(currentInfo)
+                table.insert(currentInfo, func)
 
-				for index = 1, select("#", ...) do
-					local argument = select(index, ...)
-					table.insert(currentInfo, argument)
-				end
+                for index = 1, select("#", ...) do
+                    local argument = select(index, ...)
+                    table.insert(currentInfo, argument)
+                end
 
-				C_Timer.After(1, TimerCallback)
-			else
-				delayed = true
-				func(...)
-			end
-		end
-	end
+                C_Timer.After(1, TimerCallback)
+            else
+                delayed = true
+                func(...)
+            end
+        end
+    end
 
     local atBank, atMail, atMerchant
-	local choiceQueue, autoCompleteIndex
+    local choiceQueue, autoCompleteIndex
 
-	local delayEvent = {
-		GOSSIP_SHOW = true,
-		GOSSIP_CONFIRM = true,
-		QUEST_GREETING = true,
-		QUEST_DETAIL = true,
-		QUEST_ACCEPT_CONFIRM = true,
-		QUEST_PROGRESS = true,
-		QUEST_AUTOCOMPLETE = true,
-	}
+    local delayEvent = {
+        GOSSIP_SHOW = true,
+        GOSSIP_CONFIRM = true,
+        QUEST_GREETING = true,
+        QUEST_DETAIL = true,
+        QUEST_ACCEPT_CONFIRM = true,
+        QUEST_PROGRESS = true,
+        QUEST_AUTOCOMPLETE = true,
+    }
 
     function QuickQuest:Register(event, func, override)
         self:RegisterEvent(event)
         self[event] = function(...)
             if (override or (not IsShiftKeyDown() and M.db.automation)) then
                 if delayEvent[event] then
-					DelayHandler(func, ...)
-				else
-					func(...)
-				end
+                    DelayHandler(func, ...)
+                else
+                    func(...)
+                end
             end
         end
     end
@@ -89,40 +150,40 @@ function mod:Initialize()
         end
     end
 
-	local function GetNPCID()
-		return tonumber(string.match(UnitGUID("npc") or "", "Creature%-.-%-.-%-.-%-.-%-(.-)%-"))
-	end
+    local function GetNPCID()
+        return tonumber(string.match(UnitGUID("npc") or "", "Creature%-.-%-.-%-.-%-.-%-(.-)%-"))
+    end
 
-	local ignoreQuestNPC = {
-		[88570] = true, -- Fate-Twister Tiklal
-		[87391] = true, -- Fate-Twister Seress
-	}
+    local ignoreQuestNPC = {
+        [88570] = true, -- Fate-Twister Tiklal
+        [87391] = true, -- Fate-Twister Seress
+    }
 
     QuickQuest:Register("QUEST_GREETING", function()
-		local npcID = GetNPCID()
-		if(ignoreQuestNPC[npcID]) then
-			return
-		end
+            local npcID = GetNPCID()
+            if(ignoreQuestNPC[npcID]) then
+                return
+            end
 
-        local active = GetNumActiveQuests()
-        if(active > 0) then
-            for index = 1, active do
-                local _, complete = GetActiveTitle(index)
-                if(complete) then
-                    SelectActiveQuest(index)
+            local active = GetNumActiveQuests()
+            if(active > 0) then
+                for index = 1, active do
+                    local _, complete = GetActiveTitle(index)
+                    if(complete) then
+                        SelectActiveQuest(index)
+                    end
                 end
             end
-        end
 
-        local available = GetNumAvailableQuests()
-        if(available > 0) then
-            for index = 1, available do
-                if(not IsAvailableQuestTrivial(index) or IsTrackingTrivial()) then
-                    SelectAvailableQuest(index)
+            local available = GetNumAvailableQuests()
+            if(available > 0) then
+                for index = 1, available do
+                    if(not IsAvailableQuestTrivial(index) or IsTrackingTrivial()) then
+                        SelectAvailableQuest(index)
+                    end
                 end
             end
-        end
-    end)
+        end)
 
     -- This should be part of the API, really
     local function IsGossipQuestCompleted(index)
@@ -133,58 +194,58 @@ function mod:Initialize()
         return not not select(((index * 6) - 6) + 3, GetGossipAvailableQuests())
     end
 
-	local ignoreGossipNPC = {
-		-- Bodyguards
-		[86945] = true, -- Aeda Brightdawn (Horde)
-		[86933] = true, -- Vivianne (Horde)
-		[86927] = true, -- Delvar Ironfist (Alliance)
-		[86934] = true, -- Defender Illona (Alliance)
-		[86682] = true, -- Tormmok
-		[86964] = true, -- Leorajh
-		[86946] = true, -- Talonpriest Ishaal
+    local ignoreGossipNPC = {
+        -- Bodyguards
+        [86945] = true, -- Aeda Brightdawn (Horde)
+        [86933] = true, -- Vivianne (Horde)
+        [86927] = true, -- Delvar Ironfist (Alliance)
+        [86934] = true, -- Defender Illona (Alliance)
+        [86682] = true, -- Tormmok
+        [86964] = true, -- Leorajh
+        [86946] = true, -- Talonpriest Ishaal
 
-		-- Misc NPCs
-		[79740] = true, -- Warmaster Zog (Horde)
-		[79953] = true, -- Lieutenant Thorn (Alliance)
-	}
+        -- Misc NPCs
+        [79740] = true, -- Warmaster Zog (Horde)
+        [79953] = true, -- Lieutenant Thorn (Alliance)
+    }
 
     QuickQuest:Register("GOSSIP_SHOW", function()
-        local active = GetNumGossipActiveQuests()
-        if(active > 0) then
-            for index = 1, active do
-                if(IsGossipQuestCompleted(index)) then
-                    SelectGossipActiveQuest(index)
+            local active = GetNumGossipActiveQuests()
+            if(active > 0) then
+                for index = 1, active do
+                    if(IsGossipQuestCompleted(index)) then
+                        SelectGossipActiveQuest(index)
+                    end
                 end
             end
-        end
 
-        local available = GetNumGossipAvailableQuests()
-        if(available > 0) then
-            for index = 1, available do
-                if(not IsGossipQuestTrivial(index) or IsTrackingTrivial()) then
-                    SelectGossipAvailableQuest(index)
+            local available = GetNumGossipAvailableQuests()
+            if(available > 0) then
+                for index = 1, available do
+                    if(not IsGossipQuestTrivial(index) or IsTrackingTrivial()) then
+                        SelectGossipAvailableQuest(index)
+                    end
                 end
             end
-        end
 
-		if(available == 0 and active == 0 and GetNumGossipOptions() == 1) then
-			local npcID = GetNPCID()
-			if(npcID == 57850) then
-				return SelectGossipOption(1)
-			end
+            if(available == 0 and active == 0 and GetNumGossipOptions() == 1) then
+                local npcID = GetNPCID()
+                if(npcID == 57850) then
+                    return SelectGossipOption(1)
+                end
 
-			local _, instance = GetInstanceInfo()
-			if instance ~= "raid" then
-				local _, type = GetGossipOptions()
-				if type == "gossip" and not ignoreGossipNPC[npcID] then
-					SelectGossipOption(1)
-					return
-				end
-			end
-		end
-    end)
+                local _, instance = GetInstanceInfo()
+                if instance ~= "raid" then
+                    local _, type = GetGossipOptions()
+                    if type == "gossip" and not ignoreGossipNPC[npcID] then
+                        SelectGossipOption(1)
+                        return
+                    end
+                end
+            end
+        end)
 
-	local ignoredItems = {
+    local ignoredItems = {
         -- Inscription weapons
         [31690] = true, -- Inscribed Tiger Staff
         [31691] = true, -- Inscribed Crane Staff
@@ -202,174 +263,174 @@ function mod:Initialize()
         [29464] = true, -- Soothsayer's Runes
     }
 
-	local darkmoonNPC = {
-		[57850] = true, -- Teleportologist Fozlebub
-		[55382] = true, -- Darkmoon Faire Mystic Mage (Horde)
-		[54334] = true, -- Darkmoon Faire Mystic Mage (Alliance)
-	}
+    local darkmoonNPC = {
+        [57850] = true, -- Teleportologist Fozlebub
+        [55382] = true, -- Darkmoon Faire Mystic Mage (Horde)
+        [54334] = true, -- Darkmoon Faire Mystic Mage (Alliance)
+    }
 
     QuickQuest:Register("GOSSIP_CONFIRM", function(index)
-		local npcID = GetNPCID()
+            local npcID = GetNPCID()
 
-        if(npcID and darkmoonNPC[npcID]) then
-            SelectGossipOption(index, "", true)
-            StaticPopup_Hide("GOSSIP_CONFIRM")
-        end
-    end)
+            if(npcID and darkmoonNPC[npcID]) then
+                SelectGossipOption(index, "", true)
+                StaticPopup_Hide("GOSSIP_CONFIRM")
+            end
+        end)
 
     QuickQuest:Register("QUEST_DETAIL", function()
-        if(not QuestGetAutoAccept()) then
-			AcceptQuest()
-		end
-    end)
+            if(not QuestGetAutoAccept()) then
+                AcceptQuest()
+            end
+        end)
 
     QuickQuest:Register("QUEST_ACCEPT_CONFIRM", AcceptQuest)
 
     QuickQuest:Register("QUEST_ACCEPTED", function(id)
-        if(QuestFrame:IsShown() and QuestGetAutoAccept()) then
-			CloseQuest()
-		end
-    end)
+            if(QuestFrame:IsShown() and QuestGetAutoAccept()) then
+                CloseQuest()
+            end
+        end)
 
     local choiceQueue
     QuickQuest:Register("QUEST_ITEM_UPDATE", function(...)
-        if(choiceQueue and QuickQuest[choiceQueue]) then
-			QuickQuest[choiceQueue]()
-		end
-    end)
+            if(choiceQueue and QuickQuest[choiceQueue]) then
+                QuickQuest[choiceQueue]()
+            end
+        end)
 
-	QuickQuest:Register("QUEST_PROGRESS", function()
-        if(IsQuestCompletable()) then
-			local requiredItems = GetNumQuestItems()
-			if(requiredItems > 0) then
-				for index = 1, requiredItems do
-					local link = GetQuestItemLink("required", index)
-					if(link) then
-						local id = tonumber(string.match(link, "item:(%d+)"))
-						for _, itemID in pairs(ignoredItems) do
-							if(itemID == id) then
-								return
-							end
-						end
-					else
-						choiceQueue = "QUEST_PROGRESS"
-						return
-					end
-				end
-			end
+    QuickQuest:Register("QUEST_PROGRESS", function()
+            if(IsQuestCompletable()) then
+                local requiredItems = GetNumQuestItems()
+                if(requiredItems > 0) then
+                    for index = 1, requiredItems do
+                        local link = GetQuestItemLink("required", index)
+                        if(link) then
+                            local id = tonumber(string.match(link, "item:(%d+)"))
+                            for _, itemID in pairs(ignoredItems) do
+                                if(itemID == id) then
+                                    return
+                                end
+                            end
+                        else
+                            choiceQueue = "QUEST_PROGRESS"
+                            return
+                        end
+                    end
+                end
 
-			CompleteQuest()
-		end
-    end)
+                CompleteQuest()
+            end
+        end)
 
-	local cashRewards = {
-		[45724] = 1e5, -- Champion's Purse
-		[64491] = 2e6, -- Royal Reward
-	}
+    local cashRewards = {
+        [45724] = 1e5, -- Champion's Purse
+        [64491] = 2e6, -- Royal Reward
+    }
 
     QuickQuest:Register("QUEST_COMPLETE", function()
-		local choices = GetNumQuestChoices()
-		if(choices <= 1) then
-			GetQuestReward(1)
-		elseif(choices > 1) then
-			local bestValue, bestIndex = 0
+            local choices = GetNumQuestChoices()
+            if(choices <= 1) then
+                GetQuestReward(1)
+            elseif(choices > 1) then
+                local bestValue, bestIndex = 0
 
-			for index = 1, choices do
-				local link = GetQuestItemLink("choice", index)
-				if(link) then
-					local _, _, _, _, _, _, _, _, _, _, value = GetItemInfo(link)
-					value = cashRewards[tonumber(string.match(link, "item:(%d+):"))] or value
+                for index = 1, choices do
+                    local link = GetQuestItemLink("choice", index)
+                    if(link) then
+                        local _, _, _, _, _, _, _, _, _, _, value = GetItemInfo(link)
+                        value = cashRewards[tonumber(string.match(link, "item:(%d+):"))] or value
 
-					if(value > bestValue) then
-						bestValue, bestIndex = value, index
-					end
-				else
-					choiceQueue = "QUEST_COMPLETE"
-					return GetQuestItemInfo("choice", index)
-				end
-			end
+                        if(value > bestValue) then
+                            bestValue, bestIndex = value, index
+                        end
+                    else
+                        choiceQueue = "QUEST_COMPLETE"
+                        return GetQuestItemInfo("choice", index)
+                    end
+                end
 
-			if(bestIndex) then
-				QuestInfoRewardsFrame.RewardButtons[bestIndex]:Click()
-			end
-		end
-	end)
+                if(bestIndex) then
+                    QuestInfoRewardsFrame.RewardButtons[bestIndex]:Click()
+                end
+            end
+        end)
 
     QuickQuest:Register("QUEST_FINISHED", function()
-        choiceQueue = nil
-		autoCompleteIndex = nil
+            choiceQueue = nil
+            autoCompleteIndex = nil
 
-		if(GetNumAutoQuestPopUps() > 0) then
-			QuickQuest:QUEST_AUTOCOMPLETE()
-		end
-    end)
+            if(GetNumAutoQuestPopUps() > 0) then
+                QuickQuest:QUEST_AUTOCOMPLETE()
+            end
+        end)
 
     QuickQuest:Register("QUEST_AUTOCOMPLETE", function(id)
-        while(not autoCompleteIndex and GetNumAutoQuestPopUps() > 0) do
-			local id, type = GetAutoQuestPopUp(1)
-			if(type == "COMPLETE") then
-				local index = GetQuestLogIndexByID(id)
-				ShowQuestComplete(index)
-				autoCompleteIndex = index
-			else
-				return
-			end
-		end
-    end)
+            while(not autoCompleteIndex and GetNumAutoQuestPopUps() > 0) do
+                local id, type = GetAutoQuestPopUp(1)
+                if(type == "COMPLETE") then
+                    local index = GetQuestLogIndexByID(id)
+                    ShowQuestComplete(index)
+                    autoCompleteIndex = index
+                else
+                    return
+                end
+            end
+        end)
 
-	QuickQuest:Register("BAG_UPDATE_DELAYED", function()
-		if(autoCompleteIndex) then
-			ShowQuestComplete(autoCompleteIndex)
-			autoCompleteIndex = nil
-		end
-	end)
+    QuickQuest:Register("BAG_UPDATE_DELAYED", function()
+            if(autoCompleteIndex) then
+                ShowQuestComplete(autoCompleteIndex)
+                autoCompleteIndex = nil
+            end
+        end)
 
     QuickQuest:Register("MERCHANT_SHOW", function()
-        atMerchant = true
-    end)
+            atMerchant = true
+        end)
 
     QuickQuest:Register("MERCHANT_CLOSED", function()
-        atMerchant = false
-    end)
+            atMerchant = false
+        end)
 
     QuickQuest:Register("BANKFRAME_OPENED", function()
-        atBank = true
-    end)
+            atBank = true
+        end)
 
     QuickQuest:Register("BANKFRAME_CLOSED", function()
-        atBank = false
-    end)
+            atBank = false
+        end)
 
     QuickQuest:Register("GUILDBANKFRAME_OPENED", function()
-        atBank = true
-    end)
+            atBank = true
+        end)
 
     QuickQuest:Register("GUILDBANKFRAME_CLOSED", function()
-        atBank = false
-    end)
+            atBank = false
+        end)
 
     QuickQuest:Register("MAIL_SHOW", function()
-        atMail = true
-    end)
+            atMail = true
+        end)
 
     QuickQuest:Register("MAIL_CLOSED", function()
-        atMail = false
-    end)
+            atMail = false
+        end)
 
-	local questTip = CreateFrame("GameTooltip", "QuickQuestTip", R.UIParent, "GameTooltipTemplate")
-	local questLevel = string.gsub(ITEM_MIN_LEVEL, "%%d", "(%%d+)")
+    local questTip = CreateFrame("GameTooltip", "QuickQuestTip", R.UIParent, "GameTooltipTemplate")
+    local questLevel = string.gsub(ITEM_MIN_LEVEL, "%%d", "(%%d+)")
 
-	local function GetQuestItemLevel()
-		for index = 1, questTip:NumLines() do
-			local level = tonumber(string.match(_G["QuickQuestTipTextLeft" .. index]:GetText(), questLevel))
-			if(level) then
-				return tonumber(level)
-			end
-		end
-	end
+    local function GetQuestItemLevel()
+        for index = 1, questTip:NumLines() do
+            local level = tonumber(string.match(_G["QuickQuestTipTextLeft" .. index]:GetText(), questLevel))
+            if(level) then
+                return tonumber(level)
+            end
+        end
+    end
 
-	local function BagUpdate(bag)
-		if(atBank or atMail or atMerchant) then return end
+    local function BagUpdate(bag)
+        if(atBank or atMail or atMerchant) then return end
 
         for slot = 1, GetContainerNumSlots(bag) do
             local _, id, active = GetContainerItemQuestInfo(bag, slot)
@@ -377,24 +438,24 @@ function mod:Initialize()
                 questTip:SetOwner(R.UIParent, "ANCHOR_NONE")
                 questTip:ClearLines()
                 questTip:SetBagItem(bag, slot)
-				questTip:Show()
+                questTip:Show()
 
-				local level = GetQuestItemLevel()
-				questTip:Hide()
-				if(not level or level <= UnitLevel("player")) then
-					UseContainerItem(bag, slot)
-				end
+                local level = GetQuestItemLevel()
+                questTip:Hide()
+                if(not level or level <= UnitLevel("player")) then
+                    UseContainerItem(bag, slot)
+                end
             end
         end
-	end
+    end
 
     QuickQuest:Register("PLAYER_LOGIN", function()
-		QuickQuest:Register("BAG_UPDATE", BagUpdate)
+            QuickQuest:Register("BAG_UPDATE", BagUpdate)
 
-		if(GetNumAutoQuestPopUps() > 0) then
-			QuickQuest:QUEST_AUTOCOMPLETE()
-		end
-	end)
+            if(GetNumAutoQuestPopUps() > 0) then
+                QuickQuest:QUEST_AUTOCOMPLETE()
+            end
+        end)
 
     local errors = {
         [ERR_QUEST_ALREADY_DONE] = true,
@@ -403,10 +464,10 @@ function mod:Initialize()
     }
 
     ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", function(self, event, message)
-        if M.db.automation then
-            return errors[message]
-        end
-    end)
+            if M.db.automation then
+                return errors[message]
+            end
+        end)
 
     QuestInfoDescriptionText.SetAlphaGradient = function() return false end
 end

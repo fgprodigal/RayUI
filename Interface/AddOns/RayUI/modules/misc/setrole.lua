@@ -3,37 +3,49 @@ local M = R:GetModule("Misc")
 local mod = M:NewModule("SetRole", "AceEvent-3.0")
 local S = R:GetModule("Skins")
 
+--Cache global variables
+--Lua functions
+--WoW API / Variables
+local GetSpecialization = GetSpecialization
+local InCombatLockdown = InCombatLockdown
+local UnitLevel = UnitLevel
+local UnitGroupRolesAssigned = UnitGroupRolesAssigned
+local UnitSetRole = UnitSetRole
+local GetNumGroupMembers = GetNumGroupMembers
+local RolePollPopup = RolePollPopup
+local StaticPopupSpecial_Hide = StaticPopupSpecial_Hide
+
 local t = {
-	["Melee"] = "DAMAGER",
-	["Caster"] = "DAMAGER",
-	["Tank"] = "TANK",
+    ["Melee"] = "DAMAGER",
+    ["Caster"] = "DAMAGER",
+    ["Tank"] = "TANK",
 }
 
 function mod:SetRole()
-	local spec = GetSpecialization()
-	if UnitLevel("player") >= 10 and not InCombatLockdown() then
-		if spec == nil and UnitGroupRolesAssigned("player") ~= "NONE" then
-			UnitSetRole("player", "NONE")
-		elseif spec ~= nil then
-			if GetNumGroupMembers() > 0 then
-				if R.isHealer then
-					if UnitGroupRolesAssigned("player") ~= "HEALER" then
-						UnitSetRole("player", "HEALER")
-					end
-				else
-					if UnitGroupRolesAssigned("player") ~= t[R.Role] then
-						UnitSetRole("player", t[R.Role])
-					end
-				end
-			end
-		end
-	end
+    local spec = GetSpecialization()
+    if UnitLevel("player") >= 10 and not InCombatLockdown() then
+        if spec == nil and UnitGroupRolesAssigned("player") ~= "NONE" then
+            UnitSetRole("player", "NONE")
+        elseif spec ~= nil then
+            if GetNumGroupMembers() > 0 then
+                if R.isHealer then
+                    if UnitGroupRolesAssigned("player") ~= "HEALER" then
+                        UnitSetRole("player", "HEALER")
+                    end
+                else
+                    if UnitGroupRolesAssigned("player") ~= t[R.Role] then
+                        UnitSetRole("player", t[R.Role])
+                    end
+                end
+            end
+        end
+    end
 end
 
 function mod:Initialize()
-	R.RegisterCallback(mod, "RoleChanged", "SetRole")
-	self:RegisterEvent("GROUP_ROSTER_UPDATE", "SetRole")
-	RolePollPopup:SetScript("OnShow", function() StaticPopupSpecial_Hide(RolePollPopup) end)
+    R.RegisterCallback(mod, "RoleChanged", "SetRole")
+    self:RegisterEvent("GROUP_ROSTER_UPDATE", "SetRole")
+    RolePollPopup:SetScript("OnShow", function() StaticPopupSpecial_Hide(RolePollPopup) end)
 end
 
 M:RegisterMiscModule(mod:GetName())
