@@ -2,6 +2,38 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local NF = R:NewModule("Notification", "AceEvent-3.0", "AceHook-3.0")
 
+--Cache global variables
+--Lua functions
+local select, unpack, type = select, unpack, type
+local table = table
+local tinsert = table.insert
+local floor = math.floor
+local format = string.format
+
+--WoW API / Variables
+local CreateFrame = CreateFrame
+local UnitIsAFK = UnitIsAFK
+local GetScreenWidth = GetScreenWidth
+local IsShiftKeyDown = IsShiftKeyDown
+local HasNewMail = HasNewMail
+local GetInventoryItemLink = GetInventoryItemLink
+local GetInventoryItemDurability = GetInventoryItemDurability
+local CalendarGetDate = CalendarGetDate
+local CalendarGetNumGuildEvents = CalendarGetNumGuildEvents
+local CalendarGetGuildEventInfo = CalendarGetGuildEventInfo
+local CalendarGetNumDayEvents = CalendarGetNumDayEvents
+local CalendarGetDayEvent = CalendarGetDayEvent
+local LoadAddOn = LoadAddOn
+local Calendar_Toggle = Calendar_Toggle
+local CalendarGetNumPendingInvites = CalendarGetNumPendingInvites
+local C_Vignettes = C_Vignettes
+local PlaySoundFile = PlaySoundFile
+local PlaySound = PlaySound
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: SLASH_TESTNOTIFICATION1, MAIL_LABEL, HAVE_MAIL, MINIMAP_TRACKING_REPAIR, CalendarFrame
+-- GLOBALS: CALENDAR
+
 local f
 local playSounds = true
 local animations = true
@@ -168,7 +200,7 @@ end
 -- Test function
 
 local function testCallback()
-	print("Banner clicked!")
+	R:Print("Banner clicked!")
 end
 
 SlashCmdList.TESTNOTIFICATION = function(b)
