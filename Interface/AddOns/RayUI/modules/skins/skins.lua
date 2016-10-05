@@ -1,6 +1,17 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local S = R:NewModule("Skins", "AceEvent-3.0")
 local LSM = LibStub("LibSharedMedia-3.0")
+
+--Cache global variables
+--Lua functions
+local _G = _G
+local select, unpack, assert, pairs, type = select, unpack, assert, pairs, type
+local tinsert = table.insert
+
+--WoW API / Variables
+local CreateFrame = CreateFrame
+local IsAddOnLoaded = IsAddOnLoaded
+
 S.modName = L["插件美化"]
 
 S.allowBypass = {}
@@ -417,7 +428,7 @@ function S:ReskinScroll(f)
 				dis2:SetVertexColor(0, 0, 0, .3)
 				dis2:SetDrawLayer("OVERLAY")
 			end
-			
+
 			if f.thumbTexture then
 				local bu = f.thumbTexture
 				bu:SetAlpha(0)
@@ -841,7 +852,7 @@ function S:AddCallbackForAddon(addonName, eventName, loadFunc, forceLoad, bypass
 	if not self.addonCallbacks[addonName] then
 		self.addonCallbacks[addonName] = {}
 	end
-	
+
 	if self.addonCallbacks[addonName][eventName] then
 		--Don't allow a registered callback to be overwritten
 		R:Print("Invalid argument #2 to S:AddCallbackForAddon (event name is already registered, please use a unique event name)")
