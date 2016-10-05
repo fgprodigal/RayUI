@@ -8,10 +8,12 @@ local ipairs = ipairs
 --WoW API / Variables
 local GetCVar = GetCVar
 local GetRealZoneText = GetRealZoneText
-local GuildRosterContainer = GuildRosterContainer
 local GetGuildTradeSkillInfo = GetGuildTradeSkillInfo
 local GetGuildRosterInfo = GetGuildRosterInfo
 local hooksecurefunc = hooksecurefunc
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: GuildRosterContainer
 
 local _VIEW
 
@@ -20,7 +22,7 @@ local function setview(view)
 end
 
 local function update()
-    _VIEW = _VIEW or GetCVar'guildRosterView'
+    _VIEW = _VIEW or GetCVar('guildRosterView')
     local playerArea = GetRealZoneText()
     local buttons = GuildRosterContainer.buttons
 

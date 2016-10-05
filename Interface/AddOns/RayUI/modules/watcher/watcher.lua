@@ -174,7 +174,7 @@ end
 function watcherPrototype:UpdateButton(button, index, icon, count, duration, expires, spellID, unitID, filter, value)
     button.icon:SetTexture(icon)
     button.count:SetText(count > 1 and count or "")
-    button.value:SetText((value and value > 1) and value or "")
+    button.value:SetText((value and value > 1) and R:ShortValue(value) or "")
     if button.cooldown then
         if filter:find("CD") then
             button.cooldown:SetReverse(false)
