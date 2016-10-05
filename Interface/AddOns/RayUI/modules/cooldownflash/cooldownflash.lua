@@ -2,8 +2,34 @@ local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, 
 local CF = R:NewModule("CooldownFlash", "AceEvent-3.0", "AceHook-3.0")
 CF.modName = L["中部冷却闪光"]
 
-local cooldowns, animating, watching = { }, { }, { }
+--Cache global variables
+--Lua functions
 local GetTime = GetTime
+local select, pairs, bit = select, pairs, bit
+local string = string
+local wipe = wipe
+local tinsert, tremove = table.insert, table.remove
+
+--WoW API / Variables
+local CreateFrame = CreateFrame
+local GetPetActionInfo = GetPetActionInfo
+local GetSpellInfo = GetSpellInfo
+local GetSpellTexture = GetSpellTexture
+local GetSpellCooldown = GetSpellCooldown
+local GetItemInfo = GetItemInfo
+local GetItemCooldown = GetItemCooldown
+local GetPetActionCooldown = GetPetActionCooldown
+local IsInInstance = IsInInstance
+local GetActionInfo = GetActionInfo
+local GetActionTexture = GetActionTexture
+local GetInventoryItemID = GetInventoryItemID
+local GetInventoryItemTexture = GetInventoryItemTexture
+local GetContainerItemID = GetContainerItemID
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: NUM_PET_ACTION_SLOTS, COMBATLOG_OBJECT_TYPE_PET, COMBATLOG_OBJECT_AFFILIATION_MINE
+
+local cooldowns, animating, watching = { }, { }, { }
 local testtable
 
 local DCP = CreateFrame("frame", nil, R.UIParent)
@@ -74,7 +100,7 @@ local function OnUpdate(_,update)
             end
         end
         for i,v in pairs(cooldowns) do
-            local start, duration, remaining
+            local start, duration, remaining, enabled
             if (v[7] == "spell") then
                 start, duration = GetSpellCooldown(v[6])
             elseif (v[7] == "item") then
