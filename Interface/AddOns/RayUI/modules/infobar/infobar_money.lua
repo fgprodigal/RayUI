@@ -5,7 +5,7 @@ local IF = R:GetModule("InfoBar")
 --Lua functions
 local select, pairs, table, unpack = select, pairs, table, unpack
 local string, math = string, math
-local floor, mod = math.floor, math.mod
+local floor, mod = math.floor, mod
 local format = string.format
 local tinsert = table.insert
 
