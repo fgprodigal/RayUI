@@ -3,33 +3,61 @@
 local _, ns = ...
 local oUF = RayUF or oUF
 
-local utf8sub = function(string, i, dots)
-	local bytes = string:len()
-	if (bytes <= i) then
-		return string
-	else
-		local len, pos = 0, 1
-		while(pos <= bytes) do
-			len = len + 1
-			local c = string:byte(pos)
-			if c > 240 then
-				pos = pos + 4
-			elseif c > 225 then
-				pos = pos + 3
-			elseif c > 192 then
-				pos = pos + 2
-			else
-				pos = pos + 1
-			end
-			if (len == i) then break end
-		end
+--Cache global variables
+--Lua functions
+local type, unpack, math = type, unpack, math
+local format = string.format
+local floor = math.floor
 
-		if (len == i and pos <= bytes) then
-			return string:sub(1, pos - 1)..(dots and "..." or "")
-		else
-			return string
-		end
-	end
+--WoW API / Variables
+local UnitLevel = UnitLevel
+local UnitClassification = UnitClassification
+local GetQuestDifficultyColor = GetQuestDifficultyColor
+local UnitIsPlayer = UnitIsPlayer
+local UnitClass = UnitClass
+local UnitIsTapDenied = UnitIsTapDenied
+local UnitIsEnemy = UnitIsEnemy
+local UnitReaction = UnitReaction
+local UnitHealth = UnitHealth
+local UnitHealthMax = UnitHealthMax
+local UnitPowerType = UnitPowerType
+local UnitPower = UnitPower
+local UnitPowerMax = UnitPowerMax
+local UnitName = UnitName
+local UnitIsDead = UnitIsDead
+local UnitIsGhost = UnitIsGhost
+local UnitIsConnected = UnitIsConnected
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: ALTERNATE_POWER_INDEX, DEAD
+
+local utf8sub = function(string, i, dots)
+    local bytes = string:len()
+    if (bytes <= i) then
+        return string
+    else
+        local len, pos = 0, 1
+        while(pos <= bytes) do
+            len = len + 1
+            local c = string:byte(pos)
+            if c > 240 then
+                pos = pos + 4
+            elseif c > 225 then
+                pos = pos + 3
+            elseif c > 192 then
+                pos = pos + 2
+            else
+                pos = pos + 1
+            end
+            if (len == i) then break end
+        end
+
+        if (len == i and pos <= bytes) then
+            return string:sub(1, pos - 1)..(dots and "..." or "")
+        else
+            return string
+        end
+    end
 end
 
 local function hex(r, g, b)
@@ -41,13 +69,13 @@ local function hex(r, g, b)
     return ("|cff%02x%02x%02x"):format(r * 255, g * 255, b * 255)
 end
 
-oUF.Tags.Methods["RayUF:lvl"] = function(u) 
+oUF.Tags.Methods["RayUF:lvl"] = function(u)
     local level = UnitLevel(u)
     local typ = UnitClassification(u)
     local color = GetQuestDifficultyColor(level)
 
     if level <= 0 then
-        level = "??" 
+        level = "??"
         color.r, color.g, color.b = 1, 0, 0
     end
 
@@ -62,18 +90,18 @@ oUF.Tags.Methods["RayUF:lvl"] = function(u)
     end
 end
 
-oUF.Tags.Methods["RayUF:hp"]  = function(u)
-		local color
-		if UnitIsPlayer(u) then
-			local _, class = UnitClass(u)
-			color = oUF.colors.class[class]
-		elseif UnitIsTapDenied(u) then
-			color = oUF.colors.tapped
-		elseif UnitIsEnemy(u, "player") then
-			color = oUF.colors.reaction[1]
-		else
-			color = oUF.colors.reaction[UnitReaction(u, "player") or 5]
-		end
+oUF.Tags.Methods["RayUF:hp"] = function(u)
+    local color
+    if UnitIsPlayer(u) then
+        local _, class = UnitClass(u)
+        color = oUF.colors.class[class]
+    elseif UnitIsTapDenied(u) then
+        color = oUF.colors.tapped
+    elseif UnitIsEnemy(u, "player") then
+        color = oUF.colors.reaction[1]
+    else
+        color = oUF.colors.reaction[UnitReaction(u, "player") or 5]
+    end
     local min, max = UnitHealth(u), UnitHealthMax(u)
     -- return R:ShortValue(min).." | "..math.floor(min/max*100+.5).."%"
     return format("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(min).." | "..math.floor(min/max*100+.5).."%")
@@ -85,7 +113,7 @@ oUF.Tags.Methods["RayUF:pp"] = function(u)
     local power = UnitPower(u)
 
     if str and power > 0 then
-	local min, max = UnitPower(u), UnitPowerMax(u)
+        local min, max = UnitPower(u), UnitPowerMax(u)
         return hex(oUF.colors.power[str])..R:ShortValue(min).." | "..math.floor(min/max*100+.5).."%".."|r"
     end
 end
@@ -115,11 +143,11 @@ oUF.Tags.Events["RayUF:name"] = "UNIT_NAME_UPDATE"
 
 oUF.Tags.Methods["RayUF:info"] = function(u)
     if UnitIsDead(u) then
-        return oUF.Tags.Methods["RayUF:lvl"](u).."|cffCFCFCF 死亡|r"
+        return oUF.Tags.Methods["RayUF:lvl"](u).."|cffCFCFCF "..DEAD.."|r"
     elseif UnitIsGhost(u) then
-        return oUF.Tags.Methods["RayUF:lvl"](u).."|cffCFCFCF 靈魂|r"
+        return oUF.Tags.Methods["RayUF:lvl"](u).."|cffCFCFCF "..L["灵魂"].."|r"
     elseif not UnitIsConnected(u) then
-        return oUF.Tags.Methods["RayUF:lvl"](u).."|cffCFCFCF 離線|r"
+        return oUF.Tags.Methods["RayUF:lvl"](u).."|cffCFCFCF "..L["离线"].."|r"
     else
         return oUF.Tags.Methods["RayUF:lvl"](u)
     end
@@ -127,13 +155,13 @@ end
 oUF.Tags.Events["RayUF:info"] = "UNIT_HEALTH"
 
 oUF.Tags.Methods["RayUF:altpower"] = function(u)
-	local cur = UnitPower(u, ALTERNATE_POWER_INDEX)
-	local max = UnitPowerMax(u, ALTERNATE_POWER_INDEX)
-	local per = 0
-	if max ~= 0 then
-		per = floor(cur/max*100)
-	end
-    
+    local cur = UnitPower(u, ALTERNATE_POWER_INDEX)
+    local max = UnitPowerMax(u, ALTERNATE_POWER_INDEX)
+    local per = 0
+    if max ~= 0 then
+        per = floor(cur/max*100)
+    end
+
     return format("%d", per > 0 and per or 0).."%"
 end
 oUF.Tags.Events["RayUF:altpower"] = "UNIT_POWER UNIT_MAXPOWER"

@@ -3,6 +3,63 @@ local RC = LibStub("LibRangeCheck-2.0")
 local UF = R:GetModule("UnitFrames")
 local oUF = RayUF or oUF
 
+--Cache global variables
+--Lua functions
+local _G = _G
+local select, unpack, tonumber, pairs = select, unpack, tonumber, pairs
+local type, getfenv, setfenv = type, getfenv, setfenv
+local math, string = math, string
+local abs, floor = math.abs, math.floor
+local format = string.format
+local setmetatable = setmetatable
+local GetTime = GetTime
+
+--WoW API / Variables
+local CreateFrame = CreateFrame
+local ToggleDropDownMenu = ToggleDropDownMenu
+local RaidFrameDropDown_Initialize = RaidFrameDropDown_Initialize
+local GetNetStats = GetNetStats
+local UnitIsPlayer = UnitIsPlayer
+local UnitIsFriend = UnitIsFriend
+local UnitClass = UnitClass
+local UnitSpellHaste = UnitSpellHaste
+local UnitBuff = UnitBuff
+local UnitHealth = UnitHealth
+local UnitHealthMax = UnitHealthMax
+local UnitIsConnected = UnitIsConnected
+local UnitIsDeadOrGhost = UnitIsDeadOrGhost
+local UnitIsGhost = UnitIsGhost
+local UnitIsEnemy = UnitIsEnemy
+local UnitReaction = UnitReaction
+local UnitPowerType = UnitPowerType
+local UnitPower = UnitPower
+local UnitPowerMax = UnitPowerMax
+local UnitThreatSituation = UnitThreatSituation
+local GetThreatStatusColor = GetThreatStatusColor
+local UnitAlternatePowerInfo = UnitAlternatePowerInfo
+local UnitHasVehicleUI = UnitHasVehicleUI
+local UnitAura = UnitAura
+local GetEclipseDirection = GetEclipseDirection
+local GetSpecialization = GetSpecialization
+local IsSpellKnown = IsSpellKnown
+local UnitExists = UnitExists
+local UnitIsUnit = UnitIsUnit
+local IsShiftKeyDown = IsShiftKeyDown
+local GetNumArenaOpponentSpecs = GetNumArenaOpponentSpecs
+local GetArenaOpponentSpec = GetArenaOpponentSpec
+local GetSpecializationInfoByID = GetSpecializationInfoByID
+local UnitName = UnitName
+local InCombatLockdown = InCombatLockdown
+local UnregisterUnitWatch = UnregisterUnitWatch
+local RegisterUnitWatch = RegisterUnitWatch
+local RegisterAttributeDriver = RegisterAttributeDriver
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: SLASH_TestUF1, FriendsDropDown, INTERRUPT, SPELL_POWER_ECLIPSE, RayUF, PLAYER_OFFLINE
+-- GLOBALS: DEAD, MAX_COMBO_POINTS, DebuffTypeColor, SPELL_POWER_HOLY_POWER, SPELL_POWER_CHI
+-- GLOBALS: SPELL_POWER_DEMONIC_FURY, SPEC_WARLOCK_DEMONOLOGY, SHADOW_ORB_MINOR_TALENT_ID
+-- GLOBALS: LOCALIZED_CLASS_NAMES_MALE, CLASS_SORT_ORDER, RayUFRaid40_6, MAX_BOSS_FRAMES
+
 local function ColorGradient(perc, color1, color2, color3)
     local r1,g1,b1 = 1, 0, 0
     local r2,g2,b2 = .85, .8, .45
@@ -68,15 +125,15 @@ function UF:ConstructHealthBar(frame, bg, text)
 
     if self.db.healthColorClass ~= true then
         if self.db.smoothColor == true then
-        	health:SetStatusBarColor(.1, .1, .1)
+            health:SetStatusBarColor(.1, .1, .1)
         else
-			health.colorTapping = true
-        	health.colorClass = true
-        	health.colorReaction = true
-        	health.bg.multiplier = .8
+            health.colorTapping = true
+            health.colorClass = true
+            health.colorReaction = true
+            health.bg.multiplier = .8
         end
     else
-		health.colorTapping = true
+        health.colorTapping = true
         health.colorClass = true
         health.colorReaction = true
     end
@@ -130,7 +187,7 @@ function UF:ConstructPortrait(frame)
     -- portrait:Point("BOTTOMRIGHT", frame.Health, "BOTTOMRIGHT", 0, 1)
     portrait:SetInside(frame.Health, 1, 1)
     portrait:SetAlpha(.2)
-	portrait:SetCamDistanceScale(1)
+    portrait:SetCamDistanceScale(1)
     if frame.unit and frame.unit:find("boss") then
         portrait.PostUpdate = nil
     end
@@ -218,171 +275,189 @@ function UF:SetCastTicks(frame, numTicks, extraTick)
     extraTick = extraTick or 0
     UF:HideTicks(frame)
     if numTicks and numTicks <= 0 then return end;
-    local w = frame:GetWidth()
-    local d = w / (numTicks + extraTick)
-    local _, _, _, ms = GetNetStats()
-    for i = 1, numTicks + extraTick do
-        if not ticks[i] then
-            ticks[i] = frame:CreateTexture(nil, "OVERLAY", 5)
-            ticks[i]:SetTexture(R["media"].normal)
-            ticks[i]:SetVertexColor(1, 0, 0, 0.75)
-            ticks[i]:Width(1)
-            ticks[i]:SetHeight(frame:GetHeight())
+        local w = frame:GetWidth()
+        local d = w / (numTicks + extraTick)
+        local _, _, _, ms = GetNetStats()
+        for i = 1, numTicks + extraTick do
+            if not ticks[i] then
+                ticks[i] = frame:CreateTexture(nil, "OVERLAY", 5)
+                ticks[i]:SetTexture(R["media"].normal)
+                ticks[i]:SetVertexColor(1, 0, 0, 0.75)
+                ticks[i]:Width(1)
+                ticks[i]:SetHeight(frame:GetHeight())
+            end
+
+            local width
+            if(ms ~= 0) then
+                local perc = (w / frame.max) * (ms / 1e5)
+                if(perc > 1) then perc = 1 end
+
+                width = (w * perc) / (numTicks + extraTick)
+            else
+                width = 2
+            end
+
+            if (d * (i - 1) + width > w) then
+                width = w - d * (i - 1)
+            end
+
+            ticks[i]:SetWidth(width)
+            ticks[i]:ClearAllPoints()
+            ticks[i]:SetPoint("LEFT", frame, "LEFT", d * (i - 1), 0)
+            ticks[i]:Show()
         end
+        frame.SafeZone:Hide()
+    end
 
-        local width
-        if(ms ~= 0) then
-            local perc = (w / frame.max) * (ms / 1e5)
-            if(perc > 1) then perc = 1 end
+    local MageSpellName = GetSpellInfo(5143) --Arcane Missiles
+    local MageBuffName = GetSpellInfo(166872) --4p T17 bonus proc for arcane
 
-            width = (w * perc) / (numTicks + extraTick)
+    function UF:PostCastStart(unit, name, rank, castid)
+        if unit == "vehicle" then unit = "player" end
+        local r, g, b
+        if UnitIsPlayer(unit) and UnitIsFriend(unit, "player") and R.myname == "夏可醬" then
+            r, g, b = 95/255, 182/255, 255/255
+        elseif UnitIsPlayer(unit) and UnitIsFriend(unit, "player") then
+            r, g, b = unpack(oUF.colors.class[select(2, UnitClass(unit))])
+        elseif self.interrupt then
+            r, g, b = unpack(oUF.colors.reaction[1])
         else
-            width = 2
+            r, g, b = unpack(oUF.colors.reaction[5])
+        end
+        self:SetBackdropColor(r * 1, g * 1, b * 1)
+        if unit:find("arena%d") or unit:find("boss%d") then
+            self:SetStatusBarColor(r * 1, g * 1, b * 1, .2)
+        else
+            self:SetStatusBarColor(r * 1, g * 1, b * 1)
         end
 
-        if (d * (i - 1) + width > w) then
-            width = w - d * (i - 1)
+        self.unit = unit
+
+        if unit == "player" then
+            local unitframe = R.global.UnitFrames
+            local baseTicks = unitframe.ChannelTicks[name]
+
+            -- Detect channeling spell and if it's the same as the previously channeled one
+            if baseTicks and name == self.prevSpellCast then
+                self.chainChannel = true
+            elseif baseTicks then
+                self.chainChannel = nil
+                self.prevSpellCast = name
+            end
+
+            if baseTicks and unitframe.ChannelTicksSize[name] and unitframe.HastedChannelTicks[name] then
+                local tickIncRate = 1 / baseTicks
+                local curHaste = UnitSpellHaste("player") * 0.01
+                local firstTickInc = tickIncRate / 2
+                local bonusTicks = 0
+                if curHaste >= firstTickInc then
+                    bonusTicks = bonusTicks + 1
+                end
+
+                local x = tonumber(R:Round(firstTickInc + tickIncRate, 2))
+                while curHaste >= x do
+                    x = tonumber(R:Round(firstTickInc + (tickIncRate * bonusTicks), 2))
+                    if curHaste >= x then
+                        bonusTicks = bonusTicks + 1
+                    end
+                end
+
+                local baseTickSize = unitframe.ChannelTicksSize[name]
+                local hastedTickSize = baseTickSize / (1 + curHaste)
+                local extraTick = self.max - hastedTickSize * (baseTicks + bonusTicks)
+                local extraTickRatio = extraTick / hastedTickSize
+
+                UF:SetCastTicks(self, baseTicks + bonusTicks, extraTickRatio)
+            elseif baseTicks and unitframe.ChannelTicksSize[name] then
+                local curHaste = UnitSpellHaste("player") * 0.01
+                local baseTickSize = unitframe.ChannelTicksSize[name]
+                local hastedTickSize = baseTickSize / (1 + curHaste)
+                local extraTick = self.max - hastedTickSize * (baseTicks)
+                local extraTickRatio = extraTick / hastedTickSize
+
+                UF:SetCastTicks(self, baseTicks, extraTickRatio)
+            elseif baseTicks then
+                local hasBuff = UnitBuff("player", MageBuffName)
+                if name == MageSpellName and hasBuff then
+                    baseTicks = baseTicks + 5
+                end
+                UF:SetCastTicks(self, baseTicks)
+            else
+                UF:HideTicks(self)
+            end
         end
-
-        ticks[i]:SetWidth(width)
-        ticks[i]:ClearAllPoints()
-        ticks[i]:SetPoint("LEFT", frame, "LEFT", d * (i - 1), 0)
-        ticks[i]:Show()
-    end
-    frame.SafeZone:Hide()
-end
-
-local MageSpellName = GetSpellInfo(5143) --Arcane Missiles
-local MageBuffName = GetSpellInfo(166872) --4p T17 bonus proc for arcane
-
-function UF:PostCastStart(unit, name, rank, castid)
-    if unit == "vehicle" then unit = "player" end
-    local r, g, b
-    if UnitIsPlayer(unit) and UnitIsFriend(unit, "player") and R.myname == "夏可醬" then
-        r, g, b = 95/255, 182/255, 255/255
-    elseif UnitIsPlayer(unit) and UnitIsFriend(unit, "player") then
-        r, g, b = unpack(oUF.colors.class[select(2, UnitClass(unit))])
-    elseif self.interrupt then
-        r, g, b = unpack(oUF.colors.reaction[1])
-    else
-        r, g, b = unpack(oUF.colors.reaction[5])
-    end
-    self:SetBackdropColor(r * 1, g * 1, b * 1)
-    if unit:find("arena%d") or unit:find("boss%d") then
-        self:SetStatusBarColor(r * 1, g * 1, b * 1, .2)
-    else
-        self:SetStatusBarColor(r * 1, g * 1, b * 1)
     end
 
-    self.unit = unit
+    function UF:CustomCastTimeText(duration)
+        -- self.Time:SetText(("%.1f | %.1f"):format(self.channeling and duration or self.max - duration, self.max))
+        if self.channeling then
+            self.Time:SetText(("%.1f | %.1f"):format(duration, self.max))
+        else
+            self.Time:SetText(("%.1f | %.1f"):format(abs(duration - self.max), self.max))
+        end
+    end
 
-	if unit == "player" then
+    function UF:CustomCastDelayText(duration)
+        -- self.Time:SetText(("%.1f |cffff0000%s %.1f|r"):format(self.channeling and duration or self.max - duration, self.channeling and "- " or "+", self.delay))
+        if self.channeling then
+            self.Time:SetText(("%.1f | %.1f |cffff0000%.1f|r"):format(duration, self.max, self.delay))
+        else
+            self.Time:SetText(("%.1f | %.1f |cffff0000%s %.1f|r"):format(abs(duration - self.max), self.max, "+", self.delay))
+        end
+    end
+
+    function UF:PostCastStop(unit, name, castid)
+        self.chainChannel = nil
+        self.prevSpellCast = nil
+    end
+
+    function UF:PostChannelUpdate(unit, name)
+        if not (unit == "player" or unit == "vehicle") then return end
+
         local unitframe = R.global.UnitFrames
         local baseTicks = unitframe.ChannelTicks[name]
 
-		-- Detect channeling spell and if it's the same as the previously channeled one
-		if baseTicks and name == self.prevSpellCast then
-			self.chainChannel = true
-		elseif baseTicks then
-			self.chainChannel = nil
-			self.prevSpellCast = name
-		end
+        if baseTicks then
+            local extraTick = 0
+            if self.chainChannel then
+                extraTick = 1
+                self.chainChannel = nil
+            end
 
-		if baseTicks and unitframe.ChannelTicksSize[name] and unitframe.HastedChannelTicks[name] then
-			local tickIncRate = 1 / baseTicks
-			local curHaste = UnitSpellHaste("player") * 0.01
-			local firstTickInc = tickIncRate / 2
-			local bonusTicks = 0
-			if curHaste >= firstTickInc then
-				bonusTicks = bonusTicks + 1
-			end
-
-			local x = tonumber(R:Round(firstTickInc + tickIncRate, 2))
-			while curHaste >= x do
-				x = tonumber(R:Round(firstTickInc + (tickIncRate * bonusTicks), 2))
-				if curHaste >= x then
-					bonusTicks = bonusTicks + 1
-				end
-			end
-
-			local baseTickSize = unitframe.ChannelTicksSize[name]
-			local hastedTickSize = baseTickSize / (1 + curHaste)
-			local extraTick = self.max - hastedTickSize * (baseTicks + bonusTicks)
-			local extraTickRatio = extraTick / hastedTickSize
-
-			UF:SetCastTicks(self, baseTicks + bonusTicks, extraTickRatio)
-		elseif baseTicks and unitframe.ChannelTicksSize[name] then
-			local curHaste = UnitSpellHaste("player") * 0.01
-			local baseTickSize = unitframe.ChannelTicksSize[name]
-			local hastedTickSize = baseTickSize / (1 +  curHaste)
-			local extraTick = self.max - hastedTickSize * (baseTicks)
-			local extraTickRatio = extraTick / hastedTickSize
-
-			UF:SetCastTicks(self, baseTicks, extraTickRatio)
-		elseif baseTicks then
-			local hasBuff = UnitBuff("player", MageBuffName)
-			if name == MageSpellName and hasBuff then
-				baseTicks = baseTicks + 5
-			end
-			UF:SetCastTicks(self, baseTicks)
-		else
-			UF:HideTicks(self)
-		end
-    end
-end
-
-function UF:CustomCastTimeText(duration)
-    -- self.Time:SetText(("%.1f | %.1f"):format(self.channeling and duration or self.max - duration, self.max))
-    if self.channeling then
-      self.Time:SetText(("%.1f | %.1f"):format(duration, self.max))
-  else
-      self.Time:SetText(("%.1f | %.1f"):format(abs(duration - self.max), self.max))
-  end
-end
-
-function UF:CustomCastDelayText(duration)
-    -- self.Time:SetText(("%.1f |cffff0000%s %.1f|r"):format(self.channeling and duration or self.max - duration, self.channeling and "- " or "+", self.delay))
-    if self.channeling then
-      self.Time:SetText(("%.1f | %.1f |cffff0000%.1f|r"):format(duration, self.max, self.delay))
-  else
-      self.Time:SetText(("%.1f | %.1f |cffff0000%s %.1f|r"):format(abs(duration - self.max), self.max, "+", self.delay))
-  end
-end
-
-function UF:PostCastStop(unit, name, castid)
-    self.chainChannel = nil
-    self.prevSpellCast = nil
-end
-
-function UF:PostChannelUpdate(unit, name)
-    if not (unit == "player" or unit == "vehicle") then return end
-
-    local unitframe = R.global.UnitFrames
-    local baseTicks = unitframe.ChannelTicks[name]
-
-    if baseTicks then
-      local extraTick = 0
-      if self.chainChannel then
-        extraTick = 1
-        self.chainChannel = nil
+            UF:SetCastTicks(self, baseTicks, extraTick)
+        else
+            UF:HideTicks(self)
+        end
     end
 
-    UF:SetCastTicks(self, baseTicks, extraTick)
-else
-    UF:HideTicks(self)
-end
-end
+    function UF:PostCastInterruptible(unit)
+        if unit == "vehicle" then unit = "player" end
+        if unit ~= "player" then
+            local r, g, b
+            if UnitIsPlayer(unit) and UnitIsFriend(unit, "player") and R.myname == "夏可" then
+                r, g, b = 95/255, 182/255, 255/255
+            elseif UnitIsPlayer(unit) and UnitIsFriend(unit, "player") then
+                r, g, b = unpack(oUF.colors.class[select(2, UnitClass(unit))])
+            else
+                r, g, b = unpack(oUF.colors.reaction[6])
+            end
+            self:SetBackdropColor(r * 1, g * 1, b * 1)
+            if unit:find("arena%d") or unit:find("boss%d") then
+                self:SetStatusBarColor(r * 1, g * 1, b * 1, .2)
+            else
+                self:SetStatusBarColor(r * 1, g * 1, b * 1)
+            end
+        end
+    end
 
-function UF:PostCastInterruptible(unit)
-    if unit == "vehicle" then unit = "player" end
-    if unit ~= "player" then
+    function UF:PostCastNotInterruptible(unit)
         local r, g, b
-        if UnitIsPlayer(unit) and UnitIsFriend(unit, "player") and R.myname == "夏可" then
+        if UnitIsPlayer(unit) and UnitIsFriend(unit, "player") and R.myname == "夏可可" then
             r, g, b = 95/255, 182/255, 255/255
         elseif UnitIsPlayer(unit) and UnitIsFriend(unit, "player") then
             r, g, b = unpack(oUF.colors.class[select(2, UnitClass(unit))])
         else
-            r, g, b = unpack(oUF.colors.reaction[6])
+            r, g, b = unpack(oUF.colors.reaction[5])
         end
         self:SetBackdropColor(r * 1, g * 1, b * 1)
         if unit:find("arena%d") or unit:find("boss%d") then
@@ -391,1356 +466,1338 @@ function UF:PostCastInterruptible(unit)
             self:SetStatusBarColor(r * 1, g * 1, b * 1)
         end
     end
-end
 
-function UF:PostCastNotInterruptible(unit)
-    local r, g, b
-    if UnitIsPlayer(unit) and UnitIsFriend(unit, "player") and R.myname == "夏可可" then
-        r, g, b = 95/255, 182/255, 255/255
-    elseif UnitIsPlayer(unit) and UnitIsFriend(unit, "player") then
-        r, g, b = unpack(oUF.colors.class[select(2, UnitClass(unit))])
-    else
-        r, g, b = unpack(oUF.colors.reaction[5])
-    end
-    self:SetBackdropColor(r * 1, g * 1, b * 1)
-    if unit:find("arena%d") or unit:find("boss%d") then
-        self:SetStatusBarColor(r * 1, g * 1, b * 1, .2)
-    else
-        self:SetStatusBarColor(r * 1, g * 1, b * 1)
-    end
-end
-
-function UF:PostCastFailed(event, unit, name, rank, castid)
-    self:SetStatusBarColor(unpack(oUF.colors.reaction[1]))
-    self:SetValue(self.max)
-    self:Show()
-end
-
-function UF:OnCastbarUpdate(elapsed)
-    if(self.casting) then
-        self.Spark:Show()
-        self:SetAlpha(1)
-        local duration = self.duration + elapsed
-        if(duration >= self.max) then
-            self.casting = nil
-            self:Hide()
-
-            if(self.PostCastStop) then self:PostCastStop(self.__owner.unit) end
-            return
-        end
-
-        if(self.SafeZone) then
-            local width = self:GetWidth()
-            local _, _, _, ms = GetNetStats()
-            local safeZonePercent = (width / self.max) * (ms / 1e5)
-            if(safeZonePercent > 1) then safeZonePercent = 1 end
-            self.SafeZone:SetWidth(width * safeZonePercent)
-        end
-
-        if(self.Time) then
-            if(self.delay ~= 0) then
-                self:CustomDelayText(duration)
-            else
-                self:CustomTimeText(duration)
-            end
-        end
-
-        self.duration = duration
-        self:SetValue(duration)
-
-        if(self.Spark) then
-            self.Spark:SetPoint("CENTER", self, "LEFT", (duration / self.max) * self:GetWidth(), 0)
-            self.Spark:Show()
-        end
-    elseif(self.channeling) then
-        self:SetAlpha(1)
-        local duration = self.duration - elapsed
-
-        if(duration <= 0) then
-            self.channeling = nil
-            self:Hide()
-
-            if(self.PostChannelStop) then self:PostChannelStop(self.__owner.unit) end
-            return
-        end
-
-        if(self.SafeZone) then
-            local width = self:GetWidth()
-            local _, _, _, ms = GetNetStats()
-            local safeZonePercent = (width / self.max) * (ms / 1e5)
-            if(safeZonePercent > 1) then safeZonePercent = 1 end
-            self.SafeZone:SetWidth(width * safeZonePercent)
-        end
-
-        if(self.Time) then
-            if(self.delay ~= 0) then
-                self:CustomDelayText(duration)
-            else
-                self:CustomTimeText(duration)
-            end
-        end
-
-        self.duration = duration
-        self:SetValue(duration)
-        if(self.Spark) then
-            self.Spark:Show()
-            self.Spark:SetPoint("CENTER", self, "LEFT", (duration / self.max) * self:GetWidth(), 0)
-        end
-    else
-        if(self.SafeZone) then
-            self.SafeZone:Hide()
-        end
-        if(self.Spark) then
-            self.Spark:Hide()
-        end
-        local alpha = self:GetAlpha() - 0.02
-        if alpha > 0 then
-            self:SetAlpha(alpha)
-        else
-            self:Hide()
-        end
-        if(self.Time) then
-            self.Time:SetText(INTERRUPT)
-        end
-    end
-end
-
-function UF:PostUpdateHealth(unit, cur, max)
-    local curhealth, maxhealth = UnitHealth(unit), UnitHealthMax(unit)
-    local r, g, b = self:GetStatusBarColor()
-    if self:GetParent().isForced then
-        curhealth = math.random(1, maxhealth)
-        self:SetValue(curhealth)
-    end
-    if UF.db.smoothColor then
-        r,g,b = ColorGradient(curhealth/maxhealth)
-    else
-        r,g,b = .12, .12, .12
-    end
-    if not UF.db.healthColorClass then
-        if(b) then
-            self:SetStatusBarColor(r, g, b, 1)
-        elseif not UnitIsConnected(unit) then
-            local color = colors.disconnected
-            local power = self.__owner.Power
-            if power then
-                power:SetValue(0)
-                if power.value then
-                    power.value:SetText(nil)
-                end
-            end
-            return self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, PLAYER_OFFLINE)
-        elseif UnitIsDeadOrGhost(unit) then
-            local color = colors.disconnected
-            local power = self.__owner.Power
-            if power then
-                power:SetValue(0)
-                if power.value then
-                    power.value:SetText(nil)
-                end
-            end
-            return self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, UnitIsGhost(unit) and GHOST or DEAD)
-        end
-        if UF.db.smoothColor then
-            if UnitIsDeadOrGhost(unit) or (not UnitIsConnected(unit)) then
-                self:SetStatusBarColor(.5, .5, .5)
-                self.bg:SetVertexColor(.5, .5, .5)
-            else
-                self.bg:SetVertexColor(r*.25, g*.25, b*.25)
-            end
-        end
-    end
-    local color = {1,1,1}
-    if UnitIsPlayer(unit) then
-        local _, class = UnitClass(unit)
-        if class then
-            color = oUF.colors.class[class]
-        end
-    elseif UnitIsEnemy(unit, "player") then
-        color = oUF.colors.reaction[1]
-    else
-        color = oUF.colors.reaction[UnitReaction(unit, "player") or 5]
-    end
-    -- 如果是hover状态，总是显示
-    if self.__owner.isMouseOver then
-        if UF.db.showHealthValue then
-            self.value:SetFormattedText("|cff%02x%02x%02x%.1f%%|r", color[1] * 255, color[2] * 255, color[3] * 255, cur / max * 100)
-        else
-            self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(cur))
-        end
-        -- 否则当血量不满或者设置了总是显示时显示
-    elseif UF.db.alwaysShowHealth or cur < max then
-        if UF.db.showHealthValue then
-            self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(cur))
-        else
-            self.value:SetFormattedText("|cff%02x%02x%02x%.1f%%|r", color[1] * 255, color[2] * 255, color[3] * 255, cur / max * 100)
-        end
-    else
-        self.value:SetText(nil)
-    end
-end
-
-function UF:PostUpdatePower(unit, cur, max)
-    local shown = self:IsShown()
-    if max == 0 then
-        if shown then
-            self:Hide()
-        end
-        return
-    elseif not shown then
+    function UF:PostCastFailed(event, unit, name, rank, castid)
+        self:SetStatusBarColor(unpack(oUF.colors.reaction[1]))
+        self:SetValue(self.max)
         self:Show()
     end
-    if UnitIsDeadOrGhost(unit) then
-        self:SetValue(0)
-        if self.value then
-            self.value:SetText(nil)
+
+    function UF:OnCastbarUpdate(elapsed)
+        if(self.casting) then
+            self.Spark:Show()
+            self:SetAlpha(1)
+            local duration = self.duration + elapsed
+            if(duration >= self.max) then
+                self.casting = nil
+                self:Hide()
+
+                if(self.PostCastStop) then self:PostCastStop(self.__owner.unit) end
+                return
+            end
+
+            if(self.SafeZone) then
+                local width = self:GetWidth()
+                local _, _, _, ms = GetNetStats()
+                local safeZonePercent = (width / self.max) * (ms / 1e5)
+                if(safeZonePercent > 1) then safeZonePercent = 1 end
+                self.SafeZone:SetWidth(width * safeZonePercent)
+            end
+
+            if(self.Time) then
+                if(self.delay ~= 0) then
+                    self:CustomDelayText(duration)
+                else
+                    self:CustomTimeText(duration)
+                end
+            end
+
+            self.duration = duration
+            self:SetValue(duration)
+
+            if(self.Spark) then
+                self.Spark:SetPoint("CENTER", self, "LEFT", (duration / self.max) * self:GetWidth(), 0)
+                self.Spark:Show()
+            end
+        elseif(self.channeling) then
+            self:SetAlpha(1)
+            local duration = self.duration - elapsed
+
+            if(duration <= 0) then
+                self.channeling = nil
+                self:Hide()
+
+                if(self.PostChannelStop) then self:PostChannelStop(self.__owner.unit) end
+                return
+            end
+
+            if(self.SafeZone) then
+                local width = self:GetWidth()
+                local _, _, _, ms = GetNetStats()
+                local safeZonePercent = (width / self.max) * (ms / 1e5)
+                if(safeZonePercent > 1) then safeZonePercent = 1 end
+                self.SafeZone:SetWidth(width * safeZonePercent)
+            end
+
+            if(self.Time) then
+                if(self.delay ~= 0) then
+                    self:CustomDelayText(duration)
+                else
+                    self:CustomTimeText(duration)
+                end
+            end
+
+            self.duration = duration
+            self:SetValue(duration)
+            if(self.Spark) then
+                self.Spark:Show()
+                self.Spark:SetPoint("CENTER", self, "LEFT", (duration / self.max) * self:GetWidth(), 0)
+            end
+        else
+            if(self.SafeZone) then
+                self.SafeZone:Hide()
+            end
+            if(self.Spark) then
+                self.Spark:Hide()
+            end
+            local alpha = self:GetAlpha() - 0.02
+            if alpha > 0 then
+                self:SetAlpha(alpha)
+            else
+                self:Hide()
+            end
+            if(self.Time) then
+                self.Time:SetText(INTERRUPT)
+            end
         end
-        return
     end
-    if not self.value then return end
-    local _, type = UnitPowerType(unit)
-    local color = oUF.colors.power[type] or oUF.colors.power.FUEL
-    if self:GetParent().isForced then
-        local min = math.random(1, max)
-        local type = math.random(0, 4)
-        self:SetValue(min)
-    end
-    if cur < max then
+
+    function UF:PostUpdateHealth(unit, cur, max)
+        local curhealth, maxhealth = UnitHealth(unit), UnitHealthMax(unit)
+        local r, g, b = self:GetStatusBarColor()
+        if self:GetParent().isForced then
+            curhealth = math.random(1, maxhealth)
+            self:SetValue(curhealth)
+        end
+        if UF.db.smoothColor then
+            r,g,b = ColorGradient(curhealth/maxhealth)
+        else
+            r,g,b = .12, .12, .12
+        end
+        if not UF.db.healthColorClass then
+            if(b) then
+                self:SetStatusBarColor(r, g, b, 1)
+            elseif not UnitIsConnected(unit) then
+                local color = RayUF.colors.disconnected
+                local power = self.__owner.Power
+                if power then
+                    power:SetValue(0)
+                    if power.value then
+                        power.value:SetText(nil)
+                    end
+                end
+                return self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, PLAYER_OFFLINE)
+            elseif UnitIsDeadOrGhost(unit) then
+                local color = RayUF.colors.disconnected
+                local power = self.__owner.Power
+                if power then
+                    power:SetValue(0)
+                    if power.value then
+                        power.value:SetText(nil)
+                    end
+                end
+                return self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, UnitIsGhost(unit) and L["灵魂"] or DEAD)
+            end
+            if UF.db.smoothColor then
+                if UnitIsDeadOrGhost(unit) or (not UnitIsConnected(unit)) then
+                    self:SetStatusBarColor(.5, .5, .5)
+                    self.bg:SetVertexColor(.5, .5, .5)
+                else
+                    self.bg:SetVertexColor(r*.25, g*.25, b*.25)
+                end
+            end
+        end
+        local color = {1,1,1}
+        if UnitIsPlayer(unit) then
+            local _, class = UnitClass(unit)
+            if class then
+                color = oUF.colors.class[class]
+            end
+        elseif UnitIsEnemy(unit, "player") then
+            color = oUF.colors.reaction[1]
+        else
+            color = oUF.colors.reaction[UnitReaction(unit, "player") or 5]
+        end
+        -- 如果是hover状态，总是显示
         if self.__owner.isMouseOver then
-            self.value:SetFormattedText("%s - |cff%02x%02x%02x%s|r", R:ShortValue(UnitPower(unit)), color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(UnitPowerMax(unit)))
-        elseif type == "MANA" then
-            self.value:SetFormattedText("|cff%02x%02x%02x%.1f%%|r", color[1] * 255, color[2] * 255, color[3] * 255,  UnitPower(unit) / UnitPowerMax(unit) * 100)
-        elseif cur > 0 then
-            self.value:SetFormattedText("|cff%02x%02x%02x%d|r", color[1] * 255, color[2] * 255, color[3] * 255, UnitPower(unit))
+            if UF.db.showHealthValue then
+                self.value:SetFormattedText("|cff%02x%02x%02x%.1f%%|r", color[1] * 255, color[2] * 255, color[3] * 255, cur / max * 100)
+            else
+                self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(cur))
+            end
+            -- 否则当血量不满或者设置了总是显示时显示
+        elseif UF.db.alwaysShowHealth or cur < max then
+            if UF.db.showHealthValue then
+                self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(cur))
+            else
+                self.value:SetFormattedText("|cff%02x%02x%02x%.1f%%|r", color[1] * 255, color[2] * 255, color[3] * 255, cur / max * 100)
+            end
         else
             self.value:SetText(nil)
         end
-    elseif type == "MANA" and self.__owner.isMouseOver then
-        self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(UnitPowerMax(unit)))
-    else
-        self.value:SetText(nil)
-    end
-end
-
-function UF:UpdateThreatStatus(event, unit)
-    if self.unit ~= unit and event~="PLAYER_TARGET_CHANGED" then return end
-    unit = unit or self.unit
-    local s = UnitThreatSituation(unit)
-    if s and s > 1 then
-        local r, g, b = GetThreatStatusColor(s)
-        self.ThreatHlt:Show()
-        self.ThreatHlt:SetVertexColor(r, g, b, 0.5)
-    else
-        self.ThreatHlt:Hide()
-    end
-end
-
-function UF:PostAltUpdate(min, cur, max)
-    local perc = math.floor((cur/max)*100)
-
-    if perc < 35 then
-        self:SetStatusBarColor(0, 1, 0)
-    elseif perc < 70 then
-        self:SetStatusBarColor(1, 1, 0)
-    else
-        self:SetStatusBarColor(1, 0, 0)
     end
 
-    local unit = self:GetParent().unit
-
-    if unit == "player" and self.text then
-        local type = select(10, UnitAlternatePowerInfo(unit))
-
-        if perc > 0 then
-            self.text:SetText(type..": "..format("%d%%", perc))
-        else
-            self.text:SetText(type..": 0%")
-        end
-    elseif unit and unit:find("boss%d") and self.text then
-        self.text:SetTextColor(self:GetStatusBarColor())
-        -- if not self:GetParent().Power.value:GetText() or self:GetParent().Power.value:GetText() == "" then
-        -- self.text:Point("BOTTOMRIGHT", self:GetParent().Health, "BOTTOMRIGHT")
-        -- else
-        -- self.text:Point("RIGHT", self:GetParent().Power.value.value, "LEFT", 2, E.mult)
-        -- end
-        if perc > 0 then
-            self.text:SetText("|cffD7BEA5[|r"..format("%d%%", perc).."|cffD7BEA5]|r")
-        else
-            self.text:SetText(nil)
-        end
-    end
-end
-
-function UF:ComboDisplay(event, unit)
-    if(unit == "pet") then return end
-
-    local cpoints = self.CPoints
-    local cp = (UnitHasVehicleUI("player") or UnitHasVehicleUI("vehicle")) and UnitPower("vehicle", 4) or UnitPower("player", 4)
-
-    for i=1, MAX_COMBO_POINTS do
-        if(i <= cp) then
-            cpoints[i]:SetAlpha(1)
-        elseif UF.db.separateEnergy then
-            cpoints[i]:SetAlpha(0)
-        else
-            cpoints[i]:SetAlpha(0.15)
-        end
-    end
-
-    if cpoints[1]:GetAlpha() == 1 then
-        for i=1, MAX_COMBO_POINTS do
-            cpoints[i]:Show()
-        end
-
-    else
-        for i=1, MAX_COMBO_POINTS do
-            cpoints[i]:Hide()
-        end
-    end
-end
-
-local  function formatTime(s)
-    local day, hour, minute = 86400, 3600, 60
-    if s >= day then
-        return format("%dd", floor(s/day + 0.5)), s % day
-    elseif s >= hour then
-        return format("%dh", floor(s/hour + 0.5)), s % hour
-    elseif s >= minute then
-        return format("%dm", floor(s/minute + 0.5)), s % minute
-    elseif s >= minute / 12 then
-        return floor(s + 0.5), (s * 100 - floor(s * 100))/100
-    end
-    -- return format("%.1f", s), (s * 100 - floor(s * 100))/100
-    return format("%d", s), (s * 100 - floor(s * 100))/100
-end
-
-local function CreateAuraTimer(frame,elapsed)
-    frame.elapsed = (frame.elapsed or 0) + elapsed
-
-    if frame.elapsed < .2 then return end
-    frame.elapsed = 0
-
-    if frame.expires then
-        local timeLeft = frame.expires - GetTime()
-        if timeLeft <= 0 then
+    function UF:PostUpdatePower(unit, cur, max)
+        local shown = self:IsShown()
+        if max == 0 then
+            if shown then
+                self:Hide()
+            end
             return
+        elseif not shown then
+            self:Show()
+        end
+        if UnitIsDeadOrGhost(unit) then
+            self:SetValue(0)
+            if self.value then
+                self.value:SetText(nil)
+            end
+            return
+        end
+        if not self.value then return end
+        local _, type = UnitPowerType(unit)
+        local color = oUF.colors.power[type] or oUF.colors.power.FUEL
+        if self:GetParent().isForced then
+            local min = math.random(1, max)
+            local type = math.random(0, 4)
+            self:SetValue(min)
+        end
+        if cur < max then
+            if self.__owner.isMouseOver then
+                self.value:SetFormattedText("%s - |cff%02x%02x%02x%s|r", R:ShortValue(UnitPower(unit)), color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(UnitPowerMax(unit)))
+            elseif type == "MANA" then
+                self.value:SetFormattedText("|cff%02x%02x%02x%.1f%%|r", color[1] * 255, color[2] * 255, color[3] * 255, UnitPower(unit) / UnitPowerMax(unit) * 100)
+            elseif cur > 0 then
+                self.value:SetFormattedText("|cff%02x%02x%02x%d|r", color[1] * 255, color[2] * 255, color[3] * 255, UnitPower(unit))
+            else
+                self.value:SetText(nil)
+            end
+        elseif type == "MANA" and self.__owner.isMouseOver then
+            self.value:SetFormattedText("|cff%02x%02x%02x%s|r", color[1] * 255, color[2] * 255, color[3] * 255, R:ShortValue(UnitPowerMax(unit)))
         else
-            frame.remaining:SetText(formatTime(timeLeft))
+            self.value:SetText(nil)
         end
     end
-end
 
-function UF:PostUpdateIcon(unit, icon, index, offset)
-    local name, _, _, _, dtype, duration, expirationTime, unitCaster, canStealOrPurge = UnitAura(unit, index, icon.filter)
-
-    local texture = icon.icon
-    if icon.isDebuff then
-        if icon.owner == "player" or icon.owner == "pet" or icon.owner == "vehicle" or UnitIsFriend("player", unit) then
-            local color = DebuffTypeColor[dtype] or DebuffTypeColor.none
-            icon.border:SetBackdropBorderColor(color.r * 0.6, color.g * 0.6, color.b * 0.6)
-            icon:StyleButton(1)
-            texture:Point("TOPLEFT", icon, 1, -1)
-            texture:Point("BOTTOMRIGHT", icon, -1, 1)
-            texture:SetDesaturated(false)
+    function UF:UpdateThreatStatus(event, unit)
+        if self.unit ~= unit and event~="PLAYER_TARGET_CHANGED" then return end
+        unit = unit or self.unit
+        local s = UnitThreatSituation(unit)
+        if s and s > 1 then
+            local r, g, b = GetThreatStatusColor(s)
+            self.ThreatHlt:Show()
+            self.ThreatHlt:SetVertexColor(r, g, b, 0.5)
         else
-            icon.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))
-            icon:StyleButton(true)
-            texture:Point("TOPLEFT", icon)
-            texture:Point("BOTTOMRIGHT", icon)
-            texture:SetDesaturated(true)
+            self.ThreatHlt:Hide()
         end
-    else
-        if (canStealOrPurge or ((R.myclass == "PRIEST" or R.myclass == "SHAMAN" or R.myclass == "MAGE") and dtype == "Magic")) and not UnitIsFriend("player", unit) then
-            icon.border:SetBackdropBorderColor(237/255, 234/255, 142/255)
-            icon:GetHighlightTexture():StyleButton(1)
-            texture:StyleButton(1)
-            texture:Point("TOPLEFT", icon, 1, -1)
-            texture:Point("BOTTOMRIGHT", icon, -1, 1)
+    end
+
+    function UF:PostAltUpdate(min, cur, max)
+        local perc = math.floor((cur/max)*100)
+
+        if perc < 35 then
+            self:SetStatusBarColor(0, 1, 0)
+        elseif perc < 70 then
+            self:SetStatusBarColor(1, 1, 0)
         else
-            icon:GetHighlightTexture():StyleButton(true)
-            icon.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))
-            texture:Point("TOPLEFT", icon)
-            texture:Point("BOTTOMRIGHT", icon)
+            self:SetStatusBarColor(1, 0, 0)
+        end
+
+        local unit = self:GetParent().unit
+
+        if unit == "player" and self.text then
+            local type = select(10, UnitAlternatePowerInfo(unit))
+
+            if perc > 0 then
+                self.text:SetText(type..": "..format("%d%%", perc))
+            else
+                self.text:SetText(type..": 0%")
+            end
+        elseif unit and unit:find("boss%d") and self.text then
+            self.text:SetTextColor(self:GetStatusBarColor())
+            -- if not self:GetParent().Power.value:GetText() or self:GetParent().Power.value:GetText() == "" then
+            -- self.text:Point("BOTTOMRIGHT", self:GetParent().Health, "BOTTOMRIGHT")
+            -- else
+            -- self.text:Point("RIGHT", self:GetParent().Power.value.value, "LEFT", 2, E.mult)
+            -- end
+            if perc > 0 then
+                self.text:SetText("|cffD7BEA5[|r"..format("%d%%", perc).."|cffD7BEA5]|r")
+            else
+                self.text:SetText(nil)
+            end
         end
     end
 
-    if duration and duration > 0 then
-        icon.remaining:Show()
-    else
-        icon.remaining:Hide()
-    end
+    function UF:ComboDisplay(event, unit)
+        if(unit == "pet") then return end
 
-    icon.duration = duration
-    icon.expires = expirationTime
-    icon:SetScript("OnUpdate", CreateAuraTimer)
-end
+        local cpoints = self.CPoints
+        local cp = (UnitHasVehicleUI("player") or UnitHasVehicleUI("vehicle")) and UnitPower("vehicle", 4) or UnitPower("player", 4)
 
-function UF:PostCreateIcon(button)
-    button:SetFrameStrata("BACKGROUND")
-    local count = button.count
-    count:ClearAllPoints()
-    count:Point("CENTER", button, "BOTTOMRIGHT", 0, 5)
-    count:SetFontObject(nil)
-    count:SetFont(R["media"].font, 13, "THINOUTLINE")
-    count:SetTextColor(.8, .8, .8)
+        for i=1, MAX_COMBO_POINTS do
+            if(i <= cp) then
+                cpoints[i]:SetAlpha(1)
+            elseif UF.db.separateEnergy then
+                cpoints[i]:SetAlpha(0)
+            else
+                cpoints[i]:SetAlpha(0.15)
+            end
+        end
 
-    self.disableCooldown = true
-    button.icon:SetTexCoord(.1, .9, .1, .9)
-    button:CreateShadow()
-    button.shadow:SetBackdropColor(0, 0, 0)
-    button.overlay:Hide()
+        if cpoints[1]:GetAlpha() == 1 then
+            for i=1, MAX_COMBO_POINTS do
+                cpoints[i]:Show()
+            end
 
-    button.remaining = button:CreateFontString(nil, "OVERLAY")
-    button.remaining:SetFont(R["media"].font, 13, R["media"].fontflag)
-    button.remaining:SetJustifyH("LEFT")
-    button.remaining:SetTextColor(0.99, 0.99, 0.99)
-    button.remaining:Point("CENTER", 0, 0)
-
-    button:StyleButton(true)
-    button:SetPushedTexture(nil)
-end
-
-function UF:CustomFilter(unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster)
-    local isPlayer
-
-    if(caster == "player" or caster == "vehicle") then
-        isPlayer = true
-    end
-
-    if name then
-        icon.isPlayer = isPlayer
-        icon.owner = caster
-    end
-
-    -- if UnitCanAttack(unit, "player") and UnitLevel(unit) == -1 then
-    -- if (R.Role == "Melee" and name and UF.PvEMeleeBossDebuffs[name]) or
-    -- (R.Role == "Caster" and name and UF.PvECasterBossDebuffs[name]) or
-    -- (R.Role == "Tank" and name and UF.PvETankBossDebuffs[name]) or
-    -- isPlayer then
-    -- return true
-    -- else
-    -- return false
-    -- end
-    -- end
-
-    return true
-end
-
-function UF:ConstructComboBar(frame)
-    -- Combo Bar
-    local count = 5
-    local bars = CreateFrame("Frame", nil, frame)
-    bars:SetSize(200, 5)
-    bars:Point("BOTTOM", frame, "TOP", 0, 1)
-
-    bars:SetBackdropBorderColor(0,0,0,0)
-    bars:SetBackdropColor(0,0,0,0)
-
-    for i = 1, count do
-        bars[i] = CreateFrame("StatusBar", frame:GetName().."_Combo"..i, bars)
-        bars[i]:SetHeight(5)
-        bars[i]:SetStatusBarTexture(R["media"].normal)
-        bars[i]:GetStatusBarTexture():SetHorizTile(false)
-
-        if i == 1 then
-            bars[i]:SetPoint("LEFT", bars)
         else
-            bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
+            for i=1, MAX_COMBO_POINTS do
+                cpoints[i]:Hide()
+            end
         end
-        bars[i]:SetAlpha(0.15)
-        bars[i]:SetWidth((200 - (count - 1)*5)/count)
-        bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
-        bars[i].bg:SetAllPoints(bars[i])
-        bars[i].bg:SetTexture(R["media"].normal)
-        bars[i].bg.multiplier = .2
-
-        bars[i]:CreateShadow("Background")
-        bars[i].shadow:SetFrameStrata("BACKGROUND")
-        bars[i].shadow:SetFrameLevel(0)
     end
 
-    bars[1]:SetStatusBarColor(255/255, 0/255, 0)
-    bars[2]:SetStatusBarColor(255/255, 0/255, 0)
-    bars[3]:SetStatusBarColor(255/255, 255/255, 0)
-    bars[4]:SetStatusBarColor(255/255, 255/255, 0)
-    bars[5]:SetStatusBarColor(0, 1, 0)
-    bars.Override = self.ComboDisplay
+    local function formatTime(s)
+        local day, hour, minute = 86400, 3600, 60
+        if s >= day then
+            return format("%dd", floor(s/day + 0.5)), s % day
+        elseif s >= hour then
+            return format("%dh", floor(s/hour + 0.5)), s % hour
+        elseif s >= minute then
+            return format("%dm", floor(s/minute + 0.5)), s % minute
+        elseif s >= minute / 12 then
+            return floor(s + 0.5), (s * 100 - floor(s * 100))/100
+        end
+        -- return format("%.1f", s), (s * 100 - floor(s * 100))/100
+        return format("%d", s), (s * 100 - floor(s * 100))/100
+    end
 
-    return bars
-end
+    local function CreateAuraTimer(frame,elapsed)
+        frame.elapsed = (frame.elapsed or 0) + elapsed
 
-function UF:ConstructMonkResourceBar(frame)
-    local bars = CreateFrame("Frame", nil, frame)
-    bars:SetSize(200, 5)
-    bars:SetFrameLevel(5)
-    bars:Point("BOTTOM", frame, "TOP", 0, 1)
-    local count = 6
-    bars.number = count
+        if frame.elapsed < .2 then return end
+        frame.elapsed = 0
 
-    for i = 1, count do
-        bars[i] = CreateFrame("StatusBar", nil, bars)
-        bars[i]:SetStatusBarTexture(R["media"].normal)
-        bars[i]:SetWidth((200 - (count - 1)*5)/count)
-        bars[i]:SetHeight(5)
-        bars[i]:GetStatusBarTexture():SetHorizTile(false)
+        if frame.expires then
+            local timeLeft = frame.expires - GetTime()
+            if timeLeft <= 0 then
+                return
+            else
+                frame.remaining:SetText(formatTime(timeLeft))
+            end
+        end
+    end
 
-        local color = RayUF.colors.class[R.myclass]
-        bars[i]:SetStatusBarColor(unpack(color))
+    function UF:PostUpdateIcon(unit, icon, index, offset)
+        local name, _, _, _, dtype, duration, expirationTime, unitCaster, canStealOrPurge = UnitAura(unit, index, icon.filter)
 
-        if i == 1 then
-            bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
+        local texture = icon.icon
+        if icon.isDebuff then
+            if icon.owner == "player" or icon.owner == "pet" or icon.owner == "vehicle" or UnitIsFriend("player", unit) then
+                local color = DebuffTypeColor[dtype] or DebuffTypeColor.none
+                icon.border:SetBackdropBorderColor(color.r * 0.6, color.g * 0.6, color.b * 0.6)
+                icon:StyleButton(1)
+                texture:Point("TOPLEFT", icon, 1, -1)
+                texture:Point("BOTTOMRIGHT", icon, -1, 1)
+                texture:SetDesaturated(false)
+            else
+                icon.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))
+                icon:StyleButton(true)
+                texture:Point("TOPLEFT", icon)
+                texture:Point("BOTTOMRIGHT", icon)
+                texture:SetDesaturated(true)
+            end
         else
-            bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
+            if (canStealOrPurge or ((R.myclass == "PRIEST" or R.myclass == "SHAMAN" or R.myclass == "MAGE") and dtype == "Magic")) and not UnitIsFriend("player", unit) then
+                icon.border:SetBackdropBorderColor(237/255, 234/255, 142/255)
+                icon:GetHighlightTexture():StyleButton(1)
+                texture:StyleButton(1)
+                texture:Point("TOPLEFT", icon, 1, -1)
+                texture:Point("BOTTOMRIGHT", icon, -1, 1)
+            else
+                icon:GetHighlightTexture():StyleButton(true)
+                icon.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))
+                texture:Point("TOPLEFT", icon)
+                texture:Point("BOTTOMRIGHT", icon)
+            end
         end
 
-        bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
-        bars[i].bg:SetAllPoints(bars[i])
-        bars[i].bg:SetTexture(R["media"].normal)
-        bars[i].bg.multiplier = .2
-
-        bars[i]:CreateShadow("Background")
-        bars[i].shadow:SetFrameStrata("BACKGROUND")
-        bars[i].shadow:SetFrameLevel(0)
-    end
-
-    bars.PostUpdate = UF.UpdateHarmony
-
-    return bars
-end
-
-function UF:ConstructDeathKnightResourceBar(frame)
-    local bars = CreateFrame("Frame", nil, frame)
-    bars:SetSize(200, 5)
-    bars:SetFrameLevel(5)
-    bars:Point("BOTTOM", frame, "TOP", 0, 1)
-    local count = 6
-
-    for i = 1, count do
-        bars[i] = CreateFrame("StatusBar", nil, bars)
-        bars[i]:SetStatusBarTexture(R["media"].normal)
-        bars[i]:SetWidth((200 - (count - 1)*5)/count)
-        bars[i]:SetHeight(5)
-        bars[i]:GetStatusBarTexture():SetHorizTile(false)
-
-        if i == 1 then
-            bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
+        if duration and duration > 0 then
+            icon.remaining:Show()
         else
-            bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
+            icon.remaining:Hide()
         end
 
-        bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
-        bars[i].bg:SetAllPoints(bars[i])
-        bars[i].bg:SetTexture(R["media"].normal)
-        bars[i].bg.multiplier = .2
-
-        bars[i]:CreateShadow("Background")
-        bars[i].shadow:SetFrameStrata("BACKGROUND")
-        bars[i].shadow:SetFrameLevel(0)
+        icon.duration = duration
+        icon.expires = expirationTime
+        icon:SetScript("OnUpdate", CreateAuraTimer)
     end
 
-    return bars
-end
+    function UF:PostCreateIcon(button)
+        button:SetFrameStrata("BACKGROUND")
+        local count = button.count
+        count:ClearAllPoints()
+        count:Point("CENTER", button, "BOTTOMRIGHT", 0, 5)
+        count:SetFontObject(nil)
+        count:SetFont(R["media"].font, 13, "THINOUTLINE")
+        count:SetTextColor(.8, .8, .8)
 
-function UF:ConstructPaladinResourceBar(frame)
-    local bars = CreateFrame("Frame", nil, frame)
-    bars:SetSize(200, 5)
-    bars:SetFrameLevel(5)
-    bars:Point("BOTTOM", frame, "TOP", 0, 1)
-    local count = 5
-    bars.number = count
+        self.disableCooldown = true
+        button.icon:SetTexCoord(.1, .9, .1, .9)
+        button:CreateShadow()
+        button.shadow:SetBackdropColor(0, 0, 0)
+        button.overlay:Hide()
 
-    for i = 1, count do
-        bars[i] = CreateFrame("StatusBar", nil, bars)
-        bars[i]:SetStatusBarTexture(R["media"].normal)
-        bars[i]:SetWidth((200 - (count - 1)*5)/count)
-        bars[i]:SetHeight(5)
-        bars[i]:GetStatusBarTexture():SetHorizTile(false)
+        button.remaining = button:CreateFontString(nil, "OVERLAY")
+        button.remaining:SetFont(R["media"].font, 13, R["media"].fontflag)
+        button.remaining:SetJustifyH("LEFT")
+        button.remaining:SetTextColor(0.99, 0.99, 0.99)
+        button.remaining:Point("CENTER", 0, 0)
 
-        local color = RayUF.colors.class[R.myclass]
-        bars[i]:SetStatusBarColor(unpack(color))
+        button:StyleButton(true)
+        button:SetPushedTexture(nil)
+    end
 
-        if i == 1 then
-            bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
+    function UF:CustomFilter(unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster)
+        local isPlayer
+
+        if(caster == "player" or caster == "vehicle") then
+            isPlayer = true
+        end
+
+        if name then
+            icon.isPlayer = isPlayer
+            icon.owner = caster
+        end
+
+        -- if UnitCanAttack(unit, "player") and UnitLevel(unit) == -1 then
+        -- if (R.Role == "Melee" and name and UF.PvEMeleeBossDebuffs[name]) or
+        -- (R.Role == "Caster" and name and UF.PvECasterBossDebuffs[name]) or
+        -- (R.Role == "Tank" and name and UF.PvETankBossDebuffs[name]) or
+        -- isPlayer then
+        -- return true
+        -- else
+        -- return false
+        -- end
+        -- end
+
+        return true
+    end
+
+    function UF:ConstructComboBar(frame)
+        -- Combo Bar
+        local count = 5
+        local bars = CreateFrame("Frame", nil, frame)
+        bars:SetSize(200, 5)
+        bars:Point("BOTTOM", frame, "TOP", 0, 1)
+
+        bars:SetBackdropBorderColor(0,0,0,0)
+        bars:SetBackdropColor(0,0,0,0)
+
+        for i = 1, count do
+            bars[i] = CreateFrame("StatusBar", frame:GetName().."_Combo"..i, bars)
+            bars[i]:SetHeight(5)
+            bars[i]:SetStatusBarTexture(R["media"].normal)
+            bars[i]:GetStatusBarTexture():SetHorizTile(false)
+
+            if i == 1 then
+                bars[i]:SetPoint("LEFT", bars)
+            else
+                bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
+            end
+            bars[i]:SetAlpha(0.15)
+            bars[i]:SetWidth((200 - (count - 1)*5)/count)
+            bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
+            bars[i].bg:SetAllPoints(bars[i])
+            bars[i].bg:SetTexture(R["media"].normal)
+            bars[i].bg.multiplier = .2
+
+            bars[i]:CreateShadow("Background")
+            bars[i].shadow:SetFrameStrata("BACKGROUND")
+            bars[i].shadow:SetFrameLevel(0)
+        end
+
+        bars[1]:SetStatusBarColor(255/255, 0/255, 0)
+        bars[2]:SetStatusBarColor(255/255, 0/255, 0)
+        bars[3]:SetStatusBarColor(255/255, 255/255, 0)
+        bars[4]:SetStatusBarColor(255/255, 255/255, 0)
+        bars[5]:SetStatusBarColor(0, 1, 0)
+        bars.Override = self.ComboDisplay
+
+        return bars
+    end
+
+    function UF:ConstructMonkResourceBar(frame)
+        local bars = CreateFrame("Frame", nil, frame)
+        bars:SetSize(200, 5)
+        bars:SetFrameLevel(5)
+        bars:Point("BOTTOM", frame, "TOP", 0, 1)
+        local count = 6
+        bars.number = count
+
+        for i = 1, count do
+            bars[i] = CreateFrame("StatusBar", nil, bars)
+            bars[i]:SetStatusBarTexture(R["media"].normal)
+            bars[i]:SetWidth((200 - (count - 1)*5)/count)
+            bars[i]:SetHeight(5)
+            bars[i]:GetStatusBarTexture():SetHorizTile(false)
+
+            local color = RayUF.colors.class[R.myclass]
+            bars[i]:SetStatusBarColor(unpack(color))
+
+            if i == 1 then
+                bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
+            else
+                bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
+            end
+
+            bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
+            bars[i].bg:SetAllPoints(bars[i])
+            bars[i].bg:SetTexture(R["media"].normal)
+            bars[i].bg.multiplier = .2
+
+            bars[i]:CreateShadow("Background")
+            bars[i].shadow:SetFrameStrata("BACKGROUND")
+            bars[i].shadow:SetFrameLevel(0)
+        end
+
+        bars.PostUpdate = UF.UpdateHarmony
+
+        return bars
+    end
+
+    function UF:ConstructDeathKnightResourceBar(frame)
+        local bars = CreateFrame("Frame", nil, frame)
+        bars:SetSize(200, 5)
+        bars:SetFrameLevel(5)
+        bars:Point("BOTTOM", frame, "TOP", 0, 1)
+        local count = 6
+
+        for i = 1, count do
+            bars[i] = CreateFrame("StatusBar", nil, bars)
+            bars[i]:SetStatusBarTexture(R["media"].normal)
+            bars[i]:SetWidth((200 - (count - 1)*5)/count)
+            bars[i]:SetHeight(5)
+            bars[i]:GetStatusBarTexture():SetHorizTile(false)
+
+            if i == 1 then
+                bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
+            else
+                bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
+            end
+
+            bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
+            bars[i].bg:SetAllPoints(bars[i])
+            bars[i].bg:SetTexture(R["media"].normal)
+            bars[i].bg.multiplier = .2
+
+            bars[i]:CreateShadow("Background")
+            bars[i].shadow:SetFrameStrata("BACKGROUND")
+            bars[i].shadow:SetFrameLevel(0)
+        end
+
+        return bars
+    end
+
+    function UF:ConstructPaladinResourceBar(frame)
+        local bars = CreateFrame("Frame", nil, frame)
+        bars:SetSize(200, 5)
+        bars:SetFrameLevel(5)
+        bars:Point("BOTTOM", frame, "TOP", 0, 1)
+        local count = 5
+        bars.number = count
+
+        for i = 1, count do
+            bars[i] = CreateFrame("StatusBar", nil, bars)
+            bars[i]:SetStatusBarTexture(R["media"].normal)
+            bars[i]:SetWidth((200 - (count - 1)*5)/count)
+            bars[i]:SetHeight(5)
+            bars[i]:GetStatusBarTexture():SetHorizTile(false)
+
+            local color = RayUF.colors.class[R.myclass]
+            bars[i]:SetStatusBarColor(unpack(color))
+
+            if i == 1 then
+                bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
+            else
+                bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
+            end
+
+            bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
+            bars[i].bg:SetAllPoints(bars[i])
+            bars[i].bg:SetTexture(R["media"].normal)
+            bars[i].bg.multiplier = .2
+
+            bars[i]:CreateShadow("Background")
+            bars[i].shadow:SetFrameStrata("BACKGROUND")
+            bars[i].shadow:SetFrameLevel(0)
+        end
+
+        bars.PostUpdate = UF.UpdateHolyPower
+
+        return bars
+    end
+
+    function UF:ConstructWarlockResourceBar(frame)
+        local bars = CreateFrame("Frame", nil, frame)
+        bars:SetSize(200, 5)
+        bars:SetFrameLevel(5)
+        bars:Point("BOTTOM", frame, "TOP", 0, 1)
+        local count = 4
+
+        for i = 1, count do
+            bars[i] = CreateFrame("StatusBar", nil, bars)
+            bars[i]:SetStatusBarTexture(R["media"].normal)
+            bars[i]:SetWidth((200 - (count - 1)*5)/count)
+            bars[i]:SetHeight(5)
+            bars[i]:GetStatusBarTexture():SetHorizTile(false)
+
+            local color = RayUF.colors.class[R.myclass]
+            bars[i]:SetStatusBarColor(unpack(color))
+
+            bars[i].text = bars[i]:CreateFontString(nil, "OVERLAY")
+            bars[i].text:SetPoint("CENTER")
+            bars[i].text:SetFont(R["media"].font, R["media"].fontsize - 2, R["media"].fontflag)
+
+            if i == 1 then
+                bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
+            else
+                bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
+            end
+
+            bars[i]:CreateShadow("Background")
+            bars[i].shadow:SetFrameStrata("BACKGROUND")
+            bars[i].shadow:SetFrameLevel(0)
+        end
+
+        bars.PostUpdate = UF.UpdateShardBar
+
+        return bars
+    end
+
+    function UF:ConstructPriestResourceBar(frame)
+        local bars = CreateFrame("Frame", nil, frame)
+        bars:SetSize(200, 5)
+        bars:SetFrameLevel(5)
+        bars:Point("BOTTOM", frame, "TOP", 0, 1)
+        local count = 5
+
+        for i = 1, count do
+            bars[i] = CreateFrame("StatusBar", nil, bars)
+            bars[i]:SetStatusBarTexture(R["media"].normal)
+            bars[i]:SetWidth((200 - (count - 1)*5)/count)
+            bars[i]:SetHeight(5)
+            bars[i]:GetStatusBarTexture():SetHorizTile(false)
+
+            local color = RayUF.colors.class[R.myclass]
+            bars[i]:SetStatusBarColor(unpack(color))
+
+            if i == 1 then
+                bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
+            else
+                bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
+            end
+
+            bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
+            bars[i].bg:SetAllPoints(bars[i])
+            bars[i].bg:SetTexture(R["media"].normal)
+            bars[i].bg.multiplier = .2
+
+            bars[i]:CreateShadow("Background")
+            bars[i].shadow:SetFrameStrata("BACKGROUND")
+            bars[i].shadow:SetFrameLevel(0)
+        end
+
+        bars.PostUpdate = UF.UpdateShadowOrbs
+
+        return bars
+    end
+
+    function UF:ConstructShamanResourceBar(frame)
+        local bars = {}
+        bars.Destroy = true
+        for i = 1, 4 do
+            bars[i] = CreateFrame("StatusBar", nil, frame)
+            bars[i]:SetStatusBarTexture(R["media"].normal)
+            bars[i]:SetWidth(200/4-5)
+            bars[i]:SetHeight(5)
+            bars[i]:GetStatusBarTexture():SetHorizTile(false)
+            bars[i]:SetFrameLevel(5)
+
+            bars[i]:SetBackdrop({bgFile = R["media"].normal})
+            bars[i]:SetBackdropColor(0.5, 0.5, 0.5)
+            bars[i]:SetMinMaxValues(0, 1)
+
+            bars[i].bg = bars[i]:CreateTexture(nil, "BORDER")
+            bars[i].bg:SetAllPoints(bars[i])
+            bars[i].bg:SetTexture(R["media"].normal)
+            bars[i].bg.multiplier = 0.3
+
+            bars[i]:CreateShadow("Background")
+            bars[i].shadow:SetFrameStrata("BACKGROUND")
+            bars[i].shadow:SetFrameLevel(0)
+        end
+        bars[2]:SetPoint("BOTTOM", frame, "TOP", -75,1)
+        bars[1]:SetPoint("LEFT", bars[2], "RIGHT", 5, 0)
+        bars[3]:SetPoint("LEFT", bars[1], "RIGHT", 5, 0)
+        bars[4]:SetPoint("LEFT", bars[3], "RIGHT", 5, 0)
+
+        return bars
+    end
+
+    function UF:ConstructRogueResourceBar(frame)
+        local bars = CreateFrame("Frame", nil, frame)
+        bars:SetSize(200, 5)
+        bars:SetFrameLevel(7)
+        bars:Point("BOTTOM", frame, "TOP", 0, -6)
+        bars:Hide()
+        local count = 5
+
+        for i = 1, count do
+            bars[i] = CreateFrame("StatusBar", nil, bars)
+            bars[i]:SetStatusBarTexture(R["media"].normal)
+            bars[i]:SetWidth((200 - (count - 1)*5)/count)
+            bars[i]:SetHeight(3)
+            bars[i]:GetStatusBarTexture():SetHorizTile(false)
+            bars[i]:SetFrameLevel(7)
+
+            if i == 1 then
+                bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
+            else
+                bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
+            end
+
+            bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
+            bars[i].bg:SetAllPoints(bars[i])
+            bars[i].bg:SetTexture(R["media"].normal)
+            bars[i].bg:SetVertexColor(0, 0, 0)
+            bars[i].bg.multiplier = .2
+
+            bars[i]:CreateShadow("Background")
+            bars[i].border:SetFrameLevel(7)
+            bars[i].shadow:SetFrameStrata("BACKGROUND")
+            bars[i].shadow:SetFrameLevel(6)
+        end
+        bars[1]:SetStatusBarColor(255/255, 0/255, 0)
+        bars[2]:SetStatusBarColor(255/255, 0/255, 0)
+        bars[3]:SetStatusBarColor(255/255, 255/255, 0)
+        bars[4]:SetStatusBarColor(255/255, 255/255, 0)
+        bars[5]:SetStatusBarColor(0, 1, 0)
+        return bars
+    end
+
+    function UF:ConstructDruidResourceBar(frame)
+        local ebar = CreateFrame("Frame", nil, frame)
+        ebar:Point("BOTTOM", frame, "TOP", 0, 1)
+        ebar:SetSize(200, 5)
+        ebar:CreateShadow("Background")
+        ebar:SetFrameLevel(5)
+        ebar.shadow:SetFrameStrata("BACKGROUND")
+        ebar.shadow:SetFrameLevel(0)
+
+        ebar.Spark = ebar:CreateTexture(nil, "OVERLAY")
+        ebar.Spark:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
+        ebar.Spark:SetBlendMode("ADD")
+        ebar.Spark:SetAlpha(0.8)
+        ebar.Spark:SetHeight(26)
+        ebar.Spark:SetWidth(10)
+        ebar.Spark:SetPoint("CENTER", ebar, "CENTER", 0, 0)
+
+        local lbar = CreateFrame("StatusBar", nil, ebar)
+        lbar:SetStatusBarTexture(R["media"].normal)
+        lbar:SetStatusBarColor(0, .4, 1)
+        lbar:SetWidth(0)
+        lbar:SetHeight(5)
+        lbar:SetFrameLevel(5)
+        lbar:GetStatusBarTexture():SetHorizTile(false)
+        lbar:SetPoint("RIGHT", ebar, "CENTER", 0, 0)
+        ebar.LunarBar = lbar
+
+        local sbar = CreateFrame("StatusBar", nil, ebar)
+        sbar:SetStatusBarTexture(R["media"].normal)
+        sbar:SetStatusBarColor(1, .6, 0)
+        sbar:SetWidth(0)
+        sbar:SetHeight(5)
+        sbar:SetFrameLevel(5)
+        sbar:GetStatusBarTexture():SetHorizTile(false)
+        sbar:SetPoint("LEFT", ebar, "CENTER", 0, 0)
+        ebar.SolarBar = sbar
+
+        ebar.Text = ebar:CreateFontString(nil, "OVERLAY")
+        ebar.Text:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
+        ebar.Text:SetPoint("CENTER", sbar:GetStatusBarTexture(), "LEFT", 0, 1)
+
+        ebar.PostUpdatePower = self.UpdateEclipse
+        ebar.PostUnitAura = self.UpdateEclipse
+
+        return ebar
+    end
+
+    function UF:ConstructMageResourceBar(frame)
+        local bars = CreateFrame("Frame", nil, frame)
+        bars:SetSize(200, 5)
+        bars:SetFrameLevel(5)
+        bars:Point("BOTTOM", frame, "TOP", 0, 1)
+        local count = 2
+        bars.number = count
+
+        for i = 1, count do
+            bars[i] = CreateFrame("StatusBar", nil, bars)
+            bars[i]:SetStatusBarTexture(R["media"].normal)
+            bars[i]:SetWidth((200 - (count - 1)*5)/count)
+            bars[i]:SetHeight(5)
+            bars[i]:GetStatusBarTexture():SetHorizTile(false)
+
+            local color = RayUF.colors.class[R.myclass]
+            bars[i]:SetStatusBarColor(unpack(color))
+
+            if i == 1 then
+                bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
+            else
+                bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
+            end
+
+            bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
+            bars[i].bg:SetAllPoints(bars[i])
+            bars[i].bg:SetTexture(R["media"].normal)
+            bars[i].bg.multiplier = .2
+
+            bars[i]:CreateShadow("Background")
+            bars[i].shadow:SetFrameStrata("BACKGROUND")
+            bars[i].shadow:SetFrameLevel(0)
+            bars[i].__parent = bars
+        end
+
+        bars.Colors = RayUF.colors.class["MAGE"]
+        bars.ExpColors = { 1, 0, 0 }
+        bars.BgColors = { 0, 0, 0 }
+
+        return bars
+    end
+
+    function UF:EnableHealPredictionAndAbsorb(frame)
+        local mhpb = frame:CreateTexture(nil, "BORDER", 5)
+        mhpb:SetWidth(1)
+        mhpb:SetTexture(R["media"].normal)
+        mhpb:SetVertexColor(0, 1, 0.5, 0.25)
+
+        local ohpb = frame:CreateTexture(nil, "BORDER", 5)
+        ohpb:SetWidth(1)
+        ohpb:SetTexture(R["media"].normal)
+        ohpb:SetVertexColor(0, 1, 0, 0.25)
+
+        local abb = frame:CreateTexture(nil, "BORDER", 5)
+        abb:SetWidth(1)
+        abb:SetTexture(R["media"].normal)
+        abb:SetVertexColor(.66, 1, 1, .7)
+
+        local abbo = frame:CreateTexture(nil, "ARTWORK", 1)
+        abbo:SetAllPoints(abb)
+        abbo:SetTexture("Interface\\RaidFrame\\Shield-Overlay", true, true)
+        abbo.tileSize = 32
+
+        local oag = frame:CreateTexture(nil, "ARTWORK", 1)
+        oag:SetWidth(15)
+        oag:SetTexture("Interface\\RaidFrame\\Shield-Overshield")
+        oag:SetBlendMode("ADD")
+        oag:SetPoint("TOPLEFT", frame.Health, "TOPRIGHT", -5, 0)
+        oag:SetPoint("BOTTOMLEFT", frame.Health, "BOTTOMRIGHT", -5, 0)
+
+        frame.HealPredictionAndAbsorb = {
+            myBar = mhpb,
+            otherBar = ohpb,
+            absorbBar = abb,
+            absorbBarOverlay = abbo,
+            overAbsorbGlow = oag,
+            maxOverflow = 1,
+        }
+    end
+
+    function UF:UpdateEclipse(unit)
+        local direction = GetEclipseDirection()
+        local power = UnitPower("player", SPELL_POWER_ECLIPSE)
+        local maxPower = UnitPowerMax("player", SPELL_POWER_ECLIPSE)
+        local absolutePower = math.abs(power/maxPower)*100
+
+        self.Text:ClearAllPoints()
+        if power < 0 then
+            self.Text:SetTextColor(0, .4, 1)
+            self.Text:SetPoint("CENTER", self.LunarBar, "LEFT")
+            self.LunarBar:SetPoint("LEFT", self, "CENTER", -absolutePower, 0)
         else
-            bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
+            self.Text:SetTextColor(1, .6, 0)
+            self.Text:SetPoint("CENTER", self.SolarBar, "RIGHT")
+            self.SolarBar:SetPoint("RIGHT", self, "CENTER", absolutePower, 0)
         end
 
-        bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
-        bars[i].bg:SetAllPoints(bars[i])
-        bars[i].bg:SetTexture(R["media"].normal)
-        bars[i].bg.multiplier = .2
-
-        bars[i]:CreateShadow("Background")
-        bars[i].shadow:SetFrameStrata("BACKGROUND")
-        bars[i].shadow:SetFrameLevel(0)
-    end
-
-    bars.PostUpdate = UF.UpdateHolyPower
-
-    return bars
-end
-
-function UF:ConstructWarlockResourceBar(frame)
-    local bars = CreateFrame("Frame", nil, frame)
-    bars:SetSize(200, 5)
-    bars:SetFrameLevel(5)
-    bars:Point("BOTTOM", frame, "TOP", 0, 1)
-    local count = 4
-
-    for i = 1, count do
-        bars[i] = CreateFrame("StatusBar", nil, bars)
-        bars[i]:SetStatusBarTexture(R["media"].normal)
-        bars[i]:SetWidth((200 - (count - 1)*5)/count)
-        bars[i]:SetHeight(5)
-        bars[i]:GetStatusBarTexture():SetHorizTile(false)
-
-        local color = RayUF.colors.class[R.myclass]
-        bars[i]:SetStatusBarColor(unpack(color))
-
-        bars[i].text = bars[i]:CreateFontString(nil, "OVERLAY")
-        bars[i].text:SetPoint("CENTER")
-        bars[i].text:SetFont(R["media"].font, R["media"].fontsize - 2, R["media"].fontflag)
-
-        if i == 1 then
-            bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
+        if direction == "sun" then
+            self.Text:SetText(absolutePower.. ">")
+        elseif direction == "moon" then
+            self.Text:SetText("<".. absolutePower)
         else
-            bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
+            self.Text:SetText("")
         end
 
-        bars[i]:CreateShadow("Background")
-        bars[i].shadow:SetFrameStrata("BACKGROUND")
-        bars[i].shadow:SetFrameLevel(0)
-    end
-
-    bars.PostUpdate = UF.UpdateShardBar
-
-    return bars
-end
-
-function UF:ConstructPriestResourceBar(frame)
-    local bars = CreateFrame("Frame", nil, frame)
-    bars:SetSize(200, 5)
-    bars:SetFrameLevel(5)
-    bars:Point("BOTTOM", frame, "TOP", 0, 1)
-    local count = 5
-
-    for i = 1, count do
-        bars[i] = CreateFrame("StatusBar", nil, bars)
-        bars[i]:SetStatusBarTexture(R["media"].normal)
-        bars[i]:SetWidth((200 - (count - 1)*5)/count)
-        bars[i]:SetHeight(5)
-        bars[i]:GetStatusBarTexture():SetHorizTile(false)
-
-        local color = RayUF.colors.class[R.myclass]
-        bars[i]:SetStatusBarColor(unpack(color))
-
-        if i == 1 then
-            bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
+        if self.hasSolarEclipse then
+            self.border:SetBackdropBorderColor(1, .6, 0)
+            self.shadow:SetBackdropBorderColor(1, .6, 0)
+        elseif self.hasLunarEclipse then
+            self.border:SetBackdropBorderColor(0, .4, 1)
+            self.shadow:SetBackdropBorderColor(0, .4, 1)
         else
-            bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
-        end
-
-        bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
-        bars[i].bg:SetAllPoints(bars[i])
-        bars[i].bg:SetTexture(R["media"].normal)
-        bars[i].bg.multiplier = .2
-
-        bars[i]:CreateShadow("Background")
-        bars[i].shadow:SetFrameStrata("BACKGROUND")
-        bars[i].shadow:SetFrameLevel(0)
-    end
-
-    bars.PostUpdate = UF.UpdateShadowOrbs
-
-    return bars
-end
-
-function UF:ConstructShamanResourceBar(frame)
-    local bars = {}
-    bars.Destroy = true
-    for i = 1, 4 do
-        bars[i] = CreateFrame("StatusBar", nil, frame)
-        bars[i]:SetStatusBarTexture(R["media"].normal)
-        bars[i]:SetWidth(200/4-5)
-        bars[i]:SetHeight(5)
-        bars[i]:GetStatusBarTexture():SetHorizTile(false)
-        bars[i]:SetFrameLevel(5)
-
-        bars[i]:SetBackdrop({bgFile = R["media"].normal})
-        bars[i]:SetBackdropColor(0.5, 0.5, 0.5)
-        bars[i]:SetMinMaxValues(0, 1)
-
-        bars[i].bg = bars[i]:CreateTexture(nil, "BORDER")
-        bars[i].bg:SetAllPoints(bars[i])
-        bars[i].bg:SetTexture(R["media"].normal)
-        bars[i].bg.multiplier = 0.3
-
-        bars[i]:CreateShadow("Background")
-        bars[i].shadow:SetFrameStrata("BACKGROUND")
-        bars[i].shadow:SetFrameLevel(0)
-    end
-    bars[2]:SetPoint("BOTTOM", frame, "TOP", -75,1)
-    bars[1]:SetPoint("LEFT", bars[2], "RIGHT", 5, 0)
-    bars[3]:SetPoint("LEFT", bars[1], "RIGHT", 5, 0)
-    bars[4]:SetPoint("LEFT", bars[3], "RIGHT", 5, 0)
-
-    return bars
-end
-
-function UF:ConstructRogueResourceBar(frame)
-    local bars = CreateFrame("Frame", nil, frame)
-    bars:SetSize(200, 5)
-    bars:SetFrameLevel(7)
-    bars:Point("BOTTOM", frame, "TOP", 0, -6)
-    bars:Hide()
-    local count = 5
-
-    for i = 1, count do                  
-        bars[i] = CreateFrame("StatusBar", nil, bars)
-        bars[i]:SetStatusBarTexture(R["media"].normal)
-        bars[i]:SetWidth((200 - (count - 1)*5)/count)
-        bars[i]:SetHeight(3)
-        bars[i]:GetStatusBarTexture():SetHorizTile(false)
-        bars[i]:SetFrameLevel(7)
-
-        if i == 1 then
-            bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
-        else
-            bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
-        end
-        
-        bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
-        bars[i].bg:SetAllPoints(bars[i])
-        bars[i].bg:SetTexture(R["media"].normal)
-        bars[i].bg:SetVertexColor(0, 0, 0)
-        bars[i].bg.multiplier = .2
-
-        bars[i]:CreateShadow("Background")
-        bars[i].border:SetFrameLevel(7)
-        bars[i].shadow:SetFrameStrata("BACKGROUND")
-        bars[i].shadow:SetFrameLevel(6)
-    end
-    bars[1]:SetStatusBarColor(255/255, 0/255, 0)
-    bars[2]:SetStatusBarColor(255/255, 0/255, 0)
-    bars[3]:SetStatusBarColor(255/255, 255/255, 0)
-    bars[4]:SetStatusBarColor(255/255, 255/255, 0)
-    bars[5]:SetStatusBarColor(0, 1, 0)
-    return bars
-end
-
-function UF:ConstructDruidResourceBar(frame)
-    local ebar = CreateFrame("Frame", nil, frame)
-    ebar:Point("BOTTOM", frame, "TOP", 0, 1)
-    ebar:SetSize(200, 5)
-    ebar:CreateShadow("Background")
-    ebar:SetFrameLevel(5)
-    ebar.shadow:SetFrameStrata("BACKGROUND")
-    ebar.shadow:SetFrameLevel(0)
-
-    ebar.Spark = ebar:CreateTexture(nil, "OVERLAY")
-    ebar.Spark:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
-    ebar.Spark:SetBlendMode("ADD")
-    ebar.Spark:SetAlpha(0.8)
-    ebar.Spark:SetHeight(26)
-    ebar.Spark:SetWidth(10)
-    ebar.Spark:SetPoint("CENTER", ebar, "CENTER", 0, 0)
-
-    local lbar = CreateFrame("StatusBar", nil, ebar)
-    lbar:SetStatusBarTexture(R["media"].normal)
-    lbar:SetStatusBarColor(0, .4, 1)
-    lbar:SetWidth(0)
-    lbar:SetHeight(5)
-    lbar:SetFrameLevel(5)
-    lbar:GetStatusBarTexture():SetHorizTile(false)
-    lbar:SetPoint("RIGHT", ebar, "CENTER", 0, 0)
-    ebar.LunarBar = lbar
-
-    local sbar = CreateFrame("StatusBar", nil, ebar)
-    sbar:SetStatusBarTexture(R["media"].normal)
-    sbar:SetStatusBarColor(1, .6, 0)
-    sbar:SetWidth(0)
-    sbar:SetHeight(5)
-    sbar:SetFrameLevel(5)
-    sbar:GetStatusBarTexture():SetHorizTile(false)
-    sbar:SetPoint("LEFT", ebar, "CENTER", 0, 0)
-    ebar.SolarBar = sbar
-
-    ebar.Text = ebar:CreateFontString(nil, "OVERLAY")
-    ebar.Text:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
-    ebar.Text:SetPoint("CENTER", sbar:GetStatusBarTexture(), "LEFT", 0, 1)
-
-    ebar.PostUpdatePower = self.UpdateEclipse
-    ebar.PostUnitAura = self.UpdateEclipse
-
-    return ebar
-end
-
-function UF:ConstructMageResourceBar(frame)
-    local bars = CreateFrame("Frame", nil, frame)
-    bars:SetSize(200, 5)
-    bars:SetFrameLevel(5)
-    bars:Point("BOTTOM", frame, "TOP", 0, 1)
-    local count = 2
-    bars.number = count
-
-    for i = 1, count do
-        bars[i] = CreateFrame("StatusBar", nil, bars)
-        bars[i]:SetStatusBarTexture(R["media"].normal)
-        bars[i]:SetWidth((200 - (count - 1)*5)/count)
-        bars[i]:SetHeight(5)
-        bars[i]:GetStatusBarTexture():SetHorizTile(false)
-
-        local color = RayUF.colors.class[R.myclass]
-        bars[i]:SetStatusBarColor(unpack(color))
-
-        if i == 1 then
-            bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
-        else
-            bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
-        end
-
-        bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
-        bars[i].bg:SetAllPoints(bars[i])
-        bars[i].bg:SetTexture(R["media"].normal)
-        bars[i].bg.multiplier = .2
-
-        bars[i]:CreateShadow("Background")
-        bars[i].shadow:SetFrameStrata("BACKGROUND")
-        bars[i].shadow:SetFrameLevel(0)
-        bars[i].__parent = bars
-    end
-
-    bars.Colors = RayUF.colors.class["MAGE"]
-    bars.ExpColors = { 1, 0, 0 }
-    bars.BgColors = { 0, 0, 0 }
-
-    return bars
-end
-
-function UF:EnableHealPredictionAndAbsorb(frame)
-	local mhpb = frame:CreateTexture(nil, "BORDER", 5)
-	mhpb:SetWidth(1)
-	mhpb:SetTexture(R["media"].normal)
-	mhpb:SetVertexColor(0, 1, 0.5, 0.25)
-
-	local ohpb = frame:CreateTexture(nil, "BORDER", 5)
-	ohpb:SetWidth(1)
-	ohpb:SetTexture(R["media"].normal)
-	ohpb:SetVertexColor(0, 1, 0, 0.25)
-
-	local abb = frame:CreateTexture(nil, "BORDER", 5)
-	abb:SetWidth(1)
-	abb:SetTexture(R["media"].normal)
-	abb:SetVertexColor(.66, 1, 1, .7)
-
-	local abbo = frame:CreateTexture(nil, "ARTWORK", 1)
-	abbo:SetAllPoints(abb)
-	abbo:SetTexture("Interface\\RaidFrame\\Shield-Overlay", true, true)
-	abbo.tileSize = 32
-
-	local oag = frame:CreateTexture(nil, "ARTWORK", 1)
-	oag:SetWidth(15)
-	oag:SetTexture("Interface\\RaidFrame\\Shield-Overshield")
-	oag:SetBlendMode("ADD")
-	oag:SetPoint("TOPLEFT", frame.Health, "TOPRIGHT", -5, 0)
-	oag:SetPoint("BOTTOMLEFT", frame.Health, "BOTTOMRIGHT", -5, 0)
-
-	frame.HealPredictionAndAbsorb = {
-		myBar = mhpb,
-		otherBar = ohpb,
-		absorbBar = abb,
-		absorbBarOverlay = abbo,
-		overAbsorbGlow = oag,
-		maxOverflow = 1,
-	}
-end
-
-function UF:UpdateEclipse(unit)
-    local direction = GetEclipseDirection()
-    local power = UnitPower("player", SPELL_POWER_ECLIPSE)
-    local maxPower = UnitPowerMax("player", SPELL_POWER_ECLIPSE)
-    local absolutePower = math.abs(power/maxPower)*100
-
-    self.Text:ClearAllPoints()
-    if power < 0 then
-        self.Text:SetTextColor(0, .4, 1)
-        self.Text:SetPoint("CENTER", self.LunarBar, "LEFT")
-        self.LunarBar:SetPoint("LEFT", self, "CENTER", -absolutePower, 0)
-    else
-        self.Text:SetTextColor(1, .6, 0)
-        self.Text:SetPoint("CENTER", self.SolarBar, "RIGHT")
-        self.SolarBar:SetPoint("RIGHT", self, "CENTER", absolutePower, 0)
-    end
-
-    if direction == "sun" then
-        self.Text:SetText(absolutePower.. ">")
-    elseif direction == "moon" then
-        self.Text:SetText("<".. absolutePower)
-    else
-        self.Text:SetText("")
-    end
-
-    if self.hasSolarEclipse then
-        self.border:SetBackdropBorderColor(1, .6, 0)
-        self.shadow:SetBackdropBorderColor(1, .6, 0)
-    elseif self.hasLunarEclipse then
-        self.border:SetBackdropBorderColor(0, .4, 1)
-        self.shadow:SetBackdropBorderColor(0, .4, 1)
-    else
-        self.border:SetBackdropBorderColor(0, 0, 0)
-        self.shadow:SetBackdropBorderColor(0, 0, 0)
-    end
-end
-
-function UF:UpdateHolyPower()
-    local maxHolyPower = UnitPowerMax("player", SPELL_POWER_HOLY_POWER)
-    if maxHolyPower < self.number then
-        for i = 1, 3 do
-            self[i]:SetWidth(185/3)
-        end
-        self[4]:Hide()
-        self[5]:Hide()
-        self.number = maxHolyPower
-    elseif maxHolyPower > self.number then
-        for i = 1, 3 do
-            self[i]:SetWidth(180/5)
-        end
-        self[4]:Show()
-        self[5]:Show()
-        self.number = maxHolyPower
-    end
-end
-
-function UF:UpdateHarmony()
-    local maxChi = UnitPowerMax("player", SPELL_POWER_CHI)
-
-    for i = 1, 6 do
-        if i > maxChi then
-            self[i]:Hide()
-        else
-            self[i]:SetWidth((200 - (maxChi - 1)*5)/maxChi)
+            self.border:SetBackdropBorderColor(0, 0, 0)
+            self.shadow:SetBackdropBorderColor(0, 0, 0)
         end
     end
-end
 
-function UF:UpdateShardBar(spec)
-    local maxBars = self.number
-    local frame = self:GetParent()
-    local spec = GetSpecialization()
-    local power = UnitPower("player", SPELL_POWER_DEMONIC_FURY)
+    function UF:UpdateHolyPower()
+        local maxHolyPower = UnitPowerMax("player", SPELL_POWER_HOLY_POWER)
+        if maxHolyPower < self.number then
+            for i = 1, 3 do
+                self[i]:SetWidth(185/3)
+            end
+            self[4]:Hide()
+            self[5]:Hide()
+            self.number = maxHolyPower
+        elseif maxHolyPower > self.number then
+            for i = 1, 3 do
+                self[i]:SetWidth(180/5)
+            end
+            self[4]:Show()
+            self[5]:Show()
+            self.number = maxHolyPower
+        end
+    end
 
-    for i = 1, 4 do
-        if i > maxBars then
-            self[i]:Hide()
-        else
-            self[i]:SetWidth((200 - (maxBars - 1)*5)/maxBars)
+    function UF:UpdateHarmony()
+        local maxChi = UnitPowerMax("player", SPELL_POWER_CHI)
+
+        for i = 1, 6 do
+            if i > maxChi then
+                self[i]:Hide()
+            else
+                self[i]:SetWidth((200 - (maxChi - 1)*5)/maxChi)
+            end
+        end
+    end
+
+    function UF:UpdateShardBar(spec)
+        local maxBars = self.number
+        local frame = self:GetParent()
+        local spec = GetSpecialization()
+        local power = UnitPower("player", SPELL_POWER_DEMONIC_FURY)
+
+        for i = 1, 4 do
+            if i > maxBars then
+                self[i]:Hide()
+            else
+                self[i]:SetWidth((200 - (maxBars - 1)*5)/maxBars)
                 if spec == SPEC_WARLOCK_DEMONOLOGY then
                     self[i].text:SetText(power)
                 else
                     self[i].text:SetText()
                 end
-        end
-    end
-end
-
-function UF:UpdateShadowOrbs()
-	local totalOrbs = IsSpellKnown(SHADOW_ORB_MINOR_TALENT_ID) and 5 or 3
-	for i = 1,totalOrbs do
-		self[i]:SetWidth((200 - (totalOrbs - 1)*5)/totalOrbs)
-    end
-end
-
-function UF:AuraBarFilter(unit, name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellID)
-    if R.global.UnitFrames.InvalidSpells[spellID] then
-        return false
-    end
-    local returnValue = true
-    local returnValueChanged = false
-    local isPlayer, isFriend
-    local auraType
-
-    if unitCaster == "player" or unitCaster == "vehicle" then isPlayer = true end
-    if UnitIsFriend("player", unit) then isFriend = true end
-    if isFriend then
-        auraType = "HELPFUL"
-    else
-        auraType = "HARMFUL"
-    end
-
-    if isPlayer then
-        returnValue = true
-    else
-        returnValue = false
-    end
-
-    if shouldConsolidate == 1 then
-        returnValue = false
-    end
-
-    if (duration == 0 or not duration) then
-        returnValue = false
-    end
-
-    if R.global["UnitFrames"]["aurafilters"]["Blacklist"][name] then
-        returnValue = false
-    end
-
-    if R.global["UnitFrames"]["aurafilters"]["Whitelist"][name] then
-        returnValue = true
-    end
-
-    return returnValue
-end
-
-local RangeColors = {
-	[5] = RayUF.colors.reaction[5],
-	[30] = RayUF.colors.reaction[4],
-	[35] = RayUF.colors.reaction[3],
-	[40] = {1.00, 0.38, 0.08, 1},
-	[100] = RayUF.colors.reaction[1],
-}
-
-function UF:Construct_RangeText(frame)
-	local text = frame.textframe:CreateFontString(nil, "OVERLAY")
-	text:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
-	-- text:SetFont(R["media"].font, R["media"].fontsize - 2, R["media"].fontflag)
-	text:SetJustifyH("RIGHT")
-	text:SetParent(frame.textframe)
-	text:Point("TOPRIGHT", frame.textframe, "TOPLEFT", -2, 3)
-	return text
-end
-
-function UF:RangeDisplayUpdate(frame)
-	if ( not UnitExists("target") ) or ( not frame.RangeText ) then return end
-
-	-- Get range
-	local section
-	local minRange, maxRange = RC:GetRange("target")
-
-	-- No change? Skip
-	if ((minRange == frame.RangeText.lastMinRange) and (maxRange == frame.RangeText.lastMaxRange)) then return end
-
-	frame.RangeText.lastMinRange = minRange
-	frame.RangeText.lastMaxRange = maxRange
-
-	-- Get Range section
-	if UnitIsUnit("player", "target") then maxRange = nil end
-	if minRange > 80 then maxRange = nil end
-	if maxRange then
-		if maxRange <= 5 then
-			section = 5
-		elseif maxRange <= 30 then
-			section = 30
-		elseif maxRange <= 35 then
-			section = 35
-		elseif maxRange <= 40 then
-			section = 40
-		else
-			section = 100
-		end
-		frame.RangeText:SetFormattedText("%d", maxRange)
-		frame.RangeText:SetTextColor(RangeColors[section][1], RangeColors[section][2], RangeColors[section][3])
-	else
-		frame.RangeText:SetText("")
-	end
-end
-
-function UF:Construct_AuraBars()
-    local bar = self.statusBar
-
-    bar:Height(5)
-    bar:ClearAllPoints()
-    bar:SetPoint("BOTTOMLEFT")
-    bar:SetPoint("BOTTOMRIGHT")
-    bar:CreateShadow("Background")
-
-    bar:SetStatusBarColor(unpack(RayUF.colors.class[R.myclass]))
-
-    bar.spelltime:FontTemplate(R["media"].font, R["media"].fontsize, "OUTLINE")
-    bar.spellname:FontTemplate(R["media"].font, R["media"].fontsize, "OUTLINE")
-
-    bar.spellname:ClearAllPoints()
-    bar.spellname:SetPoint("BOTTOMLEFT", bar, "TOPLEFT", 2, 2)
-    bar.spellname:SetPoint("BOTTOMRIGHT", bar, "TOPRIGHT", -20, 2)
-
-    bar.spelltime:ClearAllPoints()
-    bar.spelltime:SetPoint("BOTTOMRIGHT", bar, "TOPRIGHT", 0, 2)
-
-    bar.iconHolder:CreateShadow("Background")
-    bar.icon:SetDrawLayer("OVERLAY")
-
-    bar.iconHolder:RegisterForClicks("RightButtonUp")
-    bar.iconHolder:SetScript("OnClick", function(self)
-        if not IsShiftKeyDown() then return end
-        local auraName = self:GetParent().aura.name
-
-        if auraName then
-            R.global["UnitFrames"]["aurafilters"]["Blacklist"][auraName] = true
-        end
-    end)
-end
-
-function UF:Construct_AuraBarHeader(frame)
-    local auraBar = CreateFrame("Frame", nil, frame)
-    auraBar.PostCreateBar = UF.Construct_AuraBars
-    auraBar.gap = 4
-    auraBar.spacing = 4
-    auraBar.spark = true
-    auraBar.sort = true
-    auraBar.filter = UF.AuraBarFilter
-    auraBar.friendlyAuraType = "HELPFUL"
-    auraBar.enemyAuraType = "HARMFUL"
-    auraBar.auraBarTexture = R["media"].normal
-    auraBar.buffColor = RayUF.colors.class[R.myclass]
-
-    return auraBar
-end
-
-function UF:UpdatePrep(event)
-    if event == "ARENA_OPPONENT_UPDATE" then
-        for i=1, 5 do
-            if not _G["RayUFArena"..i] then return end
-            _G["RayUFArena"..i].prepFrame:Hide()
-        end
-    else
-        local numOpps = GetNumArenaOpponentSpecs()
-
-        if numOpps > 0 then
-            for i=1, 5 do
-                if not _G["RayUFArena"..i] then return end
-                local s = GetArenaOpponentSpec(i)
-                local _, spec, class, texture = nil, "UNKNOWN", "UNKNOWN", [[INTERFACE\ICONS\INV_MISC_QUESTIONMARK]]
-
-                if s and s > 0 then
-                    _, spec, _, texture, _, _, class = GetSpecializationInfoByID(s)
-                end
-
-                if (i <= numOpps) then
-                    if class and spec then
-                        local color = R.colors.class[class]
-                        _G["RayUFArena"..i].prepFrame.SpecClass:SetText(spec.."  -  "..LOCALIZED_CLASS_NAMES_MALE[class])
-                        _G["RayUFArena"..i].prepFrame.Health:SetStatusBarColor(color.r, color.g, color.b)
-                        _G["RayUFArena"..i].prepFrame.Icon:SetTexture(texture)
-                        _G["RayUFArena"..i].prepFrame:Show()
-                    end
-                else
-                    _G["RayUFArena"..i].prepFrame:Hide()
-                end
             end
+        end
+    end
+
+    function UF:UpdateShadowOrbs()
+        local totalOrbs = IsSpellKnown(SHADOW_ORB_MINOR_TALENT_ID) and 5 or 3
+        for i = 1,totalOrbs do
+            self[i]:SetWidth((200 - (totalOrbs - 1)*5)/totalOrbs)
+        end
+    end
+
+    function UF:AuraBarFilter(unit, name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellID)
+        if R.global.UnitFrames.InvalidSpells[spellID] then
+            return false
+        end
+        local returnValue = true
+        local returnValueChanged = false
+        local isPlayer, isFriend
+        local auraType
+
+        if unitCaster == "player" or unitCaster == "vehicle" then isPlayer = true end
+        if UnitIsFriend("player", unit) then isFriend = true end
+        if isFriend then
+            auraType = "HELPFUL"
         else
+            auraType = "HARMFUL"
+        end
+
+        if isPlayer then
+            returnValue = true
+        else
+            returnValue = false
+        end
+
+        if shouldConsolidate == 1 then
+            returnValue = false
+        end
+
+        if (duration == 0 or not duration) then
+            returnValue = false
+        end
+
+        if R.global["UnitFrames"]["aurafilters"]["Blacklist"][name] then
+            returnValue = false
+        end
+
+        if R.global["UnitFrames"]["aurafilters"]["Whitelist"][name] then
+            returnValue = true
+        end
+
+        return returnValue
+    end
+
+    local RangeColors = {
+        [5] = RayUF.colors.reaction[5],
+        [30] = RayUF.colors.reaction[4],
+        [35] = RayUF.colors.reaction[3],
+        [40] = {1.00, 0.38, 0.08, 1},
+        [100] = RayUF.colors.reaction[1],
+    }
+
+    function UF:Construct_RangeText(frame)
+        local text = frame.textframe:CreateFontString(nil, "OVERLAY")
+        text:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
+        -- text:SetFont(R["media"].font, R["media"].fontsize - 2, R["media"].fontflag)
+        text:SetJustifyH("RIGHT")
+        text:SetParent(frame.textframe)
+        text:Point("TOPRIGHT", frame.textframe, "TOPLEFT", -2, 3)
+        return text
+    end
+
+    function UF:RangeDisplayUpdate(frame)
+        if ( not UnitExists("target") ) or ( not frame.RangeText ) then return end
+
+        -- Get range
+        local section
+        local minRange, maxRange = RC:GetRange("target")
+
+        -- No change? Skip
+        if ((minRange == frame.RangeText.lastMinRange) and (maxRange == frame.RangeText.lastMaxRange)) then return end
+
+        frame.RangeText.lastMinRange = minRange
+        frame.RangeText.lastMaxRange = maxRange
+
+        -- Get Range section
+        if UnitIsUnit("player", "target") then maxRange = nil end
+        if minRange > 80 then maxRange = nil end
+        if maxRange then
+            if maxRange <= 5 then
+                section = 5
+            elseif maxRange <= 30 then
+                section = 30
+            elseif maxRange <= 35 then
+                section = 35
+            elseif maxRange <= 40 then
+                section = 40
+            else
+                section = 100
+            end
+            frame.RangeText:SetFormattedText("%d", maxRange)
+            frame.RangeText:SetTextColor(RangeColors[section][1], RangeColors[section][2], RangeColors[section][3])
+        else
+            frame.RangeText:SetText("")
+        end
+    end
+
+    function UF:Construct_AuraBars()
+        local bar = self.statusBar
+
+        bar:Height(5)
+        bar:ClearAllPoints()
+        bar:SetPoint("BOTTOMLEFT")
+        bar:SetPoint("BOTTOMRIGHT")
+        bar:CreateShadow("Background")
+
+        bar:SetStatusBarColor(unpack(RayUF.colors.class[R.myclass]))
+
+        bar.spelltime:FontTemplate(R["media"].font, R["media"].fontsize, "OUTLINE")
+        bar.spellname:FontTemplate(R["media"].font, R["media"].fontsize, "OUTLINE")
+
+        bar.spellname:ClearAllPoints()
+        bar.spellname:SetPoint("BOTTOMLEFT", bar, "TOPLEFT", 2, 2)
+        bar.spellname:SetPoint("BOTTOMRIGHT", bar, "TOPRIGHT", -20, 2)
+
+        bar.spelltime:ClearAllPoints()
+        bar.spelltime:SetPoint("BOTTOMRIGHT", bar, "TOPRIGHT", 0, 2)
+
+        bar.iconHolder:CreateShadow("Background")
+        bar.icon:SetDrawLayer("OVERLAY")
+
+        bar.iconHolder:RegisterForClicks("RightButtonUp")
+        bar.iconHolder:SetScript("OnClick", function(self)
+                if not IsShiftKeyDown() then return end
+                local auraName = self:GetParent().aura.name
+
+                if auraName then
+                    R.global["UnitFrames"]["aurafilters"]["Blacklist"][auraName] = true
+                end
+            end)
+    end
+
+    function UF:Construct_AuraBarHeader(frame)
+        local auraBar = CreateFrame("Frame", nil, frame)
+        auraBar.PostCreateBar = UF.Construct_AuraBars
+        auraBar.gap = 4
+        auraBar.spacing = 4
+        auraBar.spark = true
+        auraBar.sort = true
+        auraBar.filter = UF.AuraBarFilter
+        auraBar.friendlyAuraType = "HELPFUL"
+        auraBar.enemyAuraType = "HARMFUL"
+        auraBar.auraBarTexture = R["media"].normal
+        auraBar.buffColor = RayUF.colors.class[R.myclass]
+
+        return auraBar
+    end
+
+    function UF:UpdatePrep(event)
+        if event == "ARENA_OPPONENT_UPDATE" then
             for i=1, 5 do
                 if not _G["RayUFArena"..i] then return end
                 _G["RayUFArena"..i].prepFrame:Hide()
             end
+        else
+            local numOpps = GetNumArenaOpponentSpecs()
+
+            if numOpps > 0 then
+                for i=1, 5 do
+                    if not _G["RayUFArena"..i] then return end
+                    local s = GetArenaOpponentSpec(i)
+                    local _, spec, class, texture = nil, "UNKNOWN", "UNKNOWN", [[INTERFACE\ICONS\INV_MISC_QUESTIONMARK]]
+
+                    if s and s > 0 then
+                        _, spec, _, texture, _, _, class = GetSpecializationInfoByID(s)
+                    end
+
+                    if (i <= numOpps) then
+                        if class and spec then
+                            local color = R.colors.class[class]
+                            _G["RayUFArena"..i].prepFrame.SpecClass:SetText(spec.." - "..LOCALIZED_CLASS_NAMES_MALE[class])
+                            _G["RayUFArena"..i].prepFrame.Health:SetStatusBarColor(color.r, color.g, color.b)
+                            _G["RayUFArena"..i].prepFrame.Icon:SetTexture(texture)
+                            _G["RayUFArena"..i].prepFrame:Show()
+                        end
+                    else
+                        _G["RayUFArena"..i].prepFrame:Hide()
+                    end
+                end
+            else
+                for i=1, 5 do
+                    if not _G["RayUFArena"..i] then return end
+                    _G["RayUFArena"..i].prepFrame:Hide()
+                end
+            end
         end
     end
-end
 
-local attributeBlacklist = {["showplayer"] = true, ["showraid"] = true, ["showparty"] = true, ["showsolo"] = true}
-local configEnv
-local originalEnvs = {}
-local overrideFuncs = {}
+    local attributeBlacklist = {["showplayer"] = true, ["showraid"] = true, ["showparty"] = true, ["showsolo"] = true}
+    local configEnv
+    local originalEnvs = {}
+    local overrideFuncs = {}
 
-local function createConfigEnv()
-    if( configEnv ) then return end
-    configEnv = setmetatable({
-        UnitName = function(unit)
-            if unit:find("target") or unit:find("focus") then
-                return UnitName(unit)
+    local function createConfigEnv()
+        if( configEnv ) then return end
+        configEnv = setmetatable({
+                UnitName = function(unit)
+                    if unit:find("target") or unit:find("focus") then
+                        return UnitName(unit)
+                    end
+                    if R.Developer then
+                        local max = #R.Developer
+                        return R.Developer[math.random(1, max)]
+                    end
+                    return "Test Name"
+                end,
+                UnitClass = function(unit)
+                    if unit:find("target") or unit:find("focus") then
+                        return UnitClass(unit)
+                    end
+
+                    local classToken = CLASS_SORT_ORDER[math.random(1, #(CLASS_SORT_ORDER))]
+                    return LOCALIZED_CLASS_NAMES_MALE[classToken], classToken
+                end,
+                }, {
+                __index = _G,
+                __newindex = function(tbl, key, value) _G[key] = value end,
+            })
+
+        overrideFuncs["RayUFRaid:name"] = RayUF.Tags.Methods["RayUFRaid:name"]
+    end
+
+    function UF:ForceShow(frame)
+        if InCombatLockdown() then return end
+        if not frame.isForced then
+            frame.oldUnit = frame.unit
+            frame.unit = "player"
+            frame.isForced = true
+            if frame.Buffs then
+                frame.Buffs.forceShow = true
             end
-            if R.Developer then
-                local max = #R.Developer
-                return R.Developer[math.random(1, max)]
+            if frame.Auras then
+                frame.Auras.forceShow = true
             end
-            return "Test Name"
-        end,
-        UnitClass = function(unit)
-            if unit:find("target") or unit:find("focus") then
-                return UnitClass(unit)
+            if frame.Debuffs then
+                frame.Debuffs.forceShow = true
             end
+        end
+        UnregisterUnitWatch(frame)
+        RegisterUnitWatch(frame, true)
 
-            local classToken = CLASS_SORT_ORDER[math.random(1, #(CLASS_SORT_ORDER))]
-            return LOCALIZED_CLASS_NAMES_MALE[classToken], classToken
-        end,
-    }, {
-        __index = _G,
-        __newindex = function(tbl, key, value) _G[key] = value end,
-    })
+        frame:Show()
+    end
 
-    overrideFuncs["RayUFRaid:name"] = RayUF.Tags.Methods["RayUFRaid:name"]
-end
-
-function UF:ForceShow(frame)
-    if InCombatLockdown() then return end
-    if not frame.isForced then
-        frame.oldUnit = frame.unit
-        frame.unit = "player"
-        frame.isForced = true
+    function UF:UnforceShow(frame)
+        if InCombatLockdown() then return end
+        if not frame.isForced then
+            return
+        end
+        frame.isForced = nil
         if frame.Buffs then
-            frame.Buffs.forceShow = true
+            frame.Buffs.forceShow = nil
         end
         if frame.Auras then
-            frame.Auras.forceShow = true
+            frame.Auras.forceShow = nil
         end
         if frame.Debuffs then
-            frame.Debuffs.forceShow = true
+            frame.Debuffs.forceShow = nil
+        end
+
+        UnregisterUnitWatch(frame)
+        RegisterUnitWatch(frame)
+
+        frame.unit = frame.oldUnit or frame.unit
+    end
+
+    function UF:ShowChildUnits(header, ...)
+        header.isForced = true
+        for i=1, select("#", ...) do
+            local frame = select(i, ...)
+            frame:RegisterForClicks(nil)
+            frame:SetID(i)
+            frame.TargetBorder:SetAlpha(0)
+            frame.FocusHighlight:SetAlpha(0)
+            self:ForceShow(frame)
         end
     end
-    UnregisterUnitWatch(frame)
-    RegisterUnitWatch(frame, true)
 
-    frame:Show()
-end
-
-function UF:UnforceShow(frame)
-    if InCombatLockdown() then return end
-    if not frame.isForced then
-        return
-    end
-    frame.isForced = nil
-    if frame.Buffs then
-        frame.Buffs.forceShow = nil
-    end
-    if frame.Auras then
-        frame.Auras.forceShow = nil
-    end
-    if frame.Debuffs then
-        frame.Debuffs.forceShow = nil
+    function UF:UnshowChildUnits(header, ...)
+        header.isForced = nil
+        for i=1, select("#", ...) do
+            local frame = select(i, ...)
+            frame:RegisterForClicks("AnyUp")
+            frame.TargetBorder:SetAlpha(1)
+            frame.FocusHighlight:SetAlpha(1)
+            self:UnforceShow(frame)
+        end
     end
 
-    UnregisterUnitWatch(frame)
-    RegisterUnitWatch(frame)
+    local function OnAttributeChanged(self, name)
+        if not self.forceShow then return end
 
-    frame.unit = frame.oldUnit or frame.unit
-end
-
-function UF:ShowChildUnits(header, ...)
-    header.isForced = true
-    for i=1, select("#", ...) do
-        local frame = select(i, ...)
-        frame:RegisterForClicks(nil)
-        frame:SetID(i)
-        frame.TargetBorder:SetAlpha(0)
-        frame.FocusHighlight:SetAlpha(0)
-        self:ForceShow(frame)
+        local startingIndex = - 4
+        if self:GetAttribute("startingIndex") ~= startingIndex then
+            self:SetAttribute("startingIndex", startingIndex)
+            UF:ShowChildUnits(self, self:GetChildren())
+        end
     end
-end
 
-function UF:UnshowChildUnits(header, ...)
-    header.isForced = nil
-    for i=1, select("#", ...) do
-        local frame = select(i, ...)
-        frame:RegisterForClicks("AnyUp")
-        frame.TargetBorder:SetAlpha(1)
-        frame.FocusHighlight:SetAlpha(1)
-        self:UnforceShow(frame)
-    end
-end
+    function UF:HeaderConfig(header, configMode)
+        if InCombatLockdown() then return end
 
-local function OnAttributeChanged(self, name)
-    if not self.forceShow then return end
-
-    local startingIndex = - 4
-    if self:GetAttribute("startingIndex") ~= startingIndex then
-        self:SetAttribute("startingIndex", startingIndex)
-        UF:ShowChildUnits(self, self:GetChildren())
-    end
-end
-
-function UF:HeaderConfig(header, configMode)
-    if InCombatLockdown() then return end
-
-    createConfigEnv()
-    header.forceShow = configMode
-    header:HookScript("OnAttributeChanged", OnAttributeChanged)
-    if configMode then
-        for _, func in pairs(overrideFuncs) do
-            if type(func) == "function" and not originalEnvs[func] then
-                originalEnvs[func] = getfenv(func)
-                setfenv(func, configEnv)
+        createConfigEnv()
+        header.forceShow = configMode
+        header:HookScript("OnAttributeChanged", OnAttributeChanged)
+        if configMode then
+            for _, func in pairs(overrideFuncs) do
+                if type(func) == "function" and not originalEnvs[func] then
+                    originalEnvs[func] = getfenv(func)
+                    setfenv(func, configEnv)
+                end
             end
-        end
 
-        for key in pairs(attributeBlacklist) do
-            header:SetAttribute(key, nil)
-        end
-
-        RegisterAttributeDriver(header, "state-visibility", "show")
-        OnAttributeChanged(header)
-
-        UF:ShowChildUnits(header, header:GetChildren())
-    else
-        for func, env in pairs(originalEnvs) do
-            setfenv(func, env)
-            originalEnvs[func] = nil
-        end
-
-        UF:UnshowChildUnits(header, header:GetChildren())
-        header:SetAttribute("startingIndex", 1)
-
-        local RA = R:GetModule("Raid")
-        if header:GetName():find("RayUFRaid15") then
-            RA.Raid15SmartVisibility(header)
-        end
-        if header:GetName():find("RayUFRaid25") then
-            RA.Raid25SmartVisibility(header)
-        end
-        if header:GetName():find("RayUFRaid40") then
-            RA.Raid40SmartVisibility(header)
-        end
-    end
-end
-
-local testuf = TestUF or function() end
-local function TestUF(msg)
-    if msg == "a" or msg == "arena" then
-        for i = 1, 5 do
-            local frame = _G["RayUFArena"..i]
-            if frame and not frame.isForced then
-                UF:ForceShow(frame)
-            elseif frame then
-                UF:UnforceShow(frame)
+            for key in pairs(attributeBlacklist) do
+                header:SetAttribute(key, nil)
             end
-        end
-    elseif msg == "boss" or msg == "b" then
-        for i = 1, MAX_BOSS_FRAMES do
-            local frame = _G["RayUFBoss"..i]
-            if frame and not frame.isForced then
-                UF:ForceShow(frame)
-            elseif frame then
-                UF:UnforceShow(frame)
+
+            RegisterAttributeDriver(header, "state-visibility", "show")
+            OnAttributeChanged(header)
+
+            UF:ShowChildUnits(header, header:GetChildren())
+        else
+            for func, env in pairs(originalEnvs) do
+                setfenv(func, env)
+                originalEnvs[func] = nil
             end
-        end
-    elseif msg == "raid15" or msg == "r15" then
-        for i = 1, 30 do
-            local header = _G["RayUFRaid15_"..i]
-            if header then
-                UF:HeaderConfig(header, header.forceShow ~= true or nil)
+
+            UF:UnshowChildUnits(header, header:GetChildren())
+            header:SetAttribute("startingIndex", 1)
+
+            local RA = R:GetModule("Raid")
+            if header:GetName():find("RayUFRaid15") then
+                RA.Raid15SmartVisibility(header)
             end
-        end
-    elseif msg == "raid25" or msg == "r25" then
-        for i = 1, 5 do
-            local header = _G["RayUFRaid25_"..i]
-            if header then
-                UF:HeaderConfig(header, header.forceShow ~= true or nil)
+            if header:GetName():find("RayUFRaid25") then
+                RA.Raid25SmartVisibility(header)
             end
-        end
-    elseif msg == "raid40" or msg == "r40" then
-        local forceShow = RayUFRaid40_6.forceShow
-        for i = 6, 8 do
-            local header = _G["RayUFRaid40_"..i]
-            if header then
-                UF:HeaderConfig(header, forceShow ~= true or nil)
-            end
-        end
-        for i = 1, 5 do
-            local header = _G["RayUFRaid25_"..i]
-            if header then
-                UF:HeaderConfig(header, forceShow ~= true or nil)
+            if header:GetName():find("RayUFRaid40") then
+                RA.Raid40SmartVisibility(header)
             end
         end
     end
-end
 
-SlashCmdList.TestUF = TestUF
-SLASH_TestUF1 = "/testuf"
+    local testuf = TestUF or function() end
+    local function TestUF(msg)
+        if msg == "a" or msg == "arena" then
+            for i = 1, 5 do
+                local frame = _G["RayUFArena"..i]
+                if frame and not frame.isForced then
+                    UF:ForceShow(frame)
+                elseif frame then
+                    UF:UnforceShow(frame)
+                end
+            end
+        elseif msg == "boss" or msg == "b" then
+            for i = 1, MAX_BOSS_FRAMES do
+                local frame = _G["RayUFBoss"..i]
+                if frame and not frame.isForced then
+                    UF:ForceShow(frame)
+                elseif frame then
+                    UF:UnforceShow(frame)
+                end
+            end
+        elseif msg == "raid15" or msg == "r15" then
+            for i = 1, 30 do
+                local header = _G["RayUFRaid15_"..i]
+                if header then
+                    UF:HeaderConfig(header, header.forceShow ~= true or nil)
+                end
+            end
+        elseif msg == "raid25" or msg == "r25" then
+            for i = 1, 5 do
+                local header = _G["RayUFRaid25_"..i]
+                if header then
+                    UF:HeaderConfig(header, header.forceShow ~= true or nil)
+                end
+            end
+        elseif msg == "raid40" or msg == "r40" then
+            local forceShow = RayUFRaid40_6.forceShow
+            for i = 6, 8 do
+                local header = _G["RayUFRaid40_"..i]
+                if header then
+                    UF:HeaderConfig(header, forceShow ~= true or nil)
+                end
+            end
+            for i = 1, 5 do
+                local header = _G["RayUFRaid25_"..i]
+                if header then
+                    UF:HeaderConfig(header, forceShow ~= true or nil)
+                end
+            end
+        end
+    end
+
+    SlashCmdList.TestUF = TestUF
+    SLASH_TestUF1 = "/testuf"
