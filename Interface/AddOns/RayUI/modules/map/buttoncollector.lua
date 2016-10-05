@@ -1,5 +1,18 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local MM = R:GetModule("MiniMap")
+
+--Cache global variables
+--Lua functions
+local select, unpack, pairs, string, math = select, unpack, pairs, string, math
+local tinsert = table.insert
+local strfind = string.find
+
+--WoW API / Variables
+local CreateFrame = CreateFrame
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: VendomaticButton, VendomaticButtonIcon, Minimap, BaudErrorFrameMinimapButton
+
 local MBCF
 local buttons = {}
 
