@@ -2,6 +2,16 @@ local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, 
 local mod = R:GetModule('NamePlates')
 local LSM = LibStub("LibSharedMedia-3.0")
 
+--Cache global variables
+--Lua functions
+local select, unpack = select, unpack
+local tinsert, tremove = table.insert, table.remove
+--WoW API / Variables
+local CreateFrame = CreateFrame
+local UnitBuff = UnitBuff
+local UnitDebuff = UnitDebuff
+local BUFF_STACKS_OVERFLOW = BUFF_STACKS_OVERFLOW
+
 local auraCache = {}
 local tinsert, tremove, twipe = table.insert, table.remove, table.wipe
 
@@ -39,7 +49,7 @@ end
 function mod:UpdateElement_Auras(frame)
 	local hasBuffs = false
 	local hasDebuffs = false
-	
+
 	--Debuffs
 	local index = 1;
 	local frameNum = 1;
@@ -47,7 +57,7 @@ function mod:UpdateElement_Auras(frame)
 	local maxDebuffs = #frame.Debuffs.icons;
 	--Show both Boss buffs & debuffs in the debuff location
 	--First, we go through all the debuffs looking for any boss flagged ones.
-	
+
 	self:HideAuraIcons(frame.Debuffs)
 	if(self.db.units[frame.UnitType].debuffs.enable) then
 		frame.Debuffs.shownIDs = {}
@@ -68,7 +78,7 @@ function mod:UpdateElement_Auras(frame)
 				index = index + 1;
 			end
 		end
-		
+
 		if(self.db.units[frame.UnitType].debuffs.filters.personal) then
 			index = 1
 			--Now look for personal debuffs
@@ -89,7 +99,7 @@ function mod:UpdateElement_Auras(frame)
 			end
 		end
 	end
-	
+
 	--Buffs
 	index = 1
 	local maxBuffs = #frame.Buffs.icons
@@ -113,9 +123,9 @@ function mod:UpdateElement_Auras(frame)
 					break;
 				end
 				index = index + 1;
-			end	
+			end
 		end
-		
+
 		if(self.db.units[frame.UnitType].buffs.filters.personal) then
 			index = 1
 			--Now look the rest of buffs
@@ -136,7 +146,7 @@ function mod:UpdateElement_Auras(frame)
 			end
 		end
 	end
-	
+
 	local TopLevel = frame.HealthBar
 	local TopOffset = self.db.units[frame.UnitType].showName and select(2, frame.Name:GetFont()) + 5 or 0
 	if(hasDebuffs) then
@@ -146,14 +156,14 @@ function mod:UpdateElement_Auras(frame)
 		TopLevel = frame.Debuffs
 		TopOffset = 3
 	end
-	
+
 	if(hasBuffs) then
 		if(not hasDebuffs) then
 			TopOffset = TopOffset + 3
 		end
 		frame.Buffs:SetPoint("BOTTOMLEFT", TopLevel, "TOPLEFT", 0, TopOffset)
 		frame.Buffs:SetPoint("BOTTOMRIGHT", TopLevel, "TOPRIGHT", 0, TopOffset)
-		TopLevel = frame.Buffs	
+		TopLevel = frame.Buffs
 		TopOffset = 3
 	end
 end
@@ -165,7 +175,7 @@ function mod:CreateAuraIcon(parent)
 	aura.icon = aura:CreateTexture(nil, "OVERLAY")
 	aura.icon:SetAllPoints()
 	aura.icon:SetTexCoord(.07, 1-.07, .23, 1-.23)
-	
+
 	aura.cooldown = CreateFrame("Cooldown", nil, aura, "CooldownFrameTemplate")
 	aura.cooldown:SetAllPoints(aura)
 	aura.cooldown:SetReverse(true)
@@ -176,7 +186,7 @@ function mod:CreateAuraIcon(parent)
 	aura.count = aura:CreateFontString(nil, "OVERLAY")
 	aura.count:SetPoint("BOTTOMRIGHT")
 	aura.count:SetFont(LSM:Fetch("font", R.global.media.font), R.global.media.fontsize, R.global.media.fontflag)
-	
+
 	return aura
 end
 
@@ -196,7 +206,7 @@ function mod:UpdateAuraIcons(auras)
 			tinsert(auras.icons[i], auraCache)
 			auras.icons[i]:Hide()
 			auras.icons[i] = nil
-		end 
+		end
 	end
 
 	if numCurrentAuras ~= maxAuras then
@@ -221,7 +231,7 @@ function mod:UpdateAuraIcons(auras)
 				auras.icons[i]:SetPoint("RIGHT", auras, "RIGHT")
 			else
 				auras.icons[i]:SetPoint("RIGHT", auras.icons[i-1], "LEFT", -3, 0)
-			end		
+			end
 		end
 	end
 end
@@ -233,6 +243,6 @@ function mod:ConstructElement_Auras(frame, maxAuras, side)
 	auras:SetHeight(18) -- this really doesn't matter
 	auras.side = side
 	auras.icons = {}
-	
+
 	return auras
 end

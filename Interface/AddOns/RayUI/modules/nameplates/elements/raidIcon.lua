@@ -1,6 +1,12 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local mod = R:GetModule('NamePlates')
 
+--Cache global variables
+--Lua functions
+--WoW API / Variables
+local GetRaidTargetIndex = GetRaidTargetIndex
+local SetRaidTargetIconTexture = SetRaidTargetIconTexture
+
 function mod:UpdateElement_RaidIcon(frame)
 	local icon = frame.RaidIcon;
 	local index = GetRaidTargetIndex(frame.unit);
@@ -10,7 +16,7 @@ function mod:UpdateElement_RaidIcon(frame)
 	else
 		icon:SetPoint("BOTTOM", frame.Name, "TOP", 0, 3)
 	end
-	
+
 	if ( index ) then
 		SetRaidTargetIconTexture(icon, index);
 		icon:Show();
@@ -25,6 +31,6 @@ function mod:ConstructElement_RaidIcon(frame)
 	texture:SetSize(40, 40)
 	texture:SetTexture([[Interface\TargetingFrame\UI-RaidTargetingIcons]])
 	texture:Hide()
-	
+
 	return texture
 end

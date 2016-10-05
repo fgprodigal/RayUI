@@ -137,6 +137,37 @@ function R:Scale(x)
 	return (self.mult*math.floor(x/self.mult+.5))
 end
 
+R.LockedCVars = {}
+function R:PLAYER_REGEN_ENABLED(_)
+	if(self.CVarUpdate) then
+		for cvarName, value in pairs(self.LockedCVars) do
+			if(GetCVar(cvarName) ~= value) then
+				SetCVar(cvarName, value)
+			end
+		end
+		self.CVarUpdate = nil
+	end
+end
+
+local function CVAR_UPDATE(cvarName, value)
+	if(R.LockedCVars[cvarName] and R.LockedCVars[cvarName] ~= value) then
+		if(InCombatLockdown()) then
+			R.CVarUpdate = true
+			return
+		end
+
+		SetCVar(cvarName, R.LockedCVars[cvarName])
+	end
+end
+
+hooksecurefunc("SetCVar", CVAR_UPDATE)
+function R:LockCVar(cvarName, value)
+	if(GetCVar(cvarName) ~= value) then
+		SetCVar(cvarName, value)
+	end
+	self.LockedCVars[cvarName] = value
+end
+
 function R:RegisterModule(name)
 	if self.initialized then
 		self:GetModule(name):Initialize()

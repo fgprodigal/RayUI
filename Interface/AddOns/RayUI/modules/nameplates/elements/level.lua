@@ -2,9 +2,18 @@ local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, 
 local mod = R:GetModule('NamePlates')
 local LSM = LibStub("LibSharedMedia-3.0")
 
+--Cache global variables
+--Lua functions
+local strfind = string.find
+
+--WoW API / Variables
+local GetQuestDifficultyColor = GetQuestDifficultyColor
+local UnitLevel = UnitLevel
+local UnitClassification = UnitClassification
+
 function mod:UpdateElement_Level(frame)
 	if(not self.db.units[frame.UnitType].showLevel and frame.UnitType ~= "PLAYER") then return end
-	if frame.UnitType == "PLAYER" and not self.db.units[frame.UnitType].showLevel then frame.Level:SetText() return end 
+	if frame.UnitType == "PLAYER" and not self.db.units[frame.UnitType].showLevel then frame.Level:SetText() return end
 	local level = UnitLevel(frame.displayedUnit)
 	local c = UnitClassification(frame.displayedUnit)
 
@@ -18,7 +27,7 @@ function mod:UpdateElement_Level(frame)
 		if strfind(c, "elite") then level = level .. "+" end
 		r, g, b = color.r, color.g, color.b
 	end
-	
+
 	if(self.db.units[frame.UnitType].healthbar.enable or frame.isTarget) then
 		frame.Level:SetText(level)
 	else
@@ -29,7 +38,7 @@ end
 
 function mod:ConfigureElement_Level(frame)
 	local level = frame.Level
-	
+
 	level:ClearAllPoints()
 
 	if(self.db.units[frame.UnitType].healthbar.enable or frame.isTarget) then

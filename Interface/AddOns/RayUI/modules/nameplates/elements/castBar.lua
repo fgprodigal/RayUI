@@ -1,6 +1,18 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local mod = R:GetModule('NamePlates')
 local LSM = LibStub("LibSharedMedia-3.0")
+
+--Cache global variables
+--Lua functions
+local select, unpack = select, unpack
+--WoW API / Variables
+local CreateFrame = CreateFrame
+local GetTime = GetTime
+local UnitCastingInfo = UnitCastingInfo
+local UnitChannelInfo = UnitChannelInfo
+local FAILED = FAILED
+local INTERRUPTED = INTERRUPTED
+
 function mod:UpdateElement_CastBarOnUpdate(elapsed)
 	if ( self.casting ) then
 		self.value = self.value + elapsed;
@@ -28,7 +40,7 @@ end
 
 function mod:UpdateElement_Cast(frame, event, ...)
 	if(self.db.units[frame.UnitType].castbar.enable ~= true) then return end
-	
+
 	local arg1 = ...;
 	local unit = frame.displayedUnit
 	if ( event == "PLAYER_ENTERING_WORLD" ) then
@@ -44,10 +56,10 @@ function mod:UpdateElement_Cast(frame, event, ...)
 		    frame.CastBar:Hide()
 		end
 	end
-	
+
 	if ( arg1 ~= unit ) then
 		return;
-	end		
+	end
 
 	if ( event == "UNIT_SPELLCAST_START" ) then
 		local name, nameSubtext, text, texture, startTime, endTime, isTradeSkill, castID, notInterruptible = UnitCastingInfo(unit);
@@ -57,7 +69,7 @@ function mod:UpdateElement_Cast(frame, event, ...)
 		end
 
 		frame.CastBar.canInterrupt = not notInterruptible
-		
+
 		if ( frame.CastBar.Spark ) then
 			frame.CastBar.Spark:Show();
 		end
@@ -132,8 +144,8 @@ function mod:UpdateElement_Cast(frame, event, ...)
 			if ( not frame.CastBar.casting ) then
 				if ( frame.CastBar.Spark ) then
 					frame.CastBar.Spark:Show();
-				end			
-				
+				end
+
 				frame.CastBar.casting = true;
 				frame.CastBar.channeling = nil;
 			end
@@ -150,7 +162,7 @@ function mod:UpdateElement_Cast(frame, event, ...)
 		frame.CastBar.maxValue = (endTime - startTime) / 1000;
 		frame.CastBar:SetMinMaxValues(0, frame.CastBar.maxValue);
 		frame.CastBar:SetValue(frame.CastBar.value);
-		
+
 		if ( frame.CastBar.Text ) then
 			frame.CastBar.Text:SetText(text);
 		end
@@ -183,7 +195,7 @@ function mod:UpdateElement_Cast(frame, event, ...)
 	elseif ( event == "UNIT_SPELLCAST_NOT_INTERRUPTIBLE" ) then
 		frame.CastBar.canInterrupt = nil
 	end
-	
+
 	if(frame.CastBar.canInterrupt) then
 		frame.CastBar:SetStatusBarColor(0, 1, 0)
 	else
@@ -199,7 +211,7 @@ function mod:ConfigureElement_CastBar(frame)
 	castBar:ClearAllPoints()
 	if(self.db.units[frame.UnitType].powerbar.enable) then
 		castBar:SetPoint("TOPLEFT", frame.PowerBar, "BOTTOMLEFT", 0, -5)
-		castBar:SetPoint("TOPRIGHT", frame.PowerBar, "BOTTOMRIGHT", 0, -5)	
+		castBar:SetPoint("TOPRIGHT", frame.PowerBar, "BOTTOMRIGHT", 0, -5)
 	else
 		castBar:SetPoint("TOPLEFT", frame.HealthBar, "BOTTOMLEFT", 0, -5)
 		castBar:SetPoint("TOPRIGHT", frame.HealthBar, "BOTTOMRIGHT", 0, -5)
@@ -214,16 +226,16 @@ function mod:ConfigureElement_CastBar(frame)
 		castBar.Icon:SetWidth(self.db.cbHeight + self.db.hpHeight + 5)
 	end
 	castBar.Icon.texture:SetTexCoord(.08, .92, .08, .92)
-	
+
 	castBar.Name:SetPoint("TOPLEFT", castBar, "BOTTOMLEFT", 0, -3)
 	castBar.Time:SetPoint("TOPRIGHT", castBar, "BOTTOMRIGHT", 0, -3)
 	castBar.Name:SetPoint("TOPRIGHT", castBar.Time, "TOPLEFT")
-	
+
 	castBar.Name:SetJustifyH("LEFT")
 	castBar.Name:SetFont(LSM:Fetch("font", R.global.media.font), R.global.media.fontsize, R.global.media.fontflag)
 	castBar.Time:SetJustifyH("RIGHT")
 	castBar.Time:SetFont(LSM:Fetch("font", R.global.media.font), R.global.media.fontsize, R.global.media.fontflag)
-		
+
 	--Texture
 	castBar:SetStatusBarTexture(LSM:Fetch("statusbar", "RayUI Normal"))
 end
@@ -232,7 +244,7 @@ function mod:ConstructElement_CastBar(parent)
 	local frame = CreateFrame("StatusBar", "$parentCastBar", parent)
 	self:StyleFrame(frame)
 	frame:SetScript("OnUpdate", mod.UpdateElement_CastBarOnUpdate)
-	
+
 	frame.Icon = CreateFrame("Frame", nil, frame)
 	frame.Icon.texture = frame.Icon:CreateTexture(nil, "BORDER")
 	frame.Icon.texture:SetAllPoints()
@@ -246,5 +258,5 @@ function mod:ConstructElement_CastBar(parent)
 	frame.Spark:SetBlendMode("ADD")
 	frame.Spark:SetSize(15, 15)
 	frame:Hide()
-	return frame	
+	return frame
 end

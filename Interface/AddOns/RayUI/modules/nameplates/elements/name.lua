@@ -2,10 +2,24 @@ local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, 
 local mod = R:GetModule('NamePlates')
 local LSM = LibStub("LibSharedMedia-3.0")
 
+--Cache global variables
+--Lua functions
+local unpack = unpack
+
+--WoW API / Variables
+local UnitClass = UnitClass
+local UnitName = UnitName
+local UnitReaction = UnitReaction
+local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: RayUF
+
 function mod:UpdateElement_Name(frame)
 	local name, realm = UnitName(frame.displayedUnit)
 	if((not self.db.units[frame.UnitType].showName and frame.UnitType ~= "PLAYER") or not name) then return end
-	if frame.UnitType == "PLAYER" and not self.db.units[frame.UnitType].showName then frame.Name:SetText() return end 
+	if frame.UnitType == "PLAYER" and not self.db.units[frame.UnitType].showName then frame.Name:SetText() return end
 
 	frame.Name:SetText(name)
 
@@ -24,8 +38,8 @@ function mod:UpdateElement_Name(frame)
 			r, g, b = unpack(RayUF.colors.reaction[5])
 		else
 			r, g, b = unpack(RayUF.colors.reaction[1])
-		end	
-		
+		end
+
 		frame.Name:SetTextColor(r, g, b)
 	else
 		frame.Name:SetTextColor(1, 1, 1)
@@ -34,7 +48,7 @@ end
 
 function mod:ConfigureElement_Name(frame)
 	local name = frame.Name
-	
+
 	name:SetJustifyH("LEFT")
 	name:ClearAllPoints()
 	if(self.db.units[frame.UnitType].healthbar.enable or frame.isTarget) then
@@ -45,7 +59,7 @@ function mod:ConfigureElement_Name(frame)
 		name:SetJustifyH("CENTER")
 		name:SetPoint("TOP", frame, "CENTER")
 	end
-	
+
 	name:SetFont(LSM:Fetch("font", R.global.media.font), R.global.media.fontsize, R.global.media.fontflag)
 end
 
