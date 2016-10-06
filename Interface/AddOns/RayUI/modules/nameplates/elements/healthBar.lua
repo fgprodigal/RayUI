@@ -214,9 +214,9 @@ end
 
 function mod:UpdateElement_Health(frame)
     local health = UnitHealth(frame.displayedUnit);
-	local _, maxHealth = frame.HealthBar:GetMinMaxValues()
+    local _, maxHealth = frame.HealthBar:GetMinMaxValues()
     frame.HealthBar:SetValue(health)
-	frame.HealthBar.text:SetText(format("%.1f%%", health / maxHealth * 100))
+    frame.HealthBar.text:SetText(format("%.1f%%", health / maxHealth * 100))
 end
 
 function mod:ConfigureElement_HealthBar(frame, configuring)
@@ -236,7 +236,7 @@ function mod:ConfigureElement_HealthBar(frame, configuring)
 
     --Texture
     healthBar:SetStatusBarTexture(LSM:Fetch("statusbar", "RayUI Normal"))
-    if(not configuring) then
+    if(not configuring) and (self.db.units[frame.UnitType].healthbar.enable or frame.isTarget) then
         healthBar:Show()
     end
     absorbBar:Hide()
