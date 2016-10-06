@@ -13,10 +13,9 @@ local IsInRaid = IsInRaid
 local IsInInstance = IsInInstance
 local IsInGuild = IsInGuild
 local IsShiftKeyDown = IsShiftKeyDown
-local ChatEdit_UpdateHeader = ChatEdit_UpdateHeader
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RayUITabChannelTutorial
+-- GLOBALS: RayUITabChannelTutorial, ChatEdit_UpdateHeader
 
 local cycles = {
 	{
