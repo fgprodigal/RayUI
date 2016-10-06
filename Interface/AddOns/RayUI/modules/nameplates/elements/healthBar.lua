@@ -63,7 +63,7 @@ function mod:UpdateElement_HealthColor(frame)
                 local isTanking, status = UnitDetailedThreatSituation("player", frame.unit)
                 if status then
                     if(status == 3) then --Securely Tanking
-                        if(R.Role == "Tank") then
+                        if(R:GetPlayerRole() == "TANK") then
                             r, g, b = goodR, goodG, goodB
                             scale = 0.8
                         else
@@ -71,19 +71,19 @@ function mod:UpdateElement_HealthColor(frame)
                             scale = 1.2
                         end
                     elseif(status == 2) then --insecurely tanking
-                        if(R.Role == "Tank") then
+                        if(R:GetPlayerRole() == "TANK") then
                             r, g, b = transitionR2, transitionG2, transitionB2
                         else
                             r, g, b = transitionR, transitionG, transitionB
                         end
                     elseif(status == 1) then --not tanking but threat higher than tank
-                        if(R.Role == "Tank") then
+                        if(R:GetPlayerRole() == "TANK") then
                             r, g, b = transitionR, transitionG, transitionB
                         else
                             r, g, b = transitionR2, transitionG2, transitionB2
                         end
                     else -- not tanking at all
-                        if(R.Role == "Tank") then
+                        if(R:GetPlayerRole() == "TANK") then
                             --Check if it is being tanked by an offtank.
                             if (IsInRaid() or IsInGroup()) and frame.isBeingTanked then
                                 r, g, b = tankedByTankR, tankedByTankG, tankedByTankB

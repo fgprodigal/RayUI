@@ -96,7 +96,7 @@ function UF:GetOptions()
                     order = 2,
                     name = L["坦克复仇条"],
                     type = "toggle",
-                    disabled = function() return R.Role ~= "Tank" end,
+                    disabled = function() return R:GetPlayerRole() ~= "TANK" end,
                 },
             },
         },

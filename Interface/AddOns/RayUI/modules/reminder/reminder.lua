@@ -136,7 +136,7 @@ function RM:FilterCheck(frame, isReverse)
 	local db = P["Reminder"].filters[R.myclass][frame.groupName]
 
 	if db.role then
-		if db.role == R.Role or db.role == "ANY" then
+		if db.role == R:GetPlayerRole() or db.role == "ANY" then
 			roleCheck = true
 		else
 			roleCheck = nil

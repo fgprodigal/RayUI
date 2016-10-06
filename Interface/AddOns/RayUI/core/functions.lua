@@ -51,14 +51,13 @@ local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
 local QuestDifficulty_Trivial = QuestDifficulty_Trivial
 local GameMenuFrame = GameMenuFrame
 local GameMenuButtonContinue = GameMenuButtonContinue
-local COMBAT_RATING_RESILIENCE_PLAYER_DAMAGE_TAKEN = COMBAT_RATING_RESILIENCE_PLAYER_DAMAGE_TAKEN
-local FIRST_NUMBER_CAP = FIRST_NUMBER_CAP
-local SECOND_NUMBER_CAP = SECOND_NUMBER_CAP
+local UnitGroupRolesAssigned = UnitGroupRolesAssigned
+local GetSpecializationRole = GetSpecializationRole
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: UIParent, LibStub, MAX_PLAYER_LEVEL, ScriptErrorsFrame_OnError, BaudErrorFrameHandler, UISpecialFrames
 -- GLOBALS: QuestDifficultyColors, Advanced_UIScaleSlider, Advanced_UseUIScale, RayUIConfigTutorial, RayUIWarningFrameScrollScrollBar
--- GLOBALS: SLASH_RELOAD1
+-- GLOBALS: SLASH_RELOAD1, COMBAT_RATING_RESILIENCE_PLAYER_DAMAGE_TAKEN, FIRST_NUMBER_CAP, SECOND_NUMBER_CAP
 
 SlashCmdList["RELOAD"] = function() ReloadUI() end
 SLASH_RELOAD1 = "/rl"
@@ -338,14 +337,6 @@ function R:Initialize()
 		self:ChooseLayout()
 	end
 
-	self:CheckRole()
-	self:RegisterEvent("PLAYER_ENTERING_WORLD", "CheckRole")
-	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", "CheckRole")
-	self:RegisterEvent("PLAYER_TALENT_UPDATE", "CheckRole")
-	self:RegisterEvent("CHARACTER_POINTS_CHANGED", "CheckRole")
-	self:RegisterEvent("UNIT_INVENTORY_CHANGED", "CheckRole")
-	self:RegisterEvent("UPDATE_BONUS_ACTIONBAR", "CheckRole")
-	self:RegisterEvent("UPDATE_SHAPESHIFT_FORM", "CheckRole")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:Delay(5, function() collectgarbage("collect") end)
 
@@ -367,113 +358,14 @@ function R:Initialize()
 	S:Reskin(configButton)
 end
 
---Check the player"s role
-local roles = {
-	PALADIN = {
-		[1] = "Caster",
-		[2] = "Tank",
-		[3] = "Melee",
-	},
-	PRIEST = "Caster",
-	WARLOCK = "Caster",
-	WARRIOR = {
-		[1] = "Melee",
-		[2] = "Melee",
-		[3] = "Tank",
-	},
-	HUNTER = "Melee",
-	SHAMAN = {
-		[1] = "Caster",
-		[2] = "Melee",
-		[3] = "Caster",
-	},
-	ROGUE = "Melee",
-	MAGE = "Caster",
-	DEATHKNIGHT = {
-		[1] = "Tank",
-		[2] = "Melee",
-		[3] = "Melee",
-	},
-	DRUID = {
-		[1] = "Caster",
-		[2] = "Melee",
-		[3] = "Tank",
-		[4] = "Caster"
-	},
-	MONK = {
-		[1] = "Tank",
-		[2] = "Caster",
-		[3] = "Melee",
-	},
-	DEMONHUNTER = {
-		[1] = "Melee",
-		[2] = "Tank",
-	},
-}
-
-local healingClasses = {
-	PALADIN = 1,
-	SHAMAN = 3,
-	DRUID = 4,
-	MONK = 2,
-	PRIEST = {1, 2}
-}
-
-function R:CheckRole()
-	local role = self.Role
-	local talentTree = GetSpecialization()
-	local IsInPvPGear = false;
-	local resilperc = GetCombatRatingBonus(COMBAT_RATING_RESILIENCE_PLAYER_DAMAGE_TAKEN)
-	if resilperc > GetDodgeChance() and resilperc > GetParryChance() and UnitLevel("player") == MAX_PLAYER_LEVEL then
-		IsInPvPGear = true;
+function R:GetPlayerRole()
+	local assignedRole = UnitGroupRolesAssigned("player")
+	if ( assignedRole == "NONE" ) then
+		local spec = GetSpecialization()
+		return GetSpecializationRole(spec)
 	end
 
-	self.Role = nil;
-
-	if type(roles[self.myclass]) == "string" then
-		self.Role = roles[self.myclass]
-	elseif talentTree then
-		self.Role = roles[self.myclass][talentTree]
-	end
-
-	if self.Role == "Tank" and IsInPvPGear then
-		self.Role = "Melee"
-	end
-
-	if not self.Role then
-		local playerint = select(2, UnitStat("player", 4));
-		local playeragi	= select(2, UnitStat("player", 2));
-		local base, posBuff, negBuff = UnitAttackPower("player");
-		local playerap = base + posBuff + negBuff;
-
-		if (playerap > playerint) or (playeragi > playerint) then
-			self.Role = "Melee";
-		else
-			self.Role = "Caster";
-		end
-	end
-
-	if healingClasses[self.myclass] then
-		local tree = healingClasses[self.myclass]
-		if type(tree) == "number" then
-			if talentTree == tree then
-				self.isHealer = true
-				return
-			end
-		elseif type(tree) == "table" then
-			for _, index in pairs(tree) do
-				if index == talentTree then
-					self.isHealer = true
-					return
-				end
-			end
-		end
-	end
-	self.isHealer = false
-
-	if(self.Role ~= role) then
-		self.callbacks:Fire("RoleChanged")
-	end
+	return assignedRole
 end
 
 local tmp={}

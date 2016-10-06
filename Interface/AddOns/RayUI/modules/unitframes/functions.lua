@@ -869,17 +869,6 @@ function UF:SetCastTicks(frame, numTicks, extraTick)
             icon.owner = caster
         end
 
-        -- if UnitCanAttack(unit, "player") and UnitLevel(unit) == -1 then
-        -- if (R.Role == "Melee" and name and UF.PvEMeleeBossDebuffs[name]) or
-        -- (R.Role == "Caster" and name and UF.PvECasterBossDebuffs[name]) or
-        -- (R.Role == "Tank" and name and UF.PvETankBossDebuffs[name]) or
-        -- isPlayer then
-        -- return true
-        -- else
-        -- return false
-        -- end
-        -- end
-
         return true
     end
 

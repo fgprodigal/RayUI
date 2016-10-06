@@ -22,7 +22,7 @@ function mod:Update_ThreatList(frame)
     frame.ThreatData = {}
     frame.ThreatData.player = {isTanking, status, percent}
     frame.isBeingTanked = false
-    if(isTanking and R.Role == "TANK") then
+    if(isTanking and R:GetPlayerRole() == "TANK") then
         frame.isBeingTanked = true
     end
 

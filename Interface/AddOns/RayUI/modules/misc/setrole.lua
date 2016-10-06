@@ -15,12 +15,6 @@ local GetNumGroupMembers = GetNumGroupMembers
 local RolePollPopup = RolePollPopup
 local StaticPopupSpecial_Hide = StaticPopupSpecial_Hide
 
-local t = {
-    ["Melee"] = "DAMAGER",
-    ["Caster"] = "DAMAGER",
-    ["Tank"] = "TANK",
-}
-
 function mod:SetRole()
     local spec = GetSpecialization()
     if UnitLevel("player") >= 10 and not InCombatLockdown() then
@@ -28,15 +22,9 @@ function mod:SetRole()
             UnitSetRole("player", "NONE")
         elseif spec ~= nil then
             if GetNumGroupMembers() > 0 then
-                if R.isHealer then
-                    if UnitGroupRolesAssigned("player") ~= "HEALER" then
-                        UnitSetRole("player", "HEALER")
-                    end
-                else
-                    if UnitGroupRolesAssigned("player") ~= t[R.Role] then
-                        UnitSetRole("player", t[R.Role])
-                    end
-                end
+				if UnitGroupRolesAssigned("player") ~= R:GetPlayerRole() then
+					UnitSetRole("player", R:GetPlayerRole())
+				end
             end
         end
     end
