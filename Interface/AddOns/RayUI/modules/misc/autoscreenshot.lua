@@ -15,6 +15,7 @@ end
 function mod:Initialize()
     if not M.db.autoscreenshot then return end
     self:RegisterEvent("ACHIEVEMENT_EARNED", "TakeScreenshot")
+    self:RegisterEvent("SHOW_LOOT_TOAST_LEGENDARY_LOOTED", "TakeScreenshot")
 end
 
 M:RegisterMiscModule(mod:GetName())
