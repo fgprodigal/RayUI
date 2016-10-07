@@ -2421,8 +2421,8 @@ function AL:PostAlertMove()
 	AlertFrame:SetPoint("CENTER", R.UIParent, "CENTER", 0, 40)
 end
 
-function AL:Initialize()
-    anchorFrame:SetPoint(unpack(CFG.point))
+function AL:PLAYER_LOGIN()
+	anchorFrame:SetPoint(unpack(CFG.point))
     anchorFrame:SetSize(234 * CFG.scale, 58 * CFG.scale)
 
 	UIPARENT_MANAGED_FRAME_POSITIONS["GroupLootContainer"] = nil
@@ -2441,6 +2441,10 @@ function AL:Initialize()
 
     AL:RegisterEvent("PLAYER_REGEN_DISABLED")
     AL:RegisterEvent("PLAYER_REGEN_ENABLED")
+end
+
+function AL:Initialize()
+    AL:RegisterEvent("PLAYER_LOGIN")
 
     SLASH_LSADDTOAST1 = "/testalerts"
     SlashCmdList["LSADDTOAST"] = SpawnTestToast
