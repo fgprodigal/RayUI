@@ -158,6 +158,11 @@ function CH:AutoHide()
             self:RegisterEvent(event, "OnEvent")
         end
         self:RegisterEvent("PLAYER_REGEN_DISABLED", "OnEvent")
+        self:RegisterEvent("BN_FRIEND_ACCOUNT_ONLINE", "OnEvent")
+        self:RegisterEvent("BN_FRIEND_ACCOUNT_OFFLINE", "OnEvent")
+        self:RegisterEvent("BN_CUSTOM_MESSAGE_CHANGED", "OnEvent")
+        self:RegisterEvent("BN_FRIEND_INVITE_ADDED", "OnEvent")
+        self:RegisterEvent("BN_FRIEND_INVITE_LIST_INITIALIZED", "OnEvent")
     end
     local RayUIChatToggle = CreateFrame("Frame", "RayUIChatToggle", R.UIParent)
     RayUIChatToggle:CreatePanel("Default", 15, 140, "BOTTOMLEFT",R.UIParent,"BOTTOMLEFT", 0,30)
