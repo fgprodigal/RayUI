@@ -350,7 +350,7 @@ function RM:ReminderIcon_OnEvent(event, unit)
 		end
 	end
 
-	if not db.disableSound and self:GetAlpha() == 1 then
+	if not db.disableSound and self:GetAlpha() == 1 and event~="PLAYER_ENTERING_WORLD" then
 		if not RM.SoundThrottled and RM.initialized then
 			RM.SoundThrottled = true
 			PlaySoundFile(R["media"].warning)
