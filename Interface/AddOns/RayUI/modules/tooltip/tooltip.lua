@@ -58,7 +58,7 @@ local UnitHealthMax = UnitHealthMax
 local GetCursorPosition = GetCursorPosition
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: GameTooltip, FACTION_BAR_COLORS, InspectFrame, RayUFRaid40_8, RayUFRaid15_3
+-- GLOBALS: GameTooltip, FACTION_BAR_COLORS, InspectFrame, RayUFRaid40_8, RayUFRaid15_3, INVSLOT_OFFHAND, INVSLOT_MAINHAND
 -- GLOBALS: RayUFRaid25_5, GameTooltipStatusBar, WorldMapTooltip, NumerationFrame, Skada, Examiner
 -- GLOBALS: RayUFRaid40_6UnitButton1, RayUI_ContainerFrame, RayUI_ContainerFrameItemSets, RayUI_ContainerFrameConsumables
 -- GLOBALS: RayUI_ContainerFrameMain, RayUFRaid15_1UnitButton1, RayUFRaid25_1UnitButton1, STAT_AVERAGE_ITEM_LEVEL, FriendsTooltip
@@ -383,10 +383,13 @@ local function GetPlayerScore(unit)
                 local iLink = GetInventoryItemLink(unit, i)
                 if (iLink) then
                     -- Artifact Fix
-                    local name, _, itemRarity = GetItemInfo(iLink)
                     ilvlAdd = TT:GetItemScore(iLink)
-                    if itemRarity == 6 and i == 17 and GetItemInfo(GetInventoryItemLink(unit, 16)) == name then
-                        ilvlAdd = TT:GetItemScore(GetInventoryItemLink(unit, 16))
+                    if (i == INVSLOT_OFFHAND or i == INVSLOT_MAINHAND) then
+                        local name, _, itemRarity = GetItemInfo(iLink)
+                        if(itemRarity == 6 and ilvlAdd == 750) then
+                            local slot = (i == INVSLOT_OFFHAND) and INVSLOT_MAINHAND or INVSLOT_MAINHAND
+                            ilvlAdd = TT:GetItemScore(GetInventoryItemLink(unit, slot))
+                        end
                     end
                     if ilvlAdd then
                         ilvl = ilvl + ilvlAdd
