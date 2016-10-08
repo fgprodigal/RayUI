@@ -17,12 +17,13 @@ function AL:SkinToast(toast, toastType)
     if not toast.bg then
         toast.bg = CreateFrame("Frame", nil, toast)
         toast.bg:SetOutside(toast.BG, 1, 1)
-        toast.bg:SetFrameLevel(toast:GetFrameLevel() - 1)
 
         S:CreateBD(toast.bg)
     end
 
+    toast.bg:SetFrameLevel(0)
     toast.BG:SetParent(toast.bg)
+    toast.BG:SetDrawLayer("BACKGROUND", 0)
     toast.BG:SetBlendMode("ADD")
 
     if toastType == "item" then
