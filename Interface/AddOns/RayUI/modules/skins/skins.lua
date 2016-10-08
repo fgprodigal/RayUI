@@ -313,7 +313,11 @@ function S:Reskin(f, noGlow)
 		f:HookScript("OnLeave", StopGlow)
 	end
 
-	f.tex = S:CreateGradient(f)
+	if not f.tex then
+		f.tex = S:CreateGradient(f)
+	else
+		f.gradient = S:CreateGradient(f)
+	end
 end
 
 function S:CreateTab(f)

@@ -203,11 +203,16 @@ local function LoadSkin()
 				header.button.expandedIcon:SetTextColor(1, 1, 1)
 				header.button.expandedIcon.SetTextColor = R.dummy
 
-				-- Blizzard already uses .tex for this frame, so we can't do highlights
 				S:Reskin(header.button, true)
 
 				header.button.abilityIcon:SetTexCoord(.08, .92, .08, .92)
 				header.button.bg = S:CreateBG(header.button.abilityIcon)
+
+				if header.button.abilityIcon:IsShown() then
+					header.button.bg:Show()
+				else
+					header.button.bg:Hide()
+				end
 
 				header.styled = true
 			end
@@ -539,7 +544,7 @@ local function LoadSkin()
 			suggestion.reward.icon:SetTexCoord(.08, .92, .08, .92)
 		end
 	end)
-	
+
 	-- [[ Loot tab ]]
 
 	S:Reskin(EncounterJournal.LootJournal.LegendariesFrame.ClassButton)
