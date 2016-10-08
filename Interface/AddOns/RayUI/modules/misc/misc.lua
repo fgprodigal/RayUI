@@ -117,53 +117,6 @@ function M:GetOptions()
                 },
             },
         },
-        remindergroup = {
-            order = 11,
-            type = "group",
-            name = L["buff提醒"],
-            guiInline = true,
-            args = {
-                reminder = {
-                    order = 1,
-                    name = L["启用"],
-                    desc = L["缺失重要buff时提醒"],
-                    type = "toggle",
-                },
-            },
-        },
-        raidbuffremindergroup = {
-            order = 12,
-            type = "group",
-            name = L["团队buff提醒"],
-            guiInline = true,
-            args = {
-                raidbuffreminder = {
-                    order = 1,
-                    name = L["启用"],
-                    type = "toggle",
-                },
-                raidbuffreminderparty = {
-                    order = 2,
-                    name = L["单人隐藏团队buff提醒"],
-                    type = "toggle",
-                    disabled = function() return not M.db.raidbuffreminder end,
-                },
-                raidbuffreminderduration = {
-                    order = 3,
-                    name = L["持续时间"],
-                    desc = L["图标上显示持续时间"],
-                    type = "toggle",
-                    disabled = function() return not M.db.raidbuffreminder end,
-                },
-                consolidate = {
-                    order = 4,
-                    name = L["整合buff"],
-                    desc = L["隐藏在团队buff提醒中显示的buff"],
-                    type = "toggle",
-                    disabled = function() return not M.db.raidbuffreminder end,
-                },
-            },
-        },
         autoinvitegroup = {
             order = 13,
             type = "group",

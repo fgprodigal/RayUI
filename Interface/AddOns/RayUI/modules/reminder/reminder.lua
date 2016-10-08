@@ -24,6 +24,8 @@ local GetInventoryItemTexture = GetInventoryItemTexture
 local UnitInVehicle = UnitInVehicle
 local PlaySoundFile = PlaySoundFile
 local C_Timer = C_Timer
+local ActionButton_ShowOverlayGlow = ActionButton_ShowOverlayGlow
+local ActionButton_HideOverlayGlow = ActionButton_HideOverlayGlow
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: RayUF_player
@@ -350,13 +352,6 @@ function RM:ReminderIcon_OnEvent(event, unit)
 		end
 	end
 
-	if not db.disableSound and self:GetAlpha() == 1 and event~="PLAYER_ENTERING_WORLD" then
-		if not RM.SoundThrottled and RM.initialized then
-			RM.SoundThrottled = true
-			PlaySoundFile(R["media"].warning)
-			RM:ScheduleTimer("ThrottleSound", 10)
-		end
-	end
 	if self:GetAlpha() == 1 then
 		ActionButton_ShowOverlayGlow(self.overlay)
 	else
