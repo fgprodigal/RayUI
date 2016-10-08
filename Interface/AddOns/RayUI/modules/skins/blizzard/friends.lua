@@ -237,6 +237,7 @@ local function LoadSkin()
 
     S:ReskinPortraitFrame(FriendsFrame, true)
     S:ReskinDropDown(FriendsFrameStatusDropDown)
+    S:SetBD(AddFriendFrame)
 
     -- Battletag invite frame
     -- for i = 1, 9 do

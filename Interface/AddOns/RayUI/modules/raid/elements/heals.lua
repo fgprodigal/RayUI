@@ -22,7 +22,7 @@ local UnitHealthMax = UnitHealthMax
 local UnitGetIncomingHeals = UnitGetIncomingHeals
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: ALTERNATE_POWER_INDEX
+-- GLOBALS: ALTERNATE_POWER_INDEX, DEAD
 
 local numberize = RA.numberize
 local colorCache = RA.colorCache
@@ -48,11 +48,11 @@ oUF.Tags.Methods['RayUIRaid:def'] = function(u)
     if UnitIsAFK(u) then
         return "|cffCFCFCFAFK|r"
     elseif UnitIsDead(u) then
-        return "|cffCFCFCFDead|r"
+        return "|cffCFCFCF"..DEAD.."|r"
     elseif UnitIsGhost(u) then
-        return "|cffCFCFCFGhost|r"
+        return "|cffCFCFCF"..L["灵魂"].."|r"
     elseif not UnitIsConnected(u) then
-        return "|cffCFCFCFD/C|r"
+        return "|cffCFCFCF"..L["离线"].."|r"
     end
 
     if RA.db.perc then

@@ -534,7 +534,6 @@ local function style(self)
     healtext:SetShadowOffset(1.25, -1.25)
     healtext:SetFont(R["media"].font, R["media"].fontsize - 2, R["media"].fontflag)
     healtext:SetWidth(RA.db.width)
-    healtext:SetText("123")
     self.Healtext = healtext
     self:Tag(healtext, "[RayUIRaid:def]")
 
