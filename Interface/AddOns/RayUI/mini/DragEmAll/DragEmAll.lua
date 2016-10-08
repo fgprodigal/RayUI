@@ -70,8 +70,12 @@ local frames = {
     ["PVEFrame"] = false, -- dungeon finder + challenges
     ["GuildInviteFrame"] = false,
 
+    ["AddonList"] = false,
+    ["SplashFrame"] = false,
+
     -- AddOns
     ["LudwigFrame"] = false,
+
 }
 
 -- Frames provided by load on demand addons, hooked when the addon is loaded.
@@ -89,12 +93,12 @@ local lodFrames = {
     Blizzard_TrainerUI = { ["ClassTrainerFrame"] = false },
     Blizzard_GuildBankUI = { ["GuildBankFrame"] = false, ["GuildBankEmblemFrame"] = true },
     Blizzard_TimeManager = { ["TimeManagerFrame"] = false },
-    Blizzard_AchievementUI = { ["AchievementFrame"] = false, ["AchievementFrameHeader"] = true, ["AchievementFrameCategoriesContainer"] = "AchievementFrame" },
+    Blizzard_AchievementUI = { ["AchievementFrame"] = false, ["AchievementFrameHeader"] = false, ["AchievementFrame.searchBox"] = false, ["AchievementFrameCategoriesContainer"] = "AchievementFrame" },
     Blizzard_TokenUI = { ["TokenFrame"] = true },
     Blizzard_ItemSocketingUI = { ["ItemSocketingFrame"] = false },
     Blizzard_BarbershopUI = { ["BarberShopFrame"] = false },
     Blizzard_Calendar = { ["CalendarFrame"] = false, ["CalendarCreateEventFrame"] = true },
-    Blizzard_GuildUI = { ["GuildFrame"] = false, ["GuildRosterFrame"] = true },
+    Blizzard_GuildUI = { ["GuildFrame"] = false, ["GuildRosterFrame"] = true, ["GuildFrame.TitleMouseover"] = true },
     Blizzard_ReforgingUI = { ["ReforgingFrame"] = false, ["ReforgingFrameInvisibleButton"] = true, ["ReforgingFrame.InvisibleButton"] = true },
     Blizzard_ArchaeologyUI = { ["ArchaeologyFrame"] = false },
     Blizzard_LookingForGuildUI = { ["LookingForGuildFrame"] = false },
@@ -105,7 +109,15 @@ local lodFrames = {
     Blizzard_BlackMarketUI = { ["BlackMarketFrame"] = false }, -- UNTESTED
     Blizzard_ChallengesUI = { ["ChallengesLeaderboardFrame"] = false }, -- UNTESTED
     Blizzard_ItemUpgradeUI = { ["ItemUpgradeFrame"] = false, }, -- UNTESTED
-    Blizzard_GarrisonUI = { ["GarrisonCapacitiveDisplayFrame"] = false, },
+    Blizzard_GarrisonUI = { ["GarrisonLandingPage"] = false, ["GarrisonLandingPageReport"] = true, ["GarrisonMissionFrame"] = false, ["GarrisonMissionFrame.MissionTab"] = true, ["GarrisonBuildingFrame"] = false, GarrisonRecruiterFrame = false,GarrisonRecruitSelectFrame = false, GarrisonCapacitiveDisplayFrame = false, GarrisonShipyardFrame = false},
+    Blizzard_Collections = { ["CollectionsJournal"] = false },
+
+    -- New frames in LEG
+    Blizzard_TalkingHeadUI= { ["TalkingHeadFrame"] = false},
+    Blizzard_OrderHallUI= { ["OrderHallMissionFrame"] = false, ["OrderHallMissionFrame.MissionTab"] = true,["OrderHallTalentFrame"] = false},
+    Blizzard_ArtifactUI= { ["ArtifactFrame"] = false},
+    Blizzard_ObliterumUI = { ["ObliterumForgeFrame"] = false},
+
 }
 
 local parentFrame = {}
