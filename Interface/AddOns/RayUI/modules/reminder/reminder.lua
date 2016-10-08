@@ -357,6 +357,11 @@ function RM:ReminderIcon_OnEvent(event, unit)
 			RM:ScheduleTimer("ThrottleSound", 10)
 		end
 	end
+	if self:GetAlpha() == 1 then
+		ActionButton_ShowOverlayGlow(self.overlay)
+	else
+		ActionButton_HideOverlayGlow(self.overlay)
+	end
 end
 
 function RM:ThrottleSound()
@@ -394,6 +399,8 @@ function RM:CreateReminder(name, index)
 	frame.icon:SetAllPoints()
 	frame:EnableMouse(false)
 	frame:SetAlpha(0)
+	frame.overlay = CreateFrame("Button", nil, frame)
+	frame.overlay:SetOutside(frame)
 
 	local cd = CreateFrame("Cooldown", nil, frame)
 	cd:SetAllPoints(frame.icon)

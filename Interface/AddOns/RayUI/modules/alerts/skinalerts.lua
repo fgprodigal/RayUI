@@ -20,12 +20,10 @@ function AL:SkinToast(toast, toastType)
         toast.bg:SetFrameLevel(toast:GetFrameLevel() - 1)
 
         S:CreateBD(toast.bg)
-
-        toast.BG:SetParent(toast.bg)
     end
 
+    toast.BG:SetParent(toast.bg)
     toast.BG:SetBlendMode("ADD")
-    toast.BG:SetAlpha(0.3)
 
     if toastType == "item" then
         if not toast.Icon.b then
