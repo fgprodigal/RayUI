@@ -904,7 +904,10 @@ function CH:ChatEdit_AddHistory(editBox, line)
 end
 
 function CH:SaveChatHistory(event, ...)
-    local temp = {...}
+    local temp = {}
+    for i = 1, select('#', ...) do
+        temp[i] = select(i, ...) or false
+    end
     if #temp > 0 then
         temp[20] = event
         local timeForMessage = GetTimeForSavedMessage()
@@ -940,8 +943,20 @@ function CH:DisplayChatHistory()
             RayUICharacterData.ChatHistory[tostring(temp[i])] = nil
         else
             if type(data) == "table" and data[20] ~= nil then
+                local event = data[20]
+
+                if event == "CHAT_MSG_BN_WHISPER" or event == "CHAT_MSG_BN_WHISPER_INFORM" then
+                    --Sender info is stored as |Kf#|k0000000000|k, which is a unique identifier for the current session only
+                    --We need to update it in case the WoW client has been closed between the time the message was saved and now
+                    local bnetIDAccount = data[13] --Unique identifier which persists between sessions (integer)
+                    local _, presenceName = BNGetFriendInfoByID(bnetIDAccount)
+                    if presenceName then
+                        data[2] = presenceName --Update sender with correct name
+                    end
+                end
+
                 CH.timeOverride = temp[i]
-                ChatFrame_MessageEventHandler(DEFAULT_CHAT_FRAME, data[20], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15])
+                ChatFrame_MessageEventHandler(DEFAULT_CHAT_FRAME, event, unpack(data))
             end
         end
     end
