@@ -251,16 +251,7 @@ function MM:CreateMenu()
 		{text = SOCIAL_BUTTON, notCheckable = true,
 		func = function() ToggleFriendsFrame() end},
 		{text = ACHIEVEMENTS_GUILD_TAB, notCheckable = true,
-		func = function()
-			if IsInGuild() then
-				if not GuildFrame then GuildFrame_LoadUI() end
-				GuildFrame_Toggle()
-			else
-				if not LookingForGuildFrame then LookingForGuildFrame_LoadUI() end
-				if not LookingForGuildFrame then return end
-				LookingForGuildFrame_Toggle()
-			end
-		end},
+		func = function() ToggleGuildFrame() end},
 		{text = ENCOUNTER_JOURNAL, notCheckable = true,
 		func = function() if not IsAddOnLoaded("Blizzard_EncounterJournal") then EncounterJournal_LoadUI() end ToggleFrame(EncounterJournal) end},
 		{text = COLLECTIONS, notCheckable = true,
@@ -278,10 +269,7 @@ function MM:CreateMenu()
 		{text = GARRISON_LANDING_PAGE_TITLE, notCheckable = true,
 		func = function() GarrisonLandingPageMinimapButton_OnClick() end},
 		{text = CALENDAR, notCheckable = true,
-		func = function()
-		if(not CalendarFrame) then LoadAddOn("Blizzard_Calendar") end
-			Calendar_Toggle()
-		end},
+		func = function() GameTimeFrame:Click() end},
 		{text = LOOT_ROLLS, notCheckable = true,
 		func = function() ToggleFrame(LootHistoryFrame) end},
 	}
