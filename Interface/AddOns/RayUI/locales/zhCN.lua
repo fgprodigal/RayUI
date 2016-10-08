@@ -27,7 +27,6 @@ do
     L["施法条锚点"] = true
     L["小地图锚点"] = true
     L["团队冷却锚点"] = true
-    L["团队buff提醒锚点"] = true
     L["重要buff提醒锚点"] = true
     L["离开载具按钮"] = true
     L["额外按钮"] = true
