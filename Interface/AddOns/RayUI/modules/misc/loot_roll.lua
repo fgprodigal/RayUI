@@ -31,12 +31,12 @@ local GetItemInfo = GetItemInfo
 local GetItemQualityColor = GetItemQualityColor
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: GameTooltip, NEED, GREED, PASS, ROLL_DISENCHANT, AlertFrameHolder, ITEM_QUALITY_COLORS
+-- GLOBALS: GameTooltip, NEED, GREED, PASS, ROLL_DISENCHANT, AlertFrame, ITEM_QUALITY_COLORS
 -- GLOBALS: MAX_PLAYER_LEVEL, WorldFrame, UIParent, SlashCmdList, SLASH_LFrames1
 
 R.rollBars = {}
 local testMode = false
-local pos = "TOP"
+local pos = "BOTTOM"
 
 local function ClickRoll(frame)
     RollOnLoot(frame.parent.rollid, frame.rolltype)
@@ -184,10 +184,11 @@ local function CreateRollFrame()
     status:Width(326)
     status:Height(5)
     status:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", 2, 1)
-    status:CreateShadow("Background")
     status:SetScript("OnUpdate", StatusUpdate)
     status:SetStatusBarTexture(R["media"].normal)
     status:SetStatusBarColor(.8, .8, .8, .9)
+    status:SetFrameLevel(1)
+    status:CreateShadow("Background")
     status.parent = frame
     frame.status = status
 
@@ -232,9 +233,9 @@ local function GetFrame()
 
     local f = CreateRollFrame()
     if pos == "TOP" then
-        f:Point("TOP", next(R.rollBars) and R.rollBars[#R.rollBars] or AlertFrameHolder, "BOTTOM", 0, -4)
+        f:Point("TOP", next(R.rollBars) and R.rollBars[#R.rollBars] or AlertFrame, "BOTTOM", 0, -4)
     else
-        f:Point("BOTTOM", next(R.rollBars) and R.rollBars[#R.rollBars] or AlertFrameHolder, "TOP", 0, 4)
+        f:Point("BOTTOM", next(R.rollBars) and R.rollBars[#R.rollBars] or AlertFrame, "TOP", 0, 4)
     end
     table.insert(R.rollBars, f)
     return f
