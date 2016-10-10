@@ -377,6 +377,14 @@ function AB:HideBlizz()
 	MainMenuExpBar:UnregisterAllEvents()
 	MainMenuExpBar:Hide()
 	MainMenuExpBar:SetParent(blizzHider)
+	
+	
+-- Fix：神器经验条--
+    ArtifactWatchBar:EnableMouse(false)
+    ArtifactWatchBar:SetAlpha(0)
+    ArtifactWatchBar:UnregisterAllEvents()
+    ArtifactWatchBar:Hide()
+    ArtifactWatchBar:SetParent(blizzHider)
 
 	for i=1, MainMenuBar:GetNumChildren() do
 		local child = select(i, MainMenuBar:GetChildren())
