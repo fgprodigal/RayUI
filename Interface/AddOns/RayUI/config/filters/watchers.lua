@@ -258,6 +258,8 @@ R["Watcher"] = {
                 { spellID = 3045, unitId = "player", caster = "player", filter = "BUFF" },
                 --治療寵物
                 { spellID = 136, unitId = "pet", caster = "player", filter = "BUFF" },
+                --宠物顺劈斩
+                { spellID = 118455, unitId = "pet", caster = "player", filter = "BUFF" },
                 --連環火網
                 { spellID = 82921, unitId = "player", caster = "player", filter = "BUFF" },
                 --狂亂效果
