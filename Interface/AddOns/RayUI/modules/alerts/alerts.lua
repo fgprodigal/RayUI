@@ -62,6 +62,7 @@ local HaveQuestData = HaveQuestData
 local GetNumQuestLogRewards = GetNumQuestLogRewards
 local GetQuestLogRewardInfo = GetQuestLogRewardInfo
 local GetCurrencyLink = GetCurrencyLink
+local hooksecurefunc = hooksecurefunc
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: GameTooltip, GarrisonShipyardFollowerTooltip, GarrisonFollowerTooltip, AlertFrame, AchievementFrame
@@ -1188,9 +1189,6 @@ function AL:CRITERIA_EARNED(...)
 end
 
 local function EnableAchievementToasts()
-	AlertFrame:UnregisterEvent("ACHIEVEMENT_EARNED")
-	AlertFrame:UnregisterEvent("CRITERIA_EARNED")
-
 	if CFG.achievement_enabled then
 		if not AchievementFrame then
 			AchievementFrame_LoadUI()
@@ -1408,12 +1406,6 @@ function AL:GARRISON_TALENT_COMPLETE(...)
 end
 
 local function EnableGarrisonToasts()
-	AlertFrame:UnregisterEvent("GARRISON_BUILDING_ACTIVATABLE")
-	AlertFrame:UnregisterEvent("GARRISON_FOLLOWER_ADDED")
-	AlertFrame:UnregisterEvent("GARRISON_MISSION_FINISHED")
-	AlertFrame:UnregisterEvent("GARRISON_RANDOM_MISSION_ADDED")
-	AlertFrame:UnregisterEvent("GARRISON_TALENT_COMPLETE")
-
 	if CFG.garrison_6_0_enabled or CFG.garrison_7_0_enabled then
 		AL:RegisterEvent("GARRISON_FOLLOWER_ADDED")
 		AL:RegisterEvent("GARRISON_MISSION_FINISHED")
@@ -1541,8 +1533,6 @@ function AL:LFG_COMPLETION_REWARD()
 end
 
 local function EnableInstanceToasts()
-	AlertFrame:UnregisterEvent("LFG_COMPLETION_REWARD")
-
 	if CFG.instance_enabled then
 		AL:RegisterEvent("LFG_COMPLETION_REWARD")
 	end
@@ -1752,13 +1742,6 @@ function AL:STORE_PRODUCT_DELIVERED(...)
 end
 
 local function EnableSpecialLootToasts()
-	AlertFrame:UnregisterEvent("LOOT_ITEM_ROLL_WON")
-	AlertFrame:UnregisterEvent("SHOW_LOOT_TOAST")
-	AlertFrame:UnregisterEvent("SHOW_LOOT_TOAST_LEGENDARY_LOOTED")
-	AlertFrame:UnregisterEvent("SHOW_LOOT_TOAST_UPGRADE")
-	AlertFrame:UnregisterEvent("SHOW_PVP_FACTION_LOOT_TOAST")
-	AlertFrame:UnregisterEvent("STORE_PRODUCT_DELIVERED")
-
 	if CFG.loot_special_enabled then
 		AL:RegisterEvent("LOOT_ITEM_ROLL_WON")
 		AL:RegisterEvent("SHOW_LOOT_TOAST")
@@ -1969,8 +1952,6 @@ function AL:NEW_RECIPE_LEARNED(...)
 end
 
 local function EnableRecipeToasts()
-	AlertFrame:UnregisterEvent("NEW_RECIPE_LEARNED")
-
 	if CFG.recipe_enabled then
 		AL:RegisterEvent("NEW_RECIPE_LEARNED")
 	end
@@ -2148,10 +2129,6 @@ function AL:QUEST_LOOT_RECEIVED(...)
 end
 
 local function EnableWorldToasts()
-	AlertFrame:UnregisterEvent("SCENARIO_COMPLETED")
-	AlertFrame:UnregisterEvent("QUEST_LOOT_RECEIVED")
-	AlertFrame:UnregisterEvent("QUEST_TURNED_IN")
-
 	if CFG.world_enabled then
 		AL:RegisterEvent("SCENARIO_COMPLETED")
 		AL:RegisterEvent("QUEST_TURNED_IN")
@@ -2439,6 +2416,11 @@ function AL:PLAYER_LOGIN()
     EnableRecipeToasts()
     EnableWorldToasts()
     EnableTransmogToasts()
+
+	AlertFrame:UnregisterAllEvents()
+ 	hooksecurefunc(AlertFrame, "RegisterEvent", function(self, event)
+ 		self:UnregisterEvent(event)
+ 	end)
 
     AL:RegisterEvent("PLAYER_REGEN_DISABLED")
     AL:RegisterEvent("PLAYER_REGEN_ENABLED")
