@@ -29,10 +29,16 @@ function AL:SkinToast(toast, toastType)
     if toastType == "item" then
         if not toast.Icon.b then
             toast.Icon.b = CreateFrame("Frame", nil, toast)
-            S:CreateBD(toast.Icon.b)
+            toast.Icon.b:SetTemplate()
+            toast.Icon.b:SetBackdropColor(0, 0, 0, 1)
             toast.Icon.b:SetOutside(toast.Icon)
             toast.Icon.b:SetFrameLevel(toast:GetFrameLevel() - 1)
         end
-        toast.Icon.b:SetBackdropBorderColor(r, g, b)
+        if r + g + b > 2.9 then
+            toast.Icon.b:Hide()
+        else
+            toast.Icon.b:Show()
+            toast.Icon.b:SetBackdropBorderColor(r, g, b)
+        end
     end
 end
