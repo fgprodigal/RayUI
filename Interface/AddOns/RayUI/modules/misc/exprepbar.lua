@@ -42,7 +42,7 @@ local InCombatLockdown = InCombatLockdown
 -- GLOBALS: ArtifactFrame, GameTooltip, Minimap, XP, NORMAL_FONT_COLOR, HIGHLIGHT_FONT_COLOR, MAX_PLAYER_LEVEL_TABLE
 -- GLOBALS: HONOR, PVP_HONOR_PRESTIGE_AVAILABLE, HONOR_LEVEL_LABEL, MAX_HONOR_LEVEL, HONOR_BAR
 -- GLOBALS: MAX_PLAYER_LEVEL, STANDING, RayUF, REPUTATION, ReputationWatchBar, ARTIFACT_POWER_TOOLTIP_TITLE
--- GLOBALS: ArtifactWatchBar, ARTIFACT_POWER_TOOLTIP_BODY
+-- GLOBALS: ARTIFACT_POWER_TOOLTIP_BODY
 
 local function AddPerks()
     if not IsAddOnLoaded("Blizzard_ArtifactUI") then LoadAddOn("Blizzard_ArtifactUI") end
@@ -312,17 +312,17 @@ function mod:CreateArtiBar()
     self.ArtiBar:SetScript("OnEnter", function(self)
             if HasArtifactEquipped() and not InCombatLockdown() then
                 local title,r,g,b = select(2, C_ArtifactUI.GetEquippedArtifactArtInfo())
-                local name, icon, totalXP, pointsSpent = select(3, C_ArtifactUI.GetEquippedArtifactInfo())
-                local points, xp, xpMax = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP)
+                local _, _, totalXP, pointsSpent = select(3, C_ArtifactUI.GetEquippedArtifactInfo())
+                local numPointsAvailableToSpend, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP)
 
                 GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -5)
                 GameTooltip:AddLine(title,r,g,b,false)
                 GameTooltip:SetPrevLineJustify("CENTER")
                 GameTooltip:AddDivider()
-                GameTooltip:AddLine(ARTIFACT_POWER_TOOLTIP_TITLE:format(BreakUpLargeNumbers(ArtifactWatchBar.totalXP), BreakUpLargeNumbers(ArtifactWatchBar.xp), BreakUpLargeNumbers(ArtifactWatchBar.xpForNextPoint)), 1, 1, 1)
-                if ArtifactWatchBar.numPointsAvailableToSpend > 0 then
+                GameTooltip:AddLine(ARTIFACT_POWER_TOOLTIP_TITLE:format(BreakUpLargeNumbers(totalXP), BreakUpLargeNumbers(xp), BreakUpLargeNumbers(xpForNextPoint)), 1, 1, 1)
+                if numPointsAvailableToSpend > 0 then
                     GameTooltip:AddLine(" ")
-                    GameTooltip:AddLine(ARTIFACT_POWER_TOOLTIP_BODY:format(ArtifactWatchBar.numPointsAvailableToSpend), 0, 1, 0, true)
+                    GameTooltip:AddLine(ARTIFACT_POWER_TOOLTIP_BODY:format(numPointsAvailableToSpend), 0, 1, 0, true)
                 end
 
                 AddPerks()

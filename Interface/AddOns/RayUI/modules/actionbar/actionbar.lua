@@ -50,7 +50,7 @@ local C_PetBattlesIsInBattle = C_PetBattles.IsInBattle
 -- GLOBALS: PossessBackground1, PossessBackground2, StanceBarLeft, StanceBarMiddle, StanceBarRight
 -- GLOBALS: ActionBar1Mover, RayUIActionBarHider, RayUI_InfoPanel_Talent
 -- GLOBALS: KEY_BUTTON3, KEY_PAGEUP, KEY_PAGEDOWN, KEY_SPACE, KEY_INSERT, KEY_HOME
--- GLOBALS: KEY_DELETE, KEY_MOUSEWHEELUP, KEY_MOUSEWHEELDOWN, visibility
+-- GLOBALS: KEY_DELETE, KEY_MOUSEWHEELUP, KEY_MOUSEWHEELDOWN, visibility, ArtifactWatchBar
 
 AB.modName = L["动作条"]
 AB["Handled"] = {}
@@ -377,9 +377,9 @@ function AB:HideBlizz()
 	MainMenuExpBar:UnregisterAllEvents()
 	MainMenuExpBar:Hide()
 	MainMenuExpBar:SetParent(blizzHider)
-	
-	
--- Fix：神器经验条--
+
+
+	-- Fix：神器经验条--
     ArtifactWatchBar:EnableMouse(false)
     ArtifactWatchBar:SetAlpha(0)
     ArtifactWatchBar:UnregisterAllEvents()

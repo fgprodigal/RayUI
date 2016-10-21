@@ -24,7 +24,6 @@ local GetGuildFactionInfo = GetGuildFactionInfo
 local GetGuildRosterMOTD = GetGuildRosterMOTD
 local GetQuestDifficultyColor = GetQuestDifficultyColor
 local GuildFrame_LoadUI = GuildFrame_LoadUI
-local GuildFrame_Toggle = GuildFrame_Toggle
 local ToggleGuildFinder = ToggleGuildFinder
 local LoadAddOn = LoadAddOn
 local GuildRoster = GuildRoster
@@ -32,7 +31,7 @@ local InCombatLockdown = InCombatLockdown
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: SetItemRef, REMOTE_CHAT, NAME, LEVEL_ABBR, ZONE, RANK, GUILD_OFFICERNOTES_LABEL
--- GLOBALS: GUILD_RANK0_DESC, GuildFrame, ERR_FRIEND_ONLINE_SS, GUILD, LABEL_NOTE
+-- GLOBALS: GUILD_RANK0_DESC, GuildFrame, ERR_FRIEND_ONLINE_SS, GUILD, LABEL_NOTE, GuildFrame_Toggle
 
 local GuildTabletData = {}
 local GuildOnline = 0
