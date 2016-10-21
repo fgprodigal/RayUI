@@ -9,31 +9,41 @@ local GetInventoryItemID = GetInventoryItemID
 
 local _, addon = ...
 
-local DRAGONWRATH = GetItemInfo(71086) -- "Dragonwrath, Tarecgosa's Rest"
+addon:RegisterName("Dragonwrath, Tarecgosa's Rest", 71086, 1)
+addon:RegisterDebugAttr("dragonwrath")
 
---local DRAGONWRATH = "Dragonwrath, Tarecgosa's Rest" -- For taking an enUS screenshot...
+local module = addon:CreateModule("Dragonwrath")
 
-function addon:GetDragonwrathName()
-	if DRAGONWRATH then
-		return DRAGONWRATH
-	end
-
-	DRAGONWRATH = GetItemInfo(71086)
-	return DRAGONWRATH or "Hitem:71086"
+function module:OnEnable()
+	self:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
+	self:PLAYER_EQUIPMENT_CHANGED()
 end
 
-local frame = CreateFrame("Frame")
-frame:RegisterEvent("PLAYER_ENTERING_WORLD")
-frame:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
+function module:OnDisable()
+	addon:SetAttribute("dragonwrath", nil)
+end
 
-frame:SetScript("OnEvent", function(self, event)
-	local dragonwrathEquipped
-	if GetInventoryItemID("player", 16) == 71086 then
-		dragonwrathEquipped = 1
-	end
+function module:PLAYER_EQUIPMENT_CHANGED()
+	addon:SetAttribute("dragonwrath", GetInventoryItemID("player", 16) == 71086)
+end
 
-	if addon.dragonwrathEquipped ~= dragonwrathEquipped then
-		addon.dragonwrathEquipped = dragonwrathEquipped
-		addon:UpdateAttributes()
+addon:RegisterEventCallback("OnNewUserData", function(db)
+	db.dragonwrathFirst = 1
+end)
+
+addon:RegisterOptionCallback("dragonwrathFirst", function(value)
+	if value then
+		module:Enable()
+	else
+		module:Disable()
 	end
 end)
+
+addon:AppendVariables([[
+	local dragonwrath = self:GetAttribute("dragonwrath")
+]])
+
+addon:AppendConditions([[
+	elseif dragonwrath then
+		macro = "/use 16"
+]])

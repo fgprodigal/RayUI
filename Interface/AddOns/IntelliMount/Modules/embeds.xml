@@ -1,0 +1,7 @@
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="ShapeShifts.lua"/>
+	<Script file="AbyssalSeahorse.lua"/>
+	<Script file="Dragonwrath.lua"/>
+	<Script file="MagicBroom.lua"/>
+	<Script file="UtilityMounts.lua"/>
+</Ui>
