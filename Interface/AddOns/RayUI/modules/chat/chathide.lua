@@ -71,18 +71,26 @@ function CH:MoveOut()
     isMoving = true
     CH.ChatIn = false
     RayUIChatBG:SetPoint("BOTTOMLEFT", R.UIParent, "BOTTOMLEFT", 15, 30)
-    -- R:Slide(RayUIChatBG, "LEFT", CH.db.width + 15, 195)
-    R:UIFrameFadeOut(RayUIChatBG, .5, 1, 0)
+    local fadeInfo = {}
+	fadeInfo.mode = "OUT"
+	fadeInfo.timeToFade = 0.5
+	fadeInfo.finishedFunc = function()
+		if InCombatLockdown() then return end
+		RayUIChatBG:Hide()
+	end
+	fadeInfo.startAlpha = RayUIChatBG:GetAlpha()
+	fadeInfo.endAlpha = 0
+    R:UIFrameFade(RayUIChatBG, fadeInfo)
+    R:Slide(RayUIChatBG, "LEFT", CH.db.width + 15, 195)
     ChatEdit_ClearChat(ChatFrame1EditBox)
 end
 
 function CH:MoveIn()
     isMoving = true
     CH.ChatIn = true
-    -- RayUIChatBG:SetPoint("BOTTOMLEFT", R.UIParent, "BOTTOMLEFT", -CH.db.width, 30)
-    RayUIChatBG:SetPoint("BOTTOMLEFT", R.UIParent, "BOTTOMLEFT", 15, 30)
-    -- R:Slide(RayUIChatBG, "RIGHT", CH.db.width + 15, 195)
-    R:UIFrameFadeIn(RayUIChatBG, .5, 0, 1)
+    RayUIChatBG:SetPoint("BOTTOMLEFT", R.UIParent, "BOTTOMLEFT", -CH.db.width, 30)
+    R:Slide(RayUIChatBG, "RIGHT", CH.db.width + 15, 195)
+    R:UIFrameFadeIn(RayUIChatBG, .5, RayUIChatBG:GetAlpha(), 1)
 end
 
 function CH:ToggleChat()
