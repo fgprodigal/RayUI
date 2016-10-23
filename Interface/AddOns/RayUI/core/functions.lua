@@ -339,6 +339,7 @@ function R:Initialize()
 
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:Delay(5, function() collectgarbage("collect") end)
+	self:LockCVar("overrideArchive", 0)
 
 	local configButton = CreateFrame("Button", "RayUIConfigButton", GameMenuFrame, "GameMenuButtonTemplate")
 	configButton:SetSize(GameMenuButtonContinue:GetWidth(), GameMenuButtonContinue:GetHeight())
