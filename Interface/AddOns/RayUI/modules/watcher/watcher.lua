@@ -1,6 +1,5 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local RW = R:NewModule("Watcher", "AceEvent-3.0")
-local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 
 --Cache global variables
 --Lua functions

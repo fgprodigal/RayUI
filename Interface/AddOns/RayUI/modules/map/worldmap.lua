@@ -21,37 +21,6 @@ local GetCursorPosition = GetCursorPosition
 
 WM.modName = L["世界地图"]
 
-function WM:GetOptions()
-	local options = {
-		-- lock = {
-			-- order = 5,
-			-- name = L["地图锁定"],
-			-- type = "toggle",
-		-- },
-		-- scale = {
-			-- order = 6,
-			-- name = L["地图大小"],
-			-- type = "range",
-			-- min = 0.5, max = 1, step = 0.01,
-			-- isPercent = true,
-		-- },
-		-- ejbuttonscale = {
-			-- order = 7,
-			-- name = L["Boss头像大小"],
-			-- type = "range",
-			-- min = 0.6, max = 1, step = 0.01,
-			-- isPercent = true,
-		-- },
-		-- partymembersize = {
-			-- order = 8,
-			-- name = L["队友标示大小"],
-			-- type = "range",
-			-- min = 20, max = 30, step = 1,
-		-- },
-	}
-	return options
-end
-
 function WM:SetLargeWorldMap()
 	if InCombatLockdown() then return end
 

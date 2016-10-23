@@ -13,7 +13,7 @@ local InCombatLockdown = InCombatLockdown
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: MacroFrame, HoverBind, RayUIActionBarHider
 
-local hider = CreateFrame("Frame", "RayUIActionBarHider", R.UIParent)
+local hider = CreateFrame("Frame", "RayUIActionBarHider", R.UIParent, "SecureHandlerStateTemplate")
 RegisterStateDriver(hider, "visibility", "[combat][@target,exists][vehicleui]show")
 
 local function pending()

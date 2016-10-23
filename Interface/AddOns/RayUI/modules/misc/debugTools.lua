@@ -133,8 +133,10 @@ function D:Initialize()
     D:SecureHook("ScriptErrorsFrame_UpdateButtons")
     D:SecureHook("ScriptErrorsFrame_OnError")
     D:RegisterEvent("PLAYER_REGEN_DISABLED")
-    -- D:RegisterEvent("ADDON_ACTION_BLOCKED", "TaintError")
-    D:RegisterEvent("ADDON_ACTION_FORBIDDEN", "TaintError")
+    if R.myname == "夏琉君" then
+        D:RegisterEvent("ADDON_ACTION_BLOCKED", "TaintError")
+        D:RegisterEvent("ADDON_ACTION_FORBIDDEN", "TaintError")
+    end
     D:RegisterChatCommand("error", "ShowScriptErrorsFrame")
 
     D.HideFrame = CreateFrame("Frame")

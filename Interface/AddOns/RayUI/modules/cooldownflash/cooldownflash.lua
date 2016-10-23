@@ -29,7 +29,7 @@ local GetContainerItemID = GetContainerItemID
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: NUM_PET_ACTION_SLOTS, COMBATLOG_OBJECT_TYPE_PET, COMBATLOG_OBJECT_AFFILIATION_MINE
 
-local cooldowns, animating, watching = { }, { }, { }
+CF.cooldowns, CF.animating, CF.watching = { }, { }, { }
 local testtable
 
 local DCP = CreateFrame("frame", nil, R.UIParent)
@@ -40,6 +40,7 @@ DCP.TextFrame:SetPoint("TOP",DCP,"BOTTOM",0,-5)
 DCP.TextFrame:SetWidth(185)
 DCP.TextFrame:SetJustifyH("CENTER")
 DCP.TextFrame:SetTextColor(1,1,1)
+CF.DCP = DCP
 
 local DCPT = DCP:CreateTexture(nil,"BACKGROUND")
 DCPT:SetTexCoord(.08, .92, .08, .92)
@@ -73,7 +74,7 @@ local runtimer = 0
 local function OnUpdate(_,update)
     elapsed = elapsed + update
     if (elapsed > 0.05) then
-        for i,v in pairs(watching) do
+        for i,v in pairs(CF.watching) do
             if (GetTime() >= v[1] + 0.5) then
                 local start, duration, enabled, texture, isPet, name
                 if (v[2] == "spell") then
@@ -91,15 +92,15 @@ local function OnUpdate(_,update)
                 end
                 if (enabled ~= 0) then
                     if (duration and duration > 2.0 and texture) then
-                        cooldowns[i] = { start, duration, texture, isPet, name, v[3], v[2] }
+                        CF.cooldowns[i] = { start, duration, texture, isPet, name, v[3], v[2] }
                     end
                 end
                 if (not (enabled == 0 and v[2] == "spell")) then
-                    watching[i] = nil
+                    CF.watching[i] = nil
                 end
             end
         end
-        for i,v in pairs(cooldowns) do
+        for i,v in pairs(CF.cooldowns) do
             local start, duration, remaining, enabled
             if (v[7] == "spell") then
                 start, duration = GetSpellCooldown(v[6])
@@ -114,34 +115,34 @@ local function OnUpdate(_,update)
                 remaining = v[2]-(GetTime()-v[1])
             end
             if (remaining <= 0) then
-                tinsert(animating, {v[3],v[4],v[5]})
-                cooldowns[i] = nil
+                tinsert(CF.animating, {v[3],v[4],v[5]})
+                CF.cooldowns[i] = nil
             end
         end
 
         elapsed = 0
-        if (#animating == 0 and tcount(watching) == 0 and tcount(cooldowns) == 0) then
+        if (#CF.animating == 0 and tcount(CF.watching) == 0 and tcount(CF.cooldowns) == 0) then
             DCP:SetScript("OnUpdate", nil)
             return
         end
     end
 
-    if (#animating > 0) then
+    if (#CF.animating > 0) then
         runtimer = runtimer + update
         if (runtimer > (CF.db.fadeInTime + CF.db.holdTime + CF.db.fadeOutTime)) then
-            tremove(animating,1)
+            tremove(CF.animating,1)
             runtimer = 0
-			DCP.TextFrame:SetText(nil)
+            DCP.TextFrame:SetText(nil)
             DCPT:SetTexture(nil)
             DCPT:SetVertexColor(1,1,1)
             DCP:SetAlpha(0)
             DCP:SetSize(CF.db.iconSize, CF.db.iconSize)
         elseif CF.db.enable then
             if (not DCPT:GetTexture()) then
-				if (animating[1][3] ~= nil and CF.db.showSpellName) then
-					DCP.TextFrame:SetText(animating[1][3])
-				end
-                DCPT:SetTexture(animating[1][1])
+                if (CF.animating[1][3] ~= nil and CF.db.showSpellName) then
+                    DCP.TextFrame:SetText(CF.animating[1][3])
+                end
+                DCPT:SetTexture(CF.animating[1][1])
             end
             local alpha = CF.db.maxAlpha
             if (runtimer < CF.db.fadeInTime) then
@@ -162,7 +163,7 @@ end
 --------------------
 function DCP:UNIT_SPELLCAST_SUCCEEDED(unit,spell,rank)
     if (unit == "player") then
-        watching[spell] = {GetTime(),"spell",spell.."("..rank..")"}
+        CF.watching[spell] = {GetTime(),"spell",spell.."("..rank..")"}
         self:SetScript("OnUpdate", OnUpdate)
     end
 end
@@ -174,9 +175,9 @@ function DCP:COMBAT_LOG_EVENT_UNFILTERED(...)
             local name = GetSpellInfo(spellID)
             local index = GetPetActionIndexByName(name)
             if (index and not select(7,GetPetActionInfo(index))) then
-                watching[name] = {GetTime(),"pet",index}
+                CF.watching[name] = {GetTime(),"pet",index}
             elseif (not index and name) then
-                watching[name] = {GetTime(),"spell",name}
+                CF.watching[name] = {GetTime(),"spell",name}
             else
                 return
             end
@@ -189,8 +190,8 @@ function DCP:PLAYER_ENTERING_WORLD()
     local inInstance,instanceType = IsInInstance()
     if (inInstance and instanceType == "arena") then
         self:SetScript("OnUpdate", nil)
-        wipe(cooldowns)
-        wipe(watching)
+        wipe(CF.cooldowns)
+        wipe(CF.watching)
     end
 end
 
@@ -198,7 +199,7 @@ function CF:UseAction(slot)
     local actionType,itemID = GetActionInfo(slot)
     if (actionType == "item") then
         local texture = GetActionTexture(slot)
-        watching[itemID] = {GetTime(),"item",texture}
+        CF.watching[itemID] = {GetTime(),"item",texture}
         DCP:SetScript("OnUpdate", OnUpdate)
     end
 end
@@ -207,7 +208,7 @@ function CF:UseInventoryItem(slot)
     local itemID = GetInventoryItemID("player", slot);
     if (itemID) then
         local texture = GetInventoryItemTexture("player", slot)
-        watching[itemID] = {GetTime(),"item",texture}
+        CF.watching[itemID] = {GetTime(),"item",texture}
         DCP:SetScript("OnUpdate", OnUpdate)
     end
 end
@@ -216,19 +217,19 @@ function CF:UseContainerItem(bag,slot)
     local itemID = GetContainerItemID(bag, slot)
     if (itemID) then
         local texture = select(10, GetItemInfo(itemID))
-        watching[itemID] = {GetTime(),"item",texture}
+        CF.watching[itemID] = {GetTime(),"item",texture}
         DCP:SetScript("OnUpdate", OnUpdate)
     end
 end
 
 function CF:UseItemByName(itemName)
-	local itemID
-	if itemName then
-		itemID = string.match(select(2, GetItemInfo(itemName)), "item:(%d+)")
-	end
+    local itemID
+    if itemName then
+        itemID = string.match(select(2, GetItemInfo(itemName)), "item:(%d+)")
+    end
     if (itemID) then
         local texture = select(10, GetItemInfo(itemID))
-        watching[itemID] = {GetTime(),"item",texture}
+        CF.watching[itemID] = {GetTime(),"item",texture}
         DCP:SetScript("OnUpdate", OnUpdate)
     end
 end
@@ -240,9 +241,9 @@ function CF:EnableCooldownFlash()
     self:SecureHook("UseItemByName")
     DCP:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
     DCP:RegisterEvent("PLAYER_ENTERING_WORLD")
-	if self.db.enablePet then
-		DCP:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-	end
+    if self.db.enablePet then
+        DCP:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+    end
 end
 
 function CF:DisableCooldownFlash()
@@ -254,8 +255,13 @@ function CF:DisableCooldownFlash()
     DCP:UnregisterEvent("PLAYER_ENTERING_WORLD")
     DCP:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
     --DCP:SetScript("OnUpdate", nil)
-    --wipe(cooldowns)
-    --wipe(watching)
+    --wipe(CF.cooldowns)
+    --wipe(CF.watching)
+end
+
+function CF:TestMode()
+    tinsert(CF.animating, testtable)
+    DCP:SetScript("OnUpdate", OnUpdate)
 end
 
 function CF:Initialize()
@@ -267,110 +273,9 @@ function CF:Initialize()
         self:EnableCooldownFlash()
     end
     DCP:SetPoint("CENTER", R.UIParent, "CENTER")
-	R:CreateMover(DCP, "CooldownFlashMover", L["中部冷却闪光"], true, nil)
-    R.Options.args.CooldownFlash.args.toggle.set = function(info, v)
-        CF.db.enable = v
-        if v then
-            self:EnableCooldownFlash()
-        else
-            self:DisableCooldownFlash()
-        end
-    end
+    R:CreateMover(DCP, "CooldownFlashMover", L["中部冷却闪光"], true, nil)
     local spellname, _, icon = GetSpellInfo(16914)
     testtable = { icon, nil, spellname }
-end
-
-function CF:GetOptions()
-	local options = {
-		iconSize = {
-			order = 5,
-			name = L["图标大小"],
-			type = "range",
-			min = 30, max = 125, step = 1,
-            set = function(info, value) R.db.CooldownFlash[ info[#info] ] = value; DCP:SetSize(value, value) end,
-            hidden = function() return not R.db.CooldownFlash.enable end,
-		},
-		fadeInTime = {
-			order = 6,
-			name = L["淡入时间"],
-			type = "range",
-			min = 0, max = 2.5, step = 0.1,
-            get = function(info) return R.db.CooldownFlash[ info[#info] ] end,
-            set = function(info, value) R.db.CooldownFlash[ info[#info] ] = value end,
-            hidden = function() return not R.db.CooldownFlash.enable end,
-		},
-		fadeOutTime = {
-			order = 7,
-			name = L["淡出时间"],
-			type = "range",
-			min = 0, max = 2.5, step = 0.1,
-            get = function(info) return R.db.CooldownFlash[ info[#info] ] end,
-            set = function(info, value) R.db.CooldownFlash[ info[#info] ] = value end,
-            hidden = function() return not R.db.CooldownFlash.enable end,
-		},
-		maxAlpha = {
-			order = 8,
-			name = L["最大透明度"],
-			type = "range",
-			min = 0, max = 1, step = 0.05,
-			isPercent = true,
-            get = function(info) return R.db.CooldownFlash[ info[#info] ] end,
-            set = function(info, value) R.db.CooldownFlash[ info[#info] ] = value end,
-            hidden = function() return not R.db.CooldownFlash.enable end,
-		},
-		holdTime = {
-			order = 9,
-			name = L["持续时间"],
-			type = "range",
-			min = 0, max = 2.5, step = 0.1,
-            get = function(info) return R.db.CooldownFlash[ info[#info] ] end,
-            set = function(info, value) R.db.CooldownFlash[ info[#info] ] = value end,
-            hidden = function() return not R.db.CooldownFlash.enable end,
-		},
-		animScale = {
-			order = 10,
-			name = L["动画大小"],
-			type = "range",
-			min = 0, max = 2, step = 0.1,
-            get = function(info) return R.db.CooldownFlash[ info[#info] ] end,
-            set = function(info, value) R.db.CooldownFlash[ info[#info] ] = value end,
-            hidden = function() return not R.db.CooldownFlash.enable end,
-		},
-        showSpellName = {
-			order = 11,
-			name = L["显示法术名称"],
-			type = "toggle",
-            get = function(info) return R.db.CooldownFlash[ info[#info] ] end,
-            set = function(info, value) R.db.CooldownFlash[ info[#info] ] = value end,
-            hidden = function() return not R.db.CooldownFlash.enable end,
-        },
-        enablePet = {
-			order = 12,
-			name = L["监视宠物技能"],
-			type = "toggle",
-            get = function(info) return R.db.CooldownFlash[ info[#info] ] end,
-            set = function(info, value)
-				R.db.CooldownFlash[ info[#info] ] = value
-				if value then
-					DCP:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-				else
-					DCP:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-				end
-			end,
-            hidden = function() return not R.db.CooldownFlash.enable end,
-        },
-        test = {
-            order = 20,
-            name = L["测试"],
-            type = "execute",
-            func = function()
-                tinsert(animating,testtable)
-                DCP:SetScript("OnUpdate", OnUpdate)
-            end,
-            hidden = function() return not R.db.CooldownFlash.enable end,
-        }
-	}
-    return options
 end
 
 function CF:Info()

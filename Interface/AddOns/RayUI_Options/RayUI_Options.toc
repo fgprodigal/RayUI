@@ -1,0 +1,20 @@
+## Interface: 70000
+## Title: |cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r Options
+## Author: Elv
+## Version: 1.0
+## Notes: Options for RayUI.
+## RequiredDeps: RayUI
+## LoadOnDemand: 1
+
+libs\load_libs.xml
+core.lua
+unitframes.lua
+raid.lua
+actionbar.lua
+bags.lua
+chat.lua
+cooldownflash.lua
+tooltip.lua
+skins.lua
+misc.lua
+nameplates.lua

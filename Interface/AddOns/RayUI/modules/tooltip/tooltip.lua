@@ -138,22 +138,6 @@ local function SetPrevLineJustify(self,justify)
     self.justify[line] = justify
 end
 
-function TT:GetOptions()
-    local options = {
-        cursor = {
-            order = 5,
-            name = L["跟随鼠标"],
-            type = "toggle",
-        },
-        hideincombat = {
-            order = 6,
-            name = L["战斗中隐藏"],
-            type = "toggle",
-        },
-    }
-    return options
-end
-
 local function GatherTalents(isInspect)
     local spec = isInspect and GetInspectSpecialization(talentcurrent.unit) or GetSpecialization()
     if (spec) and (spec > 0) then

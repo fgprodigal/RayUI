@@ -30,39 +30,6 @@ local consumable = AUCTION_CATEGORY_CONSUMABLES
 
 B.modName = L["背包"]
 
-function B:GetOptions()
-	local options = {
-		bagSize = {
-			order = 5,
-			type = "range",
-			name = L["背包格大小"],
-			min = 15, max = 45, step = 1,
-			set = function(info, value) R.db.Bags[ info[#info] ] = value B:Layout() end,
-		},
-		sortInverted = {
-			order = 7,
-			type = "toggle",
-			name = L["逆序整理"],
-			set = function(info, value) R.db.Bags[ info[#info] ] = value end,
-		},
-		bagWidth = {
-			order = 8,
-			type = "range",
-			name = L["背包面板宽度"],
-			min = 8, max = 20, step = 1,
-			set = function(info, value) R.db.Bags[ info[#info] ] = value B:Layout() end,
-		},
-		bankWidth = {
-			order = 9,
-			type = "range",
-			name = L["银行面板宽度"],
-			min = 8, max = 20, step = 1,
-			set = function(info, value) R.db.Bags[ info[#info] ] = value B:Layout(true) end,
-		},
-	}
-	return options
-end
-
 function B:Tooltip_Show()
 	GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, 4)
 	GameTooltip:ClearLines()

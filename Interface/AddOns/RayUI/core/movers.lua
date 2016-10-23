@@ -1,7 +1,6 @@
 --Create a Mover frame by Elv
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local AddOnName = ...
-local AceConfig = LibStub("AceConfigDialog-3.0")
 
 --Cache global variables
 --Lua functions
@@ -305,7 +304,7 @@ local function CreatePopup()
 
 	lock:SetScript("OnClick", function(self)
 		R:ToggleConfigMode(true)
-		AceConfig["Open"](AceConfig,"RayUI")
+		if IsAddOnLoaded("RayUI_Options") then LibStub("AceConfigDialog-3.0"):Open("RayUI") end
 		selectedValue = "GENERAL"
 		UIDropDownMenu_SetSelectedValue(RayUIMoverPopupWindowDropDown, selectedValue)
 	end)
@@ -690,8 +689,10 @@ function R:ToggleConfigMode(override, moverType)
 
 		RayUIMoverPopupWindow:Show()
 		ShowGrid()
-		AceConfig["Close"](AceConfig, "RayUI")
-		GameTooltip:Hide()
+		if IsAddOnLoaded("RayUI_Options") then
+			LibStub("AceConfigDialog-3.0"):Close("RayUI")
+			GameTooltip:Hide()
+		end
 		R.ConfigurationMode = true
 	else
 		if RayUIMoverPopupWindow then
