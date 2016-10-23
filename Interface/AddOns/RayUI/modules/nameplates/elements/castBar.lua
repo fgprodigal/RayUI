@@ -39,7 +39,7 @@ function mod:UpdateElement_CastBarOnUpdate(elapsed)
 end
 
 function mod:UpdateElement_Cast(frame, event, ...)
-    if(self.db.units[frame.UnitType].castbar.enable ~= true) then return end
+    if frame.UnitType == "FRIENDLY_NPC" then return end
 
     local arg1 = ...;
     local unit = frame.displayedUnit
@@ -210,7 +210,7 @@ function mod:ConfigureElement_CastBar(frame)
 
     --Position
     castBar:ClearAllPoints()
-    if(self.db.units[frame.UnitType].powerbar.enable) then
+    if frame.UnitType == "HEALER" or frame.UnitType == "FRIENDLY_PLAYER" then
         castBar:SetPoint("TOPLEFT", frame.PowerBar, "BOTTOMLEFT", 0, -5)
         castBar:SetPoint("TOPRIGHT", frame.PowerBar, "BOTTOMRIGHT", 0, -5)
     else
@@ -221,7 +221,7 @@ function mod:ConfigureElement_CastBar(frame)
 
     castBar.Icon:SetPoint("TOPRIGHT", frame.HealthBar, "TOPLEFT", -3, 0)
     castBar.Icon:SetPoint("BOTTOMRIGHT", castBar, "BOTTOMLEFT", -3, 0)
-    if(self.db.units[frame.UnitType].powerbar.enable) then
+    if frame.UnitType == "HEALER" or frame.UnitType == "FRIENDLY_PLAYER" then
         castBar.Icon:SetWidth(self.db.cbHeight + self.db.hpHeight + self.db.pbHeight + 8)
     else
         castBar.Icon:SetWidth(self.db.cbHeight + self.db.hpHeight + 5)

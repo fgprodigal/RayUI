@@ -22,7 +22,7 @@ GameTooltip_SetDefaultAnchor(tooltip, UIParent)
 
 function mod:UpdateElement_NPCTitle(frame)
 	frame.NPCTitle:SetText("")
-	if not UnitIsPlayer(frame.unit) and not UnitPlayerControlled(frame.unit) and not UnitIsUnit("target", frame.unit) and not self.db.units[frame.UnitType].healthbar.enable then
+	if not UnitIsPlayer(frame.unit) and not UnitPlayerControlled(frame.unit) and not UnitIsUnit("target", frame.unit) and frame.UnitType == "FRIENDLY_NPC" then
 		tooltip:SetOwner(UIParent, "ANCHOR_NONE")
 		tooltip:SetUnit(frame.unit)
 		tooltip:Show()
@@ -51,7 +51,7 @@ function mod:ConfigureElement_NPCTitle(frame)
 	title:SetJustifyH("CENTER")
 	title:SetPoint("TOP", frame.Name, "BOTTOM", 0, -2)
 
-	title:SetFont(LSM:Fetch("font", R["media"].font), R["media"].fontsize, R["media"].fontflag)
+	title:SetFont(LSM:Fetch("font", R["media"].font), self.db.fontsize, "OUTLINE")
 end
 
 function mod:ConstructElement_NPCTitle(frame)

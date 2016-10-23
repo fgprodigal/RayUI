@@ -63,44 +63,40 @@ function mod:UpdateElement_Auras(frame)
     --First, we go through all the debuffs looking for any boss flagged ones.
 
     self:HideAuraIcons(frame.Debuffs)
-    if(self.db.units[frame.UnitType].debuffs.enable) then
+    if mod.db.showauras then
         frame.Debuffs.shownIDs = {}
-        if(self.db.units[frame.UnitType].debuffs.filters.boss) then
-            while ( frameNum <= maxDebuffs ) do
-                local name, _, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId, _, isBossAura = UnitDebuff(frame.displayedUnit, index, filter);
-                if ( name ) then
-                    if ( isBossAura ) then
-                        local debuffFrame = frame.Debuffs.icons[frameNum];
-                        mod:SetAura(debuffFrame, index, name, filter, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, spellId, isBossAura)
-                        frameNum = frameNum + 1;
-                        frame.Debuffs.shownIDs[spellId] = true
-                        hasDebuffs = true
-                    end
-                else
-                    break;
+        while ( frameNum <= maxDebuffs ) do
+            local name, _, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId, _, isBossAura = UnitDebuff(frame.displayedUnit, index, filter);
+            if ( name ) then
+                if ( isBossAura ) then
+                    local debuffFrame = frame.Debuffs.icons[frameNum];
+                    mod:SetAura(debuffFrame, index, name, filter, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, spellId, isBossAura)
+                    frameNum = frameNum + 1;
+                    frame.Debuffs.shownIDs[spellId] = true
+                    hasDebuffs = true
                 end
-                index = index + 1;
+            else
+                break;
             end
+            index = index + 1;
         end
 
-        if(self.db.units[frame.UnitType].debuffs.filters.personal) then
-            index = 1
-            --Now look for personal debuffs
-            while ( frameNum <= maxDebuffs ) do
-                local name, _, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId, _, isBossAura = UnitDebuff(frame.displayedUnit, index, filter);
-                if ( name ) then
-                    if (unitCaster == mod.playerUnitToken and not frame.Debuffs.shownIDs[spellId] and (duration > 0 or (duration == 0 and durationOverride[spellId])) and duration <= self.db.units[frame.UnitType].debuffs.filters.maxDuration) then
-                        local debuffFrame = frame.Debuffs.icons[frameNum];
-                        mod:SetAura(debuffFrame, index, name, filter, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, spellId, isBossAura)
-                        frameNum = frameNum + 1;
-                        frame.Debuffs.shownIDs[spellId] = true
-                        hasDebuffs = true
-                    end
-                else
-                    break;
+        index = 1
+        --Now look for personal debuffs
+        while ( frameNum <= maxDebuffs ) do
+            local name, _, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId, _, isBossAura = UnitDebuff(frame.displayedUnit, index, filter);
+            if ( name ) then
+                if (unitCaster == mod.playerUnitToken and not frame.Debuffs.shownIDs[spellId] and (duration > 0 or (duration == 0 and durationOverride[spellId])) and duration <= mod.db.maxDuration) then
+                    local debuffFrame = frame.Debuffs.icons[frameNum];
+                    mod:SetAura(debuffFrame, index, name, filter, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, spellId, isBossAura)
+                    frameNum = frameNum + 1;
+                    frame.Debuffs.shownIDs[spellId] = true
+                    hasDebuffs = true
                 end
-                index = index + 1;
+            else
+                break;
             end
+            index = index + 1;
         end
     end
 
@@ -111,48 +107,44 @@ function mod:UpdateElement_Auras(frame)
     self:HideAuraIcons(frame.Buffs)
     frame.Buffs.shownIDs = {}
     --Now look for boss buffs
-    if(self.db.units[frame.UnitType].buffs.enable) then
-        if(self.db.units[frame.UnitType].buffs.filters.boss) then
-            while ( frameNum <= maxBuffs ) do
-                local name, _, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId, _, isBossAura = UnitBuff(frame.displayedUnit, index, filter);
-                if ( name ) then
-                    if ( isBossAura ) then
-                        local buffFrame = frame.Buffs.icons[frameNum];
-                        mod:SetAura(buffFrame, index, name, filter, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, spellId, isBossAura)
-                        frameNum = frameNum + 1;
-                        frame.Buffs.shownIDs[spellId] = true
-                        hasBuffs = true
-                    end
-                else
-                    break;
+    if mod.db.showauras then
+        while ( frameNum <= maxBuffs ) do
+            local name, _, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId, _, isBossAura = UnitBuff(frame.displayedUnit, index, filter);
+            if ( name ) then
+                if ( isBossAura ) then
+                    local buffFrame = frame.Buffs.icons[frameNum];
+                    mod:SetAura(buffFrame, index, name, filter, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, spellId, isBossAura)
+                    frameNum = frameNum + 1;
+                    frame.Buffs.shownIDs[spellId] = true
+                    hasBuffs = true
                 end
-                index = index + 1;
+            else
+                break;
             end
+            index = index + 1;
         end
 
-        if(self.db.units[frame.UnitType].buffs.filters.personal) then
-            index = 1
-            --Now look the rest of buffs
-            while ( frameNum <= maxBuffs ) do
-                local name, _, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId, _, isBossAura = UnitBuff(frame.displayedUnit, index, filter);
-                if ( name ) then
-                    if ( unitCaster == mod.playerUnitToken and not frame.Buffs.shownIDs[spellId] and (duration > 0 or (duration == 0 and durationOverride[spellId])) and duration <= self.db.units[frame.UnitType].buffs.filters.maxDuration ) then
-                        local buffFrame = frame.Buffs.icons[frameNum];
-                        mod:SetAura(buffFrame, index, name, filter, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, spellId, isBossAura)
-                        frameNum = frameNum + 1;
-                        frame.Buffs.shownIDs[spellId] = true
-                        hasBuffs = true
-                    end
-                else
-                    break;
+        index = 1
+        --Now look the rest of buffs
+        while ( frameNum <= maxBuffs ) do
+            local name, _, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId, _, isBossAura = UnitBuff(frame.displayedUnit, index, filter);
+            if ( name ) then
+                if ( unitCaster == mod.playerUnitToken and not frame.Buffs.shownIDs[spellId] and (duration > 0 or (duration == 0 and durationOverride[spellId])) and duration <= mod.db.maxDuration ) then
+                    local buffFrame = frame.Buffs.icons[frameNum];
+                    mod:SetAura(buffFrame, index, name, filter, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, spellId, isBossAura)
+                    frameNum = frameNum + 1;
+                    frame.Buffs.shownIDs[spellId] = true
+                    hasBuffs = true
                 end
-                index = index + 1;
+            else
+                break;
             end
+            index = index + 1;
         end
     end
 
     local TopLevel = frame.HealthBar
-    local TopOffset = ((self.db.units[frame.UnitType].showName and select(2, frame.Name:GetFont()) + 5) or 0)
+    local TopOffset = select(2, frame.Name:GetFont()) + 5
     if(hasDebuffs) then
         TopOffset = TopOffset + 3
         frame.Debuffs:SetPoint("BOTTOMLEFT", TopLevel, "TOPLEFT", 0, TopOffset)
@@ -203,13 +195,13 @@ function mod:Auras_SizeChanged(width, height)
     local numAuras = #self.icons
     for i=1, numAuras do
         self.icons[i]:SetWidth((width - (mod.mult*numAuras)) / numAuras)
-        self.icons[i]:SetHeight((self.db.baseHeight or 18) * (self:GetParent().HealthBar.currentScale or 1))
+        self.icons[i]:SetHeight((mod.db.iconSize or 18) * (self:GetParent().HealthBar.currentScale or 1))
     end
-    self:SetHeight((self.db.baseHeight or 18) * (self:GetParent().HealthBar.currentScale or 1))
+    self:SetHeight((mod.db.iconSiz or 18) * (self:GetParent().HealthBar.currentScale or 1))
 end
 
 function mod:UpdateAuraIcons(auras)
-    local maxAuras = auras.db.numAuras
+    local maxAuras = mod.db.numAuras
     local numCurrentAuras = #auras.icons
     if numCurrentAuras > maxAuras then
         for i = maxAuras, numCurrentAuras do
@@ -228,7 +220,7 @@ function mod:UpdateAuraIcons(auras)
         auras.icons[i]:SetParent(auras)
         auras.icons[i]:ClearAllPoints()
         auras.icons[i]:Hide()
-        auras.icons[i]:SetHeight(auras.db.baseHeight or 18)
+        auras.icons[i]:SetHeight(mod.iconSize or 18)
 
         if(auras.side == "LEFT") then
             if(i == 1) then

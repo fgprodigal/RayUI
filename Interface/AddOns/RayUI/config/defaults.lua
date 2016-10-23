@@ -42,226 +42,27 @@ P["MiniMap"]={
 
 P["NamePlates"]={
     enable = true,
-    showdebuff = true,
+    markHealers = true,
+    showauras = true,
+    numAuras = 4,
+    iconSize = 20,
+    maxDuration = 120,
     showhealer = true,
     smooth = true,
-    fontsize = 9,
+    fontsize = 12,
     hpHeight = 10,
     hpWidth = 150,
     pbHeight = 3,
-    iconSize = 23,
     cbHeight = 5,
-    cbWidth = 110,
     targetScale = 1.2,
+    displayStyle = "ALL",
+	lowHealthThreshold = 0.4,
+	showFriendlyCombat = "DISABLED",
+	showEnemyCombat = "DISABLED",
     motionType = "OVERLAP", --OVERLAP, STACKED
-    ['units'] = {
-        ['HEALER'] = {
-            ['healthbar'] = {
-                ['enable'] = true,
-                ['healPrediction'] = true,
-                ['glowStyle'] = "TARGET_THREAT",
-            },
-            ['showName'] = true,
-            ['showLevel'] = false,
-            ['powerbar'] = {
-                ['enable'] = true,
-                ['costPrediction'] = true,
-                ['height'] = 8,
-            },
-            ['castbar'] = {
-                ['enable'] = true,
-                ['height'] = 8,
-            },
-            ['buffs'] = {
-                ['enable'] = true,
-                ['numAuras'] = 4,
-                ['baseHeight'] = 20,
-                ['filters'] = {
-                    ['personal'] = true,
-                    ['boss'] = true,
-                    ['maxDuration'] = 120,
-                    ['filter'] = 'TurtleBuffs'
-                },
-            },
-            ['debuffs'] = {
-                ['enable'] = true,
-                ['numAuras'] = 4,
-                ['baseHeight'] = 20,
-                ['filters'] = {
-                    ['personal'] = true,
-                    ['boss'] = true,
-                    ['maxDuration'] = 120,
-                    ['filter'] = 'CCDebuffs'
-                },
-            },
-        },
-        ['FRIENDLY_PLAYER'] = {
-            ["minions"] = false,
-            ['healthbar'] = {
-                ['enable'] = true,
-                ['healPrediction'] = true,
-                ['glowStyle'] = "TARGET_THREAT",
-            },
-            ['showName'] = true,
-            ['showLevel'] = false,
-            ['powerbar'] = {
-                ['enable'] = true,
-                ['costPrediction'] = true,
-                ['height'] = 8,
-                ['baseHeight'] = 20,
-            },
-            ['castbar'] = {
-                ['enable'] = true,
-                ['height'] = 8,
-            },
-            ['buffs'] = {
-                ['enable'] = true,
-                ['numAuras'] = 4,
-                ['filters'] = {
-                    ['personal'] = true,
-                    ['boss'] = true,
-                    ['maxDuration'] = 120,
-                    ['filter'] = 'TurtleBuffs'
-                },
-            },
-            ['debuffs'] = {
-                ['enable'] = false,
-                ['numAuras'] = 4,
-                ['baseHeight'] = 20,
-                ['filters'] = {
-                    ['personal'] = true,
-                    ['boss'] = true,
-                    ['maxDuration'] = 120,
-                    ['filter'] = 'CCDebuffs'
-                },
-            },
-        },
-        ['ENEMY_PLAYER'] = {
-            ["minions"] = false,
-            ["markHealers"] = true,
-            ['healthbar'] = {
-                ['enable'] = true,
-                ['healPrediction'] = true,
-                ['glowStyle'] = "TARGET_THREAT",
-            },
-            ['showName'] = true,
-            ['showLevel'] = true,
-            ['powerbar'] = {
-                ['enable'] = false,
-                ['costPrediction'] = true,
-                ['height'] = 8,
-            },
-            ['castbar'] = {
-                ['enable'] = true,
-                ['height'] = 8,
-            },
-            ['buffs'] = {
-                ['enable'] = true,
-                ['numAuras'] = 4,
-                ['baseHeight'] = 20,
-                ['filters'] = {
-                    ['personal'] = true,
-                    ['boss'] = true,
-                    ['maxDuration'] = 120,
-                    ['filter'] = 'TurtleBuffs'
-                },
-            },
-            ['debuffs'] = {
-                ['enable'] = true,
-                ['numAuras'] = 4,
-                ['baseHeight'] = 20,
-                ['filters'] = {
-                    ['personal'] = true,
-                    ['boss'] = true,
-                    ['maxDuration'] = 120,
-                    ['filter'] = 'CCDebuffs'
-                },
-            },
-        },
-        ['FRIENDLY_NPC'] = {
-            ['healthbar'] = {
-                ['enable'] = false,
-                ['healPrediction'] = true,
-                ['glowStyle'] = "TARGET_THREAT",
-            },
-            ['showName'] = true,
-            ['showLevel'] = false,
-            ['powerbar'] = {
-                ['enable'] = false,
-                ['costPrediction'] = true,
-                ['height'] = 8,
-            },
-            ['castbar'] = {
-                ['enable'] = false,
-                ['height'] = 8,
-            },
-            ['buffs'] = {
-                ['enable'] = true,
-                ['numAuras'] = 4,
-                ['baseHeight'] = 20,
-                ['filters'] = {
-                    ['personal'] = true,
-                    ['boss'] = true,
-                    ['maxDuration'] = 120,
-                    ['filter'] = 'TurtleBuffs'
-                },
-            },
-            ['debuffs'] = {
-                ['enable'] = true,
-                ['numAuras'] = 4,
-                ['baseHeight'] = 20,
-                ['filters'] = {
-                    ['personal'] = true,
-                    ['boss'] = true,
-                    ['maxDuration'] = 120,
-                    ['filter'] = 'CCDebuffs'
-                },
-            },
-        },
-        ['ENEMY_NPC'] = {
-            ["minors"] = true,
-            ['healthbar'] = {
-                ['enable'] = true,
-                ['height'] = 10,
-                ['width'] = 150,
-                ['healPrediction'] = true,
-                ['glowStyle'] = "TARGET_THREAT",
-            },
-            ['showName'] = true,
-            ['showLevel'] = true,
-            ['powerbar'] = {
-                ['enable'] = false,
-                ['costPrediction'] = true,
-                ['height'] = 8,
-            },
-            ['castbar'] = {
-                ['enable'] = true,
-                ['height'] = 8,
-            },
-            ['buffs'] = {
-                ['enable'] = true,
-                ['numAuras'] = 4,
-                ['baseHeight'] = 20,
-                ['filters'] = {
-                    ['personal'] = true,
-                    ['boss'] = true,
-                    ['maxDuration'] = 120,
-                    ['filter'] = 'TurtleBuffs'
-                },
-            },
-            ['debuffs'] = {
-                ['enable'] = true,
-                ['numAuras'] = 4,
-                ['baseHeight'] = 20,
-                ['filters'] = {
-                    ['personal'] = true,
-                    ['boss'] = true,
-                    ['maxDuration'] = 120,
-                    ['filter'] = 'CCDebuffs'
-                },
-            },
-        },
-    },
+    friendly_minions = false,
+    enemy_minions = false,
+    enemy_minors = true,
 }
 
 P["Chat"]={

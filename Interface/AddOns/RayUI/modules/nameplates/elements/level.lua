@@ -12,8 +12,7 @@ local UnitLevel = UnitLevel
 local UnitClassification = UnitClassification
 
 function mod:UpdateElement_Level(frame)
-    if(not self.db.units[frame.UnitType].showLevel and frame.UnitType ~= "PLAYER") then return end
-    if frame.UnitType == "PLAYER" and not self.db.units[frame.UnitType].showLevel then frame.Level:SetText() return end
+    if frame.UnitType ~= "ENEMY_PLAYER" and frame.UnitType ~= "ENEMY_NPC" then frame.Level:SetText() return end
     local level = UnitLevel(frame.displayedUnit)
     local c = UnitClassification(frame.displayedUnit)
 
@@ -28,7 +27,7 @@ function mod:UpdateElement_Level(frame)
         r, g, b = color.r, color.g, color.b
     end
 
-    if(self.db.units[frame.UnitType].healthbar.enable or frame.isTarget) then
+    if(frame.UnitType ~= "FRIENDLY_NPC" or frame.isTarget) then
         frame.Level:SetText(level)
     else
         frame.Level:SetFormattedText(" [%s]", level)
@@ -41,14 +40,14 @@ function mod:ConfigureElement_Level(frame)
 
     level:ClearAllPoints()
 
-    if(self.db.units[frame.UnitType].healthbar.enable or frame.isTarget) then
+    if(frame.UnitType ~= "FRIENDLY_NPC" or frame.isTarget) then
         level:SetJustifyH("RIGHT")
         level:SetPoint("BOTTOMRIGHT", frame.HealthBar, "TOPRIGHT", 0, 2)
     else
         level:SetPoint("LEFT", frame.Name, "RIGHT")
         level:SetJustifyH("LEFT")
     end
-    level:SetFont(LSM:Fetch("font", R.global.media.font), R.global.media.fontsize, R.global.media.fontflag)
+    level:SetFont(LSM:Fetch("font", R.global.media.font), self.db.fontsize, "OUTLINE")
 end
 
 function mod:ConstructElement_Level(frame)

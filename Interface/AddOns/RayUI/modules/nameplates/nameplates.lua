@@ -96,10 +96,10 @@ end
 function mod:PLAYER_ENTERING_WORLD()
     twipe(self.Healers)
     local inInstance, instanceType = IsInInstance()
-    if inInstance and instanceType == 'pvp' and self.db.units.ENEMY_PLAYER.markHealers then
+    if inInstance and instanceType == 'pvp' and self.db.markHealers then
         self.CheckHealerTimer = self:ScheduleRepeatingTimer("CheckBGHealers", 3)
         self:CheckBGHealers()
-    elseif inInstance and instanceType == 'arena' and self.db.units.ENEMY_PLAYER.markHealers then
+    elseif inInstance and instanceType == 'arena' and self.db.markHealers then
         self:RegisterEvent('UNIT_NAME_UPDATE', 'CheckArenaHealers')
         self:RegisterEvent("ARENA_OPPONENT_UPDATE", 'CheckArenaHealers');
         self:CheckArenaHealers()
@@ -154,7 +154,7 @@ function mod:SetTargetFrame(frame)
 
         self:SetFrameScale(frame, self.db.targetScale)
         frame.isTarget = true
-        if(self.db.units[frame.UnitType].healthbar.enable ~= true) then
+        if frame.UnitType == "FRIENDLY_NPC" then
             frame.Name:ClearAllPoints()
             frame.Level:ClearAllPoints()
             frame.HealthBar.r, frame.HealthBar.g, frame.HealthBar.b = nil, nil, nil
@@ -179,7 +179,7 @@ function mod:SetTargetFrame(frame)
     elseif (frame.isTarget) then
         self:SetFrameScale(frame, frame.ThreatScale or 1)
         frame.isTarget = nil
-        if(self.db.units[frame.UnitType].healthbar.enable ~= true) then
+        if frame.UnitType == "FRIENDLY_NPC" then
             self:UpdateAllFrame(frame)
         end
 
@@ -195,6 +195,12 @@ function mod:SetTargetFrame(frame)
             frame:SetAlpha(1)
         end
     end
+
+    if (self.db.displayStyle == "TARGET" and not frame.isTarget and frame.UnitType ~= "PLAYER") then
+		frame:Hide()
+	else
+		frame:Show()
+	end
 end
 
 function mod:StyleFrame(frame, useMainFrame)
@@ -268,19 +274,17 @@ function mod:NAME_PLATE_UNIT_ADDED(event, unit, frame)
         mod.PlayerFrame = frame
     end
 
-    if(self.db.units[frame.UnitFrame.UnitType].healthbar.enable) then
+    if frame.UnitType ~= "FRIENDLY_NPC" or self.db.displayStyle ~= "ALL" then
         self:ConfigureElement_HealthBar(frame.UnitFrame)
         self:ConfigureElement_PowerBar(frame.UnitFrame)
         self:ConfigureElement_CastBar(frame.UnitFrame)
         self:ConfigureElement_Glow(frame.UnitFrame)
 
-        if(self.db.units[frame.UnitFrame.UnitType].buffs.enable) then
-            frame.UnitFrame.Buffs.db = self.db.units[frame.UnitFrame.UnitType].buffs
+        if self.db.showauras then
             self:UpdateAuraIcons(frame.UnitFrame.Buffs)
         end
 
-        if(self.db.units[frame.UnitFrame.UnitType].debuffs.enable) then
-            frame.UnitFrame.Debuffs.db = self.db.units[frame.UnitFrame.UnitType].debuffs
+        if self.db.showauras then
             self:UpdateAuraIcons(frame.UnitFrame.Debuffs)
         end
     end
@@ -292,7 +296,11 @@ function mod:NAME_PLATE_UNIT_ADDED(event, unit, frame)
     self:ConfigureElement_NPCTitle(frame.UnitFrame)
     self:RegisterEvents(frame.UnitFrame, unit)
     self:UpdateElement_All(frame.UnitFrame, unit)
-    frame.UnitFrame:Show()
+    if (self.db.displayStyle == "TARGET" and not frame.UnitFrame.isTarget and frame.UnitFrame.UnitType ~= "PLAYER") then
+		frame.UnitFrame:Hide()
+	else
+		frame.UnitFrame:Show()
+	end
 end
 
 function mod:NAME_PLATE_UNIT_REMOVED(event, unit, frame, ...)
@@ -382,7 +390,7 @@ function mod:UpdateInVehicle(frame, noEvents)
 end
 
 function mod:UpdateElement_All(frame, unit, noTargetFrame)
-    if (self.db.units[frame.UnitType].healthbar.enable or frame.isTarget) then
+    if (frame.UnitType ~= "FRIENDLY_NPC" or (self.db.displayStyle ~= "ALL") or frame.isTarget) then
         mod:UpdateElement_MaxHealth(frame)
         mod:UpdateElement_Health(frame)
         mod:UpdateElement_HealthColor(frame)
@@ -391,7 +399,7 @@ function mod:UpdateElement_All(frame, unit, noTargetFrame)
         mod:UpdateElement_Cast(frame)
         mod:UpdateElement_Auras(frame)
         mod:UpdateElement_HealPrediction(frame)
-        if(self.db.units[frame.UnitType].powerbar.enable) then
+        if frame.UnitType == "HEALER" or frame.UnitType == "FRIENDLY_PLAYER" then
             frame.PowerBar:Show()
             mod.OnEvent(frame, "UNIT_DISPLAYPOWER", unit or frame.unit)
         else
@@ -487,7 +495,7 @@ function mod:RegisterEvents(frame, unit)
         displayedUnit = frame.displayedUnit;
     end
 
-    if(self.db.units[frame.UnitType].healthbar.enable or frame.isTarget) then
+    if(frame.UnitType ~= "FRIENDLY_NPC" or frame.isTarget) then
         frame:RegisterUnitEvent("UNIT_MAXHEALTH", unit, displayedUnit);
         frame:RegisterUnitEvent("UNIT_HEALTH", unit, displayedUnit);
         frame:RegisterUnitEvent("UNIT_HEALTH_FREQUENT", unit, displayedUnit);
@@ -499,19 +507,19 @@ function mod:RegisterEvents(frame, unit)
     frame:RegisterEvent("UNIT_NAME_UPDATE");
     frame:RegisterUnitEvent("UNIT_LEVEL", unit, displayedUnit);
 
-    if(self.db.units[frame.UnitType].healthbar.enable or frame.isTarget) then
+    if(frame.UnitType ~= "FRIENDLY_NPC" or frame.isTarget) then
         if(frame.UnitType == "ENEMY_NPC") then
             frame:RegisterUnitEvent("UNIT_THREAT_LIST_UPDATE", unit, displayedUnit);
         end
 
-        if(self.db.units[frame.UnitType].powerbar.enable) then
+        if frame.UnitType == "HEALER" or frame.UnitType == "FRIENDLY_PLAYER" then
             frame:RegisterUnitEvent("UNIT_POWER", unit, displayedUnit)
             frame:RegisterUnitEvent("UNIT_POWER_FREQUENT", unit, displayedUnit)
             frame:RegisterUnitEvent("UNIT_DISPLAYPOWER", unit, displayedUnit)
             frame:RegisterUnitEvent("UNIT_MAXPOWER", unit, displayedUnit)
         end
 
-        if(self.db.units[frame.UnitType].castbar.enable) then
+        if frame.UnitType ~= "FRIENDLY_NPC" then
             frame:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED");
             frame:RegisterEvent("UNIT_SPELLCAST_DELAYED");
             frame:RegisterEvent("UNIT_SPELLCAST_CHANNEL_START");
@@ -526,7 +534,7 @@ function mod:RegisterEvents(frame, unit)
 
         frame:RegisterEvent("PLAYER_ENTERING_WORLD");
 
-        if(self.db.units[frame.UnitType].buffs.enable or self.db.units[frame.UnitType].debuffs.enable) then
+        if self.db.showauras then
             frame:RegisterUnitEvent("UNIT_AURA", unit, displayedUnit)
         end
         frame:RegisterEvent("RAID_TARGET_UPDATE")
@@ -544,10 +552,10 @@ end
 function mod:UpdateCVars()
     R:LockCVar("nameplateShowSelf", "0")
     R:LockCVar("nameplateMotion", self.db.motionType == "STACKED" and "1" or "0")
-    R:LockCVar("nameplateShowAll", "1")
-    R:LockCVar("nameplateShowFriendlyMinions", self.db.units.FRIENDLY_PLAYER.minions == true and "1" or "0")
-    R:LockCVar("nameplateShowEnemyMinions", self.db.units.ENEMY_PLAYER.minions == true and "1" or "0")
-    R:LockCVar("nameplateShowEnemyMinus", self.db.units.ENEMY_NPC.minors == true and "1" or "0")
+	R:LockCVar("nameplateShowAll", self.db.displayStyle ~= "ALL" and "0" or "1")
+    R:LockCVar("nameplateShowFriendlyMinions", self.db.friendly_minions == true and "1" or "0")
+    R:LockCVar("nameplateShowEnemyMinions", self.db.enemy_minions == true and "1" or "0")
+    R:LockCVar("nameplateShowEnemyMinus", self.db.enemy_minors == true and "1" or "0")
 
     R:LockCVar("nameplateOtherTopInset", -1)
     R:LockCVar("nameplateOtherBottomInset", -1)
@@ -584,18 +592,49 @@ function mod:UpdateVehicleStatus(event, unit)
     end
 end
 
+function mod:PLAYER_REGEN_DISABLED()
+	if(self.db.showFriendlyCombat == "TOGGLE_ON") then
+		SetCVar("nameplateShowFriends", 1)
+	elseif(self.db.showFriendlyCombat == "TOGGLE_OFF") then
+		SetCVar("nameplateShowFriends", 0)
+	end
+
+	if(self.db.showEnemyCombat == "TOGGLE_ON") then
+		SetCVar("nameplateShowEnemies", 1)
+	elseif(self.db.showEnemyCombat == "TOGGLE_OFF") then
+		SetCVar("nameplateShowEnemies", 0)
+	end
+end
+
+function mod:PLAYER_REGEN_ENABLED()
+	if(self.db.showFriendlyCombat == "TOGGLE_ON") then
+		SetCVar("nameplateShowFriends", 0)
+	elseif(self.db.showFriendlyCombat == "TOGGLE_OFF") then
+		SetCVar("nameplateShowFriends", 1)
+	end
+
+	if(self.db.showEnemyCombat == "TOGGLE_ON") then
+		SetCVar("nameplateShowEnemies", 0)
+	elseif(self.db.showEnemyCombat == "TOGGLE_OFF") then
+		SetCVar("nameplateShowEnemies", 1)
+	end
+end
+
 function mod:Initialize()
-    self.db = R.db["NamePlates"]
+    if not self.db.enable then return end
+
     R.NamePlates = mod
 
     self:UpdateVehicleStatus()
 
-    -- InterfaceOptionsNamesPanelUnitNameplates:Kill()
+    InterfaceOptionsNamesPanelUnitNameplates:Kill()
     NamePlateDriverFrame:UnregisterAllEvents()
     NamePlateDriverFrame.ApplyFrameOptions = R.dummy
     self:RegisterEvent("NAME_PLATE_CREATED");
     self:RegisterEvent("NAME_PLATE_UNIT_ADDED");
     self:RegisterEvent("NAME_PLATE_UNIT_REMOVED");
+	self:RegisterEvent("PLAYER_REGEN_ENABLED");
+	self:RegisterEvent("PLAYER_REGEN_DISABLED");
     self:RegisterEvent("DISPLAY_SIZE_CHANGED");
     self:RegisterEvent("UNIT_ENTERED_VEHICLE", "UpdateVehicleStatus")
     self:RegisterEvent("UNIT_EXITED_VEHICLE", "UpdateVehicleStatus")
@@ -609,5 +648,10 @@ function mod:Initialize()
 
     R.NamePlates = self
 end
+
+function mod:Info()
+    return L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r姓名板模块."]
+end
+mod.modName = L["姓名板"]
 
 R:RegisterModule(mod:GetName())
