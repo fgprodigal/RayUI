@@ -562,28 +562,6 @@ function mod:UpdateCVars()
     R:LockCVar("nameplateMaxDistance", 50)
 end
 
-local function CopySettings(from, to)
-    for setting, value in pairs(from) do
-        if(type(value) == "table") then
-            CopySettings(from[setting], to[setting])
-        else
-            if(to[setting] ~= nil) then
-                to[setting] = from[setting]
-            end
-        end
-    end
-end
-
-function mod:ResetSettings(unit)
-    CopySettings(P.nameplates.units[unit], self.db.units[unit])
-end
-
-function mod:CopySettings(from, to)
-    if(from == to) then return end
-
-    CopySettings(self.db.units[from], self.db.units[to])
-end
-
 function mod:UpdateVehicleStatus(event, unit)
     if ( UnitHasVehicleUI("player") ) then
         self.playerUnitToken = "vehicle"

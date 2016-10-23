@@ -66,12 +66,12 @@ P["NamePlates"]={
 }
 
 P["Chat"]={
-    ["enable"] = true,
-    ["height"] = 140,
-    ["width"] = 400,
-    ["autohide"] = true,
-    ["autoshow"] = true,
-    ["autohidetime"] = 10,
+    enable = true,
+    height = 140,
+    width = 400,
+    autohide = true,
+    autoshow = true,
+    autohidetime = 10,
 }
 
 P["Tooltip"]={
