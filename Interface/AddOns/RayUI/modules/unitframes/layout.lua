@@ -646,6 +646,23 @@ function UF:DPSLayout(frame, unit)
     self:ScheduleRepeatingTimer("RangeDisplayUpdate", 0.25, frame)
 end
 
+function UF:LoadFakeUnitFrames()
+    local player = CreateFrame("Frame", "RayUF_player", R.UIParent)
+    player:Point("BOTTOMRIGHT", R.UIParent, "BOTTOM", -80, 390)
+    player:Size(PLAYER_WIDTH, PLAYER_HEIGHT)
+    player:Show()
+
+    local target = CreateFrame("Frame", "RayUF_target", R.UIParent)
+    target:Point("BOTTOMLEFT", R.UIParent, "BOTTOM", 80, 390)
+    target:Size(TARGET_WIDTH, TARGET_HEIGHT)
+    target:Show()
+
+    local focus = CreateFrame("Frame", "RayUF_focus", R.UIParent)
+    focus:Point("BOTTOMRIGHT", RayUF_player, "TOPLEFT", -20, 20)
+    focus:Size(PARTY_WIDTH, PARTY_HEIGHT)
+    focus:Show()
+end
+
 function UF:LoadUnitFrames()
     oUF:RegisterStyle("RayUF", function(frame, unit)
             UF:DPSLayout(frame, unit)

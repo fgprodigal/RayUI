@@ -1197,6 +1197,8 @@ function CH:ON_FCF_SavePositionAndDimensions(_, noLoop)
 end
 
 function CH:Initialize()
+    if not self.db.enable then return end
+
     if not RayUICharacterData.ChatEditHistory then
         RayUICharacterData.ChatEditHistory = {}
     end

@@ -690,6 +690,8 @@ function TT:GameTooltip_ShowStatusBar(tooltip, min, max, value, text)
 end
 
 function TT:Initialize()
+    if not self.db.enable then return end
+
     self:RawHook("GameTooltip_UnitColor", true)
 
     self:HookScript(GameTooltip, "OnTooltipSetUnit")

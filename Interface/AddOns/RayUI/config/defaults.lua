@@ -90,6 +90,7 @@ P["Buff"]={
 G["UnitFrames"]={}
 
 P["UnitFrames"]={
+    enable = true,
     powerColorClass = true,
     healthColorClass = false,
     smooth = true,
@@ -144,6 +145,7 @@ P["Raid"]={
 }
 
 P["ActionBar"]={
+    enable = true,
     buttonsize = 28,
     buttonspacing = 6,
     barscale = 1,
@@ -260,6 +262,7 @@ P["Skins"]={
 }
 
 P["Bags"]={
+    enable = true,
     bagSize = 35,
     bankSize = 35,
     sortInverted = true,

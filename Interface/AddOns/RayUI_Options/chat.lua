@@ -23,6 +23,14 @@ R.Options.args.Chat = {
             name = CH:Info() .. "\n\n",
             order = 2
         },
+
+        enable = {
+            type = "toggle",
+            name = CH.toggleLabel or (L["启用"] .. (CH.modName or CH:GetName())),
+            width = "double",
+            desc = CH.Info and CH:Info() or (L["启用"] .. (CH.modName or CH:GetName())),
+            order = 3,
+        },
         settingsHeader = {
             type = "header",
             name = L["设置"],

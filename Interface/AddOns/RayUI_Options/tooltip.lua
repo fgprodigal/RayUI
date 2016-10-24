@@ -23,6 +23,13 @@ R.Options.args.Tooltip = {
             name = TT:Info() .. "\n\n",
             order = 2
         },
+        enable = {
+            type = "toggle",
+            name = TT.toggleLabel or (L["启用"] .. (TT.modName or TT:GetName())),
+            width = "double",
+            desc = TT.Info and TT:Info() or (L["启用"] .. (TT.modName or TT:GetName())),
+            order = 3,
+        },
         settingsHeader = {
             type = "header",
             name = L["设置"],

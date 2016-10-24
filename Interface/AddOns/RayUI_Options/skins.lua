@@ -23,6 +23,13 @@ R.Options.args.Skins = {
             name = S:Info() .. "\n\n",
             order = 2
         },
+        enable = {
+            type = "toggle",
+            name = S.toggleLabel or (L["启用"] .. (S.modName or S:GetName())),
+            width = "double",
+            desc = S.Info and S:Info() or (L["启用"] .. (S.modName or S:GetName())),
+            order = 3,
+        },
         settingsHeader = {
             type = "header",
             name = L["设置"],

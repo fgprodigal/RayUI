@@ -23,6 +23,13 @@ R.Options.args.Raid = {
             name = RA:Info() .. "\n\n",
             order = 2
         },
+        enable = {
+            type = "toggle",
+            name = RA.toggleLabel or (L["启用"] .. (RA.modName or RA:GetName())),
+            width = "double",
+            desc = RA.Info and RA:Info() or (L["启用"] .. (RA.modName or RA:GetName())),
+            order = 3,
+        },
         settingsHeader = {
             type = "header",
             name = L["设置"],

@@ -23,6 +23,13 @@ R.Options.args.ActionBar = {
             name = AB:Info() .. "\n\n",
             order = 2
         },
+        enable = {
+            type = "toggle",
+            name = AB.toggleLabel or (L["启用"] .. (AB.modName or AB:GetName())),
+            width = "double",
+            desc = AB.Info and AB:Info() or (L["启用"] .. (AB.modName or AB:GetName())),
+            order = 3,
+        },
         settingsHeader = {
             type = "header",
             name = L["设置"],
@@ -34,70 +41,44 @@ R.Options.args.ActionBar = {
             type = "range",
             min = 0.5, max = 1.5, step = 0.01,
             isPercent = true,
+            hidden = function() return not R.db.ActionBar.enable end,
         },
         macroname = {
             order = 9,
             name = L["显示宏名称"],
             type = "toggle",
+            hidden = function() return not R.db.ActionBar.enable end,
         },
         itemcount = {
             order = 10,
             name = L["显示物品数量"],
             type = "toggle",
+            hidden = function() return not R.db.ActionBar.enable end,
         },
         hotkeys = {
             order = 11,
             name = L["显示快捷键"],
             type = "toggle",
+            hidden = function() return not R.db.ActionBar.enable end,
         },
         showgrid = {
             order = 12,
             name = L["显示空按键"],
             type = "toggle",
+            hidden = function() return not R.db.ActionBar.enable end,
         },
         clickondown = {
             order = 13,
             name = L["按下时生效"],
-            type = "toggle"
-        },
-        CooldownAlphaGroup = {
-            order = 14,
-            type = "group",
-            name = L["根据CD淡出"],
-            guiInline = true,
-            args = {
-                cooldownalpha = {
-                    type = "toggle",
-                    name = L["启用"],
-                    order = 1,
-                },
-                spacer = {
-                    type = "description",
-                    name = "",
-                    desc = "",
-                    order = 2,
-                },
-                cdalpha = {
-                    order = 3,
-                    name = L["CD时透明度"],
-                    type = "range",
-                    min = 0, max = 1, step = 0.05,
-                    disabled = function() return not AB.db.cooldownalpha end,
-                },
-                readyalpha = {
-                    order = 4,
-                    name = L["就绪时透明度"],
-                    type = "range",
-                    min = 0, max = 1, step = 0.05,
-                    disabled = function() return not AB.db.cooldownalpha end,
-                },
-            },
+            type = "toggle",
+            hidden = function() return not R.db.ActionBar.enable end,
         },
         PetGroup = {
             order = 40,
             type = "group",
             guiInline = false,
             name = L["宠物条"],
+            hidden = function() return not R.db.ActionBar.enable end,
             get = function(info) return R.db.ActionBar["barpet"][ info[#info] ] end,
             set = function(info, value) R.db.ActionBar["barpet"][ info[#info] ] = value; AB:UpdatePetBar() end,
             args = {
@@ -141,6 +122,7 @@ R.Options.args.ActionBar = {
             type = "group",
             guiInline = false,
             name = L["姿态条"],
+            hidden = function() return not R.db.ActionBar.enable end,
             args = {
                 stancebarfade = {
                     type = "toggle",
@@ -163,6 +145,7 @@ for i = 1, 5 do
         type = "group",
         name = L["动作条"..i],
         guiInline = false,
+        hidden = function() return not R.db.ActionBar.enable end,
         get = function(info) return R.db.ActionBar["bar"..i][ info[#info] ] end,
         set = function(info, value) R.db.ActionBar["bar"..i][ info[#info] ] = value; AB:UpdatePositionAndSize("bar"..i) end,
         args = {

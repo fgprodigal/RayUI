@@ -75,6 +75,8 @@ function B:IsConsumableItem(item)
 end
 
 function B:Initialize()
+	if not self.db.enable then return end
+
 	if B.db.bagWidth > 20 then B.db.bagWidth = 10 end
 	if B.db.bankWidth > 20 then B.db.bankWidth = 12 end
 

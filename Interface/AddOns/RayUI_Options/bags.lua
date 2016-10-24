@@ -23,6 +23,13 @@ R.Options.args.Bags = {
             name = B:Info() .. "\n\n",
             order = 2
         },
+        enable = {
+            type = "toggle",
+            name = B.toggleLabel or (L["启用"] .. (B.modName or B:GetName())),
+            width = "double",
+            desc = B.Info and B:Info() or (L["启用"] .. (B.modName or B:GetName())),
+            order = 3,
+        },
         settingsHeader = {
             type = "header",
             name = L["设置"],

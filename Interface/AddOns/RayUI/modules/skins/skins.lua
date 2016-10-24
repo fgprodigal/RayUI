@@ -7,6 +7,7 @@ local LSM = LibStub("LibSharedMedia-3.0")
 local _G = _G
 local select, unpack, assert, pairs, type = select, unpack, assert, pairs, type
 local tinsert = table.insert
+local wipe = table.wipe
 
 --WoW API / Variables
 local CreateFrame = CreateFrame
@@ -786,6 +787,12 @@ function S:ADDON_LOADED(event, addon)
 end
 
 function S:Initialize()
+	if not self.db.enable then
+		wipe(self.addonCallbacks)
+		wipe(self.nonAddonCallbacks)
+		return
+	end
+
 	backdropfadecolorr, backdropfadecolorg, backdropfadecolorb, alpha = unpack(R["media"].backdropfadecolor)
 	backdropcolorr, backdropcolorg, backdropcolorb = unpack(R["media"].backdropcolor)
 	bordercolorr, bordercolorg, bordercolorb = unpack(R["media"].bordercolor)

@@ -285,7 +285,7 @@ function R:InitializeModules()
 	else
 		for i = 1, #self["RegisteredModules"] do
 			local module = self:GetModule(self["RegisteredModules"][i])
-			if (self.db[self["RegisteredModules"][i]] == nil or self.db[self["RegisteredModules"][i]].enable ~= false) and module.Initialize then
+			if module.Initialize then
 				local _, catch = pcall(module.Initialize, module)
 				self:ThrowError(catch)
 			end

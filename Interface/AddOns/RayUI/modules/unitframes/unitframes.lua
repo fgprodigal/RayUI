@@ -17,7 +17,11 @@ UF["classMaxResourceBar"] = {
 }
 
 function UF:Initialize()
-    self:LoadUnitFrames()
+    if self.db.enable then
+        self:LoadUnitFrames()
+    else
+        self:LoadFakeUnitFrames()
+    end
 end
 
 function UF:Info()

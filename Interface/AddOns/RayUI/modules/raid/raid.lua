@@ -59,6 +59,8 @@ function RA:HideBlizzard()
 end
 
 function RA:Initialize()
+    if not self.db.enable then return end
+
     for i = 1, 4 do
         local frame = _G["PartyMemberFrame"..i]
         frame:UnregisterAllEvents()
