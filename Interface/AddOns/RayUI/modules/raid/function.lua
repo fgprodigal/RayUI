@@ -532,7 +532,7 @@ function RA:Construct_HealText(frame)
     healtext:SetFont(R["media"].font, R["media"].fontsize - 2, R["media"].fontflag)
     healtext:SetPoint("LEFT")
     healtext:SetPoint("RIGHT")
-    frame:Tag(healtext, "[RayUIRaid:heals]")
+    frame:Tag(healtext, "[RayUIRaid:stat]")
     return healtext
 end
 

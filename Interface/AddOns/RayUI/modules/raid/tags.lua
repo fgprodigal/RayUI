@@ -24,7 +24,7 @@ local UnitGetIncomingHeals = UnitGetIncomingHeals
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: ALTERNATE_POWER_INDEX, DEAD
 
-RayUF.Tags.Methods["RayUIRaid:def"] = function(u)
+RayUF.Tags.Methods["RayUIRaid:stat"] = function(u)
     if UnitIsAFK(u) then
         return "|cffCFCFCFAFK|r"
     elseif UnitIsDead(u) then
@@ -57,18 +57,18 @@ RayUF.Tags.Methods["RayUIRaid:def"] = function(u)
         end
     end
 end
-RayUF.Tags.Events["RayUIRaid:def"] = "UNIT_MAXHEALTH UNIT_HEALTH UNIT_HEALTH_FREQUENT UNIT_CONNECTION PLAYER_FLAGS_CHANGED"
+RayUF.Tags.Events["RayUIRaid:stat"] = "UNIT_MAXHEALTH UNIT_HEALTH UNIT_HEALTH_FREQUENT UNIT_CONNECTION PLAYER_FLAGS_CHANGED"
 
 RayUF.Tags.Methods["RayUIRaid:heals"] = function(u)
     local incheal = UnitGetIncomingHeals(u) or 0
     if incheal > 0 then
         return "|cff00FF00"..R:ShortValue(incheal).."|r"
     else
-        local def = RayUF.Tags.Methods["RayUIRaid:def"](u)
+        local def = RayUF.Tags.Methods["RayUIRaid:stat"](u)
         return def
     end
 end
-RayUF.Tags.Events["RayUIRaid:heals"] = "UNIT_HEAL_PREDICTION "..RayUF.Tags.Events["RayUIRaid:def"]
+RayUF.Tags.Events["RayUIRaid:heals"] = "UNIT_HEAL_PREDICTION "..RayUF.Tags.Events["RayUIRaid:stat"]
 
 RayUF.Tags.Methods["RayUIRaid:othersheals"] = function(u)
     local incheal = UnitGetIncomingHeals(u) or 0
@@ -79,7 +79,7 @@ RayUF.Tags.Methods["RayUIRaid:othersheals"] = function(u)
     if incheal > 0 then
         return "|cff00FF00"..R:ShortValue(incheal).."|r"
     else
-        local def = RayUF.Tags.Methods["RayUIRaid:def"](u)
+        local def = RayUF.Tags.Methods["RayUIRaid:stat"](u)
         return def
     end
 end
