@@ -768,16 +768,16 @@ function CH:SetChatPosition(override)
         local tab = _G[format("ChatFrame%sTab", i)]
         if chat == COMBATLOG then
             chat:ClearAllPoints()
-            chat:SetPoint("TOPLEFT", _G["RayUIChatBG"], "TOPLEFT", 2, -CombatLogQuickButtonFrame_Custom:GetHeight())
-            chat:SetPoint("BOTTOMRIGHT", _G["RayUIChatBG"], "BOTTOMRIGHT", -2, 4)
+            chat:SetPoint("TOPLEFT", RayUIChatBG, "TOPLEFT", 0, 0)
+            chat:SetPoint("BOTTOMRIGHT", RayUIChatBG, "BOTTOMRIGHT", 0, 0)
         else
             chat:ClearAllPoints()
-            chat:SetPoint("TOPLEFT", _G["RayUIChatBG"], "TOPLEFT", 2, -2)
-            chat:SetPoint("BOTTOMRIGHT", _G["RayUIChatBG"], "BOTTOMRIGHT", -2, 4)
+            chat:SetPoint("TOPLEFT", RayUIChatBG, "TOPLEFT", 2, -2)
+            chat:SetPoint("BOTTOMRIGHT", RayUIChatBG, "BOTTOMRIGHT", -2, 4)
         end
         FCF_SavePositionAndDimensions(chat, true)
-        tab:SetParent(_G["RayUIChatBG"])
-        chat:SetParent(_G["RayUIChatBG"])
+        tab:SetParent(RayUIChatBG)
+        chat:SetParent(RayUIChatBG)
         local _, _, _, _, _, _, shown, _, docked, _ = GetChatWindowInfo(i)
         if shown and not docked then
             FCF_DockFrame(chat)
@@ -1213,7 +1213,7 @@ function CH:Initialize()
 
     CreatCopyFrame()
     CopyChatFrame:Hide()
-    if not _G["RayUIChatBG"] then
+    if not RayUIChatBG then
         local RayUIChatBG = CreateFrame("Frame", "RayUIChatBG", R.UIParent)
         RayUIChatBG:CreatePanel("Default", self.db.width, self.db.height, "BOTTOMLEFT",R.UIParent,"BOTTOMLEFT",15,30)
         GeneralDockManager:SetParent(RayUIChatBG)
