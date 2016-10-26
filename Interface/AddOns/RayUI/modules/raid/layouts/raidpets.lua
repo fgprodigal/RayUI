@@ -2,7 +2,8 @@ local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, 
 local RA = R:GetModule("Raid")
 local UF = R:GetModule("UnitFrames")
 
-local oUF = RayUF or oUF
+local _, ns = ...
+local RayUF = ns.oUF
 
 --Cache global variables
 --Lua functions

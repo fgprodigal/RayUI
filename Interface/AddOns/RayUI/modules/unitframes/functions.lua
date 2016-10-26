@@ -1070,10 +1070,9 @@ local RangeColors = {
 function UF:Construct_RangeText(frame)
     local text = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY")
     text:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
-    -- text:SetFont(R["media"].font, R["media"].fontsize - 2, R["media"].fontflag)
     text:SetJustifyH("RIGHT")
     text:SetParent(frame.RaisedElementParent)
-    text:Point("TOPRIGHT", frame.RaisedElementParent, "TOPLEFT", -2, 3)
+    text:Point("TOPRIGHT", frame, "TOPLEFT", -2, 3)
     return text
 end
 

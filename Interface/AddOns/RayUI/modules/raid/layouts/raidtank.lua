@@ -2,7 +2,8 @@ local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, 
 local RA = R:GetModule("Raid")
 local UF = R:GetModule("UnitFrames")
 
-local oUF = RayUF or oUF
+local _, ns = ...
+local RayUF = ns.oUF
 
 --Cache global variables
 --Lua functions
@@ -42,7 +43,6 @@ function RA:Construct_RaidTankFrames()
     if RA.db.roleicon then
         self.LFDRole = RA:Construct_RoleIcon(self)
     end
-    self.RayUFAfk = true
     local range = {
         insideAlpha = 1,
         outsideAlpha = RA.db.outsideRange,

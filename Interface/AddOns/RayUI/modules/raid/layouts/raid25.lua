@@ -2,7 +2,8 @@ local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, 
 local RA = R:GetModule("Raid")
 local UF = R:GetModule("UnitFrames")
 
-local oUF = RayUF or oUF
+local _, ns = ...
+local RayUF = ns.oUF
 
 --Cache global variables
 --Lua functions
@@ -15,9 +16,6 @@ local IsInInstance = IsInInstance
 local GetInstanceInfo = GetInstanceInfo
 local RegisterStateDriver = RegisterStateDriver
 local UnregisterStateDriver = UnregisterStateDriver
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RayUF
 
 function RA:FetchRaidSettings()
     self.groupConfig.raid = {
@@ -38,7 +36,7 @@ function RA:Construct_RaidFrames()
     self.Power = RA:Construct_PowerBar(self)
     self.Name = RA:Construct_NameText(self)
     self.Threat = RA:Construct_Threat(self)
-    self.Healtext = RA:Construct_HealthText(self)
+    self.Healtext = RA:Construct_HealText(self)
     self.Highlight = RA:Construct_Highlight(self)
     self.RaidIcon = RA:Construct_RaidIcon(self)
     self.ResurrectIcon = RA:Construct_ResurectionIcon(self)
@@ -49,7 +47,7 @@ function RA:Construct_RaidFrames()
     if RA.db.roleicon then
         self.LFDRole = RA:Construct_RoleIcon(self)
     end
-    self.RayUFAfk = true
+    self.AFKtext = RA:Construct_AFKText(self)
     local range = {
         insideAlpha = 1,
         outsideAlpha = RA.db.outsideRange,

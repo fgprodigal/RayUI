@@ -1,7 +1,8 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local RA = R:GetModule("Raid")
 
-local oUF = RayUF or oUF
+local _, ns = ...
+local RayUF = ns.oUF
 
 --Cache global variables
 --Lua functions
@@ -91,4 +92,4 @@ local Disable = function(self)
     self:SetAttribute("*type3", nil)
 end
 
-oUF:AddElement("RayUFAutoRez", nil, Enable, Disable)
+RayUF:AddElement("RayUFAutoRez", nil, Enable, Disable)

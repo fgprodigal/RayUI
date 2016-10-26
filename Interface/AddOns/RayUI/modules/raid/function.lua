@@ -2,7 +2,8 @@ local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, 
 local RA = R:GetModule("Raid")
 local UF = R:GetModule("UnitFrames")
 
-local oUF = RayUF or oUF
+local _, ns = ...
+local RayUF = ns.oUF
 
 --Cache global variables
 --Lua functions
@@ -29,7 +30,7 @@ local UnitFrame_OnLeave = UnitFrame_OnLeave
 local GetSpellInfo = GetSpellInfo
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RayUF, GameTooltip
+-- GLOBALS: GameTooltip
 
 function RA:Hex(r, g, b)
     if(type(r) == "table") then
@@ -393,7 +394,7 @@ end
 function RA:Construct_RaidDebuffs(frame)
     local raidDebuffs = CreateFrame("Frame", nil, frame.RaisedElementParent)
     raidDebuffs:SetFrameLevel(frame.RaisedElementParent:GetFrameLevel() + 20)
-    raidDebuffs:SetPoint("BOTTOM", frame)
+    raidDebuffs:SetPoint("BOTTOM", frame.Health)
     raidDebuffs:SetTemplate("Default")
     raidDebuffs:Size(self.db.aurasize, self.db.aurasize-4)
 
@@ -418,7 +419,7 @@ end
 function RA:Construct_AuraWatch(frame)
     local auraWatch = CreateFrame("Frame", nil, frame.RaisedElementParent)
     auraWatch:SetFrameLevel(frame.RaisedElementParent:GetFrameLevel() + 25)
-    auraWatch:SetInside(frame)
+    auraWatch:SetInside(frame.Health)
     auraWatch.presentAlpha = 1
     auraWatch.missingAlpha = 0
     auraWatch.strictMatching = true
@@ -497,7 +498,7 @@ end
 
 function RA:Construct_NameText(frame)
     local name = frame.RaisedElementParent:CreateFontString(nil, "ARTKWORK")
-    name:SetPoint("CENTER", frame, 0, 2)
+    name:SetPoint("CENTER", frame.Health, 0, 2)
     name:SetJustifyH("CENTER")
     name:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
     name:SetPoint("LEFT")
@@ -524,14 +525,14 @@ function RA:Construct_Threat(frame)
     return threat
 end
 
-function RA:Construct_HealthText(frame)
+function RA:Construct_HealText(frame)
     local healtext = frame.RaisedElementParent:CreateFontString(nil, "ARTKWORK")
-    healtext:SetPoint("BOTTOM", frame)
+    healtext:SetPoint("BOTTOM", frame.Health)
     healtext:SetShadowOffset(1.25, -1.25)
     healtext:SetFont(R["media"].font, R["media"].fontsize - 2, R["media"].fontflag)
     healtext:SetPoint("LEFT")
     healtext:SetPoint("RIGHT")
-    frame:Tag(healtext, "[RayUIRaid:def]")
+    frame:Tag(healtext, "[RayUIRaid:heals]")
     return healtext
 end
 
@@ -568,4 +569,16 @@ function RA:Construct_ResurectionIcon(frame)
     resurrectIcon:SetPoint("TOP", frame, 0, -2)
     resurrectIcon:SetSize(16, 16)
     return resurrectIcon
+end
+
+function RA:Construct_AFKText(frame)
+    local afktext = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY")
+    afktext:SetPoint("TOP", frame, "TOP")
+    afktext:SetShadowOffset(1.25, -1.25)
+    afktext:SetFont(R["media"].font, R["media"].fontsize - 2, R["media"].fontflag)
+    afktext:SetPoint("LEFT", frame, "LEFT")
+    afktext:SetPoint("RIGHT", frame, "RIGHT")
+    afktext.frequentUpdates = 1
+    frame:Tag(afktext, "[RayUIRaid:afk]")
+    return afktext
 end
