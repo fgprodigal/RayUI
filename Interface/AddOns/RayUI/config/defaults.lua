@@ -120,17 +120,23 @@ P["UnitFrames"]={
             castbar = {
                 showicon = true,
                 iconposition = "LEFT",
-                width = 220 - 25,
+                width = 220,
                 height = 20,
             },
         },
         targettarget = {
-            defaultPosition = { "BOTTOMLEFT", "RayUF_Target", "TOPRIGHT", 5, 30 },
-            width = 140,
-            height = 8,
+            defaultPosition = { "LEFT", "RayUF_Target", "RIGHT", 6, 0 },
+            width = 120,
+            height = 32,
+            castbar = {
+                showicon = true,
+                iconposition = "LEFT",
+                width = 120,
+                height = 20,
+            },
         },
         focus = {
-            defaultPosition = { "BOTTOMRIGHT", "RayUF_Player", "TOPLEFT", -20, 20 },
+            defaultPosition = { "BOTTOMRIGHT", "RayUF_Player", "TOPLEFT", -20, 40 },
             width = 170,
             height = 32,
             castbar = {
@@ -141,14 +147,14 @@ P["UnitFrames"]={
             },
         },
         focustarget = {
-            defaultPosition = { "BOTTOMRIGHT", "RayUF_Focus", "BOTTOMLEFT", -10, 1 },
-            width = 140,
-            height = 8,
+            defaultPosition = { "RIGHT", "RayUF_Focus", "LEFT", -6, 1 },
+            width = 120,
+            height = 32,
         },
         pet = {
-            defaultPosition = { "BOTTOM", "RayUIPetBar", "TOP", 0, 3 },
-            width = 140,
-            height = 18,
+            defaultPosition = { "RIGHT", "RayUF_Player", "LEFT", -6, 0 },
+            width = 120,
+            height = 32,
         },
         arena = {
             enable = true,

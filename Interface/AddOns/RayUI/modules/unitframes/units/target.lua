@@ -54,34 +54,33 @@ function UF:Construct_TargetFrame(frame, unit)
 
     if self.db.castBar then
         local castbar = self:Construct_CastBar(frame)
-        castbar:ClearAllPoints()
-        castbar:Point("TOPRIGHT", frame, "TOPRIGHT", 0, -65)
         castbar:Width(self.db.units[unit].castbar.width)
         castbar:Height(self.db.units[unit].castbar.height)
-        castbar.Iconbg:Size(max(self.db.units[unit].castbar.height, 20))
-        if self.db.units[unit].castbar.showicon then
-            castbar.Iconbg:Show()
-        else
-            castbar.Iconbg:Hide()
-        end
-        castbar.Iconbg:ClearAllPoints()
-        if self.db.units[unit].castbar.iconposition == "LEFT" then
-            castbar.Iconbg:SetPoint("BOTTOMRIGHT", castbar, "BOTTOMLEFT", -5, 0)
-        else
-            castbar.Iconbg:SetPoint("BOTTOMLEFT", castbar, "BOTTOMRIGHT", 5, 0)
-        end
+        local iconSize = max(self.db.units[unit].castbar.height, 20)
+        castbar.Iconbg:Size(iconSize)
         castbar.Text:ClearAllPoints()
         castbar.Text:SetPoint("LEFT", castbar, "LEFT", 5, 0)
         castbar.Time:ClearAllPoints()
         castbar.Time:SetPoint("RIGHT", castbar, "RIGHT", -5, 0)
+
+        castbar:ClearAllPoints()
+        castbar.Iconbg:ClearAllPoints()
+        if self.db.units[unit].castbar.showicon then
+            castbar.Iconbg:Show()
+            castbar:Width(self.db.units[unit].castbar.width - iconSize - 5)
+            if self.db.units[unit].castbar.iconposition == "LEFT" then
+                castbar.Iconbg:SetPoint("BOTTOMRIGHT", castbar, "BOTTOMLEFT", -5, 0)
+                castbar:Point("TOPRIGHT", frame, "BOTTOMRIGHT", 0, -6)
+            else
+                castbar.Iconbg:SetPoint("BOTTOMLEFT", castbar, "BOTTOMRIGHT", 5, 0)
+                castbar:Point("TOPLEFT", frame, "BOTTOMLEFT", 0, -6)
+            end
+        else
+            castbar.Iconbg:Hide()
+            castbar:Point("TOPRIGHT", frame, "BOTTOMRIGHT", 0, -6)
+        end
         frame.Castbar = castbar
     end
-
-    frame.Buffs = self:Construct_Buffs(frame)
-    frame.Buffs["growth-x"] = "RIGHT"
-    frame.Buffs["growth-y"] = "DOWN"
-    frame.Buffs.initialAnchor = "TOPLEFT"
-    frame.Buffs:Point("TOPLEFT", frame, "BOTTOMLEFT", 0, -5)
 
     frame.Debuffs = self:Construct_Debuffs(frame)
     frame.Debuffs["growth-x"] = "RIGHT"
@@ -89,6 +88,12 @@ function UF:Construct_TargetFrame(frame, unit)
     frame.Debuffs.initialAnchor = "BOTTOMLEFT"
     frame.Debuffs.CustomFilter = self.CustomFilter
     frame.Debuffs:Point("BOTTOMLEFT", frame, "TOPLEFT", 0, 8)
+
+    frame.Buffs = self:Construct_Buffs(frame)
+    frame.Buffs["growth-x"] = "RIGHT"
+    frame.Buffs["growth-y"] = "UP"
+    frame.Buffs.initialAnchor = "BOTTOMLEFT"
+    frame.Buffs:Point("BOTTOMLEFT", frame.Debuffs, "TOPLEFT", 0, 4)
 
     if UF.db.aurabar then
         frame.AuraBars = self:Construct_AuraBarHeader(frame)

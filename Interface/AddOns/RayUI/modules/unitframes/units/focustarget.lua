@@ -25,6 +25,7 @@ function UF:Construct_FocusTargetFrame(frame, unit)
 
     frame:Size(frame.UNIT_WIDTH, frame.UNIT_HEIGHT)
     frame.Health = self:Construct_HealthBar(frame, true, true)
+    frame.Power = self:Construct_PowerBar(frame, true, true)
     frame.Name = self:Construct_NameText(frame)
     frame.Mouseover = self:Construct_Highlight(frame)
     frame.ThreatHlt = self:Construct_Highlight(frame)
@@ -32,22 +33,23 @@ function UF:Construct_FocusTargetFrame(frame, unit)
     frame.QuestIcon = self:Construct_QuestIcon(frame)
     frame.RaidIcon = self:Construct_RaidIcon(frame)
     frame.Range = {
-            insideAlpha = 1,
-            outsideAlpha = 0.4
-        }
+        insideAlpha = 1,
+        outsideAlpha = 0.4
+    }
 
     self:EnableHealPredictionAndAbsorb(frame)
 
-    frame.Health.value:Point("LEFT", frame, "LEFT", 5, 0)
-    frame.Health:SetPoint("BOTTOM")
+    frame.Health.value:Point("TOPRIGHT", frame.Health, "TOPRIGHT", -8, -2)
+    frame.Power.value:Point("BOTTOMRIGHT", frame.Health, "BOTTOMRIGHT", -8, 2)
 
-    frame.Name:ClearAllPoints()
-    frame.Name:Point("TOP", frame.Health, 0, 12)
-    frame.Name:SetJustifyH("CENTER")
     if self.db.healthColorClass then
         frame:Tag(frame.Name, "[RayUF:name]")
     else
         frame:Tag(frame.Name, "[RayUF:color][RayUF:name]")
+    end
+
+    if self.db.showPortrait then
+        frame.Portrait = self:Construct_Portrait(frame)
     end
 end
 

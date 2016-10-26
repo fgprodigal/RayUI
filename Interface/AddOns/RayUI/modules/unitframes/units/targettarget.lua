@@ -25,6 +25,7 @@ function UF:Construct_TargetTargetFrame(frame, unit)
 
     frame:Size(frame.UNIT_WIDTH, frame.UNIT_HEIGHT)
     frame.Health = self:Construct_HealthBar(frame, true, true)
+    frame.Power = self:Construct_PowerBar(frame, true, true)
     frame.Name = self:Construct_NameText(frame)
     frame.Mouseover = self:Construct_Highlight(frame)
     frame.ThreatHlt = self:Construct_Highlight(frame)
@@ -38,11 +39,11 @@ function UF:Construct_TargetTargetFrame(frame, unit)
 
     self:EnableHealPredictionAndAbsorb(frame)
 
-    frame.Health.value:Point("LEFT", frame, "LEFT", 5, 0)
-    frame.Health:SetPoint("BOTTOM")
+    frame.Health.value:Point("TOPLEFT", frame.Health, "TOPLEFT", 8, -2)
+    frame.Power.value:Point("BOTTOMLEFT", frame.Health, "BOTTOMLEFT", 8, 2)
 
     frame.Name:ClearAllPoints()
-    frame.Name:Point("TOP", frame.Health, 0, 12)
+    frame.Name:Point("BOTTOMRIGHT", frame.Health, "BOTTOMRIGHT", -8, 3)
     frame.Name:SetJustifyH("CENTER")
     if self.db.healthColorClass then
         frame:Tag(frame.Name, "[RayUF:name]")
@@ -50,21 +51,25 @@ function UF:Construct_TargetTargetFrame(frame, unit)
         frame:Tag(frame.Name, "[RayUF:color][RayUF:name]")
     end
 
+    if self.db.showPortrait then
+        frame.Portrait = self:Construct_Portrait(frame)
+    end
+
     frame.Buffs = self:Construct_Buffs(frame)
     frame.Buffs["growth-x"] = "RIGHT"
-    frame.Buffs["growth-y"] = "DOWN"
-    frame.Buffs.initialAnchor = "TOPLEFT"
+    frame.Buffs["growth-y"] = "UP"
+    frame.Buffs.initialAnchor = "BOTTOMLEFT"
     frame.Buffs.num = 5
     frame.Buffs.CustomFilter = function(_, unit) if UnitIsFriend(unit, "player") then return false end return true end
-    frame.Buffs:Point("TOPLEFT", frame, "BOTTOMLEFT", 1, -5)
+    frame.Buffs:Point("BOTTOMLEFT", frame, "TOPLEFT", 0, 8)
 
     frame.Debuffs = self:Construct_Debuffs(frame)
     frame.Debuffs["growth-x"] = "RIGHT"
     frame.Debuffs["growth-y"] = "UP"
-    frame.Debuffs.initialAnchor = "TOPLEFT"
+    frame.Debuffs.initialAnchor = "BOTTOMLEFT"
     frame.Debuffs.num = 5
     frame.Debuffs.CustomFilter = function(_, unit) if UnitIsEnemy(unit, "player") then return false end return true end
-    frame.Debuffs:Point("TOPLEFT", frame, "BOTTOMLEFT", 1, -5)
+    frame.Debuffs:Point("BOTTOMLEFT", frame, "TOPLEFT", 0, 8)
 end
 
 tinsert(UF["unitstoload"], "targettarget")
