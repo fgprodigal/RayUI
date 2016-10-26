@@ -33,17 +33,20 @@ R.Options.args.Tooltip = {
         settingsHeader = {
             type = "header",
             name = L["设置"],
-            order = 4
+            order = 4,
+            hidden = function() return not R.db.Tooltip.enable end,
         },
         cursor = {
             order = 5,
             name = L["跟随鼠标"],
             type = "toggle",
+            hidden = function() return not R.db.Tooltip.enable end,
         },
         hideincombat = {
             order = 6,
             name = L["战斗中隐藏"],
             type = "toggle",
+            hidden = function() return not R.db.Tooltip.enable end,
         },
     },
 }

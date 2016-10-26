@@ -45,8 +45,7 @@ do
     L["ALL"] = "全部"
     L["GENERAL"] = "综合"
     L["ACTIONBARS"] = "动作条"
-    L["RAID15"] = "15人团队"
-    L["RAID25"] = "25人团队"
+    L["RAID"] = "团队"
     L["RAID40"] = "40人团队"
     L["ARENA"] = "竞技场"
 
@@ -276,6 +275,7 @@ do
     L["显示"] = true
     L["显示小队"] = true
     L["显示BOSS"] = true
+    L["显示施法条"] = true
     L["显示竞技场头像"] = true
     L["启用3D头像"] = true
     L["默认显示血量数值"] = true
@@ -287,11 +287,15 @@ do
     L["团队"] = true
     L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r团队模块."] = true
     L["启用"] = true
+    L["显示团队"] = "显示25人团队"
+    L["显示40人团队"] = true
+    L["显示主坦克框体"] = true
+    L["显示团队宠物框体"] = true
     L["大小"] = true
-    L["单位长度"] = true
-    L["单位高度"] = true
-    L["单位长度2"] = true
-    L["单位高度2"] = true
+    L["单位长度"] = "40人团单位长度"
+    L["单位高度"] = "40人团单位高度"
+    L["单位长度2"] = "25人团单位长度"
+    L["单位高度2"] = "25人团单位高度"
     L["间距"] = true
     L["solo时显示"] = true
     L["在队伍中显示自己"] = true
@@ -333,6 +337,13 @@ do
     L["屏蔽右键菜单"] = true
     L["快速复活"] = true
     L["鼠标中键点击快速复活/战复"] = true
+    L["显示小队编号"] = true
+    L["主坦克框体"] = true
+    L["主坦克框体长度"] = true
+    L["主坦克框体高度"] = true
+    L["宠物框体"] = true
+    L["宠物框体长度"] = true
+    L["宠物框体高度"] = true
     L["动作条"] = true
     L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r动作条模块."] = true
     L["动作条缩放"] = true

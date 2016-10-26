@@ -108,7 +108,7 @@ function RA:arrow(object, unit)
     local bearing = GetBearing(unit)
 
     if bearing then
-        RotateTexture(object.freebarrow, bearing)
+        RotateTexture(object.RayUFArrow, bearing)
     end
 end
 
@@ -119,7 +119,7 @@ local OnRangeUpdate = function(self, elapsed)
     if(timer >= update) then
         for _, object in next, _FRAMES do
             if(object:IsShown()) then
-                local range = object.freebRange
+                local range = object.RayUFRange
                 if UnitIsConnected(object.unit) and not UnitInRange(object.unit) and IsInGroup() then
                     -- if(object:GetAlpha() == range.insideAlpha) then
                     -- object:SetAlpha(range.outsideAlpha)
@@ -129,22 +129,22 @@ local OnRangeUpdate = function(self, elapsed)
                     if not RA.db.arrowmouseover then
                         local bearing = GetBearing(object.unit)
                         if bearing then
-                            RotateTexture(object.freebarrow, bearing)
-                        elseif object.freebarrow:IsShown() then
-                            object.freebarrow:Hide()
+                            RotateTexture(object.RayUFArrow, bearing)
+                        elseif object.RayUFArrow:IsShown() then
+                            object.RayUFArrow:Hide()
                         end
                     end
                     -- elseif(object:GetAlpha() ~= range.insideAlpha) then
                     -- object:SetAlpha(range.insideAlpha)
-                    -- if object.freebarrow:IsShown() then
-                    -- object.freebarrow:Hide()
+                    -- if object.RayUFArrow:IsShown() then
+                    -- object.RayUFArrow:Hide()
                     -- end
                 else
                     object.OoR = false
                 end
             else
-                if object.freebarrow:IsShown() then
-                    object.freebarrow:Hide()
+                if object.RayUFArrow:IsShown() then
+                    object.RayUFArrow:Hide()
                 end
             end
         end
@@ -154,7 +154,7 @@ local OnRangeUpdate = function(self, elapsed)
 end
 
 local Enable = function(self)
-    local range = self.freebRange
+    local range = self.RayUFRange
     if(range and range.insideAlpha and range.outsideAlpha) then
         table.insert(_FRAMES, self)
 
@@ -173,13 +173,13 @@ local Enable = function(self)
         frame.arrow:SetPoint("TOPRIGHT", frame, "TOPRIGHT")
         frame.arrow:SetSize(24, 24)
 
-        self.freebarrow = frame
-        self.freebarrow:Hide()
+        self.RayUFArrow = frame
+        self.RayUFArrow:Hide()
     end
 end
 
 local Disable = function(self)
-    local range = self.freebRange
+    local range = self.RayUFRange
     if(range) then
         for k, frame in next, _FRAMES do
             if(frame == self) then
@@ -194,4 +194,4 @@ local Disable = function(self)
     end
 end
 
-oUF:AddElement('freebRange', nil, Enable, Disable)
+oUF:AddElement("RayUFRange", nil, Enable, Disable)

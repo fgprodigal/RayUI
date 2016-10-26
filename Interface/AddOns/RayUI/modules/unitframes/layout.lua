@@ -140,57 +140,36 @@ function UF:DPSLayout(frame, unit)
             frame:Tag(name, "[RayUF:color][RayUF:name] [RayUF:info]")
         end
 
-        -- Separated Energy Bar
-        if self.db.separateEnergy and R.myclass == "ROGUE" then
-            local EnergyBarHolder = CreateFrame("Frame", nil, frame)
-            EnergyBarHolder:SetPoint("BOTTOM", R.UIParent, "BOTTOM", 0, 311)
-            EnergyBarHolder:Size(ENERGY_WIDTH, ENERGY_HEIGHT + 13)
-            local EnergyBar = CreateFrame("Statusbar", "RayUF_EnergyBar", EnergyBarHolder)
-            EnergyBar:SetStatusBarTexture(R["media"].normal)
-            EnergyBar:SetStatusBarColor(unpack(self.db.powerColorClass and oUF.colors.class[R.myclass] or oUF.colors.power["ENERGY"]))
-            EnergyBar:SetPoint("BOTTOM", 0, 3)
-            EnergyBar:Size(ENERGY_WIDTH, ENERGY_HEIGHT)
-            EnergyBar:CreateShadow("Background")
-            EnergyBar.shadow:SetBackdropColor(.12, .12, .12, 1)
-            EnergyBar.text = EnergyBar:CreateFontString(nil, "OVERLAY")
-            EnergyBar.text:SetPoint("CENTER")
-            EnergyBar.text:SetFont(R["media"].font, R["media"].fontsize + 2, R["media"].fontflag)
-            EnergyBar:RegisterEvent("UNIT_POWER_FREQUENT")
-            EnergyBar:SetScript("OnEvent", function(frame)
-                    frame:SetMinMaxValues(0, UnitPowerMax("player"))
-                    frame:SetValue(UnitPower("player"))
-                    frame.text:SetText(UnitPower("player"))
-                end)
-            R:CreateMover(EnergyBarHolder, "EnergyBarMover", L["能量条锚点"], true, nil, "ALL,RAID15,RAID25,RAID40")
-        else
-            local power = self:ConstructPowerBar(frame, true, true)
-            power:SetPoint("LEFT")
-            power:SetPoint("RIGHT")
-            power:SetPoint("BOTTOM")
-            power.value:Point("BOTTOMRIGHT", health, "BOTTOMRIGHT", -8, 2)
-            power:SetWidth(PLAYER_WIDTH)
-            power:SetHeight(PLAYER_HEIGHT * self.db.powerheight)
-            power:CreateShadow("Background")
-            frame.Power = power
-        end
+        local power = self:ConstructPowerBar(frame, true, true)
+        power:SetPoint("LEFT")
+        power:SetPoint("RIGHT")
+        power:SetPoint("BOTTOM")
+        power.value:Point("BOTTOMRIGHT", health, "BOTTOMRIGHT", -8, 2)
+        power:SetWidth(PLAYER_WIDTH)
+        power:SetHeight(PLAYER_HEIGHT * self.db.powerheight)
+        power:CreateShadow("Background")
+        frame.Power = power
+
         if self.db.showPortrait then
             frame.Portrait = self:ConstructPortrait(frame)
         end
 
         -- CastBar
-        local castbar = self:ConstructCastBar(frame)
-        castbar:ClearAllPoints()
-        castbar:Point("BOTTOM",R.UIParent,"BOTTOM",0,305)
-        castbar:Width(350)
-        castbar:Height(7)
-        castbar.Text:ClearAllPoints()
-        castbar.Text:SetPoint("BOTTOMLEFT", castbar, "TOPLEFT", 5, -2)
-        castbar.Time:ClearAllPoints()
-        castbar.Time:SetPoint("BOTTOMRIGHT", castbar, "TOPRIGHT", -5, -2)
-        castbar.Icon:Hide()
-        castbar.Iconbg:Hide()
-        R:CreateMover(castbar, "PlayerCastBarMover", L["施法条锚点"], true, nil, "ALL,RAID15,RAID25,RAID40")
-        frame.Castbar = castbar
+        if self.db.castBar then
+            local castbar = self:ConstructCastBar(frame)
+            castbar:ClearAllPoints()
+            castbar:Point("BOTTOM",R.UIParent,"BOTTOM",0,305)
+            castbar:Width(350)
+            castbar:Height(7)
+            castbar.Text:ClearAllPoints()
+            castbar.Text:SetPoint("BOTTOMLEFT", castbar, "TOPLEFT", 5, -2)
+            castbar.Time:ClearAllPoints()
+            castbar.Time:SetPoint("BOTTOMRIGHT", castbar, "TOPRIGHT", -5, -2)
+            castbar.Icon:Hide()
+            castbar.Iconbg:Hide()
+            R:CreateMover(castbar, "PlayerCastBarMover", L["施法条锚点"], true, nil, "ALL,RAID15,RAID25,RAID40")
+            frame.Castbar = castbar
+        end
 
         -- Debuffs
         local debuffs = CreateFrame("Frame", nil, frame)
@@ -229,22 +208,6 @@ function UF:DPSLayout(frame, unit)
         end
         frame.USE_CLASSBAR = true
         frame.MAX_CLASS_BAR = 0
-
-        --[[ if self.db.separateEnergy and R.myclass == "ROGUE" then
-        frame.CPoints:SetParent(RayUF_EnergyBar)
-        frame.CPoints:ClearAllPoints()
-        frame.CPoints:Point("BOTTOMLEFT", RayUF_EnergyBar, "TOPLEFT", 0, 3)
-        -- frame.Anticipation:SetParent(RayUF_EnergyBar)
-        -- frame.Anticipation:ClearAllPoints()
-        -- frame.Anticipation:Point("BOTTOMLEFT", RayUF_EnergyBar, "TOPLEFT", 0, 9)
-        for i = 1, 5 do
-            frame.CPoints[i]:SetHeight(3)
-            frame.CPoints[i]:SetWidth((ENERGY_WIDTH- 20)/5)
-            frame.CPoints[i]:SetAlpha(0)
-            -- frame.Anticipation[i]:SetHeight(3)
-            -- frame.Anticipation[i]:SetWidth((ENERGY_WIDTH- 20)/5)
-        end
-        end ]]
 
         local Combat = frame:CreateTexture(nil, "OVERLAY")
         Combat:Size(20, 20)
@@ -293,16 +256,18 @@ function UF:DPSLayout(frame, unit)
             frame.Portrait = self:ConstructPortrait(frame)
         end
 
-        local castbar = self:ConstructCastBar(frame)
-        castbar:ClearAllPoints()
-        castbar:Point("TOPRIGHT", frame, "TOPRIGHT", 0, -65)
-        castbar:Width(health:GetWidth()-27)
-        castbar:Height(20)
-        castbar.Text:ClearAllPoints()
-        castbar.Text:SetPoint("LEFT", castbar, "LEFT", 5, 0)
-        castbar.Time:ClearAllPoints()
-        castbar.Time:SetPoint("RIGHT", castbar, "RIGHT", -5, 0)
-        frame.Castbar = castbar
+        if self.db.castBar then
+            local castbar = self:ConstructCastBar(frame)
+            castbar:ClearAllPoints()
+            castbar:Point("TOPRIGHT", frame, "TOPRIGHT", 0, -65)
+            castbar:Width(health:GetWidth()-27)
+            castbar:Height(20)
+            castbar.Text:ClearAllPoints()
+            castbar.Text:SetPoint("LEFT", castbar, "LEFT", 5, 0)
+            castbar.Time:ClearAllPoints()
+            castbar.Time:SetPoint("RIGHT", castbar, "RIGHT", -5, 0)
+            frame.Castbar = castbar
+        end
 
         -- Auras
         local buffs = CreateFrame("Frame", nil, frame)
@@ -372,20 +337,22 @@ function UF:DPSLayout(frame, unit)
 
     if unit == "focus" then
         -- CastBar
-        local castbar = self:ConstructCastBar(frame)
-        castbar:ClearAllPoints()
-        castbar:Point("CENTER", R.UIParent, "CENTER", 0, 100)
-        castbar:Width(250)
-        castbar:Height(5)
-        castbar.Text:ClearAllPoints()
-        castbar.Text:SetPoint("BOTTOMLEFT", castbar, "TOPLEFT", 5, -2)
-        castbar.Time:ClearAllPoints()
-        castbar.Time:SetPoint("BOTTOMRIGHT", castbar, "TOPRIGHT", -5, -2)
-        castbar.Iconbg:Size(25, 25)
-        castbar.Iconbg:ClearAllPoints()
-        castbar.Iconbg:SetPoint("BOTTOM", castbar, "TOP", 0, 5)
-        castbar:SetParent(R.UIParent)
-        frame.Castbar = castbar
+        if self.db.castBar then
+            local castbar = self:ConstructCastBar(frame)
+            castbar:ClearAllPoints()
+            castbar:Point("CENTER", R.UIParent, "CENTER", 0, 100)
+            castbar:Width(250)
+            castbar:Height(5)
+            castbar.Text:ClearAllPoints()
+            castbar.Text:SetPoint("BOTTOMLEFT", castbar, "TOPLEFT", 5, -2)
+            castbar.Time:ClearAllPoints()
+            castbar.Time:SetPoint("BOTTOMRIGHT", castbar, "TOPRIGHT", -5, -2)
+            castbar.Iconbg:Size(25, 25)
+            castbar.Iconbg:ClearAllPoints()
+            castbar.Iconbg:SetPoint("BOTTOM", castbar, "TOP", 0, 5)
+            castbar:SetParent(R.UIParent)
+            frame.Castbar = castbar
+        end
 
         -- Debuffs
         local debuffs = CreateFrame("Frame", nil, frame)
@@ -508,19 +475,21 @@ function UF:DPSLayout(frame, unit)
         frame.Debuffs = debuffs
 
         -- CastBar
-        local castbar = self:ConstructCastBar(frame)
-        castbar:ClearAllPoints()
-        castbar:SetAllPoints(frame)
-        castbar.Time:ClearAllPoints()
-        castbar.Time:Point("RIGHT", frame.Health, "RIGHT", -2, 0)
-        castbar.Text:ClearAllPoints()
-        castbar.Text:Point("LEFT", frame.Health, "LEFT", 2, 0)
-        castbar.Iconbg:ClearAllPoints()
-        castbar.Iconbg:Point("RIGHT", frame, "LEFT", -2, 1)
-        castbar.border:Hide()
-        castbar.shadow:Hide()
-        castbar.bg:Hide()
-        frame.Castbar = castbar
+        if self.db.castBar then
+            local castbar = self:ConstructCastBar(frame)
+            castbar:ClearAllPoints()
+            castbar:SetAllPoints(frame)
+            castbar.Time:ClearAllPoints()
+            castbar.Time:Point("RIGHT", frame.Health, "RIGHT", -2, 0)
+            castbar.Text:ClearAllPoints()
+            castbar.Text:Point("LEFT", frame.Health, "LEFT", 2, 0)
+            castbar.Iconbg:ClearAllPoints()
+            castbar.Iconbg:Point("RIGHT", frame, "LEFT", -2, 1)
+            castbar.border:Hide()
+            castbar.shadow:Hide()
+            castbar.bg:Hide()
+            frame.Castbar = castbar
+        end
     end
 
     if (unit and unit:find("boss%d") and self.db.showBossFrames == true) then

@@ -52,7 +52,7 @@ local UnitName = UnitName
 local InCombatLockdown = InCombatLockdown
 local UnregisterUnitWatch = UnregisterUnitWatch
 local RegisterUnitWatch = RegisterUnitWatch
-local RegisterAttributeDriver = RegisterAttributeDriver
+local RegisterStateDriver = RegisterStateDriver
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: SLASH_TestUF1, FriendsDropDown, INTERRUPT, SPELL_POWER_ECLIPSE, RayUF, PLAYER_OFFLINE
@@ -737,8 +737,6 @@ function UF:ComboDisplay(event, unit)
     for i=1, MAX_COMBO_POINTS do
         if(i <= cp) then
             cpoints[i]:SetAlpha(1)
-        elseif UF.db.separateEnergy then
-            cpoints[i]:SetAlpha(0)
         else
             cpoints[i]:SetAlpha(0.15)
         end
@@ -1664,11 +1662,16 @@ function UF:ShowChildUnits(header, ...)
     header.isForced = true
     for i=1, select("#", ...) do
         local frame = select(i, ...)
-        frame:RegisterForClicks(nil)
-        frame:SetID(i)
-        frame.TargetBorder:SetAlpha(0)
-        frame.FocusHighlight:SetAlpha(0)
-        self:ForceShow(frame)
+        if frame.RegisterForClicks then
+            local rdebuffs = frame.RaidDebuffs
+            if rdebuffs then
+                rdebuffs.forceShow = true
+            end
+
+            frame:RegisterForClicks(nil)
+            frame:SetID(i)
+            self:ForceShow(frame)
+        end
     end
 end
 
@@ -1676,10 +1679,15 @@ function UF:UnshowChildUnits(header, ...)
     header.isForced = nil
     for i=1, select("#", ...) do
         local frame = select(i, ...)
-        frame:RegisterForClicks("AnyUp")
-        frame.TargetBorder:SetAlpha(1)
-        frame.FocusHighlight:SetAlpha(1)
-        self:UnforceShow(frame)
+        if frame.RegisterForClicks then
+            local rdebuffs = frame.RaidDebuffs
+            if rdebuffs then
+                rdebuffs.forceShow = nil
+            end
+
+            frame:RegisterForClicks("AnyUp")
+            self:UnforceShow(frame)
+        end
     end
 end
 
@@ -1698,7 +1706,8 @@ function UF:HeaderConfig(header, configMode)
 
     createConfigEnv()
     header.forceShow = configMode
-    header:HookScript("OnAttributeChanged", OnAttributeChanged)
+    header.forceShowAuras = configMode
+
     if configMode then
         for _, func in pairs(overrideFuncs) do
             if type(func) == "function" and not originalEnvs[func] then
@@ -1711,34 +1720,69 @@ function UF:HeaderConfig(header, configMode)
             header:SetAttribute(key, nil)
         end
 
-        RegisterAttributeDriver(header, "state-visibility", "show")
-        OnAttributeChanged(header)
-
-        UF:ShowChildUnits(header, header:GetChildren())
+        RegisterStateDriver(header, "visibility", "show")
     else
         for func, env in pairs(originalEnvs) do
             setfenv(func, env)
             originalEnvs[func] = nil
         end
 
-        UF:UnshowChildUnits(header, header:GetChildren())
-        header:SetAttribute("startingIndex", 1)
+        RegisterStateDriver(header, "visibility", header.visibility)
+        if header:GetScript("OnEvent") then
+            header:GetScript("OnEvent")(header, "PLAYER_ENTERING_WORLD")
+        end
+    end
 
-        local RA = R:GetModule("Raid")
-        if header:GetName():find("RayUFRaid15") then
-            RA.Raid15SmartVisibility(header)
+    if header.groups then
+        for i=1, #header.groups do
+            local group = header.groups[i]
+
+            if group:IsShown() then
+                group.forceShow = header.forceShow
+                group.forceShowAuras = header.forceShowAuras
+                group:HookScript("OnAttributeChanged", OnAttributeChanged)
+                if configMode then
+                    for key in pairs(attributeBlacklist) do
+                        group:SetAttribute(key, nil)
+                    end
+
+                    OnAttributeChanged(group)
+                else
+                    for key in pairs(attributeBlacklist) do
+                        group:SetAttribute(key, true)
+                    end
+
+                    UF:UnshowChildUnits(group, group:GetChildren())
+                    group:SetAttribute("startingIndex", 1)
+                end
+            end
         end
-        if header:GetName():find("RayUFRaid25") then
-            RA.Raid25SmartVisibility(header)
-        end
-        if header:GetName():find("RayUFRaid40") then
-            RA.Raid40SmartVisibility(header)
+    else
+        local group = header
+
+        if group:IsShown() then
+            group.forceShow = header.forceShow
+            group.forceShowAuras = header.forceShowAuras
+            group:HookScript("OnAttributeChanged", OnAttributeChanged)
+            if configMode then
+                for key in pairs(attributeBlacklist) do
+                    group:SetAttribute(key, nil)
+                end
+
+                OnAttributeChanged(group)
+            else
+                for key in pairs(attributeBlacklist) do
+                    group:SetAttribute(key, true)
+                end
+
+                UF:UnshowChildUnits(group, group:GetChildren())
+                group:SetAttribute("startingIndex", 1)
+            end
         end
     end
 end
 
-local testuf = TestUF or function() end
-local function TestUF(msg)
+function UF:ToggleUF(msg)
     if msg == "a" or msg == "arena" then
         for i = 1, 5 do
             local frame = _G["RayUFArena"..i]
@@ -1757,36 +1801,28 @@ local function TestUF(msg)
                 UF:UnforceShow(frame)
             end
         end
-    elseif msg == "raid15" or msg == "r15" then
-        for i = 1, 30 do
-            local header = _G["RayUFRaid15_"..i]
-            if header then
-                UF:HeaderConfig(header, header.forceShow ~= true or nil)
-            end
-        end
     elseif msg == "raid25" or msg == "r25" then
-        for i = 1, 5 do
-            local header = _G["RayUFRaid25_"..i]
-            if header then
-                UF:HeaderConfig(header, header.forceShow ~= true or nil)
-            end
+        local header = _G["RayUF_Raid"]
+        if header then
+            UF:HeaderConfig(header, header.forceShow ~= true or nil)
         end
     elseif msg == "raid40" or msg == "r40" then
-        local forceShow = RayUFRaid40_6.forceShow
-        for i = 6, 8 do
-            local header = _G["RayUFRaid40_"..i]
-            if header then
-                UF:HeaderConfig(header, forceShow ~= true or nil)
-            end
+        local header = _G["RayUF_Raid40"]
+        if header then
+            UF:HeaderConfig(header, header.forceShow ~= true or nil)
         end
-        for i = 1, 5 do
-            local header = _G["RayUFRaid25_"..i]
-            if header then
-                UF:HeaderConfig(header, forceShow ~= true or nil)
-            end
+    elseif msg == "maintank" or msg == "mt" then
+        local header = _G["RayUF_RaidTank"]
+        if header then
+            UF:HeaderConfig(header, header.forceShow ~= true or nil)
+        end
+    elseif msg == "raidpet" or msg == "rp" then
+        local header = _G["RayUF_RaidPets"]
+        if header then
+            UF:HeaderConfig(header, header.forceShow ~= true or nil)
         end
     end
 end
 
-SlashCmdList.TestUF = TestUF
+SlashCmdList.TestUF = function(...) UF:ToggleUF(...) end
 SLASH_TestUF1 = "/testuf"

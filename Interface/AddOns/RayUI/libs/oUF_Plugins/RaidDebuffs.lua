@@ -234,9 +234,6 @@ local function UpdateDebuff(self, name, icon, count, debuffType, duration, endTi
 
         local c = DispellColor[debuffType] or DispellColor.none
         f:SetBackdropBorderColor(c[1], c[2], c[3])
-        if f.border then
-            f.border:SetBackdropBorderColor(c[1], c[2], c[3])
-        end
 
         f:Show()
     else

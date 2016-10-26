@@ -33,7 +33,8 @@ R.Options.args.ActionBar = {
         settingsHeader = {
             type = "header",
             name = L["设置"],
-            order = 4
+            order = 4,
+            hidden = function() return not R.db.ActionBar.enable end,
         },
         barscale = {
             order = 5,
@@ -73,6 +74,25 @@ R.Options.args.ActionBar = {
             type = "toggle",
             hidden = function() return not R.db.ActionBar.enable end,
         },
+		lockActionBars = {
+			order = 14,
+			type = "toggle",
+			name = LOCK_ACTIONBAR_TEXT,
+            hidden = function() return not R.db.ActionBar.enable end,
+		},
+        movementModifier = {
+			order = 15,
+			type = "select",
+			name = PICKUP_ACTION_KEY_TEXT,
+            hidden = function() return not R.db.ActionBar.enable end,
+			disabled = function() return not R.db.ActionBar.lockActionBars end,
+			values = {
+				["NONE"] = NONE,
+				["SHIFT"] = SHIFT_KEY,
+				["ALT"] = ALT_KEY,
+				["CTRL"] = CTRL_KEY,
+			},
+		},
         PetGroup = {
             order = 40,
             type = "group",

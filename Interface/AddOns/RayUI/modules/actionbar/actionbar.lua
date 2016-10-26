@@ -37,6 +37,7 @@ local SetActionBarToggles = SetActionBarToggles
 local ClearOverrideBindings = ClearOverrideBindings
 local SetOverrideBindingClick = SetOverrideBindingClick
 local IsEquippedAction = IsEquippedAction
+local SetModifiedClick = SetModifiedClick
 local C_PetBattlesIsInBattle = C_PetBattles.IsInBattle
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
@@ -48,7 +49,7 @@ local C_PetBattlesIsInBattle = C_PetBattles.IsInBattle
 -- GLOBALS: MultiBarBottomLeft, MultiBarBottomRight, ReputationWatchBar, MainMenuBarArtFrame
 -- GLOBALS: OverrideActionBar, MultiCastActionBarFrame, IconIntroTracker, TalentMicroButtonAlert
 -- GLOBALS: PossessBackground1, PossessBackground2, StanceBarLeft, StanceBarMiddle, StanceBarRight
--- GLOBALS: ActionBar1Mover, RayUIActionBarHider, RayUI_InfoPanel_Talent
+-- GLOBALS: ActionBar1Mover, RayUIActionBarHider, RayUI_InfoPanel_Talent, LOCK_ACTIONBAR
 -- GLOBALS: KEY_BUTTON3, KEY_PAGEUP, KEY_PAGEDOWN, KEY_SPACE, KEY_INSERT, KEY_HOME
 -- GLOBALS: KEY_DELETE, KEY_MOUSEWHEELUP, KEY_MOUSEWHEELDOWN, visibility, ArtifactWatchBar
 
@@ -280,6 +281,7 @@ function AB:UpdateButtonConfig(bar, buttonName)
     bar.buttonConfig.hideElements.hotkey = not self.db.hotkeys
     bar.buttonConfig.showGrid = self.db.showgrid
     bar.buttonConfig.clickOnDown = self.db.clickondown
+	SetModifiedClick("PICKUPACTION", self.db.movementModifier)
     bar.buttonConfig.colors.range = { 1, 0.3, 0.1 }
     bar.buttonConfig.colors.mana = { 0.1, 0.3, 1 }
     bar.buttonConfig.colors.hp = { 0.1, 0.3, 1 }
@@ -288,7 +290,7 @@ function AB:UpdateButtonConfig(bar, buttonName)
         bar.buttonConfig.keyBoundTarget = format(buttonName.."%d", i)
         button.keyBoundTarget = bar.buttonConfig.keyBoundTarget
         button.postKeybind = AB.UpdateHotkey
-        button:SetAttribute("buttonlock", true)
+        button:SetAttribute("buttonlock", self.db.lockActionBars)
         button:SetAttribute("checkselfcast", true)
         button:SetAttribute("checkfocuscast", true)
 
@@ -557,6 +559,9 @@ function AB:Initialize()
     self:StylePet()
     self:StyleShift()
     self:StylePossess()
+
+    SetCVar("lockActionBars", (self.db.lockActionBars == true and 1 or 0))
+    LOCK_ACTIONBAR = (self.db.lockActionBars == true and "1" or "0")
 end
 
 function AB:Info()

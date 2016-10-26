@@ -33,7 +33,8 @@ R.Options.args.UnitFrames = {
         settingsHeader = {
             type = "header",
             name = L["设置"],
-            order = 4
+            order = 4,
+            hidden = function() return not R.db.UnitFrames.enable end,
         },
         colors = {
             order = 5,
@@ -71,53 +72,37 @@ R.Options.args.UnitFrames = {
             guiInline = true,
             hidden = function() return not R.db.UnitFrames.enable end,
             args = {
-                showBossFrames = {
+                castBar = {
                     order = 1,
+                    name = L["显示施法条"],
+                    type = "toggle",
+                },
+                showBossFrames = {
+                    order = 2,
                     name = L["显示BOSS"],
                     type = "toggle",
                 },
                 showArenaFrames = {
-                    order = 2,
+                    order = 3,
                     name = L["显示竞技场头像"],
                     type = "toggle",
                 },
                 showPortrait = {
-                    order = 3,
+                    order = 4,
                     name = L["启用3D头像"],
                     type = "toggle",
                 },
                 showHealthValue = {
-                    order = 4,
+                    order = 5,
                     name = L["默认显示血量数值"],
                     desc = L["鼠标悬浮时显示血量百分比"],
                     type = "toggle",
                 },
                 alwaysShowHealth = {
-                    order = 5,
+                    order = 6,
                     name = L["总是显示血量"],
                     type = "toggle",
                 }
-            },
-        },
-        others = {
-            order = 7,
-            type = "group",
-            name = L["其他"],
-            guiInline = true,
-            hidden = function() return not R.db.UnitFrames.enable end,
-            args = {
-                separateEnergy = {
-                    order = 1,
-                    name = L["独立能量条"],
-                    type = "toggle",
-                    disabled = function() return R.myclass ~= "ROGUE" end,
-                },
-                vengeance = {
-                    order = 2,
-                    name = L["坦克复仇条"],
-                    type = "toggle",
-                    disabled = function() return R:GetPlayerRole() ~= "TANK" end,
-                },
             },
         },
     },

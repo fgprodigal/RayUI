@@ -33,7 +33,8 @@ R.Options.args.NamePlates = {
         settingsHeader = {
             type = "header",
             name = L["设置"],
-            order = 4
+            order = 4,
+            hidden = function() return not R.db.NamePlates.enable end,
         },
         motionType = {
             order = 5,

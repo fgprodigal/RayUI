@@ -341,22 +341,8 @@ function R:Initialize()
 	self:Delay(5, function() collectgarbage("collect") end)
 	self:LockCVar("overrideArchive", 0)
 
-	local configButton = CreateFrame("Button", "RayUIConfigButton", GameMenuFrame, "GameMenuButtonTemplate")
-	configButton:SetSize(GameMenuButtonContinue:GetWidth(), GameMenuButtonContinue:GetHeight())
-	configButton:SetPoint("TOP", GameMenuButtonContinue, "BOTTOM", 0, -16)
-	configButton:SetText(L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r设置"])
-	configButton:SetScript("OnClick", function()
-		if RayUIConfigTutorial then
-			RayUIConfigTutorial:Hide()
-			R.global.Tutorial.configbutton = true
-		end
-		HideUIPanel(GameMenuFrame)
-		self:OpenConfig()
-	end)
-	GameMenuFrame:HookScript("OnShow", function() GameMenuFrame:SetHeight(GameMenuFrame:GetHeight() + configButton:GetHeight() + 16) end)
-
 	local S = self:GetModule("Skins")
-	S:Reskin(configButton)
+	-- S:Reskin(configButton)
 end
 
 function R:GetPlayerRole()

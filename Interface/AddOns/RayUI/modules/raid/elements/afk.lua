@@ -40,15 +40,16 @@ end
 oUF.Tags.Events['RayUIRaid:afk'] = 'PLAYER_FLAGS_CHANGED UNIT_CONNECTION'
 
 local Enable = function(self)
-    if not self.freebAfk then return end
+    if not self.RayUFAfk then return end
     local afktext = self.Health:CreateFontString(nil, "OVERLAY")
     afktext:SetPoint("TOP")
     afktext:SetShadowOffset(1.25, -1.25)
     afktext:SetFont(R["media"].font, R["media"].fontsize - 2, R["media"].fontflag)
-    afktext:SetWidth(RA.db.width)
+    afktext:SetPoint("LEFT")
+    afktext:SetPoint("RIGHT")
     afktext.frequentUpdates = 1
     self:Tag(afktext, "[RayUIRaid:afk]")
     self.AFKtext = afktext
 end
 
-oUF:AddElement('freebAfk', nil, Enable, nil)
+oUF:AddElement("RayUFAfk", nil, Enable, nil)

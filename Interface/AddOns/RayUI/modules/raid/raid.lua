@@ -7,6 +7,7 @@ local oUF = RayUF or oUF
 --Cache global variables
 --Lua functions
 local _G = _G
+local next = next
 
 --WoW API / Variables
 local CreateFrame = CreateFrame
@@ -20,9 +21,12 @@ local CompactUnitFrame_UnregisterEvents = CompactUnitFrame_UnregisterEvents
 local hooksecurefunc = hooksecurefunc
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: UIParent, oUF_RaidDebuffs, CompactRaidFrameManager, CompactRaidFrameContainer
+-- GLOBALS: UIParent, oUF_RaidDebuffs, CompactRaidFrameManager, CompactRaidFrameContainer, RayUF, DebuffTypeColor
 
 RA.modName = L["团队"]
+RA.headers = {}
+RA.colorCache = {}
+RA.debuffColor = {}
 
 local function RegisterDebuffs()
     SetMapToCurrentZone()
@@ -61,6 +65,53 @@ end
 function RA:Initialize()
     if not self.db.enable then return end
 
+    self.groupConfig = {
+        raid = {
+            width = self.db.raid25width,
+            height = self.db.raid25height,
+            visibility = "[nogroup:party,nogroup:raid][@raid26,exists] hide;show",
+            numGroups = 5,
+            defaultPosition = { "BOTTOMLEFT", R.UIParent, "BOTTOMLEFT", 15, 235 },
+            labelvisibility = "[nogroup:raid][@raid26,exists] hide;show"
+        },
+        raid40 = {
+            width = self.db.raid40width,
+            height = self.db.raid40height,
+            visibility = "[@raid26,exists] show;hide",
+            numGroups = 8,
+            defaultPosition = { "BOTTOMLEFT", R.UIParent, "BOTTOMLEFT", 15, 235 },
+        },
+        raidPets = {
+            width = self.db.raid25width,
+            height = self.db.raid25height / 2,
+            visibility = "[group:raid] show;hide",
+            numGroups = 2,
+            defaultPosition = { "BOTTOMLEFT", R.UIParent, "BOTTOMLEFT", 15, 685 },
+            label = "P",
+        },
+        raidTank = {
+            width = self.db.raid25width,
+            height = self.db.raid25height * 2/3,
+            visibility = "[@raid1,exists] show;hide",
+            defaultPosition = { "BOTTOMLEFT", R.UIParent, "BOTTOMLEFT", 15, 635 },
+            label = "T",
+        }
+    }
+
+    for class, color in next, RayUF.colors.class do
+        RA.colorCache[class] = RA:Hex(color)
+    end
+
+    for dtype, color in next, DebuffTypeColor do
+        RA.debuffColor[dtype] = RA:Hex(color)
+    end
+
+    self.glowBorder = {
+        bgFile = R["media"].blank,
+        edgeFile = R["media"].glow, edgeSize = R:Scale(5),
+        insets = {left = R:Scale(3), right = R:Scale(3), top = R:Scale(3), bottom = R:Scale(3)}
+    }
+
     for i = 1, 4 do
         local frame = _G["PartyMemberFrame"..i]
         frame:UnregisterAllEvents()
@@ -90,7 +141,14 @@ function RA:Initialize()
     self:RegisterEvent("GROUP_ROSTER_UPDATE", "HideBlizzard")
     UIParent:UnregisterEvent("GROUP_ROSTER_UPDATE")
 
-    self:SpawnRaid()
+    self:CreateHeaderGroup("raid", nil, nil)
+    self:CreateHeaderGroup("raid40", nil, nil)
+    if self.db.showTank then
+        self:CreateHeaderGroup("raidTank", "MAINTANK", nil)
+    end
+    if self.db.showPets then
+        self:CreateHeaderGroup("raidPets", nil, "SecureGroupPetHeaderTemplate")
+    end
     RegisterDebuffs()
     local ORD = ns.oUF_RaidDebuffs or oUF_RaidDebuffs
     if ORD then

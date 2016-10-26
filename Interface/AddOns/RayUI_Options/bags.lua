@@ -33,7 +33,8 @@ R.Options.args.Bags = {
         settingsHeader = {
             type = "header",
             name = L["设置"],
-            order = 4
+            order = 4,
+            hidden = function() return not R.db.Bags.enable end,
         },
         bagSize = {
 			order = 5,
@@ -41,12 +42,14 @@ R.Options.args.Bags = {
 			name = L["背包格大小"],
 			min = 15, max = 45, step = 1,
 			set = function(info, value) R.db.Bags[ info[#info] ] = value B:Layout() end,
+            hidden = function() return not R.db.Bags.enable end,
 		},
 		sortInverted = {
 			order = 7,
 			type = "toggle",
 			name = L["逆序整理"],
 			set = function(info, value) R.db.Bags[ info[#info] ] = value end,
+            hidden = function() return not R.db.Bags.enable end,
 		},
 		bagWidth = {
 			order = 8,
@@ -54,6 +57,7 @@ R.Options.args.Bags = {
 			name = L["背包面板宽度"],
 			min = 8, max = 20, step = 1,
 			set = function(info, value) R.db.Bags[ info[#info] ] = value B:Layout() end,
+            hidden = function() return not R.db.Bags.enable end,
 		},
 		bankWidth = {
 			order = 9,
@@ -61,6 +65,7 @@ R.Options.args.Bags = {
 			name = L["银行面板宽度"],
 			min = 8, max = 20, step = 1,
 			set = function(info, value) R.db.Bags[ info[#info] ] = value B:Layout(true) end,
+            hidden = function() return not R.db.Bags.enable end,
 		},
     },
 }

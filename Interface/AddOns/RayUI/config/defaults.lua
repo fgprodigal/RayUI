@@ -101,24 +101,25 @@ P["UnitFrames"]={
     showPortrait = true,
     showHealthValue = false,
     alwaysShowHealth = false,
-    separateEnergy = false,
-    vengeance = true,
     aurabar = false,
+    castBar = true,
 }
 
 G["Raid"] = {}
 
 P["Raid"]={
     enable = true,
-    width = 70,
-    height = 36,
-    bigwidth = 85,
-    bigheight = 43,
+    raid40width = 77,
+    raid40height = 30,
+    raid25width = 77,
+    raid25height = 47,
+    petheight = 40,
+    petwidth = 77,
+    tankheight = 50,
+    tankwidth = 77,
     spacing = 5,
-    showwhensolo = false,
-    showplayerinparty = true,
-    horizontal = false,
-    growth = "RIGHT",
+    horizontal = true,
+    growth = "UP",
     powerbarsize = .1,
     outsideRange = .40,
     arrow = true,
@@ -140,8 +141,9 @@ P["Raid"]={
     tooltip = true,
     hidemenu = false,
     autorez = true,
-    raid40 = true,
-    alwaysshow40 = false,
+    showlabel = true,
+    showTank = false,
+    showPets = false,
 }
 
 P["ActionBar"]={
@@ -153,6 +155,8 @@ P["ActionBar"]={
     itemcount = true,
     hotkeys = true,
     showgrid = true,
+    lockActionBars = true,
+    movementModifier = "SHIFT",
 
     bar1 = {
         enable = true,

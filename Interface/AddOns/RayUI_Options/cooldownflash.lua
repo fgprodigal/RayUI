@@ -44,7 +44,8 @@ R.Options.args.CooldownFlash = {
         settingsHeader = {
             type = "header",
             name = L["设置"],
-            order = 4
+            order = 4,
+            hidden = function() return not R.db.CooldownFlash.enable end,
         },
         iconSize = {
             order = 5,

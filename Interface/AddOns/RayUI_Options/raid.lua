@@ -1,5 +1,6 @@
 local R, L, P, G = unpack(RayUI) --Import: Engine, Locales, ProfileDB, GlobalDB
 local RA = R:GetModule("Raid")
+local UF = R:GetModule("UnitFrames")
 
 R.Options.args.Raid = {
     type = "group",
@@ -30,30 +31,74 @@ R.Options.args.Raid = {
             desc = RA.Info and RA:Info() or (L["启用"] .. (RA.modName or RA:GetName())),
             order = 3,
         },
+        spacer = {
+            type = "description",
+            name = "",
+            desc = "",
+            order = 4,
+        },
+        toggleRaid = {
+            order = 5,
+            type = "execute",
+            name = L["显示团队"],
+            func = function()
+                UF:ToggleUF("r25")
+            end,
+            hidden = function() return not R.db.Raid.enable end,
+        },
+        toggleRaid40 = {
+            order = 6,
+            type = "execute",
+            name = L["显示40人团队"],
+            func = function()
+                UF:ToggleUF("r40")
+            end,
+            hidden = function() return not R.db.Raid.enable end,
+        },
+        toggleTank = {
+            order = 6,
+            type = "execute",
+            name = L["显示主坦克框体"],
+            func = function()
+                UF:ToggleUF("mt")
+            end,
+            hidden = function() return not R.db.Raid.enable or not R.db.Raid.showTank end,
+        },
+        toggleRaidPets = {
+            order = 6,
+            type = "execute",
+            name = L["显示团队宠物框体"],
+            func = function()
+                UF:ToggleUF("rp")
+            end,
+            hidden = function() return not R.db.Raid.enable or not R.db.Raid.showPets end,
+        },
         settingsHeader = {
             type = "header",
             name = L["设置"],
-            order = 4
+            order = 9,
+            hidden = function() return not R.db.Raid.enable end,
         },
         size = {
-            order = 5,
+            order = 10,
             type = "group",
             name = L["大小"],
             guiInline = true,
+            hidden = function() return not R.db.Raid.enable end,
             args = {
-                width = {
+                raid25width = {
                     order = 1,
                     name = L["单位长度"],
                     min = 50, max = 150, step = 1,
                     type = "range",
                 },
-                height = {
+                raid25height = {
                     order = 2,
                     name = L["单位高度"],
-                    min = 20, max = 50, step = 1,
+                    min = 20, max = 70, step = 1,
                     type = "range",
                 },
-                spacer = {
+                spacer2 = {
                     type = "description",
                     name = "",
                     desc = "",
@@ -68,7 +113,7 @@ R.Options.args.Raid = {
                 bigheight = {
                     order = 5,
                     name = L["单位高度2"],
-                    min = 20, max = 50, step = 1,
+                    min = 20, max = 70, step = 1,
                     type = "range",
                 },
                 spacing = {
@@ -77,38 +122,102 @@ R.Options.args.Raid = {
                     min = 1, max = 20, step = 1,
                     type = "range",
                 },
-                powerbarsize = {
+                showTank = {
                     order = 7,
+                    name = L["主坦克框体"],
+                    type = "toggle",
+                },
+                spacer3 = {
+                    type = "description",
+                    name = "",
+                    desc = "",
+                    order = 8,
+                },
+                tankwidth = {
+                    order = 9,
+                    name = L["主坦克框体长度"],
+                    min = 50, max = 150, step = 1,
+                    type = "range",
+                    hidden = function() return not R.db.Raid.showTank end,
+                },
+                tankheight = {
+                    order = 10,
+                    name = L["主坦克框体高度"],
+                    min = 20, max = 70, step = 1,
+                    type = "range",
+                    hidden = function() return not R.db.Raid.showTank end,
+                },
+                spacer4 = {
+                    type = "description",
+                    name = "",
+                    desc = "",
+                    order = 11,
+                    hidden = function() return not R.db.Raid.showTank end,
+                },
+                showPets = {
+                    order = 12,
+                    name = L["宠物框体"],
+                    type = "toggle",
+                },
+                spacer5 = {
+                    type = "description",
+                    name = "",
+                    desc = "",
+                    order = 13,
+                },
+                petwidth = {
+                    order = 14,
+                    name = L["宠物框体长度"],
+                    min = 50, max = 150, step = 1,
+                    type = "range",
+                    hidden = function() return not R.db.Raid.showPets end,
+                },
+                petheight = {
+                    order = 15,
+                    name = L["宠物框体高度"],
+                    min = 20, max = 70, step = 1,
+                    type = "range",
+                    hidden = function() return not R.db.Raid.showPets end,
+                },
+                spacer5 = {
+                    type = "description",
+                    name = "",
+                    desc = "",
+                    order = 16,
+                    hidden = function() return not R.db.Raid.showTank end,
+                },
+                powerbarsize = {
+                    order = 17,
                     name = L["法力条高度"],
                     type = "range",
                     min = 0, max = 0.5, step = 0.01,
                 },
                 outsideRange = {
-                    order = 8,
+                    order = 18,
                     name = L["超出距离透明度"],
                     type = "range",
                     min = 0, max = 1, step = 0.05,
                 },
                 aurasize = {
-                    order = 9,
+                    order = 19,
                     name = L["技能图标大小"],
                     type = "range",
                     min = 20, max = 40, step = 1,
                 },
                 indicatorsize = {
-                    order = 10,
+                    order = 20,
                     name = L["角标大小"],
                     type = "range",
                     min = 2, max = 10, step = 1,
                 },
                 leadersize = {
-                    order = 11,
+                    order = 21,
                     name = L["职责图标大小"],
                     type = "range",
                     min = 8, max = 20, step = 1,
                 },
                 symbolsize = {
-                    order = 12,
+                    order = 22,
                     name = L["特殊标志大小"],
                     desc = L["特殊标志大小, 如愈合祷言标志"],
                     type = "range",
@@ -116,43 +225,12 @@ R.Options.args.Raid = {
                 },
             },
         },
-        visible = {
-            order = 6,
-            type = "group",
-            name = L["显示"],
-            guiInline = true,
-            set = function(info, value)
-                R.db.Raid[ info[#info] ] = value
-                RA:UpdateVisibility()
-            end,
-            args = {
-                showwhensolo = {
-                    order = 1,
-                    name = L["solo时显示"],
-                    type = "toggle",
-                },
-                showplayerinparty = {
-                    order = 2,
-                    name = L["在队伍中显示自己"],
-                    type = "toggle",
-                },
-                raid40 = {
-                    order = 3,
-                    name = L["显示6~8队"],
-                    type = "toggle",
-                },
-                alwaysshow40 = {
-                    order = 4,
-                    name = L["始终显示1~8队"],
-                    type = "toggle",
-                }
-            },
-        },
         direction = {
-            order = 7,
+            order = 11,
             type = "group",
             name = L["排列"],
             guiInline = true,
+            hidden = function() return not R.db.Raid.enable end,
             args = {
                 horizontal = {
                     order = 1,
@@ -174,10 +252,11 @@ R.Options.args.Raid = {
             },
         },
         arrows = {
-            order = 8,
+            order = 12,
             type = "group",
             name = L["箭头"],
             guiInline = true,
+            hidden = function() return not R.db.Raid.enable end,
             args = {
                 arrow = {
                     order = 1,
@@ -193,10 +272,11 @@ R.Options.args.Raid = {
             },
         },
         predict = {
-            order = 9,
+            order = 13,
             type = "group",
             name = L["预读"],
             guiInline = true,
+            hidden = function() return not R.db.Raid.enable end,
             args = {
                 healbar = {
                     order = 1,
@@ -216,10 +296,11 @@ R.Options.args.Raid = {
             },
         },
         icons = {
-            order = 10,
+            order = 14,
             type = "group",
             name = L["图标文字"],
             guiInline = true,
+            hidden = function() return not R.db.Raid.enable end,
             args = {
                 roleicon = {
                     order = 1,
@@ -250,10 +331,11 @@ R.Options.args.Raid = {
             },
         },
         others = {
-            order = 11,
+            order = 15,
             type = "group",
             name = L["其他"],
             guiInline = true,
+            hidden = function() return not R.db.Raid.enable end,
             args = {
                 dispel = {
                     order = 1,
@@ -270,15 +352,15 @@ R.Options.args.Raid = {
                     name = L["鼠标提示"],
                     type = "toggle",
                 },
-                hidemenu = {
-                    order = 4,
-                    name = L["屏蔽右键菜单"],
-                    type = "toggle",
-                },
                 autorez = {
                     order = 5,
                     name = L["快速复活"],
                     desc = L["鼠标中键点击快速复活/战复"],
+                    type = "toggle",
+                },
+                showlabel = {
+                    order = 6,
+                    name = L["显示小队编号"],
                     type = "toggle",
                 },
             },

@@ -34,9 +34,7 @@ local MoverTypes = {
 	"ALL",
 	"GENERAL",
 	"ACTIONBARS",
-	"RAID15",
-	"RAID25",
-	"RAID40",
+	"RAID",
 	"ARENA",
 }
 
