@@ -151,7 +151,7 @@ function RA:CreateHeader(parent, name, groupFilter, template, layout)
 end
 
 function RA:CreateHeaderGroup(layout, groupFilter, template)
-    local stringTitle = layout:gsub("(.)", upper, 1)
+    local stringTitle = R:StringTitle(layout)
     RayUF:RegisterStyle("RayUF_"..stringTitle, RA["Construct_"..stringTitle.."Frames"])
     RayUF:SetActiveStyle("RayUF_"..stringTitle)
 
@@ -166,7 +166,7 @@ function RA:CreateHeaderGroup(layout, groupFilter, template)
         else
             self[layout]:Size(RA.groupConfig[layout].width*numGroups + RA.db.spacing*(numGroups-1), RA.groupConfig[layout].height*5 + RA.db.spacing*4)
         end
-        R:CreateMover(self[layout], "RayUF_"..stringTitle.."Mover", "RayUI "..stringTitle, nil, nil, "ALL,RAID", true)
+        R:CreateMover(self[layout], "RayUF_"..stringTitle.."Mover", L[stringTitle.." Mover"], nil, nil, "ALL,RAID", true)
 
         for i= 1, numGroups do
             local group = self:CreateHeader(self[layout], "RayUF_"..stringTitle.."Group"..i, i, template, layout)
@@ -229,7 +229,7 @@ function RA:CreateHeaderGroup(layout, groupFilter, template)
         else
             self[layout]:Size(RA.groupConfig[layout].width, RA.groupConfig[layout].height*5 + RA.db.spacing*4)
         end
-        R:CreateMover(self[layout], "RayUF_"..stringTitle.."Mover", "RayUI "..stringTitle, nil, nil, "ALL,RAID", true)
+        R:CreateMover(self[layout], "RayUF_"..stringTitle.."Mover", L[stringTitle.." Mover"], nil, nil, "ALL,RAID", true)
     end
 
     self[layout].visibility = RA.groupConfig[layout].visibility
@@ -285,12 +285,13 @@ function RA:Initialize()
     self:RegisterEvent("GROUP_ROSTER_UPDATE", "HideBlizzard")
     UIParent:UnregisterEvent("GROUP_ROSTER_UPDATE")
 
-	for layout, config in pairs(RA["headerstoload"]) do
-        local stringTitle = layout:gsub("(.)", upper, 1)
+	for layout, config in pairs(self["headerstoload"]) do
+        local stringTitle = R:StringTitle(layout)
 		local groupFilter, template = unpack(config)
         self["Fetch"..stringTitle.."Settings"](self)
 		self:CreateHeaderGroup(layout, groupFilter, template)
 	end
+    self["headerstoload"] = nil
 
     RegisterDebuffs()
     local ORD = ns.oUF_RaidDebuffs or oUF_RaidDebuffs

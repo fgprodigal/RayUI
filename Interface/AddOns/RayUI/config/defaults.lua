@@ -56,9 +56,9 @@ P["NamePlates"]={
     cbHeight = 5,
     targetScale = 1.2,
     displayStyle = "ALL",
-	lowHealthThreshold = 0.4,
-	showFriendlyCombat = "DISABLED",
-	showEnemyCombat = "DISABLED",
+    lowHealthThreshold = 0.4,
+    showFriendlyCombat = "DISABLED",
+    showEnemyCombat = "DISABLED",
     motionType = "OVERLAP", --OVERLAP, STACKED
     friendly_minions = false,
     enemy_minions = false,
@@ -96,13 +96,73 @@ P["UnitFrames"]={
     smooth = true,
     smoothColor = true,
     powerheight = 0.08,
-    showBossFrames = true,
-    showArenaFrames = true,
     showPortrait = true,
     showHealthValue = false,
     alwaysShowHealth = false,
     aurabar = false,
     castBar = true,
+    units = {
+        player = {
+            defaultPosition = { "BOTTOMRIGHT", R.UIParent, "BOTTOM", -80, 390 },
+            width = 220,
+            height = 32,
+            castbar = {
+                showicon = false,
+                iconposition = "LEFT",
+                width = 350,
+                height = 7,
+            },
+        },
+        target = {
+            defaultPosition = { "BOTTOMLEFT", R.UIParent, "BOTTOM", 80, 390 },
+            width = 220,
+            height = 32,
+            castbar = {
+                showicon = true,
+                iconposition = "LEFT",
+                width = 220 - 25,
+                height = 20,
+            },
+        },
+        targettarget = {
+            defaultPosition = { "BOTTOMLEFT", "RayUF_Target", "TOPRIGHT", 5, 30 },
+            width = 140,
+            height = 8,
+        },
+        focus = {
+            defaultPosition = { "BOTTOMRIGHT", "RayUF_Player", "TOPLEFT", -20, 20 },
+            width = 170,
+            height = 32,
+            castbar = {
+                showicon = true,
+                iconposition = "LEFT",
+                width = 250,
+                height = 5,
+            },
+        },
+        focustarget = {
+            defaultPosition = { "BOTTOMRIGHT", "RayUF_Focus", "BOTTOMLEFT", -10, 1 },
+            width = 140,
+            height = 8,
+        },
+        pet = {
+            defaultPosition = { "BOTTOM", "RayUIPetBar", "TOP", 0, 3 },
+            width = 140,
+            height = 18,
+        },
+        arena = {
+            enable = true,
+            defaultPosition = { "BOTTOMRIGHT", R.UIParent, "BOTTOM", -80, 390 },
+            width = 190,
+            height = 22,
+        },
+        boss = {
+            enable = true,
+            defaultPosition = { "BOTTOMRIGHT", R.UIParent, "BOTTOM", -80, 390 },
+            width = 192,
+            height = 22,
+        },
+    },
 }
 
 G["Raid"] = {}

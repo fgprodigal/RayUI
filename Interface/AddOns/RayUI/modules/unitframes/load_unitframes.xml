@@ -4,5 +4,5 @@
 	<Script file="tags.lua"/>
 	<Script file="filter.lua"/>
 	<Script file="functions.lua"/>
-	<Script file="layout.lua"/>
+	<Include file="units\load_units.xml"/>
 </Ui>

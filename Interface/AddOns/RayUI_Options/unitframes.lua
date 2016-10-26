@@ -77,16 +77,6 @@ R.Options.args.UnitFrames = {
                     name = L["显示施法条"],
                     type = "toggle",
                 },
-                showBossFrames = {
-                    order = 2,
-                    name = L["显示BOSS"],
-                    type = "toggle",
-                },
-                showArenaFrames = {
-                    order = 3,
-                    name = L["显示竞技场头像"],
-                    type = "toggle",
-                },
                 showPortrait = {
                     order = 4,
                     name = L["启用3D头像"],
@@ -103,6 +93,491 @@ R.Options.args.UnitFrames = {
                     name = L["总是显示血量"],
                     type = "toggle",
                 }
+            },
+        },
+        playerGroup = {
+            order = 40,
+            type = "group",
+            guiInline = false,
+            name = L["玩家"],
+            hidden = function() return not R.db.UnitFrames.enable end,
+            get = function(info)
+                return R.db.UnitFrames.units.player[ info[#info] ]
+            end,
+            set = function(info, value)
+                R.db.UnitFrames.units.player[ info[#info] ] = value
+                StaticPopup_Show("CFG_RELOAD")
+            end,
+            args = {
+                header = {
+                    type = "header",
+                    name = L["玩家"],
+                    order = 1
+                },
+                size = {
+                    order = 2,
+                    type = "group",
+                    name = L["大小"],
+                    guiInline = true,
+                    args = {
+                        width = {
+                            order = 1,
+                            name = L["长度"],
+                            min = 100, max = 350, step = 1,
+                            type = "range",
+                        },
+                        height = {
+                            order = 2,
+                            name = L["高度"],
+                            min = 5, max = 70, step = 1,
+                            type = "range",
+                        },
+                    },
+                },
+                castbarGroup = {
+                    order = 3,
+                    type = "group",
+                    name = L["施法条"],
+                    guiInline = true,
+                    get = function(info)
+                        return R.db.UnitFrames.units.player.castbar[ info[#info] ]
+                    end,
+                    set = function(info, value)
+                        R.db.UnitFrames.units.player.castbar[ info[#info] ] = value
+                        StaticPopup_Show("CFG_RELOAD")
+                    end,
+                    args = {
+                        width = {
+                            order = 1,
+                            name = L["长度"],
+                            min = 100, max = 500, step = 1,
+                            type = "range",
+                        },
+                        height = {
+                            order = 2,
+                            name = L["高度"],
+                            min = 5, max = 70, step = 1,
+                            type = "range",
+                        },
+                        spacer = {
+                            type = "description",
+                            name = "",
+                            desc = "",
+                            order = 3,
+                        },
+                        showicon = {
+                            order = 4,
+                            name = L["显示图标"],
+                            type = "toggle",
+                        },
+                        iconposition = {
+                            order = 5,
+                            name = L["图标位置"],
+                            type = "select",
+                            values = {
+                                ["LEFT"] = L["左"],
+                                ["RIGHT"] = L["右"],
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        targetGroup = {
+            order = 41,
+            type = "group",
+            guiInline = false,
+            name = L["目标"],
+            hidden = function() return not R.db.UnitFrames.enable end,
+            get = function(info)
+                return R.db.UnitFrames.units.target[ info[#info] ]
+            end,
+            set = function(info, value)
+                R.db.UnitFrames.units.target[ info[#info] ] = value
+                StaticPopup_Show("CFG_RELOAD")
+            end,
+            args = {
+                header = {
+                    type = "header",
+                    name = L["目标"],
+                    order = 1
+                },
+                size = {
+                    order = 2,
+                    type = "group",
+                    name = L["大小"],
+                    guiInline = true,
+                    args = {
+                        width = {
+                            order = 1,
+                            name = L["长度"],
+                            min = 100, max = 350, step = 1,
+                            type = "range",
+                        },
+                        height = {
+                            order = 2,
+                            name = L["高度"],
+                            min = 5, max = 70, step = 1,
+                            type = "range",
+                        },
+                    },
+                },
+                castbarGroup = {
+                    order = 3,
+                    type = "group",
+                    name = L["施法条"],
+                    guiInline = true,
+                    get = function(info)
+                        return R.db.UnitFrames.units.target.castbar[ info[#info] ]
+                    end,
+                    set = function(info, value)
+                        R.db.UnitFrames.units.target.castbar[ info[#info] ] = value
+                        StaticPopup_Show("CFG_RELOAD")
+                    end,
+                    args = {
+                        width = {
+                            order = 1,
+                            name = L["长度"],
+                            min = 100, max = 500, step = 1,
+                            type = "range",
+                        },
+                        height = {
+                            order = 2,
+                            name = L["高度"],
+                            min = 5, max = 70, step = 1,
+                            type = "range",
+                        },
+                        spacer = {
+                            type = "description",
+                            name = "",
+                            desc = "",
+                            order = 3,
+                        },
+                        showicon = {
+                            order = 4,
+                            name = L["显示图标"],
+                            type = "toggle",
+                        },
+                        iconposition = {
+                            order = 5,
+                            name = L["图标位置"],
+                            type = "select",
+                            values = {
+                                ["LEFT"] = L["左"],
+                                ["RIGHT"] = L["右"],
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        focusGroup = {
+            order = 43,
+            type = "group",
+            guiInline = false,
+            name = L["焦点"],
+            hidden = function() return not R.db.UnitFrames.enable end,
+            get = function(info)
+                return R.db.UnitFrames.units.focus[ info[#info] ]
+            end,
+            set = function(info, value)
+                R.db.UnitFrames.units.focus[ info[#info] ] = value
+                StaticPopup_Show("CFG_RELOAD")
+            end,
+            args = {
+                header = {
+                    type = "header",
+                    name = L["焦点"],
+                    order = 1
+                },
+                size = {
+                    order = 2,
+                    type = "group",
+                    name = L["大小"],
+                    guiInline = true,
+                    args = {
+                        width = {
+                            order = 1,
+                            name = L["长度"],
+                            min = 100, max = 350, step = 1,
+                            type = "range",
+                        },
+                        height = {
+                            order = 2,
+                            name = L["高度"],
+                            min = 5, max = 70, step = 1,
+                            type = "range",
+                        },
+                    },
+                },
+                castbarGroup = {
+                    order = 3,
+                    type = "group",
+                    name = L["施法条"],
+                    guiInline = true,
+                    get = function(info)
+                        return R.db.UnitFrames.units.focus.castbar[ info[#info] ]
+                    end,
+                    set = function(info, value)
+                        R.db.UnitFrames.units.focus.castbar[ info[#info] ] = value
+                        StaticPopup_Show("CFG_RELOAD")
+                    end,
+                    args = {
+                        width = {
+                            order = 1,
+                            name = L["长度"],
+                            min = 100, max = 500, step = 1,
+                            type = "range",
+                        },
+                        height = {
+                            order = 2,
+                            name = L["高度"],
+                            min = 5, max = 70, step = 1,
+                            type = "range",
+                        },
+                        spacer = {
+                            type = "description",
+                            name = "",
+                            desc = "",
+                            order = 3,
+                        },
+                        showicon = {
+                            order = 4,
+                            name = L["显示图标"],
+                            type = "toggle",
+                        },
+                        iconposition = {
+                            order = 5,
+                            name = L["图标位置"],
+                            type = "select",
+                            values = {
+                                ["LEFT"] = L["左"],
+                                ["RIGHT"] = L["右"],
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        targettargetGroup = {
+            order = 42,
+            type = "group",
+            guiInline = false,
+            name = L["目标的目标"],
+            hidden = function() return not R.db.UnitFrames.enable end,
+            get = function(info)
+                return R.db.UnitFrames.units.targettarget[ info[#info] ]
+            end,
+            set = function(info, value)
+                R.db.UnitFrames.units.targettarget[ info[#info] ] = value
+                StaticPopup_Show("CFG_RELOAD")
+            end,
+            args = {
+                header = {
+                    type = "header",
+                    name = L["目标的目标"],
+                    order = 1
+                },
+                size = {
+                    order = 2,
+                    type = "group",
+                    name = L["大小"],
+                    guiInline = true,
+                    args = {
+                        width = {
+                            order = 1,
+                            name = L["长度"],
+                            min = 100, max = 350, step = 1,
+                            type = "range",
+                        },
+                        height = {
+                            order = 2,
+                            name = L["高度"],
+                            min = 5, max = 70, step = 1,
+                            type = "range",
+                        },
+                    },
+                },
+            },
+        },
+        focustargetGroup = {
+            order = 44,
+            type = "group",
+            guiInline = false,
+            name = L["焦点的目标"],
+            hidden = function() return not R.db.UnitFrames.enable end,
+            get = function(info)
+                return R.db.UnitFrames.units.focustarget[ info[#info] ]
+            end,
+            set = function(info, value)
+                R.db.UnitFrames.units.focustarget[ info[#info] ] = value
+                StaticPopup_Show("CFG_RELOAD")
+            end,
+            args = {
+                header = {
+                    type = "header",
+                    name = L["焦点的目标"],
+                    order = 1
+                },
+                size = {
+                    order = 2,
+                    type = "group",
+                    name = L["大小"],
+                    guiInline = true,
+                    args = {
+                        width = {
+                            order = 1,
+                            name = L["长度"],
+                            min = 100, max = 350, step = 1,
+                            type = "range",
+                        },
+                        height = {
+                            order = 2,
+                            name = L["高度"],
+                            min = 5, max = 70, step = 1,
+                            type = "range",
+                        },
+                    },
+                },
+            },
+        },
+        petGroup = {
+            order = 45,
+            type = "group",
+            guiInline = false,
+            name = L["宠物"],
+            hidden = function() return not R.db.UnitFrames.enable end,
+            get = function(info)
+                return R.db.UnitFrames.units.pet[ info[#info] ]
+            end,
+            set = function(info, value)
+                R.db.UnitFrames.units.pet[ info[#info] ] = value
+                StaticPopup_Show("CFG_RELOAD")
+            end,
+            args = {
+                header = {
+                    type = "header",
+                    name = L["宠物"],
+                    order = 1
+                },
+                size = {
+                    order = 2,
+                    type = "group",
+                    name = L["大小"],
+                    guiInline = true,
+                    args = {
+                        width = {
+                            order = 1,
+                            name = L["长度"],
+                            min = 100, max = 350, step = 1,
+                            type = "range",
+                        },
+                        height = {
+                            order = 2,
+                            name = L["高度"],
+                            min = 5, max = 70, step = 1,
+                            type = "range",
+                        },
+                    },
+                },
+            },
+        },
+        arenaGroup = {
+            order = 46,
+            type = "group",
+            guiInline = false,
+            name = L["竞技场"],
+            hidden = function() return not R.db.UnitFrames.enable end,
+            get = function(info)
+                return R.db.UnitFrames.units.arena[ info[#info] ]
+            end,
+            set = function(info, value)
+                R.db.UnitFrames.units.arena[ info[#info] ] = value
+                StaticPopup_Show("CFG_RELOAD")
+            end,
+            args = {
+                header = {
+                    type = "header",
+                    name = L["竞技场"],
+                    order = 1
+                },
+                enable = {
+                    type = "toggle",
+                    name = L["启用"],
+                    width = "double",
+                    order = 2,
+                },
+                size = {
+                    order = 3,
+                    type = "group",
+                    name = L["大小"],
+                    guiInline = true,
+                    args = {
+                        width = {
+                            order = 1,
+                            name = L["长度"],
+                            min = 100, max = 350, step = 1,
+                            type = "range",
+                            hidden = function() return not R.db.UnitFrames.units.arena.enable end,
+                        },
+                        height = {
+                            order = 2,
+                            name = L["高度"],
+                            min = 5, max = 70, step = 1,
+                            type = "range",
+                            hidden = function() return not R.db.UnitFrames.units.arena.enable end,
+                        },
+                    },
+                },
+            },
+        },
+        bossGroup = {
+            order = 47,
+            type = "group",
+            guiInline = false,
+            name = L["首领"],
+            hidden = function() return not R.db.UnitFrames.enable end,
+            get = function(info)
+                return R.db.UnitFrames.units.boss[ info[#info] ]
+            end,
+            set = function(info, value)
+                R.db.UnitFrames.units.boss[ info[#info] ] = value
+                StaticPopup_Show("CFG_RELOAD")
+            end,
+            args = {
+                header = {
+                    type = "header",
+                    name = L["首领"],
+                    order = 1
+                },
+                enable = {
+                    type = "toggle",
+                    name = L["启用"],
+                    width = "double",
+                    order = 2,
+                },
+                size = {
+                    order = 3,
+                    type = "group",
+                    name = L["大小"],
+                    guiInline = true,
+                    args = {
+                        width = {
+                            order = 1,
+                            name = L["长度"],
+                            min = 100, max = 350, step = 1,
+                            type = "range",
+                            hidden = function() return not R.db.UnitFrames.units.boss.enable end,
+                        },
+                        height = {
+                            order = 2,
+                            name = L["高度"],
+                            min = 5, max = 70, step = 1,
+                            type = "range",
+                            hidden = function() return not R.db.UnitFrames.units.boss.enable end,
+                        },
+                    },
+                },
             },
         },
     },

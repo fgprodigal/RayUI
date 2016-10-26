@@ -22,6 +22,7 @@ local floor = floor
 local unpack = unpack
 local tonumber = tonumber
 local geterrorhandler = geterrorhandler
+local upper = string.upper
 
 --WoW API / Variables
 local ReloadUI = ReloadUI
@@ -134,6 +135,10 @@ end
 
 function R:Scale(x)
 	return (self.mult*math.floor(x/self.mult+.5))
+end
+
+function R:StringTitle(str)
+	return str:gsub("(.)", upper, 1)
 end
 
 R.LockedCVars = {}

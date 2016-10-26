@@ -87,6 +87,6 @@ function AB:CreateExtraButton()
 		ExtraActionBarFrame:Show()
 	end
 
-	R:CreateMover(holder, "BossButtonMover", L["额外按钮"], true, nil, "ALL,ACTIONBARS,RAID15,RAID25,RAID40")
-	R:CreateMover(draenorholder, "DraenorButtonMover", L["要塞按钮"], true, nil, "ALL,ACTIONBARS,RAID15,RAID25,RAID40")
+	R:CreateMover(holder, "BossButtonMover", L["额外按钮"], true, nil, "ALL,ACTIONBARS,RAID")
+	R:CreateMover(draenorholder, "DraenorButtonMover", L["要塞按钮"], true, nil, "ALL,ACTIONBARS,RAID")
 end

@@ -1,13 +1,13 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 
 local positions = {
-    player_buff_icon = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 80 }, -- "玩家buff&debuff"
-    target_buff_icon = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 80 }, -- "目标buff&debuff"
-    player_proc_icon = { "BOTTOMRIGHT", "RayUF_player", "TOPRIGHT", 0, 33 }, -- "玩家重要buff&debuff"
-    target_proc_icon = { "BOTTOMLEFT", "RayUF_target", "TOPLEFT", 0, 33 }, -- "目标重要buff&debuff"
-    focus_buff_icon = { "BOTTOMLEFT", "RayUF_focus", "TOPLEFT", 0, 10 }, -- "焦点buff&debuff"
+    player_buff_icon = { "BOTTOMRIGHT", "RayUF_Player", "TOPRIGHT", 0, 80 }, -- "玩家buff&debuff"
+    target_buff_icon = { "BOTTOMLEFT", "RayUF_Target", "TOPLEFT", 0, 80 }, -- "目标buff&debuff"
+    player_proc_icon = { "BOTTOMRIGHT", "RayUF_Player", "TOPRIGHT", 0, 33 }, -- "玩家重要buff&debuff"
+    target_proc_icon = { "BOTTOMLEFT", "RayUF_Target", "TOPLEFT", 0, 33 }, -- "目标重要buff&debuff"
+    focus_buff_icon = { "BOTTOMLEFT", "RayUF_Focus", "TOPLEFT", 0, 10 }, -- "焦点buff&debuff"
     cd_icon = function() return R:IsDeveloper() and { "TOPLEFT", "RayUIActionBar1", "BOTTOMLEFT", 0, -6 } or { "TOPLEFT", "RayUIActionBar3", "BOTTOMRIGHT", -28, -6 } end, -- "cd"
-    player_special_icon = { "TOPRIGHT", "RayUF_player", "BOTTOMRIGHT", 0, -9 }, -- "玩家特殊buff&debuff"
+    player_special_icon = { "TOPRIGHT", "RayUF_Player", "BOTTOMRIGHT", 0, -9 }, -- "玩家特殊buff&debuff"
     pve_player_icon = { "BOTTOM", RayUIParent, "BOTTOM", -35, 350 }, -- "PVE/PVP玩家buff&debuff"
     pve_target_icon = { "BOTTOM", RayUIParent, "BOTTOM", 35, 350 }, -- "PVE/PVP目标buff&debuff"
 }

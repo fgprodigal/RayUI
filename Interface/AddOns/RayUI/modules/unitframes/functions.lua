@@ -6,18 +6,17 @@ local oUF = RayUF or oUF
 --Cache global variables
 --Lua functions
 local _G = _G
-local select, unpack, tonumber, pairs = select, unpack, tonumber, pairs
+local select, unpack, tonumber, pairs, ipairs = select, unpack, tonumber, pairs, ipairs
 local type, getfenv, setfenv = type, getfenv, setfenv
 local math, string = math, string
 local abs, floor = math.abs, math.floor
 local format = string.format
+local tinsert = table.insert
 local setmetatable = setmetatable
 local GetTime = GetTime
 
 --WoW API / Variables
 local CreateFrame = CreateFrame
-local ToggleDropDownMenu = ToggleDropDownMenu
-local RaidFrameDropDown_Initialize = RaidFrameDropDown_Initialize
 local GetNetStats = GetNetStats
 local UnitIsPlayer = UnitIsPlayer
 local UnitIsFriend = UnitIsFriend
@@ -53,12 +52,16 @@ local InCombatLockdown = InCombatLockdown
 local UnregisterUnitWatch = UnregisterUnitWatch
 local RegisterUnitWatch = RegisterUnitWatch
 local RegisterStateDriver = RegisterStateDriver
+local UnitFactionGroup = UnitFactionGroup
+local UnitIsPVPFreeForAll = UnitIsPVPFreeForAll
+local UnitIsPVP = UnitIsPVP
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: SLASH_TestUF1, FriendsDropDown, INTERRUPT, SPELL_POWER_ECLIPSE, RayUF, PLAYER_OFFLINE
 -- GLOBALS: DEAD, MAX_COMBO_POINTS, DebuffTypeColor, SPELL_POWER_HOLY_POWER, SPELL_POWER_CHI
 -- GLOBALS: SPELL_POWER_DEMONIC_FURY, SPEC_WARLOCK_DEMONOLOGY, SHADOW_ORB_MINOR_TALENT_ID
 -- GLOBALS: LOCALIZED_CLASS_NAMES_MALE, CLASS_SORT_ORDER, RayUFRaid40_6, MAX_BOSS_FRAMES
+-- GLOBALS: UnitFrame_OnEnter, UnitFrame_OnLeave, PVP
 
 local function ColorGradient(perc, color1, color2, color3)
     local r1,g1,b1 = 1, 0, 0
@@ -82,22 +85,25 @@ local function ColorGradient(perc, color1, color2, color3)
     return r2 + (r3-r2)*relperc, g2 + (g3-g2)*relperc, b2 + (b3-b2)*relperc
 end
 
-function UF:SpawnMenu()
-    local unit = self.unit:gsub("(.)", string.upper, 1)
-    if self.unit == "targettarget" then return end
-    if _G[unit.."FrameDropDown"] then
-        ToggleDropDownMenu(1, nil, _G[unit .. "FrameDropDown"], "cursor")
-    elseif (self.unit:match("party")) then
-        ToggleDropDownMenu(1, nil, _G["PartyMemberFrame" .. self.id .. "DropDown"], "cursor")
-    else
-        FriendsDropDown.unit = self.unit
-        FriendsDropDown.id = self.id
-        FriendsDropDown.initialize = RaidFrameDropDown_Initialize
-        ToggleDropDownMenu(1, nil, FriendsDropDown, "cursor")
+function UF:UnitFrame_OnEnter()
+    UnitFrame_OnEnter(self)
+    self.Mouseover:Show()
+    self.isMouseOver = true
+    for _, element in ipairs(self.mouseovers) do
+        element:ForceUpdate()
     end
 end
 
-function UF:ConstructHealthBar(frame, bg, text)
+function UF:UnitFrame_OnLeave()
+    UnitFrame_OnLeave(self)
+    self.Mouseover:Hide()
+    self.isMouseOver = nil
+    for _, element in ipairs(self.mouseovers) do
+        element:ForceUpdate()
+    end
+end
+
+function UF:Construct_HealthBar(frame, bg, text)
     local health = CreateFrame("StatusBar", nil, frame)
     health:SetStatusBarTexture(R["media"].normal)
     health:SetFrameStrata("LOW")
@@ -117,10 +123,10 @@ function UF:ConstructHealthBar(frame, bg, text)
     end
 
     if text then
-        health.value = frame.textframe:CreateFontString(nil, "OVERLAY")
+        health.value = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY")
         health.value:SetFont(R["media"].font, R["media"].fontsize - 1, R["media"].fontflag)
         health.value:SetJustifyH("LEFT")
-        health.value:SetParent(frame.textframe)
+        health.value:SetParent(frame.RaisedElementParent)
     end
 
     if self.db.healthColorClass ~= true then
@@ -139,10 +145,17 @@ function UF:ConstructHealthBar(frame, bg, text)
     end
     health.colorDisconnected = true
 
+    health:SetPoint("LEFT")
+    health:SetPoint("RIGHT")
+    health:SetPoint("TOP")
+    health:SetHeight(frame.UNIT_HEIGHT * (1 - self.db.powerheight) - 1)
+    health:CreateShadow("Background")
+    tinsert(frame.mouseovers, health)
+
     return health
 end
 
-function UF:ConstructPowerBar(frame, bg, text)
+function UF:Construct_PowerBar(frame, bg, text)
     local power = CreateFrame("StatusBar", nil, frame)
     power:SetStatusBarTexture(R["media"].normal)
     power.frequentUpdates = true
@@ -161,10 +174,10 @@ function UF:ConstructPowerBar(frame, bg, text)
     end
 
     if text then
-        power.value = frame.textframe:CreateFontString(nil, "OVERLAY")
+        power.value = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY")
         power.value:SetFont(R["media"].font, R["media"].fontsize - 1, R["media"].fontflag)
         power.value:SetJustifyH("LEFT")
-        power.value:SetParent(frame.textframe)
+        power.value:SetParent(frame.RaisedElementParent)
     end
 
     if self.db.powerColorClass == true then
@@ -175,11 +188,126 @@ function UF:ConstructPowerBar(frame, bg, text)
     end
 
     power.colorDisconnected = true
+    tinsert(frame.mouseovers, power)
+
+    power:SetPoint("LEFT")
+    power:SetPoint("RIGHT")
+    power:SetPoint("BOTTOM")
+    power:SetHeight(frame.UNIT_HEIGHT * self.db.powerheight)
+    power:CreateShadow("Background")
 
     return power
 end
 
-function UF:ConstructPortrait(frame)
+function UF:Construct_NameText(frame)
+    local name = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY")
+    name:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
+    name:Point("BOTTOMLEFT", frame.Health, "BOTTOMLEFT", 8, 3)
+    name:SetJustifyH("LEFT")
+    name:SetWordWrap(false)
+
+    return name
+end
+
+function UF:Construct_Fader(frame)
+    frame.FadeSmooth = 0.5
+    frame.FadeMinAlpha = 0.15
+    frame.FadeMaxAlpha = 1
+    return true
+end
+
+function UF:Construct_Highlight(frame)
+    local mouseover = frame.RaisedElementParent:CreateTexture(nil, "OVERLAY")
+    mouseover:SetAllPoints(frame)
+    mouseover:SetTexture("Interface\\AddOns\\RayUI\\media\\mouseover")
+    mouseover:SetVertexColor(1,1,1,.36)
+    mouseover:SetBlendMode("ADD")
+    mouseover:Hide()
+
+    return mouseover
+end
+
+function UF:Construct_Threat(frame)
+    local threat = frame:CreateTexture(nil, "OVERLAY")
+    threat:SetAllPoints(frame)
+    threat:SetTexture("Interface\\AddOns\\RayUI\\media\\threat")
+    threat:SetBlendMode("ADD")
+    threat:Hide()
+
+    return threat
+end
+
+function UF:UpdatePvPIndicator(event, unit)
+    if(unit ~= self.unit) then return end
+
+    if(self.PvP) then
+        local factionGroup = UnitFactionGroup(unit)
+        if factionGroup == "Neutral" then
+            self.PvP:SetTexture(nil)
+            self.PvP:Hide()
+        else
+            if(UnitIsPVPFreeForAll(unit)) then
+                self.PvP:SetTexture[[Interface\TargetingFrame\UI-PVP-FFA]]
+                self.PvP:Show()
+            elseif(factionGroup and UnitIsPVP(unit)) then
+                self.PvP:SetTexture([[Interface\AddOns\RayUI\media\UI-PVP-]]..factionGroup)
+                self.PvP:Show()
+            else
+                self.PvP:Hide()
+            end
+        end
+    end
+end
+
+function UF:Construct_PvPIndicator(frame)
+    local PvP = frame.RaisedElementParent:CreateTexture(nil, "BORDER")
+    PvP:Size(35, 35)
+    PvP:Point("TOPRIGHT", frame, 22, 8)
+    PvP.Override = UF.UpdatePvPIndicator
+    return PvP
+end
+
+function UF:Construct_CombatIndicator(frame)
+    local Combat = frame.RaisedElementParent:CreateTexture(nil, "OVERLAY")
+    Combat:Size(20, 20)
+    Combat:ClearAllPoints()
+    Combat:Point("LEFT", frame, "LEFT", -10, -5)
+    Combat:SetTexture("Interface\\AddOns\\RayUI\\media\\combat")
+    Combat:SetVertexColor(0.6, 0, 0)
+
+    return Combat
+end
+
+function UF:Construct_RestingIndicator(frame)
+    local Resting = frame:CreateFontString(nil, "OVERLAY")
+    Resting:SetFont(R["media"].font, 10, R["media"].fontflag)
+    Resting:Point("BOTTOM", frame.Combat, "BOTTOM", 0, 25)
+    Resting:SetText("zZz")
+    Resting:SetTextColor(255/255, 255/255, 255/255, 0.70)
+
+    return Resting
+end
+
+function UF:Construct_QuestIcon(frame)
+    local QuestIcon = frame.RaisedElementParent:CreateTexture(nil, "BORDER")
+    QuestIcon:Size(24, 24)
+    QuestIcon:Point("BOTTOMRIGHT", frame, 15, -2)
+    QuestIcon:SetTexture("Interface\\AddOns\\RayUI\\media\\quest")
+    QuestIcon:SetVertexColor(0.8, 0.8, 0.8)
+
+    return QuestIcon
+end
+
+function UF:Construct_RaidIcon(frame)
+    local ricon = frame.RaisedElementParent:CreateTexture(nil, "BORDER")
+    ricon:Point("BOTTOM", frame, "TOP", 0, -7)
+    ricon:Size(24, 24)
+    ricon:SetTexture("Interface\\AddOns\\RayUI\\media\\raidicons.blp")
+
+    return ricon
+end
+
+function UF:Construct_Portrait(frame)
     local portrait = CreateFrame("PlayerModel", nil, frame)
     portrait:SetFrameStrata("LOW")
     portrait:SetFrameLevel(frame.Health:GetFrameLevel() + 1)
@@ -203,7 +331,33 @@ function UF:ConstructPortrait(frame)
     return portrait
 end
 
-function UF:ConstructCastBar(frame)
+function UF:Construct_Debuffs(frame)
+    local debuffs = CreateFrame("Frame", nil, frame)
+    debuffs:SetHeight(20)
+    debuffs:SetWidth(frame.UNIT_WIDTH)
+    debuffs.spacing = 3.8
+    debuffs.size = 20
+    debuffs.num = 9
+    debuffs.PostCreateIcon = self.PostCreateIcon
+    debuffs.PostUpdateIcon = self.PostUpdateIcon
+
+    return debuffs
+end
+
+function UF:Construct_Buffs(frame)
+    local buffs = CreateFrame("Frame", nil, frame)
+    buffs:SetHeight(20)
+    buffs:SetWidth(frame.UNIT_WIDTH)
+    buffs.spacing = 3.8
+    buffs.size = 20
+    buffs.num = 9
+    buffs.PostCreateIcon = self.PostCreateIcon
+    buffs.PostUpdateIcon = self.PostUpdateIcon
+
+    return buffs
+end
+
+function UF:Construct_CastBar(frame)
     local castbar = CreateFrame("StatusBar", nil, frame)
     castbar:SetStatusBarTexture(R["media"].normal)
     castbar:GetStatusBarTexture():SetDrawLayer("BORDER")
@@ -237,15 +391,9 @@ function UF:ConstructCastBar(frame)
     castbar.Iconbg:SetPoint("BOTTOMRIGHT", castbar, "BOTTOMLEFT", -5, 0)
     castbar.Iconbg:SetSize(20, 20)
     castbar.Iconbg:CreateShadow("Background")
-    castbar.Icon = castbar:CreateTexture(nil, "OVERLAY")
+    castbar.Icon = castbar.Iconbg:CreateTexture(nil, "OVERLAY")
     castbar.Icon:SetAllPoints(castbar.Iconbg)
     castbar.Icon:SetTexCoord(0.07, 0.93, 0.07, 0.93)
-    if frame.unit == "player" then
-        castbar.SafeZone = castbar:CreateTexture(nil, "OVERLAY")
-        castbar.SafeZone:SetDrawLayer("OVERLAY", 5)
-        castbar.SafeZone:SetTexture(R["media"].normal)
-        castbar.SafeZone:SetVertexColor(1, 0, 0, 0.75)
-    end
     castbar.PostCastStart = UF.PostCastStart
     castbar.PostChannelStart = UF.PostCastStart
     castbar.PostCastStop = UF.PostCastStop
@@ -679,19 +827,6 @@ function UF:PostUpdatePower(unit, cur, max)
     end
 end
 
-function UF:UpdateThreatStatus(event, unit)
-    if self.unit ~= unit and event~="PLAYER_TARGET_CHANGED" then return end
-    unit = unit or self.unit
-    local s = UnitThreatSituation(unit)
-    if s and s > 1 then
-        local r, g, b = GetThreatStatusColor(s)
-        self.ThreatHlt:Show()
-        self.ThreatHlt:SetVertexColor(r, g, b, 0.5)
-    else
-        self.ThreatHlt:Hide()
-    end
-end
-
 function UF:PostAltUpdate(min, cur, max)
     local perc = math.floor((cur/max)*100)
 
@@ -724,32 +859,6 @@ function UF:PostAltUpdate(min, cur, max)
             self.text:SetText("|cffD7BEA5[|r"..format("%d%%", perc).."|cffD7BEA5]|r")
         else
             self.text:SetText(nil)
-        end
-    end
-end
-
-function UF:ComboDisplay(event, unit)
-    if(unit == "pet") then return end
-
-    local cpoints = self.CPoints
-    local cp = (UnitHasVehicleUI("player") or UnitHasVehicleUI("vehicle")) and UnitPower("vehicle", 4) or UnitPower("player", 4)
-
-    for i=1, MAX_COMBO_POINTS do
-        if(i <= cp) then
-            cpoints[i]:SetAlpha(1)
-        else
-            cpoints[i]:SetAlpha(0.15)
-        end
-    end
-
-    if cpoints[1]:GetAlpha() == 1 then
-        for i=1, MAX_COMBO_POINTS do
-            cpoints[i]:Show()
-        end
-
-    else
-        for i=1, MAX_COMBO_POINTS do
-            cpoints[i]:Hide()
         end
     end
 end
@@ -870,397 +979,6 @@ function UF:CustomFilter(unit, icon, name, rank, texture, count, dtype, duration
     return true
 end
 
-function UF:ConstructComboBar(frame)
-    -- Combo Bar
-    local count = 5
-    local bars = CreateFrame("Frame", nil, frame)
-    bars:SetSize(200, 5)
-    bars:Point("BOTTOM", frame, "TOP", 0, 1)
-
-    bars:SetBackdropBorderColor(0,0,0,0)
-    bars:SetBackdropColor(0,0,0,0)
-
-    for i = 1, count do
-        bars[i] = CreateFrame("StatusBar", frame:GetName().."_Combo"..i, bars)
-        bars[i]:SetHeight(5)
-        bars[i]:SetStatusBarTexture(R["media"].normal)
-        bars[i]:GetStatusBarTexture():SetHorizTile(false)
-
-        if i == 1 then
-            bars[i]:SetPoint("LEFT", bars)
-        else
-            bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
-        end
-        bars[i]:SetAlpha(0.15)
-        bars[i]:SetWidth((200 - (count - 1)*5)/count)
-        bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
-        bars[i].bg:SetAllPoints(bars[i])
-        bars[i].bg:SetTexture(R["media"].normal)
-        bars[i].bg.multiplier = .2
-
-        bars[i]:CreateShadow("Background")
-        bars[i].shadow:SetFrameStrata("BACKGROUND")
-        bars[i].shadow:SetFrameLevel(0)
-    end
-
-    bars[1]:SetStatusBarColor(255/255, 0/255, 0)
-    bars[2]:SetStatusBarColor(255/255, 0/255, 0)
-    bars[3]:SetStatusBarColor(255/255, 255/255, 0)
-    bars[4]:SetStatusBarColor(255/255, 255/255, 0)
-    bars[5]:SetStatusBarColor(0, 1, 0)
-    bars.Override = self.ComboDisplay
-
-    return bars
-end
-
-function UF:ConstructMonkResourceBar(frame)
-    local bars = CreateFrame("Frame", nil, frame)
-    bars:SetSize(200, 5)
-    bars:SetFrameLevel(5)
-    bars:Point("BOTTOM", frame, "TOP", 0, 1)
-    local count = 6
-    bars.number = count
-
-    for i = 1, count do
-        bars[i] = CreateFrame("StatusBar", nil, bars)
-        bars[i]:SetStatusBarTexture(R["media"].normal)
-        bars[i]:SetWidth((200 - (count - 1)*5)/count)
-        bars[i]:SetHeight(5)
-        bars[i]:GetStatusBarTexture():SetHorizTile(false)
-
-        local color = RayUF.colors.class[R.myclass]
-        bars[i]:SetStatusBarColor(unpack(color))
-
-        if i == 1 then
-            bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
-        else
-            bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
-        end
-
-        bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
-        bars[i].bg:SetAllPoints(bars[i])
-        bars[i].bg:SetTexture(R["media"].normal)
-        bars[i].bg.multiplier = .2
-
-        bars[i]:CreateShadow("Background")
-        bars[i].shadow:SetFrameStrata("BACKGROUND")
-        bars[i].shadow:SetFrameLevel(0)
-    end
-
-    bars.PostUpdate = UF.UpdateHarmony
-
-    return bars
-end
-
-function UF:ConstructDeathKnightResourceBar(frame)
-    local bars = CreateFrame("Frame", nil, frame)
-    bars:SetSize(200, 5)
-    bars:SetFrameLevel(5)
-    bars:Point("BOTTOM", frame, "TOP", 0, 1)
-    local count = 6
-
-    for i = 1, count do
-        bars[i] = CreateFrame("StatusBar", nil, bars)
-        bars[i]:SetStatusBarTexture(R["media"].normal)
-        bars[i]:SetWidth((200 - (count - 1)*5)/count)
-        bars[i]:SetHeight(5)
-        bars[i]:GetStatusBarTexture():SetHorizTile(false)
-
-        if i == 1 then
-            bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
-        else
-            bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
-        end
-
-        bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
-        bars[i].bg:SetAllPoints(bars[i])
-        bars[i].bg:SetTexture(R["media"].normal)
-        bars[i].bg.multiplier = .2
-
-        bars[i]:CreateShadow("Background")
-        bars[i].shadow:SetFrameStrata("BACKGROUND")
-        bars[i].shadow:SetFrameLevel(0)
-    end
-
-    return bars
-end
-
-function UF:ConstructPaladinResourceBar(frame)
-    local bars = CreateFrame("Frame", nil, frame)
-    bars:SetSize(200, 5)
-    bars:SetFrameLevel(5)
-    bars:Point("BOTTOM", frame, "TOP", 0, 1)
-    local count = 5
-    bars.number = count
-
-    for i = 1, count do
-        bars[i] = CreateFrame("StatusBar", nil, bars)
-        bars[i]:SetStatusBarTexture(R["media"].normal)
-        bars[i]:SetWidth((200 - (count - 1)*5)/count)
-        bars[i]:SetHeight(5)
-        bars[i]:GetStatusBarTexture():SetHorizTile(false)
-
-        local color = RayUF.colors.class[R.myclass]
-        bars[i]:SetStatusBarColor(unpack(color))
-
-        if i == 1 then
-            bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
-        else
-            bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
-        end
-
-        bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
-        bars[i].bg:SetAllPoints(bars[i])
-        bars[i].bg:SetTexture(R["media"].normal)
-        bars[i].bg.multiplier = .2
-
-        bars[i]:CreateShadow("Background")
-        bars[i].shadow:SetFrameStrata("BACKGROUND")
-        bars[i].shadow:SetFrameLevel(0)
-    end
-
-    bars.PostUpdate = UF.UpdateHolyPower
-
-    return bars
-end
-
-function UF:ConstructWarlockResourceBar(frame)
-    local bars = CreateFrame("Frame", nil, frame)
-    bars:SetSize(200, 5)
-    bars:SetFrameLevel(5)
-    bars:Point("BOTTOM", frame, "TOP", 0, 1)
-    local count = 4
-
-    for i = 1, count do
-        bars[i] = CreateFrame("StatusBar", nil, bars)
-        bars[i]:SetStatusBarTexture(R["media"].normal)
-        bars[i]:SetWidth((200 - (count - 1)*5)/count)
-        bars[i]:SetHeight(5)
-        bars[i]:GetStatusBarTexture():SetHorizTile(false)
-
-        local color = RayUF.colors.class[R.myclass]
-        bars[i]:SetStatusBarColor(unpack(color))
-
-        bars[i].text = bars[i]:CreateFontString(nil, "OVERLAY")
-        bars[i].text:SetPoint("CENTER")
-        bars[i].text:SetFont(R["media"].font, R["media"].fontsize - 2, R["media"].fontflag)
-
-        if i == 1 then
-            bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
-        else
-            bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
-        end
-
-        bars[i]:CreateShadow("Background")
-        bars[i].shadow:SetFrameStrata("BACKGROUND")
-        bars[i].shadow:SetFrameLevel(0)
-    end
-
-    bars.PostUpdate = UF.UpdateShardBar
-
-    return bars
-end
-
-function UF:ConstructPriestResourceBar(frame)
-    local bars = CreateFrame("Frame", nil, frame)
-    bars:SetSize(200, 5)
-    bars:SetFrameLevel(5)
-    bars:Point("BOTTOM", frame, "TOP", 0, 1)
-    local count = 5
-
-    for i = 1, count do
-        bars[i] = CreateFrame("StatusBar", nil, bars)
-        bars[i]:SetStatusBarTexture(R["media"].normal)
-        bars[i]:SetWidth((200 - (count - 1)*5)/count)
-        bars[i]:SetHeight(5)
-        bars[i]:GetStatusBarTexture():SetHorizTile(false)
-
-        local color = RayUF.colors.class[R.myclass]
-        bars[i]:SetStatusBarColor(unpack(color))
-
-        if i == 1 then
-            bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
-        else
-            bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
-        end
-
-        bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
-        bars[i].bg:SetAllPoints(bars[i])
-        bars[i].bg:SetTexture(R["media"].normal)
-        bars[i].bg.multiplier = .2
-
-        bars[i]:CreateShadow("Background")
-        bars[i].shadow:SetFrameStrata("BACKGROUND")
-        bars[i].shadow:SetFrameLevel(0)
-    end
-
-    bars.PostUpdate = UF.UpdateShadowOrbs
-
-    return bars
-end
-
-function UF:ConstructShamanResourceBar(frame)
-    local bars = {}
-    bars.Destroy = true
-    for i = 1, 4 do
-        bars[i] = CreateFrame("StatusBar", nil, frame)
-        bars[i]:SetStatusBarTexture(R["media"].normal)
-        bars[i]:SetWidth(200/4-5)
-        bars[i]:SetHeight(5)
-        bars[i]:GetStatusBarTexture():SetHorizTile(false)
-        bars[i]:SetFrameLevel(5)
-
-        bars[i]:SetBackdrop({bgFile = R["media"].normal})
-        bars[i]:SetBackdropColor(0.5, 0.5, 0.5)
-        bars[i]:SetMinMaxValues(0, 1)
-
-        bars[i].bg = bars[i]:CreateTexture(nil, "BORDER")
-        bars[i].bg:SetAllPoints(bars[i])
-        bars[i].bg:SetTexture(R["media"].normal)
-        bars[i].bg.multiplier = 0.3
-
-        bars[i]:CreateShadow("Background")
-        bars[i].shadow:SetFrameStrata("BACKGROUND")
-        bars[i].shadow:SetFrameLevel(0)
-    end
-    bars[2]:SetPoint("BOTTOM", frame, "TOP", -75,1)
-    bars[1]:SetPoint("LEFT", bars[2], "RIGHT", 5, 0)
-    bars[3]:SetPoint("LEFT", bars[1], "RIGHT", 5, 0)
-    bars[4]:SetPoint("LEFT", bars[3], "RIGHT", 5, 0)
-
-    return bars
-end
-
-function UF:ConstructRogueResourceBar(frame)
-    local bars = CreateFrame("Frame", nil, frame)
-    bars:SetSize(200, 5)
-    bars:SetFrameLevel(7)
-    bars:Point("BOTTOM", frame, "TOP", 0, -6)
-    bars:Hide()
-    local count = 5
-
-    for i = 1, count do
-        bars[i] = CreateFrame("StatusBar", nil, bars)
-        bars[i]:SetStatusBarTexture(R["media"].normal)
-        bars[i]:SetWidth((200 - (count - 1)*5)/count)
-        bars[i]:SetHeight(3)
-        bars[i]:GetStatusBarTexture():SetHorizTile(false)
-        bars[i]:SetFrameLevel(7)
-
-        if i == 1 then
-            bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
-        else
-            bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
-        end
-
-        bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
-        bars[i].bg:SetAllPoints(bars[i])
-        bars[i].bg:SetTexture(R["media"].normal)
-        bars[i].bg:SetVertexColor(0, 0, 0)
-        bars[i].bg.multiplier = .2
-
-        bars[i]:CreateShadow("Background")
-        bars[i].border:SetFrameLevel(7)
-        bars[i].shadow:SetFrameStrata("BACKGROUND")
-        bars[i].shadow:SetFrameLevel(6)
-    end
-    bars[1]:SetStatusBarColor(255/255, 0/255, 0)
-    bars[2]:SetStatusBarColor(255/255, 0/255, 0)
-    bars[3]:SetStatusBarColor(255/255, 255/255, 0)
-    bars[4]:SetStatusBarColor(255/255, 255/255, 0)
-    bars[5]:SetStatusBarColor(0, 1, 0)
-    return bars
-end
-
-function UF:ConstructDruidResourceBar(frame)
-    local ebar = CreateFrame("Frame", nil, frame)
-    ebar:Point("BOTTOM", frame, "TOP", 0, 1)
-    ebar:SetSize(200, 5)
-    ebar:CreateShadow("Background")
-    ebar:SetFrameLevel(5)
-    ebar.shadow:SetFrameStrata("BACKGROUND")
-    ebar.shadow:SetFrameLevel(0)
-
-    ebar.Spark = ebar:CreateTexture(nil, "OVERLAY")
-    ebar.Spark:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
-    ebar.Spark:SetBlendMode("ADD")
-    ebar.Spark:SetAlpha(0.8)
-    ebar.Spark:SetHeight(26)
-    ebar.Spark:SetWidth(10)
-    ebar.Spark:SetPoint("CENTER", ebar, "CENTER", 0, 0)
-
-    local lbar = CreateFrame("StatusBar", nil, ebar)
-    lbar:SetStatusBarTexture(R["media"].normal)
-    lbar:SetStatusBarColor(0, .4, 1)
-    lbar:SetWidth(0)
-    lbar:SetHeight(5)
-    lbar:SetFrameLevel(5)
-    lbar:GetStatusBarTexture():SetHorizTile(false)
-    lbar:SetPoint("RIGHT", ebar, "CENTER", 0, 0)
-    ebar.LunarBar = lbar
-
-    local sbar = CreateFrame("StatusBar", nil, ebar)
-    sbar:SetStatusBarTexture(R["media"].normal)
-    sbar:SetStatusBarColor(1, .6, 0)
-    sbar:SetWidth(0)
-    sbar:SetHeight(5)
-    sbar:SetFrameLevel(5)
-    sbar:GetStatusBarTexture():SetHorizTile(false)
-    sbar:SetPoint("LEFT", ebar, "CENTER", 0, 0)
-    ebar.SolarBar = sbar
-
-    ebar.Text = ebar:CreateFontString(nil, "OVERLAY")
-    ebar.Text:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
-    ebar.Text:SetPoint("CENTER", sbar:GetStatusBarTexture(), "LEFT", 0, 1)
-
-    ebar.PostUpdatePower = self.UpdateEclipse
-    ebar.PostUnitAura = self.UpdateEclipse
-
-    return ebar
-end
-
-function UF:ConstructMageResourceBar(frame)
-    local bars = CreateFrame("Frame", nil, frame)
-    bars:SetSize(200, 5)
-    bars:SetFrameLevel(5)
-    bars:Point("BOTTOM", frame, "TOP", 0, 1)
-    local count = 2
-    bars.number = count
-
-    for i = 1, count do
-        bars[i] = CreateFrame("StatusBar", nil, bars)
-        bars[i]:SetStatusBarTexture(R["media"].normal)
-        bars[i]:SetWidth((200 - (count - 1)*5)/count)
-        bars[i]:SetHeight(5)
-        bars[i]:GetStatusBarTexture():SetHorizTile(false)
-
-        local color = RayUF.colors.class[R.myclass]
-        bars[i]:SetStatusBarColor(unpack(color))
-
-        if i == 1 then
-            bars[i]:SetPoint("LEFT", bars, "LEFT", 0, 0)
-        else
-            bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
-        end
-
-        bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
-        bars[i].bg:SetAllPoints(bars[i])
-        bars[i].bg:SetTexture(R["media"].normal)
-        bars[i].bg.multiplier = .2
-
-        bars[i]:CreateShadow("Background")
-        bars[i].shadow:SetFrameStrata("BACKGROUND")
-        bars[i].shadow:SetFrameLevel(0)
-        bars[i].__parent = bars
-    end
-
-    bars.Colors = RayUF.colors.class["MAGE"]
-    bars.ExpColors = { 1, 0, 0 }
-    bars.BgColors = { 0, 0, 0 }
-
-    return bars
-end
-
 function UF:EnableHealPredictionAndAbsorb(frame)
     local mhpb = frame:CreateTexture(nil, "BORDER", 5)
     mhpb:SetWidth(1)
@@ -1297,101 +1015,6 @@ function UF:EnableHealPredictionAndAbsorb(frame)
         overAbsorbGlow = oag,
         maxOverflow = 1,
     }
-end
-
-function UF:UpdateEclipse(unit)
-    local direction = GetEclipseDirection()
-    local power = UnitPower("player", SPELL_POWER_ECLIPSE)
-    local maxPower = UnitPowerMax("player", SPELL_POWER_ECLIPSE)
-    local absolutePower = math.abs(power/maxPower)*100
-
-    self.Text:ClearAllPoints()
-    if power < 0 then
-        self.Text:SetTextColor(0, .4, 1)
-        self.Text:SetPoint("CENTER", self.LunarBar, "LEFT")
-        self.LunarBar:SetPoint("LEFT", self, "CENTER", -absolutePower, 0)
-    else
-        self.Text:SetTextColor(1, .6, 0)
-        self.Text:SetPoint("CENTER", self.SolarBar, "RIGHT")
-        self.SolarBar:SetPoint("RIGHT", self, "CENTER", absolutePower, 0)
-    end
-
-    if direction == "sun" then
-        self.Text:SetText(absolutePower.. ">")
-    elseif direction == "moon" then
-        self.Text:SetText("<".. absolutePower)
-    else
-        self.Text:SetText("")
-    end
-
-    if self.hasSolarEclipse then
-        self.border:SetBackdropBorderColor(1, .6, 0)
-        self.shadow:SetBackdropBorderColor(1, .6, 0)
-    elseif self.hasLunarEclipse then
-        self.border:SetBackdropBorderColor(0, .4, 1)
-        self.shadow:SetBackdropBorderColor(0, .4, 1)
-    else
-        self.border:SetBackdropBorderColor(0, 0, 0)
-        self.shadow:SetBackdropBorderColor(0, 0, 0)
-    end
-end
-
-function UF:UpdateHolyPower()
-    local maxHolyPower = UnitPowerMax("player", SPELL_POWER_HOLY_POWER)
-    if maxHolyPower < self.number then
-        for i = 1, 3 do
-            self[i]:SetWidth(185/3)
-        end
-        self[4]:Hide()
-        self[5]:Hide()
-        self.number = maxHolyPower
-    elseif maxHolyPower > self.number then
-        for i = 1, 3 do
-            self[i]:SetWidth(180/5)
-        end
-        self[4]:Show()
-        self[5]:Show()
-        self.number = maxHolyPower
-    end
-end
-
-function UF:UpdateHarmony()
-    local maxChi = UnitPowerMax("player", SPELL_POWER_CHI)
-
-    for i = 1, 6 do
-        if i > maxChi then
-            self[i]:Hide()
-        else
-            self[i]:SetWidth((200 - (maxChi - 1)*5)/maxChi)
-        end
-    end
-end
-
-function UF:UpdateShardBar(spec)
-    local maxBars = self.number
-    local frame = self:GetParent()
-    local spec = GetSpecialization()
-    local power = UnitPower("player", SPELL_POWER_DEMONIC_FURY)
-
-    for i = 1, 4 do
-        if i > maxBars then
-            self[i]:Hide()
-        else
-            self[i]:SetWidth((200 - (maxBars - 1)*5)/maxBars)
-            if spec == SPEC_WARLOCK_DEMONOLOGY then
-                self[i].text:SetText(power)
-            else
-                self[i].text:SetText()
-            end
-        end
-    end
-end
-
-function UF:UpdateShadowOrbs()
-    local totalOrbs = IsSpellKnown(SHADOW_ORB_MINOR_TALENT_ID) and 5 or 3
-    for i = 1,totalOrbs do
-        self[i]:SetWidth((200 - (totalOrbs - 1)*5)/totalOrbs)
-    end
 end
 
 function UF:AuraBarFilter(unit, name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellID)
@@ -1445,12 +1068,12 @@ local RangeColors = {
 }
 
 function UF:Construct_RangeText(frame)
-    local text = frame.textframe:CreateFontString(nil, "OVERLAY")
+    local text = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY")
     text:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
     -- text:SetFont(R["media"].font, R["media"].fontsize - 2, R["media"].fontflag)
     text:SetJustifyH("RIGHT")
-    text:SetParent(frame.textframe)
-    text:Point("TOPRIGHT", frame.textframe, "TOPLEFT", -2, 3)
+    text:SetParent(frame.RaisedElementParent)
+    text:Point("TOPRIGHT", frame.RaisedElementParent, "TOPLEFT", -2, 3)
     return text
 end
 
@@ -1543,15 +1166,15 @@ end
 function UF:UpdatePrep(event)
     if event == "ARENA_OPPONENT_UPDATE" then
         for i=1, 5 do
-            if not _G["RayUFArena"..i] then return end
-            _G["RayUFArena"..i].prepFrame:Hide()
+            if not _G["RayUF_Arena"..i] then return end
+            _G["RayUF_Arena"..i].prepFrame:Hide()
         end
     else
         local numOpps = GetNumArenaOpponentSpecs()
 
         if numOpps > 0 then
             for i=1, 5 do
-                if not _G["RayUFArena"..i] then return end
+                if not _G["RayUF_Arena"..i] then return end
                 local s = GetArenaOpponentSpec(i)
                 local _, spec, class, texture = nil, "UNKNOWN", "UNKNOWN", [[INTERFACE\ICONS\INV_MISC_QUESTIONMARK]]
 
@@ -1562,19 +1185,19 @@ function UF:UpdatePrep(event)
                 if (i <= numOpps) then
                     if class and spec then
                         local color = R.colors.class[class]
-                        _G["RayUFArena"..i].prepFrame.SpecClass:SetText(spec.." - "..LOCALIZED_CLASS_NAMES_MALE[class])
-                        _G["RayUFArena"..i].prepFrame.Health:SetStatusBarColor(color.r, color.g, color.b)
-                        _G["RayUFArena"..i].prepFrame.Icon:SetTexture(texture)
-                        _G["RayUFArena"..i].prepFrame:Show()
+                        _G["RayUF_Arena"..i].prepFrame.SpecClass:SetText(spec.." - "..LOCALIZED_CLASS_NAMES_MALE[class])
+                        _G["RayUF_Arena"..i].prepFrame.Health:SetStatusBarColor(color.r, color.g, color.b)
+                        _G["RayUF_Arena"..i].prepFrame.Icon:SetTexture(texture)
+                        _G["RayUF_Arena"..i].prepFrame:Show()
                     end
                 else
-                    _G["RayUFArena"..i].prepFrame:Hide()
+                    _G["RayUF_Arena"..i].prepFrame:Hide()
                 end
             end
         else
             for i=1, 5 do
-                if not _G["RayUFArena"..i] then return end
-                _G["RayUFArena"..i].prepFrame:Hide()
+                if not _G["RayUF_Arena"..i] then return end
+                _G["RayUF_Arena"..i].prepFrame:Hide()
             end
         end
     end
@@ -1785,7 +1408,7 @@ end
 function UF:ToggleUF(msg)
     if msg == "a" or msg == "arena" then
         for i = 1, 5 do
-            local frame = _G["RayUFArena"..i]
+            local frame = _G["RayUF_Arena"..i]
             if frame and not frame.isForced then
                 UF:ForceShow(frame)
             elseif frame then
@@ -1794,7 +1417,7 @@ function UF:ToggleUF(msg)
         end
     elseif msg == "boss" or msg == "b" then
         for i = 1, MAX_BOSS_FRAMES do
-            local frame = _G["RayUFBoss"..i]
+            local frame = _G["RayUF_Boss"..i]
             if frame and not frame.isForced then
                 UF:ForceShow(frame)
             elseif frame then

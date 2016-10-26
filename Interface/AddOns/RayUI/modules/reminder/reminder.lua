@@ -28,7 +28,7 @@ local ActionButton_ShowOverlayGlow = ActionButton_ShowOverlayGlow
 local ActionButton_HideOverlayGlow = ActionButton_HideOverlayGlow
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RayUF_player
+-- GLOBALS: RayUF_Player
 
 function RM:PlayerHasFilteredBuff(frame, db, checkPersonal)
 	for buff, value in pairs(db) do
@@ -387,7 +387,7 @@ function RM:CreateReminder(name, index)
 	frame:CreateShadow("Background")
 	frame:Size(57, 57)
 	frame.groupName = name
-	frame:Point("BOTTOM", RayUF_player, "TOP", 0, 130)
+	frame:Point("BOTTOM", RayUF_Player, "TOP", 0, 130)
 	R:CreateMover(frame, "ReminderMover", L["重要buff提醒锚点"], true, nil)
 	frame.icon = frame:CreateTexture(nil, "OVERLAY")
 	frame.icon:SetTexCoord(.08, .92, .08, .92)
