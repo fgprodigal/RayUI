@@ -7,8 +7,6 @@ local oUF = RayUF or oUF
 --Cache global variables
 --Lua functions
 local type, unpack, table = type, unpack, table
-local tinsert = table.insert
-local upper = string.upper
 
 --WoW API / Variables
 local CreateFrame = CreateFrame
