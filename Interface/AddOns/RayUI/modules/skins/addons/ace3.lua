@@ -243,6 +243,38 @@ local function SkinAce3()
 				widget.treeframe:SetBackdrop(nil)
 				-- S:CreateBD(widget.treeframe, .3)
 				frame:Point("TOPLEFT", widget.treeframe, "TOPRIGHT", 1, 0)
+
+				local oldCreateButton = widget.CreateButton
+				widget.CreateButton = function(self)
+					local button = oldCreateButton(self)
+					button.toggle:StripTextures()
+					button.toggle.SetNormalTexture = R.dummy
+					button.toggle.SetPushedTexture = R.dummy
+					button.toggleText = button.toggle:CreateFontString(nil, "OVERLAY")
+					button.toggleText:FontTemplate(R["media"].pxfont, 16, "THINOUTLINE,MONOCHROME")
+					button.toggleText:SetAllPoints(button.toggle)
+					button.toggleText:SetText("+")
+					return button
+				end
+
+				local oldRefreshTree = widget.RefreshTree
+				widget.RefreshTree = function(self, scrollToSelection)
+					oldRefreshTree(self, scrollToSelection)
+					if not self.tree then return end
+					local status = self.status or self.localstatus
+					local groupstatus = status.groups
+					local lines = self.lines
+					local buttons = self.buttons
+
+					for i, line in pairs(lines) do
+						local button = buttons[i]
+						if groupstatus[line.uniquevalue] and button then
+							button.toggleText:SetText("-")
+						elseif button then
+							button.toggleText:SetText("+")
+						end
+					end
+				end
 			end
 
 			if TYPE == "TabGroup" then
