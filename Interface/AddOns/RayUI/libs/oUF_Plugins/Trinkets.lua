@@ -1,7 +1,7 @@
 local R, C, L, DB = unpack(select(2, ...))
 
 local _, ns = ...
-local oUF = RayUF or oUF
+local oUF = ns.oUF or oUF
 
 local trinketSpells = {
 	[59752] = 120,

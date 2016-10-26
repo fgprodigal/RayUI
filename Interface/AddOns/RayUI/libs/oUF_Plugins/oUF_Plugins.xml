@@ -5,8 +5,6 @@
 	<Script file="Fader.lua"/>
 	<Script file="PVPSpecIcons.lua"/>
 	<Script file="RaidDebuffs.lua"/>
-	<Script file="RuneOfPower.lua"/>
 	<Script file="Smooth.lua"/>
-	<Script file="TotemBar.lua"/>
 	<Script file="Trinkets.lua"/>
 </Ui>

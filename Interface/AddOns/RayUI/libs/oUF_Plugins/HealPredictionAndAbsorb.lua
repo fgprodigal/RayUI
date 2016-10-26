@@ -2,7 +2,7 @@
 			By Ray
 ]]--
 local _, ns = ...
-local oUF = RayUF or oUF
+local oUF = ns.oUF or oUF
 
 local function UpdateFillBar(frame, previousTexture, bar, amount)
 	if ( amount == 0 ) then

@@ -1,5 +1,5 @@
 local _, ns = ...
-local oUF = RayUF or oUF
+local oUF = ns.oUF or oUF
 
 local function Update(self)
 	if not self.Fader then return end

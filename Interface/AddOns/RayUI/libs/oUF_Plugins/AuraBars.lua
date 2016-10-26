@@ -1,5 +1,5 @@
 local _, ns = ...
-local oUF = RayUF or oUF
+local oUF = ns.oUF or oUF
 
 local function Round(number, decimalPlaces)
 	if decimalPlaces and decimalPlaces > 0 then

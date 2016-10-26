@@ -1,5 +1,5 @@
 local _, ns = ...
-local oUF = RayUF or oUF
+local oUF = ns.oUF or oUF
 
 
 local Update = function(self, event, unit)

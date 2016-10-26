@@ -46,6 +46,9 @@ you can specify, as explained below.
 		Default false
 		Set to true for oUF_AW to to show an aura no matter what unit it 
 		originates from. This will override any fromUnits setting.
+	decimalThreshold
+		Default 5
+		The threshold before timers go into decimal form. Set to -1 to disable decimals.
 	PostCreateIcon
 		Default nil
 		A function to call when an icon is created to modify it, such as adding
@@ -61,6 +64,7 @@ The following settings can be overridden from the AuraWatch table on a per-aura 
 	hideCount
 	fromUnits
 	anyUnit
+	decimalThreshold
 		
 The following settings are unique to icons:
 	
@@ -96,8 +100,8 @@ Here is an example of how to set oUF_AW up:
 			local icon = CreateFrame("Frame", nil, auras)
 			icon.spellID = sid
 			-- set the dimensions and positions
-			icon:SetWidth(24)
-			icon:SetHeight(24)
+			icon:Width(24)
+			icon:Height(24)
 			icon:SetPoint("BOTTOM", self, "BOTTOM", 0, 28 * i)
 			auras.icons[sid] = icon
 			-- Set any other AuraWatch icon settings
@@ -107,7 +111,8 @@ Here is an example of how to set oUF_AW up:
 -----------------------------------------------------------------------------------------------------------]]
 
 local _, ns = ...
-local oUF = RayUF or oUF
+local oUF = oUF or ns.oUF
+assert(oUF, "oUF_AuraWatch cannot find an instance of oUF. If your oUF is embedded into a layout, it may not be embedded properly.")
 
 local UnitBuff, UnitDebuff, UnitGUID = UnitBuff, UnitDebuff, UnitGUID
 local GUIDs = {}
@@ -146,6 +151,47 @@ do
 	end
 end
 
+local day, hour, minute, second = 86400, 3600, 60, 1
+local function formatTime(s, threshold)
+	if s >= day then
+		return format("%dd", ceil(s / hour))
+	elseif s >= hour then
+		return format("%dh", ceil(s / hour))
+	elseif s >= minute then
+		return format("%dm", ceil(s / minute))
+	elseif s >= threshold then
+		return floor(s)
+	end
+	
+	return format("%.1f", s)
+end
+
+local function updateText(self, elapsed)
+	if self.timeLeft then
+		self.elapsed = (self.elapsed or 0) + elapsed
+		if self.elapsed >= 0.1 then
+			if not self.first then
+				self.timeLeft = self.timeLeft - self.elapsed
+			else
+				self.timeLeft = self.timeLeft - GetTime()
+				self.first = false
+			end
+			if self.timeLeft > 0 then
+				if ((self.timeLeft <= self.textThreshold) or self.textThreshold == -1) then
+					local time = formatTime(self.timeLeft, self.decimalThreshold or 5)
+					self.text:SetText(time)
+				else
+					self.text:SetText('')
+				end
+			else
+				self.text:SetText('')
+				self:SetScript("OnUpdate", nil)
+			end
+			self.elapsed = 0
+		end
+	end
+end
+
 
 local function resetIcon(icon, frame, count, duration, remaining)
 	if icon.onlyShowMissing then
@@ -153,13 +199,20 @@ local function resetIcon(icon, frame, count, duration, remaining)
 	else
 		icon:Show()
 		if icon.cd then
-			if duration and duration > 0 then
+			if duration and duration > 0 and icon.style ~= 'NONE' then
 				icon.cd:SetCooldown(remaining - duration, duration)
 				icon.cd:Show()
 			else
 				icon.cd:Hide()
 			end
 		end
+
+		if icon.displayText then
+			icon.timeLeft = remaining
+			icon.first = true;
+			icon:SetScript('OnUpdate', updateText)
+		end
+
 		if icon.count then
 			icon.count:SetText((count > 1 and count))
 		end
@@ -198,12 +251,14 @@ local function Update(frame, event, unit)
 	for key, icon in pairs(icons) do
 		if not icon.onlyShowMissing then
 			icon:Hide()
+		else
+			icon:Show()
 		end
 	end
 	
 	while true do
 		name, _, texture, count, _, duration, remaining, caster, _, _, spellID = UnitAura(unit, index, filter)
-		if not name then 
+		if not name then
 			if filter == "HELPFUL" then
 				filter = "HARMFUL"
 				index = 1
@@ -254,7 +309,6 @@ local function setupIcons(self)
 			if not icon.cd and not (watch.hideCooldown or icon.hideCooldown) then
 				local cd = CreateFrame("Cooldown", nil, icon, "CooldownFrameTemplate")
 				cd:SetAllPoints(icon)
-				cd:SetDrawEdge(false)
 				icon.cd = cd
 			end
 

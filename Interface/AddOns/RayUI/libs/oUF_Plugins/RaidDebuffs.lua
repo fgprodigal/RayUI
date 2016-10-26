@@ -1,7 +1,7 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 
 local _, ns = ...
-local oUF = RayUF or oUF
+local oUF = ns.oUF or oUF
 
 local SymbiosisName = GetSpellInfo(110309)
 local CleanseName = GetSpellInfo(4987)
