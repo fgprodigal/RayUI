@@ -19,6 +19,7 @@ local UnregisterStateDriver = UnregisterStateDriver
 
 function RA:FetchRaid40Settings()
     self.groupConfig.raid40 = {
+        enable = true,
         width = self.db.raid40width,
         height = self.db.raid40height,
         visibility = "[@raid26,exists] show;hide",

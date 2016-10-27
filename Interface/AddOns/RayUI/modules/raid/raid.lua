@@ -289,7 +289,9 @@ function RA:Initialize()
         local stringTitle = R:StringTitle(layout)
 		local groupFilter, template = unpack(config)
         self["Fetch"..stringTitle.."Settings"](self)
-		self:CreateHeaderGroup(layout, groupFilter, template)
+        if self.groupConfig[layout].enable then
+    		self:CreateHeaderGroup(layout, groupFilter, template)
+        end
 	end
     self["headerstoload"] = nil
 
