@@ -13,14 +13,17 @@ local CreateFrame = CreateFrame
 local GameTooltip_Hide = GameTooltip_Hide
 local UnitGUID = UnitGUID
 local CreateFont = CreateFont
+local IsShiftKeyDown = IsShiftKeyDown
+local C_Timer = C_Timer
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: RayUI_InfoBarButton_OnClick, RayUI_InfoBarButton_OnEnter, RayUI_InfoBarButton_OnLeave
 -- GLOBALS: RayUI_InfoBarButton_OnUpdate, RayUI_InfoBarButton_OnEvent, RayUI_InfoBarButton_OnReset
 -- GLOBALS: GameTooltip, RayUI_InfoBarMenu, RayUI_InfoBarMenu_OnInit, RayUI_InfoBarMenuButton_OnClick
--- GLOBALS: RayUI_RegisterLDB, RayUF
+-- GLOBALS: RayUI_RegisterLDB, RayUF, GameTooltip_SetDefaultAnchor
 
 local maxMenuButtons, infobarTypes, usedInfoBar = 10, {}, {}
+local brokerTooltip
 
 local function GetInfoBarList()
     if not R.db["InfoBar"] then
@@ -95,10 +98,13 @@ end
 
 local function SetButton(button,index,infobarType,info,isInit)
     button:SetAlpha(1)
+    button.isBroker = info.isBroker
+    button.title = info.title
     button.infobarType = infobarType
     button.clickFunc = info.clickFunc
     button.onUpdate = info.onUpdate
     button.tooltipFunc = info.tooltipFunc
+    button.onLeaveFunc = info.onLeaveFunc
     button.eventFunc = info.eventFunc
     button.registerLDBEvent = info.registerLDBEvent
     button.unregisterLDBEvent = info.unregisterLDBEvent
@@ -146,12 +152,19 @@ local function SetButton(button,index,infobarType,info,isInit)
 end
 
 function RayUI_InfoBarButton_OnClick(self, button)
-    if button == "LeftButton" and self.clickFunc then
-        self.clickFunc(self)
+    if button == "RightButton" and not IsShiftKeyDown() then
+        OpenMenu(self)
+        return
     end
 
-    if button == "RightButton" then
-        OpenMenu(self)
+    if button == "LeftButton" and self.clickFunc then
+        self.clickFunc(self, button)
+        return
+    end
+
+    if button == "RightButton" and IsShiftKeyDown() and self.clickFunc then
+        self.clickFunc(self, button)
+        return
     end
 end
 
@@ -184,6 +197,13 @@ function RayUI_InfoBarButton_OnLeave(self)
         self:SetAlpha(0)
     end
 
+    if self.onLeaveFunc then
+        C_Timer.After(0.25, function() self.onLeaveFunc(self) end)
+    end
+
+    if brokerTooltip then
+        brokerTooltip:Hide()
+    end
     GameTooltip_Hide()
 end
 
@@ -270,12 +290,21 @@ function RayUI_RegisterLDB()
     for name, obj in LDB:DataObjectIterator() do
         local info = {}
 
+        local longValue, brokerTitle, brokerValue
         local OnEnter = nil
         local OnLeave = nil
         local curFrame = nil
         if obj.OnTooltipShow then
             function OnEnter(self)
-                GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, 0)
+                if brokerValue then
+                    brokerTooltip:SetOwner(self, "ANCHOR_TOP", 0, 0)
+                    brokerTooltip:AddLine(brokerTitle, 1, 1, 1)
+                    brokerTooltip:SetPrevLineJustify("CENTER")
+                    brokerTooltip:AddDivider()
+                    brokerTooltip:AddLine(brokerValue, 1, 1, 1)
+                    brokerTooltip:Show()
+                end
+                GameTooltip:SetOwner(brokerTooltip, "ANCHOR_TOP", 0, 0)
                 obj.OnTooltipShow(GameTooltip)
                 GameTooltip:Show()
             end
@@ -283,9 +312,16 @@ function RayUI_RegisterLDB()
 
         if obj.OnEnter then
             function OnEnter(self)
-                obj.OnEnter(self)
-                GameTooltip:ClearAllPoints()
-                GameTooltip:SetPoint("BOTTOM", self, "TOP")
+                if brokerValue then
+                    brokerTooltip:SetOwner(self, "ANCHOR_TOP", 0, 0)
+                    brokerTooltip:AddLine(brokerTitle, 1, 1, 1)
+                    brokerTooltip:SetPrevLineJustify("CENTER")
+                    brokerTooltip:AddDivider()
+                    brokerTooltip:AddLine(brokerValue, 1, 1, 1)
+                    brokerTooltip:Show()
+                end
+                obj.OnEnter(brokerTooltip)
+                GameTooltip_Hide()
             end
         end
 
@@ -302,9 +338,14 @@ function RayUI_RegisterLDB()
         local function textUpdate(event, name, key, value, dataobj)
             if value == nil or (strlen(value) >= 3) or value == "n/a" or name == value then
                 if strlen(value) > 30 then
-                    curFrame:SetNormalFontObject("RayUI_InfoBarSmallFont")
+                    longValue = true
+                    brokerTitle = name
+                    brokerValue = value
+                    curFrame:SetText(name)
+                else
+                    longValue = false
+                    curFrame:SetText(value ~= "n/a" and value or name)
                 end
-                curFrame:SetText(value ~= "n/a" and value or name)
             else
                 curFrame:SetFormattedText("%s: |cffFFFFFF%s|r", name, value)
             end
@@ -323,10 +364,12 @@ function RayUI_RegisterLDB()
             LDB.UnregisterCallback(self,"LibDataBroker_AttributeChanged_"..name.."_value")
         end
 
+        info.isBroker = true
         info.title = name
         info.icon = obj.icon
         info.clickFunc = OnClick
         info.tooltipFunc = OnEnter
+        info.onLeaveFunc = OnLeave
         info.registerLDBEvent = registerEvent
         info.unregisterLDBEvent = unregisterEvent
 
@@ -339,18 +382,13 @@ function IF:RegisterInfoBarType(infobarType, infobarInfo)
 end
 
 function IF:Initialize()
+    brokerTooltip = CreateFrame("GameTooltip", "RayUI_InfoBar_BrokerTooltip", R.UIParent, "GameTooltipTemplate")
     local r, g, b = unpack(RayUF.colors.class[R.myclass])
     local font = CreateFont("RayUI_InfoBarFont")
     font:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
     font:SetTextColor(1, 1, 1)
     font:SetShadowColor(0, 0, 0)
     font:SetShadowOffset(R.mult, -R.mult)
-
-    local font2 = CreateFont("RayUI_InfoBarSmallFont")
-    font2:SetFont(R["media"].font, R["media"].fontsize - 2, R["media"].fontflag)
-    font2:SetTextColor(1, 1, 1)
-    font2:SetShadowColor(0, 0, 0)
-    font2:SetShadowOffset(R.mult, -R.mult)
 
     for i = 1, 8 do
         local infoBar = CreateFrame("Button", "RayUI_InfoBar"..i, R.UIParent, "RayUI_InfoBarButtonTemplate")

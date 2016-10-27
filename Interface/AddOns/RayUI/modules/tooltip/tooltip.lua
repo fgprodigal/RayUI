@@ -66,6 +66,7 @@ local GetCursorPosition = GetCursorPosition
 -- GLOBALS: ShoppingTooltip2, ShoppingTooltip3, WorldMapCompareTooltip1, WorldMapCompareTooltip2, WorldMapCompareTooltip3
 -- GLOBALS: ChatMenu, EmoteMenu, LanguageMenu, QuestDifficultyColors, YOU, TARGET, GameTooltipTextLeft2, GameTooltipTextLeft1, PLAYER
 -- GLOBALS: AFK, DND, LEVEL, PVP_ENABLED, FACTION_HORDE, FACTION_ALLIANCE, VoiceMacroMenu, GameTooltip_UnitColor
+-- GLOBALS: BNToastFrame, RayUIArtiBar
 
 local TalentFrame = CreateFrame("Frame", nil)
 TalentFrame:Hide()
@@ -485,35 +486,39 @@ end
 
 function TT:PLAYER_ENTERING_WORLD(event)
     local tooltips = {
-        GameTooltip,
-        FriendsTooltip,
-        ItemRefTooltip,
-        ItemRefShoppingTooltip1,
-        ItemRefShoppingTooltip2,
-        ItemRefShoppingTooltip3,
-        ShoppingTooltip1,
-        ShoppingTooltip2,
-        ShoppingTooltip3,
-        WorldMapTooltip,
-        WorldMapCompareTooltip1,
-        WorldMapCompareTooltip2,
-        WorldMapCompareTooltip3,
-        ChatMenu,
-        EmoteMenu,
-        LanguageMenu,
-        VoiceMacroMenu,
+        "GameTooltip",
+        "FriendsTooltip",
+        "ItemRefTooltip",
+        "ItemRefShoppingTooltip1",
+        "ItemRefShoppingTooltip2",
+        "ItemRefShoppingTooltip3",
+        "ShoppingTooltip1",
+        "ShoppingTooltip2",
+        "ShoppingTooltip3",
+        "WorldMapTooltip",
+        "WorldMapCompareTooltip1",
+        "WorldMapCompareTooltip2",
+        "WorldMapCompareTooltip3",
+        "ChatMenu",
+        "EmoteMenu",
+        "LanguageMenu",
+        "VoiceMacroMenu",
+        "RayUI_InfoBar_BrokerTooltip",
     }
 
-    for _, tt in pairs(tooltips) do
-        tt.divider = {}
-        tt.justify = {}
-        tt.CreateDivider = CreateDivider
-        tt.AddDivider = AddDivider
-        tt.SetPrevLineJustify = SetPrevLineJustify
+    for _, name in pairs(tooltips) do
+        local tooltip = _G[name]
+        if tooltip then
+            tooltip.divider = {}
+            tooltip.justify = {}
+            tooltip.CreateDivider = CreateDivider
+            tooltip.AddDivider = AddDivider
+            tooltip.SetPrevLineJustify = SetPrevLineJustify
 
-        self:SetStyle(tt)
-        self:HookScript(tt, "OnShow", "SetStyle")
-        if tt.BackdropFrame then tt.BackdropFrame:Kill() end
+            self:SetStyle(tooltip)
+            self:HookScript(tooltip, "OnShow", "SetStyle")
+            if tooltip.BackdropFrame then tooltip.BackdropFrame:Kill() end
+        end
     end
 
     self:UnregisterEvent("PLAYER_ENTERING_WORLD")
@@ -577,14 +582,14 @@ function TT:SetStyle(tooltip)
         tooltip.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))
         tooltip.shadow:SetBackdropBorderColor(unpack(R["media"].bordercolor))
     end
-    if tooltip == GameTooltip then
-        for line, justify in pairs(tooltip.justify) do
-            local width = tooltip:GetWidth()-20
+    -- if tooltip == GameTooltip then
+    for line, justify in pairs(tooltip.justify) do
+        local width = tooltip:GetWidth()-20
 
-            line:SetWidth(width)
-            line:SetJustifyH(justify)
-        end
+        line:SetWidth(width)
+        line:SetJustifyH(justify)
     end
+    -- end
     tooltip.needRefresh = true
 end
 
@@ -689,8 +694,21 @@ function TT:GameTooltip_ShowStatusBar(tooltip, min, max, value, text)
     end
 end
 
+function TT:RepositionBNET(frame, _, anchor)
+	if anchor ~= RayUIArtiBar then
+		frame:ClearAllPoints()
+		frame:SetPoint("TOPLEFT", RayUIArtiBar, "BOTTOMLEFT", 0, -5)
+	end
+end
+
 function TT:Initialize()
     if not self.db.enable then return end
+
+    self:SecureHook(BNToastFrame, "SetPoint", "RepositionBNET")
+    BNToastFrame:HookScript("OnShow", function(self)
+            self:ClearAllPoints()
+            self:SetPoint("TOPLEFT", RayUIArtiBar, "BOTTOMLEFT", 0, -5)
+        end)
 
     self:RawHook("GameTooltip_UnitColor", true)
 

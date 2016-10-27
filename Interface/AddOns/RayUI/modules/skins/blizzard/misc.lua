@@ -670,13 +670,7 @@ local function LoadSkin()
         S:CreateBD(_G[lightbds[i]], .25)
     end
 
-    --实名好友弹窗位置
     S:ReskinClose(BNToastFrameCloseButton)
-    BNToastFrame:HookScript("OnShow", function(self)
-            self:ClearAllPoints()
-            self:SetPoint("TOPLEFT", RayUIArtiBar, "BOTTOMLEFT", 0, -5)
-        end)
-
     ChatConfigFrameDefaultButton:SetWidth(125)
     ChatConfigFrameDefaultButton:SetPoint("TOPLEFT", ChatConfigCategoryFrame, "BOTTOMLEFT", 0, -4)
     ChatConfigFrameRedockButton:SetPoint("TOPLEFT", ChatConfigCategoryFrame, "BOTTOMLEFT", 127, -4)
