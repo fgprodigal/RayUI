@@ -34,6 +34,7 @@ local GetCurrencyInfo = GetCurrencyInfo
 local hooksecurefunc = hooksecurefunc
 local BonusRollFrame_StartBonusRoll = BonusRollFrame_StartBonusRoll
 local GetItemInfo = GetItemInfo
+local GetSpellConfirmationPromptsInfo = GetSpellConfirmationPromptsInfo
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: RayUI, GameTooltip, SLASH_TestBonusRollPreview1, BonusRollFrame, ShoppingTooltip1
@@ -179,12 +180,13 @@ local function HandlePosition()
     HandleClick()
 end
 
-local function ItemButtonUpdate(self, elapsed)
-    if(IsModifiedClick("COMPAREITEMS") or (GetCVarBool("alwaysCompareItems") and not IsEquippedItem(self.itemLink))) then
+function Container:MODIFIER_STATE_CHANGED()
+    if(IsModifiedClick("COMPAREITEMS") or GetCVarBool("alwaysCompareItems")) then
         GameTooltip_ShowCompareItem()
     else
-        ShoppingTooltip1:Hide()
-        ShoppingTooltip2:Hide()
+        for _, shoppingTooltip in next, GameTooltip.shoppingTooltips do
+            shoppingTooltip:Hide()
+        end
     end
 
     if(IsModifiedClick("DRESSUP")) then
@@ -207,13 +209,13 @@ local function ItemButtonEnter(self)
     end
     GameTooltip:SetHyperlink(self.itemLink)
 
-    self:SetScript("OnUpdate", ItemButtonUpdate)
+    Container:RegisterEvent("MODIFIER_STATE_CHANGED")
 end
 
 local function ItemButtonLeave(self)
     GameTooltip:Hide()
 
-    self:SetScript("OnUpdate", nil)
+    Container:UnregisterEvent("MODIFIER_STATE_CHANGED")
 end
 
 local function GetItemLine(index)
@@ -388,6 +390,14 @@ function Container:SPELL_CONFIRMATION_PROMPT(event, spellID, confirmType, _, _, 
     end
 end
 
+function Container:PLAYER_ENTERING_WORLD(event)
+    for _, info in next, GetSpellConfirmationPromptsInfo() do
+        if(info) then
+            self:SPELL_CONFIRMATION_PROMPT(event, info.spellID, info.confirmType, nil, nil, info.currencyID)
+        end
+    end
+end
+
 function Container:SPELL_CONFIRMATION_TIMEOUT()
     currentEncounterInfo = nil
 
@@ -513,6 +523,7 @@ function Container:PLAYER_LOGIN()
 end
 
 Container:SetScript("OnEvent", function(self, event, ...) self[event](self, event, ...) end)
+Container:RegisterEvent("PLAYER_ENTERING_WORLD")
 Container:RegisterEvent("PLAYER_LOGIN")
 
 SLASH_TestBonusRollPreview1 = "/testbonusroll"

@@ -2514,6 +2514,8 @@ function AL:PLAYER_LOGIN()
     UIPARENT_MANAGED_FRAME_POSITIONS["GroupLootContainer"] = nil
     self:SecureHook(AlertFrame, "UpdateAnchors", "PostAlertMove")
     self:PostAlertMove()
+	GroupLootContainer:ClearAllPoints()
+	GroupLootContainer:SetPoint("CENTER", R.UIParent, "CENTER", 0, 100)
 
     EnableAchievementToasts()
     EnableArchaeologyToasts()
