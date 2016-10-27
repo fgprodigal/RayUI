@@ -3,6 +3,5 @@
     <Script file="function.lua" />
     <Script file="tags.lua" />
     <Script file="elements\autorez.lua" />
-    <Script file="elements\range.lua" />
 	<Include file="layouts\load_layouts.xml"/>
 </Ui>

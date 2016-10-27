@@ -251,26 +251,6 @@ R.Options.args.Raid = {
                 },
             },
         },
-        arrows = {
-            order = 12,
-            type = "group",
-            name = L["箭头"],
-            guiInline = true,
-            hidden = function() return not R.db.Raid.enable end,
-            args = {
-                arrow = {
-                    order = 1,
-                    name = L["箭头方向指示"],
-                    type = "toggle",
-                },
-                arrowmouseover = {
-                    order = 2,
-                    name = L["鼠标悬停时显示"],
-                    desc = L["只在鼠标悬停时显示方向指示"],
-                    type = "toggle",
-                },
-            },
-        },
         predict = {
             order = 13,
             type = "group",
