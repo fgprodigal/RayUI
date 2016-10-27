@@ -448,6 +448,7 @@ do
     L["逆序整理"] = "Order by desc"
     L["背包面板宽度"] = "BagsFrame width"
     L["银行面板宽度"] = "BankFrame width"
+    L["显示物品等级"] = "Show item level"
 end
 do
     L["选项"] = "Settings"

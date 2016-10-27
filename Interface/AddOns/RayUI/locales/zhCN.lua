@@ -449,6 +449,7 @@ do
     L["逆序整理"] = true
     L["背包面板宽度"] = true
     L["银行面板宽度"] = true
+    L["显示物品等级"] = true
 end
 do
     L["选项"] = true
