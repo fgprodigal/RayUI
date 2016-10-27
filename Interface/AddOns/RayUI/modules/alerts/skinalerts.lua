@@ -9,7 +9,9 @@ local CreateFrame = CreateFrame
 
 function AL:SkinToast(toast, toastType)
     local r, g, b = toast.Border:GetVertexColor()
-    -- toast.BG:Kill()
+    local w, h = toast.Icon:GetSize()
+    local title = toast.Title:GetText()
+
     toast.Border:Kill()
     if toast.IconBorder then toast.IconBorder:Kill() end
 
@@ -26,15 +28,31 @@ function AL:SkinToast(toast, toastType)
     toast.BG:SetBlendMode("ADD")
     toast.BG:SetAlpha(0.4)
 
-    if toastType == "item" then
+    if toastType ~= "follower" and toastType ~= "mission" and title ~= ARCHAEOLOGY_DIGSITE_COMPLETE_TOAST_FRAME_TITLE then
         toast.Icon:SetTexCoord(.08, .92, .08, .92)
         if not toast.Icon.b then
             toast.Icon.b = CreateFrame("Frame", nil, toast)
             toast.Icon.b:SetTemplate()
             toast.Icon.b:SetBackdropColor(0, 0, 0, 1)
-            toast.Icon.b:SetOutside(toast.Icon)
             toast.Icon.b:SetFrameLevel(toast:GetFrameLevel())
         end
+        if w <= 45 and h <= 45 then
+            toast.Icon.b:SetOutside(toast.Icon, 1, 1)
+            toast.Icon.b:Show()
+            toast.Icon.b:SetBackdropBorderColor(0, 0, 0, 0)
+        else
+            toast.Icon.b:Hide()
+        end
+    end
+
+    if title == ARCHAEOLOGY_DIGSITE_COMPLETE_TOAST_FRAME_TITLE then
+        if toast.Icon.b then
+            toast.Icon.b:Hide()
+        end
+    end
+
+    if toastType == "item" then
+        toast.Icon.b:SetOutside(toast.Icon)
         if r + g + b > 2.9 then
             toast.Icon.b:SetBackdropBorderColor(0, 0, 0, 0)
         else

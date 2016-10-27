@@ -2504,7 +2504,7 @@ end
 
 function AL:PostAlertMove()
     AlertFrame:ClearAllPoints()
-    AlertFrame:SetPoint("CENTER", R.UIParent, "CENTER", 0, 40)
+    AlertFrame:SetPoint("CENTER", R.UIParent, "CENTER", 0, 60)
 end
 
 function AL:PLAYER_LOGIN()
