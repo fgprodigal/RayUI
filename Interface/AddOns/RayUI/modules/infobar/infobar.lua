@@ -300,8 +300,11 @@ function RayUI_RegisterLDB()
         end
 
         local function textUpdate(event, name, key, value, dataobj)
-            if value == nil or (strlen(value) >= 3) or value == 'n/a' or name == value then
-                curFrame:SetText(value ~= 'n/a' and value or name)
+            if value == nil or (strlen(value) >= 3) or value == "n/a" or name == value then
+                if strlen(value) > 30 then
+                    curFrame:SetNormalFontObject("RayUI_InfoBarSmallFont")
+                end
+                curFrame:SetText(value ~= "n/a" and value or name)
             else
                 curFrame:SetFormattedText("%s: |cffFFFFFF%s|r", name, value)
             end
@@ -342,6 +345,12 @@ function IF:Initialize()
     font:SetTextColor(1, 1, 1)
     font:SetShadowColor(0, 0, 0)
     font:SetShadowOffset(R.mult, -R.mult)
+
+    local font2 = CreateFont("RayUI_InfoBarSmallFont")
+    font2:SetFont(R["media"].font, R["media"].fontsize - 2, R["media"].fontflag)
+    font2:SetTextColor(1, 1, 1)
+    font2:SetShadowColor(0, 0, 0)
+    font2:SetShadowOffset(R.mult, -R.mult)
 
     for i = 1, 8 do
         local infoBar = CreateFrame("Button", "RayUI_InfoBar"..i, R.UIParent, "RayUI_InfoBarButtonTemplate")
