@@ -1,4 +1,4 @@
-## Interface: 70000
+## Interface: 70100
 ## Title: Postal
 ## Version: v3.5.8
 ## X-Build: 401

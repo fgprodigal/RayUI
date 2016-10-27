@@ -1,4 +1,4 @@
-## Interface: 70000
+## Interface: 70100
 ## Title: xCT+
 ## Notes: An Add-On that enhances and out-performs the default Floating Combat Text!
 ## Author: Dandruff-Stormreaver US
