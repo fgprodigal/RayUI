@@ -113,8 +113,9 @@ local function LoadSkin()
     GuildRecruitmentCommentFrame:ClearAllPoints()
     GuildRecruitmentCommentFrame:SetPoint("TOPLEFT", GuildRecruitmentLevelFrame, "BOTTOMLEFT", 0, 1)
     S:ReskinCheck(GuildRosterShowOfflineButton)
-    for i = 1, 6 do
-        S:ReskinCheck(_G["GuildNewsFilterButton"..i])
+    for i = 1, #GuildNewsFiltersFrame.GuildNewsFilterButtons do
+		local checkbox = GuildNewsFiltersFrame.GuildNewsFilterButtons[i]
+        S:ReskinCheck(checkbox)
     end
 
 	for i=1, 14 do

@@ -3,25 +3,21 @@ local S = R:GetModule("Skins")
 
 local function LoadSkin()
     local StripAllTextures = {
-        "ScrollOfResurrectionSelectionFrame",
-        "ScrollOfResurrectionSelectionFrameList",
-        "FriendsListFrame",
-        "FriendsTabHeader",
-        "FriendsFrameFriendsScrollFrame",
-        "WhoFrameColumnHeader1",
-        "WhoFrameColumnHeader2",
-        "WhoFrameColumnHeader3",
-        "WhoFrameColumnHeader4",
-        "ChannelListScrollFrame",
-        "ChannelRoster",
-        "FriendsFramePendingButton1",
-        "FriendsFramePendingButton2",
-        "FriendsFramePendingButton3",
-        "FriendsFramePendingButton4",
-        "ChannelFrameDaughterFrame",
-        "AddFriendFrame",
-        "AddFriendNoteFrame",
-    }
+		"ScrollOfResurrectionSelectionFrame",
+		"ScrollOfResurrectionSelectionFrameList",
+		"FriendsListFrame",
+		"FriendsTabHeader",
+		"FriendsFrameFriendsScrollFrame",
+		"WhoFrameColumnHeader1",
+		"WhoFrameColumnHeader2",
+		"WhoFrameColumnHeader3",
+		"WhoFrameColumnHeader4",
+		"ChannelListScrollFrame",
+		"ChannelRoster",
+		"ChannelFrameDaughterFrame",
+		"AddFriendFrame",
+		"AddFriendNoteFrame",
+	}
 
     local KillTextures = {
         "FriendsFrameBroadcastInputLeft",
@@ -106,26 +102,22 @@ local function LoadSkin()
     end
 
     local buttons = {
-        "WhoFrameAddFriendButton",
-        "WhoFrameGroupInviteButton",
-        "FriendsFrameAddFriendButton",
-        "FriendsFrameSendMessageButton",
-        "AddFriendEntryFrameAcceptButton",
-        "AddFriendEntryFrameCancelButton",
-        "FriendsFriendsSendRequestButton",
-        "FriendsFriendsCloseButton",
-        "FriendsFrameUnsquelchButton",
-        "FriendsFramePendingButton1AcceptButton",
-        "FriendsFramePendingButton1DeclineButton",
-        "FriendsFrameIgnorePlayerButton",
-        "AddFriendInfoFrameContinueButton",
-        "ChannelFrameNewButton",
-        "ChannelFrameDaughterFrameOkayButton",
-        "ChannelFrameDaughterFrameCancelButton",
-        "WhoFrameWhoButton",
-        "PendingListInfoFrameContinueButton",
-        "FriendsFrameMutePlayerButton"
-    }
+		"FriendsFrameAddFriendButton",
+		"FriendsFrameSendMessageButton",
+		"WhoFrameWhoButton",
+		"WhoFrameAddFriendButton",
+		"WhoFrameGroupInviteButton",
+		"ChannelFrameNewButton",
+		"FriendsFrameIgnorePlayerButton",
+		"FriendsFrameUnsquelchButton",
+		"ChannelFrameDaughterFrameOkayButton",
+		"ChannelFrameDaughterFrameCancelButton",
+		"AddFriendEntryFrameAcceptButton",
+		"AddFriendEntryFrameCancelButton",
+		"AddFriendInfoFrameContinueButton",
+		"ScrollOfResurrectionSelectionFrameAcceptButton",
+		"ScrollOfResurrectionSelectionFrameCancelButton",
+	}
     for i = 1, #buttons do
         local button = _G[buttons[i]]
         S:Reskin(button)
@@ -273,6 +265,16 @@ local function LoadSkin()
     S:CreateBD(RecruitAFriendSentFrame)
     S:Reskin(RecruitAFriendSentFrame.OKButton)
     S:ReskinClose(RecruitAFriendSentFrameCloseButton)
+
+    --Quick join
+	S:ReskinScroll(QuickJoinScrollFrameScrollBar)
+	S:Reskin(QuickJoinFrame.JoinQueueButton)
+	QuickJoinFrame.JoinQueueButton:SetSize(131, 21)  --Match button on other tab
+	QuickJoinFrame.JoinQueueButton:ClearAllPoints()
+	QuickJoinFrame.JoinQueueButton:Point("BOTTOMRIGHT", QuickJoinFrame, "BOTTOMRIGHT", -6, 4)
+	QuickJoinScrollFrameTop:SetTexture(nil)
+	QuickJoinScrollFrameBottom:SetTexture(nil)
+	QuickJoinScrollFrameMiddle:SetTexture(nil)
 end
 
 S:AddCallback("Friends", LoadSkin)

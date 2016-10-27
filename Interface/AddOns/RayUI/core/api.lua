@@ -70,9 +70,9 @@ local function CreateShadow(f, t, thickness)
 	local shadow = CreateFrame("Frame", nil, border)
 	shadow:SetFrameLevel(frameLevel - 1)
 	shadow:SetOutside(border, offset, offset)
-	shadow:SetBackdrop( { 
+	shadow:SetBackdrop( {
 		edgeFile = R.global.general.theme == "Shadow" and R["media"].glow or nil,
-        bgFile = R["media"].blank, 
+        bgFile = R["media"].blank,
 		edgeSize = R:Scale(thickness),
         tile = false,
         tileSize = 0,
@@ -90,28 +90,28 @@ end
 
 local function SetTemplate(f, t, glossTex)
 	local r, g, b, alpha = unpack(R["media"].backdropcolor)
-	if t == "Transparent" then 
+	if t == "Transparent" then
 		r, g, b, alpha = unpack(R["media"].backdropfadecolor)
 	end
 
     if t == "Border" then
         f:SetBackdrop({
-            edgeFile = R["media"].blank, 
-            edgeSize = R.mult, 
+            edgeFile = R["media"].blank,
+            edgeSize = R.mult,
             tile = false,
             tileSize = 0,
         })
     else
         f:SetBackdrop({
-            bgFile = R["media"].blank, 
-            edgeFile = R["media"].blank, 
-            edgeSize = R.mult, 
+            bgFile = R["media"].blank,
+            edgeFile = R["media"].blank,
+            edgeSize = R.mult,
             tile = false,
             tileSize = 0,
         })
     end
 
-	if glossTex then 
+	if glossTex then
         f.backdropTexture = f:CreateTexture(nil, "BACKGROUND")
         f.backdropTexture:SetDrawLayer("BACKGROUND", 1)
         f.backdropTexture:SetInside(f, 1, 1)
@@ -127,7 +127,7 @@ end
 
 local function CreateBorder(f, r, g, b, a)
 	f:SetBackdrop({
-		edgeFile = R["media"].blank, 
+		edgeFile = R["media"].blank,
 		edgeSize = R.mult,
 		insets = { left = -R.mult, right = -R.mult, top = -R.mult, bottom = -R.mult }
 	})
@@ -269,10 +269,10 @@ local function FontTemplate(fs, font, fontSize, fontStyle)
 	fs.font = font
 	fs.fontSize = fontSize
 	fs.fontStyle = fontStyle
-	
+
 	if not font then font = LSM:Fetch("font", R.global.media.font) end
 	if not fontSize then fontSize = R.global.media.fontsize end
-	
+
 	fs:SetFont(font, fontSize, fontStyle)
 	if fontStyle then
 		fs:SetShadowColor(0, 0, 0, 0.2)
@@ -280,7 +280,7 @@ local function FontTemplate(fs, font, fontSize, fontStyle)
 		fs:SetShadowColor(0, 0, 0, 1)
 	end
 	fs:SetShadowOffset((R.mult or 1), -(R.mult or 1))
-	
+
 	R["texts"][fs] = true
 end
 
@@ -348,3 +348,7 @@ while object do
 
 	object = EnumerateFrames(object)
 end
+
+--Hacky fix for issue on 7.1 PTR where scroll frames no longer seem to inherit the methods from the "Frame" widget
+local scrollFrame = CreateFrame("ScrollFrame")
+addapi(scrollFrame)

@@ -148,7 +148,6 @@ local function SetMinimapButton(btn)
 		btn.shadow:SetBackdropColor(0.8, 0.2, 0.2, 0.4)
 		R:GetModule("Skins"):CreatePulse(btn.shadow, 1, 1)
 	end
-	btn.isSkinned = true
 end
 
 local function GrabMinimapButtons()
@@ -169,8 +168,6 @@ end
 
 function MM:PositionButtonCollector(self, screenQuadrant)
 	local line = math.ceil(Minimap:GetWidth() / 20)
-	-- MBCF.bg:SetColorTexture(0, 0, 0, 1)
-	-- MBCF:SetAlpha(0)
 	MBCF:ClearAllPoints()
 	screenQuadrant = screenQuadrant or R:GetScreenQuadrant(self)
 	if BaudErrorFrameMinimapButton then
@@ -219,9 +216,6 @@ function MM:ButtonCollector()
 	MinimapButtonCollect:RegisterEvent("ADDON_LOADED")
 	MinimapButtonCollect:SetScript("OnEvent", function(self)
 		GrabMinimapButtons()
-		if #buttons == 0 then
-			MBCF:Hide()
-		end
 		MM:PositionButtonCollector(Minimap)
 	end)
 
@@ -230,9 +224,6 @@ function MM:ButtonCollector()
 		Time = Time + elasped
 		if Time > 1 then
 			GrabMinimapButtons()
-			if #buttons == 0 then
-				MBCF:Hide()
-			end
 			MM:PositionButtonCollector(Minimap)
 			self:SetScript("OnUpdate", nil)
 		end

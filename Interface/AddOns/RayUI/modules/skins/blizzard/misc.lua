@@ -615,7 +615,6 @@ local function LoadSkin()
         "InterfaceOptionsCombatPanelSpellAlertOpacitySlider",
         "CompactUnitFrameProfilesGeneralOptionsFrameHeightSlider",
         "CompactUnitFrameProfilesGeneralOptionsFrameWidthSlider",
-        "InterfaceOptionsCameraPanelMaxDistanceSlider",
         "InterfaceOptionsCameraPanelFollowSpeedSlider",
         "InterfaceOptionsMousePanelMouseSensitivitySlider",
         "InterfaceOptionsMousePanelMouseLookSpeedSlider",

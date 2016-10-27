@@ -36,9 +36,6 @@ local function LoadSkin()
 
 	WorldMapLevelDropDown:SetPoint("TOPLEFT", -14, 2)
 
-	WorldMapPlayerUpperIcon:SetTexture("Interface\\AddOns\\RayUI\\media\\MinimapArrow")
-	WorldMapPlayerLowerIcon:SetTexture("Interface\\AddOns\\RayUI\\media\\MinimapArrow")
-
 	-- [[ Size up / down buttons ]]
 
 	for _, buttonName in pairs{"WorldMapFrameSizeUpButton", "WorldMapFrameSizeDownButton"} do

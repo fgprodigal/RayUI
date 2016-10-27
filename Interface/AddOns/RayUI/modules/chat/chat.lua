@@ -55,7 +55,7 @@ local hooksecurefunc = hooksecurefunc
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: GameTooltip, CHAT_TIMESTAMP_FORMAT, LOCALIZED_CLASS_NAMES_FEMALE, LOCALIZED_CLASS_NAMES_MALE
 -- GLOBALS: RayUICharacterData, CHAT_FRAME_TEXTURES, ChatFrame1, ItemRefTooltip, ChatFrameMenuButton
--- GLOBALS: FriendsMicroButton, ChatTypeInfo, UISpecialFrames, CopyScrollScrollBar, ChatFontNormal
+-- GLOBALS: QuickJoinToastButton, ChatTypeInfo, UISpecialFrames, CopyScrollScrollBar, ChatFontNormal
 -- GLOBALS: ChatMenu, CHAT_FRAMES, RayUIChatBG, INTERFACE_ACTION_BLOCKED, COMBATLOG, CombatLogQuickButtonFrame_Custom
 -- GLOBALS: SELECTED_CHAT_FRAME, DEFAULT_CHAT_FRAME, WHISPER, GENERAL_CHAT_DOCK, PET_BATTLE_COMBAT_LOG
 -- GLOBALS: CopyChatFrame, GeneralDockManager, CHAT_INSTANCE_CHAT_GET, CHAT_INSTANCE_CHAT_LEADER_GET
@@ -1208,8 +1208,7 @@ function CH:Initialize()
     end
 
     ChatFrameMenuButton:Kill()
-    FriendsMicroButton:Hide()
-    FriendsMicroButton:Kill()
+    QuickJoinToastButton:Kill()
 
     CreatCopyFrame()
     CopyChatFrame:Hide()
