@@ -3,12 +3,13 @@ local MM = R:GetModule("MiniMap")
 
 --Cache global variables
 --Lua functions
-local select, unpack, pairs, string, math = select, unpack, pairs, string, math
+local select, unpack, pairs, string, math, type = select, unpack, pairs, string, math, type
 local tinsert = table.insert
 local strfind = string.find
 
 --WoW API / Variables
 local CreateFrame = CreateFrame
+local hooksecurefunc = hooksecurefunc
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: VendomaticButton, VendomaticButtonIcon, Minimap, BaudErrorFrameMinimapButton
@@ -190,8 +191,14 @@ function MM:PositionButtonCollector(self, screenQuadrant)
 		else
 			buttons[i]:SetPoint("TOP", buttons[i-1], "BOTTOM", 0, -3)
 		end
-		buttons[i].ClearAllPoints = R.dummy
-		buttons[i].SetPoint = R.dummy
+		if not buttons[i].hooked then
+			hooksecurefunc(buttons[i], "SetPoint", function(self, _, anchor)
+				if anchor == Minimap or type(anchor) == "number" then
+					MM:PositionButtonCollector(Minimap)
+				end
+			end)
+			buttons[i].hooked = true
+		end
 	end
 	if strfind(screenQuadrant, "RIGHT") then
 		MBCF:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -5, 0)
