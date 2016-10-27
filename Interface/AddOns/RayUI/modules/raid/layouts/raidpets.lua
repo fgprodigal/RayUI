@@ -41,6 +41,7 @@ function RA:Construct_RaidPetsFrames()
     self.RaidIcon = RA:Construct_RaidIcon(self)
     self.RaidDebuffs = RA:Construct_RaidDebuffs(self)
     self.AuraWatch = RA:Construct_AuraWatch(self)
+    self.AFKtext = RA:Construct_AFKText(self)
     self.Range = {
         insideAlpha = 1,
         outsideAlpha = RA.db.outsideRange,

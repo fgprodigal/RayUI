@@ -40,6 +40,7 @@ function RA:Construct_RaidTankFrames()
     self.RaidIcon = RA:Construct_RaidIcon(self)
     self.RaidDebuffs = RA:Construct_RaidDebuffs(self)
     self.AuraWatch = RA:Construct_AuraWatch(self)
+    self.AFKtext = RA:Construct_AFKText(self)
     if RA.db.roleicon then
         self.LFDRole = RA:Construct_RoleIcon(self)
     end

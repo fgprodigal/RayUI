@@ -461,6 +461,7 @@ local function LoadSkin()
         "InterfaceOptionsAccessibilityPanelColorFilterDropDown",
         "CompactUnitFrameProfilesProfileSelector",
         "CompactUnitFrameProfilesGeneralOptionsFrameSortByDropdown",
+        "CompactUnitFrameProfilesGeneralOptionsFrameHealthTextDropdown",
     }
     for i = 1, #dropdowns do
         S:ReskinDropDown(_G[dropdowns[i]])
@@ -556,6 +557,8 @@ local function LoadSkin()
         "CompactUnitFrameProfilesGeneralOptionsFrameAutoActivate40Players",
         "CompactUnitFrameProfilesGeneralOptionsFrameAutoActivateSpec1",
         "CompactUnitFrameProfilesGeneralOptionsFrameAutoActivateSpec2",
+        "CompactUnitFrameProfilesGeneralOptionsFrameAutoActivateSpec3",
+        "CompactUnitFrameProfilesGeneralOptionsFrameAutoActivateSpec4",
         "CompactUnitFrameProfilesGeneralOptionsFrameAutoActivatePvP",
         "CompactUnitFrameProfilesGeneralOptionsFrameAutoActivatePvE",
         "InterfaceOptionsControlsPanelStickyTargeting",

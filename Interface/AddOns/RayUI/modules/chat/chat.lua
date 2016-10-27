@@ -225,7 +225,7 @@ end
 function CH:CopyChat(cf)
     local _, size = cf:GetFont()
     FCF_SetChatWindowFontSize(cf, cf, 0.01)
-    local lineCt = GetLines(cf:GetRegions())
+    local lineCt = GetLines(cf.FontStringContainer:GetRegions())
     local text = table.concat(lines, "\n", 1, lineCt)
     FCF_SetChatWindowFontSize(cf, cf, size)
     if frame:IsShown() then frame:Hide() return end
@@ -649,22 +649,24 @@ local function filterFunc(frame, event, msg, ...)
     return false, msg, ...
 end
 
+local hyperLinkEntered
 function CH:OnHyperlinkEnter(frame, linkData, link)
+    if InCombatLockdown() then return; end
     local t = linkData:match("^(.-):")
     if CH.LinkHoverShow[t] then
         ShowUIPanel(GameTooltip)
-        -- GameTooltip:SetOwner(R.UIParent, "ANCHOR_CURSOR")
-        GameTooltip:SetOwner(RayUIChatBG, "ANCHOR_TOPLEFT", 0, 80)
+        GameTooltip:SetOwner(RayUIChatBG, "ANCHOR_RIGHT", 6, 0)
         GameTooltip:SetHyperlink(link)
         GameTooltip:Show()
+        hyperLinkEntered = frame
     end
 end
 
 function CH:OnHyperlinkLeave(frame, linkData, link)
-    local t = linkData:match("^(.-):")
-    if CH.LinkHoverShow[t] then
-        HideUIPanel(GameTooltip)
-    end
+    if hyperLinkEntered then
+		HideUIPanel(GameTooltip)
+		hyperLinkEntered = nil
+	end
 end
 
 function CH:ScrollToBottom(frame)
