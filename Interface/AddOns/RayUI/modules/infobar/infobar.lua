@@ -153,6 +153,7 @@ end
 
 function RayUI_InfoBarButton_OnClick(self, button)
     if button == "RightButton" and not IsShiftKeyDown() then
+        RayUI_InfoBarButton_OnLeave(self)
         OpenMenu(self)
         return
     end
