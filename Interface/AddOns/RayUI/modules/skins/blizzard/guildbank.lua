@@ -2,8 +2,8 @@ local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, 
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
+    GuildBankFrame:StripTextures()
     S:SetBD(GuildBankFrame)
-	GuildBankPopupFrame:SetPoint("TOPLEFT", GuildBankFrame, "TOPRIGHT", 2, -30)
 
 	local bd = CreateFrame("Frame", nil, GuildBankPopupFrame)
 	bd:SetPoint("TOPLEFT")
@@ -12,30 +12,25 @@ local function LoadSkin()
 	S:CreateBD(bd)
 	S:CreateBD(GuildBankPopupEditBox, .25)
 
-    GuildBankFrame:DisableDrawLayer("BACKGROUND")
-    GuildBankFrame:DisableDrawLayer("BORDER")
-    GuildBankFrame:DisableDrawLayer("OVERLAY")
     GuildBankTabTitle:SetDrawLayer("ARTWORK")
 	GuildBankEmblemFrame:Hide()
-	GuildBankPopupFrameTopLeft:Hide()
-	GuildBankPopupFrameBottomLeft:Hide()
-	select(2, GuildBankPopupFrame:GetRegions()):Hide()
-	select(4, GuildBankPopupFrame:GetRegions()):Hide()
+	GuildBankPopupFrame:StripTextures()
+	GuildBankPopupScrollFrame:StripTextures()
+	GuildBankPopupFrame:SetPoint("TOPLEFT", GuildBankFrame, "TOPRIGHT", 2, -30)
     GuildBankMoneyFrameBackground:Hide()
 	GuildBankPopupNameLeft:Hide()
 	GuildBankPopupNameMiddle:Hide()
 	GuildBankPopupNameRight:Hide()
-	GuildBankPopupScrollFrame:GetRegions():Hide()
-	select(2, GuildBankPopupScrollFrame:GetRegions()):Hide()
 	GuildBankTabTitleBackground:SetAlpha(0)
 	GuildBankTabTitleBackgroundLeft:SetAlpha(0)
 	GuildBankTabTitleBackgroundRight:SetAlpha(0)
 	GuildBankTabLimitBackground:SetAlpha(0)
 	GuildBankTabLimitBackgroundLeft:SetAlpha(0)
 	GuildBankTabLimitBackgroundRight:SetAlpha(0)
-	local a, b = GuildBankTransactionsScrollFrame:GetRegions()
-	a:Hide()
-	b:Hide()
+	GuildBankInfoScrollFrame:Point("TOPLEFT", GuildBankInfo, "TOPLEFT", -10, 12)
+	GuildBankInfoScrollFrame:StripTextures()
+	GuildBankInfoScrollFrame:Width(GuildBankInfoScrollFrame:GetWidth() - 8)
+	GuildBankTransactionsScrollFrame:StripTextures()
 
 	for i = 1, 4 do
 		local tab = _G["GuildBankFrameTab"..i]
@@ -54,27 +49,39 @@ local function LoadSkin()
 	S:Reskin(GuildBankInfoSaveButton)
 	S:ReskinClose(GuildBankFrame.CloseButton)
 	S:ReskinInput(GuildItemSearchBox)
+    S:ReskinScroll(GuildBankTransactionsScrollFrameScrollBar)
+	S:ReskinScroll(GuildBankInfoScrollFrameScrollBar)
 
 	GuildBankFrameWithdrawButton:ClearAllPoints()
 	GuildBankFrameWithdrawButton:Point("RIGHT", GuildBankFrameDepositButton, "LEFT", -1, 0)
 
 	for i = 1, NUM_GUILDBANK_COLUMNS do
-		_G["GuildBankColumn"..i]:GetRegions():Hide()
+		_G["GuildBankColumn"..i]:StripTextures()
+
 		for j = 1, NUM_SLOTS_PER_GUILDBANK_GROUP do
-			local bu = _G["GuildBankColumn"..i.."Button"..j]
-			bu:StyleButton(true)
+            local button = _G["GuildBankColumn"..i.."Button"..j]
+			local icon = _G["GuildBankColumn"..i.."Button"..j.."IconTexture"]
+			local texture = _G["GuildBankColumn"..i.."Button"..j.."NormalTexture"]
 
-			_G["GuildBankColumn"..i.."Button"..j.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
-			_G["GuildBankColumn"..i.."Button"..j.."NormalTexture"]:SetAlpha(0)
+            if texture then
+				texture:SetTexture(nil)
+			end
+			button:StyleButton(true)
 
-			local glow = CreateFrame("Frame", nil, bu)
+			local glow = CreateFrame("Frame", nil, button)
 			glow:SetAllPoints()
 			glow:CreateBorder()
-			bu.glow = glow
-			bu:SetBackdrop({
+			button.glow = glow
+			button:SetBackdrop({
 					bgFile = R["media"].blank,
 					insets = { left = -R.mult, right = -R.mult, top = -R.mult, bottom = -R.mult }
 				})
+
+            hooksecurefunc(button.IconBorder, "SetVertexColor", function(self, r, g, b)
+				self:SetTexture("")
+			end)
+            icon:SetInside()
+            icon:SetTexCoord(.08, .92, .08, .92)
 		end
 	end
 
@@ -138,6 +145,10 @@ local function LoadSkin()
 		end
 	end
 	hooksecurefunc("GuildBankFrame_Update", ColorBorder)
+
+    GuildBankPopupFrame:Show() --Toggle the frame in order to create the necessary button elements
+	GuildBankPopupFrame:Hide()
+	S:ReskinIconSelectionFrame(GuildBankPopupFrame, NUM_GUILDBANK_ICONS_SHOWN, "GuildBankPopupButton", "GuildBankPopup")
 end
 
 S:AddCallbackForAddon("Blizzard_GuildBankUI", "GuildBank", LoadSkin)

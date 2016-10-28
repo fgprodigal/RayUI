@@ -245,20 +245,7 @@ local function LoadSkin()
         tab.Hider:Point("BOTTOMRIGHT", tab.bg, -1, 1)
     end
 
-    for i = 1, NUM_GEARSET_ICONS_SHOWN do
-        local bu = _G["GearManagerDialogPopupButton"..i]
-        local ic = _G["GearManagerDialogPopupButton"..i.."Icon"]
-
-        bu:SetCheckedTexture(S["media"].checked)
-        select(2, bu:GetRegions()):Hide()
-        ic:Point("TOPLEFT", 1, -1)
-        ic:Point("BOTTOMRIGHT", -1, 1)
-        ic:SetTexCoord(.08, .92, .08, .92)
-
-        S:CreateBD(bu, .25)
-        bu.pushed = true
-        bu:StyleButton(1)
-    end
+    S:ReskinIconSelectionFrame(GearManagerDialogPopup, NUM_GEARSET_ICONS_SHOWN, "GearManagerDialogPopupButton", "GearManagerDialogPopup")
 
     local sets = false
     PaperDollSidebarTab3:HookScript("OnClick", function()
