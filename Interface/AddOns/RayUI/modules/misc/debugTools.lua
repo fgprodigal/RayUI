@@ -14,23 +14,14 @@ local GetCVarBool = GetCVarBool
 local SetCVar = SetCVar
 local PlaySoundFile = PlaySoundFile
 local IsAddOnLoaded = IsAddOnLoaded
+local StaticPopup_Hide = StaticPopup_Hide
 local LoadAddOn = LoadAddOn
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: ScriptErrorsFrame, ScriptErrorsFrameScrollFrameText, ScriptErrorsFrameScrollFrame
+-- GLOBALS: ScriptErrorsFrame, ScriptErrorsFrameScrollFrameText, ScriptErrorsFrameScrollFrame, UIParent
 
 --Enhanced debugtools from ElvUI
 local D = M:NewModule("DebugTools", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
-
-local showErrorButton = CreateFrame("Button", nil, Minimap)
-showErrorButton:Hide()
-showErrorButton:Size(15, 15)
-showErrorButton:SetPoint("RIGHT", -1, 0)
-showErrorButton:SetScript("OnClick", function(self)
-        ScriptErrorsFrame:SetParent(R.UIParent)
-        D.MessagePrinted = nil
-        self:Hide()
-    end)
 
 function D:ModifyErrorFrame()
     ScriptErrorsFrameScrollFrameText.cursorOffset = 0
@@ -102,10 +93,12 @@ end
 function D:ScriptErrorsFrame_OnError(_, _, keepHidden)
     if keepHidden or self.MessagePrinted or not InCombatLockdown() or GetCVarBool("scriptErrors") ~= true then return end
 
-    PlaySoundFile(R["media"].errorsound)
-    R:Print(L['|cFFE30000接收到Lua错误. 可以通过点击小地图的"E"按钮查看错误.'])
-    showErrorButton:Show()
     self.MessagePrinted = true
+end
+
+function D:PLAYER_REGEN_ENABLED()
+	ScriptErrorsFrame:SetParent(UIParent)
+	self.MessagePrinted = nil
 end
 
 function D:PLAYER_REGEN_DISABLED()
@@ -113,8 +106,9 @@ function D:PLAYER_REGEN_DISABLED()
 end
 
 function D:TaintError(event, addonName, addonFunc)
-    if GetCVarBool("scriptErrors") ~= true or not R:IsDeveloper() or addonName ~= "RayUI" then return end
-    ScriptErrorsFrame_OnError(L["%s: %s 尝试调用保护函数 '%s'."]:format(event, addonName or "<name>", addonFunc or "<func>"), false)
+    if GetCVarBool("scriptErrors") ~= true or addonName ~= "RayUI" then return end
+    R:ThrowError(L["%s: %s 尝试调用保护函数 '%s'."]:format(event, addonName or "<name>", addonFunc or "<func>"))
+    -- ScriptErrorsFrame_OnError(L["%s: %s 尝试调用保护函数 '%s'."]:format(event, addonName or "<name>", addonFunc or "<func>"), nil, false)
 end
 
 function D:ShowScriptErrorsFrame()
@@ -122,29 +116,32 @@ function D:ShowScriptErrorsFrame()
     ScriptErrorsFrame:SetParent(R.UIParent)
 end
 
+function D:StaticPopup_Show(name)
+	if(name == "ADDON_ACTION_FORBIDDEN") then
+		StaticPopup_Hide(name)
+	end
+end
+
 function D:Initialize()
-    local showErrorButtonText = showErrorButton:CreateFontString(nil, "OVERLAY")
-    showErrorButtonText:SetPoint("CENTER", 2, 1)
-    showErrorButtonText:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
-    showErrorButtonText:SetText("|cffff0000E|r")
-
-    SetCVar("scriptErrors", 1)
-    D:ModifyErrorFrame()
-    D:SecureHook("ScriptErrorsFrame_UpdateButtons")
-    D:SecureHook("ScriptErrorsFrame_OnError")
-    D:RegisterEvent("PLAYER_REGEN_DISABLED")
-    if R.myname == "夏琉君" then
-        D:RegisterEvent("ADDON_ACTION_BLOCKED", "TaintError")
-        D:RegisterEvent("ADDON_ACTION_FORBIDDEN", "TaintError")
-    end
-    D:RegisterChatCommand("error", "ShowScriptErrorsFrame")
-
-    D.HideFrame = CreateFrame("Frame")
-    D.HideFrame:Hide()
-
     if( not IsAddOnLoaded("Blizzard_DebugTools") ) then
         LoadAddOn("Blizzard_DebugTools")
     end
+
+    SetCVar("scriptErrors", 1)
+    self:ModifyErrorFrame()
+    self:SecureHook("ScriptErrorsFrame_UpdateButtons")
+    self:SecureHook("ScriptErrorsFrame_OnError")
+    self:SecureHook('StaticPopup_Show')
+    self:RegisterEvent("PLAYER_REGEN_DISABLED")
+    self:RegisterEvent("PLAYER_REGEN_ENABLED")
+    if R:IsDeveloper() then
+        self:RegisterEvent("ADDON_ACTION_BLOCKED", "TaintError")
+        self:RegisterEvent("ADDON_ACTION_FORBIDDEN", "TaintError")
+    end
+    self:RegisterChatCommand("error", "ShowScriptErrorsFrame")
+
+    self.HideFrame = CreateFrame("Frame")
+    self.HideFrame:Hide()
 end
 
 M:RegisterMiscModule(D:GetName())

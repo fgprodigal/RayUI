@@ -836,7 +836,7 @@ function R:GetTopCPUFunc(msg)
 	self:Print("Calculating CPU Usage..")
 end
 
-R.Developer = { "夏琉君", "鏡婲水月", "Divineseraph", "水月君", "夏翎", }
+R.Developer = { "夏琉君", "鏡錵水月", "Drayd", "蚊蚊", }
 
 function R:IsDeveloper()
 	for _, name in pairs(R.Developer) do
