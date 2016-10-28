@@ -35,7 +35,7 @@ local function IsItemEligibleForItemLevelDisplay(classID, subClassID, equipLoc, 
 	if ((classID == 3 and subClassID == 11) --Artifact Relics
 		or (equipLoc ~= nil and equipLoc ~= "" and equipLoc ~= "INVTYPE_BAG" and equipLoc ~= "INVTYPE_QUIVER" and equipLoc ~= "INVTYPE_TABARD"))
 		and (rarity and rarity > 1) then
-		
+
 		return true
 	end
 
@@ -122,7 +122,11 @@ local function ItemButton_Update(self, item)
 		if (clink) then
 			local itemEquipLoc, _, _, itemClassID, itemSubClassID = select(9, GetItemInfo(clink))
 			local iLvl = GetDetailedItemLevelInfo(clink)
-			local r, g, b = GetItemQualityColor(item.rarity)
+			local r, g, b
+
+			if(item.rarity) then
+				r, g, b = GetItemQualityColor(item.rarity);
+			end
 
 			if iLvl and IsItemEligibleForItemLevelDisplay(itemClassID, itemSubClassID, itemEquipLoc, item.rarity) then
 				if iLvl >= 1 then
