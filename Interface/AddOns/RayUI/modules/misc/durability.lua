@@ -5,14 +5,22 @@ local mod = M:NewModule("Durability", "AceEvent-3.0")
 --Cache global variables
 --Lua functions
 local _G = _G
-local assert, pairs, math, string, rawget = assert, pairs, math, string, rawget
+local pairs, math, string, rawget, select = pairs, math, string, rawget, select
 
 --WoW API / Variables
 local CreateFrame = CreateFrame
 local GetInventoryItemDurability = GetInventoryItemDurability
+local GetInventoryItemLink = GetInventoryItemLink
+local GetDetailedItemLevelInfo = GetDetailedItemLevelInfo
+local GetItemInfo = GetItemInfo
+local GetItemQualityColor = GetItemQualityColor
 
-local SLOTIDS = {}
-for _, slot in pairs({"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "MainHand", "SecondaryHand"}) do SLOTIDS[slot] = GetInventorySlotInfo(slot .. "Slot") end
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: LE_ITEM_QUALITY_ARTIFACT, INVSLOT_OFFHAND, INVSLOT_MAINHAND
+
+local SLOTIDS, LEFT_SLOT = {}, {}
+for _, slot in pairs({"Head","Neck","Shoulder","Shirt","Chest","Waist","Legs","Feet","Wrist","Hands","Finger0","Finger1","Trinket0","Trinket1","Back","MainHand","SecondaryHand","Tabard"}) do SLOTIDS[slot] = GetInventorySlotInfo(slot .. "Slot") end
+for _, slot in pairs({ 1, 2, 3, 4, 5, 9, 17, 19 }) do LEFT_SLOT[slot] = true end
 local frame = CreateFrame("Frame", nil, CharacterFrame)
 
 local function RYGColorGradient(perc)
@@ -24,18 +32,60 @@ local function RYGColorGradient(perc)
     else return 0, 1, 0 end
 end
 
-local fontstrings = setmetatable({}, {
+local itemLevel = setmetatable({}, {
         __index = function(t,i)
             local gslot = _G["Character"..i.."Slot"]
-            assert(gslot, "Character"..i.."Slot does not exist")
+            if not gslot then return nil end
 
-            local fstr = gslot:CreateFontString(nil, "OVERLAY")
-            fstr:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
-            fstr:SetShadowColor(0, 0, 0)
-            fstr:SetShadowOffset(R.mult, -R.mult)
-            fstr:SetPoint("CENTER", gslot, "BOTTOM", 1, 8)
-            t[i] = fstr
-            return fstr
+            local text = gslot:CreateFontString(nil, "OVERLAY")
+            text:SetFont(R["media"].pxfont, 10*R.mult, "THINOUTLINE,MONOCHROME")
+            text:SetShadowColor(0, 0, 0)
+            text:SetShadowOffset(R.mult, -R.mult)
+            if LEFT_SLOT[SLOTIDS[i]] then
+                text:Point("TOPLEFT", gslot, "TOPRIGHT", 3, 0)
+            else
+                text:Point("TOPRIGHT", gslot, "TOPLEFT", -2, 0)
+            end
+            t[i] = text
+            return text
+        end,
+    })
+
+local inspectItemLevel = setmetatable({}, {
+        __index = function(t,i)
+            local gslot = _G["Inspect"..i.."Slot"]
+            if not gslot then return nil end
+
+            local text = gslot:CreateFontString(nil, "OVERLAY")
+            text:SetFont(R["media"].pxfont, 10*R.mult, "THINOUTLINE,MONOCHROME")
+            text:SetShadowColor(0, 0, 0)
+            text:SetShadowOffset(R.mult, -R.mult)
+            if LEFT_SLOT[SLOTIDS[i]] then
+                text:Point("TOPLEFT", gslot, "TOPRIGHT", 3, 0)
+            else
+                text:Point("TOPRIGHT", gslot, "TOPLEFT", -2, 0)
+            end
+            t[i] = text
+            return text
+        end,
+    })
+
+local durability = setmetatable({}, {
+        __index = function(t,i)
+            local gslot = _G["Character"..i.."Slot"]
+            if not gslot then return nil end
+
+            local text = gslot:CreateFontString(nil, "OVERLAY")
+            text:SetFont(R["media"].pxfont, 10*R.mult, "THINOUTLINE,MONOCHROME")
+            text:SetShadowColor(0, 0, 0)
+            text:SetShadowOffset(R.mult, -R.mult)
+            if LEFT_SLOT[SLOTIDS[i]] then
+                text:Point("TOPLEFT", gslot, "TOPRIGHT", 3, -10)
+            else
+                text:Point("TOPRIGHT", gslot, "TOPLEFT", -2, -10)
+            end
+            t[i] = text
+            return text
         end,
     })
 
@@ -46,21 +96,54 @@ function mod:UpdateDurability()
 
         if v1 and v2 and v2 ~= 0 then
             min = math.min(v1/v2, min)
-            local str = fontstrings[slot]
-            str:SetTextColor(RYGColorGradient(v1/v2))
-            str:SetText(string.format("%d%%", v1/v2*100))
+            local text = durability[slot]
+            if not text then return end
+            text:SetTextColor(RYGColorGradient(v1/v2))
+            text:SetText(string.format("%d%%", v1/v2*100))
         else
-            local str = rawget(fontstrings, slot)
-            if str then str:SetText(nil) end
+            local text = rawget(durability, slot)
+            if not text then return end
+            if text then text:SetText(nil) end
         end
     end
 
     local r, g, b = RYGColorGradient(min)
 end
 
+function mod:UpdateItemlevel(event)
+    local t = itemLevel
+    local unit = "player"
+    if event == "INSPECT_READY" then
+        unit = "target"
+        t = inspectItemLevel
+    end
+    for slot, id in pairs(SLOTIDS) do
+        local text = t[slot]
+        if not text then return end
+        text:SetText("")
+        local clink = GetInventoryItemLink(unit, id)
+        if clink then
+            local iLvl = GetDetailedItemLevelInfo(clink)
+            local rarity = select(3, GetItemInfo(clink))
+            if iLvl and rarity then
+                if iLvl == 750 and rarity == LE_ITEM_QUALITY_ARTIFACT and id == INVSLOT_OFFHAND then
+                    iLvl = GetDetailedItemLevelInfo(GetInventoryItemLink(unit, INVSLOT_MAINHAND))
+                end
+                local r, g, b = GetItemQualityColor(rarity)
+
+                text:SetText(iLvl)
+                text:SetTextColor(r, g, b)
+            end
+        end
+    end
+end
+
 function mod:Initialize()
     self:RegisterEvent("ADDON_LOADED", "UpdateDurability")
     self:RegisterEvent("UPDATE_INVENTORY_DURABILITY", "UpdateDurability")
+    self:RegisterEvent("PLAYER_EQUIPMENT_CHANGED", "UpdateItemlevel")
+    self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdateItemlevel")
+    self:RegisterEvent("INSPECT_READY", "UpdateItemlevel")
 end
 
 M:RegisterMiscModule(mod:GetName())
