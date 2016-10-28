@@ -41,11 +41,13 @@ CH.ChatIn = true
 function CH:SetUpAnimGroup(self)
     self.anim = self:CreateAnimationGroup("Flash")
     self.anim.fadein = self.anim:CreateAnimation("ALPHA", "FadeIn")
-    self.anim.fadein:SetChange(1)
+    self.anim.fadein:SetFromAlpha(0)
+    self.anim.fadein:SetToAlpha(1)
     self.anim.fadein:SetOrder(2)
 
     self.anim.fadeout = self.anim:CreateAnimation("ALPHA", "FadeOut")
-    self.anim.fadeout:SetChange(-1)
+    self.anim.fadeout:SetFromAlpha(1)
+    self.anim.fadeout:SetToAlpha(0)
     self.anim.fadeout:SetOrder(1)
 end
 
@@ -90,6 +92,7 @@ function CH:MoveIn()
     CH.ChatIn = true
     RayUIChatBG:SetPoint("BOTTOMLEFT", R.UIParent, "BOTTOMLEFT", -CH.db.width, 30)
     R:Slide(RayUIChatBG, "RIGHT", CH.db.width + 15, 195)
+    RayUIChatBG:Show()
     R:UIFrameFadeIn(RayUIChatBG, .5, RayUIChatBG:GetAlpha(), 1)
 end
 
@@ -111,6 +114,7 @@ function CH:OnEvent(event, ...)
             isMoving = false
             RayUIChatBG:SetScript("OnUpdate", nil)
         end
+        RayUIChatBG:Show()
         RayUIChatBG:ClearAllPoints()
         RayUIChatBG:SetPoint("BOTTOMLEFT",R.UIParent,"BOTTOMLEFT",15,30)
         R:UIFrameFadeIn(RayUIChatBG, .7, 0, 1)
@@ -130,7 +134,6 @@ end
 
 function CH:AutoHide()
     if not self.db.autoshow then
-        -- self:SetUpAnimGroup(RayUI_ExpBar.shadow)
         local function CheckWhisperWindows(self, event)
             local chat = self:GetName()
             if chat == "ChatFrame1" and CH.ChatIn == false then
@@ -208,6 +211,7 @@ function CH:AutoHide()
                     isMoving = false
                     RayUIChatBG:SetScript("OnUpdate", nil)
                 end
+                RayUIChatBG:Show()
                 RayUIChatBG:ClearAllPoints()
                 RayUIChatBG:SetPoint("BOTTOMLEFT",R.UIParent,"BOTTOMLEFT",15,30)
                 R:UIFrameFadeIn(RayUIChatBG, .7, 0, 1)
