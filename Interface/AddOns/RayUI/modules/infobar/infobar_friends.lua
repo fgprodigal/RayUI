@@ -12,7 +12,6 @@ local tinsert = table.insert
 --WoW API / Variables
 local CreateFrame = CreateFrame
 local IsAltKeyDown = IsAltKeyDown
-local FriendsFrame_HasInvitePermission = FriendsFrame_HasInvitePermission
 local BNInviteFriend = BNInviteFriend
 local InviteUnit = InviteUnit
 local ChatFrame_SendSmartTell = ChatFrame_SendSmartTell
@@ -33,7 +32,7 @@ local ShowFriends = ShowFriends
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: DEFAULT_CHAT_FRAME, FRIENDS_BNET_NAME_COLOR, FRIENDS_TEXTURE_AFK, FRIENDS_TEXTURE_DND
 -- GLOBALS: FRIENDS_TEXTURE_ONLINE, FACTION_HORDE, FACTION_ALLIANCE, NAME, LEVEL_ABBR
--- GLOBALS: ZONE, FACTION, FRIENDS, GAME
+-- GLOBALS: ZONE, FACTION, FRIENDS, GAME, FriendsFrame_HasInvitePermission
 
 local friendsTablets = LibStub("Tablet-2.0")
 local FriendsTabletData = {}
