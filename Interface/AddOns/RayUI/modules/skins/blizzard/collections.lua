@@ -19,7 +19,7 @@ local function LoadSkin()
 		select(i, MountJournal.MountCount:GetRegions()):Hide()
 		select(i, PetJournal.PetCount:GetRegions()):Hide()
 	end
-	
+
 	S:CreateBD(CollectionsJournal)
 	S:CreateTab(CollectionsJournalTab1)
 	S:CreateTab(CollectionsJournalTab2)
@@ -27,7 +27,7 @@ local function LoadSkin()
 	S:CreateTab(CollectionsJournalTab4)
 	S:CreateTab(CollectionsJournalTab5)
 	S:ReskinClose(CollectionsJournalCloseButton)
-	
+
 	CollectionsJournalTab2:SetPoint("LEFT", CollectionsJournalTab1, "RIGHT", -15, 0)
 	CollectionsJournalTab3:SetPoint("LEFT", CollectionsJournalTab2, "RIGHT", -15, 0)
 	CollectionsJournalTab4:SetPoint("LEFT", CollectionsJournalTab3, "RIGHT", -15, 0)
@@ -97,7 +97,7 @@ local function LoadSkin()
 				bu.dragButton.ActiveTexture:SetTexture(S["media"].checked)
 				bu.dragButton.ActiveTexture:SetVertexColor(r, g, b)
 				bu.dragButton.levelBG:SetAlpha(0)
-				bu.dragButton.level:SetFontObject(GameFontNormal)
+				bu.dragButton.level:FontTemplate(nil, nil, R["media"].fontflag)
 				bu.dragButton.level:SetTextColor(1, 1, 1)
 			end
 		end
@@ -203,7 +203,7 @@ local function LoadSkin()
 	card.AbilitiesBG2:SetAlpha(0)
 	card.AbilitiesBG3:SetAlpha(0)
 
-	card.PetInfo.level:SetFontObject(GameFontNormal)
+	card.PetInfo.level:FontTemplate(nil, nil, R["media"].fontflag)
 	card.PetInfo.level:SetTextColor(1, 1, 1)
 
 	card.PetInfo.icon:SetTexCoord(.08, .92, .08, .92)
@@ -258,7 +258,7 @@ local function LoadSkin()
 		bu.levelBG:SetAlpha(0)
 		bu.helpFrame:GetRegions():Hide()
 
-		bu.level:SetFontObject(GameFontNormal)
+		bu.level:FontTemplate(nil, nil, R["media"].fontflag)
 		bu.level:SetTextColor(1, 1, 1)
 
 		bu.icon:SetTexCoord(.08, .92, .08, .92)
