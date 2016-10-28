@@ -20,7 +20,7 @@ local GetItemQualityColor = GetItemQualityColor
 
 local SLOTIDS, LEFT_SLOT = {}, {}
 for _, slot in pairs({"Head","Neck","Shoulder","Shirt","Chest","Waist","Legs","Feet","Wrist","Hands","Finger0","Finger1","Trinket0","Trinket1","Back","MainHand","SecondaryHand","Tabard"}) do SLOTIDS[slot] = GetInventorySlotInfo(slot .. "Slot") end
-for _, slot in pairs({ 1, 2, 3, 4, 5, 9, 17, 19 }) do LEFT_SLOT[slot] = true end
+for _, slot in pairs({ 1, 2, 3, 4, 5, 9, 15, 17, 19 }) do LEFT_SLOT[slot] = true end
 local frame = CreateFrame("Frame", nil, CharacterFrame)
 
 local function RYGColorGradient(perc)
