@@ -320,8 +320,10 @@ function RayUI_RegisterLDB()
                     brokerTooltip:AddDivider()
                     brokerTooltip:AddLine(brokerValue, 1, 1, 1)
                     brokerTooltip:Show()
+                    obj.OnEnter(brokerTooltip)
+                else
+                    obj.OnEnter(self)
                 end
-                obj.OnEnter(brokerTooltip)
                 GameTooltip_Hide()
             end
         end
