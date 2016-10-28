@@ -329,7 +329,7 @@ function barListPrototype:AddButton(title, description, normaltex, highlighttex,
 	btn:Show()
 
 	-- Add to our list of buttons.
-	table.insert(self.buttons, btn)
+	tinsert(self.buttons, btn)
 
 	self:AdjustButtons()
 end
@@ -961,7 +961,7 @@ do
         if has_fixed and stop < #values then
             for i = stop + 1, #values, 1 do
                 if values[i].fixed then
-                    table.insert(values, stop, values[i])
+                    tinsert(values, stop, values[i])
                     break
                 end
             end

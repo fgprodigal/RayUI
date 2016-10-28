@@ -8,7 +8,7 @@ Skada:AddLoadableModule("Overhealing", nil, function(Skada, L)
 		mod.metadata = {showspots = true, click1 = spellsmod, columns = {Overheal = true, Percent = true}}
 		spellsmod.metadata	= {columns = {Healing = true, Percent = true}}
 
-		Skada:AddMode(self)
+		Skada:AddMode(self, L["Healing"])
 	end
 
 	function mod:OnDisable()

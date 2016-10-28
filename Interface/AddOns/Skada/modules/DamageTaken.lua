@@ -292,8 +292,8 @@ Skada:AddLoadableModule("DamageTaken", nil, function(Skada, L)
 
 		Skada:RegisterForCL(SwingDamage, 'SWING_DAMAGE', {dst_is_interesting_nopets = true})
 
-		Skada:AddMode(self)
-		Skada:AddMode(spelloverview)
+		Skada:AddMode(self, L["Damage"])
+		Skada:AddMode(spelloverview, L["Damage"])
 	end
 
 	function mod:OnDisable()

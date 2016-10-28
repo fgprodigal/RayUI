@@ -1,0 +1,33 @@
+------------------------------------------------------------------------
+r698 | zarnivoop | 2016-10-26 17:28:41 +0000 (Wed, 26 Oct 2016) | 1 line
+Changed paths:
+   A /tags/1.5-13 (from /trunk:697)
+
+Tagging as 1.5-13
+------------------------------------------------------------------------
+r697 | zarnivoop | 2016-10-26 17:22:49 +0000 (Wed, 26 Oct 2016) | 1 line
+Changed paths:
+   M /trunk/Skada.toc
+
+toc update
+------------------------------------------------------------------------
+r695 | zarnivoop | 2016-10-18 21:24:12 +0000 (Tue, 18 Oct 2016) | 1 line
+Changed paths:
+   M /trunk/modules/Debuffs.lua
+
+yet another debuffs fix
+------------------------------------------------------------------------
+r694 | zarnivoop | 2016-10-17 19:32:33 +0000 (Mon, 17 Oct 2016) | 1 line
+Changed paths:
+   M /trunk/Skada.lua
+
+fixed a billion issues
+------------------------------------------------------------------------
+r693 | zarnivoop | 2016-10-15 13:19:42 +0000 (Sat, 15 Oct 2016) | 2 lines
+Changed paths:
+   M /trunk/Skada.lua
+   M /trunk/modules/Debuffs.lua
+
+fix for faulty debuff/buff uptimes
+inmprovement to the display of very large numbers
+------------------------------------------------------------------------
