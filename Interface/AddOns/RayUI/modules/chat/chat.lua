@@ -50,6 +50,7 @@ local GetMouseFocus = GetMouseFocus
 local ChatEdit_ChooseBoxForSend = ChatEdit_ChooseBoxForSend
 local ChatEdit_ActivateChat = ChatEdit_ActivateChat
 local StaticPopup_Show = StaticPopup_Show
+local RegisterStateDriver = RegisterStateDriver
 local hooksecurefunc = hooksecurefunc
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
@@ -1215,8 +1216,9 @@ function CH:Initialize()
     CreatCopyFrame()
     CopyChatFrame:Hide()
     if not RayUIChatBG then
-        local RayUIChatBG = CreateFrame("Frame", "RayUIChatBG", R.UIParent)
+        local RayUIChatBG = CreateFrame("Frame", "RayUIChatBG", R.UIParent, "SecureHandlerStateTemplate")
         RayUIChatBG:CreatePanel("Default", self.db.width, self.db.height, "BOTTOMLEFT",R.UIParent,"BOTTOMLEFT",15,30)
+        RegisterStateDriver(RayUIChatBG, "visibility", "[combat]show")
         GeneralDockManager:SetParent(RayUIChatBG)
     end
 

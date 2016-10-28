@@ -197,7 +197,7 @@ function CH:AutoHide()
             GameTooltip:Hide()
         end)
     RayUIChatToggle:SetScript("OnMouseDown", function(self, btn)
-            if btn == "LeftButton" then
+            if btn == "LeftButton" and not InCombatLockdown() then
                 CH:ToggleChat()
             end
         end)
