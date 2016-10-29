@@ -93,7 +93,7 @@ local function LoadSkin()
 	end
 
 	hooksecurefunc("HonorFrameBonusFrame_Update", function()
-		local _, _, _, _, _, winHonorAmount, winConquestAmount = GetHolidayBGInfo()
+		local _, _, _, _, _, winHonorAmount, winConquestAmount = GetRandomBGInfo()
 		local rewardIndex = 0
 		if winConquestAmount and winConquestAmount > 0 then
 			rewardIndex = rewardIndex + 1
@@ -284,21 +284,23 @@ local function LoadSkin()
 
 		Hfame.XPBar.Frame:Hide()
 		Hfame.XPBar.Bar.OverlayFrame.Text:Point("CENTER" , Hfame.XPBar.Bar.OverlayFrame, "CENTER")
-	
+
 		local bg = CreateFrame("Frame", nil, Hfame.XPBar.Bar)
 		bg:SetPoint("TOPLEFT", 0, 1)
 		bg:SetPoint("BOTTOMRIGHT", 0, -1)
 		bg:SetFrameLevel(Hfame.XPBar.Bar:GetFrameLevel()-1)
 		S:CreateBD(bg, .3)
 		Hfame.XPBar.Bar.Background:Hide()
-	
+
 		Hfame.XPBar.NextAvailable.Frame:Hide()
-		S:CreateBD(Hfame.XPBar.NextAvailable, .5)
 		Hfame.XPBar.NextAvailable:ClearAllPoints()
 		Hfame.XPBar.NextAvailable:SetPoint("LEFT", Hfame.XPBar.Bar, "RIGHT")
 		Hfame.XPBar.NextAvailable:SetSize(25, 25)
 		Hfame.XPBar.NextAvailable.Icon:SetAllPoints()
-	
+		Hfame.XPBar.NextAvailable.Icon:SetTexCoord(.08, .92, .08, .92)
+		Hfame.XPBar.NextAvailable.Icon.SetTexCoord = R.dummy
+		S:ReskinIcon(Hfame.XPBar.NextAvailable.Icon)
+
 		Hfame.XPBar.NextAvailable.Frame.Show = R.dummy
 		Hfame.XPBar.Levelbg = CreateFrame("Frame", nil, Hfame.XPBar)
 		Hfame.XPBar.Levelbg:SetPoint("RIGHT", Hfame.XPBar.Bar, "LEFT")
