@@ -48,7 +48,7 @@ local function LoadSkin()
     MacroPopupFrame:ClearAllPoints()
     MacroPopupFrame:SetPoint("TOPLEFT", MacroFrame, "TOPRIGHT", -32, -40)
 
-    S:ReskinClose(MacroFrameCloseButton, "TOPRIGHT", MacroFrame, "TOPRIGHT", -38, -14)
+    S:ReskinClose(MacroFrameCloseButton)
     S:ReskinScroll(MacroButtonScrollFrameScrollBar)
     S:ReskinScroll(MacroFrameScrollFrameScrollBar)
     S:ReskinScroll(MacroPopupScrollFrameScrollBar)
