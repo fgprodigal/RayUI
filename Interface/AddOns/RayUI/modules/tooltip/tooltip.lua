@@ -525,6 +525,7 @@ function TT:PLAYER_ENTERING_WORLD(event)
 end
 
 function TT:GetItemScore(iLink)
+    if not iLink then return end
     local _, _, itemRarity, itemLevel, _, _, _, _, itemEquip = GetItemInfo(iLink)
     if (IsEquippableItem(iLink)) then
         if not (itemLevel > 0) and (itemRarity > 1) then

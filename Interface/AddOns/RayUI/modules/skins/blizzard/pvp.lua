@@ -310,6 +310,23 @@ local function LoadSkin()
 		Hfame.XPBar.Level:SetJustifyH("CENTER")
 		S:CreateBD(Hfame.XPBar.Levelbg, .5)
 	end
+
+	for _, tooltip in pairs({ConquestTooltip, PVPRewardTooltip}) do
+		tooltip:SetBackdrop(nil)
+		S:CreateStripesThin(tooltip)
+		tooltip:CreateShadow("Background")
+		tooltip.stripesthin:SetInside(tooltip)
+		tooltip.border:SetInside(tooltip.BackdropFrame)
+		if tooltip.ItemTooltip then
+		    tooltip.ItemTooltip.IconBorder:Kill()
+		    tooltip.ItemTooltip.Icon:SetTexCoord(0.08, .92, .08, .92)
+		    tooltip.ItemTooltip.b = CreateFrame("Frame", nil, tooltip.ItemTooltip)
+		    tooltip.ItemTooltip.b:SetAllPoints(tooltip.ItemTooltip.Icon)
+		    tooltip.ItemTooltip.b:CreateShadow("Background")
+		    tooltip.ItemTooltip.Count:ClearAllPoints()
+		    tooltip.ItemTooltip.Count:SetPoint("BOTTOMRIGHT", tooltip.ItemTooltip.Icon, "BOTTOMRIGHT", 0, 2)
+		end
+	end
 end
 
 S:AddCallbackForAddon("Blizzard_PVPUI", "PVP", LoadSkin)

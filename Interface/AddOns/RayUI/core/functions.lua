@@ -74,8 +74,7 @@ R.HiddenFrame:Hide()
 
 R.UIParent = CreateFrame("Frame", "RayUIParent", UIParent)
 R.UIParent:SetFrameLevel(UIParent:GetFrameLevel())
-R.UIParent:SetPoint("CENTER", UIParent, "CENTER")
-R.UIParent:SetSize(UIParent:GetSize())
+R.UIParent:SetAllPoints()
 R.UIParent.origHeight = R.UIParent:GetHeight()
 
 local AddonNotSupported = {}
@@ -126,10 +125,9 @@ function R:UIScale()
 		R.ResScale = 1
 	end
 
-	self.UIParent:SetSize(UIParent:GetSize())
-	self.UIParent.origHeight = self.UIParent:GetHeight()
 	self.UIParent:ClearAllPoints()
-	self.UIParent:Point("BOTTOM")
+	self.UIParent:SetAllPoints()
+	self.UIParent.origHeight = self.UIParent:GetHeight()
 	self.mult = 768/string.match(self.resolution, "%d+x(%d+)")/self.global.general.uiscale
 end
 
@@ -836,7 +834,7 @@ function R:GetTopCPUFunc(msg)
 	self:Print("Calculating CPU Usage..")
 end
 
-R.Developer = { "夏琉君", "鏡錵水月", "Drayd", "蚊蚊", }
+R.Developer = { "夏琉君", "Myr", "Drayd", "蚊蚊", }
 
 function R:IsDeveloper()
 	for _, name in pairs(R.Developer) do

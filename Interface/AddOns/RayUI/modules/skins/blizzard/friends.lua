@@ -81,6 +81,12 @@ local function LoadSkin()
     S:ReskinClose(FriendsFrameCloseButton)
     ChannelRosterScrollFrame:Point("TOPRIGHT", ChannelFrame, "TOPRIGHT", -39, -60)
     FriendsTabHeaderSoRButton:StyleButton(true)
+    FriendsFriendsFrame:StripTextures()
+    FriendsFriendsList:StripTextures()
+    S:SetBD(FriendsFriendsFrame)
+    S:CreateBD(FriendsFriendsList)
+    S:Reskin(FriendsFriendsSendRequestButton)
+    S:Reskin(FriendsFriendsCloseButton)
 
     for i = 1, 4 do
         S:CreateTab(_G["FriendsFrameTab"..i])
