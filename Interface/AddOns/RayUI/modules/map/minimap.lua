@@ -50,7 +50,7 @@ local ToggleLFDParentFrame = ToggleLFDParentFrame
 -- GLOBALS: LFG_TITLE, BLIZZARD_STORE, HELP_BUTTON, GARRISON_LANDING_PAGE_TITLE, CALENDAR, LOOT_ROLLS
 -- GLOBALS: SpellBookFrame, PlayerTalentFrame, GuildFrame, EncounterJournal, RaidFinderFrame, StoreMicroButton
 -- GLOBALS: CalendarFrame, LootHistoryFrame, MiniMapTrackingDropDown, BlizzardStopwatchOptions, GameTimeFrame, TimeManagerFrame
--- GLOBALS: GuildFrame_LoadUI, EncounterJournal_LoadUI, TalentFrame_LoadUI
+-- GLOBALS: GuildFrame_LoadUI, EncounterJournal_LoadUI, TalentFrame_LoadUI, UIParent, MinimapButtonCollectFrame
 
 MM.modName = L["小地图"]
 
@@ -239,116 +239,120 @@ function MM:CreateMenu()
                 else
                     HideUIPanel(PlayerTalentFrame)
                 end
-                end},
-            {text = ACHIEVEMENT_BUTTON, notCheckable = true,
-                func = function() ToggleAchievementFrame() end},
-            {text = SOCIAL_BUTTON, notCheckable = true,
-                func = function() ToggleFriendsFrame() end},
-            {text = ACHIEVEMENTS_GUILD_TAB, notCheckable = true,
-                func = function() ToggleGuildFrame() end},
-            {text = ENCOUNTER_JOURNAL, notCheckable = true,
-                func = function() if not IsAddOnLoaded("Blizzard_EncounterJournal") then EncounterJournal_LoadUI() end ToggleFrame(EncounterJournal) end},
-            {text = COLLECTIONS, notCheckable = true,
-                func = function() ToggleCollectionsJournal() end},
-            {text = LFG_TITLE, notCheckable = true,
-                func = function() ToggleLFDParentFrame() end},
-            {text = BLIZZARD_STORE, notCheckable = true,
-                func = function() StoreMicroButton:Click() end},
-            {text = HELP_BUTTON, notCheckable = true,
-                func = function() ToggleHelpFrame() end},
-            {text = GARRISON_LANDING_PAGE_TITLE, notCheckable = true,
-                func = function() GarrisonLandingPageMinimapButton_OnClick() end},
-            {text = CALENDAR, notCheckable = true,
-                func = function() GameTimeFrame:Click() end},
-            {text = LOOT_ROLLS, notCheckable = true,
-                func = function() ToggleFrame(LootHistoryFrame) end},
-        }
-        Minimap:SetScript("OnMouseUp", function(_, btn)
-                if( btn == "RightButton" and not IsShiftKeyDown() ) then
-                    ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, "cursor", 0, 0)
-                elseif(btn == "MiddleButton" or ( btn== "RightButton" and IsShiftKeyDown())) then
-                    EasyMenu(menuList, menuFrame, "cursor", 0, 0, "MENU", 1)
-                else
-                    local x, y = GetCursorPosition()
-                    x = x / Minimap:GetEffectiveScale()
-                    y = y / Minimap:GetEffectiveScale()
-                    local cx, cy = Minimap:GetCenter()
-                    x = x - cx
-                    y = y - cy
-                    if ( sqrt(x * x + y * y) < (Minimap:GetWidth() / 2) ) then
-                        Minimap:PingLocation(x, y)
-                    end
-                    Minimap_SetPing(x, y, 1)
-                end
-            end)
-        self:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", "CheckMail")
-        self:RegisterEvent("UPDATE_PENDING_MAIL", "CheckMail")
-        self:RegisterEvent("PLAYER_ENTERING_WORLD", "CheckMail")
-        MM:HookScript(MiniMapMailFrame, "OnHide", "CheckMail")
-        MM:HookScript(MiniMapMailFrame, "OnShow", "CheckMail")
-        Minimap.shadow:SetBackdrop( {
-                edgeFile = R["media"].glow,
-                bgFile = R["media"].blank,
-                edgeSize = R:Scale(4),
-                tile = false,
-                tileSize = 0,
-                insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
-            })
-    end
-
-    function MM:Info()
-        return L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r小地图模块."]
-    end
-
-    local function MinimapPostDrag(self, screenQuadrant)
-        MM:PositionButtonCollector(self, screenQuadrant)
-        PositionGarrisonButton(self, screenQuadrant)
-    end
-
-    function MM:Initialize()
-        if not IsAddOnLoaded("Blizzard_TimeManager") then
-            LoadAddOn("Blizzard_TimeManager")
-            if ( not BlizzardStopwatchOptions ) then
-                BlizzardStopwatchOptions = {}
             end
-
-            if ( BlizzardStopwatchOptions.position ) then
-                StopwatchFrame:ClearAllPoints()
-                StopwatchFrame:SetPoint("CENTER", R.UIParent, "BOTTOMLEFT", BlizzardStopwatchOptions.position.x, BlizzardStopwatchOptions.position.y)
-                StopwatchFrame:SetUserPlaced(true)
+        },
+        {text = ACHIEVEMENT_BUTTON, notCheckable = true,
+            func = function() ToggleAchievementFrame() end},
+        {text = SOCIAL_BUTTON, notCheckable = true,
+            func = function() ToggleFriendsFrame() end},
+        {text = ACHIEVEMENTS_GUILD_TAB, notCheckable = true,
+            func = function() ToggleGuildFrame() end},
+        {text = ENCOUNTER_JOURNAL, notCheckable = true,
+            func = function() if not IsAddOnLoaded("Blizzard_EncounterJournal") then EncounterJournal_LoadUI() end ToggleFrame(EncounterJournal) end},
+        {text = COLLECTIONS, notCheckable = true,
+            func = function() ToggleCollectionsJournal() end},
+        {text = LFG_TITLE, notCheckable = true,
+            func = function() ToggleLFDParentFrame() end},
+        {text = BLIZZARD_STORE, notCheckable = true,
+            func = function() StoreMicroButton:Click() end},
+        {text = HELP_BUTTON, notCheckable = true,
+            func = function() ToggleHelpFrame() end},
+        {text = GARRISON_LANDING_PAGE_TITLE, notCheckable = true,
+            func = function() GarrisonLandingPageMinimapButton_OnClick() end},
+        {text = CALENDAR, notCheckable = true,
+            func = function() GameTimeFrame:Click() end},
+        {text = LOOT_ROLLS, notCheckable = true,
+            func = function() ToggleFrame(LootHistoryFrame) end},
+    }
+    Minimap:SetScript("OnMouseUp", function(_, btn)
+            if( btn == "RightButton" and not IsShiftKeyDown() ) then
+                ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, "cursor", 0, 0)
+            elseif(btn == "MiddleButton" or ( btn== "RightButton" and IsShiftKeyDown())) then
+                EasyMenu(menuList, menuFrame, "cursor", 0, 0, "MENU", 1)
             else
-                StopwatchFrame:SetPoint("TOPRIGHT", R.UIParent, "TOPRIGHT", -250, -300)
+                local x, y = GetCursorPosition()
+                x = x / Minimap:GetEffectiveScale()
+                y = y / Minimap:GetEffectiveScale()
+                local cx, cy = Minimap:GetCenter()
+                x = x - cx
+                y = y - cy
+                if ( sqrt(x * x + y * y) < (Minimap:GetWidth() / 2) ) then
+                    Minimap:PingLocation(x, y)
+                end
+                Minimap_SetPing(x, y, 1)
             end
-        end
-        self:SkinMiniMap()
-        self:CreateMenu()
-        self:ButtonCollector()
-        self:RawHook("TimeManagerClockButton_UpdateTooltip", true)
-        Minimap:ClearAllPoints()
-        Minimap:Point("TOPLEFT", R.UIParent, "TOPLEFT", 10, -20)
-        Minimap:SetFrameLevel(10)
-        local clockFrame, clockTime = TimeManagerClockButton:GetRegions()
-        clockFrame:Hide()
-        clockTime:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
-        clockTime:SetTextColor(1,1,1)
-        TimeManagerClockButton:SetPoint("BOTTOM", Minimap, "BOTTOM", 0, -3)
-        TimeManagerClockButton:SetScript("OnClick", function(_,btn)
-                if btn == "LeftButton" then
-                    ToggleFrame(TimeManagerFrame)
-                end
-                if btn == "RightButton" then
-                    GameTimeFrame:Click()
-                end
-            end)
-        Minimap:EnableMouseWheel(true)
-        Minimap:SetScript("OnMouseWheel", function(_, zoom)
-                if zoom > 0 then
-                    Minimap_ZoomIn()
-                else
-                    Minimap_ZoomOut()
-                end
-            end)
-        R:CreateMover(Minimap, "MinimapMover", L["小地图锚点"], true, MinimapPostDrag)
-    end
+        end)
+    self:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", "CheckMail")
+    self:RegisterEvent("UPDATE_PENDING_MAIL", "CheckMail")
+    self:RegisterEvent("PLAYER_ENTERING_WORLD", "CheckMail")
+    self:HookScript(MiniMapMailFrame, "OnHide", "CheckMail")
+    self:HookScript(MiniMapMailFrame, "OnShow", "CheckMail")
+    Minimap.shadow:SetBackdrop( {
+            edgeFile = R["media"].glow,
+            bgFile = R["media"].blank,
+            edgeSize = R:Scale(4),
+            tile = false,
+            tileSize = 0,
+            insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
+        })
+end
 
-    R:RegisterModule(MM:GetName())
+function MM:Info()
+    return L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r小地图模块."]
+end
+
+local function MinimapPostDrag(self, screenQuadrant)
+    MM:PositionButtonCollector(self, screenQuadrant)
+    PositionGarrisonButton(self, screenQuadrant)
+    if screenQuadrant == "TOPLEFT" then
+        UIParent:SetAttribute("LEFT_OFFSET", MinimapButtonCollectFrame:GetLeft() + MinimapButtonCollectFrame:GetWidth() + 5)
+    end
+end
+
+function MM:Initialize()
+    if not IsAddOnLoaded("Blizzard_TimeManager") then
+        LoadAddOn("Blizzard_TimeManager")
+        if ( not BlizzardStopwatchOptions ) then
+            BlizzardStopwatchOptions = {}
+        end
+
+        if ( BlizzardStopwatchOptions.position ) then
+            StopwatchFrame:ClearAllPoints()
+            StopwatchFrame:SetPoint("CENTER", R.UIParent, "BOTTOMLEFT", BlizzardStopwatchOptions.position.x, BlizzardStopwatchOptions.position.y)
+            StopwatchFrame:SetUserPlaced(true)
+        else
+            StopwatchFrame:SetPoint("TOPRIGHT", R.UIParent, "TOPRIGHT", -250, -300)
+        end
+    end
+    self:SkinMiniMap()
+    self:CreateMenu()
+    self:ButtonCollector()
+    self:RawHook("TimeManagerClockButton_UpdateTooltip", true)
+    Minimap:ClearAllPoints()
+    Minimap:Point("TOPLEFT", R.UIParent, "TOPLEFT", 10, -20)
+    Minimap:SetFrameLevel(10)
+    local clockFrame, clockTime = TimeManagerClockButton:GetRegions()
+    clockFrame:Hide()
+    clockTime:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
+    clockTime:SetTextColor(1,1,1)
+    TimeManagerClockButton:SetPoint("BOTTOM", Minimap, "BOTTOM", 0, -3)
+    TimeManagerClockButton:SetScript("OnClick", function(_,btn)
+            if btn == "LeftButton" then
+                ToggleFrame(TimeManagerFrame)
+            end
+            if btn == "RightButton" then
+                GameTimeFrame:Click()
+            end
+        end)
+    Minimap:EnableMouseWheel(true)
+    Minimap:SetScript("OnMouseWheel", function(_, zoom)
+            if zoom > 0 then
+                Minimap_ZoomIn()
+            else
+                Minimap_ZoomOut()
+            end
+        end)
+    R:CreateMover(Minimap, "MinimapMover", L["小地图锚点"], true, MinimapPostDrag)
+end
+
+R:RegisterModule(MM:GetName())

@@ -233,7 +233,7 @@ function MM:ButtonCollector()
     else
         MBCF:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -5)
     end
-    MBCF:SetSize(20, 150)
+    MBCF:Size(23, 150)
     MBCF:SetFrameStrata("BACKGROUND")
     MBCF:SetFrameLevel(1)
 

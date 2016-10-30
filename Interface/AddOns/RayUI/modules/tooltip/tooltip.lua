@@ -520,9 +520,6 @@ function TT:PLAYER_ENTERING_WORLD(event)
             if tooltip.BackdropFrame then tooltip.BackdropFrame:Kill() end
         end
     end
-    WorldMapTooltip.border:SetFrameStrata("HIGH")
-	WorldMapCompareTooltip1.border:SetFrameStrata("HIGH")
-	WorldMapCompareTooltip2.border:SetFrameStrata("HIGH")
 
     self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 end

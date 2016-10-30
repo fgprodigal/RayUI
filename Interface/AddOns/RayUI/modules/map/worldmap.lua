@@ -21,15 +21,24 @@ local GetCursorPosition = GetCursorPosition
 
 WM.modName = L["世界地图"]
 
+local function FixTooltip()
+    WorldMapTooltip:SetFrameStrata("TOOLTIP")
+    WorldMapCompareTooltip1:SetFrameStrata("TOOLTIP")
+    WorldMapCompareTooltip2:SetFrameStrata("TOOLTIP")
+    if WorldMapTooltip.border then
+        WorldMapTooltip.border:SetFrameStrata("DIALOG")
+        WorldMapCompareTooltip1.border:SetFrameStrata("DIALOG")
+        WorldMapCompareTooltip2.border:SetFrameStrata("DIALOG")
+    end
+end
+
 function WM:SetLargeWorldMap()
     if InCombatLockdown() then return end
 
     WorldMapFrame:SetParent(R.UIParent)
     WorldMapFrame:EnableKeyboard(false)
     WorldMapFrame:EnableMouse(true)
-    WorldMapTooltip:SetFrameStrata("TOOLTIP")
-	WorldMapCompareTooltip1:SetFrameStrata("TOOLTIP")
-	WorldMapCompareTooltip2:SetFrameStrata("TOOLTIP")
+    FixTooltip()
 
     if WorldMapFrame:GetAttribute("UIPanelLayout-area") ~= "center" then
         SetUIPanelAttribute(WorldMapFrame, "area", "center");
@@ -52,6 +61,10 @@ function WM:SetSmallWorldMap()
 
     WorldMapFrameSizeUpButton:Show()
     WorldMapFrameSizeDownButton:Hide()
+    FixTooltip()
+
+    -- WorldMapFrame:ClearAllPoints()
+    -- WorldMapFrame:SetPoint("CENTER", R.UIParent, "CENTER", 0, 100)
 end
 
 function WM:PLAYER_REGEN_ENABLED()

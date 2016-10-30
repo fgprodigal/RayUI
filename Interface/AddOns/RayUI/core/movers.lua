@@ -639,7 +639,7 @@ local function CreateMover(parent, name, text, overlay, postdrag, ignoreSizeChan
 	if postdrag ~= nil and type(postdrag) == "function" then
 		f:RegisterEvent("PLAYER_ENTERING_WORLD")
 		f:SetScript("OnEvent", function(self, event)
-			postdrag(f)
+			postdrag(f, R:GetScreenQuadrant(f))
 			self:UnregisterAllEvents()
 		end)
 	end
