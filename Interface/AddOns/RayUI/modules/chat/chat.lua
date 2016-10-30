@@ -64,7 +64,9 @@ local hooksecurefunc = hooksecurefunc
 -- GLOBALS: CHAT_PARTY_LEADER_GET, CHAT_RAID_GET, CHAT_RAID_LEADER_GET, CHAT_RAID_WARNING_GET, CHAT_SAY_GET
 -- GLOBALS: CHAT_WHISPER_GET, CHAT_YELL_GET, ERR_FRIEND_ONLINE_SS, ERR_FRIEND_OFFLINE_S, TIMESTAMP_FORMAT_HHMM
 -- GLOBALS: TIMESTAMP_FORMAT_HHMMSS, TIMESTAMP_FORMAT_HHMMSS_24HR, TIMESTAMP_FORMAT_HHMMSS_AMPM
--- GLOBALS: TIMESTAMP_FORMAT_HHMM_24HR, TIMESTAMP_FORMAT_HHMM_AMPM, CHAT_FRAME_TAB_NORMAL_NOMOUSE_ALPHA, CHAT_FRAME_TAB_SELECTED_NOMOUSE_ALPHA
+-- GLOBALS: TIMESTAMP_FORMAT_HHMM_24HR, TIMESTAMP_FORMAT_HHMM_AMPM, CHAT_FRAME_TAB_NORMAL_NOMOUSE_ALPHA
+-- GLOBALS: CHAT_FRAME_TAB_SELECTED_NOMOUSE_ALPHA, InterfaceOptionsSocialPanelTimestamps
+-- GLOBALS: InterfaceOptionsSocialPanelChatStyle, InterfaceOptionsSocialPanelProfanityFilter
 
 local ChatHistoryEvent = CreateFrame("Frame")
 local tokennum, matchTable = 1, {}
@@ -692,7 +694,6 @@ function CH:OnMouseScroll(frame, dir)
         if frame.ScrollTimer then
             CH:CancelTimer(frame.ScrollTimer, true)
         end
-
         frame.ScrollTimer = CH:ScheduleTimer("ScrollToBottom", 15, frame)
     elseif dir < 0 then
         if IsShiftKeyDown() then
@@ -1325,8 +1326,15 @@ function CH:Initialize()
         end)
     CH:DisplayChatHistory()
 
+    InterfaceOptionsSocialPanelTimestamps:SetScale(0.0001)
+    InterfaceOptionsSocialPanelChatStyle:SetScale(0.0001)
+    InterfaceOptionsSocialPanelProfanityFilter:SetScale(0.0001)
+    InterfaceOptionsSocialPanelTimestamps:SetAlpha(0)
+    InterfaceOptionsSocialPanelChatStyle:SetAlpha(0)
+    InterfaceOptionsSocialPanelProfanityFilter:SetAlpha(0)
     SetCVar("profanityFilter", 0)
     SetCVar("chatStyle", "classic")
+    SetCVar("showTimestamps", "none")
 
     self:RegisterChatCommand("setchat", "SetChat")
 end
