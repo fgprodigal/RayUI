@@ -67,7 +67,7 @@ local function LoadSkin()
 			local tex = button:CreateTexture()
 			tex:SetColorTexture(1, 1, 1)
 			tex:SetSize(1, 1)
-			tex:SetPoint("BOTTOMLEFT", 3+i, 3+i)
+			tex:Point("BOTTOMLEFT", 3+i, 3+i)
 			tinsert(button.pixels, tex)
 		end
 
@@ -82,11 +82,11 @@ local function LoadSkin()
 		tinsert(button.pixels, vline)
 
 		if buttonName == "WorldMapFrameSizeUpButton" then
-			hline:SetPoint("TOP", 1, -4)
-			vline:SetPoint("RIGHT", -4, 1)
+			hline:Point("TOP", 1, -4)
+			vline:Point("RIGHT", -4, 1)
 		else
-			hline:SetPoint("BOTTOM", 1, 4)
-			vline:SetPoint("LEFT", 4, 1)
+			hline:Point("BOTTOM", -1, 4)
+			vline:Point("LEFT", 4, -1)
 		end
 
 		button:SetScript("OnEnter", colourArrow)

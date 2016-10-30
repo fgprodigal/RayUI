@@ -16,8 +16,8 @@ local GetCursorPosition = GetCursorPosition
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: WorldMapFrame, WorldMapFrameSizeUpButton, WorldMapFrameSizeDownButton, CoordsHolder, PLAYER
--- GLOBALS: WorldMapDetailFrame, MOUSE_LABEL, DropDownList1, NumberFontNormal, BlackoutWorld
--- GLOBALS: WORLDMAP_SETTINGS, WORLDMAP_FULLMAP_SIZE, WORLDMAP_WINDOWED_SIZE
+-- GLOBALS: WorldMapDetailFrame, MOUSE_LABEL, DropDownList1, NumberFontNormal, BlackoutWorld, WorldMapTooltip
+-- GLOBALS: WORLDMAP_SETTINGS, WORLDMAP_FULLMAP_SIZE, WORLDMAP_WINDOWED_SIZE, WorldMapCompareTooltip1, WorldMapCompareTooltip2
 
 WM.modName = L["世界地图"]
 
@@ -26,8 +26,10 @@ function WM:SetLargeWorldMap()
 
     WorldMapFrame:SetParent(R.UIParent)
     WorldMapFrame:EnableKeyboard(false)
-    WorldMapFrame:SetScale(1)
     WorldMapFrame:EnableMouse(true)
+    WorldMapTooltip:SetFrameStrata("TOOLTIP")
+	WorldMapCompareTooltip1:SetFrameStrata("TOOLTIP")
+	WorldMapCompareTooltip2:SetFrameStrata("TOOLTIP")
 
     if WorldMapFrame:GetAttribute("UIPanelLayout-area") ~= "center" then
         SetUIPanelAttribute(WorldMapFrame, "area", "center");
