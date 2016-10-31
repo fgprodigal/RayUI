@@ -8,8 +8,6 @@ local oUF = ns.oUF
 local format = string.format
 local tinsert, tremove = table.insert, table.remove
 
-local isBetaClient = select(4, GetBuildInfo()) >= 70000
-
 local _PATTERN = '%[..-%]+'
 
 local _ENV = {
@@ -23,7 +21,6 @@ local _ENV = {
 		return format("|cff%02x%02x%02x", r*255, g*255, b*255)
 	end,
 	ColorGradient = oUF.ColorGradient,
-	isBetaClient = isBetaClient,
 }
 local _PROXY = setmetatable(_ENV, {__index = _G})
 
@@ -43,7 +40,7 @@ local tagStrings = {
 	["difficulty"] = [[function(u)
 		if UnitCanAttack("player", u) then
 			local l = UnitLevel(u)
-			return Hex(GetQuestDifficultyColor((l > 0) and l or 99))
+			return Hex(GetCreatureDifficultyColor((l > 0) and l or 999))
 		end
 	end]],
 
@@ -281,10 +278,6 @@ local tagStrings = {
 	end]],
 
 	['soulshards'] = [[function()
-		if(not isBetaClient and not IsPlayerSpell(WARLOCK_SOULBURN)) then
-			return
-		end
-
 		local num = UnitPower('player', SPELL_POWER_SOUL_SHARDS)
 		if(num > 0) then
 			return num
@@ -292,25 +285,29 @@ local tagStrings = {
 	end]],
 
 	['holypower'] = [[function()
-		if((isBetaClient and GetSpecialization() ~= SPEC_PALADIN_RETRIBUTION))
-			or (not isBetaClient and IsPlayerSpell(85673)) then
-			return
-		end
-
-		local num = UnitPower('player', SPELL_POWER_HOLY_POWER)
-		if(num > 0) then
-			return num
+		if(GetSpecialization() == SPEC_PALADIN_RETRIBUTION) then
+			local num = UnitPower('player', SPELL_POWER_HOLY_POWER)
+			if(num > 0) then
+				return num
+			end
 		end
 	end]],
 
 	['chi'] = [[function()
-		if(isBetaClient and GetSpecialization() ~= SPEC_MONK_WINDWALKER) then
-			return
+		if(GetSpecialization() == SPEC_MONK_WINDWALKER) then
+			local num = UnitPower('player', SPELL_POWER_CHI)
+			if(num > 0) then
+				return num
+			end
 		end
+	end]],
 
-		local num = UnitPower('player', SPELL_POWER_CHI)
-		if(num > 0) then
-			return num
+	['arcanecharges'] = [[function()
+		if(GetSpecialization() == SPEC_MAGE_ARCANE) then
+			local num = UnitPower('player', SPELL_POWER_ARCANE_CHARGES)
+			if(num > 0) then
+				return num
+			end
 		end
 	end]],
 
@@ -320,25 +317,26 @@ local tagStrings = {
 			return 'Affix'
 		end
 	end]],
-}
 
-if(isBetaClient) then
-	tagStrings['arcanecharges'] = [[function()
-		local num = UnitPower('player', SPELL_POWER_ARCANE_CHARGES)
-		if(num > 0) then
-			return num
-		end
-	end]]
-else
-	tagStrings['shadoworbs'] = [[function()
-		if(IsPlayerSpell(95740)) then
-			local num = UnitPower('player', SPELL_POWER_SHADOW_ORBS)
-			if(num > 0) then
-				return num
+	['powercolor'] = [[function(u)
+		local pType, pToken, altR, altG, altB = UnitPowerType(u)
+		local t = _COLORS.power[pToken]
+
+		if(not t) then
+			if(altR) then
+				if(altR > 1 or altG > 1 or altB > 1) then
+					return Hex(altR / 255, altG / 255, altB / 255)
+				else
+					return Hex(altR, altG, altB)
+				end
+			else
+				return Hex(_COLORS.power[pType])
 			end
 		end
-	end]]
-end
+
+		return Hex(t)
+	end]],
+}
 
 local tags = setmetatable(
 	{
@@ -416,19 +414,12 @@ local tagEvents = {
 	["status"]              = "UNIT_HEALTH PLAYER_UPDATE_RESTING UNIT_CONNECTION",
 	['curmana']             = 'UNIT_POWER UNIT_MAXPOWER',
 	['maxmana']             = 'UNIT_POWER UNIT_MAXPOWER',
-	['soulshards']          = 'UNIT_POWER SPELLS_CHANGED',
+	['soulshards']          = 'UNIT_POWER',
 	['holypower']           = 'UNIT_POWER SPELLS_CHANGED',
+	['chi']                 = 'UNIT_POWER SPELLS_CHANGED',
+	['arcanecharges']       = 'UNIT_POWER SPELLS_CHANGED',
+	['powercolor']          = 'UNIT_DISPLAYPOWER',
 }
-
-if(isBetaClient) then
-	tagEvents['arcanecharges'] = 'UNIT_POWER SPELLS_CHANGED'
-	tagEvents['soulshards'] = 'UNIT_POWER'
-	tagEvents['chi'] = 'UNIT_POWER SPELLS_CHANGED'
-else
-	tagEvents['shadoworbs'] = 'UNIT_POWER SPELLS_CHANGED'
-	tagEvents['soulshards'] = 'UNIT_POWER SPELLS_CHANGED'
-	tagEvents['chi'] = 'UNIT_POWER'
-end
 
 local unitlessEvents = {
 	PLAYER_LEVEL_UP = true,
@@ -613,9 +604,9 @@ local Tag = function(self, fs, tagstr)
 
 		for bracket in tagstr:gmatch(_PATTERN) do
 			local tagFunc = funcPool[bracket] or tags[bracket:sub(2, -2)]
-
 			if(not tagFunc) then
 				local tagName, s, e = getTagName(bracket)
+
 				local tag = tags[tagName]
 				if(tag) then
 					s = s - 2
