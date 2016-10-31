@@ -1,6 +1,6 @@
 local addon, ns = ...
 local cargBags = ns.cargBags
-local LibItemLevel = LibStub:GetLibrary("LibItemLevel.7000")
+local LibItemLevel = LibStub:GetLibrary("LibItemLevel-RayUI")
 
 local function noop() end
 

@@ -1,6 +1,6 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local TT = R:NewModule("Tooltip", "AceEvent-3.0", "AceHook-3.0", "AceTimer-3.0")
-local LibItemLevel = LibStub:GetLibrary("LibItemLevel.7000")
+local LibItemLevel = LibStub:GetLibrary("LibItemLevel-RayUI")
 
 --Cache global variables
 --Lua functions
@@ -370,11 +370,12 @@ function TT:SetiLV()
 
     local unknownCount, unitilvl = LibItemLevel:GetUnitItemLevel(unit)
     if unknownCount == 0 and unitilvl > 1 then
+        unitilvl = floor(unitilvl)
         local r, g, b = TT:GetQuality(unitilvl)
         ilvcurrent.format = R:RGBToHex(r, g, b)..unitilvl
         for i = 2, GameTooltip:NumLines() do
             if ((_G["GameTooltipTextLeft"..i]:GetText() or ""):match("^"..STAT_AVERAGE_ITEM_LEVEL)) then
-                _G["GameTooltipTextRight"..i]:SetText(R:RGBToHex(r, g, b)..floor(unitilvl))
+                _G["GameTooltipTextRight"..i]:SetText(R:RGBToHex(r, g, b)..unitilvl)
                 break
             end
         end
@@ -433,8 +434,9 @@ function TT:iLVSetUnit()
     end
     if UnitIsUnit(unit, "player") then
         local _, unitilvl = LibItemLevel:GetUnitItemLevel("player")
+        unitilvl = floor(unitilvl)
         local r, g, b = 1, 1, 0.1
-        GameTooltip:AddDoubleLine(STAT_AVERAGE_ITEM_LEVEL, R:RGBToHex(r, g, b)..floor(unitilvl), nil, nil, nil, 1, 1, 1)
+        GameTooltip:AddDoubleLine(STAT_AVERAGE_ITEM_LEVEL, R:RGBToHex(r, g, b)..unitilvl, nil, nil, nil, 1, 1, 1)
     elseif not cacheLoaded then
         GameTooltip:AddDoubleLine(STAT_AVERAGE_ITEM_LEVEL, "...", nil, nil, nil, 1, 1, 1)
     end

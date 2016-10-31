@@ -1,7 +1,7 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local M = R:GetModule("Misc")
 local mod = M:NewModule("Durability", "AceEvent-3.0")
-local LibItemLevel = LibStub:GetLibrary("LibItemLevel.7000")
+local LibItemLevel = LibStub:GetLibrary("LibItemLevel-RayUI")
 
 --Cache global variables
 --Lua functions
