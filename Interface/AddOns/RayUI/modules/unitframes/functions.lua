@@ -332,7 +332,7 @@ function UF:Construct_Portrait(frame)
 end
 
 function UF:Construct_Debuffs(frame)
-    local debuffs = CreateFrame("Frame", nil, frame)
+    local debuffs = CreateFrame("Frame", frame:GetName().."Debuffs", frame)
     debuffs:SetHeight(20)
     debuffs:SetWidth(frame.UNIT_WIDTH)
     debuffs.spacing = 3.8
@@ -345,7 +345,7 @@ function UF:Construct_Debuffs(frame)
 end
 
 function UF:Construct_Buffs(frame)
-    local buffs = CreateFrame("Frame", nil, frame)
+    local buffs = CreateFrame("Frame", frame:GetName().."Buffs", frame)
     buffs:SetHeight(20)
     buffs:SetWidth(frame.UNIT_WIDTH)
     buffs.spacing = 3.8
