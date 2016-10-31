@@ -46,7 +46,7 @@ local function CreateShadow(f, t, thickness)
 
 	local borderr, borderg, borderb = 0, 0, 0
     local backdropr, backdropg, backdropb, backdropa = unpack(R["media"].backdropcolor)
-	local frameLevel = f:GetFrameLevel() > 1 and f:GetFrameLevel() - 1 or 1
+	local frameLevel = f:GetFrameLevel() > 0 and f:GetFrameLevel() - 1 or 0
 	local thickness = thickness or 4
 	local offset = thickness - 1
 
@@ -68,7 +68,7 @@ local function CreateShadow(f, t, thickness)
 	f.border = f.border or border
 
 	local shadow = CreateFrame("Frame", nil, border)
-	shadow:SetFrameLevel(frameLevel - 1)
+	shadow:SetFrameLevel(frameLevel)
 	shadow:SetOutside(border, offset, offset)
 	shadow:SetBackdrop( {
 		edgeFile = R.global.general.theme == "Shadow" and R["media"].glow or nil,
@@ -82,7 +82,7 @@ local function CreateShadow(f, t, thickness)
 	shadow:SetBackdropBorderColor( borderr, borderg, borderb )
 	hooksecurefunc(shadow, "SetFrameLevel", function(self, value)
     	if value > frameLevel then
-    		shadow:SetFrameLevel(frameLevel - 1)
+    		shadow:SetFrameLevel(frameLevel)
     	end
     end)
 	f.shadow = shadow
