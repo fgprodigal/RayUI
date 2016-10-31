@@ -1,5 +1,6 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local TT = R:NewModule("Tooltip", "AceEvent-3.0", "AceHook-3.0")
+local TT = R:NewModule("Tooltip", "AceEvent-3.0", "AceHook-3.0", "AceTimer-3.0")
+local LibItemLevel = LibStub:GetLibrary("LibItemLevel.7000")
 
 --Cache global variables
 --Lua functions
@@ -359,55 +360,26 @@ function TT:Hook_Reset(tooltip)
     end
 end
 
-local function GetPlayerScore(unit)
-    local unitilvl = 0
-    local ilvl, ilvlAdd, equipped = 0, 0, 0
-    if (UnitIsPlayer(unit)) then
-        for i = 1, 18 do
-            if (i ~= 4) then
-                local iLink = GetInventoryItemLink(unit, i)
-                if (iLink) then
-                    -- Artifact Fix
-                    ilvlAdd = TT:GetItemScore(iLink)
-                    if (i == INVSLOT_OFFHAND or i == INVSLOT_MAINHAND) then
-                        local name, _, itemRarity = GetItemInfo(iLink)
-                        if(itemRarity == 6 and ilvlAdd == 750) then
-                            local slot = (i == INVSLOT_OFFHAND) and INVSLOT_MAINHAND or INVSLOT_MAINHAND
-                            ilvlAdd = TT:GetItemScore(GetInventoryItemLink(unit, slot))
-                        end
-                    end
-                    if ilvlAdd then
-                        ilvl = ilvl + ilvlAdd
-                    end
-                    equipped = equipped + 1
-                end
-            end
-        end
-    end
-    -- ClearInspectPlayer()
-    if equipped > 0 then
-        return floor(ilvl / equipped)
-    else
-        return 0
-    end
-end
-
 function TT:SetiLV()
+    self:CancelTimer(self.UpdateInspect)
+    self.UpdateInspect = nil
     local _, unit = GameTooltip:GetUnit()
     if not (unit) or not (UnitIsPlayer(unit)) or not (CanInspect(unit)) then
         return
     end
 
-    local unitilvl = GetPlayerScore(unit)
-    if (unitilvl > 1) then
+    local unknownCount, unitilvl = LibItemLevel:GetUnitItemLevel(unit)
+    if unknownCount == 0 and unitilvl > 1 then
         local r, g, b = TT:GetQuality(unitilvl)
         ilvcurrent.format = R:RGBToHex(r, g, b)..unitilvl
         for i = 2, GameTooltip:NumLines() do
             if ((_G["GameTooltipTextLeft"..i]:GetText() or ""):match("^"..STAT_AVERAGE_ITEM_LEVEL)) then
-                _G["GameTooltipTextRight"..i]:SetText(R:RGBToHex(r, g, b)..unitilvl)
+                _G["GameTooltipTextRight"..i]:SetText(R:RGBToHex(r, g, b)..floor(unitilvl))
                 break
             end
         end
+    elseif unknownCount > 0 then
+        self.UpdateInspect = self:ScheduleTimer("SetiLV", 0.5)
     end
 
     for i = #ilvcache, 1, -1 do
@@ -460,9 +432,9 @@ function TT:iLVSetUnit()
         end
     end
     if UnitIsUnit(unit, "player") then
-        local unitilvl = GetPlayerScore("player")
+        local _, unitilvl = LibItemLevel:GetUnitItemLevel("player")
         local r, g, b = 1, 1, 0.1
-        GameTooltip:AddDoubleLine(STAT_AVERAGE_ITEM_LEVEL, R:RGBToHex(r, g, b)..unitilvl, nil, nil, nil, 1, 1, 1)
+        GameTooltip:AddDoubleLine(STAT_AVERAGE_ITEM_LEVEL, R:RGBToHex(r, g, b)..floor(unitilvl), nil, nil, nil, 1, 1, 1)
     elseif not cacheLoaded then
         GameTooltip:AddDoubleLine(STAT_AVERAGE_ITEM_LEVEL, "...", nil, nil, nil, 1, 1, 1)
     end
@@ -522,17 +494,6 @@ function TT:PLAYER_ENTERING_WORLD(event)
     end
 
     self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-end
-
-function TT:GetItemScore(iLink)
-    if not iLink then return end
-    local _, _, itemRarity, itemLevel, _, _, _, _, itemEquip = GetItemInfo(iLink)
-    if (IsEquippableItem(iLink)) then
-        if not (itemLevel > 0) and (itemRarity > 1) then
-            return 0
-        end
-    end
-    return R:GetItemUpgradeLevel(iLink)
 end
 
 function TT:SetStyle(tooltip)
@@ -696,10 +657,10 @@ function TT:GameTooltip_ShowStatusBar(tooltip, min, max, value, text)
 end
 
 function TT:RepositionBNET(frame, _, anchor)
-	if anchor ~= RayUIArtiBar then
-		frame:ClearAllPoints()
-		frame:SetPoint("TOPLEFT", RayUIArtiBar, "BOTTOMLEFT", 0, -5)
-	end
+    if anchor ~= RayUIArtiBar then
+        frame:ClearAllPoints()
+        frame:SetPoint("TOPLEFT", RayUIArtiBar, "BOTTOMLEFT", 0, -5)
+    end
 end
 
 function TT:Initialize()

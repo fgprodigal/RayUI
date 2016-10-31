@@ -1,6 +1,7 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local M = R:GetModule("Misc")
 local mod = M:NewModule("Durability", "AceEvent-3.0")
+local LibItemLevel = LibStub:GetLibrary("LibItemLevel.7000")
 
 --Cache global variables
 --Lua functions
@@ -118,7 +119,7 @@ function mod:UpdateItemlevel(event)
         text:SetText("")
         local clink = GetInventoryItemLink(unit, id)
         if clink then
-            local iLvl = GetDetailedItemLevelInfo(clink)
+            local _, iLvl = LibItemLevel:GetItemInfo(clink)
             local rarity = select(3, GetItemInfo(clink))
             if iLvl and rarity then
                 if iLvl == 750 and rarity == LE_ITEM_QUALITY_ARTIFACT and id == INVSLOT_OFFHAND then

@@ -1,5 +1,6 @@
 local addon, ns = ...
 local cargBags = ns.cargBags
+local LibItemLevel = LibStub:GetLibrary("LibItemLevel.7000")
 
 local function noop() end
 
@@ -121,7 +122,7 @@ local function ItemButton_Update(self, item)
 		local clink = GetContainerItemLink(item.bagID, item.slotID)
 		if (clink) then
 			local itemEquipLoc, _, _, itemClassID, itemSubClassID = select(9, GetItemInfo(clink))
-			local iLvl = GetDetailedItemLevelInfo(clink)
+			local _, iLvl = LibItemLevel:GetItemInfo(clink)
 			local r, g, b
 
 			if(item.rarity) then

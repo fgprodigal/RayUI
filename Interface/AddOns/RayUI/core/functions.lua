@@ -1,6 +1,5 @@
 ﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local LSM = LibStub("LibSharedMedia-3.0")
-local LibItemUpgrade = LibStub("LibItemUpgradeInfo-1.0")
 
 --Cache global variables
 --Lua functions
@@ -57,7 +56,7 @@ local GetSpecializationRole = GetSpecializationRole
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: UIParent, LibStub, MAX_PLAYER_LEVEL, ScriptErrorsFrame_OnError, BaudErrorFrameHandler, UISpecialFrames
--- GLOBALS: QuestDifficultyColors, Advanced_UIScaleSlider, Advanced_UseUIScale, RayUIConfigTutorial, RayUIWarningFrameScrollScrollBar
+-- GLOBALS: Advanced_UIScaleSlider, Advanced_UseUIScale, RayUIConfigTutorial, RayUIWarningFrameScrollScrollBar
 -- GLOBALS: SLASH_RELOAD1, COMBAT_RATING_RESILIENCE_PLAYER_DAMAGE_TAKEN, FIRST_NUMBER_CAP, SECOND_NUMBER_CAP
 
 SlashCmdList["RELOAD"] = function() ReloadUI() end
@@ -187,14 +186,6 @@ function R:TableIsEmpty(t)
 	end
 end
 
-function R:GetItemUpgradeLevel(iLink)
-	if not iLink then
-		return 0
-	else
-		return LibItemUpgrade:GetUpgradedItemLevel(iLink)
-	end
-end
-
 local function CreateWarningFrame()
 	for index in pairs(AddonNotSupported) do
 		R:Print(GetAddOnInfo(index))
@@ -310,12 +301,6 @@ function R:PLAYER_ENTERING_WORLD()
 	RayUIGarbageCollector:RegisterAllEvents()
 	RayUIGarbageCollector:SetScript("OnEvent", function(self, event, addon)
 		eventcount = eventcount + 1
-		if QuestDifficultyColors["trivial"].r ~= 0.50 then
-			QuestDifficultyColors["trivial"].r = 0.50
-			QuestDifficultyColors["trivial"].g = 0.50
-			QuestDifficultyColors["trivial"].b = 0.50
-			QuestDifficultyColors["trivial"].font = QuestDifficulty_Trivial
-		end
 		if InCombatLockdown() then return end
 
 		if eventcount > 6000 then

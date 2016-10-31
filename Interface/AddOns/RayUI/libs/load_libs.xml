@@ -11,6 +11,7 @@
     <Include file="AceHook-3.0\AceHook-3.0.xml"/>
     <Script file="AceLibrary\AceLibrary.lua"/>
     <Script file="Tablet-2.0\Tablet-2.0.lua"/>
+	<Script file="LibItemLevel\LibItemLevel.lua"/>
     <Include file="cargBags\embed.xml"/>
     <Include file="LibSpellRange-1.0\lib.xml"/>
     <Include file="oUF\oUF.xml"/>
@@ -18,6 +19,5 @@
     <Script file="LibRangeCheck-2.0\LibRangeCheck-2.0.lua"/>
 	<Script file="LibDataBroker\LibDataBroker-1.1.lua"/>
 	<Include file="LibActionButton-1.0\LibActionButton-1.0.xml"/>
-	<Script file="LibItemUpgradeInfo-1.0\LibItemUpgradeInfo-1.0.lua"/>
 	<Script file="LibAnim\LibAnim.lua"/>
 </Ui>
