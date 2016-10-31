@@ -306,6 +306,8 @@ local function MinimapPostDrag(self, screenQuadrant)
     PositionGarrisonButton(self, screenQuadrant)
     if screenQuadrant == "TOPLEFT" then
         UIParent:SetAttribute("LEFT_OFFSET", MinimapButtonCollectFrame:GetLeft() + MinimapButtonCollectFrame:GetWidth() + 5)
+    else
+        UIParent:SetAttribute("LEFT_OFFSET", 16)
     end
 end
 
