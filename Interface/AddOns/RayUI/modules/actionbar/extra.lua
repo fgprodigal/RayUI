@@ -60,6 +60,10 @@ function AB:CreateExtraButton()
 
 			self:Style(button)
             button:StyleButton(true)
+			local tex = button:CreateTexture(nil, 'OVERLAY')
+			tex:SetColorTexture(0.9, 0.8, 0.1, 0.3)
+			tex:SetAllPoints()
+			button:SetCheckedTexture(tex)
 			_G["ExtraActionButton"..i.."Icon"]:SetDrawLayer("ARTWORK")
 			_G["ExtraActionButton"..i.."Cooldown"]:SetFrameLevel(button:GetFrameLevel()+2)
 		end
