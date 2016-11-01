@@ -121,7 +121,7 @@ function mod:UpdateItemlevel(event)
         if clink then
             local _, iLvl = LibItemLevel:GetUnitItemInfo(unit, id)
             local rarity = select(3, GetItemInfo(clink))
-            if iLvl and rarity and rarity > 1 then
+            if iLvl and iLvl > 1 and rarity then
                 local r, g, b = GetItemQualityColor(rarity)
 
                 text:SetText(iLvl)
