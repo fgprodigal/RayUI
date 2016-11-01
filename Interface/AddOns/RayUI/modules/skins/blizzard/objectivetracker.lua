@@ -157,7 +157,7 @@ local function LoadSkin()
                 progressBar.styled = true
             end
 
-            progressBar.Bar:SetValue(50)
+            -- progressBar.Bar:SetValue(50)
         end)
 
     WORLD_QUEST_TRACKER_MODULE.Header:StripTextures()
@@ -218,7 +218,7 @@ local function LoadSkin()
             end
 
             bar.IconBG:Hide()
-            progressBar.Bar:SetValue(50)
+            -- progressBar.Bar:SetValue(50)
         end)
 end
 
