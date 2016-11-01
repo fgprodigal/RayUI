@@ -99,7 +99,14 @@ function AddOn:OnInitialize()
     self:RegisterEvent("PLAYER_LOGIN", "Initialize")
     self:RegisterChatCommand("RayUI", "OpenConfig")
     self:RegisterChatCommand("RC", "OpenConfig")
-    self:RegisterChatCommand("cpuusage", "GetTopCPUFunc")
+    self:RegisterChatCommand("cpuimpact", "GetCPUImpact")
+	self:RegisterChatCommand("cpuusage", "GetTopCPUFunc")
+	-- args: module, showall, delay, minCalls
+	-- Example1: /cpuusage all
+	-- Example2: /cpuusage Bags true
+	-- Example3: /cpuusage UnitFrames nil 50 25
+	-- Note: showall, delay, and minCalls will default if not set
+	-- arg1 can be "all" this will scan all registered modules!
     self:RegisterChatCommand("gm", ToggleHelpFrame)
 end
 

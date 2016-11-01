@@ -2,8 +2,8 @@ local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, 
 local S = R:GetModule("Skins")
 
 local function SkinBaudErrorFrame()
-	S:CreateBD(BaudErrorFrame)
-	S:CreateSD(BaudErrorFrame, 1, 4)
+	BaudErrorFrame:StripTextures()
+	S:SetBD(BaudErrorFrame)
 	S:Reskin(BaudErrorFrameClearButton)
 	S:Reskin(BaudErrorFrameCloseButton)
 	S:Reskin(BaudErrorFrameReloadUIButton)
