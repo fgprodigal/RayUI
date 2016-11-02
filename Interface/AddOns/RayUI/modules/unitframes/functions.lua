@@ -311,8 +311,6 @@ function UF:Construct_Portrait(frame)
     local portrait = CreateFrame("PlayerModel", nil, frame)
     portrait:SetFrameStrata("LOW")
     portrait:SetFrameLevel(frame.Health:GetFrameLevel() + 1)
-    -- portrait:Point("TOPLEFT", frame.Health, "TOPLEFT", 0, 0)
-    -- portrait:Point("BOTTOMRIGHT", frame.Health, "BOTTOMRIGHT", 0, 1)
     portrait:SetInside(frame.Health, 1, 1)
     portrait:SetAlpha(.2)
     portrait:SetCamDistanceScale(1)
@@ -321,7 +319,7 @@ function UF:Construct_Portrait(frame)
     end
 
     portrait.overlay = CreateFrame("Frame", nil, frame)
-    portrait.overlay:SetFrameLevel(frame:GetFrameLevel() - 5)
+    portrait.overlay:SetFrameLevel(frame:GetFrameLevel() + 5)
 
     frame.Health.bg:ClearAllPoints()
     frame.Health.bg:Point("BOTTOMLEFT", frame.Health:GetStatusBarTexture(), "BOTTOMRIGHT")
