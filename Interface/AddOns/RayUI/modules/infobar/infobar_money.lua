@@ -63,10 +63,8 @@ local function GetMoneyString(money)
         silverText = ""
     end
 
-    if gold >= 1000000 then
-        string = format("%.2f", gold/1000000)..SECOND_NUMBER_CAP.."|TInterface\\MoneyFrame\\UI-GoldIcon:%d:%d:2:0|t"
-    elseif gold >= 10000 then
-        string = format(GOLD_AMOUNT_TEXTURE_STRING, BreakUpLargeNumbers(gold))
+    if gold >= 10000 then
+        string = format(GOLD_AMOUNT_TEXTURE_STRING, R:ShortValue(gold))
     elseif gold >= 100 then
         string = goldText..silverText
     elseif gold > 0 then
