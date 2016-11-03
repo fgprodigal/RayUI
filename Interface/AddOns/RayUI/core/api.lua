@@ -46,12 +46,12 @@ local function CreateShadow(f, t, thickness)
 
 	local borderr, borderg, borderb = 0, 0, 0
     local backdropr, backdropg, backdropb, backdropa = unpack(R["media"].backdropcolor)
-	if f:GetFrameLevel() <= 1 then
-		f:SetFrameLevel(2)
-	end
-	local frameLevel = f:GetFrameLevel() - 1 or 1
-	local thickness = thickness or 4
+	local frameLevel = f:GetFrameLevel() > 1 and f:GetFrameLevel() - 1 or 1
+	local thickness = thickness or (R.global.general.theme == "Pixel" and 3 or 4)
 	local offset = thickness - 1
+	if R.global.general.theme == "Pixel" then
+		offset = thickness
+	end
 
     if t == "Background" then
         backdropr, backdropg, backdropb, backdropa = unpack(R["media"].backdropfadecolor)
@@ -63,11 +63,6 @@ local function CreateShadow(f, t, thickness)
 	border:SetFrameLevel(frameLevel)
 	border:SetOutside(f, 1, 1)
     border:SetTemplate("Border")
-    hooksecurefunc(border, "SetFrameLevel", function(self, value)
-    	if value > frameLevel + 1 then
-    		border:SetFrameLevel(frameLevel)
-    	end
-    end)
 	f.border = f.border or border
 
 	local shadow = CreateFrame("Frame", nil, border)
@@ -83,16 +78,7 @@ local function CreateShadow(f, t, thickness)
 	})
 	shadow:SetBackdropColor( backdropr, backdropg, backdropb, backdropa )
 	shadow:SetBackdropBorderColor( borderr, borderg, borderb )
-	hooksecurefunc(f, "SetFrameLevel", function(self, value)
-    	if value <= 1 then
-			f:SetFrameLevel(2)
-			border:SetFrameLevel(frameLevel)
-    		shadow:SetFrameLevel(frameLevel - 1)
-    	else
-			border:SetFrameLevel(value - 1)
-    		shadow:SetFrameLevel(value - 2)
-		end
-    end)
+	f:SetFrameLevel(frameLevel + 1)
 	f.shadow = shadow
 end
 
