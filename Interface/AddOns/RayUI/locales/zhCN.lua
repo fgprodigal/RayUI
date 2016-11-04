@@ -87,7 +87,10 @@ do
     L["<Shift+点击套装> 解除天赋绑定."] = true
     L["<点击玩家>发送密语, <Alt+点击玩家>邀请玩家."] = true
     L["网络"] = true
+    L["下行"] = true
+    L["上行"] = true
     L["电脑"] = true
+    L["系统信息"] = true
     L["FPS"] = true
     L["本地"] = true
     L["世界"] = true

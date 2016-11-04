@@ -10,7 +10,6 @@
     <Include file="LibSharedMedia-3.0\lib.xml"/>
     <Include file="AceHook-3.0\AceHook-3.0.xml"/>
     <Script file="AceLibrary\AceLibrary.lua"/>
-    <Script file="Tablet-2.0\Tablet-2.0.lua"/>
 	<Script file="LibItemLevel\LibItemLevel.lua"/>
     <Include file="cargBags\embed.xml"/>
     <Include file="LibSpellRange-1.0\lib.xml"/>
@@ -21,4 +20,5 @@
 	<Include file="LibActionButton-1.0\LibActionButton-1.0.xml"/>
 	<Script file="LibAnim\LibAnim.lua"/>
 	<Include file="LibChatAnims\LibChatAnims\LibChatAnims.xml"/>
+	<Script file="LibQTip-1.0\LibQTip-1.0.lua"/>
 </Ui>

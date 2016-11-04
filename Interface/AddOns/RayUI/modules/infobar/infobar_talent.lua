@@ -1,232 +1,126 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local IF = R:GetModule("InfoBar")
+local LibQTip = LibStub("LibQTip-1.0")
 
 --Cache global variables
 --Lua functions
-local ipairs, select = ipairs, select
+local ipairs, select, unpack = ipairs, select, unpack
 local string = string
 local wipe = table.wipe
-local collectgarbage = collectgarbage
 local format = string.format
 
 --WoW API / Variables
-local CreateFrame = CreateFrame
 local GetSpecialization = GetSpecialization
 local SetSpecialization = SetSpecialization
-local EquipmentManager_EquipSet = EquipmentManager_EquipSet
 local GetNumSpecGroups = GetNumSpecGroups
-local GetEquipmentSetInfo = GetEquipmentSetInfo
 local GetSpecializationInfo = GetSpecializationInfo
 local GetNumSpecializations = GetNumSpecializations
 local UnitLevel = UnitLevel
-local GetNumEquipmentSets = GetNumEquipmentSets
 local GetActiveSpecGroup = GetActiveSpecGroup
-local InCombatLockdown = InCombatLockdown
 local GetLootSpecialization = GetLootSpecialization
 local GetSpecializationInfoByID = GetSpecializationInfoByID
+local SetLootSpecialization = SetLootSpecialization
 local TalentFrame_LoadUI = TalentFrame_LoadUI
 local ShowUIPanel = ShowUIPanel
 local HideUIPanel = HideUIPanel
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: TALENTS, ACTIVE_PETS, NONE, NORMAL_FONT_COLOR, EQUIPMENT_MANAGER, PlayerTalentFrame
+-- GLOBALS: TALENTS, ACTIVE_PETS, NONE, NORMAL_FONT_COLOR, EQUIPMENT_MANAGER, PlayerTalentFrame, RayUI_InfobarTooltipFont
+-- GLOBALS: SELECT_LOOT_SPECIALIZATION, UNKNOWN
 
-local spec = LibStub("Tablet-2.0")
-local SpecEquipList = {}
-local SpecSection = {}
-local resSizeExtra
+local Tooltip
+local ActiveColor = {0, 0.9, 0}
+local InactiveColor = {0.3, 0.3, 0.3}
 
-local function SpecChangeClickFunc(self, ...)
-    if ... then
-        if GetSpecialization(false, false, 1) == ... then return end
-        SetSpecialization(...)
+local function Tooltip_OnRelease(self)
+    Tooltip:SetFrameStrata("TOOLTIP")
+    Tooltip = nil
+end
+
+local function GetCurrentLootSpecName()
+    local lsID = GetLootSpecialization()
+    if (lsID == 0) then
+        local specIndex = GetSpecialization()
+        local _, specName = GetSpecializationInfo(specIndex)
+        return specName or UNKNOWN
+    else
+        local _, specName = GetSpecializationInfoByID(lsID)
+        return specName
     end
 end
 
-local function SpecGearClickFunc(self, index, equipName)
-    if not index then return end
-
-    EquipmentManager_EquipSet(equipName)
+local function Spec_OnMouseUp(self, talentGroup)
+    if GetSpecialization() == talentGroup then return end
+    SetSpecialization(talentGroup)
 end
 
-local function SpecAddEquipListToCat(self, cat)
-    resSizeExtra = 2
-    local numTalentGroups = GetNumSpecGroups()
+local function LootSpec_OnMouseUp(self, talentGroup)
+    if GetCurrentLootSpecName() == GetSpecializationInfo(talentGroup) then return end
+    SetLootSpecialization(GetSpecializationInfo(talentGroup))
+end
 
-    -- Sets
-    local line = {}
-    if #SpecEquipList > 0 then
-        for k, v in ipairs(SpecEquipList) do
-            local _, _, _, isEquipped = GetEquipmentSetInfo(k)
-
-            wipe(line)
-            for i = 1, 2 do
-                if i == 1 then
-                    line["text"] = string.format("|T%s:%d:%d:0:0:64:64:5:59:5:59|t %s", SpecEquipList[k].icon, 10 + resSizeExtra, 10 + resSizeExtra, SpecEquipList[k].name)
-                    line["size"] = 10 + resSizeExtra
-                    line["justify"] = "LEFT"
-                    line["textR"] = 0.9
-                    line["textG"] = 0.9
-                    line["textB"] = 0.9
-                    line["hasCheck"] = true
-                    line["isRadio"] = true
-                    line["checked"] = isEquipped
-                    line["func"] = function() SpecGearClickFunc(self, k, SpecEquipList[k].name) end
-                    line["customwidth"] = 110
-                elseif i == 2 then
-                    line["text"..i] = isEquipped and ACTIVE_PETS or ""
-                    line["size"..i] = 10 + resSizeExtra
-                    line["justify"..i] = "LEFT"
-                    line["text"..i.."R"] = isEquipped and 0 or 0.3
-                    line["text"..i.."G"] = isEquipped and 0.9 or 0.3
-                    line["text"..i.."B"] = isEquipped and 0 or 0.3
-                end
-            end
-
-            cat:AddLine(line)
+local function RenderTooltip(anchorFrame)
+    local paddingLeft, paddingRight = 25, 25
+    if not Tooltip then
+        Tooltip = LibQTip:Acquire("RayUI_InfobarTalentTooltip", 1, "CENTER")
+        Tooltip:SetAutoHideDelay(0.001, anchorFrame)
+        Tooltip:SetBackdrop(nil)
+        Tooltip:SmartAnchorTo(anchorFrame)
+        Tooltip:SetHighlightTexture([[Interface\QuestFrame\UI-QuestTitleHighlight]])
+        Tooltip:CreateShadow("Background")
+        if not Tooltip.stripesthin then
+            R:GetModule("Skins"):CreateStripesThin(Tooltip)
+            Tooltip.stripesthin:SetInside(Tooltip, 1, 1)
         end
+
+        Tooltip.OnRelease = Tooltip_OnRelease
     end
-end
+    Tooltip:Clear()
 
-local function SpecAddTalentGroupLineToCat(self, cat, talentGroup)
-    resSizeExtra = 2
+    -- Spec
+    Tooltip:SetCell(Tooltip:AddLine(), 1, TALENTS, RayUI_InfobarTooltipFont)
+    Tooltip:AddLine("")
+    Tooltip:AddSeparator(1, 1, 1, 1, 0.8)
 
-    local ActiveColor = {0, 0.9, 0}
-    local InactiveColor = {0.3, 0.3, 0.3}
-
-    local IsPrimary = GetSpecialization(false, false, 1)
-
-    local line = {}
-    for i = 1, 2 do
-        local SpecColor = (IsPrimary == talentGroup) and ActiveColor or InactiveColor
-        if i == 1 then
-            if talentGroup then
-                line["text"] = string.format("|T%s:%d:%d:0:0:64:64:5:59:5:59|t %s", select(4, GetSpecializationInfo(talentGroup)), 10 + resSizeExtra, 10 + resSizeExtra, select(2, GetSpecializationInfo(talentGroup)))
-            else
-                line["text"] = NONE..TALENTS
-            end
-            line["justify"] = "LEFT"
-            line["size"] = 10 + resSizeExtra
-            line["textR"] = 0.9
-            line["textG"] = 0.9
-            line["textB"] = 0.9
-            line["hasCheck"] = true
-            line["checked"] = IsPrimary == talentGroup
-            line["isRadio"] = true
-            line["func"] = function() SpecChangeClickFunc(self, talentGroup) end
-            line["customwidth"] = 130
-        else
-            line["text"..i] = IsPrimary == talentGroup and ACTIVE_PETS or ""
-            line["justify"..i] = "RIGHT"
-            line["size"..i] = 10 + resSizeExtra
-            line["text"..i.."R"] = SpecColor[1]
-            line["text"..i.."G"] = SpecColor[2]
-            line["text"..i.."B"] = SpecColor[3]
-            line["customwidth"..i] = 20
-        end
-    end
-    cat:AddLine(line)
-end
-
-local function Spec_UpdateTablet(self)
-    resSizeExtra = 2
-    local Cols, lineHeader
-
+    local active = GetSpecialization()
     local numTalentGroups = GetNumSpecializations()
 
-    if numTalentGroups > 0 and UnitLevel("player") >= 10 then
-        wipe(SpecSection)
+    for talentGroup = 1, numTalentGroups do
+        local SpecColor = (active == talentGroup) and ActiveColor or InactiveColor
+        local line = Tooltip:AddLine()
+        Tooltip:SetCell(line, 1, R:RGBToHex(unpack(SpecColor))..string.format("|T%s:%d:%d:0:0:64:64:5:59:5:59|t %s", select(4, GetSpecializationInfo(talentGroup)), 12, 12, select(2, GetSpecializationInfo(talentGroup))), RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+        Tooltip:SetLineScript(line, "OnMouseUp", Spec_OnMouseUp, talentGroup)
+    end
+    Tooltip:AddLine(" ")
 
-        -- Spec Category
-        SpecSection["specs"] = {}
-        SpecSection["specs"].cat = spec:AddCategory()
-        SpecSection["specs"].cat:AddLine("text", R:RGBToHex(NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)..TALENTS.."|r", "size", 10 + resSizeExtra, "textR", 1, "textG", 1, "textB", 1)
-
-        -- Talent Cat
-        SpecSection["specs"].talentCat = spec:AddCategory("columns", 2)
-        R:AddBlankTabLine(SpecSection["specs"].talentCat, 2)
-
-        for i = 1, numTalentGroups do
-            SpecAddTalentGroupLineToCat(self, SpecSection["specs"].talentCat, i)
-        end
+    --LootSpec
+    Tooltip:SetCell(Tooltip:AddLine(), 1, SELECT_LOOT_SPECIALIZATION, RayUI_InfobarTooltipFont)
+    Tooltip:AddLine("")
+    Tooltip:AddSeparator(1, 1, 1, 1, 0.8)
+    local curLootSpecName = GetCurrentLootSpecName()
+    for talentGroup = 1, numTalentGroups do
+        local SpecColor = (select(2, GetSpecializationInfo(talentGroup)) == curLootSpecName) and ActiveColor or InactiveColor
+        local line = Tooltip:AddLine()
+        Tooltip:SetCell(line, 1, R:RGBToHex(unpack(SpecColor))..string.format("|T%s:%d:%d:0:0:64:64:5:59:5:59|t %s", select(4, GetSpecializationInfo(talentGroup)), 12, 12, select(2, GetSpecializationInfo(talentGroup))), RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+        Tooltip:SetLineScript(line, "OnMouseUp", LootSpec_OnMouseUp, talentGroup )
     end
 
-    local numEquipSets = GetNumEquipmentSets()
-    if numEquipSets > 0 then
-
-        -- Equipment Category
-        SpecSection["equipment"] = {}
-        SpecSection["equipment"].cat = spec:AddCategory()
-        if numTalentGroups > 0 then
-            R:AddBlankTabLine(SpecSection["equipment"].cat, 2)
-        end
-        SpecSection["equipment"].cat:AddLine("text", R:RGBToHex(NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)..EQUIPMENT_MANAGER.."|r", "size", 10 + resSizeExtra, "textR", 1, "textG", 1, "textB", 1)
-        R:AddBlankTabLine(SpecSection["equipment"].cat, 2)
-
-        -- Equipment Cat
-        SpecSection["equipment"].equipCat = spec:AddCategory("columns", 2)
-        R:AddBlankTabLine(SpecSection["equipment"].equipCat, 1)
-
-        SpecAddEquipListToCat(self, SpecSection["equipment"].equipCat)
-    end
-
-    -- Hint
-    if (numTalentGroups > 0 and UnitLevel("player") >= 10) and (numEquipSets > 0) then
-        spec:SetHint(L["<点击天赋> 切换天赋."].."\n"..L["<点击套装> 装备套装."])
-    elseif numTalentGroups > 0 and UnitLevel("player") >= 10 then
-        spec:SetHint(L["<点击天赋> 切换天赋."])
-    elseif numEquipSets > 0 then
-        spec:SetHint(L["<点击套装> 装备套装."])
-    end
+    Tooltip:Show()
+    Tooltip:AddLine("")
+    Tooltip:UpdateScrolling()
 end
 
 local function Spec_OnEnter(self)
-    local active = GetActiveSpecGroup(false, false)
-    if InCombatLockdown() or not GetSpecialization(false, false, active) or not select(2, GetSpecializationInfo(GetSpecialization(false, false, active))) then return end
-    -- Register spec
-    if not spec:IsRegistered(self) then
-        spec:Register(self,
-            "children", function()
-                Spec_UpdateTablet(self)
-            end,
-            "point", "BOTTOM",
-            "relativePoint", "TOP",
-            "maxHeight", 500,
-            "clickable", true,
-            "hideWhenEmpty", true
-        )
+    local numTalentGroups = GetNumSpecializations()
+
+    if numTalentGroups > 0 and UnitLevel("player") >= 10 then
+        RenderTooltip(self)
     end
-
-    if spec:IsRegistered(self) then
-        -- spec appearance
-        spec:SetColor(self, 0, 0, 0)
-        spec:SetTransparency(self, .65)
-        spec:SetFontSizePercent(self, 1)
-
-        -- Open
-        spec:Open(self)
-    end
-
-    collectgarbage()
 end
 
 local function Spec_Update(self)
     local numTalentGroups = GetNumSpecGroups()
-
-    -- Gear sets
-    wipe(SpecEquipList)
-    local numEquipSets = GetNumEquipmentSets()
-    if numEquipSets > 0 then
-        for index = 1, numEquipSets do
-            local equipName, equipIcon = GetEquipmentSetInfo(index)
-            SpecEquipList[index] = {
-                name = equipName,
-                icon = equipIcon or 132632,
-            }
-        end
-    end
-
-    local active = GetActiveSpecGroup(false, false)
+    local active = GetActiveSpecGroup()
     local talent, loot = "", ""
     if GetSpecialization(false, false, active) then
         talent = format("|T%s:14:14:0:0:64:64:4:60:4:60|t", select(4, GetSpecializationInfo(GetSpecialization(false, false, active))) or "")
@@ -250,7 +144,7 @@ local function Spec_Update(self)
         end
     end
     if GetSpecialization(false, false, active) and select(2, GetSpecializationInfo(GetSpecialization(false, false, active))) then
-        self:SetText(format("%s: %s", TALENTS, talent))
+        self:SetText(format("%s: %s | %s", TALENTS, talent, loot))
     else
         self:SetText(NONE..TALENTS)
     end
@@ -258,8 +152,8 @@ end
 
 local function Spec_OnEvent(self)
     Spec_Update(self)
-    if spec:IsRegistered(self) then
-        spec:Refresh(self)
+    if Tooltip and Tooltip:IsShown() then
+        RenderTooltip(self)
     end
 end
 
@@ -285,7 +179,7 @@ do -- Initialize
     info.title = TALENTS
     info.icon = 132222
     info.clickFunc = Spec_OnClick
-    info.events = { "PLAYER_ENTERING_WORLD", "CHARACTER_POINTS_CHANGED", "PLAYER_TALENT_UPDATE", "ACTIVE_TALENT_GROUP_CHANGED", "PLAYER_LOOT_SPEC_UPDATED", "EQUIPMENT_SETS_CHANGED", "PLAYER_EQUIPMENT_CHANGED" }
+    info.events = { "PLAYER_ENTERING_WORLD", "CHARACTER_POINTS_CHANGED", "PLAYER_TALENT_UPDATE", "ACTIVE_TALENT_GROUP_CHANGED", "PLAYER_LOOT_SPEC_UPDATED" }
     info.eventFunc = Spec_OnEvent
     info.initFunc = Spec_OnEvent
     info.tooltipFunc = Spec_OnEnter

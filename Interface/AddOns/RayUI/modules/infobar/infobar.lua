@@ -1,6 +1,7 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local IF = R:NewModule("InfoBar", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0", "AceTimer-3.0")
 local LDB = LibStub:GetLibrary("LibDataBroker-1.1")
+local LibQTip = LibStub("LibQTip-1.0")
 
 --Cache global variables
 --Lua functions
@@ -31,14 +32,14 @@ local function GetInfoBarList()
     end
     if not R.db["InfoBar"]["List"] then
         R.db["InfoBar"]["List"] = {
-            "Framerate",
-            "Latency",
+            "Memory",
+            "System",
             "Talent",
             "Durability",
             "Friends",
             "Guild",
-            "Memory",
             "Money",
+            "WorldQuests",
         }
     end
     return R.db["InfoBar"]["List"]
@@ -154,6 +155,9 @@ end
 function RayUI_InfoBarButton_OnClick(self, button)
     if button == "RightButton" and not IsShiftKeyDown() then
         RayUI_InfoBarButton_OnLeave(self)
+        for _, tooltip in LibQTip:IterateTooltips() do
+            tooltip:Hide()
+        end
         OpenMenu(self)
         return
     end
@@ -385,6 +389,8 @@ function IF:RegisterInfoBarType(infobarType, infobarInfo)
 end
 
 function IF:Initialize()
+    local tooltipFont = CreateFont("RayUI_InfobarTooltipFont")
+    tooltipFont:SetFont(R["media"].font, R["media"].fontsize)
     brokerTooltip = CreateFrame("GameTooltip", "RayUI_InfoBar_BrokerTooltip", R.UIParent, "GameTooltipTemplate")
     local r, g, b = unpack(RayUF.colors.class[R.myclass])
     local font = CreateFont("RayUI_InfoBarFont")

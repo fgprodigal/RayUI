@@ -645,41 +645,6 @@ function R:IsClassUnusable(class, subclass, slot)
     end
 end
 
-function R:AddBlankTabLine(cat, ...)
-    local blank = {"blank", true, "fakeChild", true, "noInherit", true}
-    local cnt = ... or 1
-    for i = 1, cnt do
-        cat:AddLine(blank)
-    end
-end
-
-function R:MakeTabletHeader(col, size, indentation, justifyTable)
-    local header = {}
-    local colors = {}
-    colors = {0.9, 0.8, 0.7}
-
-    for i = 1, #col do
-        if ( i == 1 ) then
-            header["text"] = col[i]
-            header["justify"] = justifyTable[i]
-            header["size"] = size
-            header["textR"] = colors[1]
-            header["textG"] = colors[2]
-            header["textB"] = colors[3]
-            header["indentation"] = indentation
-        else
-            header["text"..i] = col[i]
-            header["justify"..i] = justifyTable[i]
-            header["size"..i] = size
-            header["text"..i.."R"] = colors[1]
-            header["text"..i.."G"] = colors[2]
-            header["text"..i.."B"] = colors[3]
-            header["indentation"] = indentation
-        end
-    end
-    return header
-end
-
 R["media"] = {}
 R["texts"] = {}
 

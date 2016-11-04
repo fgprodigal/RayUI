@@ -144,7 +144,7 @@
     <Script file="infobar_fps.lua"/>
     <Script file="infobar_friends.lua"/>
     <Script file="infobar_guild.lua"/>
-    <Script file="infobar_latency.lua"/>
+    <Script file="infobar_system.lua"/>
     <Script file="infobar_memory.lua"/>
     <Script file="infobar_money.lua"/>
     <Script file="infobar_talent.lua"/>

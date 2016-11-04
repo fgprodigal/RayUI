@@ -1,16 +1,16 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local IF = R:GetModule("InfoBar")
+local LibQTip = LibStub("LibQTip-1.0")
 
 --Cache global variables
 --Lua functions
-local ipairs, select = ipairs, select
+local ipairs, select, type, unpack = ipairs, select, type, unpack
 local wipe = table.wipe
 local string = string
 local tonumber = tonumber
 local tinsert = table.insert
 
 --WoW API / Variables
-local CreateFrame = CreateFrame
 local IsAltKeyDown = IsAltKeyDown
 local BNInviteFriend = BNInviteFriend
 local InviteUnit = InviteUnit
@@ -24,23 +24,25 @@ local BNGetFriendInfo = BNGetFriendInfo
 local BNet_GetClientTexture = BNet_GetClientTexture
 local BNGetGameAccountInfo = BNGetGameAccountInfo
 local GetRealmName = GetRealmName
-local GetQuestDifficultyColor = GetQuestDifficultyColor
 local ToggleFriendsFrame = ToggleFriendsFrame
 local InCombatLockdown = InCombatLockdown
 local ShowFriends = ShowFriends
+local GetRelativeDifficultyColor = GetRelativeDifficultyColor
+local UnitLevel = UnitLevel
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: DEFAULT_CHAT_FRAME, FRIENDS_BNET_NAME_COLOR, FRIENDS_TEXTURE_AFK, FRIENDS_TEXTURE_DND
 -- GLOBALS: FRIENDS_TEXTURE_ONLINE, FACTION_HORDE, FACTION_ALLIANCE, NAME, LEVEL_ABBR
--- GLOBALS: ZONE, FACTION, FRIENDS, GAME
+-- GLOBALS: ZONE, FACTION, FRIENDS, GAME, RayUI_InfobarTooltipFont, BATTLENET_FRIEND
 
-local friendsTablets = LibStub("Tablet-2.0")
 local FriendsTabletData = {}
 IF.FriendsTabletDataNames = {}
 local FriendsOnline = 0
 local displayString = string.join("", "%s: ", "", "%d|r")
-local FriendsCat
-local resSizeExtra
+local NUM_TOOLTIP_COLUMNS = 6
+local Tooltip
+local FACTION_ICON_ALLIANCE = " |TInterface\\COMMON\\icon-alliance:14:14:0:0:64:64:10:54:10:54|t "
+local FACTION_ICON_HORDE = " |TInterface\\COMMON\\icon-horde:14:14:0:0:64:64:10:54:10:54|t "
 
 local ClassLookup = {}
 for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
@@ -50,23 +52,100 @@ for k, v in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do
     ClassLookup[v] = k
 end
 
-local function Friends_TabletClickFunc(name, iname, toonid)
-    if not name then return end
+local function Tooltip_OnRelease(self)
+    Tooltip:SetFrameStrata("TOOLTIP")
+    Tooltip = nil
+end
+
+local function GetFactionIcon(faction)
+    if faction == "Horde" then
+        return FACTION_ICON_HORDE
+    elseif faction == "Alliance" then
+        return FACTION_ICON_ALLIANCE
+    else
+        return ""
+    end
+end
+
+local function ColorPlayerLevel(level)
+    if type(level) ~= "number" then
+        return level
+    end
+    local color = GetRelativeDifficultyColor(UnitLevel("player"), level)
+    return ("|cff%02x%02x%02x%d|r"):format(color.r * 255, color.g * 255, color.b * 255, level)
+end
+
+local function Friend_OnMouseUp(tooltipCell, playerEntry)
+    if not playerEntry.name then return end
     if IsAltKeyDown() then
-        if toonid then
-            BNInviteFriend(toonid)
-        elseif iname == "" then
-            InviteUnit(name)
+        if playerEntry.toonid then
+            BNInviteFriend(playerEntry.toonid)
+        elseif playerEntry.iname == "" then
+            InviteUnit(playerEntry.name)
         else
-            InviteUnit(iname)
+            InviteUnit(playerEntry.iname)
         end
     else
-        if toonid then
-            ChatFrame_SendSmartTell(name, DEFAULT_CHAT_FRAME)
+        if playerEntry.toonid then
+            ChatFrame_SendSmartTell(playerEntry.name, DEFAULT_CHAT_FRAME)
         else
-            ChatFrame_SendTell(name, DEFAULT_CHAT_FRAME)
+            ChatFrame_SendTell(playerEntry.name, DEFAULT_CHAT_FRAME)
         end
     end
+end
+
+local function RenderTooltip(anchorFrame)
+    local paddingLeft, paddingRight = 5, 5
+    if not Tooltip then
+        Tooltip = LibQTip:Acquire("RayUI_InfobarFriendTooltip", NUM_TOOLTIP_COLUMNS, "LEFT", "LEFT", "LEFT", "LEFT", "LEFT", "LEFT")
+        Tooltip:SetAutoHideDelay(0.001, anchorFrame)
+        Tooltip:SetBackdrop(nil)
+        Tooltip:SmartAnchorTo(anchorFrame)
+        Tooltip:SetHighlightTexture([[Interface\QuestFrame\UI-QuestTitleHighlight]])
+        Tooltip:CreateShadow("Background")
+        if not Tooltip.stripesthin then
+            R:GetModule("Skins"):CreateStripesThin(Tooltip)
+            Tooltip.stripesthin:SetInside(Tooltip, 1, 1)
+        end
+
+        Tooltip.OnRelease = Tooltip_OnRelease
+    end
+    Tooltip:Clear()
+
+    local titleLine = Tooltip:AddLine()
+    Tooltip:SetCell(titleLine, 1, FRIENDS, RayUI_InfobarTooltipFont, "CENTER", NUM_TOOLTIP_COLUMNS)
+    Tooltip:AddLine("")
+
+    local headerLine = Tooltip:AddLine()
+    Tooltip:SetCell(headerLine, 1, GAME, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+    Tooltip:SetCell(headerLine, 2, BATTLENET_FRIEND, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft + 20, paddingRight)
+    Tooltip:SetCell(headerLine, 3, LEVEL_ABBR, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+    Tooltip:SetCell(headerLine, 4, NAME, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+    Tooltip:SetCell(headerLine, 5, ZONE, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+    Tooltip:SetCell(headerLine, 6, FACTION, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+    Tooltip:SetLineTextColor(headerLine, 0.9, 0.8, 0.7)
+    Tooltip:AddSeparator(1, 1, 1, 1, 0.8)
+
+    for _, val in ipairs(FriendsTabletData) do
+        local line = Tooltip:AddLine()
+        local cname, level, zone, faction, clientIcon, presenceName, note, name, toonid, showPresenceName = unpack(val)
+        Tooltip:SetCell(line, 1, clientIcon, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+        Tooltip:SetCell(line, 2, showPresenceName, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+        Tooltip:SetCell(line, 3, level, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+        Tooltip:SetCell(line, 4, cname, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+        Tooltip:SetCell(line, 5, zone, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+        Tooltip:SetCell(line, 6, faction, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+        local playerEntry = {
+            name = presenceName,
+            iname = name,
+            toonid = toonid,
+        }
+        Tooltip:SetLineScript(line, "OnMouseUp", Friend_OnMouseUp, playerEntry)
+    end
+
+    Tooltip:Show()
+    Tooltip:AddLine("")
+    Tooltip:UpdateScrolling()
 end
 
 local function Friends_BuildTablet()
@@ -96,8 +175,8 @@ local function Friends_BuildTablet()
             class = string.format("|cff%02x%02x%02x%s|r", r * 255, g * 255, b * 255, class)
 
             -- Add Friend to list
-            local _, faction = UnitFactionGroup("player")
-            tinsert(FriendsTabletData, { cname, lvl, area, faction, "WoW", name, note, "" })
+            local faction = UnitFactionGroup("player")
+            tinsert(FriendsTabletData, { cname, ColorPlayerLevel(tonumber(lvl)), area, GetFactionIcon(faction), " |T"..BNet_GetClientTexture("WoW")..":14:14:0:0:64:64:10:54:10:54|t ", name, note, "", "" })
             if name then
                 IF.FriendsTabletDataNames[name] = true
             end
@@ -131,9 +210,7 @@ local function Friends_BuildTablet()
             if ( realmName == GetRealmName() ) then
                 -- On My Realm
                 cname = string.format(
-                    "|cff%02x%02x%02x%s|r |cffcccccc(|r|cff%02x%02x%02x%s|r|cffcccccc)|r",
-                    FRIENDS_BNET_NAME_COLOR.r * 255, FRIENDS_BNET_NAME_COLOR.g * 255, FRIENDS_BNET_NAME_COLOR.b * 255,
-                    presenceName,
+                    "|cff%02x%02x%02x%s|r",
                     r * 255, g * 255, b * 255,
                     name
                 )
@@ -141,26 +218,17 @@ local function Friends_BuildTablet()
                 -- On Another Realm
                 if realmName and realmName ~= "" then
                     cname = string.format(
-                        "|cff%02x%02x%02x%s|r |cffcccccc(|r|cff%02x%02x%02x%s|r|cffcccccc-%s)|r",
-                        FRIENDS_BNET_NAME_COLOR.r * 255, FRIENDS_BNET_NAME_COLOR.g * 255, FRIENDS_BNET_NAME_COLOR.b * 255,
-                        presenceName,
+                        "|cff%02x%02x%02x%s|r|cffcccccc-%s",
                         r * 255, g * 255, b * 255,
                         name,
                         realmName
                     )
-                else
+                elseif name and name ~= "" then
                     cname = string.format(
-                        "|cff%02x%02x%02x%s|r",
-                        FRIENDS_BNET_NAME_COLOR.r * 255, FRIENDS_BNET_NAME_COLOR.g * 255, FRIENDS_BNET_NAME_COLOR.b * 255,
-                        presenceName
+                        " |cffcccccc(|r|cff%02x%02x%02x%s|r|cffcccccc)|r",
+                        r * 255, g * 255, b * 255,
+                        name
                     )
-                    if name and name ~= "" then
-                        cname = cname .. string.format(
-                            " |cffcccccc(|r|cff%02x%02x%02x%s|r|cffcccccc)|r",
-                            r * 255, g * 255, b * 255,
-                            name
-                        )
-                    end
                 end
             end
 
@@ -173,77 +241,19 @@ local function Friends_BuildTablet()
             else
                 status = FRIENDS_TEXTURE_ONLINE
             end
-            cname = " |T"..status..":14:14:|t "..cname
-
-            -- Faction
-            if faction == "Horde" then
-                faction = FACTION_HORDE
-            elseif faction == "Alliance" then
-                faction = FACTION_ALLIANCE
-            else
-                faction = ""
-            end
+            local showPresenceName = " |T"..status..":14:14:|t "..string.format(
+                "|cff%02x%02x%02x%s|r",
+                FRIENDS_BNET_NAME_COLOR.r * 255, FRIENDS_BNET_NAME_COLOR.g * 255, FRIENDS_BNET_NAME_COLOR.b * 255,
+                presenceName
+            )
 
             -- Add Friend to list
-            tinsert(FriendsTabletData, { cname, lvl, area, faction, clientIcon, presenceName, note, name, ["toonid"] = toonID })
+            tinsert(FriendsTabletData, { cname, ColorPlayerLevel(tonumber(lvl)), area, GetFactionIcon(faction), clientIcon, presenceName, note, name, toonID, showPresenceName })
         end
     end
 
     -- OnEnter
     FriendsOnline = curFriendsOnline
-end
-
-local function Friends_UpdateTablet()
-    if ( FriendsOnline > 0 and FriendsTabletData ) then
-        resSizeExtra = 2
-        local Cols, lineHeader
-        Friends_BuildTablet()
-
-        -- Title
-        local Cols = {
-            NAME,
-            LEVEL_ABBR,
-            ZONE,
-            FACTION,
-            GAME
-        }
-        FriendsCat = friendsTablets:AddCategory("columns", #Cols)
-        lineHeader = R:MakeTabletHeader(Cols, 10 + resSizeExtra, 0, {"LEFT", "RIGHT", "LEFT", "LEFT", "LEFT"})
-        FriendsCat:AddLine(lineHeader)
-        R:AddBlankTabLine(FriendsCat)
-
-        -- Friends
-        for _, val in ipairs(FriendsTabletData) do
-            local line = {}
-            for i = 1, #Cols do
-                if i == 1 then -- Name
-                    line["text"] = val[i]
-                    line["justify"] = "LEFT"
-                    line["func"] = function() Friends_TabletClickFunc(val[6],val[8], val["toonid"]) end
-                    line["size"] = 11 + resSizeExtra
-                elseif i == 2 then -- Level
-                    line["text"..i] = val[2]
-                    line["justify"..i] = "RIGHT"
-                    local uLevelColor = GetQuestDifficultyColor(tonumber(val[2]) or 1)
-                    line["text"..i.."R"] = uLevelColor.r
-                    line["text"..i.."G"] = uLevelColor.g
-                    line["text"..i.."B"] = uLevelColor.b
-                    line["size"..i] = 11 + resSizeExtra
-                else -- The rest
-                    line["text"..i] = val[i]
-                    line["justify"..i] = "LEFT"
-                    line["text"..i.."R"] = 0.8
-                    line["text"..i.."G"] = 0.8
-                    line["text"..i.."B"] = 0.8
-                    line["size"..i] = 11 + resSizeExtra
-                end
-            end
-            FriendsCat:AddLine(line)
-        end
-
-        -- Hint
-        friendsTablets:SetHint(L["<点击玩家>发送密语, <Alt+点击玩家>邀请玩家."])
-    end
 end
 
 local function Social_OnClick(self)
@@ -254,41 +264,20 @@ local function Social_OnEvent(self)
     local numBNetOnline = select(2, BNGetNumFriends())
     local numWoWOnline = select(2, GetNumFriends())
 
+    if Tooltip and Tooltip:IsShown() then
+        RenderTooltip(self)
+    end
     self:SetText(FRIENDS..": "..numBNetOnline + numWoWOnline)
 end
 
 local function Social_OnEnter(self)
     local totalFriends, onlineFriends = GetNumFriends()
     local totalBN, numBNetOnline = BNGetNumFriends()
-    if InCombatLockdown() or onlineFriends + numBNetOnline == 0 then return end
+    if onlineFriends + numBNetOnline == 0 then return end
 
-    -- Register friendsTablets
-    if not friendsTablets:IsRegistered(self) then
-        friendsTablets:Register(self,
-            "children", function()
-                Friends_BuildTablet()
-                Friends_UpdateTablet()
-            end,
-            "point", "BOTTOM",
-            "relativePoint", "TOP",
-            "maxHeight", 500,
-            "clickable", true,
-            "hideWhenEmpty", true
-        )
-    end
-
-    if friendsTablets:IsRegistered(self) then
-        -- friendsTablets appearance
-        friendsTablets:SetColor(self, 0, 0, 0)
-        friendsTablets:SetTransparency(self, .65)
-        friendsTablets:SetFontSizePercent(self, 1)
-
-        -- Open
-        if ( FriendsOnline > 0 ) then
-            ShowFriends()
-        end
-        friendsTablets:Open(self)
-    end
+    ShowFriends()
+    Friends_BuildTablet()
+    RenderTooltip(self)
 end
 
 do -- Initialize
