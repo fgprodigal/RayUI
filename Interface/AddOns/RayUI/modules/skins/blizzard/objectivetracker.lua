@@ -151,8 +151,7 @@ local function LoadSkin()
                 label:FontTemplate(nil, nil, "OUTLINE")
 
                 local bg = S:CreateBDFrame(bar)
-                bg:Point("TOPLEFT", -1, 1)
-                bg:Point("BOTTOMRIGHT", 0, -2)
+                bg:SetOutside(bar, 1, 1)
 
                 progressBar.styled = true
             end
@@ -211,8 +210,7 @@ local function LoadSkin()
                 label:FontTemplate(nil, nil, "OUTLINE")
 
                 local bg = S:CreateBDFrame(bar)
-                bg:Point("TOPLEFT", -1, 1)
-                bg:Point("BOTTOMRIGHT", 0, -2)
+                bg:SetOutside(bar, 1, 1)
 
                 progressBar.styled = true
             end
