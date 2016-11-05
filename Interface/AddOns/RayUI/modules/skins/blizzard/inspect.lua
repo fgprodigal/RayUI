@@ -2,128 +2,144 @@ local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, 
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
-	S:SetBD(InspectFrame)
-	S:Reskin(InspectPaperDollFrame.ViewButton)
-	InspectFrame:DisableDrawLayer("BACKGROUND")
-	InspectFrame:DisableDrawLayer("BORDER")
-	InspectFrameInset:DisableDrawLayer("BACKGROUND")
-	InspectFrameInset:DisableDrawLayer("BORDER")
-	InspectModelFrame:DisableDrawLayer("OVERLAY")
-	InspectTalentFrame:DisableDrawLayer("BACKGROUND")
-	InspectTalentFrame:DisableDrawLayer("BORDER")
+    S:SetBD(InspectFrame)
+    S:Reskin(InspectPaperDollFrame.ViewButton)
+    InspectFrame:DisableDrawLayer("BACKGROUND")
+    InspectFrame:DisableDrawLayer("BORDER")
+    InspectFrameInset:DisableDrawLayer("BACKGROUND")
+    InspectFrameInset:DisableDrawLayer("BORDER")
+    InspectModelFrame:DisableDrawLayer("OVERLAY")
+    InspectTalentFrame:DisableDrawLayer("BACKGROUND")
+    InspectTalentFrame:DisableDrawLayer("BORDER")
 
-	-- InspectPVPTeam1:DisableDrawLayer("BACKGROUND")
-	-- InspectPVPTeam2:DisableDrawLayer("BACKGROUND")
-	-- InspectPVPTeam3:DisableDrawLayer("BACKGROUND")
-	InspectFramePortrait:Hide()
-	InspectGuildFrameBG:Hide()
-	for i = 1, 5 do
-		select(i, InspectModelFrame:GetRegions()):Hide()
-	end
-	InspectFramePortraitFrame:Hide()
-	InspectFrameTopBorder:Hide()
-	InspectFrameTopRightCorner:Hide()
-	-- InspectPVPFrameBG:SetAlpha(0)
-	-- InspectPVPFrameBottom:SetAlpha(0)
-	for i = 1, 4 do
-		local tab = _G["InspectFrameTab"..i]
-		S:CreateTab(tab)
-		if i ~= 1 then
-			tab:SetPoint("LEFT", _G["InspectFrameTab"..i-1], "RIGHT", -15, 0)
-		end
-	end
+    -- InspectPVPTeam1:DisableDrawLayer("BACKGROUND")
+    -- InspectPVPTeam2:DisableDrawLayer("BACKGROUND")
+    -- InspectPVPTeam3:DisableDrawLayer("BACKGROUND")
+    InspectFramePortrait:Hide()
+    InspectGuildFrameBG:Hide()
+    for i = 1, 5 do
+        select(i, InspectModelFrame:GetRegions()):Hide()
+    end
+    InspectFramePortraitFrame:Hide()
+    InspectFrameTopBorder:Hide()
+    InspectFrameTopRightCorner:Hide()
+    -- InspectPVPFrameBG:SetAlpha(0)
+    -- InspectPVPFrameBottom:SetAlpha(0)
+    for i = 1, 4 do
+        local tab = _G["InspectFrameTab"..i]
+        S:CreateTab(tab)
+        if i ~= 1 then
+            tab:SetPoint("LEFT", _G["InspectFrameTab"..i-1], "RIGHT", -15, 0)
+        end
+    end
 
-	for i = 1, MAX_TALENT_TIERS do
-		local row = _G["TalentsTalentRow"..i]
-		row:DisableDrawLayer("BORDER")
+    for i = 1, MAX_TALENT_TIERS do
+        local row = _G["TalentsTalentRow"..i]
+        row:DisableDrawLayer("BORDER")
 
-		for j = 1, NUM_TALENT_COLUMNS do
-			local bu = _G["TalentsTalentRow"..i.."Talent"..j]
-			local border = _G["TalentsTalentRow"..i.."Talent"..j.."Border"]
-			local ic = _G["TalentsTalentRow"..i.."Talent"..j.."IconTexture"]
+        for j = 1, NUM_TALENT_COLUMNS do
+            local bu = _G["TalentsTalentRow"..i.."Talent"..j]
+            local border = _G["TalentsTalentRow"..i.."Talent"..j.."Border"]
+            local ic = _G["TalentsTalentRow"..i.."Talent"..j.."IconTexture"]
 
-			border:Kill()
-			bu:SetHighlightTexture("")
-			bu.Slot:SetAlpha(0)
+            border:Kill()
+            bu:SetHighlightTexture("")
+            bu.Slot:SetAlpha(0)
 
-			ic:SetDrawLayer("ARTWORK")
-			ic:SetTexCoord(.08, .92, .08, .92)
-			S:CreateBG(ic)
-		end
-	end
+            ic:SetDrawLayer("ARTWORK")
+            ic:SetTexCoord(.08, .92, .08, .92)
+            S:CreateBG(ic)
+        end
+    end
 
-	local slots = {
-		"Head",
-		"Neck",
-		"Shoulder",
-		"Shirt",
-		"Chest",
-		"Waist",
-		"Legs",
-		"Feet",
-		"Wrist",
-		"Hands",
-		"Finger0",
-		"Finger1",
-		"Trinket0",
-		"Trinket1",
-		"Back",
-		"MainHand",
-		"SecondaryHand",
-		"Tabard"
-	}
+    InspectModelFrameControlFrame:DisableDrawLayer("BACKGROUND")
+    local buttons = {
+        "ZoomIn",
+        "ZoomOut",
+        "Pan",
+        "RotateLeft",
+        "RotateRight",
+        "RotateReset",
+    }
+    for i = 1, #buttons do
+        local cb = _G["InspectModelFrameControlFrame"..buttons[i].."Button"]
+        _G["InspectModelFrameControlFrame"..buttons[i].."ButtonBg"]:Hide()
 
-	for i = 1, #slots do
-		local slot = _G["Inspect"..slots[i].."Slot"]
-		local icon = _G["Inspect"..slots[i].."SlotIconTexture"]
-		_G["Inspect"..slots[i].."SlotFrame"]:Hide()
-		slot.IconBorder:Kill()
-		slot:SetNormalTexture("")
-		slot:StripTextures()
-		slot.backgroundTextureName = ""
-		slot.checkRelic = nil
-		slot:SetNormalTexture("")
-		slot:StyleButton()
-		icon:SetTexCoord(.08, .92, .08, .92)
-		icon:Point("TOPLEFT", 2, -2)
-		icon:Point("BOTTOMRIGHT", -2, 2)
-		slot.glow = CreateFrame("Frame", nil, slot)
-		slot.glow:SetAllPoints()
-		slot.glow:CreateBorder()
+        S:Reskin(cb)
+    end
 
-		hooksecurefunc(slot.IconBorder, "SetVertexColor", function(self, r, g, b)
-			self:GetParent().glow:SetBackdropBorderColor(r, g, b)
-			self:GetParent():SetBackdropColor(0, 0, 0)
-		end)
-		hooksecurefunc(slot.IconBorder, "Hide", function(self)
-			self:GetParent().glow:SetBackdropBorderColor(0, 0, 0)
-			self:GetParent():SetBackdropColor(0, 0, 0, 0)
-		end)
-	end
-	select(8, InspectMainHandSlot:GetRegions()):Kill()
+    local slots = {
+        "Head",
+        "Neck",
+        "Shoulder",
+        "Shirt",
+        "Chest",
+        "Waist",
+        "Legs",
+        "Feet",
+        "Wrist",
+        "Hands",
+        "Finger0",
+        "Finger1",
+        "Trinket0",
+        "Trinket1",
+        "Back",
+        "MainHand",
+        "SecondaryHand",
+        "Tabard"
+    }
 
-	S:ReskinClose(InspectFrameCloseButton)
+    for i = 1, #slots do
+        local slot = _G["Inspect"..slots[i].."Slot"]
+        local icon = _G["Inspect"..slots[i].."SlotIconTexture"]
+        _G["Inspect"..slots[i].."SlotFrame"]:Hide()
+        slot.IconBorder:Kill()
+        slot:SetNormalTexture("")
+        slot:StripTextures()
+        slot.backgroundTextureName = ""
+        slot.checkRelic = nil
+        slot:SetNormalTexture("")
+        slot:StyleButton()
+        icon:SetTexCoord(.08, .92, .08, .92)
+        icon:Point("TOPLEFT", 2, -2)
+        icon:Point("BOTTOMRIGHT", -2, 2)
+        slot.glow = CreateFrame("Frame", nil, slot)
+        slot.glow:SetAllPoints()
+        slot.glow:CreateBorder()
 
-	-- for i = 1, MAX_NUM_TALENTS do
-		-- local bu = _G["InspectTalentFrameTalent"..i]
-		-- local ic = _G["InspectTalentFrameTalent"..i.."IconTexture"]
-		-- if bu then
-			-- bu:StyleButton()
-			-- bu:GetPushedTexture():StyleButton(1)
-			-- bu.SetHighlightTexture = R.dummy
-			-- bu.SetPushedTexture = R.dummy
+        hooksecurefunc(slot.IconBorder, "SetVertexColor", function(self, r, g, b)
+                self:GetParent().glow:SetBackdropBorderColor(r, g, b)
+                self:GetParent():SetBackdropColor(0, 0, 0)
+            end)
+        hooksecurefunc(slot.IconBorder, "Hide", function(self)
+                self:GetParent().glow:SetBackdropBorderColor(0, 0, 0)
+                self:GetParent():SetBackdropColor(0, 0, 0, 0)
+            end)
+    end
+    select(8, InspectMainHandSlot:GetRegions()):Kill()
 
-			-- _G["InspectTalentFrameTalent"..i.."Slot"]:SetAlpha(0)
-			-- _G["InspectTalentFrameTalent"..i.."SlotShadow"]:SetAlpha(0)
-			-- _G["InspectTalentFrameTalent"..i.."GoldBorder"]:SetAlpha(0)
+    S:ReskinClose(InspectFrameCloseButton)
 
-			-- ic:SetTexCoord(.08, .92, .08, .92)
-			-- ic:SetPoint("TOPLEFT", 1, -1)
-			-- ic:SetPoint("BOTTOMRIGHT", -1, 1)
+    -- for i = 1, MAX_NUM_TALENTS do
+    -- local bu = _G["InspectTalentFrameTalent"..i]
+    -- local ic = _G["InspectTalentFrameTalent"..i.."IconTexture"]
+    -- if bu then
+    -- bu:StyleButton()
+    -- bu:GetPushedTexture():StyleButton(1)
+    -- bu.SetHighlightTexture = R.dummy
+    -- bu.SetPushedTexture = R.dummy
 
-			-- S:CreateBD(bu)
-		-- end
-	-- end
+    -- _G["InspectTalentFrameTalent"..i.."Slot"]:SetAlpha(0)
+    -- _G["InspectTalentFrameTalent"..i.."SlotShadow"]:SetAlpha(0)
+    -- _G["InspectTalentFrameTalent"..i.."GoldBorder"]:SetAlpha(0)
+
+    -- ic:SetTexCoord(.08, .92, .08, .92)
+    -- ic:SetPoint("TOPLEFT", 1, -1)
+    -- ic:SetPoint("BOTTOMRIGHT", -1, 1)
+
+    -- S:CreateBD(bu)
+    -- end
+    -- end
 end
 
 S:AddCallbackForAddon("Blizzard_InspectUI", "Inspect", LoadSkin)
