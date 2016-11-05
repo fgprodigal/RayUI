@@ -154,6 +154,7 @@ local function Latency_OnUpdate(self)
     if timer > 5 then
         timer = 1
         SysStats.bwIn.cur, SysStats.bwOut.cur, SysStats.lagHome.cur, SysStats.lagWorld.cur = GetNetStats()
+        if SysStats.lagHome.cur == 0 or SysStats.lagWorld.cur == 0 then return end
         SysStats.bwIn.cur = floor(SysStats.bwIn.cur * 100 + 0.5 ) / 100
         SysStats.bwOut.cur = floor(SysStats.bwOut.cur * 100 + 0.5 ) / 100
 
@@ -225,6 +226,7 @@ local function Latency_OnUpdate(self)
         SysStats.lagWorld.max = maxLagWorld
     else
         SysStats.fps.cur = floor((GetFramerate() or 0) + 0.5)
+        if SysStats.fps.cur == 0 then return end
 
         -- Get last 60 second data
         if ( (SysStats.fps.cur > 0) and (SysStats.fps.cur < 120) ) then
