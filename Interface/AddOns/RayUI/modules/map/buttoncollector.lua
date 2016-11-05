@@ -156,7 +156,9 @@ local function GrabMinimapButtons()
         local object = select(i, Minimap:GetChildren())
         if object then
             if object:IsObjectType("Button") and object:GetName() then
-                SetMinimapButton(object)
+                if not object:GetName():find("GatherMatePin") then
+                    SetMinimapButton(object)
+                end
             end
             for _, frame in pairs(AcceptedFrames) do
                 if object:IsObjectType("Frame") and object:GetName() == frame then
@@ -174,21 +176,21 @@ function MM:PositionButton(button)
         if self.prevButton == nil then
             button:SetPoint("TOP", MBCF, "TOP", 0, 0)
             self.prevButton = button
-		elseif self.prevLineButton then
+        elseif self.prevLineButton then
             if strfind(self.screenQuadrant, "RIGHT") then
                 button:SetPoint("TOPRIGHT", self.prevLineButton, "TOPLEFT", -3, 0)
             else
                 button:SetPoint("TOPLEFT", self.prevLineButton, "TOPRIGHT", 3, 0)
             end
-			self.prevLineButton = nil
+            self.prevLineButton = nil
         else
             button:SetPoint("TOP", self.prevButton, "BOTTOM", 0, -3)
         end
         self.positioned = self.positioned + 1
         self.prevButton = button
-		if self.positioned%line == 1 and self.positioned > 1 then
+        if self.positioned%line == 1 and self.positioned > 1 then
             self.prevLineButton = button
-		end
+        end
     end
 end
 
@@ -205,7 +207,7 @@ function MM:PositionButtonCollector(self, screenQuadrant)
     MM.prevLineButton = nil
     MM.prevButton = nil
     MM.positioned = 0
-	MM.screenQuadrant = screenQuadrant
+    MM.screenQuadrant = screenQuadrant
     for i =1, #buttons do
         MM:PositionButton(buttons[i])
         if not buttons[i].hooked then
