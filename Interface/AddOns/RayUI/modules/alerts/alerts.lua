@@ -126,6 +126,28 @@ local EQUIP_SLOTS = {
     ["INVTYPE_THROWN"] = {_G.INVSLOT_RANGED},
 }
 
+local BLACKLISTED_EVENTS = {
+    ACHIEVEMENT_EARNED = true,
+    CRITERIA_EARNED = true,
+    GARRISON_BUILDING_ACTIVATABLE = true,
+    GARRISON_FOLLOWER_ADDED = true,
+    GARRISON_MISSION_FINISHED = true,
+    GARRISON_RANDOM_MISSION_ADDED = true,
+    GARRISON_TALENT_COMPLETE = true,
+    LFG_COMPLETION_REWARD = true,
+    LOOT_ITEM_ROLL_WON = true,
+    NEW_RECIPE_LEARNED = true,
+    QUEST_LOOT_RECEIVED = true,
+    QUEST_TURNED_IN = true,
+    SCENARIO_COMPLETED = true,
+    SHOW_LOOT_TOAST = true,
+    SHOW_LOOT_TOAST_LEGENDARY_LOOTED = true,
+    SHOW_LOOT_TOAST_UPGRADE = true,
+    SHOW_PVP_FACTION_LOOT_TOAST = true,
+    SHOW_RATED_PVP_REWARD_TOAST = true,
+    STORE_PRODUCT_DELIVERED = true,
+}
+
 ------------
 -- CONFIG --
 ------------
@@ -627,6 +649,9 @@ local function ToastButton_OnClick(self, button)
     elseif button == "LeftButton" then
         if self.id then
             if self.type == "achievement" then
+                if not AchievementFrame then
+                    AchievementFrame_LoadUI()
+                end
                 ShowUIPanel(AchievementFrame)
                 AchievementFrame_SelectAchievement(self.id)
             elseif self.type == "follower" then
@@ -661,9 +686,13 @@ local function ToastButton_OnEnter(self)
             GameTooltip:SetItemByID(self.id)
             GameTooltip:Show()
         elseif self.type == "follower" then
-            local link = C_Garrison.GetFollowerLink(self.id)
+            local isOK, link = pcall(_G.C_Garrison.GetFollowerLink, self.id)
 
-            if link then
+            if not isOK then
+                isOK, link = pcall(_G.C_Garrison.GetFollowerLinkByID, self.id)
+            end
+
+            if isOK and link then
                 local _, garrisonFollowerID, quality, level, itemLevel, ability1, ability2, ability3, ability4, trait1, trait2, trait3, trait4, spec1 = string.split(":", link)
                 local followerType = C_Garrison.GetFollowerTypeByID(tonumber(garrisonFollowerID))
                 GarrisonFollowerTooltip_Show(tonumber(garrisonFollowerID), false, tonumber(quality), tonumber(level), 0, 0, tonumber(itemLevel), tonumber(spec1), tonumber(ability1), tonumber(ability2), tonumber(ability3), tonumber(ability4), tonumber(trait1), tonumber(trait2), tonumber(trait3), tonumber(trait4))
@@ -953,8 +982,8 @@ local function Reward_OnEnter(self)
 
     GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 
-    if self.rewardID then
-        GameTooltip:SetLFGCompletionReward(self.rewardID)
+    if self.item then
+        GameTooltip:SetHyperlink(self.item)
     elseif self.xp then
         GameTooltip:AddLine(YOU_RECEIVED)
         GameTooltip:AddLine(string.format(BONUS_OBJECTIVE_EXPERIENCE_FORMAT, self.xp), 1, 1, 1)
@@ -1037,11 +1066,11 @@ local function GetToast(toastType)
             countUpdate:SetAlpha(0)
             toast.CountUpdate = countUpdate
 
-			local upgradeIcon = toast:CreateTexture(nil, "ARTWORK", nil, 3)
-			upgradeIcon:SetAtlas("bags-greenarrow", true)
-			upgradeIcon:SetPoint("TOPLEFT", 4, -4)
-			upgradeIcon:Hide()
-			toast.UpgradeIcon = upgradeIcon
+            local upgradeIcon = toast:CreateTexture(nil, "ARTWORK", nil, 3)
+            upgradeIcon:SetAtlas("bags-greenarrow", true)
+            upgradeIcon:SetPoint("TOPLEFT", 4, -4)
+            upgradeIcon:Hide()
+            toast.UpgradeIcon = upgradeIcon
 
             local ag = toast:CreateAnimationGroup()
             toast.CountUpdateAnim = ag
@@ -1280,10 +1309,6 @@ end
 
 local function EnableAchievementToasts()
     if CFG.achievement_enabled then
-        if not AchievementFrame then
-            AchievementFrame_LoadUI()
-        end
-
         AL:RegisterEvent("ACHIEVEMENT_EARNED")
         AL:RegisterEvent("CRITERIA_EARNED")
     end
@@ -1322,10 +1347,18 @@ end
 
 local function EnableArchaeologyToasts()
     if not ArchaeologyFrame then
-        UIParentLoadAddOn("Blizzard_ArchaeologyUI")
-    end
+        local hooked = false
 
-    ArcheologyDigsiteProgressBar.AnimOutAndTriggerToast:SetScript("OnFinished", ArcheologyProgressBarAnimOut_OnFinished)
+        hooksecurefunc("ArchaeologyFrame_LoadUI", function()
+                if not hooked then
+                    ArcheologyDigsiteProgressBar.AnimOutAndTriggerToast:SetScript("OnFinished", ArcheologyProgressBarAnimOut_OnFinished)
+
+                    hooked = true
+                end
+            end)
+    else
+        ArcheologyDigsiteProgressBar.AnimOutAndTriggerToast:SetScript("OnFinished", ArcheologyProgressBarAnimOut_OnFinished)
+    end
 
     if CFG.archaeology_enabled then
         AL:RegisterEvent("ARTIFACT_DIGSITE_COMPLETE")
@@ -1690,7 +1723,7 @@ local function LootWonToast_Setup(itemLink, quantity, rollType, roll, showFactio
             toast.Border:SetVertexColor(color.r, color.g, color.b)
             toast.IconBorder:SetVertexColor(color.r, color.g, color.b)
             toast.Icon:SetTexture(icon)
-			toast.UpgradeIcon:SetShown(IsItemAnUpgrade(itemLink))
+            toast.UpgradeIcon:SetShown(IsItemAnUpgrade(itemLink))
             toast.link = itemLink
 
             if lessAwesome then
@@ -1762,7 +1795,7 @@ function AL:SHOW_LOOT_TOAST_LEGENDARY_LOOTED(...)
         toast.IconBorder:SetVertexColor(color.r, color.g, color.b)
         toast.Count:SetText("")
         toast.Icon:SetTexture(icon)
-		toast.UpgradeIcon:SetShown(IsItemAnUpgrade(itemLink))
+        toast.UpgradeIcon:SetShown(IsItemAnUpgrade(itemLink))
         toast.Dragon:Show()
         toast.soundFile = "UI_LegendaryLoot_Toast"
         toast.link = itemLink
@@ -1792,7 +1825,7 @@ function AL:SHOW_LOOT_TOAST_UPGRADE(...)
         toast.Border:SetVertexColor(color.r, color.g, color.b)
         toast.IconBorder:SetVertexColor(color.r, color.g, color.b)
         toast.Icon:SetTexture(icon)
-		toast.UpgradeIcon:SetShown(IsItemAnUpgrade(itemLink))
+        toast.UpgradeIcon:SetShown(IsItemAnUpgrade(itemLink))
         toast.soundFile = 51561
         toast.link = itemLink
 
@@ -1812,9 +1845,15 @@ function AL:SHOW_PVP_FACTION_LOOT_TOAST(...)
     LootWonToast_Setup(itemLink, quantity, nil, nil, true, typeID == "item", typeID == "money", lessAwesome, nil, isPersonal)
 end
 
+function AL:SHOW_RATED_PVP_REWARD_TOAST(...)
+    local _, typeID, itemLink, quantity, _, _, isPersonal, lessAwesome = ...
+
+    LootWonToast_Setup(itemLink, quantity, nil, nil, true, typeID == "item", typeID == "money", lessAwesome, nil, isPersonal)
+end
+
 function AL:STORE_PRODUCT_DELIVERED(...)
-    local _, _, icon, name, payloadID = ...
-    local _, _, quality = GetItemInfo(payloadID)
+    local _, _, icon, _, payloadID = ...
+    local name, _, quality = GetItemInfo(payloadID)
     local color = ITEM_QUALITY_COLORS[quality or 4]
     local toast = GetToast("item")
 
@@ -1841,6 +1880,7 @@ local function EnableSpecialLootToasts()
         AL:RegisterEvent("SHOW_LOOT_TOAST_LEGENDARY_LOOTED")
         AL:RegisterEvent("SHOW_LOOT_TOAST_UPGRADE")
         AL:RegisterEvent("SHOW_PVP_FACTION_LOOT_TOAST")
+        AL:RegisterEvent("SHOW_RATED_PVP_REWARD_TOAST")
         AL:RegisterEvent("STORE_PRODUCT_DELIVERED")
 
         BonusRollFrame.FinishRollAnim:SetScript("OnFinished", BonusRollFrame_FinishedFading_Enabled)
@@ -1855,6 +1895,7 @@ local function DisableSpecialLootToasts()
     AL:UnregisterEvent("SHOW_LOOT_TOAST_LEGENDARY_LOOTED")
     AL:UnregisterEvent("SHOW_LOOT_TOAST_UPGRADE")
     AL:UnregisterEvent("SHOW_PVP_FACTION_LOOT_TOAST")
+    AL:UnregisterEvent("SHOW_RATED_PVP_REWARD_TOAST")
     AL:UnregisterEvent("STORE_PRODUCT_DELIVERED")
 
     BonusRollFrame.FinishRollAnim:SetScript("OnFinished", BonusRollFrame_FinishedFading_Disabled)
@@ -2118,7 +2159,7 @@ local function WorldQuestToast_SetUp(questID)
     local toast = GetToast("scenario")
     local _, _, _, taskName = GetTaskInfo(questID)
     local _, _, worldQuestType, rarity, _, tradeskillLineIndex = GetQuestTagInfo(questID)
-    local color = WORLD_QUEST_QUALITY_COLORS[rarity]
+    local color = WORLD_QUEST_QUALITY_COLORS[rarity] or WORLD_QUEST_QUALITY_COLORS[1]
     local money = GetQuestLogRewardMoney(questID)
     local xp = GetQuestLogRewardXP(questID)
     local usedRewards = 0
@@ -2240,79 +2281,81 @@ end
 --------------
 
 local function IsAppearanceKnown(sourceID)
-	local data = C_TransmogCollection.GetSourceInfo(sourceID)
-	local sources = C_TransmogCollection.GetAppearanceSources(data.appearanceID)
+    local data = C_TransmogCollection.GetSourceInfo(sourceID)
+    local sources = C_TransmogCollection.GetAppearanceSources(data.appearanceID)
 
-	if sources then
-		for i = 1, #sources do
-			if sources[i].isCollected and sourceID ~= sources[i].sourceID then
-				return true
-			end
-		end
-	end
+    if sources then
+        for i = 1, #sources do
+            if sources[i].isCollected and sourceID ~= sources[i].sourceID then
+                return true
+            end
+        end
+    else
+        return nil
+    end
 
-	return false
+    return false
 end
 
 local function TransmogToast_SetUp(sourceID, isAdded)
-	local _, _, _, icon, _, _, transmogLink = C_TransmogCollection.GetAppearanceSourceInfo(sourceID)
-	local name
-	transmogLink, name = string.match(transmogLink, "|H(.+)|h%[(.+)%]|h")
+    local _, _, _, icon, _, _, transmogLink = C_TransmogCollection.GetAppearanceSourceInfo(sourceID)
+    local name
+    transmogLink, name = string.match(transmogLink, "|H(.+)|h%[(.+)%]|h")
 
-	if not transmogLink then
-		return C_Timer.After(0.25, function() TransmogToast_SetUp(sourceID, isAdded) end)
-	end
+    if not transmogLink then
+        return C_Timer.After(0.25, function() TransmogToast_SetUp(sourceID, isAdded) end)
+    end
 
-	local toast = GetToast("misc")
+    local toast = GetToast("misc")
 
-	if isAdded then
-		toast.Title:SetText("Appearance Added")
-	else
-		toast.Title:SetText("Appearance Removed")
-	end
+    if isAdded then
+        toast.Title:SetText("Appearance Added")
+    else
+        toast.Title:SetText("Appearance Removed")
+    end
 
-	toast.Text:SetText(name)
-	toast.BG:SetTexture("Interface\\AddOns\\RayUI\\media\\toast-bg-transmog")
-	toast.Border:SetVertexColor(1, 128 / 255, 1)
-	toast.IconBorder:SetVertexColor(1, 128 / 255, 1)
-	toast.Icon:SetTexture(icon)
-	toast.soundFile = "UI_DigsiteCompletion_Toast"
-	toast.id = sourceID
-	toast.link = transmogLink
+    toast.Text:SetText(name)
+    toast.BG:SetTexture("Interface\\AddOns\\RayUI\\media\\toast-bg-transmog")
+    toast.Border:SetVertexColor(1, 128 / 255, 1)
+    toast.IconBorder:SetVertexColor(1, 128 / 255, 1)
+    toast.Icon:SetTexture(icon)
+    toast.soundFile = "UI_DigsiteCompletion_Toast"
+    toast.id = sourceID
+    toast.link = transmogLink
 
-	SpawnToast(toast, CFG.dnd.transmog)
+    SpawnToast(toast, CFG.dnd.transmog)
 end
 
 function AL:TRANSMOG_COLLECTION_SOURCE_ADDED(event, sourceID)
-	local isKnown = IsAppearanceKnown(sourceID)
+    local isKnown = IsAppearanceKnown(sourceID)
 
-	if isKnown == false then
-		TransmogToast_SetUp(sourceID, true)
-	elseif isKnown == nil then
-		C_Timer.After(0.25, function() AL:TRANSMOG_COLLECTION_SOURCE_ADDED("", sourceID) end)
-	end
+    if isKnown == false then
+        TransmogToast_SetUp(sourceID, true)
+    elseif isKnown == nil then
+        C_Timer.After(0.25, function() AL:TRANSMOG_COLLECTION_SOURCE_ADDED("", sourceID) end)
+    end
 end
 
 function AL:TRANSMOG_COLLECTION_SOURCE_REMOVED(event, sourceID)
-	local isKnown = IsAppearanceKnown(sourceID)
+    local isKnown = IsAppearanceKnown(sourceID)
 
-	if isKnown == false then
-		TransmogToast_SetUp(sourceID)
-	elseif isKnown == nil then
-		C_Timer.After(0.25, function() AL:TRANSMOG_COLLECTION_SOURCE_REMOVED("", sourceID) end)
-	end
+    if isKnown == false then
+        TransmogToast_SetUp(sourceID)
+    elseif isKnown == nil then
+        C_Timer.After(0.25, function() AL:TRANSMOG_COLLECTION_SOURCE_REMOVED("", sourceID) end)
+    end
 end
 
 local function EnableTransmogToasts()
-	if CFG.transmog_enabled then
-		AL:RegisterEvent("TRANSMOG_COLLECTION_SOURCE_ADDED")
-		AL:RegisterEvent("TRANSMOG_COLLECTION_SOURCE_REMOVED")
-	end
+    if CFG.transmog_enabled then
+        AL:RegisterEvent("TRANSMOG_COLLECTION_SOURCE_ADDED")
+        AL:RegisterEvent("TRANSMOG_COLLECTION_SOURCE_REMOVED")
+    end
 end
 
 local function DisableTransmogToasts()
-	AL:UnregisterEvent("TRANSMOG_COLLECTION_SOURCE_ADDED")
-	AL:UnregisterEvent("TRANSMOG_COLLECTION_SOURCE_REMOVED")
+    AL:UnregisterEvent("TRANSMOG_COLLECTION_SOURCE_ADDED")
+    AL:UnregisterEvent("TRANSMOG_COLLECTION_SOURCE_REMOVED")
 end
 
 -----------
@@ -2395,36 +2438,10 @@ local function SpawnTestWorldEventToast()
     local _, link = GetItemInfo(139049)
 
     if link then
-        InvasionToast_SetUp(43301)
-        UpdateToast(43301, "scenario", link)
-    end
-
-    -- world quests, have to be in zone to get info
-    local mapAreaID = GetCurrentMapAreaID()
-    local taskInfo = C_TaskQuest.GetQuestsForPlayerByMapID(mapAreaID)
-
-    for _, info in pairs(taskInfo) do
-        local questID = info.questId
-
-        if QuestUtils_IsQuestWorldQuest(questID) and HaveQuestData(questID) then
-            local numRewards = GetNumQuestLogRewards(questID)
-
-            if numRewards > 0 then
-                for i = 1, numRewards do
-                    local _, _, _, _, _, itemID = GetQuestLogRewardInfo(i, questID)
-
-                    if itemID then
-                        local _, itemLink = GetItemInfo(itemID)
-
-                        if itemLink then
-                            AL:QUEST_LOOT_RECEIVED("", questID, itemLink)
-
-                            return
-                        end
-                    end
-                end
-            end
-        end
+        WorldQuestToast_SetUp(41662)
+        UpdateToast(41662, "scenario", link)
+    else
+        C_Timer.After(0.25, SpawnTestWorldEventToast)
     end
 end
 
@@ -2472,11 +2489,11 @@ local function SpawnTestCurrencyToast()
 end
 
 local function SpawnTestTransmogToast()
-	local appearance = C_TransmogCollection.GetCategoryAppearances(1) and C_TransmogCollection.GetCategoryAppearances(1)[1]
-	local source = C_TransmogCollection.GetAppearanceSources(appearance.visualID) and C_TransmogCollection.GetAppearanceSources(appearance.visualID)[1]
+    local appearance = C_TransmogCollection.GetCategoryAppearances(1) and C_TransmogCollection.GetCategoryAppearances(1)[1]
+    local source = C_TransmogCollection.GetAppearanceSources(appearance.visualID) and C_TransmogCollection.GetAppearanceSources(appearance.visualID)[1]
 
-	TransmogToast_SetUp(source.sourceID, true)
-	TransmogToast_SetUp(source.sourceID)
+    TransmogToast_SetUp(source.sourceID, true)
+    TransmogToast_SetUp(source.sourceID)
 end
 
 -------------
@@ -2499,7 +2516,7 @@ local function SpawnTestToast()
 
     SpawnTestWorldEventToast()
 
-	SpawnTestTransmogToast()
+    SpawnTestTransmogToast()
 end
 
 function AL:PostAlertMove()
@@ -2514,8 +2531,8 @@ function AL:PLAYER_LOGIN()
     UIPARENT_MANAGED_FRAME_POSITIONS["GroupLootContainer"] = nil
     self:SecureHook(AlertFrame, "UpdateAnchors", "PostAlertMove")
     self:PostAlertMove()
-	GroupLootContainer:ClearAllPoints()
-	GroupLootContainer:SetPoint("CENTER", R.UIParent, "CENTER", 0, 100)
+    GroupLootContainer:ClearAllPoints()
+    GroupLootContainer:SetPoint("CENTER", R.UIParent, "CENTER", 0, 100)
 
     EnableAchievementToasts()
     EnableArchaeologyToasts()
@@ -2528,9 +2545,15 @@ function AL:PLAYER_LOGIN()
     EnableWorldToasts()
     EnableTransmogToasts()
 
+    for event in pairs(BLACKLISTED_EVENTS) do
+        _G.AlertFrame:UnregisterEvent(event)
+    end
+
     AlertFrame:UnregisterAllEvents()
     hooksecurefunc(AlertFrame, "RegisterEvent", function(self, event)
-            self:UnregisterEvent(event)
+            if event and BLACKLISTED_EVENTS[event] then
+                self:UnregisterEvent(event)
+            end
         end)
 
     AL:RegisterEvent("PLAYER_REGEN_DISABLED")
