@@ -29,7 +29,7 @@ local UnitIsGhost = UnitIsGhost
 local UnitIsConnected = UnitIsConnected
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: ALTERNATE_POWER_INDEX, DEAD
+-- GLOBALS: ALTERNATE_POWER_INDEX, DEAD, QuestDifficultyColors
 
 local utf8sub = function(string, i, dots)
     local bytes = string:len()
@@ -72,21 +72,20 @@ end
 oUF.Tags.Methods["RayUF:lvl"] = function(u)
     local level = UnitLevel(u)
     local typ = UnitClassification(u)
-    local color = GetQuestDifficultyColor(level)
+    local diffColor = level > 0 and GetQuestDifficultyColor(level) or QuestDifficultyColors["impossible"]
 
     if level <= 0 then
         level = "??"
-        color.r, color.g, color.b = 1, 0, 0
     end
 
     if typ=="rareelite" then
-        return hex(color)..level.."r+|r"
+        return hex(diffColor)..level.."r+|r"
     elseif typ=="elite" then
-        return hex(color)..level.."+|r"
+        return hex(diffColor)..level.."+|r"
     elseif typ=="rare" then
-        return hex(color)..level.."r|r"
+        return hex(diffColor)..level.."r|r"
     else
-        return hex(color)..level.."|r"
+        return hex(diffColor)..level.."|r"
     end
 end
 
