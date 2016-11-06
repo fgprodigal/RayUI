@@ -4,7 +4,7 @@ local RW = R:NewModule("Watcher", "AceEvent-3.0")
 --Cache global variables
 --Lua functions
 local _G = _G
-local select, unpack, pairs, ipairs, type = select, unpack, pairs, ipairs, type
+local select, unpack, pairs, ipairs, type, next = select, unpack, pairs, ipairs, type, next
 local table = table
 local wipe = wipe
 local getmetatable = getmetatable
@@ -490,23 +490,23 @@ function RW:NewWatcher(data)
                 module.defaultSetting = module.defaultSetting or {}
                 module.defaultSetting[v.filter] = module.defaultSetting[v.filter] or {}
                 module[v.filter] = module[v.filter] or {}
-                module[v.filter][spellName or v.spellID or v.itemID or v.slotID] = module[v.filter][spellName or v.spellID or v.itemID or v.slotID] or {}
-                module.defaultSetting[v.filter][spellName or v.spellID or v.itemID or v.slotID] = module.defaultSetting[v.filter][spellName or v.spellID or v.itemID or v.slotID] or {}
+                module[v.filter][v.spellID or v.itemID or v.slotID] = module[v.filter][v.spellID or v.itemID or v.slotID] or {}
+                module.defaultSetting[v.filter][v.spellID or v.itemID or v.slotID] = module.defaultSetting[v.filter][v.spellID or v.itemID or v.slotID] or {}
                 for ii, vv in pairs(v) do
                     if ii ~= "filter" and ii ~= "spellID" and ii ~= "itemID" and ii ~= "slotID" and v.filter ~= "CD" and v.filter ~= "itemCD" and v.filter ~= "slotCD" then
                         ii = ii == "unitId" and "unitID" or ii
-                        module[v.filter][spellName or v.spellID or v.itemID][ii] = vv
-                        module.defaultSetting[v.filter][spellName or v.spellID or v.itemID][ii] = vv
+                        module[v.filter][v.spellID or v.itemID][ii] = vv
+                        module.defaultSetting[v.filter][v.spellID or v.itemID][ii] = vv
                     end
-                    module[v.filter][spellName or v.spellID or v.itemID].enable = true
-                    module.defaultSetting[v.filter][spellName or v.spellID or v.itemID].enable = true
+                    module[v.filter][v.spellID or v.itemID].enable = true
+                    module.defaultSetting[v.filter][v.spellID or v.itemID].enable = true
                 end
             end
         end
     end
     if R.global.Watcher and R.global.Watcher[name] then
         for filter, config in pairs(R.global.Watcher[name]) do
-            if next(R.global.Watcher[name][filter]) then
+            if R.global.Watcher[name][filter] and next(R.global.Watcher[name][filter]) then
                 module[filter] = R:CopyTable(module[filter], R.global.Watcher[name][filter])
             else
                 R.global.Watcher[name][filter] = nil
