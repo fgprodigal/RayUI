@@ -506,7 +506,11 @@ function RW:NewWatcher(data)
     end
     if R.global.Watcher and R.global.Watcher[name] then
         for filter, config in pairs(R.global.Watcher[name]) do
-            module[filter] = R:CopyTable(module[filter], R.global.Watcher[name][filter])
+            if next(R.global.Watcher[name][filter]) then
+                module[filter] = R:CopyTable(module[filter], R.global.Watcher[name][filter])
+            else
+                R.global.Watcher[name][filter] = nil
+            end
         end
     end
 
