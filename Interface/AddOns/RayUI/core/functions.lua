@@ -61,7 +61,7 @@ local UpdateAddOnCPUUsage = UpdateAddOnCPUUsage
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: UIParent, LibStub, MAX_PLAYER_LEVEL, ScriptErrorsFrame_OnError, BaudErrorFrameHandler, UISpecialFrames
 -- GLOBALS: Advanced_UIScaleSlider, Advanced_UseUIScale, RayUIConfigTutorial, RayUIWarningFrameScrollScrollBar
--- GLOBALS: SLASH_RELOAD1, COMBAT_RATING_RESILIENCE_PLAYER_DAMAGE_TAKEN, FIRST_NUMBER_CAP, SECOND_NUMBER_CAP
+-- GLOBALS: SLASH_RELOAD1, COMBAT_RATING_RESILIENCE_PLAYER_DAMAGE_TAKEN, FIRST_NUMBER_CAP, SECOND_NUMBER_CAP, QuestDifficultyColors, QuestDifficulty_Trivial
 
 SlashCmdList["RELOAD"] = function() ReloadUI() end
 SLASH_RELOAD1 = "/rl"
@@ -305,6 +305,12 @@ function R:PLAYER_ENTERING_WORLD()
     RayUIGarbageCollector:RegisterAllEvents()
     RayUIGarbageCollector:SetScript("OnEvent", function(self, event, addon)
             eventcount = eventcount + 1
+            if QuestDifficultyColors["trivial"].r ~= 0.50 then
+                QuestDifficultyColors["trivial"].r = 0.50
+                QuestDifficultyColors["trivial"].g = 0.50
+                QuestDifficultyColors["trivial"].b = 0.50
+                QuestDifficultyColors["trivial"].font = QuestDifficulty_Trivial
+            end
             if InCombatLockdown() then return end
 
             if eventcount > 6000 then
@@ -862,8 +868,24 @@ function R:GetCPUImpact()
 end
 
 function R:Debug(...)
-	if not R:IsDeveloper() then return end
-	self:Print(...)
+    if not R:IsDeveloper() then return end
+    self:Print(...)
+end
+
+function R:CopyTable(currentTable, defaultTable)
+    if type(currentTable) ~= "table" then currentTable = {} end
+
+    if type(defaultTable) == "table" then
+        for option, value in pairs(defaultTable) do
+            if type(value) == "table" then
+                value = self:CopyTable(currentTable[option], value)
+            end
+
+            currentTable[option] = value
+        end
+    end
+
+    return currentTable
 end
 
 function R:ADDON_LOADED(event, addon)
