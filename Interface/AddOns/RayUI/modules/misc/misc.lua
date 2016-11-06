@@ -13,7 +13,6 @@ local table, pairs, pcall = table, pairs, pcall
 M.modName = L["小玩意儿"]
 local error=error
 M.Modules = {}
-M.OnLoadErrors = {}
 
 function M:RegisterMiscModule(name)
     table.insert(M.Modules, name)

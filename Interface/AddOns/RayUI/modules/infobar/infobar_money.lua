@@ -31,17 +31,11 @@ local GameTooltip_Hide = GameTooltip_Hide
 local session, init
 
 local function GetInfoBarDataBase(serverName)
-    if not R.db["InfoBar"] then
-        R.db["InfoBar"] = {}
-    end
-    if not R.db["InfoBar"]["CharInfo"] then
-        R.db["InfoBar"]["CharInfo"] = {}
-    end
-    if not R.db["InfoBar"]["CharInfo"][serverName] then
-        R.db["InfoBar"]["CharInfo"][serverName] = {}
-    end
+    R.global["InfoBar"] = R.global["InfoBar"] or {}
+    R.global["InfoBar"]["CharInfo"] = R.global["InfoBar"]["CharInfo"] or {}
+    R.global["InfoBar"]["CharInfo"][serverName] = R.global["InfoBar"]["CharInfo"][serverName] or {}
 
-    return R.db["InfoBar"]["CharInfo"][serverName]
+    return R.global["InfoBar"]["CharInfo"][serverName]
 end
 
 local function GetMoneyString(money)
@@ -143,7 +137,7 @@ local function Money_OnEnter(self)
 
     -- All Servers
     if self.isShift then
-        local dataBase = R.db["InfoBar"]["CharInfo"]
+        local dataBase = R.global["InfoBar"]["CharInfo"]
         local total = 0
 
         GameTooltip:AddLine(L["全部服务器"],1,1,1)
