@@ -74,14 +74,14 @@ function CH:MoveOut()
     CH.ChatIn = false
     RayUIChatBG:SetPoint("BOTTOMLEFT", R.UIParent, "BOTTOMLEFT", 15, 30)
     local fadeInfo = {}
-	fadeInfo.mode = "OUT"
-	fadeInfo.timeToFade = 0.5
-	fadeInfo.finishedFunc = function()
-		if InCombatLockdown() then return end
-		RayUIChatBG:Hide()
-	end
-	fadeInfo.startAlpha = RayUIChatBG:GetAlpha()
-	fadeInfo.endAlpha = 0
+    fadeInfo.mode = "OUT"
+    fadeInfo.timeToFade = 0.5
+    fadeInfo.finishedFunc = function()
+        if InCombatLockdown() then return end
+        RayUIChatBG:Hide()
+    end
+    fadeInfo.startAlpha = RayUIChatBG:GetAlpha()
+    fadeInfo.endAlpha = 0
     R:UIFrameFade(RayUIChatBG, fadeInfo)
     R:Slide(RayUIChatBG, "LEFT", CH.db.width + 15, 195)
     ChatEdit_ClearChat(ChatFrame1EditBox)
@@ -174,6 +174,9 @@ function CH:AutoHide()
         self:RegisterEvent("BN_CUSTOM_MESSAGE_CHANGED", "OnEvent")
         self:RegisterEvent("BN_FRIEND_INVITE_ADDED", "OnEvent")
         self:RegisterEvent("BN_FRIEND_INVITE_LIST_INITIALIZED", "OnEvent")
+        R:SecureHook(R, "Print", function()
+                self:OnEvent(self, "CHAT_MSG_SAY")
+            end)
     end
     local RayUIChatToggle = CreateFrame("Frame", "RayUIChatToggle", R.UIParent)
     RayUIChatToggle:CreatePanel("Default", 15, 140, "BOTTOMLEFT",R.UIParent,"BOTTOMLEFT", 0,30)

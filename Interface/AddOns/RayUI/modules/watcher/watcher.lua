@@ -265,8 +265,8 @@ function watcherPrototype:CheckAura()
             local index = 1
             while UnitBuff(unitID, index) and not ( index > 40 ) do
                 local spellName, _, icon, count, _, duration, expires, caster, _, _, spellID, _, _, _, _, _, value = UnitBuff(unitID,index)
-                if (self.BUFF[spellID] and self.BUFF[spellID].unitID == unitID and ( caster == self.BUFF[spellID].caster or self.BUFF[spellID].caster:lower() == "all" )) or
-                (self.BUFF[spellName] and self.BUFF[spellName].unitID == unitID and ( caster == self.BUFF[spellName].caster or self.BUFF[spellName].caster:lower() == "all" )) then
+                if (self.BUFF[spellID] and self.BUFF[spellID].enable and self.BUFF[spellID].unitID == unitID and ( caster == self.BUFF[spellID].caster or self.BUFF[spellID].caster:lower() == "all" )) or
+                (self.BUFF[spellName] and self.BUFF[spellID].enable and self.BUFF[spellName].unitID == unitID and ( caster == self.BUFF[spellName].caster or self.BUFF[spellName].caster:lower() == "all" )) then
                     if not self.button[self.current] then
                         self.button[self.current] = self:CreateButton(self.mode)
                         self:SetPosition(self.current)
@@ -288,8 +288,8 @@ function watcherPrototype:CheckAura()
             local index = 1
             while UnitDebuff(unitID, index) and not ( index > 1024 ) do
                 local spellName, _, icon, count, _, duration, expires, caster, _, _, spellID, _, _, _, _, _, value = UnitDebuff(unitID,index)
-                if (self.DEBUFF[spellID] and self.DEBUFF[spellID].unitID == unitID and ( caster == self.DEBUFF[spellID].caster or self.DEBUFF[spellID].caster:lower() == "all" )) or
-                (self.DEBUFF[spellName] and self.DEBUFF[spellName].unitID == unitID and ( caster == self.DEBUFF[spellName].caster or self.DEBUFF[spellName].caster:lower() == "all" )) then
+                if (self.DEBUFF[spellID] and self.DEBUFF[spellID].enable and self.DEBUFF[spellID].unitID == unitID and ( caster == self.DEBUFF[spellID].caster or self.DEBUFF[spellID].caster:lower() == "all" )) or
+                (self.DEBUFF[spellName] and self.DEBUFF[spellID].enable and self.DEBUFF[spellName].unitID == unitID and ( caster == self.DEBUFF[spellName].caster or self.DEBUFF[spellName].caster:lower() == "all" )) then
                     if not self.button[self.current] then
                         self.button[self.current] = self:CreateButton(self.mode)
                         self:SetPosition(self.current)
@@ -311,7 +311,7 @@ end
 function watcherPrototype:CheckCooldown()
     if self.CD then
         for spellID in pairs(self.CD) do
-            if type(spellID) == "number" and self.CD[spellID] then
+            if type(spellID) == "number" and self.CD[spellID] and self.CD[spellID].enable then
                 local start, duration = GetSpellCooldown(spellID)
                 local _, _, icon = GetSpellInfo(spellID)
                 if start ~= 0 and duration > 2.9 then
@@ -328,7 +328,7 @@ function watcherPrototype:CheckCooldown()
     end
     if self.itemCD then
         for itemID in pairs(self.itemCD) do
-            if type(itemID) == "number" and self.itemCD[itemID] then
+            if type(itemID) == "number" and self.itemCD[itemID] and self.itemCD[itemID].enable then
                 local start, duration = GetItemCooldown(itemID)
                 local _, _, _, _, _, _, _, _, _, icon = GetItemInfo(itemID)
                 if start ~= 0 and duration > 2.9 then
@@ -345,7 +345,7 @@ function watcherPrototype:CheckCooldown()
     end
     if self.slotCD then
         for slotID in pairs(self.slotCD) do
-            if type(slotID) == "number" and self.slotCD[slotID] then
+            if type(slotID) == "number" and self.slotCD[slotID] and self.slotCD[slotID].enable then
                 local slotLink = GetInventoryItemLink("player", slotID)
                 if slotLink then
                     local _, _, _, _, _, _, _, _, _, icon = GetItemInfo(slotLink)
@@ -460,69 +460,91 @@ function RW:NewWatcher(data)
     local function createClass(...)
         local c = {}
         local arg = {...}
-        setmetatable(c, {__index = function (t, k)
+        setmetatable(c, {
+                __index = function (t, k)
                     return search(k, arg)
-                    end})
-            c.__index = c
-            function c:new (o)
-                o = o or {}
-                setmetatable(o, c)
-                return o
-            end
-            return c
+                end
+            }
+        )
+        c.__index = c
+        function c:new (o)
+            o = o or {}
+            setmetatable(o, c)
+            return o
         end
-        local oldmeta = getmetatable(module)
-        module = setmetatable(module, { __index = createClass(oldmeta, watcherPrototype) })
-        module.button = {}
+        return c
+    end
+    local oldmeta = getmetatable(module)
+    module = setmetatable(module, { __index = createClass(oldmeta, watcherPrototype) })
+    module.button = {}
 
-        for i,v in pairs(data) do
-            if type(v) == "function" then
-                v = v()
+    for i,v in pairs(data) do
+        if type(v) == "function" then
+            v = v()
+        end
+        if type(v) ~= "table" or (type(v) == "table" and type(i) ~= "number") then
+            module[i:lower()] = v
+        elseif type(v) == "table" then
+            if (v.spellID or v.itemID or v.slotID) and v.filter then
+                if v.filter == "CD" and v.itemID then v.filter = "itemCD" end
+                module.defaultSetting = module.defaultSetting or {}
+                module.defaultSetting[v.filter] = module.defaultSetting[v.filter] or {}
+                module[v.filter] = module[v.filter] or {}
+                module[v.filter][spellName or v.spellID or v.itemID or v.slotID] = module[v.filter][spellName or v.spellID or v.itemID or v.slotID] or {}
+                module.defaultSetting[v.filter][spellName or v.spellID or v.itemID or v.slotID] = module.defaultSetting[v.filter][spellName or v.spellID or v.itemID or v.slotID] or {}
+                for ii, vv in pairs(v) do
+                    if ii ~= "filter" and ii ~= "spellID" and ii ~= "itemID" and ii ~= "slotID" and v.filter ~= "CD" and v.filter ~= "itemCD" and v.filter ~= "slotCD" then
+                        ii = ii == "unitId" and "unitID" or ii
+                        module[v.filter][spellName or v.spellID or v.itemID][ii] = vv
+                        module.defaultSetting[v.filter][spellName or v.spellID or v.itemID][ii] = vv
+                    end
+                    module[v.filter][spellName or v.spellID or v.itemID].enable = true
+                    module.defaultSetting[v.filter][spellName or v.spellID or v.itemID].enable = true
+                end
             end
-            if type(v) ~= "table" or (type(v) == "table" and type(i) ~= "number") then
-                module[i:lower()] = v
-            elseif type(v) == "table" then
-                if (v.spellID or v.itemID or v.slotID) and v.filter then
-                    local spellName
-                    if v.fuzzy and (v.filter == "BUFF" or v.filter == "DEBUFF") then spellName = GetSpellInfo(v.spellID) end
-                    if v.filter == "CD" and v.slotID then v.filter = "slotCD" end
-                    if v.filter == "CD" and v.itemID then v.filter = "itemCD" end
-                    module[v.filter] = module[v.filter] or {}
-                    module[v.filter][spellName or v.spellID or v.itemID or v.slotID] = module[v.filter][spellName or v.spellID or v.itemID or v.slotID] or {}
-                    for ii,vv in pairs(v) do
-                        if ii ~= "filter" and ii ~= "spellID" and ii ~= "itemID" and ii ~= "slotID" and v.filter ~= "CD" and v.filter ~= "itemCD" and v.filter ~= "slotCD" then
-                            ii = ii == "unitId" and "unitID" or ii
-                            module[v.filter][spellName or v.spellID or v.itemID][ii] = vv
-                            if spellName then
-                                module[v.filter][spellName]["spellID"] = v.spellID
-                                module[v.filter][spellName]["fuzzy"] = true
-                            end
-                        end
-                        if (ii == "unitId" or ii == "unitID") and (v.filter == "BUFF" or v.filter == "DEBUFF") then
-                            module[v.filter]["unitIDs"] = module[v.filter]["unitIDs"] or {}
-                            module[v.filter]["unitIDs"][vv] = true
-                        end
+        end
+    end
+    if R.global.Watcher and R.global.Watcher[name] then
+        for filter, config in pairs(R.global.Watcher[name]) do
+            module[filter] = R:CopyTable(module[filter], R.global.Watcher[name][filter])
+        end
+    end
+
+    for _, filter in pairs({"BUFF", "DEBUFF"}) do
+        if module[filter] then
+            for _, config in pairs(module[filter]) do
+                for key, value in pairs(config) do
+                    if (key == "unitId" or key == "unitID") and (filter == "BUFF" or filter == "DEBUFF") then
+                        module[filter]["unitIDs"] = module[filter]["unitIDs"] or {}
+                        module[filter]["unitIDs"][value] = true
                     end
                 end
             end
         end
-
-        module.holder = CreateFrame("Frame", nil, R.UIParent)
-        module.holder:SetSize(module.size, module.size)
-        module.parent = CreateFrame("Frame", module.name, R.UIParent)
-        module.parent:SetAllPoints(module.holder)
-
-        module:RegisterEvent("PLAYER_ENTERING_WORLD", "OnEvent")
-        if module.BUFF or module.DEBUFF then
-            module:RegisterEvent("UNIT_AURA", "OnEvent")
-            module:RegisterEvent("PLAYER_TARGET_CHANGED", "OnEvent")
-            module:RegisterEvent("PLAYER_FOCUS_CHANGED", "OnEvent")
-        end
-        if module.CD or module.itemCD then
-            module:RegisterEvent("SPELL_UPDATE_COOLDOWN", "OnEvent")
-            module:RegisterEvent("SPELL_UPDATE_USABLE", "OnEvent")
-        end
-        RW.modules[module.name] = module
     end
 
-    R:RegisterModule(RW:GetName())
+    module.holder = CreateFrame("Frame", nil, R.UIParent)
+    module.holder:SetSize(module.size, module.size)
+    module.parent = CreateFrame("Frame", module.name, R.UIParent)
+    module.parent:SetAllPoints(module.holder)
+
+    module:RegisterEvent("PLAYER_ENTERING_WORLD", "OnEvent")
+    if module.BUFF or module.DEBUFF then
+        module:RegisterEvent("UNIT_AURA", "OnEvent")
+        module:RegisterEvent("PLAYER_TARGET_CHANGED", "OnEvent")
+        module:RegisterEvent("PLAYER_FOCUS_CHANGED", "OnEvent")
+    end
+    if module.CD or module.itemCD then
+        module:RegisterEvent("SPELL_UPDATE_COOLDOWN", "OnEvent")
+        module:RegisterEvent("SPELL_UPDATE_USABLE", "OnEvent")
+    end
+    RW.modules[name] = module
+    if R.global.Watcher and R.global.Watcher[name] and R.global.Watcher[name].enable == false then
+        RW.modules[name]:Disable()
+        RW.modules[name].enable = false
+    else
+        RW.modules[name].enable = true
+    end
+end
+
+R:RegisterModule(RW:GetName())

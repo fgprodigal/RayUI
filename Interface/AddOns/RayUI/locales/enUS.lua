@@ -490,6 +490,7 @@ do
     L["匹配所有相同名字的法术"] = "Only match by name"
     L["添加/编辑"] = "Add/Edit"
     L["添加到当前分组或编辑当前列表中已有法术"] = "Add spell to current group or edit current group"
+    L["你不能删除一个内建的法术，已停用此技能。"] = "You may not remove a spell from a default filter that is not customly added. Setting spell to false instead."
     L["删除"] = "Delete"
     L["从当前分组删除"] = "Delete from current group"
 end
