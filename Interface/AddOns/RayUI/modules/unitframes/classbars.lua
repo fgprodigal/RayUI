@@ -215,10 +215,19 @@ function UF:Construct_DeathKnightResourceBar(frame)
     end
 
     runes.PostUpdateVisibility = UF.PostVisibilityRunes
+    runes.PostUpdate = UF.PostUpdateRunes
     runes:SetScript("OnShow", ToggleResourceBar)
     runes:SetScript("OnHide", ToggleResourceBar)
 
     return runes
+end
+
+function UF:PostUpdateRunes(rune, rid, start, duration, runeReady)
+    if runeReady then
+        rune:SetAlpha(1)
+    else
+        rune:SetAlpha(0.4)
+    end
 end
 
 function UF:PostVisibilityRunes(enabled, stateChanged)
