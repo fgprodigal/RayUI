@@ -347,12 +347,14 @@ end
 
 function UF:Construct_SmartAura(frame)
     local auras = CreateFrame("Frame", frame:GetName().."SmartAuras", frame)
+    auras.isSmartAura = true
     auras:SetHeight(38)
     auras:SetWidth(frame.UNIT_WIDTH * 2)
     auras.spacing = 6
     auras.size = 38
     auras.PreSetPosition = (not frame:GetScript("OnUpdate")) and UF.SortAuras or nil
     auras.PostCreateIcon = self.PostCreateIcon
+    auras.PostUpdateIcon = self.PostUpdateIcon
     auras.CustomFilter = self.CustomSmartFilter
 
     return auras
@@ -360,12 +362,12 @@ end
 
 function UF:CustomSmartFilter(unit, icon, name, rank, texture, count, debuffType, duration, expirationTime, unitCaster, isStealable, _, spellID)
     local returnValue = true
-	local isPlayer = unitCaster == "player" or unitCaster == "vehicle"
+    local isPlayer = unitCaster == "player" or unitCaster == "vehicle"
 
     icon.isPlayer = isPlayer
-	icon.owner = unitCaster
-	icon.name = name
-    icon.priority = 0
+    icon.owner = unitCaster
+    icon.name = name
+    icon.priority = -1
 
     if isPlayer then
         returnValue = true
@@ -373,9 +375,9 @@ function UF:CustomSmartFilter(unit, icon, name, rank, texture, count, debuffType
         returnValue = false
     end
 
-	if (duration and (duration > 60)) or (duration == 0 or not duration) then
-		returnValue = false
-	end
+    if (duration and (duration > 60)) or (duration == 0 or not duration) then
+        returnValue = false
+    end
 
     if R.global["UnitFrames"]["aurafilters"]["Blacklist"][spellID] then
         returnValue = false
@@ -396,27 +398,66 @@ function UF:CustomSmartFilter(unit, icon, name, rank, texture, count, debuffType
         returnValue = true
     end
 
-	return returnValue
+    return returnValue
+end
+
+local function SortAurasByTime(a, b)
+    if a and b then
+        if a:IsShown() and b:IsShown() then
+            local aTime = a.expiration or -1
+            local bTime = b.expiration or -1
+            return aTime < bTime
+        elseif a:IsShown() then
+            return true
+        end
+    end
 end
 
 local function SortAurasByPriority(a, b)
-	if (a and b) then
-		if a.isPlayer and not b.isPlayer then
-			return true
-		elseif not a.isPlayer and b.isPlayer then
-			return false
-		end
+    if a and b then
+        if a:IsShown() and b:IsShown() then
+            if a.isPlayer and not b.isPlayer then
+                return true
+            elseif not a.isPlayer and b.isPlayer then
+                return false
+            end
 
-		if (a.priority and b.priority) then
-			return a.priority > b.priority
-		end
-	end
+            if (a.priority and b.priority) then
+                return a.priority > b.priority
+            end
+        elseif a:IsShown() then
+            return true
+        end
+    end
+end
+
+local function SortAurasByPriorityAndTime(a, b)
+    if a and b then
+        if a:IsShown() and b:IsShown() then
+            if a.isPlayer and not b.isPlayer then
+                return true
+            elseif not a.isPlayer and b.isPlayer then
+                return false
+            end
+            local aTime = a.expiration or -1
+            local bTime = b.expiration or -1
+            if (a.priority and b.priority) then
+                if a.priority ~= b.priority then
+                    return a.priority > b.priority
+                else
+                    return aTime < bTime
+                end
+            end
+        elseif a:IsShown() then
+            return true
+        end
+    end
 end
 
 function UF:SortAuras()
-	tsort(self, SortAurasByPriority)
+    tsort(self, SortAurasByTime)
 
-	return 1, #self
+    return 1, #self
 end
 
 function UF:Construct_CastBar(frame)
@@ -929,7 +970,7 @@ function UF:PostUpdateIcon(unit, icon, index, offset)
     local name, _, _, _, dtype, duration, expirationTime, unitCaster, canStealOrPurge = UnitAura(unit, index, icon.filter)
 
     local texture = icon.icon
-    if icon.isDebuff then
+    if icon.isDebuff and not self.isSmartAura then
         if icon.owner == "player" or icon.owner == "pet" or icon.owner == "vehicle" or UnitIsFriend("player", unit) then
             local color = DebuffTypeColor[dtype] or DebuffTypeColor.none
             icon.border:SetBackdropBorderColor(color.r * 0.6, color.g * 0.6, color.b * 0.6)
@@ -944,7 +985,7 @@ function UF:PostUpdateIcon(unit, icon, index, offset)
             texture:Point("BOTTOMRIGHT", icon)
             texture:SetDesaturated(true)
         end
-    else
+    elseif not self.isSmartAura then
         if (canStealOrPurge or ((R.myclass == "PRIEST" or R.myclass == "SHAMAN" or R.myclass == "MAGE") and dtype == "Magic")) and not UnitIsFriend("player", unit) then
             icon.border:SetBackdropBorderColor(237/255, 234/255, 142/255)
             icon:GetHighlightTexture():StyleButton(1)
@@ -960,7 +1001,13 @@ function UF:PostUpdateIcon(unit, icon, index, offset)
     end
 
     icon.duration = duration
-    icon.expires = expirationTime
+    icon.expirationTime = expirationTime
+    if expirationTime and duration ~= 0 then
+        icon.expiration = expirationTime - GetTime()
+    end
+    if duration == 0 or expirationTime == 0 then
+        icon.expiration = nil
+    end
 end
 
 function UF:PostCreateIcon(button)

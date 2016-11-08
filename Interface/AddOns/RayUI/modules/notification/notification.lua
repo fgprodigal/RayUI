@@ -417,18 +417,8 @@ function NF:PLAYER_ENTERING_WORLD()
 end
 
 function NF:VIGNETTE_ADDED(event, vignetteInstanceID)
-	self:UnregisterEvent(event)
-	local names = ""
-
-	local numVignettes = C_Vignettes.GetNumVignettes()
-	for i=1, numVignettes do
-		local vigInstanceGUID= C_Vignettes.GetVignetteGUID(i)
-		local ofsX, ofsY, name = C_Vignettes. GetVignetteInfoFromInstanceID(vigInstanceGUID)
-		names = names..name.."  "
-	end
-	PlaySoundFile("Sound\\Spells\\PVPFlagTaken.wav")
-	self:Show("发现稀有", names)
-	C_Timer.After(0.5, function() self:RegisterEvent(event) end)
+	local ofsX, ofsY, name = C_Vignettes.GetVignetteInfoFromInstanceID(vignetteInstanceID)
+	self:Show("发现稀有", name)
 end
 
 function NF:RESURRECT_REQUEST(name)
