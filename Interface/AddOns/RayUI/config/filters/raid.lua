@@ -23,7 +23,7 @@ local function SpellName(id)
 end
 
 local function Defaults(priorityOverride)
-	return {["enable"] = true, ["priority"] = priorityOverride or 0}
+	return {["enable"] = true, ["priority"] = priorityOverride or 0, ["stackThreshold"] = 0}
 end
 
 G.Raid.AuraWatch = {

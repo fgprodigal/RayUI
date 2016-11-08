@@ -371,6 +371,14 @@ function UF:CustomSmartFilter(unit, icon, name, rank, texture, count, debuffType
 		returnValue = false
 	end
 
+    if R.global["UnitFrames"]["aurafilters"]["Blacklist"][spellID] then
+        returnValue = false
+    end
+
+    if R.global["UnitFrames"]["aurafilters"]["Whitelist"][spellID] then
+        returnValue = true
+    end
+
 	return returnValue
 end
 
