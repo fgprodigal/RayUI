@@ -101,6 +101,7 @@ P["UnitFrames"]={
     alwaysShowHealth = false,
     aurabar = false,
     castBar = true,
+    smartAura = false,
     units = {
         player = {
             defaultPosition = { "BOTTOMRIGHT", R.UIParent, "BOTTOM", -80, 390 },

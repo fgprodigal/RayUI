@@ -269,7 +269,7 @@ function UF:Construct_CombatIndicator(frame)
 end
 
 function UF:Construct_RestingIndicator(frame)
-    local Resting = frame:CreateFontString(nil, "OVERLAY")
+    local Resting = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY")
     Resting:SetFont(R["media"].font, 10, R["media"].fontflag)
     Resting:Point("BOTTOM", frame.Combat, "BOTTOM", 0, 25)
     Resting:SetText("zZz")
@@ -343,6 +343,35 @@ function UF:Construct_Buffs(frame)
     buffs.PostUpdateIcon = self.PostUpdateIcon
 
     return buffs
+end
+
+function UF:Construct_SmartAura(frame)
+    local auras = CreateFrame("Frame", frame:GetName().."SmartAuras", frame)
+    auras:SetHeight(38)
+    auras:SetWidth(frame.UNIT_WIDTH * 2)
+    auras.spacing = 6
+    auras.size = 38
+    auras.PostCreateIcon = self.PostCreateIcon
+    auras.CustomFilter = self.CustomSmartFilter
+
+    return auras
+end
+
+function UF:CustomSmartFilter(unit, icon, name, rank, texture, count, debuffType, duration, expirationTime, unitCaster, isStealable, _, spellID)
+    local returnValue = true
+	local isPlayer = unitCaster == "player" or unitCaster == "vehicle"
+
+    if isPlayer then
+        returnValue = true
+    else
+        returnValue = false
+    end
+
+	if (duration and (duration > 60)) or (duration == 0 or not duration) then
+		returnValue = false
+	end
+
+	return returnValue
 end
 
 function UF:Construct_CastBar(frame)
@@ -851,37 +880,6 @@ function UF:PostAltUpdate(min, cur, max)
     end
 end
 
-local function formatTime(s)
-    local day, hour, minute = 86400, 3600, 60
-    if s >= day then
-        return format("%dd", floor(s/day + 0.5)), s % day
-    elseif s >= hour then
-        return format("%dh", floor(s/hour + 0.5)), s % hour
-    elseif s >= minute then
-        return format("%dm", floor(s/minute + 0.5)), s % minute
-    elseif s >= minute / 12 then
-        return floor(s + 0.5), (s * 100 - floor(s * 100))/100
-    end
-    -- return format("%.1f", s), (s * 100 - floor(s * 100))/100
-    return format("%d", s), (s * 100 - floor(s * 100))/100
-end
-
-local function CreateAuraTimer(frame,elapsed)
-    frame.elapsed = (frame.elapsed or 0) + elapsed
-
-    if frame.elapsed < .2 then return end
-    frame.elapsed = 0
-
-    if frame.expires then
-        local timeLeft = frame.expires - GetTime()
-        if timeLeft <= 0 then
-            return
-        else
-            frame.remaining:SetText(formatTime(timeLeft))
-        end
-    end
-end
-
 function UF:PostUpdateIcon(unit, icon, index, offset)
     local name, _, _, _, dtype, duration, expirationTime, unitCaster, canStealOrPurge = UnitAura(unit, index, icon.filter)
 
@@ -916,40 +914,30 @@ function UF:PostUpdateIcon(unit, icon, index, offset)
         end
     end
 
-    if duration and duration > 0 then
-        icon.remaining:Show()
-    else
-        icon.remaining:Hide()
-    end
-
     icon.duration = duration
     icon.expires = expirationTime
-    icon:SetScript("OnUpdate", CreateAuraTimer)
 end
 
 function UF:PostCreateIcon(button)
+    button.RaisedElementParent = CreateFrame("Frame", nil, button)
+    button.RaisedElementParent:SetFrameLevel(button:GetFrameLevel() + 100)
+
     button:SetFrameStrata("BACKGROUND")
     local count = button.count
+    count:SetParent(button.RaisedElementParent)
     count:ClearAllPoints()
-    count:Point("CENTER", button, "BOTTOMRIGHT", 0, 5)
+    count:Point("BOTTOMRIGHT", button , "BOTTOMRIGHT", 4, -4)
     count:SetFontObject(nil)
-    count:SetFont(R["media"].font, 13, "THINOUTLINE")
-    count:SetTextColor(.8, .8, .8)
+    count:SetFont(R["media"].font, R["media"].fontsize * (R:Round(self.size) / 30), R["media"].fontflag)
 
-    self.disableCooldown = true
     button.icon:SetTexCoord(.1, .9, .1, .9)
     button:CreateShadow()
     button.shadow:SetBackdropColor(0, 0, 0)
     button.overlay:Hide()
+    button.cd:SetReverse(true)
 
-    button.remaining = button:CreateFontString(nil, "OVERLAY")
-    button.remaining:SetFont(R["media"].font, 13, R["media"].fontflag)
-    button.remaining:SetJustifyH("LEFT")
-    button.remaining:SetTextColor(0.99, 0.99, 0.99)
-    button.remaining:Point("CENTER", 0, 0)
-
+    button.pushed = true
     button:StyleButton(true)
-    button:SetPushedTexture(nil)
 end
 
 function UF:CustomFilter(unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster)
@@ -962,6 +950,10 @@ function UF:CustomFilter(unit, icon, name, rank, texture, count, dtype, duration
     if name then
         icon.isPlayer = isPlayer
         icon.owner = caster
+    end
+
+    if UF.db.smartAura and isPlayer and duration and duration < 60 and duration ~= 0 then
+        return false
     end
 
     return true
@@ -1012,23 +1004,13 @@ function UF:AuraBarFilter(unit, name, rank, icon, count, debuffType, duration, e
     local returnValue = true
     local returnValueChanged = false
     local isPlayer, isFriend
-    local auraType
 
     if unitCaster == "player" or unitCaster == "vehicle" then isPlayer = true end
     if UnitIsFriend("player", unit) then isFriend = true end
-    if isFriend then
-        auraType = "HELPFUL"
-    else
-        auraType = "HARMFUL"
-    end
 
     if isPlayer then
         returnValue = true
     else
-        returnValue = false
-    end
-
-    if shouldConsolidate == 1 then
         returnValue = false
     end
 
@@ -1102,10 +1084,8 @@ end
 function UF:Construct_AuraBars()
     local bar = self.statusBar
 
-    bar:Height(5)
     bar:ClearAllPoints()
-    bar:SetPoint("BOTTOMLEFT")
-    bar:SetPoint("BOTTOMRIGHT")
+    bar:SetAllPoints()
     bar:CreateShadow("Background")
 
     bar:SetStatusBarColor(unpack(RayUF.colors.class[R.myclass]))
@@ -1114,11 +1094,11 @@ function UF:Construct_AuraBars()
     bar.spellname:FontTemplate(R["media"].font, R["media"].fontsize, "OUTLINE")
 
     bar.spellname:ClearAllPoints()
-    bar.spellname:SetPoint("BOTTOMLEFT", bar, "TOPLEFT", 2, 2)
-    bar.spellname:SetPoint("BOTTOMRIGHT", bar, "TOPRIGHT", -20, 2)
+    bar.spellname:SetPoint("LEFT", bar, "LEFT", 2, 0)
+    bar.spellname:SetPoint("RIGHT", bar, "RIGHT", -20, 0)
 
     bar.spelltime:ClearAllPoints()
-    bar.spelltime:SetPoint("BOTTOMRIGHT", bar, "TOPRIGHT", 0, 2)
+    bar.spelltime:SetPoint("RIGHT", bar, "RIGHT", 0, 0)
 
     bar.iconHolder:CreateShadow("Background")
     bar.icon:SetDrawLayer("OVERLAY")

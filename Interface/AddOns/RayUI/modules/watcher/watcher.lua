@@ -397,6 +397,7 @@ function watcherPrototype:SetPosition(num)
 end
 
 function watcherPrototype:OnEvent(event, unit)
+    if self.enable == false then return end
     if event == "PLAYER_ENTERING_WORLD" then
         self.holder:SetPoint(unpack(self.setpoint))
         self.parent:SetAllPoints(self.holder)
@@ -506,7 +507,9 @@ function RW:NewWatcher(data)
     end
     if R.global.Watcher and R.global.Watcher[name] then
         for filter, config in pairs(R.global.Watcher[name]) do
-            if R.global.Watcher[name][filter] and next(R.global.Watcher[name][filter]) then
+            if type(filter) ~= "number" and type(config) ~="table" then
+                module[filter:lower()] = config
+            elseif R.global.Watcher[name][filter] and next(R.global.Watcher[name][filter]) then
                 module[filter] = R:CopyTable(module[filter], R.global.Watcher[name][filter])
             else
                 R.global.Watcher[name][filter] = nil
@@ -533,22 +536,21 @@ function RW:NewWatcher(data)
     module.parent:SetAllPoints(module.holder)
 
     module:RegisterEvent("PLAYER_ENTERING_WORLD", "OnEvent")
-    if module.BUFF or module.DEBUFF then
-        module:RegisterEvent("UNIT_AURA", "OnEvent")
-        module:RegisterEvent("PLAYER_TARGET_CHANGED", "OnEvent")
-        module:RegisterEvent("PLAYER_FOCUS_CHANGED", "OnEvent")
+    module:RegisterEvent("UNIT_AURA", "OnEvent")
+    module:RegisterEvent("PLAYER_TARGET_CHANGED", "OnEvent")
+    module:RegisterEvent("PLAYER_FOCUS_CHANGED", "OnEvent")
+    module:RegisterEvent("SPELL_UPDATE_COOLDOWN", "OnEvent")
+    module:RegisterEvent("SPELL_UPDATE_USABLE", "OnEvent")
+
+    if module.enable == nil then
+        module.enable = true
     end
-    if module.CD or module.itemCD then
-        module:RegisterEvent("SPELL_UPDATE_COOLDOWN", "OnEvent")
-        module:RegisterEvent("SPELL_UPDATE_USABLE", "OnEvent")
+    if not module.enable then
+        module:Disable()
+    else
+        module.enable = true
     end
     RW.modules[name] = module
-    if R.global.Watcher and R.global.Watcher[name] and R.global.Watcher[name].enable == false then
-        RW.modules[name]:Disable()
-        RW.modules[name].enable = false
-    else
-        RW.modules[name].enable = true
-    end
 end
 
 R:RegisterModule(RW:GetName())

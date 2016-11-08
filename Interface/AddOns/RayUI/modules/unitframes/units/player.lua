@@ -93,6 +93,15 @@ function UF:Construct_PlayerFrame(frame, unit)
     frame.Debuffs.initialAnchor = "BOTTOMRIGHT"
     frame.Debuffs:Point("BOTTOMRIGHT", frame, "TOPRIGHT", 0, 8)
 
+    if self.db.smartAura then
+        frame.Auras = self:Construct_SmartAura(frame)
+        frame.Auras["growth-x"] = "LEFT"
+        frame.Auras["growth-y"] = "UP"
+        frame.Auras.initialAnchor = "BOTTOMRIGHT"
+        frame.Auras:Point("BOTTOMRIGHT", frame, "TOPRIGHT", 0, 60)
+        frame.Auras:SetParent(R.UIParent)
+    end
+
     frame.Fader = self:Construct_Fader(frame)
 
     frame.ClassIcons = self:Construct_ClassBar(frame)

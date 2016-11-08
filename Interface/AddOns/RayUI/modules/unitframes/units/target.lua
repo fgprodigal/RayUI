@@ -101,7 +101,18 @@ function UF:Construct_TargetFrame(frame, unit)
     frame.Buffs["growth-x"] = "RIGHT"
     frame.Buffs["growth-y"] = "UP"
     frame.Buffs.initialAnchor = "BOTTOMLEFT"
+    if self.db.smartAura then
+        frame.Buffs.CustomFilter = self.CustomFilter
+    end
     frame.Buffs:Point("BOTTOMLEFT", frame.Debuffs, "TOPLEFT", 0, 4)
+
+    if self.db.smartAura then
+        frame.Auras = self:Construct_SmartAura(frame)
+        frame.Auras["growth-x"] = "RIGHT"
+        frame.Auras["growth-y"] = "UP"
+        frame.Auras.initialAnchor = "BOTTOMLEFT"
+        frame.Auras:Point("BOTTOMLEFT", frame, "TOPLEFT", 0, 60)
+    end
 
     if UF.db.aurabar then
         frame.AuraBars = self:Construct_AuraBarHeader(frame)

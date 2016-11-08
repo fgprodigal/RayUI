@@ -95,8 +95,17 @@ function UF:Construct_FocusFrame(frame, unit)
     frame.Debuffs["growth-y"] = "UP"
     frame.Debuffs.initialAnchor = "BOTTOMRIGHT"
     frame.Debuffs.num = 7
-    frame.Debuffs.onlyShowPlayer = true
+    frame.Debuffs.CustomFilter = self.CustomFilter
     frame.Debuffs:Point("BOTTOMRIGHT", frame, "TOPRIGHT", 0, 7)
+
+    if self.db.smartAura then
+        frame.Auras = self:Construct_SmartAura(frame)
+        frame.Auras.size = 30
+        frame.Auras["growth-x"] = "LEFT"
+        frame.Auras["growth-y"] = "UP"
+        frame.Auras.initialAnchor = "BOTTOMRIGHT"
+        frame.Auras:Point("BOTTOMRIGHT", frame, "TOPRIGHT", 0, 30)
+    end
 end
 
 tinsert(UF["unitstoload"], "focus")
