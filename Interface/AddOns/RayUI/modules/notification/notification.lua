@@ -29,6 +29,7 @@ local CalendarGetNumPendingInvites = CalendarGetNumPendingInvites
 local C_Vignettes = C_Vignettes
 local PlaySoundFile = PlaySoundFile
 local PlaySound = PlaySound
+local C_Timer = C_Timer
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: SLASH_TESTNOTIFICATION1, MAIL_LABEL, HAVE_MAIL, MINIMAP_TRACKING_REPAIR, CalendarFrame
@@ -416,6 +417,7 @@ function NF:PLAYER_ENTERING_WORLD()
 end
 
 function NF:VIGNETTE_ADDED(event, vignetteInstanceID)
+	self:UnregisterEvent(event)
 	local names = ""
 
 	local numVignettes = C_Vignettes.GetNumVignettes()
@@ -426,6 +428,7 @@ function NF:VIGNETTE_ADDED(event, vignetteInstanceID)
 	end
 	PlaySoundFile("Sound\\Spells\\PVPFlagTaken.wav")
 	self:Show("发现稀有", names)
+	C_Timer.After(0.5, function() self:RegisterEvent(event) end)
 end
 
 function NF:RESURRECT_REQUEST(name)
