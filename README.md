@@ -16,7 +16,7 @@
 
 [点击提交Bug(GitLab)](https://gitlab.com/fgprodigal/RayUI/issues/new)
 
-[点击提交Bug(GitHub)](https://github.com/fgprodigal/RayUI/issues/new)
+[点击提交Bug(GitHub)](https://github.com/fgprodigal/RayUI/issues/new?labels=bug)
 
 ## 贡献
 
@@ -42,7 +42,7 @@ Website: [rayui.me](http://rayui.me)
 
 [click to report issues (GitLab)](https://gitlab.com/fgprodigal/RayUI/issues/new)
 
-[click to report issues (GitHub)](https://github.com/fgprodigal/RayUI/issues/new)
+[click to report issues (GitHub)](https://github.com/fgprodigal/RayUI/issues/new?labels=bug)
 
 ## Contributing
 
