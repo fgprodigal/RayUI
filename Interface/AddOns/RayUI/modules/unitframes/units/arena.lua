@@ -5,7 +5,7 @@ local oUF = RayUF or oUF
 --Cache global variables
 --Lua functions
 local tinsert = table.insert
-local max = math.max
+local max, ceil = math.max, math.ceil
 local gsub = string.gsub
 
 --WoW API / Variables
@@ -21,10 +21,18 @@ function UF:Construct_ArenaFrame(frame, unit)
     frame.mouseovers = {}
     frame.UNIT_WIDTH = self.db.units[unitGroup].width
     frame.UNIT_HEIGHT = self.db.units[unitGroup].height
+    frame.POWER_HEIGHT = ceil(frame.UNIT_HEIGHT * self.db.powerheight)
 
     frame:Size(frame.UNIT_WIDTH, frame.UNIT_HEIGHT)
     frame.Health = self:Construct_HealthBar(frame, true, true)
     frame.Power = self:Construct_PowerBar(frame, true, true)
+
+    frame.Power:Point("BOTTOMLEFT", frame, "BOTTOMLEFT")
+    frame.Power:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT")
+    frame.Power:Height(frame.POWER_HEIGHT)
+    frame.Health:Point("TOPLEFT", frame, "TOPLEFT")
+    frame.Health:Point("BOTTOMRIGHT", frame.Power, "TOPRIGHT", 0, 1)
+
     frame.Name = self:Construct_NameText(frame)
     frame.Mouseover = self:Construct_Highlight(frame)
     frame.RaidIcon = self:Construct_RaidIcon(frame)

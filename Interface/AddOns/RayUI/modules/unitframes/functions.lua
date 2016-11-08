@@ -144,11 +144,6 @@ function UF:Construct_HealthBar(frame, bg, text)
         health.colorReaction = true
     end
     health.colorDisconnected = true
-
-    health:SetPoint("LEFT")
-    health:SetPoint("RIGHT")
-    health:SetPoint("TOP")
-    health:SetHeight(frame.UNIT_HEIGHT * (1 - self.db.powerheight) - 1)
     health:CreateShadow("Background")
     tinsert(frame.mouseovers, health)
 
@@ -189,11 +184,6 @@ function UF:Construct_PowerBar(frame, bg, text)
 
     power.colorDisconnected = true
     tinsert(frame.mouseovers, power)
-
-    power:SetPoint("LEFT")
-    power:SetPoint("RIGHT")
-    power:SetPoint("BOTTOM")
-    power:SetHeight(frame.UNIT_HEIGHT * self.db.powerheight)
     power:CreateShadow("Background")
 
     return power
