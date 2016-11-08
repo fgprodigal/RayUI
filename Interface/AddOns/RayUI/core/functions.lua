@@ -57,11 +57,12 @@ local GetSpecializationRole = GetSpecializationRole
 local ResetCPUUsage = ResetCPUUsage
 local GetAddOnCPUUsage = GetAddOnCPUUsage
 local UpdateAddOnCPUUsage = UpdateAddOnCPUUsage
+local C_Timer = C_Timer
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: UIParent, LibStub, MAX_PLAYER_LEVEL, ScriptErrorsFrame_OnError, BaudErrorFrameHandler, UISpecialFrames
 -- GLOBALS: Advanced_UIScaleSlider, Advanced_UseUIScale, RayUIConfigTutorial, RayUIWarningFrameScrollScrollBar
--- GLOBALS: SLASH_RELOAD1, COMBAT_RATING_RESILIENCE_PLAYER_DAMAGE_TAKEN, FIRST_NUMBER_CAP, SECOND_NUMBER_CAP
+-- GLOBALS: SLASH_RELOAD1, COMBAT_RATING_RESILIENCE_PLAYER_DAMAGE_TAKEN, FIRST_NUMBER_CAP, SECOND_NUMBER_CAP, RayUISplashScreen
 
 SlashCmdList["RELOAD"] = function() ReloadUI() end
 SLASH_RELOAD1 = "/rl"
@@ -291,6 +292,71 @@ function R:InitializeModules()
     end
 end
 
+
+local logo = CreateFrame("Frame", nil, R.UIParent)
+logo:SetPoint("CENTER", 0, 150)
+logo:SetSize(256, 128)
+logo.image = logo:CreateTexture(nil, "OVERLAY")
+logo.image:SetAllPoints()
+logo.image:SetTexture("Interface\\AddOns\\RayUI\\media\\logo.tga")
+logo:Hide()
+R.logo = logo
+
+local function CreateSplashScreen()
+	local f = CreateFrame("Frame", "RayUISplashScreen", R.UIParent)
+	f:Size(300, 150)
+	f:SetPoint("CENTER", 0, 100)
+	f:SetFrameStrata("TOOLTIP")
+	f:SetAlpha(0)
+
+	f.bg = f:CreateTexture(nil, "BACKGROUND")
+	f.bg:SetTexture([[Interface\LevelUp\LevelUpTex]])
+	f.bg:SetPoint("BOTTOM")
+	f.bg:Size(400, 240)
+	f.bg:SetTexCoord(0.00195313, 0.63867188, 0.03710938, 0.23828125)
+	f.bg:SetVertexColor(1, 1, 1, 0.7)
+
+	f.lineTop = f:CreateTexture(nil, "BACKGROUND")
+	f.lineTop:SetDrawLayer("BACKGROUND", 2)
+	f.lineTop:SetTexture([[Interface\LevelUp\LevelUpTex]])
+	f.lineTop:SetPoint("TOP")
+	f.lineTop:Size(418, 7)
+	f.lineTop:SetTexCoord(0.00195313, 0.81835938, 0.01953125, 0.03320313)
+
+	f.lineBottom = f:CreateTexture(nil, "BACKGROUND")
+	f.lineBottom:SetDrawLayer("BACKGROUND", 2)
+	f.lineBottom:SetTexture([[Interface\LevelUp\LevelUpTex]])
+	f.lineBottom:SetPoint("BOTTOM")
+	f.lineBottom:Size(418, 7)
+	f.lineBottom:SetTexCoord(0.00195313, 0.81835938, 0.01953125, 0.03320313)
+
+	f.logo = f:CreateTexture(nil, "OVERLAY")
+	f.logo:Size(256, 128)
+	f.logo:SetTexture("Interface\\AddOns\\RayUI\\media\\logo.tga")
+	f.logo:Point("CENTER", f, "CENTER")
+
+	f.version = f:CreateFontString(nil, "OVERLAY")
+	f.version:FontTemplate(nil, 12, nil)
+	f.version:Point("TOP", f.logo, "BOTTOM", 90, 20)
+	f.version:SetFormattedText("v%s", R.version)
+end
+
+local function HideSplashScreen()
+	RayUISplashScreen:Hide()
+end
+
+local function FadeSplashScreen()
+	R:Delay(2, function()
+		R:UIFrameFadeOut(RayUISplashScreen, 1, 1, 0)
+		RayUISplashScreen.fadeInfo.finishedFunc = HideSplashScreen
+	end)
+end
+
+local function ShowSplashScreen()
+	R:UIFrameFadeIn(RayUISplashScreen, 1, 0, 1)
+	RayUISplashScreen.fadeInfo.finishedFunc = FadeSplashScreen
+end
+
 function R:PLAYER_ENTERING_WORLD()
     RequestTimePlayed()
     Advanced_UIScaleSlider:Kill()
@@ -299,7 +365,6 @@ function R:PLAYER_ENTERING_WORLD()
     SetCVar("uiScale", R.global.general.uiscale)
     DEFAULT_CHAT_FRAME:AddMessage("欢迎使用|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r(v"..R.version..")，插件发布网址: |cff8A9DDE[|Hurl:https://github.com/fgprodigal/RayUI|h点击复制|h]|r")
     self:UnregisterEvent("PLAYER_ENTERING_WORLD" )
-    collectgarbage("collect")
 end
 
 function R:Initialize()
@@ -307,14 +372,15 @@ function R:Initialize()
 
     if not self.db.layoutchosen then
         self:ChooseLayout()
+    else
+        CreateSplashScreen()
     end
 
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
     self:Delay(5, function() collectgarbage("collect") end)
     self:LockCVar("overrideArchive", 0)
 
-    local S = self:GetModule("Skins")
-    -- S:Reskin(configButton)
+    C_Timer.After(6, ShowSplashScreen)
 end
 
 function R:GetPlayerRole()
