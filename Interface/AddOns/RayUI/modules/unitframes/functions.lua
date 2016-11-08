@@ -455,7 +455,7 @@ local function SortAurasByPriorityAndTime(a, b)
 end
 
 function UF:SortAuras()
-    tsort(self, SortAurasByTime)
+    tsort(self, SortAurasByPriorityAndTime)
 
     return 1, #self
 end
@@ -1020,7 +1020,7 @@ function UF:PostCreateIcon(button)
     count:ClearAllPoints()
     count:Point("BOTTOMRIGHT", button , "BOTTOMRIGHT", 4, -4)
     count:SetFontObject(nil)
-    count:SetFont(R["media"].font, R["media"].fontsize * (R:Round(self.size) / 30), R["media"].fontflag)
+    count:SetFont(R["media"].font, math.max(R["media"].fontsize * (R:Round(self.size) / 30), 12), R["media"].fontflag)
 
     button.icon:SetTexCoord(.1, .9, .1, .9)
     button:CreateShadow()
