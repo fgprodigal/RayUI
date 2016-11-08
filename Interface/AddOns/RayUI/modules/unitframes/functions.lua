@@ -11,7 +11,7 @@ local type, getfenv, setfenv = type, getfenv, setfenv
 local math, string = math, string
 local abs, floor = math.abs, math.floor
 local format = string.format
-local tinsert = table.insert
+local tinsert, tsort = table.insert, table.sort
 local setmetatable = setmetatable
 local GetTime = GetTime
 
@@ -351,6 +351,7 @@ function UF:Construct_SmartAura(frame)
     auras:SetWidth(frame.UNIT_WIDTH * 2)
     auras.spacing = 6
     auras.size = 38
+    auras.PreSetPosition = (not frame:GetScript("OnUpdate")) and UF.SortAuras or nil
     auras.PostCreateIcon = self.PostCreateIcon
     auras.CustomFilter = self.CustomSmartFilter
 
@@ -360,6 +361,11 @@ end
 function UF:CustomSmartFilter(unit, icon, name, rank, texture, count, debuffType, duration, expirationTime, unitCaster, isStealable, _, spellID)
     local returnValue = true
 	local isPlayer = unitCaster == "player" or unitCaster == "vehicle"
+
+    icon.isPlayer = isPlayer
+	icon.owner = unitCaster
+	icon.name = name
+    icon.priority = 0
 
     if isPlayer then
         returnValue = true
@@ -376,10 +382,41 @@ function UF:CustomSmartFilter(unit, icon, name, rank, texture, count, debuffType
     end
 
     if R.global["UnitFrames"]["aurafilters"]["Whitelist"][spellID] then
+        icon.priority = R.global["UnitFrames"]["aurafilters"]["Whitelist"][spellID].priority
+        returnValue = true
+    end
+
+    if R.global["UnitFrames"]["aurafilters"]["TurtleBuffs"][spellID] then
+        icon.priority = R.global["UnitFrames"]["aurafilters"]["TurtleBuffs"][spellID].priority
+        returnValue = true
+    end
+
+    if R.global["UnitFrames"]["aurafilters"]["CCDebuffs"][spellID] then
+        icon.priority = R.global["UnitFrames"]["aurafilters"]["CCDebuffs"][spellID].priority
         returnValue = true
     end
 
 	return returnValue
+end
+
+local function SortAurasByPriority(a, b)
+	if (a and b) then
+		if a.isPlayer and not b.isPlayer then
+			return true
+		elseif not a.isPlayer and b.isPlayer then
+			return false
+		end
+
+		if (a.priority and b.priority) then
+			return a.priority > b.priority
+		end
+	end
+end
+
+function UF:SortAuras()
+	tsort(self, SortAurasByPriority)
+
+	return 1, #self
 end
 
 function UF:Construct_CastBar(frame)
