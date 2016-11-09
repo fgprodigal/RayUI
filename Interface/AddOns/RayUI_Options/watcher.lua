@@ -349,13 +349,13 @@ local function UpdateGroup()
                 end,
                 func = function()
                     SaveProfileKey("enable", selectedSpell.enable)
+                    RW.modules[selectedGroup][selectedSpell.filter] = RW.modules[selectedGroup][selectedSpell.filter] or {}
                     if selectedSpell.filter == "BUFF" or selectedSpell.filter == "DEBUFF" then
                         SaveProfileKey("caster", selectedSpell.caster)
                         SaveProfileKey("unitID", selectedSpell.unitID)
+                        RW.modules[selectedGroup][selectedSpell.filter].unitIDs = RW.modules[selectedGroup][selectedSpell.filter].unitIDs or {}
+                        RW.modules[selectedGroup][selectedSpell.filter].unitIDs[selectedSpell.unitID] = true
                     end
-                    RW.modules[selectedGroup][selectedSpell.filter] = RW.modules[selectedGroup][selectedSpell.filter] or {}
-                    RW.modules[selectedGroup][selectedSpell.filter].unitIDs = RW.modules[selectedGroup][selectedSpell.filter].unitIDs or {}
-                    RW.modules[selectedGroup][selectedSpell.filter].unitIDs[selectedSpell.unitID] = true
                     RW.modules[selectedGroup][selectedSpell.filter][selectedSpell.spellID] = {
                         ["enable"] = selectedSpell.enable,
                         ["caster"] = selectedSpell.caster,
