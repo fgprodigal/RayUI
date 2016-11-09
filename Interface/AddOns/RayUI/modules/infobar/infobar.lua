@@ -344,7 +344,7 @@ function RayUI_RegisterLDB()
 
         local function textUpdate(event, name, key, value, dataobj)
             if value == nil or (strlen(value) >= 3) or value == "n/a" or name == value then
-                if strlen(value) > 30 then
+                if value and strlen(value) > 30 then
                     longValue = true
                     brokerTitle = name
                     brokerValue = value
