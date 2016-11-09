@@ -46,15 +46,6 @@ R.Options.args.Raid = {
             end,
             hidden = function() return not R.db.Raid.enable end,
         },
-        toggleRaid40 = {
-            order = 6,
-            type = "execute",
-            name = L["显示40人团队"],
-            func = function()
-                UF:ToggleUF("r40")
-            end,
-            hidden = function() return not R.db.Raid.enable end,
-        },
         toggleTank = {
             order = 6,
             type = "execute",
@@ -86,24 +77,6 @@ R.Options.args.Raid = {
             guiInline = true,
             hidden = function() return not R.db.Raid.enable end,
             args = {
-                raid40width = {
-                    order = 1,
-                    name = L["单位长度"],
-                    min = 50, max = 150, step = 1,
-                    type = "range",
-                },
-                raid40height = {
-                    order = 2,
-                    name = L["单位高度"],
-                    min = 20, max = 70, step = 1,
-                    type = "range",
-                },
-                spacer2 = {
-                    type = "description",
-                    name = "",
-                    desc = "",
-                    order = 3,
-                },
                 raid25width = {
                     order = 4,
                     name = L["单位长度2"],
