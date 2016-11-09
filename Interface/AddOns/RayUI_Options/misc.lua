@@ -34,7 +34,7 @@ R.Options.args.Misc = {
             name = L["冷却条"],
             guiInline = true,
             get = function(info) return R.db.Misc.cooldowns[ info[#info] ] end,
-            set = function(info, value) R.db.Misc.cooldowns[ info[#info] ] = value end,
+            set = function(info, value) R.db.Misc.cooldowns[ info[#info] ] = value StaticPopup_Show("CFG_RELOAD") end,
             args = {
                 enable = {
                     order = 1,
