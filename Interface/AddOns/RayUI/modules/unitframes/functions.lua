@@ -218,11 +218,11 @@ function UF:Construct_Highlight(frame)
 end
 
 function UF:Construct_Threat(frame)
-    local threat = frame:CreateTexture(nil, "OVERLAY")
+    local threat = frame.RaisedElementParent:CreateTexture(nil, "OVERLAY")
     threat:SetAllPoints(frame)
     threat:SetTexture("Interface\\AddOns\\RayUI\\media\\threat")
     threat:SetBlendMode("ADD")
-    threat:Hide()
+    threat:Show()
 
     return threat
 end
@@ -351,7 +351,7 @@ function UF:Construct_SmartAura(frame)
     auras:SetHeight(38)
     auras:SetWidth(frame.UNIT_WIDTH * 2)
     auras.spacing = 6
-    auras.size = 38
+    auras.size = 32
     auras.PreSetPosition = (not frame:GetScript("OnUpdate")) and UF.SortAuras or nil
     auras.PostCreateIcon = self.PostCreateIcon
     auras.PostUpdateIcon = self.PostUpdateIcon
@@ -1052,27 +1052,27 @@ function UF:CustomFilter(unit, icon, name, rank, texture, count, dtype, duration
 end
 
 function UF:EnableHealPredictionAndAbsorb(frame)
-    local mhpb = frame:CreateTexture(nil, "BORDER", 5)
+    local mhpb = frame.RaisedElementParent:CreateTexture(nil, "BORDER", 5)
     mhpb:SetWidth(1)
     mhpb:SetTexture(R["media"].normal)
     mhpb:SetVertexColor(0, 1, 0.5, 0.25)
 
-    local ohpb = frame:CreateTexture(nil, "BORDER", 5)
+    local ohpb = frame.RaisedElementParent:CreateTexture(nil, "BORDER", 5)
     ohpb:SetWidth(1)
     ohpb:SetTexture(R["media"].normal)
     ohpb:SetVertexColor(0, 1, 0, 0.25)
 
-    local abb = frame:CreateTexture(nil, "BORDER", 5)
+    local abb = frame.RaisedElementParent:CreateTexture(nil, "BORDER", 5)
     abb:SetWidth(1)
     abb:SetTexture(R["media"].normal)
     abb:SetVertexColor(.66, 1, 1, .7)
 
-    local abbo = frame:CreateTexture(nil, "ARTWORK", 1)
+    local abbo = frame.RaisedElementParent:CreateTexture(nil, "ARTWORK", 1)
     abbo:SetAllPoints(abb)
     abbo:SetTexture("Interface\\RaidFrame\\Shield-Overlay", true, true)
     abbo.tileSize = 32
 
-    local oag = frame:CreateTexture(nil, "ARTWORK", 1)
+    local oag = frame.RaisedElementParent:CreateTexture(nil, "ARTWORK", 1)
     oag:SetWidth(15)
     oag:SetTexture("Interface\\RaidFrame\\Shield-Overshield")
     oag:SetBlendMode("ADD")

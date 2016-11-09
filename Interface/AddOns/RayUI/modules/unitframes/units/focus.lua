@@ -40,6 +40,7 @@ function UF:Construct_FocusFrame(frame, unit)
     frame.PvP = self:Construct_PvPIndicator(frame)
     frame.QuestIcon = self:Construct_QuestIcon(frame)
     frame.RaidIcon = self:Construct_RaidIcon(frame)
+    frame.Threat = self:Construct_Threat(frame)
     frame.Range = {
             insideAlpha = 1,
             outsideAlpha = 0.4

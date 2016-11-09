@@ -39,6 +39,7 @@ function UF:Construct_PlayerFrame(frame, unit)
     frame.RaidIcon = self:Construct_RaidIcon(frame)
     frame.Combat = self:Construct_CombatIndicator(frame)
     frame.Resting = self:Construct_RestingIndicator(frame)
+    frame.Threat = self:Construct_Threat(frame)
 
     self:EnableHealPredictionAndAbsorb(frame)
 
