@@ -33,6 +33,7 @@ do
     L["要塞按钮"] = "Draenor Zone Ability Button"
     L["副资源条"] = "Alternate resource bar"
     L["图腾条"] = "Totem bar"
+    L["冷却条"] = "Cooldowns"
     L["Player Mover"] = "Player"
     L["Target Mover"] = "Target"
     L["Focus Mover"] = "Focus"
@@ -422,6 +423,8 @@ do
     L["排列方向"] = "Bar Direction"
     L["垂直"] = "Vertical"
     L["水平"] = "Horizontal"
+    L["横向增长方向"] = "Growth-x"
+    L["纵向增长方向"] = "Growth-y"
     L["插件美化"] = "Reskin"
     L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r插件美化模块."] = "|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r Reskin module."
     L["Skada"] = true

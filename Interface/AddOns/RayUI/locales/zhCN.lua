@@ -33,6 +33,7 @@ do
     L["要塞按钮"] = true
     L["副资源条"] = true
     L["图腾条"] = true
+    L["冷却条"] = true
     L["Player Mover"] = "玩家头像"
     L["Target Mover"] = "目标头像"
     L["Focus Mover"] = "焦点头像"
@@ -422,6 +423,8 @@ do
     L["排列方向"] = true
     L["垂直"] = true
     L["水平"] = true
+    L["横向增长方向"] = true
+    L["纵向增长方向"] = true
     L["插件美化"] = true
     L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r插件美化模块."] = true
     L["Skada"] = true

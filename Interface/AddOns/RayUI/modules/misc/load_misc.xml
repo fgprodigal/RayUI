@@ -23,4 +23,5 @@
 	<Script file="totemBar.lua"/>
 	<Script file="vehicle.lua"/>
 	<Script file="talkinghead.lua"/>
+	<Script file="cooldowns.lua"/>
 </Ui>
