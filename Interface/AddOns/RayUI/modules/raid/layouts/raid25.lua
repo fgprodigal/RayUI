@@ -22,10 +22,10 @@ function RA:FetchRaidSettings()
         enable = true,
         width = self.db.raid25width,
         height = self.db.raid25height,
-        visibility = "[nogroup:party,nogroup:raid][@raid26,exists] hide;show",
-        numGroups = 5,
+        visibility = "[nogroup:party,nogroup:raid] hide;show",
+        numGroups = 8,
         defaultPosition = { "BOTTOMLEFT", R.UIParent, "BOTTOMLEFT", 15, 235 },
-        labelvisibility = "[nogroup:raid][@raid26,exists] hide;show"
+        labelvisibility = "[nogroup:party,nogroup:raid] hide;show"
     }
 end
 
@@ -63,7 +63,7 @@ function RA:Construct_RaidFrames()
 end
 
 function RA:RaidSmartVisibility(event)
-    local inInstance, instanceType = IsInInstance()
+--[[    local inInstance, instanceType = IsInInstance()
     local _, _, _, _, maxPlayers, _, _, mapID, instanceGroupSize = GetInstanceInfo()
     if event == "PLAYER_REGEN_ENABLED" then self:UnregisterEvent("PLAYER_REGEN_ENABLED") end
     if not InCombatLockdown() then
@@ -84,6 +84,8 @@ function RA:RaidSmartVisibility(event)
         self:RegisterEvent("PLAYER_REGEN_ENABLED")
         return
     end
+    ]]
+    RegisterStateDriver(self, "visibility", RA.groupConfig.raid.visibility)
 end
 
 RA["headerstoload"]["raid"] = { nil, nil }

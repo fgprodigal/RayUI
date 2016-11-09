@@ -88,4 +88,4 @@ function RA:Raid40SmartVisibility(event)
     end
 end
 
-RA["headerstoload"]["raid40"] = { nil, nil }
+-- RA["headerstoload"]["raid40"] = { nil, nil }

@@ -75,13 +75,13 @@ function R:SetLayout(layout)
 		R.db.movers.RayUF_RaidMover = "BOTTOMLEFTRayUIParentBOTTOMLEFT15235"
 		R.db.movers.RayUF_Raid40Mover = "BOTTOMLEFTRayUIParentBOTTOMLEFT15235"
 		R.db.movers.ActionBar4Mover = "RIGHTRayUIParentRIGHT-490"
-		R.db.Raid.horizontal = false
-		R.db.Raid.growth = "RIGHT"
+		R.db.Raid.horizontal = true
+		R.db.Raid.growth = "UP"
 		StaticPopup_Show("CFG_RELOAD")
 	elseif layout == "default" then
 		R:ResetMovers()
-		R.db.Raid.horizontal = false
-		R.db.Raid.growth = "RIGHT"
+		R.db.Raid.horizontal = true
+		R.db.Raid.growth = "UP"
 		StaticPopup_Show("CFG_RELOAD")
 	end
 	R:SetMoversPositions()
