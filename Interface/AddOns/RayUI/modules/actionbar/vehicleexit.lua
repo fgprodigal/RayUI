@@ -24,6 +24,7 @@ function AB:CreateVehicleExit()
 	holder:SetWidth(AB.db.buttonsize)
 
 	local bar = CreateFrame("Frame", "RayUIVehicleBar", holder)
+	bar:SetFrameStrata("HIGH")
 	bar:Show()
 	bar:SetAllPoints()
 

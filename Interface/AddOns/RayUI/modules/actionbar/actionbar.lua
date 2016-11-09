@@ -402,6 +402,7 @@ function AB:UpdatePositionAndSize(barName)
     else
         bar:SetParent(R.UIParent)
     end
+    bar:SetFrameStrata("LOW")
 
     local button, lastButton, lastColumnButton
     for i = 1, #bar.buttons do

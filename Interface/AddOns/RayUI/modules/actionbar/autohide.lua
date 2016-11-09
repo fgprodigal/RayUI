@@ -14,6 +14,7 @@ local InCombatLockdown = InCombatLockdown
 -- GLOBALS: MacroFrame, HoverBind, RayUIActionBarHider
 
 local hider = CreateFrame("Frame", "RayUIActionBarHider", R.UIParent, "SecureHandlerStateTemplate")
+hider:SetFrameStrata("LOW")
 RegisterStateDriver(hider, "visibility", "[combat][@target,exists][vehicleui]show")
 
 local function pending()

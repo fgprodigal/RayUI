@@ -15,6 +15,7 @@ local RegisterStateDriver = RegisterStateDriver
 function AB:CreateOverrideBar()
     local num = NUM_OVERRIDE_BUTTONS
     local bar = CreateFrame("Frame","RayUIOverrideBar", R.UIParent, "SecureHandlerStateTemplate")
+	bar:SetFrameStrata("LOW")
     bar:SetWidth(AB.db.buttonsize*(num+1)+AB.db.buttonspacing*num)
     bar:SetHeight(AB.db.buttonsize)
     bar:Point("BOTTOM", R.UIParent, "BOTTOM", 0, 235)

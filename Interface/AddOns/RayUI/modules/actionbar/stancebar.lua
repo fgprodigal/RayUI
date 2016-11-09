@@ -22,6 +22,7 @@ function AB:CreateStanceBar()
 	local num2 = NUM_POSSESS_SLOTS
 
 	local bar = CreateFrame("Frame","RayUIStanceBar", R.UIParent, "SecureHandlerStateTemplate")
+	bar:SetFrameStrata("LOW")
 	bar:SetWidth(AB.db.buttonsize*num+AB.db.buttonspacing*(num-1))
 	bar:SetHeight(AB.db.buttonsize)
 	bar:SetPoint("BOTTOMLEFT", R.UIParent, "BOTTOMLEFT", 15, 202)
@@ -32,6 +33,7 @@ function AB:CreateStanceBar()
 	else
 		bar:SetParent(R.UIParent)
 	end
+	bar:SetFrameStrata("LOW")
 
 	R:CreateMover(bar, "StanceBarMover", L["职业条锚点"], true, nil, "ALL,ACTIONBARS")
 

@@ -164,6 +164,7 @@ function AB:UpdatePetBar()
     else
         bar:SetParent(R.UIParent)
     end
+	bar:SetFrameStrata("LOW")
 
     local button, lastButton, lastColumnButton
     for i = 1, NUM_PET_ACTION_SLOTS do
