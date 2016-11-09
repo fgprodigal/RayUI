@@ -34,7 +34,7 @@ R.Options.args.Misc = {
             name = L["冷却条"],
             guiInline = true,
             get = function(info) return R.db.Misc.cooldowns[ info[#info] ] end,
-            set = function(info, value) R.db.Misc.cooldowns[ info[#info] ] = value; R:GetModule("Misc"):PositionAndSizeTotem() end,
+            set = function(info, value) R.db.Misc.cooldowns[ info[#info] ] = value end,
             args = {
                 enable = {
                     order = 1,
@@ -212,13 +212,13 @@ R.Options.args.Misc = {
             name = L["图腾条"],
             guiInline = true,
             get = function(info) return R.db.Misc.totembar[ info[#info] ] end,
-            set = function(info, value) R.db.Misc.totembar[ info[#info] ] = value; R:GetModule("Misc"):PositionAndSizeTotem() end,
+            set = function(info, value) R.db.Misc.totembar[ info[#info] ] = value; M:GetModule("TotemBar"):PositionAndSizeTotem() end,
             args = {
                 enable = {
                     order = 1,
                     type = "toggle",
                     name = L["启用"],
-                    set = function(info, value) R.db.Misc.totembar[ info[#info] ] = value; R:GetModule("Misc"):ToggleTotemEnable() end,
+                    set = function(info, value) R.db.Misc.totembar[ info[#info] ] = value; M:GetModule("TotemBar"):ToggleTotemEnable() end,
                 },
                 size = {
                     order = 2,
