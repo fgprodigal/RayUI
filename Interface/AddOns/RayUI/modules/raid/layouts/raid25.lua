@@ -20,8 +20,8 @@ local UnregisterStateDriver = UnregisterStateDriver
 function RA:FetchRaidSettings()
     self.groupConfig.raid = {
         enable = true,
-        width = self.db.raid25width,
-        height = self.db.raid25height,
+        width = self.db.width,
+        height = self.db.height,
         visibility = "[nogroup:party,nogroup:raid] hide;show",
         numGroups = 8,
         defaultPosition = { "BOTTOMLEFT", R.UIParent, "BOTTOMLEFT", 15, 235 },

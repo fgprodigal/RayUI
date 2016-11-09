@@ -41,21 +41,39 @@ R.Options.args.Misc = {
                     type = "toggle",
                     name = L["启用"],
                 },
-                size = {
+                spacer = {
+                    type = "description",
+                    name = "",
+                    desc = "",
                     order = 2,
+                },
+                showpets = {
+                    order = 3,
+                    type = "toggle",
+                    name = L["显示宠物技能冷却"],
+                    hidden = function() return not R.db.Misc.cooldowns.enable end,
+                },
+                showequip = {
+                    order = 4,
+                    type = "toggle",
+                    name = L["显示装备冷却"],
+                    hidden = function() return not R.db.Misc.cooldowns.enable end,
+                },
+                showbags = {
+                    order = 5,
+                    type = "toggle",
+                    name = L["显示物品冷却"],
+                    hidden = function() return not R.db.Misc.cooldowns.enable end,
+                },
+                size = {
+                    order = 6,
                     type = "range",
                     name = L["按键大小"],
                     min = 24, max = 60, step = 1,
                     hidden = function() return not R.db.Misc.cooldowns.enable end,
                 },
-                spacer = {
-                    type = "description",
-                    name = "",
-                    desc = "",
-                    order = 3,
-                },
                 growthx = {
-                    order = 4,
+                    order = 7,
                     type = "select",
                     name = L["横向增长方向"],
                     values = {
@@ -65,7 +83,7 @@ R.Options.args.Misc = {
                     hidden = function() return not R.db.Misc.cooldowns.enable end,
                 },
                 growthy = {
-                    order = 5,
+                    order = 8,
                     type = "select",
                     name = L["纵向增长方向"],
                     values = {

@@ -77,15 +77,15 @@ R.Options.args.Raid = {
             guiInline = true,
             hidden = function() return not R.db.Raid.enable end,
             args = {
-                raid25width = {
+                width = {
                     order = 4,
-                    name = L["单位长度2"],
+                    name = L["单位长度"],
                     min = 50, max = 150, step = 1,
                     type = "range",
                 },
-                raid25height = {
+                height = {
                     order = 5,
-                    name = L["单位高度2"],
+                    name = L["单位高度"],
                     min = 20, max = 70, step = 1,
                     type = "range",
                 },

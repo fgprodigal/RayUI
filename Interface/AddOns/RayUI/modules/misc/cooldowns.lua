@@ -236,7 +236,9 @@ end
 
 function mod:SPELLS_CHANGED()
     self:CacheBook(BOOKTYPE_SPELL)
-    self:CacheBook(BOOKTYPE_PET)
+	if self.db.showpets then
+	    self:CacheBook(BOOKTYPE_PET)
+	end
 end
 
 function mod:CheckSpellBook(btype)
@@ -263,7 +265,7 @@ function mod:CheckSpellBook(btype)
 end
 
 function mod:BAG_UPDATE_COOLDOWN()
-    for i = 1, 18 do
+    for i = 1, (self.db.showequip and 18) or 0, 1 do
         local start, duration, enable = GetInventoryItemCooldown("player", i)
         if enable == 1 then
             if start > 0 then
@@ -275,7 +277,7 @@ function mod:BAG_UPDATE_COOLDOWN()
             end
         end
     end
-    for i = 0, 4 do
+    for i = 0, (self.db.showbags and 18) or 0, 1 do
         for j = 1, GetContainerNumSlots(i), 1 do
             local start, duration, enable = GetContainerItemCooldown(i, j)
             if enable == 1 then
@@ -293,7 +295,7 @@ end
 
 function mod:SPELL_UPDATE_COOLDOWN()
     self:CheckSpellBook(BOOKTYPE_SPELL)
-    if HasPetUI() then
+    if self.db.showpets and HasPetUI() then
         self:CheckSpellBook(BOOKTYPE_PET)
     end
 end
@@ -328,19 +330,26 @@ function mod:Initialize()
     self.db = M.db.cooldowns
     self.Holder = CreateFrame("Frame", nil, R.UIParent)
     self.Holder:Size(self.db.size)
-    self.Holder:Point("BOTTOMRIGHT", R.UIParent, "BOTTOM", -80, 340)
+    self.Holder:Point("BOTTOMRIGHT", R.UIParent, "BOTTOM", -80, 550)
     R:CreateMover(self.Holder, "Cooldowns Mover", L["冷却条"], true, nil, "ALL,GENERAL,ACTIONBARS")
 
     self:RegisterEvent("SPELLS_CHANGED")
     self:RegisterEvent("SPELL_UPDATE_COOLDOWN")
     self:RegisterEvent("SPELL_UPDATE_CHARGES", "SPELL_UPDATE_COOLDOWN")
-    self:RegisterEvent("BAG_UPDATE_COOLDOWN")
-    self:RegisterEvent("UNIT_INVENTORY_CHANGED", "BAG_UPDATE_COOLDOWN")
-    self:RegisterEvent("UNIT_PET")
+
+	if self.db.showequip or self.db.showbag then
+	    self:RegisterEvent("BAG_UPDATE_COOLDOWN")
+	    self:BAG_UPDATE_COOLDOWN()
+	end
+	if self.db.showequip then
+	    self:RegisterEvent("UNIT_INVENTORY_CHANGED", "BAG_UPDATE_COOLDOWN")
+	end
+	if self.db.showpets then
+	    self:RegisterEvent("UNIT_PET")
+	    self:UNIT_PET()
+	end
 
     self:SPELL_UPDATE_COOLDOWN()
-    self:BAG_UPDATE_COOLDOWN()
-    self:UNIT_PET()
 end
 
 M:RegisterMiscModule(mod:GetName())
