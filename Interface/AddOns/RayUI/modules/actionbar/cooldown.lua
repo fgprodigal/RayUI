@@ -7,6 +7,7 @@ local _G = _G
 local pairs = pairs
 local GetTime = GetTime
 local tonumber = tonumber
+local max = math.max
 
 --WoW API / Variables
 local CreateFrame = CreateFrame
@@ -80,7 +81,7 @@ function AB:Cooldown_OnSizeChanged(cd, width, height)
 	if fontScale < MIN_SCALE then
 		cd:Hide()
 	else
-		cd.text:SetFont(R["media"].cdfont, fontScale * (override or FONT_SIZE), 'OUTLINE')
+		cd.text:SetFont(R["media"].cdfont, max(fontScale * (override or FONT_SIZE), 12), "OUTLINE")
 		cd.text:SetShadowColor(0, 0, 0, 0.5)
 		cd.text:SetShadowOffset(2, -2)
 		if cd.enabled then

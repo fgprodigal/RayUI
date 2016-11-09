@@ -219,7 +219,7 @@ end
 
 function UF:Construct_Threat(frame)
     local threat = frame.RaisedElementParent:CreateTexture(nil, "OVERLAY")
-    threat:SetAllPoints(frame)
+    threat:SetAllPoints(frame.Health)
     threat:SetTexture("Interface\\AddOns\\RayUI\\media\\threat")
     threat:SetBlendMode("ADD")
     threat:Show()
