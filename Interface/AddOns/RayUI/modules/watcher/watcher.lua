@@ -417,6 +417,7 @@ function watcherPrototype:OnEvent(event, unit)
 end
 
 function RW:Initialize()
+    if not self.db.enable then return end
     SpellActivationOverlayFrame:SetFrameStrata("BACKGROUND")
     SpellActivationOverlayFrame:SetFrameLevel(0)
     if type(R["Watcher"]["filters"][R.myclass]) == "table" then

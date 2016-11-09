@@ -257,7 +257,7 @@ function mod:CheckSpellBook(btype)
     for id, name in pairs(chargespells[btype]) do
         local start, duration, enable = GetSpellCooldown(id)
         local currentCharges, maxCharges, cooldownStart, cooldownDuration = GetSpellCharges(id)
-        if cooldownStart and cooldownDuration and currentCharges < maxCharges and enable == 1 and start > 0 then
+        if cooldownStart and cooldownDuration and currentCharges < maxCharges and enable == 1 and start > 0 and duration > 2.5 then
             local _, _, texture = GetSpellInfo(id)
             mod:AddCooldown("spell", id)
         end
@@ -326,30 +326,39 @@ function mod:UNIT_PET()
     end
 end
 
-function mod:Initialize()
-    self.db = M.db.cooldowns
-    self.Holder = CreateFrame("Frame", nil, R.UIParent)
-    self.Holder:Size(self.db.size)
-    self.Holder:Point("BOTTOMRIGHT", R.UIParent, "BOTTOM", -80, 550)
-    R:CreateMover(self.Holder, "Cooldowns Mover", L["冷却条"], true, nil, "ALL,GENERAL,ACTIONBARS")
+function mod:PLAYER_ENTERING_WORLD(event)
+	self:UnregisterEvent(event)
 
-    self:RegisterEvent("SPELLS_CHANGED")
-    self:RegisterEvent("SPELL_UPDATE_COOLDOWN")
-    self:RegisterEvent("SPELL_UPDATE_CHARGES", "SPELL_UPDATE_COOLDOWN")
+	self:RegisterEvent("SPELLS_CHANGED")
+	self:RegisterEvent("SPELL_UPDATE_COOLDOWN")
+	self:RegisterEvent("SPELL_UPDATE_CHARGES", "SPELL_UPDATE_COOLDOWN")
 
 	if self.db.showequip or self.db.showbag then
-	    self:RegisterEvent("BAG_UPDATE_COOLDOWN")
-	    self:BAG_UPDATE_COOLDOWN()
+		self:RegisterEvent("BAG_UPDATE_COOLDOWN")
+		self:BAG_UPDATE_COOLDOWN()
 	end
 	if self.db.showequip then
-	    self:RegisterEvent("UNIT_INVENTORY_CHANGED", "BAG_UPDATE_COOLDOWN")
+		self:RegisterEvent("UNIT_INVENTORY_CHANGED", "BAG_UPDATE_COOLDOWN")
 	end
 	if self.db.showpets then
-	    self:RegisterEvent("UNIT_PET")
-	    self:UNIT_PET()
+		self:RegisterEvent("UNIT_PET")
+		self:UNIT_PET()
 	end
 
-    self:SPELL_UPDATE_COOLDOWN()
+	self:SPELLS_CHANGED()
+	self:SPELL_UPDATE_COOLDOWN()
+end
+
+function mod:Initialize()
+    self.db = M.db.cooldowns
+	if not self.db.enable then return end
+
+    self.Holder = CreateFrame("Frame", nil, R.UIParent)
+    self.Holder:Size(self.db.size)
+    self.Holder:Point("BOTTOMRIGHT", R.UIParent, "BOTTOM", -80, 530)
+    R:CreateMover(self.Holder, "Cooldowns Mover", L["冷却条"], true, nil, "ALL,GENERAL,ACTIONBARS")
+
+    self:RegisterEvent("PLAYER_ENTERING_WORLD")
 end
 
 M:RegisterMiscModule(mod:GetName())
