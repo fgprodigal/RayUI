@@ -2,18 +2,15 @@ local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, 
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
-	BlackMarketFrame:DisableDrawLayer("BACKGROUND")
-	BlackMarketFrame:DisableDrawLayer("BORDER")
-	BlackMarketFrame:DisableDrawLayer("OVERLAY")
-	BlackMarketFrame.Inset:DisableDrawLayer("BORDER")
-	select(9, BlackMarketFrame.Inset:GetRegions()):Hide()
-	BlackMarketFrame.MoneyFrameBorder:Hide()
-	BlackMarketFrame.HotDeal.Left:Hide()
-	BlackMarketFrame.HotDeal.Right:Hide()
-	select(4, BlackMarketFrame.HotDeal:GetRegions()):Hide()
+	BlackMarketFrame:StripTextures()
+	BlackMarketFrame.Inset:StripTextures()
+	BlackMarketFrame.MoneyFrameBorder:StripTextures()
 
-	S:CreateBG(BlackMarketFrame.HotDeal.Item)
+	BlackMarketFrame.HotDeal:StripTextures()
+	BlackMarketFrame.HotDeal.Item.IconBorder:Kill()
 	BlackMarketFrame.HotDeal.Item.IconTexture:SetTexCoord(.08, .92, .08, .92)
+	BlackMarketFrame.HotDeal.Item:StyleButton(true)
+	S:CreateBG(BlackMarketFrame.HotDeal.Item)
 
 	local headers = {"ColumnName", "ColumnLevel", "ColumnType", "ColumnDuration", "ColumnHighBidder", "ColumnCurrentBid"}
 	for _, header in pairs(headers) do
@@ -32,10 +29,8 @@ local function LoadSkin()
 	S:SetBD(BlackMarketFrame)
 	S:CreateBD(BlackMarketFrame.HotDeal, .25)
 	S:Reskin(BlackMarketFrame.BidButton)
-	S:Reskin(BlackMarketFrame.HotDeal.BidButton)
 	S:ReskinClose(BlackMarketFrame.CloseButton)
 	S:ReskinInput(BlackMarketBidPriceGold)
-	S:ReskinInput(BlackMarketHotItemBidPriceGold)
 	S:ReskinScroll(BlackMarketScrollFrameScrollBar)
 
     local function UpdateBlackMarketList()
@@ -50,6 +45,7 @@ local function LoadSkin()
 
             bu.Item.IconTexture:SetTexCoord(.08, .92, .08, .92)
             if not bu.reskinned then
+				bu.Item.IconBorder:Kill()
                 bu.Left:Hide()
                 bu.Right:Hide()
                 select(3, bu:GetRegions()):Hide()
