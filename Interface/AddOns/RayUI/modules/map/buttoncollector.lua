@@ -3,7 +3,7 @@ local MM = R:GetModule("MiniMap")
 
 --Cache global variables
 --Lua functions
-local select, unpack, pairs, string, math, type = select, unpack, pairs, string, math, type
+local select, unpack, pairs, ipairs, string, math, type = select, unpack, pairs, ipairs, string, math, type
 local tinsert = table.insert
 local strfind = string.find
 
@@ -24,26 +24,58 @@ local AcceptedFrames = {
 }
 local TexCoords = { .1, .9, .1, .9 }
 local BlackList = {
-    ["MiniMapTracking"] = true,
-    ["MiniMapVoiceChatFrame"] = true,
-    ["MiniMapWorldMapButton"] = true,
-    ["MiniMapLFGFrame"] = true,
-    ["MinimapZoomIn"] = true,
-    ["MinimapZoomOut"] = true,
-    ["MiniMapMailFrame"] = true,
-    ["BattlefieldMinimap"] = true,
-    ["MinimapBackdrop"] = true,
-    ["GameTimeFrame"] = true,
-    ["TimeManagerClockButton"] = true,
-    ["FeedbackUIButton"] = true,
-    ["HelpOpenTicketButton"] = true,
-    ["MiniMapBattlefieldFrame"] = true,
+    [1] = "MiniMapTrackingFrame",
+    [2] = "MiniMapMeetingStoneFrame",
+    [3] = "MiniMapMailFrame",
+    [4] = "MiniMapBattlefieldFrame",
+    [5] = "MiniMapWorldMapButton",
+    [6] = "MiniMapPing",
+    [7] = "MinimapBackdrop",
+    [8] = "MinimapZoomIn",
+    [9] = "MinimapZoomOut",
+    [10] = "BookOfTracksFrame",
+    [11] = "GatherNote",
+    [12] = "FishingExtravaganzaMini",
+    [13] = "MiniNotePOI",
+    [14] = "RecipeRadarMinimapIcon",
+    [15] = "FWGMinimapPOI",
+    [16] = "CartographerNotesPOI",
+    [17] = "MBB_MinimapButtonFrame",
+    [18] = "EnhancedFrameMinimapButton",
+    [19] = "GFW_TrackMenuFrame",
+    [20] = "GFW_TrackMenuButton",
+    [21] = "TDial_TrackingIcon",
+    [22] = "TDial_TrackButton",
+    [23] = "MiniMapTracking",
+    [24] = "GatherMatePin",
+    [25] = "HandyNotesPin",
+    [26] = "TimeManagerClockButton",
+    [27] = "GameTimeFrame",
+    [28] = "DA_Minimap",
+    [29] = "ElvConfigToggle",
+    [30] = "MiniMapInstanceDifficulty",
+    [31] = "MinimapZoneTextButton",
+    [32] = "GuildInstanceDifficulty",
+    [33] = "MiniMapVoiceChatFrame",
+    [34] = "MiniMapRecordingButton",
+    [35] = "QueueStatusMinimapButton",
+    [36] = "GatherArchNote",
+    [37] = "ZGVMarker",
+    [38] = "QuestPointerPOI", -- QuestPointer
+    [39] = "poiMinimap", -- QuestPointer
+    [40] = "MiniMapLFGFrame", -- LFG
+    [41] = "PremadeFilter_MinimapButton", -- PreMadeFilter
+    [42] = "GarrisonMinimapButton"
 }
 
 local function SetMinimapButton(btn)
     if (not btn or btn.isSkinned) then return end
     local name = btn:GetName()
-    if BlackList[name] then return end
+    for _, button in ipairs(BlackList) do
+        if( string.find(name, button) ) then
+            return
+        end
+    end
     btn:SetParent("MinimapButtonCollectFrame")
     if not name == "GarrisonLandingPageMinimapButton" then
         btn:SetPushedTexture(nil)
@@ -156,9 +188,7 @@ local function GrabMinimapButtons()
         local object = select(i, Minimap:GetChildren())
         if object then
             if object:IsObjectType("Button") and object:GetName() then
-                if not object:GetName():find("GatherMatePin") then
-                    SetMinimapButton(object)
-                end
+                SetMinimapButton(object)
             end
             for _, frame in pairs(AcceptedFrames) do
                 if object:IsObjectType("Frame") and object:GetName() == frame then
