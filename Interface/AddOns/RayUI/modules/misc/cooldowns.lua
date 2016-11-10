@@ -311,7 +311,7 @@ function mod:PET_BAR_UPDATE_COOLDOWN()
                         self:AddCooldown("pet", i)
                     end
                 else
-                    self:ClearCooldown("pet", i)
+                    self:RemoveCooldown("pet", i)
                 end
             end
         end

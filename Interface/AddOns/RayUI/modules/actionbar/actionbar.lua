@@ -282,6 +282,8 @@ function AB:UpdateButtonConfig(bar, buttonName)
     bar.buttonConfig.showGrid = self.db.showgrid
     bar.buttonConfig.clickOnDown = self.db.clickondown
 	SetModifiedClick("PICKUPACTION", self.db.movementModifier)
+	bar.buttonConfig.useDrawBling = true
+	bar.buttonConfig.useDrawSwipeOnCharges = false
     bar.buttonConfig.colors.range = { 1, 0.3, 0.1 }
     bar.buttonConfig.colors.mana = { 0.1, 0.3, 1 }
     bar.buttonConfig.colors.hp = { 0.1, 0.3, 1 }
