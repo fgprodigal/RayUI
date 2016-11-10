@@ -25,7 +25,6 @@ function RA:FetchRaidSettings()
         visibility = "[nogroup:party,nogroup:raid] hide;show",
         numGroups = 8,
         defaultPosition = { "BOTTOMLEFT", R.UIParent, "BOTTOMLEFT", 15, 235 },
-        labelvisibility = "[nogroup:party,nogroup:raid] hide;show"
     }
 end
 

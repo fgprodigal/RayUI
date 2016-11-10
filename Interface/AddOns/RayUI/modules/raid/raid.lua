@@ -1,5 +1,5 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local RA = R:NewModule("Raid", "AceEvent-3.0")
+local RA = R:NewModule("Raid", "AceEvent-3.0", "AceTimer-3.0")
 
 local _, ns = ...
 local oUF = RayUF or oUF
@@ -10,6 +10,7 @@ local _G = _G
 local next = next
 local type, unpack, pairs = type, unpack, pairs
 local upper = string.upper
+local tinsert = table.insert
 
 --WoW API / Variables
 local CreateFrame = CreateFrame
@@ -27,6 +28,7 @@ local hooksecurefunc = hooksecurefunc
 -- GLOBALS: UIParent, oUF_RaidDebuffs, CompactRaidFrameManager, CompactRaidFrameContainer, RayUF, DebuffTypeColor
 
 RA.modName = L["团队"]
+RA.labels = {}
 RA.headers = {}
 RA.colorCache = {}
 RA.debuffColor = {}
@@ -48,7 +50,7 @@ RA["mapIDs"] = {
     [1280] = 40, -- Southshore vs. Tarren Mill
 }
 
-local function RegisterDebuffs()
+function RA:RegisterDebuffs()
     SetMapToCurrentZone()
     local _, instanceType = IsInInstance()
     local zone = GetCurrentMapAreaID()
@@ -83,7 +85,7 @@ function RA:HideBlizzard()
 end
 
 local function CreateLabel(frame)
-    local label = CreateFrame("Frame", nil, frame, "SecureHandlerStateTemplate")
+    local label = CreateFrame("Frame", nil, frame)
     label:SetFrameStrata("BACKGROUND")
     label:SetFrameLevel(0)
     label:SetTemplate("Transparent")
@@ -103,7 +105,26 @@ local function CreateLabel(frame)
         label:Height(12)
     end
 
+    label.__owner = frame
+    tinsert(RA.labels, label)
+    label:Hide()
     return label
+end
+
+function RA:UpdateLabelVisibility()
+    for _, label in pairs(self.labels) do
+        local header = label.__owner
+        label:Hide()
+        for i = 1, #header do
+            local frame = header[i]
+            if frame:IsShown() then label:Show() end
+        end
+    end
+end
+
+function RA:GROUP_ROSTER_UPDATE()
+    self:HideBlizzard()
+    self.labelTimer = self:ScheduleTimer("UpdateLabelVisibility", 0.1)
 end
 
 function RA:CreateHeader(parent, name, groupFilter, template, layout)
@@ -173,11 +194,6 @@ function RA:CreateHeaderGroup(layout, groupFilter, template)
             if RA.db.showlabel then
                 group.label = CreateLabel(group)
                 group.label.text:SetText(RA.groupConfig[layout].label or i)
-                if RA.groupConfig[layout].labelvisibility then
-                    RegisterStateDriver(group.label, "visibility", RA.groupConfig[layout].labelvisibility)
-                else
-                    RegisterStateDriver(group.label, "visibility", RA.groupConfig[layout].visibility)
-                end
             end
 
             if i == 1 then
@@ -218,11 +234,6 @@ function RA:CreateHeaderGroup(layout, groupFilter, template)
         if RA.db.showlabel and RA.groupConfig[layout].label then
             self[layout].label = CreateLabel(self[layout])
             self[layout].label.text:SetText(RA.groupConfig[layout].label)
-            if RA.groupConfig[layout].labelvisibility then
-                RegisterStateDriver(self[layout].label, "visibility", RA.groupConfig[layout].labelvisibility)
-            else
-                RegisterStateDriver(self[layout].label, "visibility", RA.groupConfig[layout].visibility)
-            end
         end
         if RA.db.horizontal then
             self[layout]:Size(RA.groupConfig[layout].width*5 + RA.db.spacing*4, RA.groupConfig[layout].height)
@@ -282,7 +293,7 @@ function RA:Initialize()
         end
     end
     self:HideBlizzard()
-    self:RegisterEvent("GROUP_ROSTER_UPDATE", "HideBlizzard")
+    self:RegisterEvent("GROUP_ROSTER_UPDATE")
     UIParent:UnregisterEvent("GROUP_ROSTER_UPDATE")
 
 	for layout, config in pairs(self["headerstoload"]) do
@@ -295,16 +306,14 @@ function RA:Initialize()
 	end
     self["headerstoload"] = nil
 
-    RegisterDebuffs()
+    self:RegisterDebuffs()
     local ORD = ns.oUF_RaidDebuffs or oUF_RaidDebuffs
     if ORD then
         ORD.MatchBySpellName = false
     end
 
-    local event = CreateFrame("Frame")
-    event:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-    event:RegisterEvent("PLAYER_ENTERING_WORLD")
-    event:SetScript("OnEvent", RegisterDebuffs)
+    self:RegisterEvent("ZONE_CHANGED_NEW_AREA", "RegisterDebuffs")
+    self:RegisterEvent("PLAYER_ENTERING_WORLD", "RegisterDebuffs")
 end
 
 function RA:Info()
