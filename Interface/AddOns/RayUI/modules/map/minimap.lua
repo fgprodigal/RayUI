@@ -31,7 +31,6 @@ local ToggleHelpFrame = ToggleHelpFrame
 local GarrisonLandingPageMinimapButton_OnClick = GarrisonLandingPageMinimapButton_OnClick
 local IsShiftKeyDown = IsShiftKeyDown
 local ToggleDropDownMenu = ToggleDropDownMenu
-local EasyMenu = EasyMenu
 local GetCursorPosition = GetCursorPosition
 local Minimap_SetPing = Minimap_SetPing
 local Minimap_ZoomIn = Minimap_ZoomIn
@@ -222,7 +221,7 @@ function MM:CheckMail()
 end
 
 function MM:CreateMenu()
-    local menuFrame = CreateFrame("Frame", "RayUI_MinimapRightClickMenu", R.UIParent, "UIDropDownMenuTemplate")
+    local menuFrame = CreateFrame("Frame", "RayUI_MinimapRightClickMenu", R.UIParent)
     local menuList = {
         {text = CHARACTER_BUTTON, notCheckable = true,
             func = function() ToggleCharacter("PaperDollFrame") end},
@@ -264,11 +263,16 @@ function MM:CreateMenu()
         {text = LOOT_ROLLS, notCheckable = true,
             func = function() ToggleFrame(LootHistoryFrame) end},
     }
-    Minimap:SetScript("OnMouseUp", function(_, btn)
+    Minimap:SetScript("OnMouseUp", function(self, btn)
+            local position = self:GetPoint()
             if( btn == "RightButton" and not IsShiftKeyDown() ) then
                 ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, "cursor", 0, 0)
             elseif(btn == "MiddleButton" or ( btn== "RightButton" and IsShiftKeyDown())) then
-                EasyMenu(menuList, menuFrame, "cursor", 0, 0, "MENU", 1)
+                if position:match("LEFT") then
+                    R:DropDown(menuList, menuFrame)
+                else
+                    R:DropDown(menuList, menuFrame, -160, 0)
+                end
             else
                 local x, y = GetCursorPosition()
                 x = x / Minimap:GetEffectiveScale()
@@ -282,6 +286,8 @@ function MM:CreateMenu()
                 Minimap_SetPing(x, y, 1)
             end
         end)
+    R:GetModule("Skins"):CreateBD(menuFrame)
+    R:GetModule("Skins"):CreateStripesThin(menuFrame)
     self:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", "CheckMail")
     self:RegisterEvent("UPDATE_PENDING_MAIL", "CheckMail")
     self:RegisterEvent("PLAYER_ENTERING_WORLD", "CheckMail")
