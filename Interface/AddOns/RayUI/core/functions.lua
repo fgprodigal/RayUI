@@ -90,13 +90,16 @@ function R.dummy()
 end
 
 function R:UIScale()
-    R.lowversion = false
+    if not self.global.general.uiscale then
+        self.global.general.uiscale = math.max(0.64, math.min(1.15, 768/self.screenheight));
+    end
+    self.lowversion = false
 
-    if R.screenwidth < 1600 then
-        R.lowversion = true
-    elseif R.screenwidth >= 3840 or (UIParent:GetWidth() + 1 > R.screenwidth) then
-        local width = R.screenwidth
-        local height = R.screenheight
+    if self.screenwidth < 1600 then
+        self.lowversion = true
+    elseif self.screenwidth >= 3840 or (UIParent:GetWidth() + 1 > self.screenwidth) then
+        local width = self.screenwidth
+        local height = self.screenheight
 
         -- because some user enable bezel compensation, we need to find the real width of a single monitor.
         -- I don"t know how it really work, but i"m assuming they add pixel to width to compensate the bezel. :P
@@ -116,17 +119,17 @@ function R:UIScale()
         if width >= 3840 and width < 4080 then width = 1224 end -- SXGA & SXGA (UVGA) & WXGA & HDTV
 
         if width < 1600 then
-            R.lowversion = true
+            self.lowversion = true
         end
 
         -- register a constant, we will need it later for launch.lua
-        R.eyefinity = width
+        self.eyefinity = width
     end
 
-    if R.lowversion == true then
-        R.ResScale = 0.9
+    if self.lowversion == true then
+        self.ResScale = 0.9
     else
-        R.ResScale = 1
+        self.ResScale = 1
     end
 
     self.UIParent:ClearAllPoints()
@@ -373,15 +376,14 @@ function R:Initialize()
 
     if not self.db.layoutchosen then
         self:ChooseLayout()
-    else
+    elseif self.global.general.logo then
         CreateSplashScreen()
+        C_Timer.After(6, ShowSplashScreen)
     end
 
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
     self:Delay(5, function() collectgarbage("collect") end)
     self:LockCVar("overrideArchive", 0)
-
-    C_Timer.After(6, ShowSplashScreen)
 end
 
 function R:GetPlayerRole()
@@ -790,7 +792,7 @@ function R:UpdateDemoFrame()
     demoFrame.button2.backdropTexture:SetVertexColor(backdropr, backdropg, backdropb)
 end
 
-R.Developer = { "夏琉君", "Myr", "Drayd", "蚊蚊", "Gabrriel" }
+R.Developer = { "夏琉君", "Myr", "Drayd", "蚊蚊", "Gabrriel", "Manastrom", "Casadora" }
 
 function R:IsDeveloper()
     for _, name in pairs(R.Developer) do
