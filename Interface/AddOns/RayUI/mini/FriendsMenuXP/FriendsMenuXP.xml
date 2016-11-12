@@ -1,19 +1,11 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
+	<Script file="localization.deDE.lua"/>
+	<Script file="localization.enUS.lua"/>
+	<Script file="localization.zhCN.lua"/>
+	<Script file="localization.zhTW.lua"/>
+    <Script file="FriendsMenuXP_ButtonSet.lua"/>
 	<Script file="FriendsMenuXP.lua"/>
-	<Frame name = "FriendsMenuXPUpdateFrame">
-		<Scripts>
-			<OnLoad>
-				FriendsMenuXP_OnLoad(self);
-			</OnLoad>
-			<OnUpdate>
-				FriendsMenuXP_OnUpdate(self, elapsed);
-			</OnUpdate>
-			<OnEvent>
-				FriendsMenuXP_OnEvent(self, event, ...);
-			</OnEvent>
-		</Scripts>
-	</Frame>
 
 	<Button name="FriendsMenuXPButtonTemplate" virtual="true">
 		<Size>
@@ -46,7 +38,7 @@
 				</Anchors>
 				<Scripts>
 					<OnEnter>
-						UIDropDownMenu_StopCounting(self:GetParent():GetParent());
+						FriendsMenuXP_StopCounting(self:GetParent():GetParent());
 						--CloseDropDownMenus(self:GetParent():GetParent():GetID() + 1);
 					</OnEnter>
 					<OnLeave>
@@ -61,7 +53,7 @@
 			</OnClick>
 			<OnEnter>
 				getglobal(self:GetName().."Highlight"):Show();
-				UIDropDownMenu_StopCounting(self:GetParent());
+				FriendsMenuXP_StopCounting(self:GetParent());
 				if ( self.tooltipText ) then
 					GameTooltip_AddNewbieTip(self, self:GetText(), 1.0, 1.0, 1.0, self.tooltipText, 1);
 				end
@@ -147,7 +139,7 @@
 				self:Hide();
 			</OnClick>
 			<OnEnter>
-				UIDropDownMenu_StopCounting(self);
+				FriendsMenuXP_StopCounting(self);
 			</OnEnter>
 			<OnLeave>
 				UIDropDownMenu_StartCounting(self);
@@ -240,7 +232,7 @@
 				self:Hide();
 			</OnClick>
 			<OnEnter>
-				UIDropDownMenu_StopCounting(self);
+				FriendsMenuXP_StopCounting(self);
 			</OnEnter>
 			<OnLeave>
 				UIDropDownMenu_StartCounting(self);
@@ -261,4 +253,17 @@
 		</Scripts>
 	</Button>
 
+    <Frame name = "FriendsMenuXPUpdateFrame">
+        <Scripts>
+            <OnLoad>
+                FriendsMenuXP_OnLoad(self);
+            </OnLoad>
+            <OnUpdate>
+                FriendsMenuXP_OnUpdate(self, elapsed);
+            </OnUpdate>
+            <OnEvent>
+                FriendsMenuXP_OnEvent(self, event, ...);
+            </OnEvent>
+        </Scripts>
+    </Frame>
 </Ui>

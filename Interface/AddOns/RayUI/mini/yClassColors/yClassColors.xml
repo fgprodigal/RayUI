@@ -1,8 +1,6 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/">	
-	<Script file="core.lua"/>
-	<Script file="battlefield.lua"/>
-	<Script file="friends.lua"/>
-	<Script file="guild.lua"/>
-	<Script file="lfr.lua"/>
-	<Script file="who.lua"/>
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+    <Script file="Localization.lua"/>
+	<Script file="ClassColors.lua"/>
+	<Script file="ClassColorsBlizz.lua"/>
 </Ui>

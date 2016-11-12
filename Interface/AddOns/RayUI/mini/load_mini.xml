@@ -1,10 +1,6 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/">	
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="DragEmAll\DragEmAll.lua"/>
 	<Script file="ExtraQuestButton\ExtraQuestButton.lua"/>
-	<Script file="FriendsMenuXP\localization.enUS.lua"/>
-	<Script file="FriendsMenuXP\localization.zhCN.lua"/>
-	<Script file="FriendsMenuXP\localization.zhTW.lua"/>
-	<Script file="FriendsMenuXP\localization.deDE.lua"/>
 	<Include file="FriendsMenuXP\FriendsMenuXP.xml"/>
 	<Script file="TooltipItemID\TooltipItemID.lua"/>
 	<Script file="TooltipItemIcon\TooltipItemIcon.lua"/>
