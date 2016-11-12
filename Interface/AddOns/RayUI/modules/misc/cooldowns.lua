@@ -138,7 +138,7 @@ local function IconOnUpdate(self)
         self:SetScript("OnUpdate", nil)
         mod:SetPosition()
         visible = visible - 1
-    end
+	end
 end
 
 function mod:RemoveCooldown(type, spellID)
@@ -176,7 +176,13 @@ function mod:AddCooldown(type, spellID)
 
     for i, icon in pairs(self.icons) do
         if icon.spellID == spellID and icon.type == type then
+			icon.start = start
+		    icon.duration = duration
+		    icon.expirationTime = start + duration
+		    icon.spellID = spellID
+		    icon.type = type
             CooldownFrame_Set(icon.cd, start, duration, true)
+			self:SetPosition()
             return
         end
     end
@@ -242,10 +248,11 @@ function mod:SPELLS_CHANGED()
 end
 
 function mod:CheckSpellBook(btype)
+	local threshold = btype == BOOKTYPE_SPELL and 2.5 or 4
     for id, name in pairs(spells[btype]) do
         local start, duration, enable = GetSpellCooldown(id)
         if enable == 1 and start > 0 then
-            if duration > 2.5 then
+            if duration > threshold then
                 local _, _, texture = GetSpellInfo(id)
                 mod:AddCooldown("spell", id)
             else
@@ -257,7 +264,7 @@ function mod:CheckSpellBook(btype)
     for id, name in pairs(chargespells[btype]) do
         local start, duration, enable = GetSpellCooldown(id)
         local currentCharges, maxCharges, cooldownStart, cooldownDuration = GetSpellCharges(id)
-        if cooldownStart and cooldownDuration and currentCharges < maxCharges and enable == 1 and start > 0 and duration > 2.5 then
+        if cooldownStart and cooldownDuration and currentCharges < maxCharges and enable == 1 and start > 0 and duration > threshold then
             local _, _, texture = GetSpellInfo(id)
             mod:AddCooldown("spell", id)
         end
@@ -269,7 +276,7 @@ function mod:BAG_UPDATE_COOLDOWN()
         local start, duration, enable = GetInventoryItemCooldown("player", i)
         if enable == 1 then
             if start > 0 then
-                if duration > 3 and duration < 3601 then
+                if duration > 5 and duration < 3601 then
                     mod:AddCooldown("slot", i)
                 else
                     mod:RemoveCooldown("slot", i)
@@ -282,7 +289,7 @@ function mod:BAG_UPDATE_COOLDOWN()
             local start, duration, enable = GetContainerItemCooldown(i, j)
             if enable == 1 then
                 if start > 0 then
-                    if duration > 3 and duration < 3601 then
+                    if duration > 5 and duration < 3601 then
                         mod:AddCooldown("inventory", string.join("#", i, j))
                     end
                 else
@@ -307,7 +314,7 @@ function mod:PET_BAR_UPDATE_COOLDOWN()
             local name, _, texture = GetPetActionInfo(i)
             if name then
                 if start > 0 then
-                    if duration > 3 then
+                    if duration > 5 then
                         self:AddCooldown("pet", i)
                     end
                 else
