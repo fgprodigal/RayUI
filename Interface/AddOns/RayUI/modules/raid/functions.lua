@@ -234,6 +234,22 @@ function RA:UpdatePower(power)
     power:SetPoint("BOTTOM")
 end
 
+function RA:UnitFrame_OnShow(event)
+    if event ~= "OnShow" then return end
+    local parent = self:GetParent()
+    if parent.label then parent.label:Show() end
+end
+
+function RA:UnitFrame_OnHide()
+    local parent = self:GetParent()
+    if not parent.label then return end
+    for i = 1, #parent do
+        local unit = parent[i]
+        if unit:IsShown() then return end
+    end
+    parent.label:Hide()
+end
+
 -- Show Mouseover highlight
 function RA:UnitFrame_OnEnter()
     if RA.db.tooltip then

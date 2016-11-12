@@ -1,6 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
     <Script file="raid.lua" />
-    <Script file="function.lua" />
+    <Script file="functions.lua" />
     <Script file="tags.lua" />
     <Script file="elements\autorez.lua" />
 	<Include file="layouts\load_layouts.xml"/>
