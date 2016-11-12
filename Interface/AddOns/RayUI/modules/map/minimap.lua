@@ -223,11 +223,11 @@ end
 function MM:CreateMenu()
     local menuFrame = CreateFrame("Frame", "RayUI_MinimapRightClickMenu", R.UIParent)
     local menuList = {
-        {text = CHARACTER_BUTTON, notCheckable = true,
+        {text = CHARACTER_BUTTON,
             func = function() ToggleCharacter("PaperDollFrame") end},
-        {text = SPELLBOOK_ABILITIES_BUTTON, notCheckable = true,
+        {text = SPELLBOOK_ABILITIES_BUTTON,
             func = function() if not SpellBookFrame:IsShown() then ShowUIPanel(SpellBookFrame) else HideUIPanel(SpellBookFrame) end end},
-        {text = TALENTS_BUTTON, notCheckable = true,
+        {text = TALENTS_BUTTON,
             func = function()
                 if not PlayerTalentFrame then
                     TalentFrame_LoadUI()
@@ -240,27 +240,27 @@ function MM:CreateMenu()
                 end
             end
         },
-        {text = ACHIEVEMENT_BUTTON, notCheckable = true,
+        {text = ACHIEVEMENT_BUTTON,
             func = function() ToggleAchievementFrame() end},
-        {text = SOCIAL_BUTTON, notCheckable = true,
+        {text = SOCIAL_BUTTON,
             func = function() ToggleFriendsFrame() end},
-        {text = ACHIEVEMENTS_GUILD_TAB, notCheckable = true,
+        {text = ACHIEVEMENTS_GUILD_TAB,
             func = function() ToggleGuildFrame() end},
-        {text = ENCOUNTER_JOURNAL, notCheckable = true,
+        {text = ENCOUNTER_JOURNAL,
             func = function() if not IsAddOnLoaded("Blizzard_EncounterJournal") then EncounterJournal_LoadUI() end ToggleFrame(EncounterJournal) end},
-        {text = COLLECTIONS, notCheckable = true,
+        {text = COLLECTIONS,
             func = function() ToggleCollectionsJournal() end},
-        {text = LFG_TITLE, notCheckable = true,
+        {text = LFG_TITLE,
             func = function() ToggleLFDParentFrame() end},
-        {text = BLIZZARD_STORE, notCheckable = true,
+        {text = BLIZZARD_STORE,
             func = function() StoreMicroButton:Click() end},
-        {text = HELP_BUTTON, notCheckable = true,
+        {text = HELP_BUTTON,
             func = function() ToggleHelpFrame() end},
-        {text = GARRISON_LANDING_PAGE_TITLE, notCheckable = true,
+        {text = GARRISON_LANDING_PAGE_TITLE,
             func = function() GarrisonLandingPageMinimapButton_OnClick() end},
-        {text = CALENDAR, notCheckable = true,
+        {text = CALENDAR,
             func = function() GameTimeFrame:Click() end},
-        {text = LOOT_ROLLS, notCheckable = true,
+        {text = LOOT_ROLLS,
             func = function() ToggleFrame(LootHistoryFrame) end},
     }
     Minimap:SetScript("OnMouseUp", function(self, btn)
