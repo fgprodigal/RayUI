@@ -2,7 +2,7 @@ local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, 
 local S = R:GetModule("Skins")
 
 local function SkinAce3()
-	local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
+	local AceGUI = LibStub("AceGUI-3.0", true)
 	if not AceGUI then return end
 	if not S.db.ace3 then return end
 	local oldRegisterAsWidget = AceGUI.RegisterAsWidget
@@ -10,6 +10,7 @@ local function SkinAce3()
 	local r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b
 
 	AceGUI.RegisterAsWidget = function(self, widget)
+		if widget.skinned then return oldRegisterAsWidget(self, widget) end
 		local TYPE = widget.type
 		--print(TYPE)
 		if TYPE == "MultiLineEditBox" then
@@ -211,12 +212,14 @@ local function SkinAce3()
 			widget.right:SetColorTexture(.4, .4, .4)
 			widget.right:SetGradientAlpha("HORIZONTAL", .8, .8, .8, 1, .8, .8, .8, 0)
 		end
+		widget.skinned = true
 		return oldRegisterAsWidget(self, widget)
 	end
 
 	local oldRegisterAsContainer = AceGUI.RegisterAsContainer
 
 	AceGUI.RegisterAsContainer = function(self, widget)
+		if widget.skinned then return oldRegisterAsContainer(self, widget) end
 		local TYPE = widget.type
 		if TYPE == "ScrollFrame" then
 			local frame = widget.scrollbar
@@ -290,6 +293,7 @@ local function SkinAce3()
 				S:ReskinScroll(widget.scrollbar)
 			end
 		end
+		widget.skinned = true
 		return oldRegisterAsContainer(self, widget)
 	end
 end
@@ -300,5 +304,9 @@ local function attemptSkin()
 		SkinAce3()
 	end
 end
+
+local f = CreateFrame("Frame")
+f:RegisterEvent("ADDON_LOADED")
+f:SetScript("OnEvent", attemptSkin)
 
 S:AddCallback("Ace3", attemptSkin)

@@ -360,7 +360,7 @@ function UF:Construct_SmartAura(frame)
     return auras
 end
 
-function UF:CustomSmartFilter(unit, icon, name, rank, texture, count, debuffType, duration, expirationTime, unitCaster, isStealable, _, spellID)
+function UF:CustomSmartFilter(unit, icon, name, rank, texture, count, debuffType, duration, expirationTime, unitCaster, isStealable, _, spellID, canApplyAura, isBossDebuff, _, nameplateShowAll, timeMod, value1, value2, value3)
     local returnValue = true
     local isPlayer = unitCaster == "player" or unitCaster == "vehicle"
 
@@ -396,6 +396,13 @@ function UF:CustomSmartFilter(unit, icon, name, rank, texture, count, debuffType
     if R.global["UnitFrames"]["aurafilters"]["CCDebuffs"][spellID] then
         icon.priority = R.global["UnitFrames"]["aurafilters"]["CCDebuffs"][spellID].priority
         returnValue = true
+    end
+
+    if icon.value then
+        icon.value:SetText("")
+        if returnValue and value1 and value1 > 0 then
+            icon.value:SetText(R:ShortValue(value1))
+        end
     end
 
     return returnValue
@@ -1028,24 +1035,31 @@ function UF:PostCreateIcon(button)
     button.overlay:Hide()
     button.cd:SetReverse(true)
 
+    if self.isSmartAura then
+        button.value = button.RaisedElementParent:CreateFontString(nil, "OVERLAY")
+        button.value:SetFont(R["media"].font, ( R["media"].fontsize - 3 ) * (R:Round(self.size) / 30), R["media"].fontflag)
+        button.value:SetPoint("CENTER", button , "TOP", 0, 1)
+        button.value:SetJustifyH("RIGHT")
+    end
+
     button.pushed = true
     button:StyleButton(true)
 end
 
-function UF:CustomFilter(unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster)
+function UF:CustomFilter(unit, icon, name, rank, texture, count, debuffType, duration, expirationTime, unitCaster, isStealable, _, spellID)
     local isPlayer
 
-    if(caster == "player" or caster == "vehicle") then
+    if(unitCaster == "player" or unitCaster == "vehicle") then
         isPlayer = true
     end
 
     if name then
         icon.isPlayer = isPlayer
-        icon.owner = caster
+        icon.owner = unitCaster
     end
 
-    if UF.db.smartAura and isPlayer and duration and duration < 60 and duration ~= 0 then
-        return false
+    if UF.db.smartAura then
+        return not UF:CustomSmartFilter(unit, icon, name, rank, texture, count, debuffType, duration, expirationTime, unitCaster, isStealable, _, spellID)
     end
 
     return true

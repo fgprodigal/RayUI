@@ -61,7 +61,7 @@ local C_Timer = C_Timer
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: UIParent, LibStub, MAX_PLAYER_LEVEL, ScriptErrorsFrame_OnError, BaudErrorFrameHandler, UISpecialFrames
--- GLOBALS: Advanced_UIScaleSlider, Advanced_UseUIScale, RayUIConfigTutorial, RayUIWarningFrameScrollScrollBar
+-- GLOBALS: Advanced_UIScaleSlider, Advanced_UseUIScale, RayUIConfigTutorial, RayUIWarningFrameScrollScrollBar, WorldMapFrame
 -- GLOBALS: SLASH_RELOAD1, COMBAT_RATING_RESILIENCE_PLAYER_DAMAGE_TAKEN, FIRST_NUMBER_CAP, SECOND_NUMBER_CAP, RayUISplashScreen
 
 SlashCmdList["RELOAD"] = function() ReloadUI() end
@@ -133,6 +133,10 @@ function R:UIScale()
     self.UIParent:SetAllPoints()
     self.UIParent.origHeight = self.UIParent:GetHeight()
     self.mult = 768/string.match(self.resolution, "%d+x(%d+)")/self.global.general.uiscale
+
+    SetCVar("useUiScale", 1)
+    SetCVar("uiScale", self.global.general.uiscale)
+    WorldMapFrame.hasTaint = true
 end
 
 function R:Scale(x)
@@ -292,7 +296,6 @@ function R:InitializeModules()
     end
 end
 
-
 local logo = CreateFrame("Frame", nil, R.UIParent)
 logo:SetPoint("CENTER", 0, 150)
 logo:SetSize(256, 128)
@@ -303,66 +306,64 @@ logo:Hide()
 R.logo = logo
 
 local function CreateSplashScreen()
-	local f = CreateFrame("Frame", "RayUISplashScreen", R.UIParent)
-	f:Size(300, 150)
-	f:SetPoint("CENTER", 0, 100)
-	f:SetFrameStrata("TOOLTIP")
-	f:SetAlpha(0)
+    local f = CreateFrame("Frame", "RayUISplashScreen", R.UIParent)
+    f:Size(300, 150)
+    f:SetPoint("CENTER", 0, 100)
+    f:SetFrameStrata("TOOLTIP")
+    f:SetAlpha(0)
 
-	f.bg = f:CreateTexture(nil, "BACKGROUND")
-	f.bg:SetTexture([[Interface\LevelUp\LevelUpTex]])
-	f.bg:SetPoint("BOTTOM")
-	f.bg:Size(400, 240)
-	f.bg:SetTexCoord(0.00195313, 0.63867188, 0.03710938, 0.23828125)
-	f.bg:SetVertexColor(1, 1, 1, 0.7)
+    f.bg = f:CreateTexture(nil, "BACKGROUND")
+    f.bg:SetTexture([[Interface\LevelUp\LevelUpTex]])
+    f.bg:SetPoint("BOTTOM")
+    f.bg:Size(400, 240)
+    f.bg:SetTexCoord(0.00195313, 0.63867188, 0.03710938, 0.23828125)
+    f.bg:SetVertexColor(1, 1, 1, 0.7)
 
-	f.lineTop = f:CreateTexture(nil, "BACKGROUND")
-	f.lineTop:SetDrawLayer("BACKGROUND", 2)
-	f.lineTop:SetTexture([[Interface\LevelUp\LevelUpTex]])
-	f.lineTop:SetPoint("TOP")
-	f.lineTop:Size(418, 7)
-	f.lineTop:SetTexCoord(0.00195313, 0.81835938, 0.00195313, 0.01562500)
+    f.lineTop = f:CreateTexture(nil, "BACKGROUND")
+    f.lineTop:SetDrawLayer("BACKGROUND", 2)
+    f.lineTop:SetTexture([[Interface\LevelUp\LevelUpTex]])
+    f.lineTop:SetPoint("TOP")
+    f.lineTop:Size(418, 7)
+    f.lineTop:SetTexCoord(0.00195313, 0.81835938, 0.00195313, 0.01562500)
 
-	f.lineBottom = f:CreateTexture(nil, "BACKGROUND")
-	f.lineBottom:SetDrawLayer("BACKGROUND", 2)
-	f.lineBottom:SetTexture([[Interface\LevelUp\LevelUpTex]])
-	f.lineBottom:SetPoint("BOTTOM")
-	f.lineBottom:Size(418, 7)
-	f.lineBottom:SetTexCoord(0.00195313, 0.81835938, 0.00195313, 0.01562500)
+    f.lineBottom = f:CreateTexture(nil, "BACKGROUND")
+    f.lineBottom:SetDrawLayer("BACKGROUND", 2)
+    f.lineBottom:SetTexture([[Interface\LevelUp\LevelUpTex]])
+    f.lineBottom:SetPoint("BOTTOM")
+    f.lineBottom:Size(418, 7)
+    f.lineBottom:SetTexCoord(0.00195313, 0.81835938, 0.00195313, 0.01562500)
 
-	f.logo = f:CreateTexture(nil, "OVERLAY")
-	f.logo:Size(256, 128)
-	f.logo:SetTexture("Interface\\AddOns\\RayUI\\media\\logo.tga")
-	f.logo:Point("CENTER", f, "CENTER")
+    f.logo = f:CreateTexture(nil, "OVERLAY")
+    f.logo:Size(256, 128)
+    f.logo:SetTexture("Interface\\AddOns\\RayUI\\media\\logo.tga")
+    f.logo:Point("CENTER", f, "CENTER")
 
-	f.version = f:CreateFontString(nil, "OVERLAY")
-	f.version:FontTemplate(nil, 12, nil)
-	f.version:Point("TOP", f.logo, "BOTTOM", 90, 20)
-	f.version:SetFormattedText("v%s", R.version)
+    f.version = f:CreateFontString(nil, "OVERLAY")
+    f.version:FontTemplate(nil, 12, nil)
+    f.version:Point("TOP", f.logo, "BOTTOM", 90, 20)
+    f.version:SetFormattedText("v%s", R.version)
 end
 
 local function HideSplashScreen()
-	RayUISplashScreen:Hide()
+    RayUISplashScreen:Hide()
 end
 
 local function FadeSplashScreen()
-	R:Delay(2, function()
-		R:UIFrameFadeOut(RayUISplashScreen, 1, 1, 0)
-		RayUISplashScreen.fadeInfo.finishedFunc = HideSplashScreen
-	end)
+    R:Delay(2, function()
+            R:UIFrameFadeOut(RayUISplashScreen, 1, 1, 0)
+            RayUISplashScreen.fadeInfo.finishedFunc = HideSplashScreen
+        end)
 end
 
 local function ShowSplashScreen()
-	R:UIFrameFadeIn(RayUISplashScreen, 1, 0, 1)
-	RayUISplashScreen.fadeInfo.finishedFunc = FadeSplashScreen
+    R:UIFrameFadeIn(RayUISplashScreen, 1, 0, 1)
+    RayUISplashScreen.fadeInfo.finishedFunc = FadeSplashScreen
 end
 
 function R:PLAYER_ENTERING_WORLD()
     RequestTimePlayed()
     Advanced_UIScaleSlider:Kill()
     Advanced_UseUIScale:Kill()
-    SetCVar("useUiScale", 1)
-    SetCVar("uiScale", R.global.general.uiscale)
     DEFAULT_CHAT_FRAME:AddMessage("欢迎使用|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r(v"..R.version..")，插件发布网址: |cff8A9DDE[|Hurl:https://github.com/fgprodigal/RayUI|h点击复制|h]|r")
     self:UnregisterEvent("PLAYER_ENTERING_WORLD" )
 end
@@ -789,7 +790,7 @@ function R:UpdateDemoFrame()
     demoFrame.button2.backdropTexture:SetVertexColor(backdropr, backdropg, backdropb)
 end
 
-R.Developer = { "夏琉君", "Myr", "Drayd", "蚊蚊", }
+R.Developer = { "夏琉君", "Myr", "Drayd", "蚊蚊", "Gabrriel" }
 
 function R:IsDeveloper()
     for _, name in pairs(R.Developer) do

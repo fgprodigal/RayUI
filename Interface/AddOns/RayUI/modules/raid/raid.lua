@@ -124,7 +124,7 @@ end
 
 function RA:GROUP_ROSTER_UPDATE()
     self:HideBlizzard()
-    self.labelTimer = self:ScheduleTimer("UpdateLabelVisibility", 0.1)
+    self.labelTimer = self:ScheduleTimer("UpdateLabelVisibility", 0.5)
 end
 
 function RA:CreateHeader(parent, name, groupFilter, template, layout)

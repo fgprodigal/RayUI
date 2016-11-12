@@ -29,7 +29,6 @@ local function OnLeave(btn)
 end
 
 function R:DropDown(list, frame, xOffset, yOffset)
-	local S = R:GetModule("Skins")
 	if not frame.buttons then
 		frame.buttons = {}
 		frame:SetFrameStrata("DIALOG")
@@ -51,7 +50,8 @@ function R:DropDown(list, frame, xOffset, yOffset)
 
 			frame.buttons[i].hoverTex = frame.buttons[i]:CreateTexture(nil, "OVERLAY")
 			frame.buttons[i].hoverTex:SetAllPoints()
-			frame.buttons[i].hoverTex:SetColorTexture(S["media"].r, S["media"].g, S["media"].b, .2)
+			frame.buttons[i].hoverTex:SetTexture([[Interface\QuestFrame\UI-QuestTitleHighlight]])
+			frame.buttons[i].hoverTex:SetBlendMode("ADD")
 			frame.buttons[i].hoverTex:Hide()
 
 			frame.buttons[i].text = frame.buttons[i]:CreateFontString(nil, "BORDER")

@@ -12,7 +12,7 @@ local CreateFrame = CreateFrame
 local IsAddOnLoaded = IsAddOnLoaded
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RayUF, RayUF_Player, RayUF_Target, RayUIPetBar, RayUF_Focus, MAX_BOSS_FRAMES
+-- GLOBALS: RayUF, RayUF_Player, RayUF_Target, RayUIPetBar, RayUF_Focus, MAX_BOSS_FRAMES, SpellActivationOverlayFrame
 
 UF.modName = L["头像"]
 
@@ -114,6 +114,11 @@ function UF:LoadUnitFrames()
             boss[i]:Show()
         end
         R:CreateMover(BossHeader, "BossHeaderMover", "首领头像", nil, nil, "ALL,RAID15,RAID25,RAID40")
+    end
+
+    if self.db.smartAura then
+        SpellActivationOverlayFrame:SetFrameStrata("BACKGROUND")
+        SpellActivationOverlayFrame:SetFrameLevel(0)
     end
 end
 
