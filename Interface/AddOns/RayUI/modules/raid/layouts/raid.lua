@@ -59,6 +59,8 @@ function RA:Construct_RaidFrames()
     self:RegisterForClicks("AnyUp")
     self:SetScript("OnEnter", RA.UnitFrame_OnEnter)
     self:SetScript("OnLeave", RA.UnitFrame_OnLeave)
+    RA:SecureHook(self, "UpdateAllElements", RA.UnitFrame_OnShow)
+    self:SetScript("OnHide", RA.UnitFrame_OnHide)
 end
 
 function RA:RaidSmartVisibility(event)

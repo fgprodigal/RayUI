@@ -1,5 +1,5 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local RA = R:NewModule("Raid", "AceEvent-3.0", "AceTimer-3.0")
+local RA = R:NewModule("Raid", "AceEvent-3.0", "AceTimer-3.0", "AceHook-3.0")
 
 local _, ns = ...
 local oUF = RayUF or oUF
@@ -105,8 +105,6 @@ local function CreateLabel(frame)
         label:Height(12)
     end
 
-    label.__owner = frame
-    tinsert(RA.labels, label)
     label:Hide()
     return label
 end
@@ -120,11 +118,6 @@ function RA:UpdateLabelVisibility()
             if frame:IsShown() then label:Show() end
         end
     end
-end
-
-function RA:GROUP_ROSTER_UPDATE()
-    self:HideBlizzard()
-    self.labelTimer = self:ScheduleTimer("UpdateLabelVisibility", 0.5)
 end
 
 function RA:CreateHeader(parent, name, groupFilter, template, layout)
@@ -293,7 +286,7 @@ function RA:Initialize()
         end
     end
     self:HideBlizzard()
-    self:RegisterEvent("GROUP_ROSTER_UPDATE")
+    self:RegisterEvent("GROUP_ROSTER_UPDATE", "HideBlizzard")
     UIParent:UnregisterEvent("GROUP_ROSTER_UPDATE")
 
 	for layout, config in pairs(self["headerstoload"]) do
