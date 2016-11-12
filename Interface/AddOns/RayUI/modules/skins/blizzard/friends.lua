@@ -1,23 +1,90 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local S = R:GetModule("Skins")
 
+local FRIENDS_LEVEL_TEMPLATE = FRIENDS_LEVEL_TEMPLATE:gsub('%%d', '%%s')
+FRIENDS_LEVEL_TEMPLATE = FRIENDS_LEVEL_TEMPLATE:gsub('%$d', '%$s')
+
+local BC = {}
+
+for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
+    BC[v] = k
+end
+
+for k, v in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do
+    BC[v] = k
+end
+
+local function getDiffColorString(level)
+    local color = GetQuestDifficultyColor(level)
+    return R:RGBToHex(color.r, color.g, color.b)
+end
+
+local function getClassColorString(class)
+    local color = R.colors.class[BC[class] or class]
+    return R:RGBToHex(color.r, color.g, color.b)
+end
+
+local function updateFriendsColor()
+    local scrollFrame = FriendsFrameFriendsScrollFrame
+    local offset = HybridScrollFrame_GetOffset(scrollFrame)
+    local buttons = scrollFrame.buttons
+
+    local playerArea = GetRealZoneText()
+
+    for i = 1, #buttons do
+        local nameText, infoText, button, index
+        button = buttons[i]
+        index = offset + i
+        if(button:IsShown()) then
+            if ( button.buttonType == FRIENDS_BUTTON_TYPE_WOW ) then
+                local name, level, class, area, connected, status, note = GetFriendInfo(button.id)
+                if(connected) then
+                    nameText = getClassColorString(class) .. name.."|r, "..format(FRIENDS_LEVEL_TEMPLATE, getDiffColorString(level) .. level .. '|r', class)
+                    if(area == playerArea) then
+                        infoText = format('|cff00ff00%s|r', area)
+                    end
+                end
+            elseif (button.buttonType == FRIENDS_BUTTON_TYPE_BNET) then
+                local presenceID, presenceName, battleTag, isBattleTagPresence, toonName, toonID, client, isOnline, lastOnline, isAFK, isDND, messageText, noteText, isRIDFriend, messageTime, canSoR = BNGetFriendInfo(button.id)
+                if(isOnline and client==BNET_CLIENT_WOW) then
+                    local hasFocus, toonName, client, realmName, realmID, faction, race, class, guild, zoneName, level, gameText, broadcastText, broadcastTime = BNGetGameAccountInfo(toonID)
+                    if(presenceName and toonName and class) then
+                        nameText = presenceName .. ' ' .. FRIENDS_WOW_NAME_COLOR_CODE..'('..
+                        getClassColorString(class) .. toonName .. FRIENDS_WOW_NAME_COLOR_CODE .. ')'
+                        if(zoneName == playerArea) then
+                            infoText = format('|cff00ff00%s|r', zoneName)
+                        end
+                    end
+                end
+            end
+        end
+
+        if(nameText) then
+            button.name:SetText(nameText)
+        end
+        if(infoText) then
+            button.info:SetText(infoText)
+        end
+    end
+end
+
 local function LoadSkin()
     local StripAllTextures = {
-		"ScrollOfResurrectionSelectionFrame",
-		"ScrollOfResurrectionSelectionFrameList",
-		"FriendsListFrame",
-		"FriendsTabHeader",
-		"FriendsFrameFriendsScrollFrame",
-		"WhoFrameColumnHeader1",
-		"WhoFrameColumnHeader2",
-		"WhoFrameColumnHeader3",
-		"WhoFrameColumnHeader4",
-		"ChannelListScrollFrame",
-		"ChannelRoster",
-		"ChannelFrameDaughterFrame",
-		"AddFriendFrame",
-		"AddFriendNoteFrame",
-	}
+        "ScrollOfResurrectionSelectionFrame",
+        "ScrollOfResurrectionSelectionFrameList",
+        "FriendsListFrame",
+        "FriendsTabHeader",
+        "FriendsFrameFriendsScrollFrame",
+        "WhoFrameColumnHeader1",
+        "WhoFrameColumnHeader2",
+        "WhoFrameColumnHeader3",
+        "WhoFrameColumnHeader4",
+        "ChannelListScrollFrame",
+        "ChannelRoster",
+        "ChannelFrameDaughterFrame",
+        "AddFriendFrame",
+        "AddFriendNoteFrame",
+    }
 
     local KillTextures = {
         "FriendsFrameBroadcastInputLeft",
@@ -108,22 +175,22 @@ local function LoadSkin()
     end
 
     local buttons = {
-		"FriendsFrameAddFriendButton",
-		"FriendsFrameSendMessageButton",
-		"WhoFrameWhoButton",
-		"WhoFrameAddFriendButton",
-		"WhoFrameGroupInviteButton",
-		"ChannelFrameNewButton",
-		"FriendsFrameIgnorePlayerButton",
-		"FriendsFrameUnsquelchButton",
-		"ChannelFrameDaughterFrameOkayButton",
-		"ChannelFrameDaughterFrameCancelButton",
-		"AddFriendEntryFrameAcceptButton",
-		"AddFriendEntryFrameCancelButton",
-		"AddFriendInfoFrameContinueButton",
-		"ScrollOfResurrectionSelectionFrameAcceptButton",
-		"ScrollOfResurrectionSelectionFrameCancelButton",
-	}
+        "FriendsFrameAddFriendButton",
+        "FriendsFrameSendMessageButton",
+        "WhoFrameWhoButton",
+        "WhoFrameAddFriendButton",
+        "WhoFrameGroupInviteButton",
+        "ChannelFrameNewButton",
+        "FriendsFrameIgnorePlayerButton",
+        "FriendsFrameUnsquelchButton",
+        "ChannelFrameDaughterFrameOkayButton",
+        "ChannelFrameDaughterFrameCancelButton",
+        "AddFriendEntryFrameAcceptButton",
+        "AddFriendEntryFrameCancelButton",
+        "AddFriendInfoFrameContinueButton",
+        "ScrollOfResurrectionSelectionFrameAcceptButton",
+        "ScrollOfResurrectionSelectionFrameCancelButton",
+    }
     for i = 1, #buttons do
         local button = _G[buttons[i]]
         S:Reskin(button)
@@ -273,14 +340,17 @@ local function LoadSkin()
     S:ReskinClose(RecruitAFriendSentFrameCloseButton)
 
     --Quick join
-	S:ReskinScroll(QuickJoinScrollFrameScrollBar)
-	S:Reskin(QuickJoinFrame.JoinQueueButton)
-	QuickJoinFrame.JoinQueueButton:SetSize(131, 21)  --Match button on other tab
-	QuickJoinFrame.JoinQueueButton:ClearAllPoints()
-	QuickJoinFrame.JoinQueueButton:Point("BOTTOMRIGHT", QuickJoinFrame, "BOTTOMRIGHT", -6, 4)
-	QuickJoinScrollFrameTop:SetTexture(nil)
-	QuickJoinScrollFrameBottom:SetTexture(nil)
-	QuickJoinScrollFrameMiddle:SetTexture(nil)
+    S:ReskinScroll(QuickJoinScrollFrameScrollBar)
+    S:Reskin(QuickJoinFrame.JoinQueueButton)
+    QuickJoinFrame.JoinQueueButton:SetSize(131, 21) --Match button on other tab
+    QuickJoinFrame.JoinQueueButton:ClearAllPoints()
+    QuickJoinFrame.JoinQueueButton:Point("BOTTOMRIGHT", QuickJoinFrame, "BOTTOMRIGHT", -6, 4)
+    QuickJoinScrollFrameTop:SetTexture(nil)
+    QuickJoinScrollFrameBottom:SetTexture(nil)
+    QuickJoinScrollFrameMiddle:SetTexture(nil)
+
+    hooksecurefunc(FriendsFrameFriendsScrollFrame, "update", updateFriendsColor)
+    hooksecurefunc("FriendsFrame_UpdateFriends", updateFriendsColor)
 end
 
 S:AddCallback("Friends", LoadSkin)
