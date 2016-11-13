@@ -197,10 +197,10 @@ function mod:SetTargetFrame(frame)
     end
 
     if (self.db.displayStyle == "TARGET" and not frame.isTarget and frame.UnitType ~= "PLAYER") then
-		frame:Hide()
-	else
-		frame:Show()
-	end
+        frame:Hide()
+    else
+        frame:Show()
+    end
 end
 
 function mod:StyleFrame(frame, useMainFrame)
@@ -297,10 +297,10 @@ function mod:NAME_PLATE_UNIT_ADDED(event, unit, frame)
     self:RegisterEvents(frame.UnitFrame, unit)
     self:UpdateElement_All(frame.UnitFrame, unit)
     if (self.db.displayStyle == "TARGET" and not frame.UnitFrame.isTarget and frame.UnitFrame.UnitType ~= "PLAYER") then
-		frame.UnitFrame:Hide()
-	else
-		frame.UnitFrame:Show()
-	end
+        frame.UnitFrame:Hide()
+    else
+        frame.UnitFrame:Show()
+    end
 end
 
 function mod:NAME_PLATE_UNIT_REMOVED(event, unit, frame, ...)
@@ -421,7 +421,7 @@ end
 
 function mod:NAME_PLATE_CREATED(event, frame)
     frame.UnitFrame = CreateFrame("BUTTON", frame:GetName().."UnitFrame", R.UIParent);
-    frame.UnitFrame:EnableMouse(false);
+    frame.UnitFrame:EnableMouse(false)
     frame.UnitFrame:SetAllPoints(frame)
     frame.UnitFrame:SetFrameStrata("BACKGROUND")
     frame.UnitFrame:SetScript("OnEvent", mod.OnEvent)
@@ -442,6 +442,10 @@ function mod:NAME_PLATE_CREATED(event, frame)
 end
 
 function mod:OnEvent(event, unit, ...)
+    if (unit and self.displayedUnit and (not UnitIsUnit(unit, self.displayedUnit) and not ((unit == "vehicle" or unit == "player") and (self.displayedUnit == "vehicle" or self.displayedUnit == "player")))) then
+        return
+    end
+
     if(event == "UNIT_HEALTH" or event == "UNIT_HEALTH_FREQUENT") then
         mod:UpdateElement_Health(self)
         mod:UpdateElement_HealPrediction(self)
@@ -552,7 +556,7 @@ end
 function mod:UpdateCVars()
     R:LockCVar("nameplateShowSelf", "0")
     R:LockCVar("nameplateMotion", self.db.motionType == "STACKED" and "1" or "0")
-	R:LockCVar("nameplateShowAll", self.db.displayStyle ~= "ALL" and "0" or "1")
+    R:LockCVar("nameplateShowAll", self.db.displayStyle ~= "ALL" and "0" or "1")
     R:LockCVar("nameplateShowFriendlyMinions", self.db.friendly_minions == true and "1" or "0")
     R:LockCVar("nameplateShowEnemyMinions", self.db.enemy_minions == true and "1" or "0")
     R:LockCVar("nameplateShowEnemyMinus", self.db.enemy_minors == true and "1" or "0")
@@ -571,31 +575,31 @@ function mod:UpdateVehicleStatus(event, unit)
 end
 
 function mod:PLAYER_REGEN_DISABLED()
-	if(self.db.showFriendlyCombat == "TOGGLE_ON") then
-		SetCVar("nameplateShowFriends", 1)
-	elseif(self.db.showFriendlyCombat == "TOGGLE_OFF") then
-		SetCVar("nameplateShowFriends", 0)
-	end
+    if(self.db.showFriendlyCombat == "TOGGLE_ON") then
+        SetCVar("nameplateShowFriends", 1)
+    elseif(self.db.showFriendlyCombat == "TOGGLE_OFF") then
+        SetCVar("nameplateShowFriends", 0)
+    end
 
-	if(self.db.showEnemyCombat == "TOGGLE_ON") then
-		SetCVar("nameplateShowEnemies", 1)
-	elseif(self.db.showEnemyCombat == "TOGGLE_OFF") then
-		SetCVar("nameplateShowEnemies", 0)
-	end
+    if(self.db.showEnemyCombat == "TOGGLE_ON") then
+        SetCVar("nameplateShowEnemies", 1)
+    elseif(self.db.showEnemyCombat == "TOGGLE_OFF") then
+        SetCVar("nameplateShowEnemies", 0)
+    end
 end
 
 function mod:PLAYER_REGEN_ENABLED()
-	if(self.db.showFriendlyCombat == "TOGGLE_ON") then
-		SetCVar("nameplateShowFriends", 0)
-	elseif(self.db.showFriendlyCombat == "TOGGLE_OFF") then
-		SetCVar("nameplateShowFriends", 1)
-	end
+    if(self.db.showFriendlyCombat == "TOGGLE_ON") then
+        SetCVar("nameplateShowFriends", 0)
+    elseif(self.db.showFriendlyCombat == "TOGGLE_OFF") then
+        SetCVar("nameplateShowFriends", 1)
+    end
 
-	if(self.db.showEnemyCombat == "TOGGLE_ON") then
-		SetCVar("nameplateShowEnemies", 0)
-	elseif(self.db.showEnemyCombat == "TOGGLE_OFF") then
-		SetCVar("nameplateShowEnemies", 1)
-	end
+    if(self.db.showEnemyCombat == "TOGGLE_ON") then
+        SetCVar("nameplateShowEnemies", 0)
+    elseif(self.db.showEnemyCombat == "TOGGLE_OFF") then
+        SetCVar("nameplateShowEnemies", 1)
+    end
 end
 
 function mod:Initialize()
@@ -611,8 +615,8 @@ function mod:Initialize()
     self:RegisterEvent("NAME_PLATE_CREATED");
     self:RegisterEvent("NAME_PLATE_UNIT_ADDED");
     self:RegisterEvent("NAME_PLATE_UNIT_REMOVED");
-	self:RegisterEvent("PLAYER_REGEN_ENABLED");
-	self:RegisterEvent("PLAYER_REGEN_DISABLED");
+    self:RegisterEvent("PLAYER_REGEN_ENABLED");
+    self:RegisterEvent("PLAYER_REGEN_DISABLED");
     self:RegisterEvent("DISPLAY_SIZE_CHANGED");
     self:RegisterEvent("UNIT_ENTERED_VEHICLE", "UpdateVehicleStatus")
     self:RegisterEvent("UNIT_EXITED_VEHICLE", "UpdateVehicleStatus")

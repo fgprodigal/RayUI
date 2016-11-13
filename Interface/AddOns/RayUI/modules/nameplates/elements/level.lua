@@ -7,7 +7,7 @@ local LSM = LibStub("LibSharedMedia-3.0")
 local strfind = string.find
 
 --WoW API / Variables
-local GetQuestDifficultyColor = GetQuestDifficultyColor
+local GetCreatureDifficultyColor = GetCreatureDifficultyColor
 local UnitLevel = UnitLevel
 local UnitClassification = UnitClassification
 
@@ -21,7 +21,7 @@ function mod:UpdateElement_Level(frame)
         level = '??'
         r, g, b = 0.9, 0, 0
     else
-        local color = GetQuestDifficultyColor(level)
+        local color = GetCreatureDifficultyColor(level)
         if strfind(c, "rare") then level = level .. "r" end
         if strfind(c, "elite") then level = level .. "+" end
         r, g, b = color.r, color.g, color.b

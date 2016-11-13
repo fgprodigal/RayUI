@@ -14,7 +14,7 @@ local BUFF_STACKS_OVERFLOW = BUFF_STACKS_OVERFLOW
 
 local auraCache = {}
 
-function mod:SetAura(aura, index, name, _, icon, count, _, duration, expirationTime)
+function mod:SetAura(aura, index, name, icon, count, duration, expirationTime)
     aura.icon:SetTexture(icon);
     aura.name = name
     if ( count > 1 ) then
@@ -53,91 +53,52 @@ local durationOverride = {
 function mod:UpdateElement_Auras(frame)
     local hasBuffs = false
     local hasDebuffs = false
+    local auraFrame
+    local name, icon, count, duration, expirationTime, unitCaster, spellId, isBossAura, _
 
     --Debuffs
-    local index = 1;
-    local frameNum = 1;
-    local filter = nil;
-    local maxDebuffs = #frame.Debuffs.icons;
+    local index = 1
+    local frameNum = 1
+    local maxAuras = #frame.Debuffs.icons
     --Show both Boss buffs & debuffs in the debuff location
     --First, we go through all the debuffs looking for any boss flagged ones.
 
     self:HideAuraIcons(frame.Debuffs)
     if mod.db.showauras then
-        frame.Debuffs.shownIDs = {}
-        while ( frameNum <= maxDebuffs ) do
-            local name, _, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId, _, isBossAura = UnitDebuff(frame.displayedUnit, index, filter);
+        while ( frameNum <= maxAuras ) do
+            name, _, icon, count, _, duration, expirationTime, unitCaster, _, _, spellId, _, isBossAura = UnitDebuff(frame.displayedUnit, index)
             if ( name ) then
-                if ( isBossAura ) then
-                    local debuffFrame = frame.Debuffs.icons[frameNum];
-                    mod:SetAura(debuffFrame, index, name, filter, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, spellId, isBossAura)
-                    frameNum = frameNum + 1;
-                    frame.Debuffs.shownIDs[spellId] = true
+                if isBossAura or (unitCaster == mod.playerUnitToken and (duration > 0 or durationOverride[spellId]) and duration <= mod.db.maxDuration ) then
+                    auraFrame = frame.Debuffs.icons[frameNum]
+                    mod:SetAura(auraFrame, index, name, icon, count, duration, expirationTime)
+                    frameNum = frameNum + 1
                     hasDebuffs = true
                 end
             else
-                break;
+                break
             end
-            index = index + 1;
-        end
-
-        index = 1
-        --Now look for personal debuffs
-        while ( frameNum <= maxDebuffs ) do
-            local name, _, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId, _, isBossAura = UnitDebuff(frame.displayedUnit, index, filter);
-            if ( name ) then
-                if (unitCaster == mod.playerUnitToken and not frame.Debuffs.shownIDs[spellId] and (duration > 0 or (duration == 0 and durationOverride[spellId])) and duration <= mod.db.maxDuration) then
-                    local debuffFrame = frame.Debuffs.icons[frameNum];
-                    mod:SetAura(debuffFrame, index, name, filter, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, spellId, isBossAura)
-                    frameNum = frameNum + 1;
-                    frame.Debuffs.shownIDs[spellId] = true
-                    hasDebuffs = true
-                end
-            else
-                break;
-            end
-            index = index + 1;
+            index = index + 1
         end
     end
 
     --Buffs
-    index = 1
-    local maxBuffs = #frame.Buffs.icons
-    frameNum = 1
-    self:HideAuraIcons(frame.Buffs)
-    frame.Buffs.shownIDs = {}
-    --Now look for boss buffs
-    if mod.db.showauras then
-        while ( frameNum <= maxBuffs ) do
-            local name, _, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId, _, isBossAura = UnitBuff(frame.displayedUnit, index, filter);
-            if ( name ) then
-                if ( isBossAura ) then
-                    local buffFrame = frame.Buffs.icons[frameNum];
-                    mod:SetAura(buffFrame, index, name, filter, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, spellId, isBossAura)
-                    frameNum = frameNum + 1;
-                    frame.Buffs.shownIDs[spellId] = true
-                    hasBuffs = true
-                end
-            else
-                break;
-            end
-            index = index + 1;
-        end
+	index = 1
+	frameNum = 1
+	maxAuras = #frame.Buffs.icons
 
-        index = 1
-        --Now look the rest of buffs
-        while ( frameNum <= maxBuffs ) do
-            local name, _, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId, _, isBossAura = UnitBuff(frame.displayedUnit, index, filter);
+    self:HideAuraIcons(frame.Buffs)
+    if mod.db.showauras then
+        while ( frameNum <= maxAuras ) do
+            name, _, icon, count, _, duration, expirationTime, unitCaster, _, _, spellId, _, isBossAura = UnitBuff(frame.displayedUnit, index)
             if ( name ) then
-                if ( unitCaster == mod.playerUnitToken and not frame.Buffs.shownIDs[spellId] and (duration > 0 or (duration == 0 and durationOverride[spellId])) and duration <= mod.db.maxDuration ) then
-                    local buffFrame = frame.Buffs.icons[frameNum];
-                    mod:SetAura(buffFrame, index, name, filter, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, spellId, isBossAura)
-                    frameNum = frameNum + 1;
-                    frame.Buffs.shownIDs[spellId] = true
-                    hasBuffs = true
+                if isBossAura or (unitCaster == mod.playerUnitToken and (duration > 0 or durationOverride[spellId]) and duration <= mod.db.maxDuration ) then
+                    auraFrame = frame.Buffs.icons[frameNum];
+                    mod:SetAura(auraFrame, index, name, icon, count, duration, expirationTime)
+                    frameNum = frameNum + 1
+                    hasDebuffs = true
                 end
             else
-                break;
+                break
             end
             index = index + 1;
         end
