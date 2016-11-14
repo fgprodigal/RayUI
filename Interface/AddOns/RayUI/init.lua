@@ -87,15 +87,14 @@ function AddOn:OnInitialize()
     self.global = self.data.global
 
     self:UIScale()
+    self:UpdateMedia()
 
-    -- self:RegisterEvent("PLAYER_LOGIN", "Initialize")
-	-- args: module, showall, delay, minCalls
-	-- Example1: /cpuusage all
-	-- Example2: /cpuusage Bags true
-	-- Example3: /cpuusage UnitFrames nil 50 25
-	-- Note: showall, delay, and minCalls will default if not set
-	-- arg1 can be "all" this will scan all registered modules!
-    self:RegisterChatCommand("gm", ToggleHelpFrame)
+    for k, v in self:IterateModules() do
+        v.db = AddOn.db[k]
+    end
+
+    self:InitializeModules()
+    self.initialized = true
 end
 
 local f=CreateFrame("Frame")
