@@ -391,10 +391,10 @@ end)
 		for i=1, NUM_BATTLE_PET_ABILITIES do
 			local b = bf.abilityButtons[i]
 			SkinPetButton(b)
-			b:SetParent(bar)
+			-- b:SetParent(bar)
 			b:ClearAllPoints()
 			if i == 1 then
-				b:SetPoint("BOTTOMLEFT", 10, 10)
+				b:SetPoint("BOTTOMLEFT", bar, "BOTTOMLEFT", 10, 10)
 			else
 				local previous = bf.abilityButtons[i-1]
 				b:SetPoint("LEFT", previous, "RIGHT", 10, 0)

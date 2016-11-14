@@ -68,6 +68,7 @@ SlashCmdList["RELOAD"] = function() ReloadUI() end
 SLASH_RELOAD1 = "/rl"
 
 R["RegisteredModules"] = {}
+R.FrameLocks = {}
 R.resolution = ({GetScreenResolutions()})[GetCurrentResolution()] or GetCVar("gxWindowedResolution")
 R.screenheight = tonumber(string.match(R.resolution, "%d+x(%d+)"))
 R.screenwidth = tonumber(string.match(R.resolution, "(%d+)x+%d"))
@@ -372,7 +373,15 @@ function R:PLAYER_ENTERING_WORLD()
 end
 
 function R:Initialize()
+    for k, v in self:IterateModules() do
+        v.db = AddOn.db[k]
+    end
+
+    self:InitializeModules()
+    self.initialized = true
+
     self:LoadMovers()
+    self:UpdateMedia()
 
     if not self.db.layoutchosen then
         self:ChooseLayout()
@@ -381,7 +390,16 @@ function R:Initialize()
         C_Timer.After(6, ShowSplashScreen)
     end
 
+    self:RegisterEvent("PLAYER_REGEN_DISABLED")
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
+    self:RegisterEvent("PET_BATTLE_CLOSE", "AddNonPetBattleFrames")
+	self:RegisterEvent("PET_BATTLE_OPENING_START", "RemoveNonPetBattleFrames")
+
+    self:RegisterChatCommand("RayUI", "OpenConfig")
+    self:RegisterChatCommand("RC", "OpenConfig")
+    self:RegisterChatCommand("cpuimpact", "GetCPUImpact")
+	self:RegisterChatCommand("cpuusage", "GetTopCPUFunc")
+
     self:Delay(5, function() collectgarbage("collect") end)
     self:LockCVar("overrideArchive", 0)
 end
@@ -931,7 +949,31 @@ function R:CopyTable(currentTable, defaultTable)
     return currentTable
 end
 
-function R:ADDON_LOADED(event, addon)
-    self:UnregisterEvent("ADDON_LOADED")
+function R:RemoveNonPetBattleFrames()
+	if InCombatLockdown() then return end
+	for object, _ in pairs(R.FrameLocks) do
+		local obj = _G[object] or object
+		obj:SetParent(R.HiddenFrame)
+	end
+
+	self:RegisterEvent("PLAYER_REGEN_DISABLED", "AddNonPetBattleFrames")
 end
-R:RegisterEvent("ADDON_LOADED")
+
+function R:AddNonPetBattleFrames()
+	if InCombatLockdown() then return end
+	for object, data in pairs(R.FrameLocks) do
+		local obj = _G[object] or object
+		local parent, strata
+		if type(data) == "table" then
+			parent, strata = data.parent, data.strata
+		elseif data == true then
+			parent = UIParent
+		end
+		obj:SetParent(parent)
+		if strata then
+			obj:SetFrameStrata(strata)
+		end
+	end
+
+	self:UnregisterEvent("PLAYER_REGEN_DISABLED")
+end

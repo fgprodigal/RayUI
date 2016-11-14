@@ -100,6 +100,8 @@ function mod:CreateBar(name, anchorFrame, height)
     bar:SetScript("OnShow", Bar_OnShow)
     bar:SetScript("OnHide", Bar_OnHide)
     Bar_OnShow(bar)
+
+    R.FrameLocks[name] = true
     return bar
 end
 

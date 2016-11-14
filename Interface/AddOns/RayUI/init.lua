@@ -87,20 +87,8 @@ function AddOn:OnInitialize()
     self.global = self.data.global
 
     self:UIScale()
-    self:UpdateMedia()
 
-    for k, v in self:IterateModules() do
-        v.db = AddOn.db[k]
-    end
-
-    self:InitializeModules()
-    self.initialized = true
-    self:RegisterEvent("PLAYER_REGEN_DISABLED")
-    self:RegisterEvent("PLAYER_LOGIN", "Initialize")
-    self:RegisterChatCommand("RayUI", "OpenConfig")
-    self:RegisterChatCommand("RC", "OpenConfig")
-    self:RegisterChatCommand("cpuimpact", "GetCPUImpact")
-	self:RegisterChatCommand("cpuusage", "GetTopCPUFunc")
+    -- self:RegisterEvent("PLAYER_LOGIN", "Initialize")
 	-- args: module, showall, delay, minCalls
 	-- Example1: /cpuusage all
 	-- Example2: /cpuusage Bags true
@@ -109,6 +97,12 @@ function AddOn:OnInitialize()
 	-- arg1 can be "all" this will scan all registered modules!
     self:RegisterChatCommand("gm", ToggleHelpFrame)
 end
+
+local f=CreateFrame("Frame")
+f:RegisterEvent("PLAYER_LOGIN")
+f:SetScript("OnEvent", function()
+	AddOn:Initialize()
+end)
 
 function AddOn:PLAYER_REGEN_ENABLED()
     AddOn:OpenConfig()
