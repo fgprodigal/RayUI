@@ -99,6 +99,7 @@ end
 
 local function SetButton(button,index,infobarType,info,isInit)
     button:SetAlpha(1)
+    button.interval = info.interval or 1
     button.isBroker = info.isBroker
     button.title = info.title
     button.infobarType = infobarType
@@ -216,9 +217,9 @@ function RayUI_InfoBarButton_OnUpdate(self, elapsed)
     if self.onUpdate then
         self.update = self.update + elapsed
 
-        while self.update > self.interval do
+        if self.update > self.interval then
             self.onUpdate(self)
-            self.update = self.update - self.interval
+            self.update = 0
         end
     end
 end

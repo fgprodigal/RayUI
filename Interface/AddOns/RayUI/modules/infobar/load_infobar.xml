@@ -30,7 +30,8 @@
     <Button name="RayUI_InfoBarButtonTemplate" inherits="RayUI_InfoBarButtonStyleTemplate" alpha="0" virtual="true">
         <Scripts>
             <OnLoad>
-                self:RegisterForClicks("AnyUp") self.update = 0 self.interval = 1
+                self:RegisterForClicks("AnyUp")
+                self.update = 0
             </OnLoad>
             <OnClick function="RayUI_InfoBarButton_OnClick"/>
             <OnEvent function="RayUI_InfoBarButton_OnEvent"/>

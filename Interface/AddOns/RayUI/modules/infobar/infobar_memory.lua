@@ -76,6 +76,7 @@ local function Memory_OnClick(self)
 end
 
 local function Memory_OnUpdate(self)
+    if InCombatLockdown() then return end
     local memory = 0
 
     UpdateAddOnMemoryUsage()
@@ -132,6 +133,7 @@ local function Memory_OnEnter(self)
     end
 
     GameTooltip:Show()
+    self:SetText(GetFormattedMemory(addOnMemory,true))
 end
 
 do -- Initialize
@@ -141,6 +143,7 @@ do -- Initialize
     info.icon = "Interface\\Icons\\inv_gizmo_khoriumpowercore"
     info.clickFunc = Memory_OnClick
     info.onUpdate = Memory_OnUpdate
+    info.interval = 10
     info.tooltipFunc = Memory_OnEnter
 
     IF:RegisterInfoBarType("Memory", info)
