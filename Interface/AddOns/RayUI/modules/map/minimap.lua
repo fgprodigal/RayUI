@@ -53,39 +53,6 @@ local ToggleLFDParentFrame = ToggleLFDParentFrame
 
 MM.modName = L["小地图"]
 
-local function ConvertSecondstoTime(value)
-    local hours, minutes, seconds
-    hours = floor(value / 3600)
-    minutes = floor((value - (hours * 3600)) / 60)
-    seconds = floor(value - ((hours * 3600) + (minutes * 60)))
-
-    if ( hours > 0 ) then
-        return string.format("%d:%02d:%02d", hours, minutes, seconds)
-    else
-        return string.format("%02d:%02d", minutes, seconds)
-    end
-end
-
-local function GameTooltip_AddPVPTimer()
-    local _, _, _, _, WGTime = GetWorldPVPAreaInfo(1)
-    local _, _, _, _, TBTime = GetWorldPVPAreaInfo(2)
-
-    GameTooltip:AddLine(L["PVP信息"], HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b)
-    -- Wintergrasp
-    if ( WGTime and WGTime > 0 ) then
-        GameTooltip:AddDoubleLine(L["下一场冬拥湖:"], string.format("%s", ConvertSecondstoTime(WGTime)), NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b)
-    else
-        GameTooltip:AddLine(L["冬拥湖不可用"], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
-    end
-    -- Tol Barad
-    if ( TBTime and TBTime > 0 ) then
-        GameTooltip:AddDoubleLine(L["下一场托尔巴拉德:"], string.format("%s", ConvertSecondstoTime(TBTime)), NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b)
-    else
-        GameTooltip:AddLine(L["托尔巴拉德不可用"], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
-    end
-    GameTooltip:AddLine(" ")
-end
-
 function MM:TimeManagerClockButton_UpdateTooltip()
     GameTooltip:SetOwner(Minimap, "ANCHOR_BOTTOMRIGHT", 5, 142)
     GameTooltip:ClearLines()
@@ -95,12 +62,10 @@ function MM:TimeManagerClockButton_UpdateTooltip()
             GameTooltip:AddLine(Settings.alarmMessage, HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b, 1)
             GameTooltip:AddLine(" ")
         end
-        GameTooltip_AddPVPTimer()
         GameTooltip:AddLine(TIMEMANAGER_ALARM_TOOLTIP_TURN_OFF)
     else
         GameTime_UpdateTooltip()
         GameTooltip:AddLine(" ")
-        GameTooltip_AddPVPTimer()
         GameTooltip:AddLine(GAMETIME_TOOLTIP_TOGGLE_CLOCK)
     end
     GameTooltip:Show()
@@ -220,6 +185,38 @@ function MM:CheckMail()
     end
 end
 
+function MM:ADDON_LOADED(event, addon)
+    if addon == "Blizzard_TimeManager" then
+        self:UnregisterEvent(event)
+        if ( not BlizzardStopwatchOptions ) then
+            BlizzardStopwatchOptions = {}
+        end
+
+        if ( BlizzardStopwatchOptions.position ) then
+            StopwatchFrame:ClearAllPoints()
+            StopwatchFrame:SetPoint("CENTER", R.UIParent, "BOTTOMLEFT", BlizzardStopwatchOptions.position.x, BlizzardStopwatchOptions.position.y)
+            StopwatchFrame:SetUserPlaced(true)
+        else
+            StopwatchFrame:SetPoint("TOPRIGHT", R.UIParent, "TOPRIGHT", -250, -300)
+        end
+        self:RawHook("TimeManagerClockButton_UpdateTooltip", true)
+
+        local clockFrame, clockTime = TimeManagerClockButton:GetRegions()
+        clockFrame:Hide()
+        clockTime:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
+        clockTime:SetTextColor(1,1,1)
+        TimeManagerClockButton:SetPoint("BOTTOM", Minimap, "BOTTOM", 0, -3)
+        TimeManagerClockButton:SetScript("OnClick", function(_,btn)
+                if btn == "LeftButton" then
+                    ToggleFrame(TimeManagerFrame)
+                end
+                if btn == "RightButton" then
+                    GameTimeFrame:Click()
+                end
+            end)
+    end
+end
+
 function MM:CreateMenu()
     local menuFrame = CreateFrame("Frame", "RayUI_MinimapRightClickMenu", R.UIParent)
     local menuList = {
@@ -288,6 +285,7 @@ function MM:CreateMenu()
         end)
     R:GetModule("Skins"):CreateBD(menuFrame)
     R:GetModule("Skins"):CreateStripesThin(menuFrame)
+    self:RegisterEvent("ADDON_LOADED")
     self:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", "CheckMail")
     self:RegisterEvent("UPDATE_PENDING_MAIL", "CheckMail")
     self:RegisterEvent("PLAYER_ENTERING_WORLD", "CheckMail")
@@ -321,23 +319,9 @@ function MM:Initialize()
     self:SkinMiniMap()
     self:CreateMenu()
     self:ButtonCollector()
-    self:RawHook("TimeManagerClockButton_UpdateTooltip", true)
     Minimap:ClearAllPoints()
     Minimap:Point("TOPLEFT", R.UIParent, "TOPLEFT", 10, -20)
     Minimap:SetFrameLevel(10)
-    local clockFrame, clockTime = TimeManagerClockButton:GetRegions()
-    clockFrame:Hide()
-    clockTime:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
-    clockTime:SetTextColor(1,1,1)
-    TimeManagerClockButton:SetPoint("BOTTOM", Minimap, "BOTTOM", 0, -3)
-    TimeManagerClockButton:SetScript("OnClick", function(_,btn)
-            if btn == "LeftButton" then
-                ToggleFrame(TimeManagerFrame)
-            end
-            if btn == "RightButton" then
-                GameTimeFrame:Click()
-            end
-        end)
     Minimap:EnableMouseWheel(true)
     Minimap:SetScript("OnMouseWheel", function(_, zoom)
             if zoom > 0 then
