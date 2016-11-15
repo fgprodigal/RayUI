@@ -557,8 +557,6 @@ end
 function B.Fill(sourceBags, targetBags, reverse, canMove)
 	if not canMove then canMove = DefaultCanMove end
 
-	local ignoreItems = B.db.ignoreItems
-	ignoreItems = ignoreItems:gsub(',%s', ',') --remove spaces that follow a comma
 	for _, bag, slot in B.IterateBags(targetBags, reverse, "deposit") do
 		local bagSlot = B:Encode_BagSlot(bag, slot)
 		if not bagIDs[bagSlot] then
