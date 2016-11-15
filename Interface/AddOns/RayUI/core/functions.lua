@@ -373,7 +373,6 @@ function R:PLAYER_ENTERING_WORLD()
 end
 
 function R:Initialize()
-    self:InitializeModules()
     self:LoadMovers()
 
     if not self.db.layoutchosen then

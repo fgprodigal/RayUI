@@ -92,6 +92,7 @@ function AddOn:OnInitialize()
     for k, v in self:IterateModules() do
         v.db = AddOn.db[k]
     end
+    self:InitializeModules()
 end
 
 local f=CreateFrame("Frame")
