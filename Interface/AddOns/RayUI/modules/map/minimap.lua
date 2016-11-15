@@ -52,6 +52,48 @@ local ToggleLFDParentFrame = ToggleLFDParentFrame
 -- GLOBALS: GuildFrame_LoadUI, EncounterJournal_LoadUI, TalentFrame_LoadUI, UIParent, MinimapButtonCollectFrame
 
 MM.modName = L["小地图"]
+local menuFrame = CreateFrame("Frame", "RayUI_MinimapRightClickMenu", R.UIParent)
+local menuList = {
+    {text = CHARACTER_BUTTON,
+        func = function() ToggleCharacter("PaperDollFrame") end},
+    {text = SPELLBOOK_ABILITIES_BUTTON,
+        func = function() if not SpellBookFrame:IsShown() then ShowUIPanel(SpellBookFrame) else HideUIPanel(SpellBookFrame) end end},
+    {text = TALENTS_BUTTON,
+        func = function()
+            if not PlayerTalentFrame then
+                TalentFrame_LoadUI()
+            end
+
+            if not PlayerTalentFrame:IsShown() then
+                ShowUIPanel(PlayerTalentFrame)
+            else
+                HideUIPanel(PlayerTalentFrame)
+            end
+        end
+    },
+    {text = ACHIEVEMENT_BUTTON,
+        func = function() ToggleAchievementFrame() end},
+    {text = SOCIAL_BUTTON,
+        func = function() ToggleFriendsFrame() end},
+    {text = ACHIEVEMENTS_GUILD_TAB,
+        func = function() ToggleGuildFrame() end},
+    {text = ENCOUNTER_JOURNAL,
+        func = function() if not IsAddOnLoaded("Blizzard_EncounterJournal") then EncounterJournal_LoadUI() end ToggleFrame(EncounterJournal) end},
+    {text = COLLECTIONS,
+        func = function() ToggleCollectionsJournal() end},
+    {text = LFG_TITLE,
+        func = function() ToggleLFDParentFrame() end},
+    {text = BLIZZARD_STORE,
+        func = function() StoreMicroButton:Click() end},
+    {text = HELP_BUTTON,
+        func = function() ToggleHelpFrame() end},
+    {text = GARRISON_LANDING_PAGE_TITLE,
+        func = function() GarrisonLandingPageMinimapButton_OnClick() end},
+    {text = CALENDAR,
+        func = function() GameTimeFrame:Click() end},
+    {text = LOOT_ROLLS,
+        func = function() ToggleFrame(LootHistoryFrame) end},
+}
 
 function MM:TimeManagerClockButton_UpdateTooltip()
     GameTooltip:SetOwner(Minimap, "ANCHOR_BOTTOMRIGHT", 5, 142)
@@ -102,6 +144,14 @@ function MM:SkinMiniMap()
     Minimap:Size(175, 175)
     Minimap:CreateShadow("Background")
     Minimap:SetPlayerTexture("Interface\\AddOns\\RayUI\\media\\MinimapArrow")
+    Minimap.shadow:SetBackdrop( {
+        edgeFile = R["media"].glow,
+        bgFile = R["media"].blank,
+        edgeSize = R:Scale(4),
+        tile = false,
+        tileSize = 0,
+        insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
+    })
     MinimapCluster:EnableMouse(false)
     MiniMapTrackingBackground:SetAlpha(0)
     MiniMapTrackingButton:SetAlpha(0)
@@ -217,88 +267,34 @@ function MM:ADDON_LOADED(event, addon)
     end
 end
 
-function MM:CreateMenu()
-    local menuFrame = CreateFrame("Frame", "RayUI_MinimapRightClickMenu", R.UIParent)
-    local menuList = {
-        {text = CHARACTER_BUTTON,
-            func = function() ToggleCharacter("PaperDollFrame") end},
-        {text = SPELLBOOK_ABILITIES_BUTTON,
-            func = function() if not SpellBookFrame:IsShown() then ShowUIPanel(SpellBookFrame) else HideUIPanel(SpellBookFrame) end end},
-        {text = TALENTS_BUTTON,
-            func = function()
-                if not PlayerTalentFrame then
-                    TalentFrame_LoadUI()
-                end
+function MM:Minimap_OnMouseUp(btn)
+	local position = self:GetPoint()
+    if( btn == "RightButton" and not IsShiftKeyDown() ) then
+        ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, "cursor", 0, 0)
+    elseif(btn == "MiddleButton" or ( btn== "RightButton" and IsShiftKeyDown())) then
+        if position:match("LEFT") then
+            R:DropDown(menuList, menuFrame)
+        else
+            R:DropDown(menuList, menuFrame, -160, 0)
+        end
+    else
+        local x, y = GetCursorPosition()
+        x = x / Minimap:GetEffectiveScale()
+        y = y / Minimap:GetEffectiveScale()
+        local cx, cy = Minimap:GetCenter()
+        x = x - cx
+        y = y - cy
+        if ( sqrt(x * x + y * y) < (Minimap:GetWidth() / 2) ) then
+            Minimap:PingLocation(x, y)
+        end
+        Minimap_SetPing(x, y, 1)
+    end
+end
 
-                if not PlayerTalentFrame:IsShown() then
-                    ShowUIPanel(PlayerTalentFrame)
-                else
-                    HideUIPanel(PlayerTalentFrame)
-                end
-            end
-        },
-        {text = ACHIEVEMENT_BUTTON,
-            func = function() ToggleAchievementFrame() end},
-        {text = SOCIAL_BUTTON,
-            func = function() ToggleFriendsFrame() end},
-        {text = ACHIEVEMENTS_GUILD_TAB,
-            func = function() ToggleGuildFrame() end},
-        {text = ENCOUNTER_JOURNAL,
-            func = function() if not IsAddOnLoaded("Blizzard_EncounterJournal") then EncounterJournal_LoadUI() end ToggleFrame(EncounterJournal) end},
-        {text = COLLECTIONS,
-            func = function() ToggleCollectionsJournal() end},
-        {text = LFG_TITLE,
-            func = function() ToggleLFDParentFrame() end},
-        {text = BLIZZARD_STORE,
-            func = function() StoreMicroButton:Click() end},
-        {text = HELP_BUTTON,
-            func = function() ToggleHelpFrame() end},
-        {text = GARRISON_LANDING_PAGE_TITLE,
-            func = function() GarrisonLandingPageMinimapButton_OnClick() end},
-        {text = CALENDAR,
-            func = function() GameTimeFrame:Click() end},
-        {text = LOOT_ROLLS,
-            func = function() ToggleFrame(LootHistoryFrame) end},
-    }
-    Minimap:SetScript("OnMouseUp", function(self, btn)
-            local position = self:GetPoint()
-            if( btn == "RightButton" and not IsShiftKeyDown() ) then
-                ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, "cursor", 0, 0)
-            elseif(btn == "MiddleButton" or ( btn== "RightButton" and IsShiftKeyDown())) then
-                if position:match("LEFT") then
-                    R:DropDown(menuList, menuFrame)
-                else
-                    R:DropDown(menuList, menuFrame, -160, 0)
-                end
-            else
-                local x, y = GetCursorPosition()
-                x = x / Minimap:GetEffectiveScale()
-                y = y / Minimap:GetEffectiveScale()
-                local cx, cy = Minimap:GetCenter()
-                x = x - cx
-                y = y - cy
-                if ( sqrt(x * x + y * y) < (Minimap:GetWidth() / 2) ) then
-                    Minimap:PingLocation(x, y)
-                end
-                Minimap_SetPing(x, y, 1)
-            end
-        end)
+function MM:CreateMenu()
+    Minimap:SetScript("OnMouseUp", MM.Minimap_OnMouseUp)
     R:GetModule("Skins"):CreateBD(menuFrame)
     R:GetModule("Skins"):CreateStripesThin(menuFrame)
-    self:RegisterEvent("ADDON_LOADED")
-    self:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", "CheckMail")
-    self:RegisterEvent("UPDATE_PENDING_MAIL", "CheckMail")
-    self:RegisterEvent("PLAYER_ENTERING_WORLD", "CheckMail")
-    self:HookScript(MiniMapMailFrame, "OnHide", "CheckMail")
-    self:HookScript(MiniMapMailFrame, "OnShow", "CheckMail")
-    Minimap.shadow:SetBackdrop( {
-            edgeFile = R["media"].glow,
-            bgFile = R["media"].blank,
-            edgeSize = R:Scale(4),
-            tile = false,
-            tileSize = 0,
-            insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
-        })
 end
 
 function MM:Info()
@@ -315,21 +311,32 @@ local function MinimapPostDrag(self, screenQuadrant)
     end
 end
 
+function MM:Minimap_OnMouseWheel(d)
+    if d > 0 then
+		MinimapZoomIn:Click()
+	elseif d < 0 then
+		MinimapZoomOut:Click()
+	end
+end
+
 function MM:Initialize()
     self:SkinMiniMap()
     self:CreateMenu()
     self:ButtonCollector()
+
     Minimap:ClearAllPoints()
     Minimap:Point("TOPLEFT", R.UIParent, "TOPLEFT", 10, -20)
     Minimap:SetFrameLevel(10)
     Minimap:EnableMouseWheel(true)
-    Minimap:SetScript("OnMouseWheel", function(_, zoom)
-            if zoom > 0 then
-                Minimap_ZoomIn()
-            else
-                Minimap_ZoomOut()
-            end
-        end)
+    Minimap:SetScript("OnMouseWheel", MM.Minimap_OnMouseWheel)
+
+    self:RegisterEvent("ADDON_LOADED")
+    self:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", "CheckMail")
+    self:RegisterEvent("UPDATE_PENDING_MAIL", "CheckMail")
+    self:RegisterEvent("PLAYER_ENTERING_WORLD", "CheckMail")
+    self:HookScript(MiniMapMailFrame, "OnHide", "CheckMail")
+    self:HookScript(MiniMapMailFrame, "OnShow", "CheckMail")
+
     R:CreateMover(Minimap, "MinimapMover", L["小地图锚点"], true, MinimapPostDrag)
 end
 
