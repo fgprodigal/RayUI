@@ -101,7 +101,7 @@ function mod:CreateBar(name, anchorFrame, height)
     bar:SetScript("OnHide", Bar_OnHide)
     Bar_OnShow(bar)
 
-    R.FrameLocks[name] = true
+    R.FrameLocks[name] = { parent = R.UIParent, strata = bar:GetFrameStrata(), level = 3 }
     return bar
 end
 

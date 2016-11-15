@@ -373,6 +373,7 @@ function R:PLAYER_ENTERING_WORLD()
 end
 
 function R:Initialize()
+    self:InitializeModules()
     self:LoadMovers()
 
     if not self.db.layoutchosen then
@@ -401,6 +402,7 @@ function R:Initialize()
 
     self:Delay(5, function() collectgarbage("collect") end)
     self:LockCVar("overrideArchive", 0)
+    self.initialized = true
 end
 
 function R:GetPlayerRole()
@@ -962,15 +964,24 @@ function R:AddNonPetBattleFrames()
 	if InCombatLockdown() then return end
 	for object, data in pairs(R.FrameLocks) do
 		local obj = _G[object] or object
-		local parent, strata
+		local parent, strata, level
 		if type(data) == "table" then
-			parent, strata = data.parent, data.strata
+			parent, strata, level = data.parent, data.strata, data.level
 		elseif data == true then
-			parent = UIParent
+			parent = R.UIParent
 		end
 		obj:SetParent(parent)
 		if strata then
 			obj:SetFrameStrata(strata)
+		end
+        if level then
+			obj:SetFrameLevel(level)
+            if obj.border then
+                obj.border:SetFrameLevel(level-1)
+            end
+            if obj.shadow then
+                obj.shadow:SetFrameLevel(level-2)
+            end
 		end
 	end
 
