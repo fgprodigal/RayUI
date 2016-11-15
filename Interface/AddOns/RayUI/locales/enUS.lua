@@ -158,12 +158,6 @@ do
 
     L["URL Ctrl+C复制"] = "Ctrl+C to copy the URL"
 
-    L["PVP信息"] = "PVP info"
-    L["下一场冬拥湖:"] = "Next Wintergrasp"
-    L["冬拥湖不可用"] = "Wintergrasp Unavailable"
-    L["下一场托尔巴拉德:"] = "Next Tol Barad"
-    L["托尔巴拉德不可用"] = "Tol Barad Unavailable"
-
     L["发布者"] = "Publisher"
 
     L["点击进入RayUI控制台。\n请仔细研究每一项设置的作用。"] = "Welcome to RayUI's console.\nYou can custom RayUI here."
