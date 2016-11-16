@@ -155,7 +155,6 @@ function MM:SkinMiniMap()
     MinimapCluster:EnableMouse(false)
     MiniMapTrackingBackground:SetAlpha(0)
     MiniMapTrackingButton:SetAlpha(0)
-    MiniMapTracking:Hide()
     MiniMapInstanceDifficulty:ClearAllPoints()
     MiniMapInstanceDifficulty:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 2, 2)
     MiniMapInstanceDifficulty:SetScale(0.75)
@@ -175,10 +174,12 @@ function MM:SkinMiniMap()
     GameTimeCalendarInvitesTexture:ClearAllPoints()
     GameTimeCalendarInvitesTexture:SetParent(Minimap)
     GameTimeCalendarInvitesTexture:SetPoint("TOPRIGHT")
+    if MiniMapTracking then
+        MiniMapTracking:ClearAllPoints()
+        MiniMapTracking:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 0, 0)
+    end
     if FeedbackUIButton then
-        FeedbackUIButton:ClearAllPoints()
-        FeedbackUIButton:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 6, -6)
-        FeedbackUIButton:SetScale(0.8)
+		FeedbackUIButton:Kill()
     end
     if StreamingIcon then
         StreamingIcon:ClearAllPoints()
@@ -269,9 +270,7 @@ end
 
 function MM:Minimap_OnMouseUp(btn)
 	local position = self:GetPoint()
-    if( btn == "RightButton" and not IsShiftKeyDown() ) then
-        ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, "cursor", 0, 0)
-    elseif(btn == "MiddleButton" or ( btn== "RightButton" and IsShiftKeyDown())) then
+    if btn == "MiddleButton" or btn== "RightButton" then
         if position:match("LEFT") then
             R:DropDown(menuList, menuFrame)
         else

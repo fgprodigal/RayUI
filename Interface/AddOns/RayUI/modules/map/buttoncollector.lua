@@ -251,10 +251,16 @@ function MM:PositionButtonCollector(self, screenQuadrant)
             buttons[i].hooked = true
         end
     end
+    local line = math.ceil(Minimap:GetWidth() / 20)
+    local rows = math.floor(MM.positioned / line) + 1
+    MBCF:SetWidth(rows*20 + (rows-1)*3)
+    GarrisonLandingPageMinimapButton:ClearAllPoints()
     if strfind(screenQuadrant, "RIGHT") then
         MBCF:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -5, 0)
+        GarrisonLandingPageMinimapButton:SetPoint("TOPRIGHT", MBCF, "TOPLEFT", -5, 10)
     else
         MBCF:SetPoint("TOPLEFT", Minimap, "TOPRIGHT", 5, 0)
+        GarrisonLandingPageMinimapButton:SetPoint("TOPLEFT", MBCF, "TOPRIGHT", 5, 10)
     end
 end
 
