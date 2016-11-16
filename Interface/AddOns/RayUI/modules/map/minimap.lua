@@ -30,7 +30,6 @@ local ToggleCollectionsJournal = ToggleCollectionsJournal
 local ToggleHelpFrame = ToggleHelpFrame
 local GarrisonLandingPageMinimapButton_OnClick = GarrisonLandingPageMinimapButton_OnClick
 local IsShiftKeyDown = IsShiftKeyDown
-local ToggleDropDownMenu = ToggleDropDownMenu
 local GetCursorPosition = GetCursorPosition
 local Minimap_SetPing = Minimap_SetPing
 local Minimap_ZoomIn = Minimap_ZoomIn
