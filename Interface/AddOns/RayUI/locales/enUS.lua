@@ -72,6 +72,7 @@ do
     L["清除"] = "Clear"
     L["自动隐藏信息条"] = "Auto hide infobar"
     L["没有公会"] = "No guild"
+    L["在线人数过多, 点击信息条查看"] = "Too many guild member online, click infobar to view"
     L["免伤分析"] = "Avoidance Breakdown"
     L["免伤"] = "AVD"
     L["未命中"] = "Unhittable"
@@ -157,6 +158,12 @@ do
     L["非伤害性毒药"] = "Non-Harmulness Poison"
 
     L["URL Ctrl+C复制"] = "Ctrl+C to copy the URL"
+
+    L["PVP信息"] = "PVP info"
+    L["下一场冬拥湖:"] = "Next Wintergrasp"
+    L["冬拥湖不可用"] = "Wintergrasp Unavailable"
+    L["下一场托尔巴拉德:"] = "Next Tol Barad"
+    L["托尔巴拉德不可用"] = "Tol Barad Unavailable"
 
     L["发布者"] = "Publisher"
 

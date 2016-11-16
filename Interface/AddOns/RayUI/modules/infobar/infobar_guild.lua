@@ -43,7 +43,6 @@ local UnitLevel = UnitLevel
 -- GLOBALS: RayUI_InfobarTooltipFont, ChatFrame_SendTell, GREEN_FONT_COLOR_CODE, GuildRoster_ShowMemberDropDown
 
 local GuildMemeberData = {}
-local GuildOnline = 0
 local PlayerStatusValToStr = {
     [1] = CHAT_FLAG_AFK,
     [2] = CHAT_FLAG_DND,
@@ -166,25 +165,30 @@ local function RenderTooltip(anchorFrame)
     Tooltip:SetLineTextColor(headerLine, 0.9, 0.8, 0.7)
     Tooltip:AddSeparator(1, 1, 1, 1, 0.8)
 
-    for _, val in ipairs(GuildMemeberData) do
-        local line = Tooltip:AddLine()
-        local name, level, zone, rank, label, officerlabel, oriname, class, mobile = unpack(val)
-        Tooltip:SetCell(line, 1, level, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
-        Tooltip:SetCell(line, 2, name, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
-        Tooltip:SetCell(line, 3, zone, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
-        Tooltip:SetCell(line, 4, rank, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
-        Tooltip:SetCell(line, 5, label, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
-        if CanViewOfficerNote() then
-            Tooltip:SetCell(line, 6, officerlabel, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+    if #GuildMemeberData <= 50 then
+        for _, val in ipairs(GuildMemeberData) do
+            local line = Tooltip:AddLine()
+            local name, level, zone, rank, label, officerlabel, oriname, class, mobile = unpack(val)
+            Tooltip:SetCell(line, 1, level, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+            Tooltip:SetCell(line, 2, name, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+            Tooltip:SetCell(line, 3, zone, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+            Tooltip:SetCell(line, 4, rank, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+            Tooltip:SetCell(line, 5, label, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+            if CanViewOfficerNote() then
+                Tooltip:SetCell(line, 6, officerlabel, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+            end
+            local toonName, realmName = ("-"):split(oriname)
+            local playerEntry = {
+                Realm = realmName,
+                ToonName = toonName,
+                FullToonName = oriname,
+                IsMobile = mobile,
+            }
+            Tooltip:SetLineScript(line, "OnMouseUp", GuildMember_OnMouseUp, playerEntry)
         end
-        local toonName, realmName = ("-"):split(oriname)
-        local playerEntry = {
-            Realm = realmName,
-            ToonName = toonName,
-            FullToonName = oriname,
-            IsMobile = mobile,
-        }
-        Tooltip:SetLineScript(line, "OnMouseUp", GuildMember_OnMouseUp, playerEntry)
+    else
+        Tooltip:SetCell(Tooltip:AddLine(), 1, GREEN_FONT_COLOR_CODE..L["在线人数过多, 点击信息条查看"], RayUI_InfobarTooltipFont, "CENTER", NUM_TOOLTIP_COLUMNS)
+        Tooltip:AddLine("")
     end
 
     Tooltip:Show()
@@ -224,7 +228,7 @@ local function GenerateGuildData()
         rank = ("|cff%02x%02x%02x%s|r"):format(rankr * 255, rankg * 255, rankb * 255, rank)
 
         -- Add to list
-        if online then
+        if online or mobile then
             GuildMemeberData[guildonline + 1] = { cname, ColorPlayerLevel(lvl), zone, rank, note, CanViewOfficerNote() and offnote or "", name, class, mobile }
             guildonline = guildonline + 1
         end
@@ -237,9 +241,6 @@ local function GenerateGuildData()
         GuildMemberIndexByName[name] = i
 		GuildMemberIndexByName[toonName] = i
     end
-
-    -- OnEnter
-    GuildOnline = guildonline
 end
 
 local eventHandlers = {

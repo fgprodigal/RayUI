@@ -72,6 +72,7 @@ do
     L["清除"] = true
     L["自动隐藏信息条"] = true
     L["没有公会"] = true
+    L["在线人数过多, 点击信息条查看"] = true
     L["免伤分析"] = true
     L["免伤"] = true
     L["未命中"] = true
@@ -157,6 +158,12 @@ do
     L["非伤害性毒药"] = true
 
     L["URL Ctrl+C复制"] = true
+
+    L["PVP信息"] = true
+    L["下一场冬拥湖:"] = true
+    L["冬拥湖不可用"] = true
+    L["下一场托尔巴拉德:"] = true
+    L["托尔巴拉德不可用"] = true
 
     L["发布者"] = true
 
