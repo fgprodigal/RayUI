@@ -105,17 +105,11 @@ local function CreateDivider(self,line)
     self.divider[line] = CreateFrame("Frame",nil,self)
 
     local divider = self.divider[line]
-    divider:Height(2)
+    divider:Height(1)
     divider.tex = divider:CreateTexture(nil,"BACKGROUND")
-    divider.tex:SetColorTexture(0,0,0)
+    divider.tex:SetColorTexture(1,1,1,0.35)
     divider.tex:Height(1)
-    divider.tex:SetPoint("TOPLEFT")
-    divider.tex:SetPoint("TOPRIGHT")
-    divider.tex2 = divider:CreateTexture(nil,"BACKGROUND")
-    divider.tex2:SetColorTexture(1,1,1,0.2)
-    divider.tex2:Height(1)
-    divider.tex2:SetPoint("BOTTOMLEFT")
-    divider.tex2:SetPoint("BOTTOMRIGHT")
+    divider.tex:SetAllPoints()
 
     return divider
 end
