@@ -126,19 +126,18 @@ local function LoadSkin()
 
     hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "AddProgressBar", function(self, block, line)
             local progressBar = line.ProgressBar
+            local bar = progressBar.Bar
+            local label = bar.Label
+            local icon = bar.Icon
+
+            bar.BarFrame:Hide()
+            bar.BarBG:Hide()
+            bar.IconBG:Hide()
+            icon:SetMask(nil)
+            icon:SetDrawLayer("BORDER")
 
             if not progressBar.styled then
-                local bar = progressBar.Bar
-                local label = bar.Label
-                local icon = bar.Icon
-
-                bar.BarFrame:Hide()
-                bar.BarBG:Hide()
-                bar.IconBG:Hide()
-
                 if icon:IsShown() then
-                    icon:SetMask(nil)
-                    icon:SetDrawLayer("BORDER")
                     icon:ClearAllPoints()
                     icon:SetPoint("RIGHT", 35, 2)
                     S:ReskinIcon(icon)
@@ -150,8 +149,7 @@ local function LoadSkin()
                 label:SetPoint("CENTER", 0, -1)
                 label:FontTemplate(nil, nil, "OUTLINE")
 
-                local bg = S:CreateBDFrame(bar)
-                bg:SetOutside(bar, 1, 1)
+                bar:CreateShadow("Background")
 
                 progressBar.styled = true
             end
@@ -190,18 +188,21 @@ local function LoadSkin()
     hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddProgressBar", function(self, block, line)
             local progressBar = line.ProgressBar
             local bar = progressBar.Bar
+            local label = bar.Label
             local icon = bar.Icon
+
+            bar.BarFrame:Hide()
+            bar.BarBG:Hide()
+            bar.IconBG:Hide()
+            icon:SetMask(nil)
+            icon:SetDrawLayer("BORDER")
+
             if not progressBar.styled then
                 local label = bar.Label
 
-                bar.BarBG:Hide()
-				bar.BarFrame:Hide()
-
-                icon:SetMask(nil)
-                icon:SetDrawLayer("BORDER")
                 icon:ClearAllPoints()
                 icon:SetPoint("RIGHT", 35, 2)
-				S:ReskinIcon(icon)
+                S:ReskinIcon(icon)
 
                 bar:SetStatusBarTexture(R["media"].gloss)
 
@@ -209,8 +210,7 @@ local function LoadSkin()
                 label:SetPoint("CENTER")
                 label:FontTemplate(nil, nil, "OUTLINE")
 
-                local bg = S:CreateBDFrame(bar)
-                bg:SetOutside(bar, 1, 1)
+                bar:CreateShadow("Background")
 
                 progressBar.styled = true
             end
