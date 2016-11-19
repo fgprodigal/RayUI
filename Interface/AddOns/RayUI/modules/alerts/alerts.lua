@@ -22,7 +22,6 @@ local ShowUIPanel = ShowUIPanel
 local Garrison_LoadUI = Garrison_LoadUI
 local ShowGarrisonLandingPage = ShowGarrisonLandingPage
 local CollectionsJournal_LoadUI = CollectionsJournal_LoadUI
-local WardrobeCollectionFrame_OpenTransmogLink = WardrobeCollectionFrame_OpenTransmogLink
 local GarrisonFollowerTooltip_Show = GarrisonFollowerTooltip_Show
 local BattlePetToolTip_Show = BattlePetToolTip_Show
 local IsModifiedClick = IsModifiedClick
@@ -83,7 +82,7 @@ local hooksecurefunc = hooksecurefunc
 -- GLOBALS: NEW_RECIPE_LEARNED_TITLE, SCENARIO_INVASION_COMPLETE, WORLD_QUEST_QUALITY_COLORS, WORLD_QUEST_COMPLETE
 -- GLOBALS: LE_QUEST_TAG_TYPE_PVP, LE_QUEST_TAG_TYPE_PET_BATTLE, LE_QUEST_TAG_TYPE_PROFESSION, LE_QUEST_TAG_TYPE_DUNGEON
 -- GLOBALS: CURRENCY_GAINED_MULTIPLE, ERR_LEARN_TRANSMOG_S, SLASH_LSADDTOAST1, SlashCmdList, DevTools_Dump
--- GLOBALS: AchievementFrame_SelectAchievement
+-- GLOBALS: AchievementFrame_SelectAchievement, QuestUtils_IsQuestWorldQuest
 
 local INLINE_NEED = "|TInterface\\Buttons\\UI-GroupLoot-Dice-Up:0:0:0:0:32:32:0:32:0:31|t"
 local INLINE_GREED = "|TInterface\\Buttons\\UI-GroupLoot-Coin-Up:0:0:0:0:32:32:0:32:0:31|t"
