@@ -2,33 +2,35 @@ local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, 
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
-	for i = 1, 3 do
-		select(i, BarberShopFrame:GetRegions()):Hide()
-	end
-	BarberShopFrameMoneyFrame:GetRegions():Hide()
-	BarberShopAltFormFrameBackground:Hide()
-	BarberShopAltFormFrameBorder:Hide()
+    local BarberShopFrame = BarberShopFrame
+    for i = 1, BarberShopFrame:GetNumRegions() do
+        local region = select(i, BarberShopFrame:GetRegions())
+        region:Hide()
+    end
+    S:SetBD(BarberShopFrame, 44, -75, -40, 44)
+    S:SetBD(BarberShopAltFormFrame, 0, 0, 2, -2)
 
-	BarberShopAltFormFrame:ClearAllPoints()
-	BarberShopAltFormFrame:SetPoint("BOTTOM", BarberShopFrame, "TOP", 0, -74)
+    for i = 1, #BarberShopFrame.Selector do
+        local prevBtn, nextBtn = BarberShopFrame.Selector[i]:GetChildren()
+        S:ReskinArrow(prevBtn, "left")
+        S:ReskinArrow(nextBtn, "right")
+    end
 
-	S:SetBD(BarberShopFrame, 44, -75, -40, 44)
-	S:SetBD(BarberShopAltFormFrame, 0, 0, 2, -2)
+    BarberShopFrameMoneyFrame:GetRegions():Hide()
+    S:Reskin(BarberShopFrameOkayButton)
+    S:Reskin(BarberShopFrameCancelButton)
+    S:Reskin(BarberShopFrameResetButton)
 
-	S:Reskin(BarberShopFrameOkayButton)
-	S:Reskin(BarberShopFrameCancelButton)
-	S:Reskin(BarberShopFrameResetButton)
+    BarberShopAltFormFrame:ClearAllPoints()
+    BarberShopAltFormFrame:SetPoint("BOTTOM", BarberShopFrame, "TOP", 0, -74)
+    BarberShopAltFormFrameBackground:Hide()
+    BarberShopAltFormFrameBorder:Hide()
 
-	for i = 1, 5 do
-		S:ReskinArrow(_G["BarberShopFrameSelector"..i.."Prev"], "left")
-		S:ReskinArrow(_G["BarberShopFrameSelector"..i.."Next"], "right")
-	end
+    -- [[ Banner frame ]]
 
-	-- [[ Banner frame ]]
+    BarberShopBannerFrameBGTexture:Hide()
 
-	BarberShopBannerFrameBGTexture:Hide()
-
-	S:SetBD(BarberShopBannerFrame, 25, -80, -20, 75)
+    S:SetBD(BarberShopBannerFrame, 25, -80, -20, 75)
 end
 
 S:AddCallbackForAddon("Blizzard_BarbershopUI", "Barbershop", LoadSkin)
