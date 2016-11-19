@@ -770,7 +770,7 @@ function CH:SetChatPosition(override)
     for i = 1, #CHAT_FRAMES do
         local chat = _G[format("ChatFrame%d", i)]
         local tab = _G[format("ChatFrame%sTab", i)]
-        if chat == COMBATLOG then
+        if i == 2 then
             chat:ClearAllPoints()
             chat:SetPoint("TOPLEFT", RayUIChatBG, "TOPLEFT", 0, 0)
             chat:SetPoint("BOTTOMRIGHT", RayUIChatBG, "BOTTOMRIGHT", 0, 0)
