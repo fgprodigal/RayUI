@@ -303,7 +303,7 @@ function mod:CreateArtiBar()
                 GameTooltip:AddLine(string.format("%s (%s %d)", data.name, LEVEL, data.numRanksPurchased))
                 GameTooltip:SetPrevLineJustify("CENTER")
                 GameTooltip:AddDivider()
-                GameTooltip:AddLine(ARTIFACT_POWER_TOOLTIP_TITLE:format(BreakUpLargeNumbers(data.maxPower), BreakUpLargeNumbers(data.power), BreakUpLargeNumbers(data.powerForNextRank)), 1, 1, 1)
+                GameTooltip:AddLine(ARTIFACT_POWER_TOOLTIP_TITLE:format(BreakUpLargeNumbers(data.unspentPower), BreakUpLargeNumbers(data.power), BreakUpLargeNumbers(data.maxPower)), 1, 1, 1)
                 if data.numRanksPurchasable > 0 then
                     GameTooltip:AddLine(" ")
                     GameTooltip:AddLine(ARTIFACT_POWER_TOOLTIP_BODY:format(data.numRanksPurchasable), 0, 1, 0, true)
