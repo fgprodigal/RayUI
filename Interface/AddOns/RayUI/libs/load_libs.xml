@@ -21,4 +21,5 @@
 	<Script file="LibAnim\LibAnim.lua"/>
 	<Include file="LibChatAnims\LibChatAnims\LibChatAnims.xml"/>
 	<Script file="LibQTip-1.0\LibQTip-1.0.lua"/>
+	<Script file="LibArtifactData-1.0\LibArtifactData-1.0.lua"/>
 </Ui>

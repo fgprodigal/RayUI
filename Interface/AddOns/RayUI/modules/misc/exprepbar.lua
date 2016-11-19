@@ -1,6 +1,7 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local M = R:GetModule("Misc")
 local mod = M:NewModule("Exprepbar", "AceEvent-3.0")
+local libAD = LibStub("LibArtifactData-1.0")
 
 --Cache global variables
 --Lua functions
@@ -14,7 +15,6 @@ local CreateFrame = CreateFrame
 local IsAddOnLoaded = IsAddOnLoaded
 local LoadAddOn = LoadAddOn
 local SocketInventoryItem = SocketInventoryItem
-local C_ArtifactUI = C_ArtifactUI
 local GetSpellInfo = GetSpellInfo
 local HideUIPanel = HideUIPanel
 local UnitXP = UnitXP
@@ -33,7 +33,6 @@ local GetFriendshipReputation = GetFriendshipReputation
 local ToggleCharacter = ToggleCharacter
 local GetFriendshipReputationRanks = GetFriendshipReputationRanks
 local HasArtifactEquipped = HasArtifactEquipped
-local MainMenuBar_GetNumArtifactTraitsPurchasableFromXP = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP
 local BreakUpLargeNumbers = BreakUpLargeNumbers
 local ShowUIPanel = ShowUIPanel
 local InCombatLockdown = InCombatLockdown
@@ -42,39 +41,25 @@ local InCombatLockdown = InCombatLockdown
 -- GLOBALS: ArtifactFrame, GameTooltip, Minimap, XP, NORMAL_FONT_COLOR, HIGHLIGHT_FONT_COLOR, MAX_PLAYER_LEVEL_TABLE
 -- GLOBALS: HONOR, PVP_HONOR_PRESTIGE_AVAILABLE, HONOR_LEVEL_LABEL, MAX_HONOR_LEVEL, HONOR_BAR
 -- GLOBALS: MAX_PLAYER_LEVEL, STANDING, RayUF, REPUTATION, ReputationWatchBar, ARTIFACT_POWER_TOOLTIP_TITLE
--- GLOBALS: ARTIFACT_POWER_TOOLTIP_BODY
+-- GLOBALS: ARTIFACT_POWER_TOOLTIP_BODY, LEVEL
 
 local function AddPerks()
-    if not IsAddOnLoaded("Blizzard_ArtifactUI") then LoadAddOn("Blizzard_ArtifactUI") end
-    local forceHide, header
-
-    if not ArtifactFrame:IsShown() then
-        forceHide = true
-        SocketInventoryItem(16)
-    end
-
-    for i, powerID in ipairs(C_ArtifactUI.GetPowers()) do
-        --local spellID, cost, currentRank, maxRank, bonusRanks, x, y, prereqsMet, isStart, isGoldMedal, isFinal = C_ArtifactUI.GetPowerInfo(powerID)
-        local spellID, _, rank, maxRank, bonus = C_ArtifactUI.GetPowerInfo(powerID)
-        local isStart = select(9, C_ArtifactUI.GetPowerInfo(powerID))
+    local _, traits = libAD:GetArtifactTraits()
+    for _, data in pairs(traits) do
         local r,g,b = 1,1,1
 
-        if bonus > 0 then
+        if data.bonusRanks > 0 then
             r,g,b = 0.4,1,0
         end
 
-        if rank > 0 and not isStart then
+        if data.currentRank > 0 and not data.isStart then
             if not header then
                 header = true
                 GameTooltip:AddDivider()
             end
 
-            GameTooltip:AddDoubleLine(GetSpellInfo(spellID), rank.."/"..maxRank, 1,1,1, r,g,b)
+            GameTooltip:AddDoubleLine(data.name, data.currentRank.."/"..data.maxRank, 1,1,1, r,g,b)
         end
-    end
-
-    if ArtifactFrame:IsShown() and forceHide then
-        HideUIPanel(ArtifactFrame)
     end
 end
 
@@ -305,26 +290,23 @@ end
 function mod:CreateArtiBar()
     self.ArtiBar = self:CreateBar("RayUIArtiBar", self.RepBar, 8)
     self.ArtiBar:SetStatusBarColor(.901, .8, .601)
+    self.ArtiBar:Hide()
 
-    self.ArtiBar:SetScript("OnEvent", self.UpdateArtiBar)
-    self.ArtiBar:RegisterEvent("ARTIFACT_XP_UPDATE")
-    self.ArtiBar:RegisterEvent("UNIT_INVENTORY_CHANGED")
-    self.ArtiBar:RegisterEvent("PLAYER_ENTERING_WORLD")
+    libAD.RegisterCallback(self, "ARTIFACT_POWER_CHANGED", "UpdateArtiBar")
+    libAD.RegisterCallback(self, "ARTIFACT_ADDED", "UpdateArtiBar")
 
     self.ArtiBar:SetScript("OnEnter", function(self)
             if HasArtifactEquipped() and not InCombatLockdown() then
-                local title,r,g,b = select(2, C_ArtifactUI.GetEquippedArtifactArtInfo())
-                local _, _, totalXP, pointsSpent = select(3, C_ArtifactUI.GetEquippedArtifactInfo())
-                local numPointsAvailableToSpend, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP)
+                local _, data = libAD:GetArtifactInfo()
 
                 GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -5)
-                GameTooltip:AddLine(title,r,g,b,false)
+                GameTooltip:AddLine(string.format("%s (%s %d)", data.name, LEVEL, data.numRanksPurchased))
                 GameTooltip:SetPrevLineJustify("CENTER")
                 GameTooltip:AddDivider()
-                GameTooltip:AddLine(ARTIFACT_POWER_TOOLTIP_TITLE:format(BreakUpLargeNumbers(totalXP), BreakUpLargeNumbers(xp), BreakUpLargeNumbers(xpForNextPoint)), 1, 1, 1)
-                if numPointsAvailableToSpend > 0 then
+                GameTooltip:AddLine(ARTIFACT_POWER_TOOLTIP_TITLE:format(BreakUpLargeNumbers(data.maxPower), BreakUpLargeNumbers(data.power), BreakUpLargeNumbers(data.powerForNextRank)), 1, 1, 1)
+                if data.numRanksPurchasable > 0 then
                     GameTooltip:AddLine(" ")
-                    GameTooltip:AddLine(ARTIFACT_POWER_TOOLTIP_BODY:format(numPointsAvailableToSpend), 0, 1, 0, true)
+                    GameTooltip:AddLine(ARTIFACT_POWER_TOOLTIP_BODY:format(data.numRanksPurchasable), 0, 1, 0, true)
                 end
 
                 AddPerks()
@@ -348,13 +330,12 @@ end
 
 function mod:UpdateArtiBar()
     if HasArtifactEquipped() then
-        local itemID, altItemID, name, icon, totalXP, pointsSpent, quality, artifactAppearanceID, appearanceModID, itemAppearanceID, altItemAppearanceID, altOnTop = C_ArtifactUI.GetEquippedArtifactInfo()
-        if not pointsSpent then return end
-        local numPointsAvailableToSpend, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP)
-        self:SetAnimatedValues(xp, 0, xpForNextPoint, numPointsAvailableToSpend + pointsSpent)
-        self:Show()
+        local _, data = libAD:GetArtifactInfo()
+        if not data.numRanksPurchased then return end
+        self.ArtiBar:SetAnimatedValues(data.power, 0, data.maxPower, data.numRanksPurchasable + data.numRanksPurchased)
+        self.ArtiBar:Show()
     else
-        self:Hide()
+        self.ArtiBar:Hide()
     end
 end
 
