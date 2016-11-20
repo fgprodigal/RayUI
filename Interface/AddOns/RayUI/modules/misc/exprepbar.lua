@@ -296,7 +296,7 @@ function mod:CreateArtiBar()
     libAD.RegisterCallback(self, "ARTIFACT_ADDED", "UpdateArtiBar")
 
     self.ArtiBar:SetScript("OnEnter", function(self)
-            if HasArtifactEquipped() and not InCombatLockdown() then
+            if HasArtifactEquipped() then
                 local _, data = libAD:GetArtifactInfo()
 
                 GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -5)
