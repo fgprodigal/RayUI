@@ -3,6 +3,7 @@ local LSM = LibStub("LibSharedMedia-3.0")
 
 --Cache global variables
 --Lua functions
+local _G = _G
 local string = string
 local math = math
 local tinsert = tinsert
@@ -57,10 +58,11 @@ local GetSpecializationRole = GetSpecializationRole
 local ResetCPUUsage = ResetCPUUsage
 local GetAddOnCPUUsage = GetAddOnCPUUsage
 local UpdateAddOnCPUUsage = UpdateAddOnCPUUsage
+local ToggleHelpFrame = ToggleHelpFrame
 local C_Timer = C_Timer
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: UIParent, LibStub, MAX_PLAYER_LEVEL, ScriptErrorsFrame_OnError, BaudErrorFrameHandler, UISpecialFrames
+-- GLOBALS: UIParent, LibStub, MAX_PLAYER_LEVEL, ScriptErrorsFrame_OnError, BaudErrorFrameHandler, UISpecialFrames, xCT_Plus
 -- GLOBALS: Advanced_UIScaleSlider, Advanced_UseUIScale, RayUIConfigTutorial, RayUIWarningFrameScrollScrollBar, WorldMapFrame
 -- GLOBALS: SLASH_RELOAD1, COMBAT_RATING_RESILIENCE_PLAYER_DAMAGE_TAKEN, FIRST_NUMBER_CAP, SECOND_NUMBER_CAP, RayUISplashScreen
 
@@ -364,7 +366,33 @@ local function ShowSplashScreen()
     RayUISplashScreen.fadeInfo.finishedFunc = FadeSplashScreen
 end
 
+function R:xCTPlusShortValue(self, amount, frameName)
+    if R.global.general.numberType == 1 then
+        return R.hooks.Abbreviate(self, amount, frameName)
+    else
+        local message = tostring(amount)
+    	if frameName and self.db.profile.frames[frameName] and self.db.profile.frames[frameName].megaDamage then
+    		if self.db.profile.spells.formatAbbreviate then
+                message = tostring(R:ShortValue(amount))
+    		else
+    			local k
+    			while true do
+    				message, k = string.gsub(message, '^(-?%d+)(%d%d%d)', '%1,%2')
+    				if (k==0) then break end
+    			end
+    		end
+    	end
+    	return message
+    end
+end
+
+function R:HandleShortValue()
+    if xCT_Plus then
+        R:RawHook(xCT_Plus, "Abbreviate", "xCTPlusShortValue")
+    end
+end
 function R:PLAYER_ENTERING_WORLD()
+    self:HandleShortValue()
     RequestTimePlayed()
     Advanced_UIScaleSlider:Kill()
     Advanced_UseUIScale:Kill()
