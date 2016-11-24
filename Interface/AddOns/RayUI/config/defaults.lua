@@ -79,7 +79,7 @@ P["Tooltip"]={
 }
 
 P["Watcher"]={
-    enable = true,
+    enable = false,
 }
 
 P["Buff"]={
@@ -100,7 +100,7 @@ P["UnitFrames"]={
     alwaysShowHealth = false,
     aurabar = false,
     castBar = true,
-    smartAura = false,
+    smartAura = true,
     units = {
         player = {
             defaultPosition = { "BOTTOMRIGHT", R.UIParent, "BOTTOM", -80, 390 },
@@ -306,7 +306,7 @@ P["Misc"]={
     raidcdwidth = 170,
     raidcdgrowth = "UP",
     cooldowns = {
-        enable = false,
+        enable = true,
         size = 25,
         growthx = "LEFT",
         growthy = "UP",
