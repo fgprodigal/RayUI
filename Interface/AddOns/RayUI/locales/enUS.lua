@@ -34,6 +34,7 @@ do
     L["副资源条"] = "Alternate resource bar"
     L["图腾条"] = "Totem bar"
     L["冷却条"] = "Cooldowns"
+    L["通知锚点"] = "Notification anchor"
     L["Player Mover"] = "Player"
     L["Target Mover"] = "Target"
     L["Focus Mover"] = "Focus"
@@ -527,6 +528,8 @@ do
     L["你有%s个未处理的活动邀请."] = "You have %s pending calendar invite(s)."
     L["你有%s个未处理的公会活动邀请."] = "You have %s pending guild event(s)."
     L["活动\"%s\"今天结束."] = "event \"%s\" will end today."
+    L["活动\"%s\"今天开始."] = "event \"%s\" started today."
+    L["活动\"%s\"正在进行."] = "event \"%s\" is ongoing."
 end
 do
     L["灵魂"] = "Ghost"

@@ -34,6 +34,7 @@ do
     L["副资源条"] = true
     L["图腾条"] = true
     L["冷却条"] = true
+    L["通知锚点"] = true
     L["Player Mover"] = "玩家头像"
     L["Target Mover"] = "目标头像"
     L["Focus Mover"] = "焦点头像"
@@ -527,6 +528,8 @@ do
     L["你有%s个未处理的活动邀请."] = true
     L["你有%s个未处理的公会活动邀请."] = true
     L["活动\"%s\"今天结束."] = true
+    L["活动\"%s\"今天开始."] = true
+    L["活动\"%s\"正在进行."] = true
 end
 do
 	L["灵魂"] = true
