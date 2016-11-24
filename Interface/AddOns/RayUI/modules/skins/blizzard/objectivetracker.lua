@@ -130,13 +130,14 @@ local function LoadSkin()
             local label = bar.Label
             local icon = bar.Icon
 
-            bar.BarFrame:Hide()
-            bar.BarBG:Hide()
-            bar.IconBG:Hide()
             icon:SetMask(nil)
             icon:SetDrawLayer("BORDER")
 
             if not progressBar.styled then
+                bar.BarFrame:Kill()
+                bar.BarBG:Kill()
+                bar.IconBG:Kill()
+
                 if icon:IsShown() then
                     icon:ClearAllPoints()
                     icon:SetPoint("RIGHT", 35, 2)
@@ -153,8 +154,6 @@ local function LoadSkin()
 
                 progressBar.styled = true
             end
-
-            -- progressBar.Bar:SetValue(50)
         end)
 
     WORLD_QUEST_TRACKER_MODULE.Header:StripTextures()
@@ -191,13 +190,14 @@ local function LoadSkin()
             local label = bar.Label
             local icon = bar.Icon
 
-            bar.BarFrame:Hide()
-            bar.BarBG:Hide()
-            bar.IconBG:Hide()
             icon:SetMask(nil)
             icon:SetDrawLayer("BORDER")
 
             if not progressBar.styled then
+                bar.BarFrame:Kill()
+                bar.BarBG:Kill()
+                bar.IconBG:Kill()
+
                 local label = bar.Label
 
                 icon:ClearAllPoints()
@@ -214,9 +214,6 @@ local function LoadSkin()
 
                 progressBar.styled = true
             end
-
-            bar.IconBG:Hide()
-            -- progressBar.Bar:SetValue(50)
         end)
 end
 
