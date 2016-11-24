@@ -49,6 +49,7 @@ local ToggleLFDParentFrame = ToggleLFDParentFrame
 -- GLOBALS: SpellBookFrame, PlayerTalentFrame, GuildFrame, EncounterJournal, RaidFinderFrame, StoreMicroButton
 -- GLOBALS: CalendarFrame, LootHistoryFrame, MiniMapTrackingDropDown, BlizzardStopwatchOptions, GameTimeFrame, TimeManagerFrame
 -- GLOBALS: GuildFrame_LoadUI, EncounterJournal_LoadUI, TalentFrame_LoadUI, UIParent, MinimapButtonCollectFrame
+-- GLOBALS: MinimapZoomIn, MinimapZoomOut
 
 MM.modName = L["小地图"]
 local menuFrame = CreateFrame("Frame", "RayUI_MinimapRightClickMenu", R.UIParent)
