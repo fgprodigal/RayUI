@@ -59,10 +59,10 @@ local UnitHealthMax = UnitHealthMax
 local GetCursorPosition = GetCursorPosition
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: GameTooltip, FACTION_BAR_COLORS, InspectFrame, RayUFRaid40_8, RayUFRaid15_3, INVSLOT_OFFHAND, INVSLOT_MAINHAND
--- GLOBALS: RayUFRaid25_5, GameTooltipStatusBar, WorldMapTooltip, NumerationFrame, Skada, Examiner
--- GLOBALS: RayUFRaid40_6UnitButton1, RayUI_ContainerFrame, RayUI_ContainerFrameItemSets, RayUI_ContainerFrameConsumables
--- GLOBALS: RayUI_ContainerFrameMain, RayUFRaid15_1UnitButton1, RayUFRaid25_1UnitButton1, STAT_AVERAGE_ITEM_LEVEL, FriendsTooltip
+-- GLOBALS: GameTooltip, FACTION_BAR_COLORS, InspectFrame, RayUF_Raid, INVSLOT_OFFHAND, INVSLOT_MAINHAND
+-- GLOBALS: GameTooltipStatusBar, WorldMapTooltip, NumerationFrame, Skada, Examiner
+-- GLOBALS: RayUI_ContainerFrame, RayUI_ContainerFrameItemSets, RayUI_ContainerFrameConsumables
+-- GLOBALS: RayUI_ContainerFrameMain, STAT_AVERAGE_ITEM_LEVEL, FriendsTooltip
 -- GLOBALS: ItemRefTooltip, ItemRefShoppingTooltip1, ItemRefShoppingTooltip2, ItemRefShoppingTooltip3, ShoppingTooltip1
 -- GLOBALS: ShoppingTooltip2, ShoppingTooltip3, WorldMapCompareTooltip1, WorldMapCompareTooltip2, WorldMapCompareTooltip3
 -- GLOBALS: ChatMenu, EmoteMenu, LanguageMenu, QuestDifficultyColors, YOU, TARGET, GameTooltipTextLeft2, GameTooltipTextLeft1, PLAYER
@@ -256,15 +256,9 @@ function TT:GameTooltip_SetDefaultAnchor(tooltip, parent)
         end
 
         tooltip:ClearAllPoints()
-        if owner and owner:match("RayUFRaid") then
-            local parent = _G[owner:match("RayUFRaid%d%d_%d")]
-            if R.db.Raid.horizontal then
-                tooltip:Point("TOPRIGHT", parent, "TOPLEFT", -23, 0)
-            else
-                tooltip:Point("BOTTOMRIGHT", parent, "TOPRIGHT", 0, 23)
-            end
-        elseif RayUFRaid40_6UnitButton1 and RayUFRaid40_6UnitButton1:IsVisible() and (GetScreenWidth() - RayUFRaid40_8:GetRight()) < 250 then
-            tooltip:Point("BOTTOMRIGHT", R.UIParent, "BOTTOMRIGHT", -50, RayUFRaid40_8:GetBottom() + RayUFRaid40_8:GetHeight() + 30)
+        if owner and owner:match("RayUF_Raid") then
+            local parent = _G[owner:match("RayUF_RaidGroup%dUnitButton%d")]
+            tooltip:Point("BOTTOM", RayUF_Raid, "TOP", 0, 30)
         elseif RayUI_ContainerFrame and RayUI_ContainerFrame:IsVisible() and (GetScreenWidth() - RayUI_ContainerFrame:GetRight()) < 250 then
             -- tooltip:Point("BOTTOMRIGHT", R.UIParent, "BOTTOMRIGHT", -50, RayUI_ContainerFrame:GetBottom() + RayUI_ContainerFrame:GetHeight() + 30)
             local parent = RayUI_ContainerFrameItemSets:IsVisible() and RayUI_ContainerFrameItemSets
@@ -273,10 +267,6 @@ function TT:GameTooltip_SetDefaultAnchor(tooltip, parent)
             if parent:GetBottom() and parent:GetHeight() then
                 tooltip:Point("BOTTOMRIGHT", R.UIParent, "BOTTOMRIGHT", -50, parent:GetBottom() + parent:GetHeight() + 30)
             end
-        elseif RayUFRaid15_1UnitButton1 and RayUFRaid15_1UnitButton1:IsVisible() and (GetScreenWidth() - RayUFRaid15_3:GetRight()) < 250 then
-            tooltip:Point("BOTTOMRIGHT", R.UIParent, "BOTTOMRIGHT", -50, RayUFRaid15_3:GetBottom() + RayUFRaid15_3:GetHeight() + 30)
-        elseif RayUFRaid25_1UnitButton1 and RayUFRaid25_1UnitButton1:IsVisible() and (GetScreenWidth() - RayUFRaid25_5:GetRight()) < 250 then
-            tooltip:Point("BOTTOMRIGHT", R.UIParent, "BOTTOMRIGHT", -50, RayUFRaid25_5:GetBottom() + RayUFRaid25_5:GetHeight() + 30)
         elseif NumerationFrame and NumerationFrame:IsVisible() and (GetScreenWidth() - NumerationFrame:GetRight()) < 250 then
             tooltip:Point("BOTTOMRIGHT", R.UIParent, "BOTTOMRIGHT", -50, NumerationFrame:GetBottom() + NumerationFrame:GetHeight() + 30)
         elseif Skada then
