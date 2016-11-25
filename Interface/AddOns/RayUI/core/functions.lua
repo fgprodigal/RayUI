@@ -368,7 +368,7 @@ end
 
 function R:xCTPlusShortValue(self, amount, frameName)
     if R.global.general.numberType == 1 then
-        return R.hooks[self].Abbreviate(self, amount, frameName)
+        return R.hooks[xCT_Plus].Abbreviate(self, amount, frameName)
     else
         local message = tostring(amount)
     	if frameName and self.db.profile.frames[frameName] and self.db.profile.frames[frameName].megaDamage then
