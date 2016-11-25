@@ -32,6 +32,8 @@ local PlaySound = PlaySound
 local C_Timer = C_Timer
 local GetGameTime = GetGameTime
 local PlaySoundKitID = PlaySoundKitID
+local CreateAnimationGroup = CreateAnimationGroup
+local CalendarGetAbsMonth = CalendarGetAbsMonth
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: SLASH_TESTNOTIFICATION1, MAIL_LABEL, HAVE_MAIL, MINIMAP_TRACKING_REPAIR, CalendarFrame
@@ -61,21 +63,25 @@ function NF:SpawnToast(toast)
         return false
     end
 
-    toast:ClearAllPoints()
-
-    if #activeToasts > 0 then
-        if R:GetScreenQuadrant(anchorFrame):find("TOP") then
-            toast:SetPoint("TOP", activeToasts[#activeToasts], "BOTTOM", 0, -4)
-        else
-            toast:SetPoint("BOTTOM", activeToasts[#activeToasts], "TOP", 0, 4)
-        end
+    local XOffset = 0
+    if R:GetScreenQuadrant(anchorFrame):find("LEFT") then
+        XOffset = bannerWidth
     else
-        toast:SetPoint("TOPLEFT", anchorFrame, "TOPLEFT", 0, 0)
+        XOffset = -bannerWidth
+    end
+
+    toast:ClearAllPoints()
+    if R:GetScreenQuadrant(anchorFrame):find("TOP") then
+        toast:SetPoint("TOP", anchorFrame, "TOP", -XOffset, -#activeToasts*(50+4))
+    else
+        toast:SetPoint("BOTTOM", anchorFrame, "BOTTOM", -XOffset, #activeToasts*(50+4))
     end
 
     table.insert(activeToasts, toast)
 
     toast:Show()
+    toast.AnimIn.AnimMove:SetOffset(XOffset - 1, 0)
+    toast.AnimOut.AnimMove:SetOffset(-XOffset + 1, 0)
     toast.AnimIn:Play()
     toast.AnimOut:Play()
     PlaySoundKitID(18019)
@@ -84,17 +90,20 @@ end
 function NF:RefreshToasts()
     for i = 1, #activeToasts do
         local activeToast = activeToasts[i]
+        local XOffset = 0
+        if activeToast.AnimIn.AnimMove:IsPlaying() then
+            XOffset = activeToast.AnimIn.AnimMove:GetOffset()
+        end
+        if activeToast.AnimOut.AnimMove:IsPlaying() then
+            XOffset = activeToast.AnimOut.AnimMove:GetOffset()
+        end
 
         activeToast:ClearAllPoints()
 
-        if i == 1 then
-            activeToast:SetPoint("TOPLEFT", anchorFrame, "TOPLEFT", 0, 0)
+        if R:GetScreenQuadrant(anchorFrame):find("TOP") then
+            activeToast:SetPoint("TOP", anchorFrame, "TOP", XOffset, -(i-1)*(50+4))
         else
-            if R:GetScreenQuadrant(anchorFrame):find("TOP") then
-                activeToast:SetPoint("TOP", activeToasts[i - 1], "BOTTOM", 0, -4)
-            else
-                activeToast:SetPoint("BOTTOM", activeToasts[i - 1], "TOP", 0, 4)
-            end
+            activeToast:SetPoint("BOTTOM", anchorFrame, "BOTTOM", XOffset, (i-1)*(50+4))
         end
     end
 
@@ -113,7 +122,7 @@ function NF:HideToast(toast)
     end
     table.insert(toasts, toast)
     toast:Hide()
-    self:RefreshToasts()
+    C_Timer.After(0.1, function() self:RefreshToasts() end)
 end
 
 local function ToastButtonAnimOut_OnFinished(self)
@@ -157,27 +166,42 @@ function NF:GetToast()
         text:SetJustifyH("LEFT")
         toast.text = text
 
-        local animIn = toast:CreateAnimationGroup()
-        toast.AnimIn = animIn
+        toast.AnimIn = CreateAnimationGroup(toast)
 
-        local anim1 = animIn:CreateAnimation("Alpha")
-        anim1:SetOrder(1)
-        anim1:SetFromAlpha(0)
-        anim1:SetToAlpha(1)
-        anim1:SetDuration(0.5)
-        animIn.Anim1 = anim1
+        local animInAlpha = toast.AnimIn:CreateAnimation("Fade")
+        animInAlpha:SetOrder(1)
+        animInAlpha:SetChange(1)
+        animInAlpha:SetDuration(0.5)
+        toast.AnimIn.AnimAlpha = animInAlpha
 
-        local animOut = toast:CreateAnimationGroup()
-        animOut:SetScript("OnFinished", ToastButtonAnimOut_OnFinished)
-        toast.AnimOut = animOut
+        local animInMove = toast.AnimIn:CreateAnimation("Move")
+        animInMove:SetOrder(1)
+        animInMove:SetDuration(0.5)
+        animInMove:SetSmoothing("Out")
+        animInMove:SetOffset(-bannerWidth, 0)
+        toast.AnimIn.AnimMove = animInMove
 
-        local anim2 = animOut:CreateAnimation("Alpha")
-        anim2:SetOrder(1)
-        anim2:SetFromAlpha(1)
-        anim2:SetToAlpha(0)
-        anim2:SetStartDelay(fadeout_delay)
-        anim2:SetDuration(1.2)
-        animOut.Anim1 = anim2
+        toast.AnimOut = CreateAnimationGroup(toast)
+
+        local animOutSleep = toast.AnimOut:CreateAnimation("Sleep")
+        animOutSleep:SetOrder(1)
+        animOutSleep:SetDuration(fadeout_delay)
+        toast.AnimOut.AnimSleep = animOutSleep
+
+        local animOutAlpha = toast.AnimOut:CreateAnimation("Fade")
+        animOutAlpha:SetOrder(2)
+        animOutAlpha:SetChange(0)
+        animOutAlpha:SetDuration(0.5)
+        toast.AnimOut.AnimAlpha = animOutAlpha
+
+        local animOutMove = toast.AnimOut:CreateAnimation("Move")
+        animOutMove:SetOrder(2)
+        animOutMove:SetDuration(0.5)
+        animOutMove:SetSmoothing("In")
+        animOutMove:SetOffset(bannerWidth, 0)
+        toast.AnimOut.AnimMove = animOutMove
+
+        toast.AnimOut.AnimAlpha:SetScript("OnFinished", ToastButtonAnimOut_OnFinished)
 
         toast:SetScript("OnEnter", function(self)
                 self.AnimOut:Stop()
@@ -377,9 +401,12 @@ end
 local function LoginCheck()
     alertEvents()
     alertGuildEvents()
-    local day = select(3, CalendarGetDate())
+    local month, day, year = select(2, CalendarGetDate())
     local numDayEvents = CalendarGetNumDayEvents(0, day)
+    local numDays = select(3, CalendarGetAbsMonth(month, year))
     local hournow, minutenow = GetGameTime()
+
+    -- Today
     for i = 1, numDayEvents do
         local title, hour, minute, calendarType, sequenceType, eventType, texture, modStatus, inviteStatus, invitedBy, difficulty, inviteType = CalendarGetDayEvent(0, day, i)
         if calendarType == "HOLIDAY" and ( sequenceType == "END" or sequenceType == "" ) and hournow < hour then
@@ -392,10 +419,26 @@ local function LoginCheck()
             NF:DisplayToast(CALENDAR, format(L["活动\"%s\"正在进行."], title), toggleCalendar)
         end
     end
+
+    --Tomorrow
+    local offset = 0
+    if numDays == day then
+        offset = 1
+        day = 1
+    else
+        day = day + 1
+    end
+    numDayEvents = CalendarGetNumDayEvents(offset, day)
+    for i = 1, numDayEvents do
+        local title, hour, minute, calendarType, sequenceType, eventType, texture, modStatus, inviteStatus, invitedBy, difficulty, inviteType = CalendarGetDayEvent(offset, day, i)
+        if calendarType == "HOLIDAY" and ( sequenceType == "END" or sequenceType == "" ) then
+            NF:DisplayToast(CALENDAR, format(L["活动\"%s\"明天结束."], title), toggleCalendar)
+        end
+    end
 end
 
 function NF:PLAYER_ENTERING_WORLD()
-    C_Timer.After(5, LoginCheck)
+    C_Timer.After(7, LoginCheck)
     self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 end
 

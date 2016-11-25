@@ -528,6 +528,7 @@ do
     L["你有%s个未处理的活动邀请."] = "You have %s pending calendar invite(s)."
     L["你有%s个未处理的公会活动邀请."] = "You have %s pending guild event(s)."
     L["活动\"%s\"今天结束."] = "event \"%s\" will end today."
+    L["活动\"%s\"明天结束."] = "event \"%s\" will end tomorrow."
     L["活动\"%s\"今天开始."] = "event \"%s\" started today."
     L["活动\"%s\"正在进行."] = "event \"%s\" is ongoing."
 end
