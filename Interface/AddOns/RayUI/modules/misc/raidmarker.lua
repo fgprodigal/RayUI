@@ -9,7 +9,7 @@ local sin, cos = math.sin, math.cos
 --WoW API / Variables
 local CreateFrame = CreateFrame
 local GetNumGroupMembers = GetNumGroupMembers
-local IsRaidLeader = IsRaidLeader
+local UnitIsGroupLeader = UnitIsGroupLeader
 local UnitIsGroupAssistant = UnitIsGroupAssistant
 local UnitExists = UnitExists
 local UnitIsDead = UnitIsDead
@@ -26,7 +26,7 @@ local ButtonIsDown
 
 function mod:RaidMarkCanMark()
     if GetNumGroupMembers() > 0 then
-        if IsRaidLeader()or UnitIsGroupAssistant("player")then
+        if UnitIsGroupLeader("player")or UnitIsGroupAssistant("player")then
             return true
         else
             UIErrorsFrame:AddMessage(L["你没有权限设置团队标记"], 1.0, 0.1, 0.1, 1.0, UIERRORS_HOLD_TIME)
