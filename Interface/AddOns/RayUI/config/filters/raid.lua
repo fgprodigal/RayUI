@@ -165,16 +165,12 @@ G.Raid.RaidDebuffs = {
             [197980] = Defaults(), -- Nightmarish Cacophony
 
             -- Dragons of Nightmare
-            [203102] = Defaults(), -- Mark of Ysondre
-            [203121] = Defaults(), -- Mark of Taerar
-            [203125] = Defaults(), -- Mark of Emeriss
-            [203124] = Defaults(), -- Mark of Lethon
-            [204731] = Defaults(5), -- Wasting Dread
+            [204731] = Defaults(1), -- Wasting Dread
             [203110] = Defaults(5), -- Slumbering Nightmare
-            [207681] = Defaults(5), -- Nightmare Bloom
+            [207681] = Defaults(3), -- Nightmare Bloom
             [205341] = Defaults(5), -- Sleeping Fog
-            [203770] = Defaults(5), -- Defiled Vines
-            [203787] = Defaults(5), -- Volatile Infection
+            [203770] = Defaults(4), -- Defiled Vines
+            [203787] = Defaults(2), -- Volatile Infection
 
             -- Cenarius
             [210279] = Defaults(), -- Creeping Nightmares
