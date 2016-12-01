@@ -63,25 +63,29 @@ function NF:SpawnToast(toast)
         return false
     end
 
-    local XOffset = 0
-    if R:GetScreenQuadrant(anchorFrame):find("LEFT") then
-        XOffset = bannerWidth
+    local YOffset = 0
+    if R:GetScreenQuadrant(anchorFrame):find("TOP") then
+        YOffset = -54
     else
-        XOffset = -bannerWidth
+        YOffset = 54
     end
 
     toast:ClearAllPoints()
-    if R:GetScreenQuadrant(anchorFrame):find("TOP") then
-        toast:SetPoint("TOP", anchorFrame, "TOP", -XOffset, -#activeToasts*(50+4))
+    if #activeToasts > 0 then
+        if R:GetScreenQuadrant(anchorFrame):find("TOP") then
+            toast:SetPoint("TOP", activeToasts[#activeToasts], "BOTTOM", 0, -4 - YOffset)
+        else
+            toast:SetPoint("BOTTOM", activeToasts[#activeToasts], "TOP", 0, 4 - YOffset)
+        end
     else
-        toast:SetPoint("BOTTOM", anchorFrame, "BOTTOM", -XOffset, #activeToasts*(50+4))
+        toast:SetPoint("TOP", anchorFrame, "TOP", 0, 1 - YOffset)
     end
 
     table.insert(activeToasts, toast)
 
     toast:Show()
-    toast.AnimIn.AnimMove:SetOffset(XOffset - 1, 0)
-    toast.AnimOut.AnimMove:SetOffset(-XOffset + 1, 0)
+    toast.AnimIn.AnimMove:SetOffset(0, YOffset)
+    toast.AnimOut.AnimMove:SetOffset(0, -YOffset)
     toast.AnimIn:Play()
     toast.AnimOut:Play()
     PlaySoundKitID(18019)
@@ -90,20 +94,24 @@ end
 function NF:RefreshToasts()
     for i = 1, #activeToasts do
         local activeToast = activeToasts[i]
-        local XOffset = 0
+        local YOffset, _ = 0
         if activeToast.AnimIn.AnimMove:IsPlaying() then
-            XOffset = activeToast.AnimIn.AnimMove:GetOffset()
+            _, YOffset = activeToast.AnimIn.AnimMove:GetOffset()
         end
         if activeToast.AnimOut.AnimMove:IsPlaying() then
-            XOffset = activeToast.AnimOut.AnimMove:GetOffset()
+            _, YOffset = activeToast.AnimOut.AnimMove:GetOffset()
         end
 
         activeToast:ClearAllPoints()
 
-        if R:GetScreenQuadrant(anchorFrame):find("TOP") then
-            activeToast:SetPoint("TOP", anchorFrame, "TOP", XOffset, -(i-1)*(50+4))
+        if i == 1 then
+            activeToast:SetPoint("TOP", anchorFrame, "TOP", 0, 1 - YOffset)
         else
-            activeToast:SetPoint("BOTTOM", anchorFrame, "BOTTOM", XOffset, (i-1)*(50+4))
+            if R:GetScreenQuadrant(anchorFrame):find("TOP") then
+                activeToast:SetPoint("TOP", activeToasts[i - 1], "BOTTOM", 0, -4 - YOffset)
+            else
+                activeToast:SetPoint("BOTTOM", activeToasts[i - 1], "TOP", 0, 4 - YOffset)
+            end
         end
     end
 
@@ -275,7 +283,7 @@ SLASH_TESTNOTIFICATION1 = "/testnotification"
 function NF:Initialize()
     anchorFrame = CreateFrame("Frame", nil, R.UIParent)
     anchorFrame:SetSize(bannerWidth, 50)
-    anchorFrame:SetPoint("TOPRIGHT", -10, -10)
+    anchorFrame:SetPoint("TOP", 0, -10)
     R:CreateMover(anchorFrame, "Notification Mover", L["通知锚点"], true, nil, "ALL,GENERAL")
 
     self:RegisterEvent("UPDATE_PENDING_MAIL")
