@@ -693,7 +693,7 @@ function AB:Style(button)
 
     if not button.shadow then
         button:CreateShadow("Background")
-        button.border:SetBackdropBorderColor(unpack(R["media"].backdropcolor))
+        button.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))
         if Icon then
             Icon:SetTexCoord(.08, .92, .08, .92)
             Icon:SetAllPoints()
