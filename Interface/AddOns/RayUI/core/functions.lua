@@ -759,6 +759,8 @@ function R:UpdateMedia()
     self["media"].dmgfont = LSM:Fetch("font", self.global["media"].dmgfont)
     self["media"].pxfont = LSM:Fetch("font", self.global["media"].pxfont)
     self["media"].cdfont = LSM:Fetch("font", self.global["media"].cdfont)
+    self["media"].octicons = LSM:Fetch("font", self.global["media"].octicons)
+    self["media"].arrowfont = LSM:Fetch("font", self.global["media"].arrowfont)
     self["media"].fontsize = self.global["media"].fontsize
     self["media"].fontflag = self.global["media"].fontflag
 
@@ -1003,12 +1005,6 @@ function R:AddNonPetBattleFrames()
 		end
         if level then
 			obj:SetFrameLevel(level)
-            if obj.border then
-                obj.border:SetFrameLevel(level-1)
-            end
-            if obj.shadow then
-                obj.shadow:SetFrameLevel(level-2)
-            end
 		end
 	end
 

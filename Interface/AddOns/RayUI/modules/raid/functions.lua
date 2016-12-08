@@ -445,7 +445,7 @@ function RA:Construct_AuraWatch(frame)
 end
 
 function RA:Construct_ReadyCheck(frame)
-    local readyCheck = frame.RaisedElementParent:CreateTexture(nil, "OVERLAY", 7)
+    local readyCheck = frame.RaisedElementParent:CreateTexture(nil, "OVERLAY", nil, 7)
     readyCheck:SetPoint("BOTTOM", frame.Health)
     readyCheck:SetSize(RA.db.leadersize + 4, self.db.leadersize+ 4)
     return readyCheck

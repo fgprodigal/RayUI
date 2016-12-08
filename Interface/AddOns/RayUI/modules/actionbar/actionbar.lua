@@ -6,6 +6,7 @@ local LAB = LibStub("LibActionButton-1.0-RayUI")
 --Cache global variables
 --Lua functions
 local _G = _G
+local unpack = unpack
 local string = string
 local select = select
 local pairs = pairs
@@ -692,6 +693,7 @@ function AB:Style(button)
 
     if not button.shadow then
         button:CreateShadow("Background")
+        button.border:SetBackdropBorderColor(unpack(R["media"].backdropcolor))
         if Icon then
             Icon:SetTexCoord(.08, .92, .08, .92)
             Icon:SetAllPoints()
@@ -699,9 +701,8 @@ function AB:Style(button)
     end
 
     if button.style then
-        button.style:SetDrawLayer("BACKGROUND", -7)
-        button.border:SetFrameLevel(button:GetFrameLevel())
-        button.shadow:SetFrameLevel(button:GetFrameLevel())
+        button.style:SetParent(button.shadow)
+        button.style:SetDrawLayer("BACKGROUND", -8)
     end
 
     if not name:find("OverrideActionBarButton") and not name:find("PetActionButton") then

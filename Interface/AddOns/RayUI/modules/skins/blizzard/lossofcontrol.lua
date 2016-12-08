@@ -3,11 +3,12 @@ local S = R:GetModule("Skins")
 
 local function LoadSkin()
     local IconBackdrop = CreateFrame("Frame", nil, LossOfControlFrame)
+    IconBackdrop:SetFrameLevel(1)
     IconBackdrop:CreateShadow("Background")
     IconBackdrop:SetAllPoints(LossOfControlFrame.Icon)
     LossOfControlFrame.Icon:SetTexCoord(.08, .92, .08, .92)
 
-    hooksecurefunc("LossOfControlFrame_SetUpDisplay", function(self, ...)   
+    hooksecurefunc("LossOfControlFrame_SetUpDisplay", function(self, ...)
         self.AbilityName:SetFont(R["media"].font, 20, "OUTLINE")
         self.TimeLeft.NumberText:SetFont(R["media"].font, 20, "OUTLINE")
         self.TimeLeft.SecondsText:SetFont(R["media"].font, 20, "OUTLINE")

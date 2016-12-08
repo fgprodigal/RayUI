@@ -405,34 +405,13 @@ function S:ReskinClose(f, a1, p, a2, x, y)
 	dis:SetDrawLayer("OVERLAY")
 	dis:SetAllPoints()
 
-	f.pixels = {}
+	local icon = f:CreateFontString(nil, "OVERLAY")
+    icon:Point("CENTER", 2, 0)
+    icon:FontTemplate(R["media"].pxfont, 12*R.mult, "OUTLINE,MONOCHROME")
+    icon:SetText("X")
 
-	for i = 1, 7 do
-		local tex = f:CreateTexture()
-		tex:SetColorTexture(1, 1, 1)
-		tex:Size(1, 1)
-		tex:Point("BOTTOMLEFT", 4+i, 4+i)
-		tinsert(f.pixels, tex)
-	end
-
-	for i = 1, 7 do
-		local tex = f:CreateTexture()
-		tex:SetColorTexture(1, 1, 1)
-		tex:Size(1, 1)
-		tex:Point("TOPLEFT", 4+i, -4-i)
-		tinsert(f.pixels, tex)
-	end
-
-	f:HookScript("OnEnter", colourClose)
-	f:HookScript("OnLeave", clearClose)
-
-	-- local text = f:CreateFontString(nil, "OVERLAY")
-	-- text:SetFont(R["media"].pxfont, R.mult*10, "OUTLINE,MONOCHROME")
-	-- text:Point("CENTER", 2, 1)
-	-- text:SetText("x")
-
-	-- f:HookScript("OnEnter", function(self) text:SetTextColor(1, .1, .1) end)
-	-- f:HookScript("OnLeave", function(self) text:SetTextColor(1, 1, 1) end)
+	f:HookScript("OnEnter", function() icon:SetTextColor(r, g, b) end)
+	f:HookScript("OnLeave", function() icon:SetTextColor(1, 1, 1) end)
 end
 
 function S:ReskinInput(f, height, width)

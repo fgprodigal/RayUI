@@ -16,3 +16,5 @@ elseif GetLocale() == "zhTW" then
 end
 LSM:Register("font","RayUI Pixel", [[Interface\AddOns\RayUI\media\pixel.ttf]], 255)
 LSM:Register("font","RayUI Roadway", [[Interface\AddOns\RayUI\media\ROADWAY.ttf]], 255)
+LSM:Register("font","RayUI Arrows", [[Interface\AddOns\RayUI\media\arrows.ttf]], 255)
+LSM:Register("font","RayUI Octicons", [[Interface\AddOns\RayUI\media\octicons.ttf]], 255)

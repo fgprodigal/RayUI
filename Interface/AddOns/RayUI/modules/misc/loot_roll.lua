@@ -152,6 +152,11 @@ local function CreateRollFrame()
     button:SetScript("OnLeave", HideTip2)
     button:SetScript("OnUpdate", ItemOnUpdate)
     button:SetScript("OnClick", LootClick)
+    button:CreateShadow("Background")
+    button.shadow:SetFrameStrata("BACKGROUND")
+    button.shadow:SetFrameLevel(0)
+    button:SetBackdropColor(0, 0, 0, 0)
+    button:SetBackdropBorderColor(0, 0, 0, 1)
     frame.button = button
 
     local buttonborder = CreateFrame("Frame", nil, button)
@@ -165,11 +170,6 @@ local function CreateRollFrame()
     buttonborder2:Height(22)
     buttonborder2:SetFrameLevel(buttonborder:GetFrameLevel()+1)
     buttonborder2:SetPoint("CENTER", button, "CENTER")
-    buttonborder2:CreateShadow("Background")
-    buttonborder2.shadow:SetFrameStrata("BACKGROUND")
-    buttonborder2.shadow:SetFrameLevel(0)
-    buttonborder2:SetBackdropColor(0, 0, 0, 0)
-    buttonborder2:SetBackdropBorderColor(0, 0, 0, 1)
 
     frame.buttonborder = buttonborder
 

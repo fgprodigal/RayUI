@@ -68,11 +68,6 @@ local function LoadSkin()
 
                 itemButton.styled = true
             end
-            if itemButton then
-                itemButton:SetFrameLevel(3)
-                itemButton.border:SetFrameLevel(2)
-                itemButton.shadow:SetFrameLevel(1)
-            end
         end)
 
     hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, "AddObjective", function(self, block)
@@ -186,11 +181,6 @@ local function LoadSkin()
                 S:CreateBG(itemButton)
 
                 itemButton.styled = true
-            end
-            if itemButton then
-                itemButton:SetFrameLevel(3)
-                itemButton.border:SetFrameLevel(2)
-                itemButton.shadow:SetFrameLevel(1)
             end
         end)
 

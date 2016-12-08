@@ -264,14 +264,14 @@ function watcherPrototype:CheckAura()
         for unitID in pairs(self.BUFF.unitIDs) do
             local index = 1
             while UnitBuff(unitID, index) and not ( index > 40 ) do
-                local spellName, _, icon, count, _, duration, expires, caster, _, _, spellID, _, _, _, _, _, value = UnitBuff(unitID,index)
+                local spellName, _, icon, count, _, duration, expires, caster, _, _, spellID, _, _, _, _, _, value1, value2, value3 = UnitBuff(unitID,index)
                 if (self.BUFF[spellID] and self.BUFF[spellID].enable and self.BUFF[spellID].unitID == unitID and ( caster == self.BUFF[spellID].caster or self.BUFF[spellID].caster:lower() == "all" )) or
                 (self.BUFF[spellName] and self.BUFF[spellID].enable and self.BUFF[spellName].unitID == unitID and ( caster == self.BUFF[spellName].caster or self.BUFF[spellName].caster:lower() == "all" )) then
                     if not self.button[self.current] then
                         self.button[self.current] = self:CreateButton(self.mode)
                         self:SetPosition(self.current)
                     end
-                    self:UpdateButton(self.button[self.current], index, icon, count, duration, expires, spellID, unitID, "BUFF", value)
+                    self:UpdateButton(self.button[self.current], index, icon, count, duration, expires, spellID, unitID, "BUFF", value1 or value2 or value3)
                     if self.mode == "BAR" then
                         self.button[self.current]:SetScript("OnUpdate", OnUpdate)
                     else
@@ -287,14 +287,14 @@ function watcherPrototype:CheckAura()
         for unitID in pairs(self.DEBUFF.unitIDs) do
             local index = 1
             while UnitDebuff(unitID, index) and not ( index > 1024 ) do
-                local spellName, _, icon, count, _, duration, expires, caster, _, _, spellID, _, _, _, _, _, value = UnitDebuff(unitID,index)
+                local spellName, _, icon, count, _, duration, expires, caster, _, _, spellID, _, _, _, _, _, value1, value2, value3 = UnitDebuff(unitID,index)
                 if (self.DEBUFF[spellID] and self.DEBUFF[spellID].enable and self.DEBUFF[spellID].unitID == unitID and ( caster == self.DEBUFF[spellID].caster or self.DEBUFF[spellID].caster:lower() == "all" )) or
                 (self.DEBUFF[spellName] and self.DEBUFF[spellID].enable and self.DEBUFF[spellName].unitID == unitID and ( caster == self.DEBUFF[spellName].caster or self.DEBUFF[spellName].caster:lower() == "all" )) then
                     if not self.button[self.current] then
                         self.button[self.current] = self:CreateButton(self.mode)
                         self:SetPosition(self.current)
                     end
-                    self:UpdateButton(self.button[self.current], index, icon, count, duration, expires, spellID, unitID, "DEBUFF", value)
+                    self:UpdateButton(self.button[self.current], index, icon, count, duration, expires, spellID, unitID, "DEBUFF", value1 or value2 or value3)
                     if self.mode == "BAR" then
                         self.button[self.current]:SetScript("OnUpdate", OnUpdate)
                     else

@@ -538,7 +538,7 @@ function UF:SetCastTicks(frame, numTicks, extraTick)
     local _, _, _, ms = GetNetStats()
     for i = 1, numTicks + extraTick do
         if not ticks[i] then
-            ticks[i] = frame:CreateTexture(nil, "OVERLAY", 5)
+            ticks[i] = frame:CreateTexture(nil, "OVERLAY", nil, 5)
             ticks[i]:SetTexture(R["media"].normal)
             ticks[i]:SetVertexColor(1, 0, 0, 0.75)
             ticks[i]:Width(1)
@@ -978,6 +978,9 @@ function UF:PostUpdateIcon(unit, icon, index, offset)
 
     local texture = icon.icon
     if icon.isDebuff and not self.isSmartAura then
+        icon.border:SetFrameLevel(icon:GetFrameLevel())
+        icon.backdropTexture:SetVertexColor(0, 0, 0)
+        icon.backdropTexture:SetAlpha(1)
         if icon.owner == "player" or icon.owner == "pet" or icon.owner == "vehicle" or UnitIsFriend("player", unit) then
             local color = DebuffTypeColor[dtype] or DebuffTypeColor.none
             icon.border:SetBackdropBorderColor(color.r * 0.6, color.g * 0.6, color.b * 0.6)
@@ -1030,7 +1033,7 @@ function UF:PostCreateIcon(button)
     count:SetFont(R["media"].font, math.max(R["media"].fontsize * (R:Round(self.size) / 30), 12), R["media"].fontflag)
 
     button.icon:SetTexCoord(.1, .9, .1, .9)
-    button:CreateShadow()
+    button:CreateShadow("Background")
     button.shadow:SetBackdropColor(0, 0, 0)
     button.overlay:Hide()
     button.cd:SetReverse(true)
@@ -1066,27 +1069,27 @@ function UF:CustomFilter(unit, icon, name, rank, texture, count, debuffType, dur
 end
 
 function UF:EnableHealPredictionAndAbsorb(frame)
-    local mhpb = frame.RaisedElementParent:CreateTexture(nil, "BORDER", 5)
+    local mhpb = frame.RaisedElementParent:CreateTexture(nil, "BORDER", nil, 5)
     mhpb:SetWidth(1)
     mhpb:SetTexture(R["media"].normal)
     mhpb:SetVertexColor(0, 1, 0.5, 0.25)
 
-    local ohpb = frame.RaisedElementParent:CreateTexture(nil, "BORDER", 5)
+    local ohpb = frame.RaisedElementParent:CreateTexture(nil, "BORDER", nil, 5)
     ohpb:SetWidth(1)
     ohpb:SetTexture(R["media"].normal)
     ohpb:SetVertexColor(0, 1, 0, 0.25)
 
-    local abb = frame.RaisedElementParent:CreateTexture(nil, "BORDER", 5)
+    local abb = frame.RaisedElementParent:CreateTexture(nil, "BORDER", nil, 5)
     abb:SetWidth(1)
     abb:SetTexture(R["media"].normal)
     abb:SetVertexColor(.66, 1, 1, .7)
 
-    local abbo = frame.RaisedElementParent:CreateTexture(nil, "ARTWORK", 1)
+    local abbo = frame.RaisedElementParent:CreateTexture(nil, "ARTWORK", nil, 1)
     abbo:SetAllPoints(abb)
     abbo:SetTexture("Interface\\RaidFrame\\Shield-Overlay", true, true)
     abbo.tileSize = 32
 
-    local oag = frame.RaisedElementParent:CreateTexture(nil, "ARTWORK", 1)
+    local oag = frame.RaisedElementParent:CreateTexture(nil, "ARTWORK", nil, 1)
     oag:SetWidth(15)
     oag:SetTexture("Interface\\RaidFrame\\Shield-Overshield")
     oag:SetBlendMode("ADD")
