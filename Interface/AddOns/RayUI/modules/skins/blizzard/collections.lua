@@ -20,7 +20,7 @@ local function LoadSkin()
 		select(i, PetJournal.PetCount:GetRegions()):Hide()
 	end
 
-	S:CreateBD(CollectionsJournal)
+	S:SetBD(CollectionsJournal)
 	S:CreateTab(CollectionsJournalTab1)
 	S:CreateTab(CollectionsJournalTab2)
 	S:CreateTab(CollectionsJournalTab3)
