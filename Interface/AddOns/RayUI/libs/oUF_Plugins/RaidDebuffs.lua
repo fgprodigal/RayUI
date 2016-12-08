@@ -61,7 +61,7 @@ local DispellColor = {
     ['Curse'] = {.6, 0, 1},
     ['Disease'] = {.6, .4, 0},
     ['Poison'] = {0, .6, 0},
-    ['none'] = { .23, .23, .23},
+    ['none'] = { .9, 0, 0},
 }
 
 local DispellPriority = {
@@ -233,7 +233,11 @@ local function UpdateDebuff(self, name, icon, count, debuffType, duration, endTi
         end
 
         local c = DispellColor[debuffType] or DispellColor.none
-        f:SetBackdropBorderColor(c[1], c[2], c[3])
+        if f.border then
+            f.border:SetBackdropBorderColor(c[1], c[2], c[3])
+        else
+            f:SetBackdropBorderColor(c[1], c[2], c[3])
+        end
 
         f:Show()
     else
