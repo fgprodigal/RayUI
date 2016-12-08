@@ -213,4 +213,4 @@ local function SkinBigWigs()
 	end)
 end
 
-S:AddCallbackForAddon("BigWigs", "BigWigs", SkinBigWigs)
+-- S:AddCallbackForAddon("BigWigs", "BigWigs", SkinBigWigs)
