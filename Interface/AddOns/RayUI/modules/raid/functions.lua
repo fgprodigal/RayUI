@@ -28,6 +28,7 @@ local UnitPowerMax = UnitPowerMax
 local UnitFrame_OnEnter = UnitFrame_OnEnter
 local UnitFrame_OnLeave = UnitFrame_OnLeave
 local GetSpellInfo = GetSpellInfo
+local InCombatLockdown = InCombatLockdown
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: GameTooltip
@@ -70,7 +71,7 @@ function RA:UpdateThreat(event, unit)
         local r, g, b = GetThreatStatusColor(status)
         self.Threat:SetBackdropBorderColor(r, g, b, 1)
     else
-        if R.global.general.theme == "Shadow" then
+        if not R.PixelMode then
             self.Threat:SetBackdropBorderColor(0, 0, 0, 1)
         else
             self.Threat:SetBackdropBorderColor(0, 0, 0, 0)
@@ -252,7 +253,7 @@ end
 
 -- Show Mouseover highlight
 function RA:UnitFrame_OnEnter()
-    if RA.db.tooltip then
+    if RA.db.tooltip and not InCombatLockdown() then
         UnitFrame_OnEnter(self)
     else
         GameTooltip:Hide()
@@ -534,7 +535,7 @@ function RA:Construct_Threat(frame)
     threat:SetFrameLevel(0)
     threat:SetBackdrop(RA.glowBorder)
     threat:SetBackdropColor(0, 0, 0, 0)
-    if R.global.general.theme == "Shadow" then
+    if not R.PixelMode then
         threat:SetBackdropBorderColor(0, 0, 0, 1)
     else
         threat:SetBackdropBorderColor(0, 0, 0, 0)
