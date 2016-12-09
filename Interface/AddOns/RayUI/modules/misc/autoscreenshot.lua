@@ -9,7 +9,7 @@ local Screenshot = Screenshot
 local C_Timer = C_Timer
 
 function mod:TakeScreenshot(event, ...)
-    C_Timer.After(1.2, Screenshot)
+    C_Timer.After(1, Screenshot)
 end
 
 function mod:Initialize()
