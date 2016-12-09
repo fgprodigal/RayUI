@@ -79,6 +79,8 @@ function AddOn:OnInitialize()
 	configButton:Point("TOPLEFT", GameMenuButtonAddons, "BOTTOMLEFT", 0, -1)
 	hooksecurefunc("GameMenuFrame_UpdateVisibleButtons", self.PositionGameMenuButton)
 
+    self:LoadDeveloperConfig()
+
     self.data = LibStub("AceDB-3.0"):New("RayUIData", self.DF)
     self.data.RegisterCallback(self, "OnProfileChanged", "OnProfileChanged")
     self.data.RegisterCallback(self, "OnProfileCopied", "OnProfileChanged")

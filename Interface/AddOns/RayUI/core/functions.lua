@@ -853,6 +853,13 @@ function R:IsDeveloper()
     return false
 end
 
+function R:LoadDeveloperConfig()
+    if not R:IsDeveloper() then return end
+    P["UnitFrames"].smartAura = true
+    P["Misc"].cooldowns.enable = true
+    P["Watcher"].enable = false
+end
+
 function R:ThrowError(err)
     if err and GetCVarBool("scriptErrors") then
         if IsAddOnLoaded("!BugGrabber") then
