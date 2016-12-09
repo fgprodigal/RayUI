@@ -178,7 +178,7 @@ local function SetMinimapButton(btn)
     if btn:GetName() ~= "BaudErrorFrameMinimapButton" then
         tinsert(buttons, btn)
     else
-        btn.shadow:SetBackdropColor(0.8, 0.2, 0.2, 0.4)
+        btn.shadow:SetBackdropBorderColor(1, 0, 0)
         R:GetModule("Skins"):CreatePulse(btn.shadow, 1, 1)
     end
 end
@@ -292,5 +292,5 @@ function MM:ButtonCollector()
                 self:SetScript("OnUpdate", nil)
             end
         end)
-    R.FrameLocks["MinimapButtonCollectFrame"] = { parent = R.UIParent, strata = "BACKGROUND", level = 1 }
+    R.FrameLocks["MinimapButtonCollectFrame"] = { parent = R.UIParent, strata = "BACKGROUND" }
 end
