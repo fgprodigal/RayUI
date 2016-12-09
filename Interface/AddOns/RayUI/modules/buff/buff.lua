@@ -129,7 +129,8 @@ function A:CreateIcon(button)
         end)
 
     button:CreateShadow("Background")
-    button.shadow:SetBackdropColor(0, 0, 0)
+    button.backdropTexture:SetVertexColor(0, 0, 0)
+    button.backdropTexture:SetAlpha(1)
 
     button.highlight = button:CreateTexture(nil, "HIGHLIGHT")
     button.highlight:SetColorTexture(1,1,1,0.45)
@@ -171,8 +172,6 @@ function A:UpdateAura(button, index)
         if filter == "HARMFUL" then
             local color = DebuffTypeColor[dtype] or DebuffTypeColor.none
             button.border:SetFrameLevel(button:GetFrameLevel())
-            button.backdropTexture:SetVertexColor(0, 0, 0)
-            button.backdropTexture:SetAlpha(1)
             button.border:SetBackdropBorderColor(color.r, color.g, color.b)
             button.texture:SetInside(button, 1, 1)
         end

@@ -25,11 +25,6 @@ local function FixTooltip()
     WorldMapTooltip:SetFrameStrata("TOOLTIP")
     WorldMapCompareTooltip1:SetFrameStrata("TOOLTIP")
     WorldMapCompareTooltip2:SetFrameStrata("TOOLTIP")
-    if WorldMapTooltip.border then
-        WorldMapTooltip.border:SetFrameStrata("DIALOG")
-        WorldMapCompareTooltip1.border:SetFrameStrata("DIALOG")
-        WorldMapCompareTooltip2.border:SetFrameStrata("DIALOG")
-    end
 end
 
 function WM:SetLargeWorldMap()

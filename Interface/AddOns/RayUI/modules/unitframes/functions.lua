@@ -979,8 +979,6 @@ function UF:PostUpdateIcon(unit, icon, index, offset)
     local texture = icon.icon
     if icon.isDebuff and not self.isSmartAura then
         icon.border:SetFrameLevel(icon:GetFrameLevel())
-        icon.backdropTexture:SetVertexColor(0, 0, 0)
-        icon.backdropTexture:SetAlpha(1)
         if icon.owner == "player" or icon.owner == "pet" or icon.owner == "vehicle" or UnitIsFriend("player", unit) then
             local color = DebuffTypeColor[dtype] or DebuffTypeColor.none
             icon.border:SetBackdropBorderColor(color.r * 0.6, color.g * 0.6, color.b * 0.6)
@@ -1034,7 +1032,8 @@ function UF:PostCreateIcon(button)
 
     button.icon:SetTexCoord(.1, .9, .1, .9)
     button:CreateShadow("Background")
-    button.shadow:SetBackdropColor(0, 0, 0)
+    button.backdropTexture:SetVertexColor(0, 0, 0)
+    button.backdropTexture:SetAlpha(1)
     button.overlay:Hide()
     button.cd:SetReverse(true)
 

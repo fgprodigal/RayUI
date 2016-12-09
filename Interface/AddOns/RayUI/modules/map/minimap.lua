@@ -142,7 +142,7 @@ function MM:SkinMiniMap()
         _G[frames[i]]:Kill()
     end
     Minimap:Size(175, 175)
-    Minimap:CreateShadow("Background")
+    Minimap:CreateShadow("Background", nil, true)
     Minimap:SetPlayerTexture("Interface\\AddOns\\RayUI\\media\\MinimapArrow")
     Minimap.shadow:SetBackdrop( {
             edgeFile = R["media"].glow,

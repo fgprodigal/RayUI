@@ -701,7 +701,6 @@ function AB:Style(button)
     end
 
     if button.style then
-        button.style:SetParent(button.shadow)
         button.style:SetDrawLayer("BACKGROUND", -8)
     end
 

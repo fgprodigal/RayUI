@@ -1003,9 +1003,6 @@ function R:AddNonPetBattleFrames()
 		if strata then
 			obj:SetFrameStrata(strata)
 		end
-        if level then
-			obj:SetFrameLevel(level)
-		end
 	end
 
 	self:UnregisterEvent("PLAYER_REGEN_DISABLED")

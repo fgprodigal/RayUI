@@ -77,7 +77,6 @@ function mod:CreateBar(name, anchorFrame, height)
     local bar = CreateFrame("StatusBar", name, R.UIParent, "AnimatedStatusBarTemplate")
     bar:CreateShadow("Background")
     bar:SetFrameLevel(3)
-    bar.shadow:SetFrameLevel(1)
     bar:SetHeight(height)
     bar.height = height
     bar:SetStatusBarTexture(R.media.normal)
@@ -86,7 +85,7 @@ function mod:CreateBar(name, anchorFrame, height)
     bar:SetScript("OnHide", Bar_OnHide)
     Bar_OnShow(bar)
 
-    R.FrameLocks[name] = { parent = R.UIParent, strata = bar:GetFrameStrata(), level = 3 }
+    R.FrameLocks[name] = { parent = R.UIParent, strata = bar:GetFrameStrata() }
     return bar
 end
 

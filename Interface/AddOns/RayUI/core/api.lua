@@ -41,10 +41,9 @@ local function Point(obj, arg1, arg2, arg3, arg4, arg5)
     obj:SetPoint(arg1, arg2, arg3, arg4, arg5)
 end
 
-local function CreateShadow(f, t, thickness)
+local function CreateShadow(f, t, thickness, forceShadow)
     local borderr, borderg, borderb = 0, 0, 0
     local backdropr, backdropg, backdropb, backdropa = unpack(R["media"].backdropcolor)
-    local frameLevel = f:GetFrameLevel() > 0 and f:GetFrameLevel() - 1 or 0
     local thickness = thickness or 3
 
     if t == "Background" then
@@ -53,27 +52,34 @@ local function CreateShadow(f, t, thickness)
         backdropa = 0
     end
 
+    if not f.shadow then
+        local shadow = CreateFrame("Frame", nil, f)
+        shadow:SetFrameLevel(1)
+        shadow:SetFrameStrata(f:GetFrameStrata())
+        f.shadow = shadow
+    end
+
     if not f.border then
         local border = CreateFrame("Frame", nil, f)
-        border:SetFrameLevel(frameLevel)
+        border:SetFrameLevel(f:GetFrameLevel())
         border:SetOutside(f, 1, 1)
         border:SetTemplate("Border")
         f.border = border
     end
 
-    if not f.shadow then
-        local shadow = CreateFrame("Frame", nil, f)
-        shadow:SetFrameLevel(frameLevel)
-        shadow:SetOutside(f.border, thickness - 1, thickness - 1)
-        if R.global.general.theme == "Shadow" then
-            shadow:SetBackdrop( {
-                    edgeFile = R["media"].glow,
-                    edgeSize = R:Scale(thickness),
-                })
-            shadow:SetBackdropBorderColor( borderr, borderg, borderb )
+    f.shadow:SetOutside(f.border, thickness - 1, thickness - 1)
+
+    if R.global.general.theme == "Shadow" or forceShadow then
+        f.shadow:SetBackdrop( {
+                edgeFile = R["media"].glow,
+                edgeSize = R:Scale(thickness),
+            })
+        f.shadow:SetBackdropBorderColor( borderr, borderg, borderb )
+        if not forceShadow then
             f.border:SetBackdropBorderColor(0, 0, 0, 0)
         end
-        f.shadow = shadow
+    else
+        f.shadow:Hide()
     end
 
     if not f.backdropTexture then
