@@ -842,7 +842,7 @@ function R:UpdateDemoFrame()
     demoFrame.button2.backdropTexture:SetVertexColor(backdropr, backdropg, backdropb)
 end
 
-R.Developer = { "夏琉君", "Myr", "Drayd", "蚊蚊", "Gabrriel", "Manastrom", "Casadora" }
+R.Developer = { "夏琉君", "Myr", "Drayd", "蚊蚊", "Gabrriel", "Manastorm" }
 
 function R:IsDeveloper()
     for _, name in pairs(R.Developer) do
