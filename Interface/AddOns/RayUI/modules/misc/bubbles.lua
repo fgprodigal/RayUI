@@ -31,12 +31,12 @@ function mod:SkinBubble(frame)
         end
     end
 
-    if R.global.general.theme == "Shadow" then
+    if not R.PixelMode then
         frame:SetBackdrop({
                 edgeFile = R["media"].glow,
                 bgFile = R["media"].blank,
-                tile = false, tileSize = 0, edgeSize = 5,
-                insets = {left = 4, right = 4, top = 4, bottom = 4}
+                tile = false, tileSize = 0, edgeSize = 3,
+                insets = {left = 5, right = 5, top = 5, bottom = 5}
             })
     else
         frame:SetBackdrop({

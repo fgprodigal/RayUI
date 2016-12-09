@@ -89,6 +89,12 @@ function AddOn:OnInitialize()
     self:UIScale()
     self:UpdateMedia()
 
+    if self.global.general.theme == "Pixel" then
+		self.Border = self.mult
+		self.Spacing = 0
+		self.PixelMode = true
+	end
+
     for k, v in self:IterateModules() do
         v.db = AddOn.db[k]
     end

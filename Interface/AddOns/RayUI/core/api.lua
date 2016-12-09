@@ -44,7 +44,7 @@ end
 local function CreateShadow(f, t, thickness, forceShadow)
     local borderr, borderg, borderb = 0, 0, 0
     local backdropr, backdropg, backdropb, backdropa = unpack(R["media"].backdropcolor)
-    local thickness = thickness or 3
+    local thickness = thickness or R.Border
 
     if t == "Background" then
         backdropr, backdropg, backdropb, backdropa = unpack(R["media"].backdropfadecolor)
@@ -55,7 +55,6 @@ local function CreateShadow(f, t, thickness, forceShadow)
     if not f.shadow then
         local shadow = CreateFrame("Frame", nil, f)
         shadow:SetFrameLevel(1)
-        shadow:SetFrameStrata(f:GetFrameStrata())
         f.shadow = shadow
     end
 
@@ -69,15 +68,12 @@ local function CreateShadow(f, t, thickness, forceShadow)
 
     f.shadow:SetOutside(f.border, thickness - 1, thickness - 1)
 
-    if R.global.general.theme == "Shadow" or forceShadow then
+    if ( not R.PixelMode ) or forceShadow then
         f.shadow:SetBackdrop( {
                 edgeFile = R["media"].glow,
                 edgeSize = R:Scale(thickness),
             })
         f.shadow:SetBackdropBorderColor( borderr, borderg, borderb )
-        if not forceShadow then
-            f.border:SetBackdropBorderColor(0, 0, 0, 0)
-        end
     else
         f.shadow:Hide()
     end

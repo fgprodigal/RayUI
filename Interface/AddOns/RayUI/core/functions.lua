@@ -139,6 +139,8 @@ function R:UIScale()
     self.UIParent:SetAllPoints()
     self.UIParent.origHeight = self.UIParent:GetHeight()
     self.mult = 768/string.match(self.resolution, "%d+x(%d+)")/self.global.general.uiscale
+	self.Spacing = self.PixelMode and 0 or self.mult
+	self.Border = (self.PixelMode and self.mult or self.mult * 3)
 
     SetCVar("useUiScale", 1)
     SetCVar("uiScale", self.global.general.uiscale)

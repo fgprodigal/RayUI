@@ -486,6 +486,7 @@ function TT:SetStyle(tooltip)
     if self.db.hideincombat and InCombatLockdown() then
         return tooltip:Hide()
     end
+    TT:Hook_Reset(tooltip)
     if not tooltip.styled then
         tooltip:SetBackdrop(nil)
         R:GetModule("Skins"):CreateStripesThin(tooltip)
@@ -701,7 +702,6 @@ function TT:Initialize()
     self:SecureHook("GameTooltip_SetDefaultAnchor")
     self:SecureHook("GameTooltip_ShowStatusBar")
     self:HookScript(GameTooltip, "OnUpdate", "GameTooltip_OnUpdate")
-    self:SecureHook(GameTooltip, "SetOwner", "Hook_Reset")
 
     GameTooltip:HookScript("OnUpdate", function(self, elapsed)
             if self:GetAnchorType() == "ANCHOR_CURSOR" then

@@ -98,10 +98,10 @@ function S:CreateSD(parent, size, r, g, b, alpha, offset)
 	assert(parent, "doesn't exist!")
 	S:CreateStripesThin(parent)
 
-	if R.global.general.theme~="Shadow" then return end
+	if R.PixelMode then return end
 	local sd = CreateFrame("Frame", nil, parent)
-	sd.size = size or 5
-	sd.size = sd.size - 5
+	sd.size = size or R.Border
+	sd.size = sd.size - R.Border
 	sd.offset = offset or 0
 	sd:Point("TOPLEFT", parent, -sd.size - 1 - sd.offset, sd.size + 1 + sd.offset)
 	sd:Point("BOTTOMRIGHT", parent, sd.size + 1 + sd.offset, -sd.size - 1 - sd.offset)
@@ -138,7 +138,7 @@ local function StartGlow(f)
 	if not f:IsEnabled() then return end
 	f:SetBackdropColor(r, g, b, .5)
 	f:SetBackdropBorderColor(r, g, b)
-	if R.global.general.theme == "Shadow" then
+	if not R.PixelMode then
 		f.glow:SetAlpha(1)
 		S:CreatePulse(f.glow)
 	end

@@ -220,23 +220,31 @@ local function LoadSkin()
 	S:Reskin(PlayerTalentFramePetSpecializationLearnButton)
 
 	-- PvP Talents
-	
+
 	PlayerTalentFramePVPTalents.XPBar.Frame:Hide()
-	
+    PlayerTalentFramePVPTalents.XPBar.NextAvailable.Frame:Hide()
+    PlayerTalentFramePVPTalents.XPBar.NextAvailable:ClearAllPoints()
+    PlayerTalentFramePVPTalents.XPBar.NextAvailable:SetPoint("LEFT", PlayerTalentFramePVPTalents.XPBar.Bar, "RIGHT")
+    PlayerTalentFramePVPTalents.XPBar.NextAvailable:SetSize(25, 25)
+    PlayerTalentFramePVPTalents.XPBar.NextAvailable.Icon:SetAllPoints()
+    PlayerTalentFramePVPTalents.XPBar.NextAvailable.Icon:SetTexCoord(.08, .92, .08, .92)
+    PlayerTalentFramePVPTalents.XPBar.NextAvailable.Icon.SetTexCoord = R.dummy
+    S:ReskinIcon(PlayerTalentFramePVPTalents.XPBar.NextAvailable.Icon)
+
 	local bg = CreateFrame("Frame", nil, PlayerTalentFramePVPTalents.XPBar.Bar)
 	bg:SetPoint("TOPLEFT", 0, 1)
 	bg:SetPoint("BOTTOMRIGHT", 0, -1)
 	bg:SetFrameLevel(PlayerTalentFramePVPTalents.XPBar.Bar:GetFrameLevel()-1)
 	S:CreateBD(bg, .3)
 	PlayerTalentFramePVPTalents.XPBar.Bar.Background:Hide()
-	
+
 	PlayerTalentFramePVPTalents.XPBar.NextAvailable.Frame:Hide()
 	S:CreateBD(PlayerTalentFramePVPTalents.XPBar.NextAvailable, .5)
 	PlayerTalentFramePVPTalents.XPBar.NextAvailable:ClearAllPoints()
 	PlayerTalentFramePVPTalents.XPBar.NextAvailable:SetPoint("LEFT", PlayerTalentFramePVPTalents.XPBar.Bar, "RIGHT")
 	PlayerTalentFramePVPTalents.XPBar.NextAvailable:SetSize(25, 25)
 	PlayerTalentFramePVPTalents.XPBar.NextAvailable.Icon:SetAllPoints()
-	
+
 	PlayerTalentFramePVPTalents.XPBar.NextAvailable.Frame.Show = R.dummy
 	PlayerTalentFramePVPTalents.XPBar.Levelbg = CreateFrame("Frame", nil, PlayerTalentFramePVPTalents.XPBar)
 	PlayerTalentFramePVPTalents.XPBar.Levelbg:SetPoint("RIGHT", PlayerTalentFramePVPTalents.XPBar.Bar, "LEFT")
@@ -245,11 +253,11 @@ local function LoadSkin()
 	PlayerTalentFramePVPTalents.XPBar.Level:SetPoint("CENTER", PlayerTalentFramePVPTalents.XPBar.Levelbg, "CENTER")
 	PlayerTalentFramePVPTalents.XPBar.Level:SetJustifyH("CENTER")
 	S:CreateBD(PlayerTalentFramePVPTalents.XPBar.Levelbg, .5)
-	
+
 	for i = 1, 7 do
 		select(i, PlayerTalentFramePVPTalents.Talents:GetRegions()):Hide()
 	end
-	
+
 	for i = 1, 6 do
 		PlayerTalentFramePVPTalents.Talents["Tier"..i].Bg:SetAlpha(0)
 		PlayerTalentFramePVPTalents.Talents["Tier"..i].TopLine:SetDesaturated(true)
@@ -265,11 +273,11 @@ local function LoadSkin()
 			bu.knownSelection:SetAlpha(0)
 			bu.learnSelection:SetAlpha(0)
 			bu.highlight:Hide()
-			
+
 			bu.Icon:SetTexCoord(.08, .92, .08, .92)
 			local iconbg = S:CreateBG(bu.Icon)
 			iconbg:SetDrawLayer("BACKGROUND", -1)
-			
+
 			bu.bg = CreateFrame("Frame", nil, bu)
 			bu.bg:SetPoint("TOPLEFT", 10, 0)
 			bu.bg:SetPoint("BOTTOMRIGHT")
@@ -277,7 +285,7 @@ local function LoadSkin()
 			S:CreateBD(bu.bg, .25)
 		end
 	end
-		
+
 	hooksecurefunc("PVPTalentFrame_Update", function()
 		for i = 1, 6 do
 			for j = 1, 3 do

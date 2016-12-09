@@ -363,9 +363,9 @@ end
 
 function CH:OnHyperlinkLeave(frame, linkData, link)
     if hyperLinkEntered then
-		HideUIPanel(GameTooltip)
-		hyperLinkEntered = nil
-	end
+        HideUIPanel(GameTooltip)
+        hyperLinkEntered = nil
+    end
 end
 
 function CH:ScrollToBottom(frame)
@@ -704,8 +704,6 @@ function CH:ApplyStyle(event, ...)
             editbox:SetWidth(RayUIChatBG:GetWidth())
             editbox:SetPoint("BOTTOMLEFT", cf, "TOPLEFT", -2, 6)
             editbox:CreateShadow("Background")
-            editbox.border:Show()
-            editbox.shadow:SetBackdrop(nil)
             editbox:Hide()
             eb:SetAltArrowKeyMode(false)
             eb:ClearAllPoints()
@@ -734,12 +732,24 @@ function CH:ApplyStyle(event, ...)
                     if ( type == "CHANNEL" ) then
                         local id = eb:GetAttribute("channelTarget")
                         if id == 0 then
-                            editbox.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))
+                            if R.PixelMode then
+                                editbox.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))
+                            else
+                                editbox.shadow:SetBackdropBorderColor(unpack(R["media"].bordercolor))
+                            end
                         else
-                            editbox.border:SetBackdropBorderColor(ChatTypeInfo[type..id].r,ChatTypeInfo[type..id].g,ChatTypeInfo[type..id].b)
+                            if R.PixelMode then
+                                editbox.border:SetBackdropBorderColor(ChatTypeInfo[type..id].r,ChatTypeInfo[type..id].g,ChatTypeInfo[type..id].b)
+                            else
+                                editbox.shadow:SetBackdropBorderColor(ChatTypeInfo[type..id].r,ChatTypeInfo[type..id].g,ChatTypeInfo[type..id].b)
+                            end
                         end
                     else
-                        editbox.border:SetBackdropBorderColor(ChatTypeInfo[type].r,ChatTypeInfo[type].g,ChatTypeInfo[type].b)
+                        if R.PixelMode then
+                            editbox.border:SetBackdropBorderColor(ChatTypeInfo[type].r,ChatTypeInfo[type].g,ChatTypeInfo[type].b)
+                        else
+                            editbox.shadow:SetBackdropBorderColor(ChatTypeInfo[type].r,ChatTypeInfo[type].g,ChatTypeInfo[type].b)
+                        end
                     end
                 end)
             local function BottomButtonClick(self)

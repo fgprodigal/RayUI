@@ -237,7 +237,7 @@ function MM:CheckMail()
         R:GetModule("Skins"):CreatePulse(Minimap.shadow, 1, 1)
     else -- None of the above
         Minimap.shadow:SetScript("OnUpdate", nil)
-        if R.global.general.theme == "Shadow" then
+        if not R.PixelMode then
             Minimap.shadow:SetAlpha(1)
         else
             Minimap.shadow:SetAlpha(0)
