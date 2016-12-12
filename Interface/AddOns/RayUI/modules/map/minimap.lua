@@ -36,11 +36,19 @@ local Minimap_ZoomIn = Minimap_ZoomIn
 local Minimap_ZoomOut = Minimap_ZoomOut
 local ToggleGuildFrame = ToggleGuildFrame
 local ToggleLFDParentFrame = ToggleLFDParentFrame
+local Minimap_OnClick = Minimap_OnClick
+local GetNumTrackingTypes = GetNumTrackingTypes
+local UnitClass = UnitClass
+local ClearAllTracking = ClearAllTracking
+local GetTrackingInfo = GetTrackingInfo
+local MiniMapTrackingDropDown_IsNoTrackingActive = MiniMapTrackingDropDown_IsNoTrackingActive
+local MiniMapTrackingDropDownButton_IsActive = MiniMapTrackingDropDownButton_IsActive
+local MiniMapTracking_SetTracking = MiniMapTracking_SetTracking
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: GameTooltip, Minimap, HIGHLIGHT_FONT_COLOR, NORMAL_FONT_COLOR, TimeManagerClockButton, Settings
 -- GLOBALS: TIMEMANAGER_ALARM_TOOLTIP_TURN_OFF, GAMETIME_TOOLTIP_TOGGLE_CLOCK, GarrisonLandingPageMinimapButton
--- GLOBALS: MinimapCluster, MiniMapTrackingBackground, MiniMapTrackingButton, MiniMapTracking, MiniMapInstanceDifficulty
+-- GLOBALS: MinimapCluster, MiniMapTracking, MiniMapInstanceDifficulty, Lib_UIDropDownMenu_CreateInfo, MINIMAP_TRACKING_NONE
 -- GLOBALS: GuildInstanceDifficulty, MiniMapChallengeMode, MiniMapMailFrame, MiniMapMailIcon, GameTimeCalendarInvitesTexture
 -- GLOBALS: FeedbackUIButton, StreamingIcon, MinimapZoneText, DropDownList1, LFGDungeonReadyStatus, HelpOpenTicketButton
 -- GLOBALS: CHARACTER_BUTTON, SPELLBOOK_ABILITIES_BUTTON, TALENTS_BUTTON, ACHIEVEMENT_BUTTON, SOCIAL_BUTTON
@@ -49,9 +57,94 @@ local ToggleLFDParentFrame = ToggleLFDParentFrame
 -- GLOBALS: SpellBookFrame, PlayerTalentFrame, GuildFrame, EncounterJournal, RaidFinderFrame, StoreMicroButton
 -- GLOBALS: CalendarFrame, LootHistoryFrame, MiniMapTrackingDropDown, BlizzardStopwatchOptions, GameTimeFrame, TimeManagerFrame
 -- GLOBALS: GuildFrame_LoadUI, EncounterJournal_LoadUI, TalentFrame_LoadUI, UIParent, MinimapButtonCollectFrame
--- GLOBALS: MinimapZoomIn, MinimapZoomOut
+-- GLOBALS: MinimapZoomIn, MinimapZoomOut, Lib_UIDropDownMenu_AddButton, HUNTER_TRACKING, HUNTER_TRACKING_TEXT, TOWNSFOLK_TRACKING_TEXT
+-- GLOBALS: TOWNSFOLK, LIB_UIDROPDOWNMENU_MENU_VALUE, Lib_ToggleDropDownMenu
 
 MM.modName = L["小地图"]
+
+local function MiniMapTrackingDropDown_Initialize(self, level)
+    local name, texture, active, category, nested, numTracking;
+    local count = GetNumTrackingTypes();
+    local info;
+    local _, class = UnitClass("player");
+
+    if (level == 1) then
+        info = Lib_UIDropDownMenu_CreateInfo();
+        info.text=MINIMAP_TRACKING_NONE;
+        info.checked = MiniMapTrackingDropDown_IsNoTrackingActive;
+        info.func = ClearAllTracking;
+        info.icon = nil;
+        info.arg1 = nil;
+        info.isNotRadio = true;
+        info.keepShownOnClick = true;
+        Lib_UIDropDownMenu_AddButton(info, level);
+
+        if (class == "HUNTER") then --only show hunter dropdown for hunters
+            numTracking = 0;
+            -- make sure there are at least two options in dropdown
+            for id=1, count do
+                name, texture, active, category, nested = GetTrackingInfo(id);
+                if (nested == HUNTER_TRACKING and category == "spell") then
+                    numTracking = numTracking + 1;
+                end
+            end
+            if (numTracking > 1) then
+                info.text = HUNTER_TRACKING_TEXT;
+                info.func = nil;
+                info.notCheckable = true;
+                info.keepShownOnClick = false;
+                info.hasArrow = true;
+                info.value = HUNTER_TRACKING;
+                Lib_UIDropDownMenu_AddButton(info, level)
+            end
+        end
+
+        info.text = TOWNSFOLK_TRACKING_TEXT;
+        info.func = nil;
+        info.notCheckable = true;
+        info.keepShownOnClick = false;
+        info.hasArrow = true;
+        info.value = TOWNSFOLK;
+        Lib_UIDropDownMenu_AddButton(info, level)
+    end
+    for id=1, count do
+        name, texture, active, category, nested = GetTrackingInfo(id);
+        info = Lib_UIDropDownMenu_CreateInfo();
+        info.text = name;
+        info.checked = MiniMapTrackingDropDownButton_IsActive;
+        info.func = MiniMapTracking_SetTracking;
+        info.icon = texture;
+        info.arg1 = id;
+        info.isNotRadio = true;
+        info.keepShownOnClick = true;
+        if ( category == "spell" ) then
+            info.tCoordLeft = 0.0625;
+            info.tCoordRight = 0.9;
+            info.tCoordTop = 0.0625;
+            info.tCoordBottom = 0.9;
+        else
+            info.tCoordLeft = 0;
+            info.tCoordRight = 1;
+            info.tCoordTop = 0;
+            info.tCoordBottom = 1;
+        end
+        if (level == 1 and
+            (nested < 0 or -- this tracking shouldn't be nested
+                (nested == HUNTER_TRACKING and class ~= "HUNTER") or
+                (numTracking == 1 and category == "spell"))) then -- this is a hunter tracking ability, but you only have one
+            Lib_UIDropDownMenu_AddButton(info, level);
+        elseif (level == 2 and (nested == TOWNSFOLK or (nested == HUNTER_TRACKING and class == "HUNTER")) and nested == LIB_UIDROPDOWNMENU_MENU_VALUE) then
+            Lib_UIDropDownMenu_AddButton(info, level);
+        end
+    end
+end
+local RayUI_MinimapTrackDropDown = CreateFrame("Frame", "RayUI_MinimapTrackDropDown", UIParent, "UIDropDownMenuTemplate")
+RayUI_MinimapTrackDropDown:SetID(1)
+RayUI_MinimapTrackDropDown:SetClampedToScreen(true)
+RayUI_MinimapTrackDropDown:Hide()
+Lib_UIDropDownMenu_Initialize(RayUI_MinimapTrackDropDown, MiniMapTrackingDropDown_Initialize, "MENU");
+RayUI_MinimapTrackDropDown.noResize = true
+
 local menuFrame = CreateFrame("Frame", "RayUI_MinimapRightClickMenu", R.UIParent)
 local menuList = {
     {text = CHARACTER_BUTTON,
@@ -153,8 +246,7 @@ function MM:SkinMiniMap()
             insets = {left = R:Scale(4), right = R:Scale(4), top = R:Scale(4), bottom = R:Scale(4)},
         })
     MinimapCluster:EnableMouse(false)
-    MiniMapTrackingBackground:SetAlpha(0)
-    MiniMapTrackingButton:SetAlpha(0)
+    MiniMapTracking:Hide()
     MiniMapInstanceDifficulty:ClearAllPoints()
     MiniMapInstanceDifficulty:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 2, 2)
     MiniMapInstanceDifficulty:SetScale(0.75)
@@ -202,20 +294,6 @@ function MM:SkinMiniMap()
     Minimap:HookScript("OnLeave", function(self)
             UIFrameFadeOut(zoneTextFrame, 0.3, zoneTextFrame:GetAlpha(), 0)
         end)
-    if MiniMapTracking then
-        MiniMapTracking:SetParent(zoneTextFrame)
-        MiniMapTracking:ClearAllPoints()
-        MiniMapTrackingButton:Size(12, 12)
-        MiniMapTrackingButton:ClearAllPoints()
-        MiniMapTrackingButton:SetPoint("CENTER")
-        MiniMapTracking:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 0, 0)
-        MiniMapTrackingButton:HookScript("OnEnter", function(self)
-                UIFrameFadeIn(zoneTextFrame, 0.3, zoneTextFrame:GetAlpha(), 1)
-            end)
-        MiniMapTrackingButton:HookScript("OnLeave", function(self)
-                UIFrameFadeOut(zoneTextFrame, 0.3, zoneTextFrame:GetAlpha(), 0)
-            end)
-    end
     DropDownList1:SetClampedToScreen(true)
     LFGDungeonReadyStatus:SetClampedToScreen(true)
     HelpOpenTicketButton:SetParent(Minimap)
@@ -280,23 +358,16 @@ end
 
 function MM:Minimap_OnMouseUp(btn)
     local position = self:GetPoint()
-    if btn == "MiddleButton" or btn== "RightButton" then
+    if btn == "MiddleButton" or (btn == "RightButton" and IsShiftKeyDown()) then
         if position:match("LEFT") then
             R:DropDown(menuList, menuFrame)
         else
             R:DropDown(menuList, menuFrame, -160, 0)
         end
+    elseif btn == "RightButton" then
+        Lib_ToggleDropDownMenu(1, nil, RayUI_MinimapTrackDropDown, "cursor")
     else
-        local x, y = GetCursorPosition()
-        x = x / Minimap:GetEffectiveScale()
-        y = y / Minimap:GetEffectiveScale()
-        local cx, cy = Minimap:GetCenter()
-        x = x - cx
-        y = y - cy
-        if ( sqrt(x * x + y * y) < (Minimap:GetWidth() / 2) ) then
-            Minimap:PingLocation(x, y)
-        end
-        Minimap_SetPing(x, y, 1)
+        Minimap_OnClick(self)
     end
 end
 
