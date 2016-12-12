@@ -1,5 +1,6 @@
 ﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local AB = R:GetModule("ActionBar")
+local S = R:GetModule("Skins")
 
 --Cache global variables
 --Lua functions
@@ -33,18 +34,10 @@ function AB:CreateVehicleExit()
 	veb:SetAllPoints()
 	veb:CreateShadow("Background")
 	veb:RegisterForClicks("AnyUp")
-	veb:SetNormalTexture("Interface\\Vehicles\\UI-Vehicles-Button-Exit-Up")
-	veb:GetNormalTexture():SetPoint("TOPLEFT", -4, 4)
-	veb:GetNormalTexture():SetPoint("BOTTOMRIGHT", 4, -4)
-	veb:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
-	veb:SetPushedTexture("Interface\\Vehicles\\UI-Vehicles-Button-Exit-Down")
-	veb:GetPushedTexture():SetPoint("TOPLEFT", -4, 4)
-	veb:GetPushedTexture():SetPoint("BOTTOMRIGHT", 4, -4)
-	veb:GetPushedTexture():SetTexCoord(.08, .92, .08, .92)
-	veb:SetHighlightTexture("Interface\\Vehicles\\UI-Vehicles-Button-Exit-Down")
-	veb:GetHighlightTexture():SetPoint("TOPLEFT", -4, 4)
-	veb:GetHighlightTexture():SetPoint("BOTTOMRIGHT", 4, -4)
-	veb:GetHighlightTexture():SetTexCoord(.08, .92, .08, .92)
+    veb.icon = veb:CreateFontString(nil, "OVERLAY")
+    veb.icon:FontTemplate(R["media"].octicons, 20*R.mult, "OUTLINE")
+    veb.icon:Point("CENTER", 2, -1)
+    veb.icon:SetText("")
 	veb:SetScript("OnClick", function(self)
 		if ( UnitOnTaxi("player") ) then
 			TaxiRequestEarlyLanding()
@@ -55,7 +48,9 @@ function AB:CreateVehicleExit()
 		end
 	end)
 	veb:SetScript("OnEnter", MainMenuBarVehicleLeaveButton_OnEnter)
+    veb:HookScript("OnEnter", function() veb.icon:SetTextColor(S["media"].r, S["media"].g, S["media"].b) end)
 	veb:SetScript("OnLeave", GameTooltip_Hide)
+    veb:HookScript("OnLeave", function() veb.icon:SetTextColor(1, 1, 1) end)
 	veb:RegisterEvent("PLAYER_ENTERING_WORLD")
 	veb:RegisterEvent("UPDATE_BONUS_ACTIONBAR")
 	veb:RegisterEvent("UPDATE_MULTI_CAST_ACTIONBAR")
@@ -65,7 +60,6 @@ function AB:CreateVehicleExit()
 	veb:SetScript("OnEvent", function(self)
 		if ( CanExitVehicle() and ActionBarController_GetCurrentActionBarState() == LE_ACTIONBAR_STATE_MAIN ) then
 			self:Show()
-			self:GetNormalTexture():SetVertexColor(1, 1, 1)
 			self:EnableMouse(true)
 		else
 			self:Hide()
