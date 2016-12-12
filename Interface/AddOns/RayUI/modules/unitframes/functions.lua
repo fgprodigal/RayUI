@@ -852,7 +852,6 @@ function UF:PostUpdateHealth(unit, cur, max)
             end
         end
     elseif UF.db.transparent then
-        self:GetParent().gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
         self.backdropTexture:Hide()
         if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
             self.bg:Hide()
@@ -863,14 +862,14 @@ function UF:PostUpdateHealth(unit, cur, max)
             self:GetParent().gradient:SetGradientAlpha("VERTICAL", .6, .6, .6, .6, .4, .4, .4, .6)
         else
             self.bg:Show()
-            local r, g, b = RayUF.ColorGradient(curhealth, maxhealth, unpack(RayUF.colors.smooth))
+            r, g, b = RayUF.ColorGradient(curhealth, maxhealth, unpack(RayUF.colors.smooth))
             self.bg:SetVertexColor(r, g, b)
             self.bg:SetGradient("VERTICAL", r, g, b, r/2, g/2, b/2)
             self:GetParent().gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
         end
     else
-        local r1, g1, b1 = self:GetStatusBarColor()
-        self:GetStatusBarTexture():SetGradient("VERTICAL", r1, g1, b1, r1/2, g1/2, b1/2)
+        r, g, b = self:GetStatusBarColor()
+        self:GetStatusBarTexture():SetGradient("VERTICAL", r, g, b, r/2, g/2, b/2)
         self:GetParent().gradient:Hide()
     end
     local color = {1,1,1}
