@@ -434,7 +434,7 @@ function AB:UpdatePositionAndSize(barName)
                 SetCooldownSwipeAlpha(bar.buttons[i].cooldown, 0)
             end
         else
-            if not self.hooks[button] then
+            if self.hooks[button] then
                 self:Unhook(button, "OnEnter")
                 self:Unhook(button, "OnLeave")
             end

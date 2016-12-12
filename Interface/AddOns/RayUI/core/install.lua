@@ -65,6 +65,10 @@ function R:SetLayout(layout)
 		R.db.movers.AltPowerBarMover = "BOTTOMRIGHTRayUIParentBOTTOMRIGHT-36085"
 		R.db.Raid.horizontal = true
 		R.db.Raid.growth = "UP"
+        R.db.UnitFrames.transparent = true
+        R.db.UnitFrames.showPortrait = false
+        R.db.UnitFrames.healthColorClass = false
+        R.db.UnitFrames.powerColorClass = true
 		StaticPopup_Show("CFG_RELOAD")
 	elseif layout == "dps" then
 		R:ResetMovers()
