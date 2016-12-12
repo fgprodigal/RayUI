@@ -27,9 +27,10 @@ local UnitFrame_OnEnter = UnitFrame_OnEnter
 local UnitFrame_OnLeave = UnitFrame_OnLeave
 local GetSpellInfo = GetSpellInfo
 local InCombatLockdown = InCombatLockdown
+local GetTexCoordsForRoleSmallCircle = GetTexCoordsForRoleSmallCircle
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: GameTooltip
+-- GLOBALS: GameTooltip, READY_CHECK_READY_TEXTURE, READY_CHECK_NOT_READY_TEXTURE, READY_CHECK_WAITING_TEXTURE
 
 function RA:Hex(r, g, b)
     if(type(r) == "table") then
@@ -160,7 +161,8 @@ function RA:UpdateHealth(hp)
     hp:SetPoint("RIGHT")
 end
 
-function RA:PostPower(unit)
+local tokens = { [0] = "MANA", "RAGE", "FOCUS", "ENERGY", "RUNIC_POWER" }
+function RA:PostPower(unit, min, max)
     local owner = self.__owner
     local _, ptype = UnitPowerType(unit)
     local _, class = UnitClass(unit)
@@ -170,11 +172,16 @@ function RA:PostPower(unit)
     local perc = RayUF.Tags.Methods["perpp"](unit)
 
     if owner.isForced then
-        local max = UnitPowerMax(unit)
-        local min = math.random(1, max)
-        local type = math.random(0, 4)
+        ptype = math.random(0, 4)
+        local color = RayUF.colors.power[tokens[ptype]]
+        min = math.random(1, max)
         self:SetValue(min)
-        perc = math.floor(min/max*100+.5)
+
+        if not self.colorClass then
+            self:SetStatusBarColor(color[1], color[2], color[3])
+            local mu = self.bg.multiplier or 1
+            self.bg:SetVertexColor(color[1] * mu, color[2] * mu, color[3] * mu)
+        end
     end
 
     if (perc < 10 and UnitIsConnected(unit) and ptype == "MANA" and not UnitIsDeadOrGhost(unit)) then
@@ -202,10 +209,10 @@ function RA:UpdatePower(power)
     power.colorClass = nil
     power.colorReaction = nil
     power.colorPower = nil
+    power.bg.multiplier = .2
     if UF.db.powerColorClass then
         power.colorReaction = true
         power.colorClass = true
-        power.bg.multiplier = .2
     else
         power.colorPower = true
         power.colorReaction = true
@@ -431,9 +438,25 @@ end
 
 function RA:Construct_ReadyCheck(frame)
     local readyCheck = frame.RaisedElementParent:CreateTexture(nil, "OVERLAY", nil, 7)
-    readyCheck:SetPoint("BOTTOM", frame.Health)
+    readyCheck:SetPoint("RIGHT", frame.Health)
     readyCheck:SetSize(RA.db.leadersize + 4, self.db.leadersize+ 4)
+    readyCheck.PostUpdate = RA.UpdateReadyCheck
     return readyCheck
+end
+
+function RA:UpdateReadyCheck(status)
+    if self.__owner.isForced then
+        local rnd = math.random(1, 3)
+        status = rnd == 1 and "waiting" or (rnd == 2 and "notready" or (rnd == 3 and "ready"))
+        if(status == "ready") then
+			self:SetTexture(self.readyTexture or READY_CHECK_READY_TEXTURE)
+		elseif(status == "notready") then
+			self:SetTexture(self.notReadyTexture or READY_CHECK_NOT_READY_TEXTURE)
+		else
+			self:SetTexture(self.waitingTexture or READY_CHECK_WAITING_TEXTURE)
+		end
+		self:Show()
+    end
 end
 
 function RA:Construct_RaidRoleFrames(frame)
@@ -562,7 +585,17 @@ function RA:Construct_RoleIcon(frame)
     role:SetSize(RA.db.leadersize, RA.db.leadersize)
     role:SetPoint("RIGHT", frame, "LEFT", RA.db.leadersize/2, 0)
     role:SetTexture("Interface\\AddOns\\RayUI\\media\\lfd_role")
+    role.PostUpdate = RA.UpdateRoleIcon
     return role
+end
+
+function RA:UpdateRoleIcon(role)
+    if self.__owner.isForced and role == "NONE" then
+        local rnd = math.random(1, 3)
+        role = rnd == 1 and "TANK" or (rnd == 2 and "HEALER" or (rnd == 3 and "DAMAGER"))
+        self:SetTexCoord(GetTexCoordsForRoleSmallCircle(role))
+		self:Show()
+    end
 end
 
 function RA:Construct_ResurectionIcon(frame)

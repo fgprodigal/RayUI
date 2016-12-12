@@ -51,7 +51,6 @@ local GetCVar = GetCVar
 local GetCVarBool = GetCVarBool
 local IsAddOnLoaded = IsAddOnLoaded
 local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
-local GameMenuFrame = GameMenuFrame
 local GameMenuButtonContinue = GameMenuButtonContinue
 local UnitGroupRolesAssigned = UnitGroupRolesAssigned
 local GetSpecializationRole = GetSpecializationRole

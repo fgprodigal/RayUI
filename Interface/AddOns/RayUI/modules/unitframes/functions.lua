@@ -109,7 +109,7 @@ function UF:Construct_HealthBar(frame, bg, text)
 
     if text then
         health.value = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY")
-        health.value:SetFont(R["media"].font, R["media"].fontsize - 1, R["media"].fontflag)
+        health.value:SetFont(R["media"].font, R["media"].fontsize - 2, R["media"].fontflag)
         health.value:SetJustifyH("LEFT")
         health.value:SetParent(frame.RaisedElementParent)
     end
@@ -159,7 +159,7 @@ function UF:Construct_PowerBar(frame, bg, text)
 
     if text then
         power.value = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY")
-        power.value:SetFont(R["media"].font, R["media"].fontsize - 1, R["media"].fontflag)
+        power.value:SetFont(R["media"].font, R["media"].fontsize - 2, R["media"].fontflag)
         power.value:SetJustifyH("LEFT")
         power.value:SetParent(frame.RaisedElementParent)
     end
@@ -1100,8 +1100,8 @@ function UF:EnableHealPredictionAndAbsorb(frame)
     oag:SetWidth(15)
     oag:SetTexture("Interface\\RaidFrame\\Shield-Overshield")
     oag:SetBlendMode("ADD")
-    oag:SetPoint("TOPLEFT", frame.Health, "TOPRIGHT", -5, 0)
-    oag:SetPoint("BOTTOMLEFT", frame.Health, "BOTTOMRIGHT", -5, 0)
+    oag:SetPoint("TOPLEFT", frame.Health, "TOPRIGHT", -5, 3)
+    oag:SetPoint("BOTTOMLEFT", frame.Health, "BOTTOMRIGHT", -5, -3)
 
     frame.HealPredictionAndAbsorb = {
         myBar = mhpb,

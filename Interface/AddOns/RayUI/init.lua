@@ -148,6 +148,9 @@ function AddOn:OpenConfig()
         local _, _, _, _, reason = GetAddOnInfo("RayUI_Options")
         if reason ~= "MISSING" and reason ~= "DISABLED" then
             LoadAddOn("RayUI_Options")
+        else
+            self:Print("请先启用RayUI_Options插件.")
+            return
         end
     end
 
