@@ -254,12 +254,6 @@ function RA:Initialize()
         RA.debuffColor[dtype] = RA:Hex(color)
     end
 
-    self.glowBorder = {
-        bgFile = R["media"].blank,
-        edgeFile = R["media"].glow, edgeSize = R:Scale(5),
-        insets = {left = R:Scale(3), right = R:Scale(3), top = R:Scale(3), bottom = R:Scale(3)}
-    }
-
     for i = 1, 4 do
         local frame = _G["PartyMemberFrame"..i]
         frame:UnregisterAllEvents()

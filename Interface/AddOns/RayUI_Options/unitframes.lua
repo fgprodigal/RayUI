@@ -43,25 +43,41 @@ R.Options.args.UnitFrames = {
             guiInline = true,
             hidden = function() return not R.db.UnitFrames.enable end,
             args = {
-                healthColorClass = {
+                transparent = {
                     order = 1,
+                    name = L["透明模式"],
+                    desc = L["一种适合治疗使用的颜色模式"],
+                    type = "toggle",
+                    set = function(info, value)
+                        R.db.UnitFrames[ info[#info] ] = value
+                        R.db.UnitFrames.showPortrait = false
+                        R.db.UnitFrames.healthColorClass = false
+                        R.db.UnitFrames.powerColorClass = true
+                        StaticPopup_Show("CFG_RELOAD")
+                    end,
+                },
+                healthColorClass = {
+                    order = 2,
                     name = L["生命条按职业着色"],
                     type = "toggle",
+                    hidden = function() return R.db.UnitFrames.transparent end,
                 },
                 powerColorClass = {
-                    order = 2,
+                    order = 3,
                     name = L["法力条按职业着色"],
                     type = "toggle",
+                    hidden = function() return R.db.UnitFrames.transparent end,
                 },
                 smooth = {
-                    order = 3,
+                    order = 4,
                     name = L["平滑变化"],
                     type = "toggle",
                 },
                 smoothColor = {
-                    order = 4,
+                    order = 5,
                     name = L["颜色随血量渐变"],
                     type = "toggle",
+                    hidden = function() return R.db.UnitFrames.transparent end,
                 },
             },
         },
@@ -81,6 +97,7 @@ R.Options.args.UnitFrames = {
                     order = 4,
                     name = L["启用3D头像"],
                     type = "toggle",
+                    hidden = function() return R.db.UnitFrames.transparent end,
                 },
                 showHealthValue = {
                     order = 5,

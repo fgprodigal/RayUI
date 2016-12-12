@@ -55,6 +55,7 @@ local RegisterStateDriver = RegisterStateDriver
 local UnitFactionGroup = UnitFactionGroup
 local UnitIsPVPFreeForAll = UnitIsPVPFreeForAll
 local UnitIsPVP = UnitIsPVP
+local UnitIsTapDenied = UnitIsTapDenied
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: SLASH_TestUF1, FriendsDropDown, INTERRUPT, SPELL_POWER_ECLIPSE, RayUF, PLAYER_OFFLINE
@@ -62,28 +63,6 @@ local UnitIsPVP = UnitIsPVP
 -- GLOBALS: SPELL_POWER_DEMONIC_FURY, SPEC_WARLOCK_DEMONOLOGY, SHADOW_ORB_MINOR_TALENT_ID
 -- GLOBALS: LOCALIZED_CLASS_NAMES_MALE, CLASS_SORT_ORDER, RayUFRaid40_6, MAX_BOSS_FRAMES
 -- GLOBALS: UnitFrame_OnEnter, UnitFrame_OnLeave, PVP
-
-local function ColorGradient(perc, color1, color2, color3)
-    local r1,g1,b1 = 1, 0, 0
-    local r2,g2,b2 = .85, .8, .45
-    local r3,g3,b3 = .12, .12, .12
-
-    if perc >= 1 then
-        return r3, g3, b3
-    elseif perc <= 0 then
-        return r1, g1, b1
-    end
-
-    local segment, relperc = math.modf(perc*(3-1))
-    local offset = (segment*3)+1
-
-    -- < 50% > 0%
-    if(offset == 1) then
-        return r1 + (r2-r1)*relperc, g1 + (g2-g1)*relperc, b1 + (b2-b1)*relperc
-    end
-    -- < 99% > 50%
-    return r2 + (r3-r2)*relperc, g2 + (g3-g2)*relperc, b2 + (b3-b2)*relperc
-end
 
 function UF:UnitFrame_OnEnter()
     UnitFrame_OnEnter(self)
@@ -110,16 +89,22 @@ function UF:Construct_HealthBar(frame, bg, text)
     health.frequentUpdates = true
     health.PostUpdate = UF.PostUpdateHealth
 
+    frame.gradient = health:CreateTexture(nil, "OVERLAY", nil, 1)
+    frame.gradient:SetAllPoints(health)
+    frame.gradient:SetTexture(R["media"].blank)
+    frame.gradient:SetGradientAlpha("VERTICAL", .2, .2, .2, 0, .25, .25, .25, .6)
+
     if self.db.smooth == true then
         health.Smooth = true
     end
 
     if bg then
-        health.bg = health:CreateTexture(nil, "BORDER")
-        health.bg:SetAllPoints()
+        health.bg = health:CreateTexture(nil, "OVERLAY", nil, 2)
         health.bg:SetTexture(R["media"].normal)
-        health.bg:SetVertexColor(.33, .33, .33)
-        health.bg.multiplier = .2
+        health.bg:SetVertexColor(.2, .2, .2)
+        health.bg.multiplier = .15
+        health.bg:Point("BOTTOMLEFT", health:GetStatusBarTexture(), "BOTTOMRIGHT")
+        health.bg:Point("TOPRIGHT", health)
     end
 
     if text then
@@ -129,19 +114,23 @@ function UF:Construct_HealthBar(frame, bg, text)
         health.value:SetParent(frame.RaisedElementParent)
     end
 
-    if self.db.healthColorClass ~= true then
-        if self.db.smoothColor == true then
-            health:SetStatusBarColor(.1, .1, .1)
+    if self.db.transparent then
+        health:SetStatusBarColor(0, 0, 0, 0)
+    else
+        if self.db.healthColorClass ~= true then
+            if self.db.smoothColor == true then
+                health:SetStatusBarColor(.1, .1, .1)
+            else
+                health.colorTapping = true
+                health.colorClass = true
+                health.colorReaction = true
+                health.bg.multiplier = .8
+            end
         else
             health.colorTapping = true
             health.colorClass = true
             health.colorReaction = true
-            health.bg.multiplier = .8
         end
-    else
-        health.colorTapping = true
-        health.colorClass = true
-        health.colorReaction = true
     end
     health.colorDisconnected = true
     health:CreateShadow("Background")
@@ -311,9 +300,6 @@ function UF:Construct_Portrait(frame)
     portrait.overlay = CreateFrame("Frame", nil, frame)
     portrait.overlay:SetFrameLevel(frame:GetFrameLevel() + 5)
 
-    frame.Health.bg:ClearAllPoints()
-    frame.Health.bg:Point("BOTTOMLEFT", frame.Health:GetStatusBarTexture(), "BOTTOMRIGHT")
-    frame.Health.bg:Point("TOPRIGHT", frame.Health)
     frame.Health.bg:SetParent(portrait.overlay)
 
     return portrait
@@ -822,17 +808,17 @@ end
 
 function UF:PostUpdateHealth(unit, cur, max)
     local curhealth, maxhealth = UnitHealth(unit), UnitHealthMax(unit)
-    local r, g, b = self:GetStatusBarColor()
+    local r, g, b
     if self:GetParent().isForced then
         curhealth = math.random(1, maxhealth)
         self:SetValue(curhealth)
     end
     if UF.db.smoothColor then
-        r,g,b = ColorGradient(curhealth/maxhealth)
+        r, g, b = RayUF.ColorGradient(curhealth, maxhealth, 1, 0, 0, .85, .8, .45, .05, .05, .05)
     else
-        r,g,b = .12, .12, .12
+        r, g, b = .12, .12, .12
     end
-    if not UF.db.healthColorClass then
+    if not UF.db.healthColorClass and not UF.db.transparent then
         if(b) then
             self:SetStatusBarColor(r, g, b, 1)
         elseif not UnitIsConnected(unit) then
@@ -861,9 +847,31 @@ function UF:PostUpdateHealth(unit, cur, max)
                 self:SetStatusBarColor(.5, .5, .5)
                 self.bg:SetVertexColor(.5, .5, .5)
             else
-                self.bg:SetVertexColor(r*.25, g*.25, b*.25)
+                local mu = self.bg.multiplier
+                self.bg:SetVertexColor(r * mu, g * mu, b * mu)
             end
         end
+    elseif UF.db.transparent then
+        self:GetParent().gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+        self.backdropTexture:Hide()
+        if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
+            self.bg:Hide()
+            self:GetParent().gradient:SetGradientAlpha("VERTICAL", .6, .6, .6, .6, .4, .4, .4, .6)
+        elseif UnitIsTapDenied(unit) then
+            self.bg:Show()
+            self.bg:SetVertexColor(unpack(oUF.colors.tapped))
+            self:GetParent().gradient:SetGradientAlpha("VERTICAL", .6, .6, .6, .6, .4, .4, .4, .6)
+        else
+            self.bg:Show()
+            local r, g, b = RayUF.ColorGradient(curhealth, maxhealth, unpack(RayUF.colors.smooth))
+            self.bg:SetVertexColor(r, g, b)
+            self.bg:SetGradient("VERTICAL", r, g, b, r/2, g/2, b/2)
+            self:GetParent().gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+        end
+    else
+        local r1, g1, b1 = self:GetStatusBarColor()
+        self:GetStatusBarTexture():SetGradient("VERTICAL", r1, g1, b1, r1/2, g1/2, b1/2)
+        self:GetParent().gradient:Hide()
     end
     local color = {1,1,1}
     if UnitIsPlayer(unit) then
@@ -1286,6 +1294,20 @@ local overrideFuncs = {}
 local function createConfigEnv()
     if( configEnv ) then return end
     configEnv = setmetatable({
+            UnitPower = function (unit, displayType)
+                if unit:find('target') or unit:find('focus') then
+                    return UnitPower(unit, displayType)
+                end
+
+                return math.random(1, UnitPowerMax(unit, displayType) or 1)
+            end,
+            UnitHealth = function(unit)
+                if unit:find('target') or unit:find('focus') then
+                    return UnitHealth(unit)
+                end
+
+                return math.random(1, UnitHealthMax(unit))
+            end,
             UnitName = function(unit)
                 if unit:find("target") or unit:find("focus") then
                     return UnitName(unit)
@@ -1297,14 +1319,23 @@ local function createConfigEnv()
                 return "Test Name"
             end,
             UnitClass = function(unit)
-                if unit:find("target") or unit:find("focus") then
+                if unit:find('target') or unit:find('focus') then
                     return UnitClass(unit)
                 end
 
                 local classToken = CLASS_SORT_ORDER[math.random(1, #(CLASS_SORT_ORDER))]
                 return LOCALIZED_CLASS_NAMES_MALE[classToken], classToken
             end,
-            }, {
+            Hex = function(r, g, b)
+                if type(r) == "table" then
+                    if r.r then r, g, b = r.r, r.g, r.b else r, g, b = unpack(r) end
+                end
+                return format("|cff%02x%02x%02x", r*255, g*255, b*255)
+            end,
+            ColorGradient = RayUF.ColorGradient,
+            _COLORS = RayUF.colors
+        },
+        {
             __index = _G,
             __newindex = function(tbl, key, value) _G[key] = value end,
         })
@@ -1408,7 +1439,7 @@ function UF:HeaderConfig(header, configMode)
 
     if configMode then
         for _, func in pairs(overrideFuncs) do
-            if type(func) == "function" and not originalEnvs[func] then
+            if type(func) == "function" then
                 originalEnvs[func] = getfenv(func)
                 setfenv(func, configEnv)
             end

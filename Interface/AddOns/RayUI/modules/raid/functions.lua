@@ -13,12 +13,10 @@ local tinsert = table.insert
 --WoW API / Variables
 local CreateFrame = CreateFrame
 local UnitIsUnit = UnitIsUnit
-local UnitIsPlayer = UnitIsPlayer
 local UnitThreatSituation = UnitThreatSituation
 local GetThreatStatusColor = GetThreatStatusColor
 local UnitName = UnitName
 local UnitClass = UnitClass
-local UnitReaction = UnitReaction
 local UnitHealth = UnitHealth
 local UnitHealthMax = UnitHealthMax
 local UnitIsDeadOrGhost = UnitIsDeadOrGhost
@@ -40,28 +38,6 @@ function RA:Hex(r, g, b)
     return ("|cff%02x%02x%02x"):format(r * 255, g * 255, b * 255)
 end
 
-local function ColorGradient(perc, color1, color2, color3)
-    local r1,g1,b1 = 1, 0, 0
-    local r2,g2,b2 = .85, .8, .45
-    local r3,g3,b3 = .12, .12, .12
-
-    if perc >= 1 then
-        return r3, g3, b3
-    elseif perc <= 0 then
-        return r1, g1, b1
-    end
-
-    local segment, relperc = math.modf(perc*(3-1))
-    local offset = (segment*3)+1
-
-    -- < 50% > 0%
-    if(offset == 1) then
-        return r1 + (r2-r1)*relperc, g1 + (g2-g1)*relperc, b1 + (b2-b1)*relperc
-    end
-    -- < 99% > 50%
-    return r2 + (r3-r2)*relperc, g2 + (g3-g2)*relperc, b2 + (b3-b2)*relperc
-end
-
 function RA:UpdateThreat(event, unit)
     if(unit ~= self.unit) then return end
 
@@ -69,37 +45,20 @@ function RA:UpdateThreat(event, unit)
 
     if(status and status > 1) then
         local r, g, b = GetThreatStatusColor(status)
-        self.Threat:SetBackdropBorderColor(r, g, b, 1)
+        if not R.PixelMode then
+            self.Health.shadow:SetBackdropBorderColor(r, g, b, 1)
+        else
+            self.Health.border:SetBackdropBorderColor(r, g, b, 1)
+        end
     else
         if not R.PixelMode then
-            self.Threat:SetBackdropBorderColor(0, 0, 0, 1)
+            self.Health.shadow:SetBackdropBorderColor(0, 0, 0)
         else
-            self.Threat:SetBackdropBorderColor(0, 0, 0, 0)
+            self.Health.border:SetBackdropBorderColor(0, 0, 0)
         end
     end
     self.Threat:Show()
 end
-
-RayUF.Tags.Methods["RayUFRaid:name"] = function(u, r)
-    local name = UnitName(u)
-    local _, class = UnitClass(u)
-    local unitReaction = UnitReaction(u, "player")
-    local colorString
-
-    if (UnitIsPlayer(u)) then
-        local class = RayUF.colors.class[class]
-        if not class then return "" end
-        colorString = R:RGBToHex(class[1], class[2], class[3])
-    elseif (unitReaction) then
-        local reaction = RayUF["colors"].reaction[unitReaction]
-        colorString = R:RGBToHex(reaction[1], reaction[2], reaction[3])
-    else
-        colorString = "|cFFC2C2C2"
-    end
-
-    return colorString..R:ShortenString(name, 8)
-end
-RayUF.Tags.Events["RayUFRaid:name"] = "UNIT_NAME_UPDATE"
 
 function RA:PostHealth(unit)
     local curhealth, maxhealth
@@ -120,13 +79,31 @@ function RA:PostHealth(unit)
     if UF.db.healthColorClass then
         self.colorClass=true
         self.bg.multiplier = .2
+        local r1, g1, b1 = self:GetStatusBarColor()
+        self:GetStatusBarTexture():SetGradient("VERTICAL", r1, g1, b1, r1/2, g1/2, b1/2)
+        self:GetParent().gradient:Hide()
+    elseif UF.db.transparent then
+        self.backdropTexture:Hide()
+        if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
+            self.bg:Hide()
+            self:GetParent().gradient:SetGradientAlpha("VERTICAL", .6, .6, .6, .6, .4, .4, .4, .6)
+        else
+            self.bg:Show()
+            if not curhealth then
+                curhealth, maxhealth = UnitHealth(unit), UnitHealthMax(unit)
+            end
+            local r, g, b = RayUF.ColorGradient(curhealth, maxhealth, unpack(RayUF.colors.smooth))
+            self.bg:SetVertexColor(r, g, b)
+            self.bg:SetGradient("VERTICAL", r, g, b, r/2, g/2, b/2)
+            self:GetParent().gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+        end
     else
         if not curhealth then
             curhealth, maxhealth = UnitHealth(unit), UnitHealthMax(unit)
         end
         local r, g, b
         if UF.db.smoothColor then
-            r,g,b = ColorGradient(curhealth/maxhealth)
+            r,g,b = RayUF.ColorGradient(curhealth, maxhealth, 1, 0, 0, .85, .8, .45, .05, .05, .05)
         else
             r,g,b = .12, .12, .12, 1
         end
@@ -139,7 +116,8 @@ function RA:PostHealth(unit)
                 self:SetStatusBarColor(.5, .5, .5)
                 self.bg:SetVertexColor(.5, .5, .5)
             else
-                self.bg:SetVertexColor(r*.25, g*.25, b*.25)
+                local mu = self.bg.multiplier
+                self.bg:SetVertexColor(r * mu, g * mu, b * mu)
             end
         end
     end
@@ -157,7 +135,12 @@ function RA:UpdateHealth(hp)
     hp.Smooth = UF.db.smooth
     hp.colorReaction = nil
     hp.colorClass = nil
-    if UF.db.healthColorClass then
+    if UF.db.transparent then
+        hp:SetStatusBarColor(0, 0, 0, 0)
+        hp.bg:ClearAllPoints()
+        hp.bg:Point("BOTTOMLEFT", hp:GetStatusBarTexture(), "BOTTOMRIGHT")
+        hp.bg:Point("TOPRIGHT", hp)
+    elseif UF.db.healthColorClass then
         hp.colorReaction = true
         hp.colorClass = true
         hp.bg.multiplier = .2
@@ -168,6 +151,7 @@ function RA:UpdateHealth(hp)
     else
         hp:SetStatusBarColor(.12, .12, .12)
         hp.bg:SetVertexColor(.33, .33, .33)
+        hp.bg.multiplier = .15
     end
 
     hp:ClearAllPoints()
@@ -472,40 +456,38 @@ end
 
 function RA:UpdateTargetBorder()
     if UnitIsUnit("target", self.unit) then
-        self.FrameBorder:SetBackdropBorderColor(.8, .8, .8, 1)
+        self.Health.border:SetBackdropBorderColor(.8, .8, .8, 1)
     else
-        self.FrameBorder:SetBackdropBorderColor(0, 0, 0, 1)
+        self.Health.border:SetBackdropBorderColor(0, 0, 0, 1)
     end
-end
-
-function RA:Construct_FrameBorder(frame)
-    local border = CreateFrame("Frame", nil, frame)
-    border:SetFrameStrata("BACKGROUND")
-    border:SetFrameLevel(1)
-    border:SetOutside(frame, 1, 1)
-    border:SetTemplate("Default")
-
-    frame:RegisterEvent("PLAYER_TARGET_CHANGED", RA.UpdateTargetBorder)
-    frame:RegisterEvent("GROUP_ROSTER_UPDATE", RA.UpdateTargetBorder)
-
-    return border
 end
 
 function RA:Construct_HealthBar(frame)
     local health = CreateFrame("StatusBar", nil, frame)
+    health:CreateShadow("Background")
+    health.border:SetFrameLevel(health:GetFrameLevel() + 1)
     health:SetFrameStrata("LOW")
     health.frequentUpdates = true
-
-    health.bg = health:CreateTexture(nil, "BORDER")
-    health.bg:SetAllPoints(health)
-
     health.PostUpdate = RA.PostHealth
+
+    health.bg = health:CreateTexture(nil, "OVERLAY", nil, 2)
+
+    frame.gradient = health:CreateTexture(nil, "OVERLAY", nil, 1)
+    frame.gradient:SetAllPoints(health)
+    frame.gradient:SetTexture(R["media"].blank)
+    frame.gradient:SetGradientAlpha("VERTICAL", .2, .2, .2, 0, .25, .25, .25, .6)
+
     RA:UpdateHealth(health)
+
+    health.bg:Point("BOTTOMLEFT", health:GetStatusBarTexture(), "BOTTOMRIGHT")
+    health.bg:Point("TOPRIGHT", health)
+
     return health
 end
 
 function RA:Construct_PowerBar(frame)
     local power = CreateFrame("StatusBar", nil, frame)
+    power:CreateShadow("Background")
     power:SetFrameStrata("LOW")
     power.bg = power:CreateTexture(nil, "BORDER")
     power.bg:SetAllPoints(power)

@@ -278,6 +278,8 @@ do
     L["头像"] = true
     L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r头像模块."] = true
     L["颜色"] = true
+    L["透明模式"] = true
+    L["一种适合治疗使用的颜色模式"] = true
     L["生命条按职业着色"] = true
     L["法力条按职业着色"] = true
     L["平滑变化"] = true

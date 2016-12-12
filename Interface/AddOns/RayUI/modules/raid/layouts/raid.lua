@@ -31,7 +31,6 @@ end
 function RA:Construct_RaidFrames()
     self.RaisedElementParent = CreateFrame("Frame", nil, self)
     self.RaisedElementParent:SetFrameLevel(self:GetFrameLevel() + 100)
-    self.FrameBorder = RA:Construct_FrameBorder(self)
     self.Health = RA:Construct_HealthBar(self)
     self.Power = RA:Construct_PowerBar(self)
     self.Name = RA:Construct_NameText(self)
@@ -61,6 +60,9 @@ function RA:Construct_RaidFrames()
     self:SetScript("OnLeave", RA.UnitFrame_OnLeave)
     RA:SecureHook(self, "UpdateAllElements", RA.UnitFrame_OnShow)
     self:SetScript("OnHide", RA.UnitFrame_OnHide)
+
+    self:RegisterEvent("PLAYER_TARGET_CHANGED", RA.UpdateTargetBorder)
+    self:RegisterEvent("GROUP_ROSTER_UPDATE", RA.UpdateTargetBorder)
 end
 
 function RA:RaidSmartVisibility(event)

@@ -6,23 +6,49 @@ local RayUF = ns.oUF
 
 --Cache global variables
 --Lua functions
+local _G = _G
 local floor = math.floor
 local format = string.format
 local GetTime = GetTime
 
 --WoW API / Variables
-local UnitName = UnitName
 local UnitIsAFK = UnitIsAFK
 local UnitIsDead = UnitIsDead
 local UnitIsGhost = UnitIsGhost
 local UnitIsConnected = UnitIsConnected
-local UnitClass = UnitClass
-local UnitHealth = UnitHealth
 local UnitHealthMax = UnitHealthMax
 local UnitGetIncomingHeals = UnitGetIncomingHeals
+local UnitIsPlayer = UnitIsPlayer
+local UnitReaction = UnitReaction
+local UnitIsUnit = UnitIsUnit
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: ALTERNATE_POWER_INDEX, DEAD
+-- GLOBALS: ALTERNATE_POWER_INDEX, DEAD, UNKNOWN, UNITNAME_SUMMON_TITLE17, UnitClass, UnitHealth, UnitName
+
+RayUF.Tags.Methods["RayUFRaid:name"] = function(u, r)
+    local name = UnitName(u)
+    local _, class = UnitClass(u)
+    local unitReaction = UnitReaction(u, "player")
+    local colorString
+
+    if name == UNKNOWN and R.myclass == "MONK" and UnitIsUnit(u, "pet") then
+		name = UNITNAME_SUMMON_TITLE17:format(UnitName("player"))
+	end
+
+    if (UnitIsPlayer(u)) then
+        local class = RayUF.colors.class[class]
+        if not class then return "" end
+        colorString = R:RGBToHex(class[1], class[2], class[3])
+    elseif (unitReaction) then
+        local reaction = RayUF["colors"].reaction[unitReaction]
+        colorString = R:RGBToHex(reaction[1], reaction[2], reaction[3])
+    else
+        colorString = "|cFFC2C2C2"
+    end
+
+    return colorString..R:ShortenString(name, 8)
+end
+RayUF.Tags.Events["RayUFRaid:name"] = "UNIT_NAME_UPDATE"
 
 RayUF.Tags.Methods["RayUIRaid:stat"] = function(u)
     if UnitIsAFK(u) then
@@ -98,6 +124,9 @@ end
 
 RayUF.Tags.Methods["RayUIRaid:afk"] = function(u)
     local name = UnitName(u)
+    if name == UNKNOWN and R.myclass == "MONK" and UnitIsUnit(u, "pet") then
+		name = UNITNAME_SUMMON_TITLE17:format(UnitName("player"))
+	end
     if(RA.db.afk and (UnitIsAFK(u) or not UnitIsConnected(u))) then
         if not timer[name] then
             timer[name] = GetTime()

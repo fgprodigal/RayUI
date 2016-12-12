@@ -278,6 +278,8 @@ do
     L["头像"] = "UnitFrame"
     L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r头像模块."] = "|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r UnitFrame Module."
     L["颜色"] = "Color"
+    L["透明模式"] = "Transparent mode"
+    L["一种适合治疗使用的颜色模式"] = "A color scheme fits the healers to use"
     L["生命条按职业着色"] = "HealthBar colored by class"
     L["法力条按职业着色"] = "ManaBar colored by class"
     L["平滑变化"] = "Transition"
