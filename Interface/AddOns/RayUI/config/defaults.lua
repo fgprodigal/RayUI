@@ -14,8 +14,8 @@ G["media"]={
     fontsize = 12,
     fontflag = "THINOUTLINE",
     errorsound = "RayUI Error",
-    backdropcolor = { .1, .1, .1 },
-    backdropfadecolor = { .04, .04, .04, .7 },
+    backdropcolor = { .1, .1, .1, 1 },
+    backdropfadecolor = { .04, .04, .04, .55 },
     bordercolor = { 0, 0, 0 },
 }
 
@@ -92,6 +92,7 @@ G["UnitFrames"]={}
 
 P["UnitFrames"]={
     enable = true,
+    transparent = false,
     powerColorClass = true,
     healthColorClass = false,
     smooth = true,

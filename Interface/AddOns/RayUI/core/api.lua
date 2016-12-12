@@ -116,7 +116,7 @@ local function SetTemplate(f, t, glossTex)
         f.backdropTexture:SetInside(f, 1, 1)
         f.backdropTexture:SetTexture(R["media"].gloss)
         f.backdropTexture:SetVertexColor(unpack(R["media"].backdropcolor))
-        f.backdropTexture:SetAlpha(.8)
+        f.backdropTexture:SetAlpha(alpha)
         alpha = 0
     end
 
