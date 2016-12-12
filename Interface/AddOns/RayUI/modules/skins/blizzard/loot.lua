@@ -1,12 +1,35 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local S = R:GetModule("Skins")
 
+local function GroupLootDropDown_Initialize()
+	local info = Lib_UIDropDownMenu_CreateInfo();
+	info.isTitle = 1;
+	info.text = MASTER_LOOTER;
+	info.fontObject = GameFontNormalLeft;
+	info.notCheckable = 1;
+	Lib_UIDropDownMenu_AddButton(info);
+	info = Lib_UIDropDownMenu_CreateInfo();
+	info.notCheckable = 1;
+	info.text = ASSIGN_LOOT;
+	info.func = MasterLooterFrame_Show;
+	Lib_UIDropDownMenu_AddButton(info);
+	info.text = REQUEST_ROLL;
+	info.func = function() DoMasterLootRoll(LootFrame.selectedSlot); end;
+	Lib_UIDropDownMenu_AddButton(info);
+end
+--Create the new group loot dropdown frame and initialize it
+local RayUIGroupLootDropDown = CreateFrame("Frame", "RayUIGroupLootDropDown", UIParent, "UIDropDownMenuTemplate")
+RayUIGroupLootDropDown:SetID(1)
+RayUIGroupLootDropDown:Hide()
+Lib_UIDropDownMenu_Initialize(RayUIGroupLootDropDown, nil, "MENU");
+RayUIGroupLootDropDown.initialize = GroupLootDropDown_Initialize;
+
 local function LoadSkin()
     local autoLootTable = {}
 
 	if not(IsAddOnLoaded("Butsu") or IsAddOnLoaded("LovelyLoot") or IsAddOnLoaded("XLoot")) then
 		MasterLooterFrame:StripTextures()
-		S:CreateBD(MasterLooterFrame)
+		S:SetBD(MasterLooterFrame)
 		MasterLooterFrame:SetFrameStrata("FULLSCREEN_DIALOG")
 
 		hooksecurefunc("MasterLooterFrame_Show", function()
@@ -248,7 +271,7 @@ local function LoadSkin()
 				end
 				self:Hide()
 			elseif event == "OPEN_MASTER_LOOT_LIST" then
-				ToggleDropDownMenu(1, nil, GroupLootDropDown, lootSlots[LootFrame.selectedSlot], 0, 0)
+				Lib_ToggleDropDownMenu(1, nil, RayUIGroupLootDropDown, lootFrame.slots[ss], 0, 0)
 			elseif event == "UPDATE_MASTER_LOOT_LIST" then
 				UIDropDownMenu_Refresh(GroupLootDropDown)
 				MasterLooterFrame_UpdatePlayers()
@@ -265,7 +288,7 @@ local function LoadSkin()
 		loot:RegisterEvent("UPDATE_MASTER_LOOT_LIST")
 		LootFrame:UnregisterAllEvents()
 
-		S:CreateBD(loot)
+		S:SetBD(loot)
 		loot:SetWidth(200)
 		loot:SetPoint("TOP", anchorframe, 0, 0)
 		loot:SetFrameStrata("FULLSCREEN")

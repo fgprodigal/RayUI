@@ -191,7 +191,7 @@ local function LoadSkin()
 		xpBar.XPRight:Hide()
 		select(4, xpBar:GetRegions()):Hide()
 
-		xpBar:SetStatusBarTexture(R["media"].gloss)
+		xpBar:SetStatusBarTexture(R["media"].normal)
 
 		S:CreateBDFrame(xpBar)
 	end
@@ -221,7 +221,7 @@ local function LoadSkin()
 		xpBar.XPRight:Hide()
 		select(4, xpBar:GetRegions()):Hide()
 
-		xpBar:SetStatusBarTexture(R["media"].gloss)
+		xpBar:SetStatusBarTexture(R["media"].normal)
 
 		S:CreateBDFrame(xpBar)
 	end
@@ -327,7 +327,7 @@ local function LoadSkin()
 			rareText:SetPoint("BOTTOMLEFT", button, 20, 10)
 
 			rareOverlay:SetDrawLayer("BACKGROUND")
-			rareOverlay:SetTexture(R["media"].gloss)
+			rareOverlay:SetTexture(R["media"].normal)
 			rareOverlay:ClearAllPoints()
 			rareOverlay:SetAllPoints()
 			rareOverlay:SetVertexColor(0.098, 0.537, 0.969, 0.2)
@@ -450,7 +450,7 @@ local function LoadSkin()
 		xpBar.XPRight:Hide()
 		select(4, xpBar:GetRegions()):Hide()
 
-		xpBar:SetStatusBarTexture(R["media"].gloss)
+		xpBar:SetStatusBarTexture(R["media"].normal)
 
 		S:CreateBDFrame(xpBar)
 	end
@@ -773,7 +773,7 @@ local function LoadSkin()
 		xpBar.XPRight:Hide()
 		select(4, xpBar:GetRegions()):Hide()
 
-		xpBar:SetStatusBarTexture(R["media"].gloss)
+		xpBar:SetStatusBarTexture(R["media"].normal)
 
 		S:CreateBDFrame(xpBar)
 	end

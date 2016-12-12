@@ -60,7 +60,7 @@ local function LoadSkin()
 		end
 	end
 
-	AchievementFrameSummaryCategoriesStatusBar:SetStatusBarTexture(R["media"].gloss)
+	AchievementFrameSummaryCategoriesStatusBar:SetStatusBarTexture(R["media"].normal)
 --	AchievementFrameSummaryCategoriesStatusBar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
 	AchievementFrameSummaryCategoriesStatusBarLeft:Hide()
 	AchievementFrameSummaryCategoriesStatusBarMiddle:Hide()
@@ -80,7 +80,7 @@ local function LoadSkin()
 		local bu = _G["AchievementFrameAchievementsContainerButton"..i]
 		bu:DisableDrawLayer("BORDER")
 
-		bu.background:SetTexture(R["media"].gloss)
+		bu.background:SetTexture(R["media"].normal)
 		bu.background:SetVertexColor(0, 0, 0, .25)
 
 		bu.description:SetTextColor(.9, .9, .9)
@@ -140,7 +140,7 @@ local function LoadSkin()
 	hooksecurefunc("AchievementButton_GetProgressBar", function(index)
 		local bar = _G["AchievementFrameProgressBar"..index]
 		if not bar.reskinned then
-			bar:SetStatusBarTexture(R["media"].gloss)
+			bar:SetStatusBarTexture(R["media"].normal)
 
 			_G["AchievementFrameProgressBar"..index.."BG"]:SetColorTexture(0, 0, 0, .25)
 			_G["AchievementFrameProgressBar"..index.."BorderLeft"]:Hide()
@@ -164,7 +164,7 @@ local function LoadSkin()
 
 				local bd = _G["AchievementFrameSummaryAchievement"..i.."Background"]
 
-				bd:SetTexture(R["media"].gloss)
+				bd:SetTexture(R["media"].normal)
 				bd:SetVertexColor(0, 0, 0, .25)
 
 				_G["AchievementFrameSummaryAchievement"..i.."TitleBackground"]:Hide()
@@ -209,7 +209,7 @@ local function LoadSkin()
 		local bar = bu:GetStatusBarTexture()
 		local label = _G["AchievementFrameSummaryCategoriesCategory"..i.."Label"]
 
-		bu:SetStatusBarTexture(R["media"].gloss)
+		bu:SetStatusBarTexture(R["media"].normal)
 	--	bar:SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
 		label:SetTextColor(1, 1, 1)
 		label:Point("LEFT", bu, "LEFT", 6, 0)
@@ -259,7 +259,7 @@ local function LoadSkin()
 
 	for _, bar in pairs(bars) do
 		local name = bar:GetName()
-		bar:SetStatusBarTexture(R["media"].gloss)
+		bar:SetStatusBarTexture(R["media"].normal)
 	--	bar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
 		_G[name.."Left"]:Hide()
 		_G[name.."Middle"]:Hide()
@@ -288,11 +288,11 @@ local function LoadSkin()
 		end
 
 		local bd = _G["AchievementFrameComparisonContainerButton"..i.."PlayerBackground"]
-		bd:SetTexture(R["media"].gloss)
+		bd:SetTexture(R["media"].normal)
 		bd:SetVertexColor(0, 0, 0, .25)
 
 		local bd = _G["AchievementFrameComparisonContainerButton"..i.."FriendBackground"]
-		bd:SetTexture(R["media"].gloss)
+		bd:SetTexture(R["media"].normal)
 		bd:SetVertexColor(0, 0, 0, .25)
 
 		local text = _G["AchievementFrameComparisonContainerButton"..i.."PlayerDescription"]

@@ -129,7 +129,7 @@ local function LoadSkin()
 			S:Reskin(bu, true)
 
 			bu.learnedTex:SetTexture("")
-			bu.selectedTex:SetTexture(R["media"].gloss)
+			bu.selectedTex:SetTexture(R["media"].normal)
 			bu.selectedTex:SetVertexColor(r, g, b, .2)
 			bu.selectedTex:SetDrawLayer("BACKGROUND")
 			bu.selectedTex:SetAllPoints()

@@ -106,7 +106,7 @@ local function LoadSkin()
             end
             local xpbar = self.followerTab.XPBar
             xpbar:StripTextures()
-            xpbar:SetStatusBarTexture(R["media"].gloss)
+            xpbar:SetStatusBarTexture(R["media"].normal)
             -- xpbar:CreateShadow("Background")
         end)
     FollowerTab:StripTextures()

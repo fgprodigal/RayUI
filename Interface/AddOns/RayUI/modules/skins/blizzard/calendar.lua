@@ -90,7 +90,7 @@ local function LoadSkin()
 	local tex = bd:CreateTexture(nil, "BACKGROUND")
 	tex:SetPoint("TOPLEFT")
 	tex:SetPoint("BOTTOMRIGHT")
-	tex:SetTexture(R["media"].gloss)
+	tex:SetTexture(R["media"].normal)
 	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 
 	local downtex = CalendarFilterButton:CreateTexture(nil, "ARTWORK")

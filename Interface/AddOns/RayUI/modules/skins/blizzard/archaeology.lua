@@ -61,14 +61,14 @@ local function LoadSkin()
 
 	ArchaeologyFrameRankBarBorder:Hide()
 	ArchaeologyFrameRankBarBackground:Hide()
-	ArchaeologyFrameRankBarBar:SetTexture(R["media"].gloss)
+	ArchaeologyFrameRankBarBar:SetTexture(R["media"].normal)
 	ArchaeologyFrameRankBarBar:SetGradient("VERTICAL", 0, .65, 0, 0, .75, 0)
 	ArchaeologyFrameRankBar:SetHeight(14)
 	S:CreateBD(ArchaeologyFrameRankBar, .25)
 
 	ArchaeologyFrameArtifactPageSolveFrameStatusBarBarBG:Hide()
 	local bar = select(3, ArchaeologyFrameArtifactPageSolveFrameStatusBar:GetRegions())
-	bar:SetTexture(R["media"].gloss)
+	bar:SetTexture(R["media"].normal)
 	bar:SetGradient("VERTICAL", .65, .25, 0, .75, .35, .1)
 
 	local bg = CreateFrame("Frame", nil, ArchaeologyFrameArtifactPageSolveFrameStatusBar)

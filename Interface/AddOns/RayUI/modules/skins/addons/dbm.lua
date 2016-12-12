@@ -108,7 +108,7 @@ local function SkinDBM()
                         texture.styled=true
                     end
 
-                    tbar:SetStatusBarTexture(R["media"].gloss)
+                    tbar:SetStatusBarTexture(R["media"].normal)
                     if not tbar.styled then
                         tbar:Point("TOPLEFT", frame, "TOPLEFT", 0, 0)
                         tbar:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 0, 0)
@@ -202,7 +202,7 @@ local function SkinDBM()
             end
 
             if not progress.styled then
-                progress:SetStatusBarTexture(R["media"].gloss)
+                progress:SetStatusBarTexture(R["media"].normal)
                 progress.styled=true
             end
             progress:ClearAllPoints()

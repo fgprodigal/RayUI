@@ -20,7 +20,7 @@ local function SkinAce3()
 		elseif TYPE == "CheckBox" then
 			widget.checkbg:Kill()
 			widget.highlight:Kill()
-			widget.frame:SetHighlightTexture(R["media"].gloss)
+			widget.frame:SetHighlightTexture(R["media"].normal)
 			local hl = widget.frame:GetHighlightTexture()
 			hl:Point("TOPLEFT", widget.checkbg, 5, -5)
 			hl:Point("BOTTOMRIGHT", widget.checkbg, -5, 5)
@@ -40,7 +40,7 @@ local function SkinAce3()
 				widget.check:SetParent(widget.skinnedCheckBG)
 			end
 			widget.check:SetDesaturated(true)
-			widget.check:SetVertexColor(r, g, b)
+			-- widget.check:SetVertexColor(r, g, b)
 		elseif TYPE == "Dropdown" then
 			local frame = widget.dropdown
 			local button = widget.button
@@ -61,7 +61,7 @@ local function SkinAce3()
 			button:Point("TOPRIGHT", frame, "TOPRIGHT", -15, 0)
 			button:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -15, 0)
 
-			button:SetDisabledTexture(R["media"].gloss)
+			button:SetDisabledTexture(R["media"].normal)
 			local dis = button:GetDisabledTexture()
 			dis:SetVertexColor(0, 0, 0, .3)
 			dis:SetDrawLayer("OVERLAY")
@@ -87,7 +87,7 @@ local function SkinAce3()
 			S:Reskin(button)
 			button:Size(20, 20)
 
-			button:SetDisabledTexture(R["media"].gloss)
+			button:SetDisabledTexture(R["media"].normal)
 			local dis = button:GetDisabledTexture()
 			dis:SetVertexColor(0, 0, 0, .3)
 			dis:SetDrawLayer("OVERLAY")

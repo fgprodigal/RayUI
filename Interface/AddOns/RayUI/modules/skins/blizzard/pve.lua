@@ -30,7 +30,7 @@ local function LoadSkin()
 		local bu = GroupFinderFrame["groupButton"..i]
 
 		bu.ring:Hide()
-		bu.bg:SetTexture(R["media"].gloss)
+		bu.bg:SetTexture(R["media"].normal)
 		bu.bg:SetVertexColor(r, g, b, .2)
 		bu.bg:SetAllPoints()
 
@@ -339,7 +339,7 @@ local function LoadSkin()
 
 			local hl = result:CreateTexture(nil, "BACKGROUND")
 			hl:SetAllPoints()
-			hl:SetTexture(R["media"].gloss)
+			hl:SetTexture(R["media"].normal)
 			hl:SetVertexColor(r, g, b, .2)
 			hl:Hide()
 			result.hl = hl
@@ -380,7 +380,7 @@ local function LoadSkin()
 
 		local hl = header:CreateTexture(nil, "BACKGROUND")
 		hl:SetAllPoints()
-		hl:SetTexture(R["media"].gloss)
+		hl:SetTexture(R["media"].normal)
 		hl:SetVertexColor(r, g, b, .2)
 		hl:Hide()
 		header.hl = hl

@@ -8,7 +8,7 @@ local function LoadSkin()
 	S:CreateBDFrame(TradeSkillFrame)
 	TradeSkillFrame:Height(TradeSkillFrame:GetHeight() + 12)
 	TradeSkillFrame.RankFrame:StripTextures()
-	TradeSkillFrame.RankFrame:SetStatusBarTexture(R["media"].gloss)
+	TradeSkillFrame.RankFrame:SetStatusBarTexture(R["media"].normal)
 	TradeSkillFrame.RankFrame.SetStatusBarColor = R.dummy
 	TradeSkillFrame.RankFrame:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
 	TradeSkillFrame.FilterButton:StripTextures(true)

@@ -327,7 +327,7 @@ local function LoadSkin()
 
 		local hl = result:CreateTexture(nil, "BACKGROUND")
 		hl:SetAllPoints()
-		hl:SetTexture(R["media"].gloss)
+		hl:SetTexture(R["media"].normal)
 		hl:SetVertexColor(r, g, b, .2)
 		hl:Hide()
 		result.hl = hl

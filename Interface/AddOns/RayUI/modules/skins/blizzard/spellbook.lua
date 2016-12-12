@@ -129,7 +129,7 @@ local function LoadSkin()
 		bu.missingText:SetTextColor(1, 1, 1)
 
 		bu.statusBar:SetHeight(13)
-		bu.statusBar:SetStatusBarTexture(R["media"].gloss)
+		bu.statusBar:SetStatusBarTexture(R["media"].normal)
 		bu.statusBar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .6, 0, 0, .8, 0)
 		bu.statusBar.rankText:SetPoint("CENTER")
 

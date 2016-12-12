@@ -148,11 +148,11 @@ local function LoadSkin()
         local bu = _G["GuildInfoFrameApplicantsContainerButton"..i]
         S:CreateBD(bu, .25)
         bu:SetHighlightTexture("")
-        bu:GetRegions():SetTexture(R["media"].gloss)
+        bu:GetRegions():SetTexture(R["media"].normal)
         bu:GetRegions():SetVertexColor(r, g, b, .2)
     end
 
-    GuildFactionBarProgress:SetTexture(R["media"].gloss)
+    GuildFactionBarProgress:SetTexture(R["media"].normal)
     GuildFactionBarLeft:Hide()
     GuildFactionBarMiddle:Hide()
     GuildFactionBarRight:Hide()
@@ -178,7 +178,7 @@ local function LoadSkin()
                 bg:SetPoint("BOTTOMRIGHT")
                 S:CreateBD(bg, 0)
 
-                bu:SetHighlightTexture(R["media"].gloss)
+                bu:SetHighlightTexture(R["media"].normal)
                 local hl = bu:GetHighlightTexture()
                 hl:SetVertexColor(r, g, b, .2)
                 hl:SetPoint("TOPLEFT", 0, -1)
@@ -187,7 +187,7 @@ local function LoadSkin()
                 ic:SetTexCoord(.08, .92, .08, .92)
 
                 select(6, bu:GetRegions()):SetAlpha(0)
-                select(7, bu:GetRegions()):SetTexture(R["media"].gloss)
+                select(7, bu:GetRegions()):SetTexture(R["media"].normal)
                 select(7, bu:GetRegions()):SetVertexColor(0, 0, 0, .25)
                 select(7, bu:GetRegions()):SetPoint("TOPLEFT", 0, -1)
                 select(7, bu:GetRegions()):SetPoint("BOTTOMRIGHT", 0, 1)
@@ -202,7 +202,7 @@ local function LoadSkin()
         local bu = _G["GuildRosterContainerButton"..i]
         local ic = _G["GuildRosterContainerButton"..i.."Icon"]
 
-        bu:SetHighlightTexture(R["media"].gloss)
+        bu:SetHighlightTexture(R["media"].normal)
         bu:GetHighlightTexture():SetVertexColor(r, g, b, .2)
 
         bu.bg = S:CreateBG(ic)
@@ -236,7 +236,7 @@ local function LoadSkin()
 			local bu = GuildRosterContainer.buttons[i]
 
 			if not bu.bg then
-				bu:SetHighlightTexture(R["media"].gloss)
+				bu:SetHighlightTexture(R["media"].normal)
 				bu:GetHighlightTexture():SetVertexColor(r, g, b, .2)
 
 				bu.bg = S:CreateBG(bu.icon)

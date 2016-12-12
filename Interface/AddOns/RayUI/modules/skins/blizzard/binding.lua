@@ -29,7 +29,7 @@ local function LoadSkin()
 			select(i, bu:GetRegions()):Hide()
 		end
 
-		selected:SetTexture(R["media"].gloss)
+		selected:SetTexture(R["media"].normal)
 		selected:SetPoint("TOPLEFT", 1, -1)
 		selected:SetPoint("BOTTOMRIGHT", -1, 1)
 		selected:SetColorTexture(r, g, b, .2)

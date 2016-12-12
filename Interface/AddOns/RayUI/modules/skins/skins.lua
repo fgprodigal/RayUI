@@ -62,7 +62,7 @@ function S:CreateBackdropTexture(f)
 	local tex = f:CreateTexture(nil, "BACKGROUND")
 	tex:SetDrawLayer("BACKGROUND", 1)
 	tex:SetInside(f, 1, 1)
-	tex:SetTexture(R["media"].gloss)
+	tex:SetTexture(R["media"].normal)
 	--tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 	tex:SetVertexColor(backdropcolorr, backdropcolorg, backdropcolorb)
 	tex:SetAlpha(0.8)
@@ -96,7 +96,6 @@ end
 
 function S:CreateSD(parent, size, r, g, b, alpha, offset)
 	assert(parent, "doesn't exist!")
-	S:CreateStripesThin(parent)
 
 	if R.PixelMode then return end
 	local sd = CreateFrame("Frame", nil, parent)
@@ -109,6 +108,7 @@ function S:CreateSD(parent, size, r, g, b, alpha, offset)
 	sd.shadow:SetBackdropBorderColor(r or bordercolorr, g or bordercolorg, b or bordercolorb)
 	sd.border:SetBackdropBorderColor(r or bordercolorr, g or bordercolorg, b or bordercolorb)
 	sd:SetAlpha(alpha or 1)
+	S:CreateStripesThin(parent)
 end
 
 function S:CreatePulse(frame, speed, alpha, mult)
@@ -165,6 +165,7 @@ function S:Reskin(f, noGlow)
 	if f.RightSeparator then f.RightSeparator:Hide() end
 
 	f:SetTemplate("Default", true)
+    f.backdropTexture:SetAlpha(0.75)
 
 	if not noGlow then
 		f.glow = CreateFrame("Frame", nil, f)
@@ -399,7 +400,7 @@ function S:ReskinClose(f, a1, p, a2, x, y)
 	S:CreateBackdropTexture(f)
 	S:CreateGradient(f)
 
-	f:SetDisabledTexture(R["media"].gloss)
+	f:SetDisabledTexture(R["media"].normal)
 	local dis = f:GetDisabledTexture()
 	dis:SetVertexColor(0, 0, 0, .4)
 	dis:SetDrawLayer("OVERLAY")
@@ -428,8 +429,7 @@ function S:ReskinInput(f, height, width)
 	if f.Right then f.Right:Hide() end
 
 	local bd = CreateFrame("Frame", nil, f)
-	bd:Point("TOPLEFT", -2, 0)
-	bd:SetPoint("BOTTOMRIGHT")
+	bd:SetAllPoints()
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
 	S:CreateBD(bd, 0)
 	S:CreateBackdropTexture(f)
@@ -645,13 +645,13 @@ function S:ReskinExpandOrCollapse(f)
 	f.minus = f:CreateTexture(nil, "OVERLAY")
 	f.minus:Size(7, 1)
 	f.minus:SetPoint("CENTER")
-	f.minus:SetTexture(R["media"].gloss)
+	f.minus:SetTexture(R["media"].normal)
 	f.minus:SetVertexColor(1, 1, 1)
 
 	f.plus = f:CreateTexture(nil, "OVERLAY")
 	f.plus:Size(1, 7)
 	f.plus:SetPoint("CENTER")
-	f.plus:SetTexture(R["media"].gloss)
+	f.plus:SetTexture(R["media"].normal)
 	f.plus:SetVertexColor(1, 1, 1)
 end
 

@@ -274,7 +274,7 @@ local function LoadSkin()
             local statusbar = _G["ReputationBar"..i.."ReputationBar"]
 
             if statusbar then
-                statusbar:SetStatusBarTexture(R["media"].gloss)
+                statusbar:SetStatusBarTexture(R["media"].normal)
 
                 if not statusbar.reskinned then
                     -- S:CreateBD(statusbar, .25)
