@@ -18,7 +18,7 @@ local function GroupLootDropDown_Initialize()
 	Lib_UIDropDownMenu_AddButton(info);
 end
 --Create the new group loot dropdown frame and initialize it
-local RayUIGroupLootDropDown = CreateFrame("Frame", "RayUIGroupLootDropDown", UIParent, "UIDropDownMenuTemplate")
+local RayUIGroupLootDropDown = CreateFrame("Frame", "RayUIGroupLootDropDown", UIParent, "Lib_UIDropDownMenuTemplate")
 RayUIGroupLootDropDown:SetID(1)
 RayUIGroupLootDropDown:Hide()
 Lib_UIDropDownMenu_Initialize(RayUIGroupLootDropDown, nil, "MENU");

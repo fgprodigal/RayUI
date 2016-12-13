@@ -138,7 +138,7 @@ local function MiniMapTrackingDropDown_Initialize(self, level)
         end
     end
 end
-local RayUI_MinimapTrackDropDown = CreateFrame("Frame", "RayUI_MinimapTrackDropDown", UIParent, "UIDropDownMenuTemplate")
+local RayUI_MinimapTrackDropDown = CreateFrame("Frame", "RayUI_MinimapTrackDropDown", UIParent, "Lib_UIDropDownMenuTemplate")
 RayUI_MinimapTrackDropDown:SetID(1)
 RayUI_MinimapTrackDropDown:SetClampedToScreen(true)
 RayUI_MinimapTrackDropDown:Hide()
