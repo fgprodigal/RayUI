@@ -516,6 +516,7 @@ function RA:Construct_PowerBar(frame)
     power.frequentUpdates = false
     power:Height(frame:GetHeight()*RA.db.powerbarsize)
     RA:UpdatePower(power)
+    R:SetStatusBarGradient(power, true)
     return power
 end
 

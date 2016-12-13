@@ -612,9 +612,9 @@ function TT:OnTooltipSetUnit(tooltip)
     R:SetStatusBarGradient(GameTooltipStatusBar)
 
     local textWidth = GameTooltipStatusBar.text:GetStringWidth()
-	if textWidth then
-		tooltip:SetMinimumWidth(textWidth)
-	end
+    if textWidth then
+        tooltip:SetMinimumWidth(textWidth)
+    end
 end
 
 function TT:GameTooltip_ShowStatusBar(tooltip, min, max, value, text)
@@ -639,6 +639,10 @@ end
 
 function TT:Initialize()
     if not self.db.enable then return end
+
+    GameTooltipStatusBar.text = GameTooltipStatusBar:CreateFontString(nil, "OVERLAY")
+    GameTooltipStatusBar.text:SetPoint("CENTER", GameTooltipStatusBar, 0, -4)
+    GameTooltipStatusBar.text:FontTemplate(R["media"].font, 12, "THINOUTLINE")
 
     self:SecureHook(BNToastFrame, "SetPoint", "RepositionBNET")
     BNToastFrame:HookScript("OnShow", function(self)
@@ -669,18 +673,9 @@ function TT:Initialize()
                 GameTooltipStatusBar:SetStatusBarColor(GameTooltip_UnitColor(unit))
                 R:SetStatusBarGradient(GameTooltipStatusBar)
                 min, max = UnitHealth(unit), UnitHealthMax(unit)
-                if not self.text then
-                    self.text = self:CreateFontString(nil, "OVERLAY")
-                    self.text:SetPoint("CENTER", GameTooltipStatusBar, 0, -4)
-                    self.text:SetFont(R["media"].font, 12, "THINOUTLINE")
-                end
                 self.text:Show()
                 local hp = R:ShortValue(min).." / "..R:ShortValue(max)
                 self.text:SetText(hp)
-            else
-                if self.text then
-                    self.text:Hide()
-                end
             end
         end)
 

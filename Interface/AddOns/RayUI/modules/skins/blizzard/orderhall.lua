@@ -107,14 +107,13 @@ local function LoadSkin()
             local xpbar = self.followerTab.XPBar
             xpbar:StripTextures()
             xpbar:SetStatusBarTexture(R["media"].normal)
-			R:SetStatusBarGradient(xpBar)
+			R:SetStatusBarGradient(xpbar)
             -- xpbar:CreateShadow("Background")
         end)
     FollowerTab:StripTextures()
     FollowerTab.Class:SetSize(50, 43)
     FollowerTab.XPBar:StripTextures()
-    FollowerTab.XPBar:SetStatusBarTexture(R["media"].normal)
-	R:SetStatusBarGradient(FollowerTab.XPBar)
+    FollowerTab.XPBar:SetStatusBarTexture(.08, .92, .08, .92)
     FollowerTab.XPBar:CreateShadow("Background")
     -- Missions
     local MissionTab = OrderHallMissionFrame.MissionTab

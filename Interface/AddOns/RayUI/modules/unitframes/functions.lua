@@ -142,6 +142,7 @@ end
 function UF:Construct_PowerBar(frame, bg, text)
     local power = CreateFrame("StatusBar", nil, frame)
     power:SetStatusBarTexture(R["media"].normal)
+    R:SetStatusBarGradient(power, true)
     power.frequentUpdates = true
     power:SetFrameStrata("LOW")
     power.PostUpdate = self.PostUpdatePower
