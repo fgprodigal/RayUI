@@ -84,6 +84,7 @@ function mod:Spawn(type)
 
     frame:SetStatusBarTexture(settings.texture)
     frame:SetStatusBarColor(r, g, b)
+	R:SetStatusBarGradient(frame)
 
     local spark = frame:CreateTexture(nil, "OVERLAY")
     spark:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]

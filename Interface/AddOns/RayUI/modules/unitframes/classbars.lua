@@ -87,6 +87,7 @@ function UF:Configure_ClassBar(frame, cur)
                     local r, g, b = RayUF.ColorGradient(i, frame.MAX_CLASS_BAR > 5 and 6 or 5, r1, g1, b1, r2, g2, b2, r3, g3, b3)
                     bars[i]:SetStatusBarColor(r, g, b)
                 end
+				R:SetStatusBarGradient(bars[i])
                 bars[i]:SetOrientation("HORIZONTAL")
                 if cur and cur >= i then bars[i]:Show() end
             end

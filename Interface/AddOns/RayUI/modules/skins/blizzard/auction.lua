@@ -8,6 +8,7 @@ local function LoadSkin()
 	S:ReskinCheck(ExactMatchCheckButton)
 
 	AuctionProgressBar:SetStatusBarTexture(R["media"].normal)
+	R:SetStatusBarGradient(AuctionProgressBar, true)
 	local ABBD = CreateFrame("Frame", nil, AuctionProgressBar)
 	ABBD:Point("TOPLEFT", -1, 1)
 	ABBD:Point("BOTTOMRIGHT", 1, -1)

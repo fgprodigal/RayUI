@@ -278,6 +278,7 @@ function mod:START_LOOT_ROLL(event, rollid, time)
     f:SetBackdropBorderColor(color.r, color.g, color.b, 1)
     f.buttonborder:SetBackdropBorderColor(color.r, color.g, color.b, 1)
     f.status:SetStatusBarColor(color.r, color.g, color.b, .7)
+	R:SetStatusBarGradient(f.status)
 
     f.status:SetMinMaxValues(0, time)
     f.status:SetValue(time)
@@ -335,6 +336,7 @@ function mod:Initialize()
                 f.fsloot:SetVertexColor(r, g, b)
                 f.fsloot:SetText(GetItemInfo(item))
                 f.status:SetStatusBarColor(r, g, b)
+				R:SetStatusBarGradient(f.status)
                 f.rollid = i
                 f.time = 100000000
                 f:Show()

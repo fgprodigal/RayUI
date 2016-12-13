@@ -10,7 +10,7 @@ local function LoadSkin()
 	TradeSkillFrame.RankFrame:StripTextures()
 	TradeSkillFrame.RankFrame:SetStatusBarTexture(R["media"].normal)
 	TradeSkillFrame.RankFrame.SetStatusBarColor = R.dummy
-	TradeSkillFrame.RankFrame:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
+	R:SetStatusBarGradient(TradeSkillFrame.RankFrame)
 	TradeSkillFrame.FilterButton:StripTextures(true)
 	S:CreateBDFrame(TradeSkillFrame.RankFrame)
 	S:Reskin(TradeSkillFrame.FilterButton)

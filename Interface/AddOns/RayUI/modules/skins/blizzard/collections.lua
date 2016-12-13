@@ -216,6 +216,7 @@ local function LoadSkin()
 	end
 
 	card.xpBar:SetStatusBarTexture(R["media"].normal)
+    R:SetStatusBarGradient(card.xpBar)
 	S:CreateBDFrame(card.xpBar, .25)
 
 	PetJournalPetCardHealthFramehealthStatusBarLeft:Hide()
@@ -225,6 +226,7 @@ local function LoadSkin()
 
 	card.HealthFrame.healthBar:SetStatusBarTexture(R["media"].normal)
 	S:CreateBDFrame(card.HealthFrame.healthBar, .25)
+    R:SetStatusBarGradient(card.HealthFrame.healthBar)
 
 	for i = 1, 6 do
 		local bu = card["spell"..i]
@@ -274,6 +276,7 @@ local function LoadSkin()
 		end
 
 		bu.xpBar:SetStatusBarTexture(R["media"].normal)
+        R:SetStatusBarGradient(bu.xpBar)
 		S:CreateBDFrame(bu.xpBar, .25)
 
 		_G["PetJournalLoadoutPet"..i.."HealthFramehealthStatusBarLeft"]:Hide()
@@ -283,6 +286,7 @@ local function LoadSkin()
 
 		bu.healthFrame.healthBar:SetStatusBarTexture(R["media"].normal)
 		S:CreateBDFrame(bu.healthFrame.healthBar, .25)
+        R:SetStatusBarGradient(bu.healthFrame.healthBar)
 
 		for j = 1, 3 do
 			local spell = bu["spell"..j]
@@ -354,6 +358,7 @@ local function LoadSkin()
 
 	progressBar.text:SetPoint("CENTER", 0, 1)
 	progressBar:SetStatusBarTexture(R["media"].normal)
+    R:SetStatusBarGradient(progressBar)
 
 	S:CreateBDFrame(progressBar, .25)
 
@@ -432,6 +437,7 @@ local function LoadSkin()
 
 	progressBar.text:SetPoint("CENTER", 0, 1)
 	progressBar:SetStatusBarTexture(R["media"].normal)
+    R:SetStatusBarGradient(progressBar)
 
 	S:CreateBDFrame(progressBar, .25)
 
@@ -465,6 +471,7 @@ local function LoadSkin()
 
 	progressBar.text:SetPoint("CENTER", 0, 1)
 	progressBar:SetStatusBarTexture(R["media"].normal)
+    R:SetStatusBarGradient(progressBar)
 
 	S:CreateBDFrame(progressBar, .25)
 

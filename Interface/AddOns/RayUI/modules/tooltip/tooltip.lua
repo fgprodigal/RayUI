@@ -14,9 +14,7 @@ local GetTime = GetTime
 
 --WoW API / Variables
 local CreateFrame = CreateFrame
-local UnitCanAttack = UnitCanAttack
 local UnitLevel = UnitLevel
-local GetInventoryItemLink = GetInventoryItemLink
 local GetInspectSpecialization = GetInspectSpecialization
 local GetSpecialization = GetSpecialization
 local GetSpecializationInfoByID = GetSpecializationInfoByID
@@ -31,8 +29,6 @@ local UnitIsUnit = UnitIsUnit
 local CanInspect = CanInspect
 local NotifyInspect = NotifyInspect
 local GetScreenWidth = GetScreenWidth
-local UnitPlayerControlled = UnitPlayerControlled
-local UnitIsPVP = UnitIsPVP
 local UnitReaction = UnitReaction
 local UnitClass = UnitClass
 local GetItemInfo = GetItemInfo
@@ -57,6 +53,7 @@ local SetCVar = SetCVar
 local UnitHealth = UnitHealth
 local UnitHealthMax = UnitHealthMax
 local GetCursorPosition = GetCursorPosition
+local UnitIsTapDenied = UnitIsTapDenied
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: GameTooltip, FACTION_BAR_COLORS, InspectFrame, RayUF_Raid, INVSLOT_OFFHAND, INVSLOT_MAINHAND
@@ -67,7 +64,7 @@ local GetCursorPosition = GetCursorPosition
 -- GLOBALS: ShoppingTooltip2, ShoppingTooltip3, WorldMapCompareTooltip1, WorldMapCompareTooltip2, WorldMapCompareTooltip3
 -- GLOBALS: ChatMenu, EmoteMenu, LanguageMenu, QuestDifficultyColors, YOU, TARGET, GameTooltipTextLeft2, GameTooltipTextLeft1, PLAYER
 -- GLOBALS: AFK, DND, LEVEL, PVP_ENABLED, FACTION_HORDE, FACTION_ALLIANCE, VoiceMacroMenu, GameTooltip_UnitColor
--- GLOBALS: BNToastFrame, RayUIArtiBar
+-- GLOBALS: BNToastFrame, RayUIArtiBar, RayUF, TAPPED_COLOR
 
 local TalentFrame = CreateFrame("Frame", nil)
 TalentFrame:Hide()
@@ -285,28 +282,12 @@ end
 
 function TT:GameTooltip_UnitColor(unit)
     local r, g, b = 1, 1, 1
-    if UnitPlayerControlled(unit) then
-        if UnitCanAttack(unit, "player") then
-            if UnitCanAttack("player", unit) then
-                r = FACTION_BAR_COLORS[2].r
-                g = FACTION_BAR_COLORS[2].g
-                b = FACTION_BAR_COLORS[2].b
-            end
-        elseif UnitCanAttack("player", unit) then
-            r = FACTION_BAR_COLORS[4].r
-            g = FACTION_BAR_COLORS[4].g
-            b = FACTION_BAR_COLORS[4].b
-        elseif UnitIsPVP(unit) then
-            r = FACTION_BAR_COLORS[6].r
-            g = FACTION_BAR_COLORS[6].g
-            b = FACTION_BAR_COLORS[6].b
-        end
+    if UnitIsTapDenied(unit) then
+        r, g, b = unpack(TAPPED_COLOR)
     else
         local reaction = UnitReaction(unit, "player")
         if reaction then
-            r = FACTION_BAR_COLORS[reaction].r
-            g = FACTION_BAR_COLORS[reaction].g
-            b = FACTION_BAR_COLORS[reaction].b
+            r, g, b = unpack(RayUF["colors"].reaction[reaction])
         end
     end
     if UnitIsPlayer(unit) then
@@ -475,6 +456,7 @@ function TT:PLAYER_ENTERING_WORLD(event)
 
             self:SetStyle(tooltip)
             self:HookScript(tooltip, "OnShow", "SetStyle")
+            self:HookScript(tooltip, "OnHide", function() self:Hook_Reset(tooltip) end)
             if tooltip.BackdropFrame then tooltip.BackdropFrame:Kill() end
         end
     end
@@ -486,7 +468,6 @@ function TT:SetStyle(tooltip)
     if self.db.hideincombat and InCombatLockdown() then
         return tooltip:Hide()
     end
-    TT:Hook_Reset(tooltip)
     if not tooltip.styled then
         tooltip:SetBackdrop(nil)
         R:GetModule("Skins"):CreateStripesThin(tooltip)
@@ -577,7 +558,6 @@ function TT:OnTooltipSetUnit(tooltip)
         local guild, rank = GetGuildInfo(unit)
         local playerGuild = GetGuildInfo("player")
         local unitSpec = GetSpecialization()
-        GameTooltipStatusBar:SetStatusBarColor(unpack({GameTooltip_UnitColor(unit)}))
         if guild then
             GameTooltipTextLeft2:SetFormattedText("<%s>"..R:RGBToHex(1, 1, 1).." %s|r", guild, rank)
             if IsInGuild() and guild == playerGuild then
@@ -628,6 +608,13 @@ function TT:OnTooltipSetUnit(tooltip)
             break
         end
     end
+    GameTooltipStatusBar:SetStatusBarColor(GameTooltip_UnitColor(unit))
+    R:SetStatusBarGradient(GameTooltipStatusBar)
+
+    local textWidth = GameTooltipStatusBar.text:GetStringWidth()
+	if textWidth then
+		tooltip:SetMinimumWidth(textWidth)
+	end
 end
 
 function TT:GameTooltip_ShowStatusBar(tooltip, min, max, value, text)
@@ -679,15 +666,13 @@ function TT:Initialize()
             end
             local unit = select(2, GameTooltip:GetUnit())
             if unit then
-                if UnitIsPlayer(unit) then
-                    GameTooltipStatusBar:SetStatusBarColor(unpack({GameTooltip_UnitColor(unit)}))
-                end
+                GameTooltipStatusBar:SetStatusBarColor(GameTooltip_UnitColor(unit))
+                R:SetStatusBarGradient(GameTooltipStatusBar)
                 min, max = UnitHealth(unit), UnitHealthMax(unit)
                 if not self.text then
                     self.text = self:CreateFontString(nil, "OVERLAY")
                     self.text:SetPoint("CENTER", GameTooltipStatusBar, 0, -4)
                     self.text:SetFont(R["media"].font, 12, "THINOUTLINE")
-                    -- self.text:SetShadowOffset(R.mult, -R.mult)
                 end
                 self.text:Show()
                 local hp = R:ShortValue(min).." / "..R:ShortValue(max)

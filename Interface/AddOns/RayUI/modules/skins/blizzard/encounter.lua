@@ -96,7 +96,6 @@ local function LoadSkin()
 	}
 	for _, tab in pairs(tabs) do
 		S:CreateBD(tab)
-		tab:SetScale(.5)
 
 		tab:SetNormalTexture("")
 		tab:SetPushedTexture("")
@@ -105,7 +104,7 @@ local function LoadSkin()
 	end
 
 	EncounterJournalEncounterFrameInfoOverviewTab:ClearAllPoints()
-	EncounterJournalEncounterFrameInfoOverviewTab:SetPoint("TOPLEFT", EncounterJournalEncounterFrameInfo, "TOPRIGHT", 9, -35)
+	EncounterJournalEncounterFrameInfoOverviewTab:Point("TOPLEFT", EncounterJournalEncounterFrameInfo, "TOPRIGHT", 7 + R.Border, -35)
 	EncounterJournalEncounterFrameInfoLootTab:ClearAllPoints()
 	EncounterJournalEncounterFrameInfoLootTab:SetPoint("TOP", EncounterJournalEncounterFrameInfoOverviewTab, "BOTTOM", 0, 1)
 	EncounterJournalEncounterFrameInfoBossTab:ClearAllPoints()

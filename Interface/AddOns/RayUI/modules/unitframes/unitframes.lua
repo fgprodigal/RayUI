@@ -87,7 +87,7 @@ function UF:LoadUnitFrames()
             if i == 1 then
                 self.arena[i]:Point("TOPRIGHT", ArenaHeader, "TOPRIGHT", 0, 0)
             else
-                self.arena[i]:Point("TOP", self.arena[i-1], "BOTTOM", 0, -36)
+                self.arena[i]:Point("TOP", self.arena[i-1], "BOTTOM", 0, -50)
             end
             self.arena[i]:Show()
         end
@@ -108,7 +108,7 @@ function UF:LoadUnitFrames()
             if i == 1 then
                 boss[i]:Point("TOPRIGHT", BossHeader, "TOPRIGHT", 0, 0)
             else
-                boss[i]:Point("TOP", boss[i-1], "BOTTOM", 0, -36)
+                boss[i]:Point("TOP", boss[i-1], "BOTTOM", 0, -50)
             end
             boss[i]:Size(self.db.units.boss.width, self.db.units.boss.height)
             boss[i]:Show()

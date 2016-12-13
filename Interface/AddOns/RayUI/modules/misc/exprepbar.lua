@@ -6,7 +6,7 @@ local libAD = LibStub("LibArtifactData-1.0")
 --Cache global variables
 --Lua functions
 local _G = _G
-local ipairs, select, string, unpack = ipairs, select, string, unpack
+local pairs, ipairs, select, string, unpack = pairs, ipairs, select, string, unpack
 local format = string.format
 local min = math.min
 
@@ -53,11 +53,6 @@ local function AddPerks()
         end
 
         if data.currentRank > 0 and not data.isStart then
-            if not header then
-                header = true
-                GameTooltip:AddDivider()
-            end
-
             GameTooltip:AddDoubleLine(data.name, data.currentRank.."/"..data.maxRank, 1,1,1, r,g,b)
         end
     end
@@ -92,12 +87,14 @@ end
 function mod:CreateExpBar()
     self.ExpBar = self:CreateBar("RayUIExpBar", Minimap, 8)
     self.ExpBar:SetStatusBarColor(.5, 0, .75)
+    R:SetStatusBarGradient(self.ExpBar)
     self.ExpBar:SetAnimatedTextureColors(0.0, 0.39, 0.88, 1.0)
 
     self.ExpBar.RestedExpBar = CreateFrame("StatusBar", nil, self.ExpBar)
     self.ExpBar.RestedExpBar:SetAllPoints()
     self.ExpBar.RestedExpBar:SetStatusBarTexture(R.media.normal)
     self.ExpBar.RestedExpBar:SetStatusBarColor(0, .4, .8)
+    R:SetStatusBarGradient(self.ExpBar.RestedExpBar)
     self.ExpBar.RestedExpBar:SetFrameLevel(2)
 
     self.ExpBar:SetScript("OnEvent", self.UpdateExpBar)
@@ -210,9 +207,11 @@ function mod:UpdateHonorBar()
         local exhaustionStateID = GetHonorRestState()
         if (exhaustionStateID == 1) then
             self:SetStatusBarColor(1.0, 0.71, 0)
+            R:SetStatusBarGradient(self)
             self:SetAnimatedTextureColors(1.0, 0.71, 0)
         else
             self:SetStatusBarColor(1.0, 0.24, 0)
+            R:SetStatusBarGradient(self)
             self:SetAnimatedTextureColors(1.0, 0.24, 0)
         end
     end
@@ -279,6 +278,7 @@ function mod:UpdateRepBar()
             rank = 8
         end
         self:SetStatusBarColor(unpack(RayUF["colors"].reaction[rank]))
+        R:SetStatusBarGradient(self)
         self:SetAnimatedTextureColors(unpack(RayUF["colors"].reaction[rank]))
         self:Show()
     else
@@ -289,6 +289,7 @@ end
 function mod:CreateArtiBar()
     self.ArtiBar = self:CreateBar("RayUIArtiBar", self.RepBar, 8)
     self.ArtiBar:SetStatusBarColor(.901, .8, .601)
+    R:SetStatusBarGradient(self.ArtiBar)
     self.ArtiBar:Hide()
 
     libAD.RegisterCallback(self, "ARTIFACT_POWER_CHANGED", "UpdateArtiBar")

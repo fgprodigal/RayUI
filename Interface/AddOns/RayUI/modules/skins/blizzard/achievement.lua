@@ -61,7 +61,7 @@ local function LoadSkin()
 	end
 
 	AchievementFrameSummaryCategoriesStatusBar:SetStatusBarTexture(R["media"].normal)
---	AchievementFrameSummaryCategoriesStatusBar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
+	AchievementFrameSummaryCategoriesStatusBar:GetStatusBarTexture():SetGradient("VERTICAL", 0, 1, 0, 0, .5, 0)
 	AchievementFrameSummaryCategoriesStatusBarLeft:Hide()
 	AchievementFrameSummaryCategoriesStatusBarMiddle:Hide()
 	AchievementFrameSummaryCategoriesStatusBarRight:Hide()
@@ -140,7 +140,9 @@ local function LoadSkin()
 	hooksecurefunc("AchievementButton_GetProgressBar", function(index)
 		local bar = _G["AchievementFrameProgressBar"..index]
 		if not bar.reskinned then
+            local r, g, b = bar:GetStatusBarColor()
 			bar:SetStatusBarTexture(R["media"].normal)
+        	bar:GetStatusBarTexture():SetGradient("VERTICAL", r, g, b, r/2, g/2, b/2)
 
 			_G["AchievementFrameProgressBar"..index.."BG"]:SetColorTexture(0, 0, 0, .25)
 			_G["AchievementFrameProgressBar"..index.."BorderLeft"]:Hide()
@@ -210,7 +212,7 @@ local function LoadSkin()
 		local label = _G["AchievementFrameSummaryCategoriesCategory"..i.."Label"]
 
 		bu:SetStatusBarTexture(R["media"].normal)
-	--	bar:SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
+		bar:SetGradient("VERTICAL", 0, 1, 0, 0, .5, 0)
 		label:SetTextColor(1, 1, 1)
 		label:Point("LEFT", bu, "LEFT", 6, 0)
 

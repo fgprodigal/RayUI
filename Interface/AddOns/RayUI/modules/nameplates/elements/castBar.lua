@@ -202,6 +202,7 @@ function mod:UpdateElement_Cast(frame, event, ...)
     else
         frame.CastBar:SetStatusBarColor(1, 0, 0)
     end
+    R:SetStatusBarGradient(frame.CastBar)
     frame.CastBar.canInterrupt = nil
 end
 

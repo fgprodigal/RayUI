@@ -130,7 +130,7 @@ local function LoadSkin()
 
 		bu.statusBar:SetHeight(13)
 		bu.statusBar:SetStatusBarTexture(R["media"].normal)
-		bu.statusBar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .6, 0, 0, .8, 0)
+		R:SetStatusBarGradient(bu.statusBar)
 		bu.statusBar.rankText:SetPoint("CENTER")
 
 		local _, p = bu.statusBar:GetPoint()

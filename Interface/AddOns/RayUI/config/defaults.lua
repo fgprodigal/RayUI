@@ -163,13 +163,13 @@ P["UnitFrames"]={
             enable = true,
             defaultPosition = { "BOTTOMRIGHT", R.UIParent, "BOTTOM", -80, 390 },
             width = 190,
-            height = 22,
+            height = 30,
         },
         boss = {
             enable = true,
             defaultPosition = { "BOTTOMRIGHT", R.UIParent, "BOTTOM", -80, 390 },
             width = 192,
-            height = 22,
+            height = 30,
         },
     },
 }

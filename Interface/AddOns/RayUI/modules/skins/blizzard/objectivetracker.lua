@@ -145,6 +145,7 @@ local function LoadSkin()
                 end
 
                 bar:SetStatusBarTexture(R["media"].normal)
+				R:SetStatusBarGradient(bar, true)
 
                 label:ClearAllPoints()
                 label:SetPoint("CENTER", 0, -1)
@@ -205,6 +206,7 @@ local function LoadSkin()
                 S:ReskinIcon(icon)
 
                 bar:SetStatusBarTexture(R["media"].normal)
+				R:SetStatusBarGradient(bar, true)
 
                 label:ClearAllPoints()
                 label:SetPoint("CENTER")

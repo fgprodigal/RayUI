@@ -278,6 +278,7 @@ local function LoadSkin()
 
                 if not statusbar.reskinned then
                     -- S:CreateBD(statusbar, .25)
+                    R:SetStatusBarGradient(statusbar, true)
                     local frame = CreateFrame("Frame",nil, statusbar)
                     S:CreateBD(frame, .25)
                     frame:SetFrameLevel(statusbar:GetFrameLevel() -1)

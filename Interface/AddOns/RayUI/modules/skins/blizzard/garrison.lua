@@ -192,6 +192,7 @@ local function LoadSkin()
 		select(4, xpBar:GetRegions()):Hide()
 
 		xpBar:SetStatusBarTexture(R["media"].normal)
+		R:SetStatusBarGradient(xpBar)
 
 		S:CreateBDFrame(xpBar)
 	end
@@ -222,6 +223,7 @@ local function LoadSkin()
 		select(4, xpBar:GetRegions()):Hide()
 
 		xpBar:SetStatusBarTexture(R["media"].normal)
+		R:SetStatusBarGradient(xpBar)
 
 		S:CreateBDFrame(xpBar)
 	end
@@ -451,6 +453,7 @@ local function LoadSkin()
 		select(4, xpBar:GetRegions()):Hide()
 
 		xpBar:SetStatusBarTexture(R["media"].normal)
+		R:SetStatusBarGradient(xpBar)
 
 		S:CreateBDFrame(xpBar)
 	end
@@ -774,6 +777,7 @@ local function LoadSkin()
 		select(4, xpBar:GetRegions()):Hide()
 
 		xpBar:SetStatusBarTexture(R["media"].normal)
+		R:SetStatusBarGradient(xpBar)
 
 		S:CreateBDFrame(xpBar)
 	end

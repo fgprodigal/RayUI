@@ -59,6 +59,7 @@ local GetAddOnCPUUsage = GetAddOnCPUUsage
 local UpdateAddOnCPUUsage = UpdateAddOnCPUUsage
 local ToggleHelpFrame = ToggleHelpFrame
 local C_Timer = C_Timer
+local hooksecurefunc = hooksecurefunc
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: UIParent, LibStub, MAX_PLAYER_LEVEL, ScriptErrorsFrame_OnError, BaudErrorFrameHandler, UISpecialFrames, xCT_Plus
@@ -138,8 +139,8 @@ function R:UIScale()
     self.UIParent:SetAllPoints()
     self.UIParent.origHeight = self.UIParent:GetHeight()
     self.mult = 768/string.match(self.resolution, "%d+x(%d+)")/self.global.general.uiscale
-	self.Spacing = self.PixelMode and 0 or self.mult
-	self.Border = (self.PixelMode and self.mult or self.mult * 3)
+    self.Spacing = self.PixelMode and 0 or self.mult
+    self.Border = (self.PixelMode and self.mult or self.mult * 3)
 
     SetCVar("useUiScale", 1)
     SetCVar("uiScale", self.global.general.uiscale)
@@ -372,18 +373,18 @@ function R:xCTPlusShortValue(self, amount, frameName)
         return R.hooks[xCT_Plus].Abbreviate(self, amount, frameName)
     else
         local message = tostring(amount)
-    	if frameName and self.db.profile.frames[frameName] and self.db.profile.frames[frameName].megaDamage then
-    		if self.db.profile.spells.formatAbbreviate then
+        if frameName and self.db.profile.frames[frameName] and self.db.profile.frames[frameName].megaDamage then
+            if self.db.profile.spells.formatAbbreviate then
                 message = tostring(R:ShortValue(amount))
-    		else
-    			local k
-    			while true do
-    				message, k = string.gsub(message, '^(-?%d+)(%d%d%d)', '%1,%2')
-    				if (k==0) then break end
-    			end
-    		end
-    	end
-    	return message
+            else
+                local k
+                while true do
+                    message, k = string.gsub(message, '^(-?%d+)(%d%d%d)', '%1,%2')
+                    if (k==0) then break end
+                end
+            end
+        end
+        return message
     end
 end
 
@@ -414,18 +415,18 @@ function R:Initialize()
     self:RegisterEvent("PLAYER_REGEN_DISABLED")
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
     self:RegisterEvent("PET_BATTLE_CLOSE", "AddNonPetBattleFrames")
-	self:RegisterEvent("PET_BATTLE_OPENING_START", "RemoveNonPetBattleFrames")
+    self:RegisterEvent("PET_BATTLE_OPENING_START", "RemoveNonPetBattleFrames")
 
     self:RegisterChatCommand("RayUI", "OpenConfig")
     self:RegisterChatCommand("RC", "OpenConfig")
     self:RegisterChatCommand("cpuimpact", "GetCPUImpact")
-	self:RegisterChatCommand("cpuusage", "GetTopCPUFunc")
-	-- args: module, showall, delay, minCalls
-	-- Example1: /cpuusage all
-	-- Example2: /cpuusage Bags true
-	-- Example3: /cpuusage UnitFrames nil 50 25
-	-- Note: showall, delay, and minCalls will default if not set
-	-- arg1 can be "all" this will scan all registered modules!
+    self:RegisterChatCommand("cpuusage", "GetTopCPUFunc")
+    -- args: module, showall, delay, minCalls
+    -- Example1: /cpuusage all
+    -- Example2: /cpuusage Bags true
+    -- Example3: /cpuusage UnitFrames nil 50 25
+    -- Note: showall, delay, and minCalls will default if not set
+    -- arg1 can be "all" this will scan all registered modules!
     self:RegisterChatCommand("gm", ToggleHelpFrame)
 
     self:Delay(5, function() collectgarbage("collect") end)
@@ -988,30 +989,40 @@ function R:CopyTable(currentTable, defaultTable)
 end
 
 function R:RemoveNonPetBattleFrames()
-	if InCombatLockdown() then return end
-	for object, _ in pairs(R.FrameLocks) do
-		local obj = _G[object] or object
-		obj:SetParent(R.HiddenFrame)
-	end
+    if InCombatLockdown() then return end
+    for object, _ in pairs(R.FrameLocks) do
+        local obj = _G[object] or object
+        obj:SetParent(R.HiddenFrame)
+    end
 
-	self:RegisterEvent("PLAYER_REGEN_DISABLED", "AddNonPetBattleFrames")
+    self:RegisterEvent("PLAYER_REGEN_DISABLED", "AddNonPetBattleFrames")
 end
 
 function R:AddNonPetBattleFrames()
-	if InCombatLockdown() then return end
-	for object, data in pairs(R.FrameLocks) do
-		local obj = _G[object] or object
-		local parent, strata, level
-		if type(data) == "table" then
-			parent, strata, level = data.parent, data.strata, data.level
-		elseif data == true then
-			parent = R.UIParent
-		end
-		obj:SetParent(parent)
-		if strata then
-			obj:SetFrameStrata(strata)
-		end
-	end
+    if InCombatLockdown() then return end
+    for object, data in pairs(R.FrameLocks) do
+        local obj = _G[object] or object
+        local parent, strata, level
+        if type(data) == "table" then
+            parent, strata, level = data.parent, data.strata, data.level
+        elseif data == true then
+            parent = R.UIParent
+        end
+        obj:SetParent(parent)
+        if strata then
+            obj:SetFrameStrata(strata)
+        end
+    end
 
-	self:UnregisterEvent("PLAYER_REGEN_DISABLED")
+    self:UnregisterEvent("PLAYER_REGEN_DISABLED")
+end
+
+function R:SetStatusBarGradient(bar, hook)
+    if not bar:GetStatusBarTexture() then return end
+    local r, g, b = bar:GetStatusBarColor()
+    bar:GetStatusBarTexture():SetGradient("VERTICAL", r, g, b, r/2, g/2, b/2)
+
+    if hook then
+        hooksecurefunc(bar, "SetStatusBarColor", function(self) R:SetStatusBarGradient(self) end)
+    end
 end

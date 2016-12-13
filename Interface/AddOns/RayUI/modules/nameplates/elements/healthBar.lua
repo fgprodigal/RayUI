@@ -119,6 +119,7 @@ function mod:UpdateElement_HealthColor(frame)
 
     if ( r ~= frame.HealthBar.r or g ~= frame.HealthBar.g or b ~= frame.HealthBar.b ) then
         frame.HealthBar:SetStatusBarColor(r, g, b);
+        R:SetStatusBarGradient(frame.HealthBar)
         frame.HealthBar.r, frame.HealthBar.g, frame.HealthBar.b = r, g, b;
     end
 
@@ -252,14 +253,17 @@ function mod:ConstructElement_HealthBar(parent)
     parent.AbsorbBar = CreateFrame("StatusBar", "$parentAbsorbBar", frame)
     parent.AbsorbBar:SetStatusBarTexture(LSM:Fetch("background", "RayUI Blank"))
     parent.AbsorbBar:SetStatusBarColor(1, 1, 0, 0.25)
+	R:SetStatusBarGradient(parent.AbsorbBar)
 
     parent.HealPrediction = CreateFrame("StatusBar", "$parentHealPrediction", frame)
     parent.HealPrediction:SetStatusBarTexture(LSM:Fetch("background", "RayUI Blank"))
     parent.HealPrediction:SetStatusBarColor(0, 1, 0, 0.25)
+	R:SetStatusBarGradient(parent.HealPrediction)
 
     parent.PersonalHealPrediction = CreateFrame("StatusBar", "$parentPersonalHealPrediction", frame)
     parent.PersonalHealPrediction:SetStatusBarTexture(LSM:Fetch("background", "RayUI Blank"))
     parent.PersonalHealPrediction:SetStatusBarColor(0, 1, 0.5, 0.25)
+	R:SetStatusBarGradient(parent.PersonalHealPrediction)
 
     frame.text = frame:CreateFontString(nil, "OVERLAY")
     frame.text:SetWordWrap(false)

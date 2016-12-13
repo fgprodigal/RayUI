@@ -81,8 +81,7 @@ local function LoadSkin()
 	ClassTrainerStatusBarBackground:Hide()
 	ClassTrainerStatusBar:SetPoint("TOPLEFT", ClassTrainerFrame, "TOPLEFT", 64, -35)
 	ClassTrainerStatusBar:SetStatusBarTexture(R["media"].normal)
-
-	ClassTrainerStatusBar:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
+	R:SetStatusBarGradient(ClassTrainerStatusBar)
 
 	local bd = CreateFrame("Frame", nil, ClassTrainerStatusBar)
 	bd:Point("TOPLEFT", -1, 1)

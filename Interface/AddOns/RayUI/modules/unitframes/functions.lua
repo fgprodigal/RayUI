@@ -574,6 +574,7 @@ function UF:PostCastStart(unit, name, rank, castid)
     else
         self:SetStatusBarColor(r * 1, g * 1, b * 1)
     end
+    R:SetStatusBarGradient(self)
 
     self.unit = unit
 
@@ -691,6 +692,7 @@ function UF:PostCastInterruptible(unit)
         else
             self:SetStatusBarColor(r * 1, g * 1, b * 1)
         end
+        R:SetStatusBarGradient(self)
     end
 end
 
@@ -709,10 +711,12 @@ function UF:PostCastNotInterruptible(unit)
     else
         self:SetStatusBarColor(r * 1, g * 1, b * 1)
     end
+    R:SetStatusBarGradient(self)
 end
 
 function UF:PostCastFailed(event, unit, name, rank, castid)
     self:SetStatusBarColor(unpack(oUF.colors.reaction[1]))
+    R:SetStatusBarGradient(self)
     self:SetValue(self.max)
     self:Show()
 end
@@ -862,17 +866,14 @@ function UF:PostUpdateHealth(unit, cur, max)
             self:GetParent().gradient:SetGradientAlpha("VERTICAL", .6, .6, .6, .6, .4, .4, .4, .6)
         else
             self.bg:Show()
-            r, g, b = RayUF.ColorGradient(curhealth, maxhealth, unpack(RayUF.colors.smooth))
-            self.bg:SetVertexColor(r, g, b)
-            self.bg:SetGradient("VERTICAL", r, g, b, r/2, g/2, b/2)
+            R:SetStatusBarGradient(self.bg)
             self:GetParent().gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
         end
     else
-        r, g, b = self:GetStatusBarColor()
-        self:GetStatusBarTexture():SetGradient("VERTICAL", r, g, b, r/2, g/2, b/2)
+        R:SetStatusBarGradient(self)
         self:GetParent().gradient:Hide()
     end
-    local color = {1,1,1}
+    local color = { 1, 1, 1 }
     if UnitIsPlayer(unit) then
         local _, class = UnitClass(unit)
         if class then
@@ -954,6 +955,7 @@ function UF:PostAltUpdate(min, cur, max)
     else
         self:SetStatusBarColor(1, 0, 0)
     end
+    R:SetStatusBarGradient(self)
 
     local unit = self:GetParent().unit
 
@@ -1204,6 +1206,7 @@ function UF:Construct_AuraBars()
     bar:CreateShadow("Background")
 
     bar:SetStatusBarColor(unpack(RayUF.colors.class[R.myclass]))
+    R:SetStatusBarGradient(bar)
 
     bar.spelltime:FontTemplate(R["media"].font, R["media"].fontsize, "OUTLINE")
     bar.spellname:FontTemplate(R["media"].font, R["media"].fontsize, "OUTLINE")
@@ -1269,6 +1272,7 @@ function UF:UpdatePrep(event)
                         local color = R.colors.class[class]
                         _G["RayUF_Arena"..i].prepFrame.SpecClass:SetText(spec.." - "..LOCALIZED_CLASS_NAMES_MALE[class])
                         _G["RayUF_Arena"..i].prepFrame.Health:SetStatusBarColor(color.r, color.g, color.b)
+                        R:SetStatusBarGradient(_G["RayUF_Arena"..i].prepFrame.Health)
                         _G["RayUF_Arena"..i].prepFrame.Icon:SetTexture(texture)
                         _G["RayUF_Arena"..i].prepFrame:Show()
                     end

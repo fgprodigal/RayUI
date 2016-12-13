@@ -31,6 +31,7 @@ function mod:UpdateElement_Power(frame)
 
     if(color) then
         frame.PowerBar:SetStatusBarColor(unpack(color))
+		R:SetStatusBarGradient(frame.PowerBar)
     end
 end
 

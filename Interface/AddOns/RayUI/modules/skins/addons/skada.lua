@@ -220,6 +220,12 @@ local function SkinSkada()
 
 		EmbedSkada()
 	end)
+
+    local lib = LibStub("SpecializedLibBars-1.0")
+    hooksecurefunc(lib.barPrototype, "UpdateColor", function(self)
+        local r, g, b = self.texture:GetVertexColor()
+		self.texture:SetGradient("VERTICAL", r, g, b, r/2, g/2, b/2)
+    end)
 end
 
 S:AddCallbackForAddon("Skada", "Skada", SkinSkada)

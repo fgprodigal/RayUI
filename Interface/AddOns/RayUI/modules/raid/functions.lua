@@ -80,8 +80,7 @@ function RA:PostHealth(unit)
     if UF.db.healthColorClass then
         self.colorClass=true
         self.bg.multiplier = .2
-        local r1, g1, b1 = self:GetStatusBarColor()
-        self:GetStatusBarTexture():SetGradient("VERTICAL", r1, g1, b1, r1/2, g1/2, b1/2)
+        R:SetStatusBarGradient(self)
         self:GetParent().gradient:Hide()
     elseif UF.db.transparent then
         self.backdropTexture:Hide()

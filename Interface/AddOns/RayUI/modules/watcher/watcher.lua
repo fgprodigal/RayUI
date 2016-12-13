@@ -122,6 +122,7 @@ function watcherPrototype:CreateButton(mode)
         button.statusbar:SetHeight(5)
         button.statusbar:SetStatusBarTexture(R["media"].normal)
         button.statusbar:SetStatusBarColor(colors[R.myclass].r, colors[R.myclass].g, colors[R.myclass].b, 1)
+		R:SetStatusBarGradient(button.statusbar)
         if ( self.iconside == "RIGHT" ) then
             button.statusbar:SetPoint("BOTTOMRIGHT", button, "BOTTOMLEFT", -5, 0)
         else
