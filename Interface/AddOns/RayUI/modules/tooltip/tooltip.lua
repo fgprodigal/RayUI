@@ -64,7 +64,7 @@ local UnitIsTapDenied = UnitIsTapDenied
 -- GLOBALS: ShoppingTooltip2, ShoppingTooltip3, WorldMapCompareTooltip1, WorldMapCompareTooltip2, WorldMapCompareTooltip3
 -- GLOBALS: ChatMenu, EmoteMenu, LanguageMenu, QuestDifficultyColors, YOU, TARGET, GameTooltipTextLeft2, GameTooltipTextLeft1, PLAYER
 -- GLOBALS: AFK, DND, LEVEL, PVP_ENABLED, FACTION_HORDE, FACTION_ALLIANCE, VoiceMacroMenu, GameTooltip_UnitColor
--- GLOBALS: BNToastFrame, RayUIArtiBar, RayUF, TAPPED_COLOR
+-- GLOBALS: BNToastFrame, RayUIArtiBar, RayUF
 
 local TalentFrame = CreateFrame("Frame", nil)
 TalentFrame:Hide()
@@ -283,7 +283,7 @@ end
 function TT:GameTooltip_UnitColor(unit)
     local r, g, b = 1, 1, 1
     if UnitIsTapDenied(unit) then
-        r, g, b = unpack(TAPPED_COLOR)
+        r, g, b = unpack(RayUF["colors"].tapped)
     else
         local reaction = UnitReaction(unit, "player")
         if reaction then
