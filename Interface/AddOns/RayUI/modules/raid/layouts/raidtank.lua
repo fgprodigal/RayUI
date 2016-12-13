@@ -31,7 +31,6 @@ end
 function RA:Construct_RaidTankFrames()
     self.RaisedElementParent = CreateFrame("Frame", nil, self)
     self.RaisedElementParent:SetFrameLevel(self:GetFrameLevel() + 100)
-    self.FrameBorder = RA:Construct_FrameBorder(self)
     self.Health = RA:Construct_HealthBar(self)
     self.Name = RA:Construct_NameText(self)
     self.Threat = RA:Construct_Threat(self)

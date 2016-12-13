@@ -31,7 +31,6 @@ end
 function RA:Construct_Raid40Frames()
     self.RaisedElementParent = CreateFrame("Frame", nil, self)
     self.RaisedElementParent:SetFrameLevel(self:GetFrameLevel() + 100)
-    self.FrameBorder = RA:Construct_FrameBorder(self)
     self.Health = RA:Construct_HealthBar(self)
     self.Power = RA:Construct_PowerBar(self)
     self.Name = RA:Construct_NameText(self)
