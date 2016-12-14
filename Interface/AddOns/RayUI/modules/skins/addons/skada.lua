@@ -231,8 +231,8 @@ local function SkinSkada()
             end
             self.shadow:Hide()
             self.border:ClearAllPoints()
-            if self.iconFrame and self.iconFrame:IsShown() then
-                self.border:Point("TOPLEFT", self.texture, "TOPLEFT", -self:GetHeight(), 1)
+            if self.icon:IsVisible() then
+                self.border:Point("TOPLEFT", self.texture, "TOPLEFT", -self.icon:GetWidth(), 1)
                 self.border:Point("BOTTOMRIGHT", self.texture, "BOTTOMRIGHT", 1, -1)
             else
                 self.border:SetOutside(self.texture, 1, 1)
