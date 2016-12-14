@@ -867,7 +867,9 @@ function UF:PostUpdateHealth(unit, cur, max)
             self:GetParent().gradient:SetGradientAlpha("VERTICAL", .6, .6, .6, .6, .4, .4, .4, .6)
         else
             self.bg:Show()
-            R:SetStatusBarGradient(self.bg)
+            r, g, b = RayUF.ColorGradient(curhealth, maxhealth, unpack(RayUF.colors.smooth))
+            self.bg:SetVertexColor(r, g, b)
+            self.bg:SetGradient("VERTICAL", r, g, b, r/2, g/2, b/2)
             self:GetParent().gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
         end
     else
