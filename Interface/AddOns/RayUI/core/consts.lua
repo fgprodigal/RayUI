@@ -48,3 +48,7 @@ R.colors = {
 for class, color in pairs(RayUF.colors.class) do
 	R.colors.class[class] = { r = color[1], g = color[2], b = color[3] }
 end
+
+for reaction, color in pairs(RayUF.colors.reaction) do
+	FACTION_BAR_COLORS[reaction] = { r = color[1], g = color[2], b = color[3] }
+end
