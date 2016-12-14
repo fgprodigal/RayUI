@@ -210,7 +210,7 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	self.rangeTimer = 0
 	self:Hide()
 
-	local Icon = self:CreateTexture("$parentIcon", "BACKGROUND")
+	local Icon = self:CreateTexture("$parentIcon", "ARTWORK")
 	Icon:SetAllPoints()
 	self.Icon = Icon
 
@@ -223,13 +223,14 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	self.Count = Count
 
 	local Cooldown = CreateFrame("Cooldown", "$parentCooldown", self, "CooldownFrameTemplate")
+    Cooldown:SetFrameLevel(self:GetFrameLevel() + 2)
 	Cooldown:ClearAllPoints()
 	Cooldown:SetPoint("TOPRIGHT", -2, -3)
 	Cooldown:SetPoint("BOTTOMLEFT", 2, 1)
 	Cooldown:Hide()
 	self.Cooldown = Cooldown
 
-	local Artwork = self:CreateTexture("$parentArtwork", "OVERLAY")
+	local Artwork = self:CreateTexture("$parentArtwork", "BACKGROUND", nil, -8)
 	Artwork:SetPoint("CENTER", -2, 0)
 	Artwork:SetSize(256, 128)
 	Artwork:SetTexture([[Interface\ExtraButton\Default]])
@@ -237,6 +238,7 @@ function ExtraQuestButton:PLAYER_LOGIN()
 
 	self.Icon:SetTexCoord(.08, .92, .08, .92)
 	self:CreateShadow("Background")
+    self.border:SetFrameLevel(self:GetFrameLevel())
 	self:StyleButton(true)
 
 	self:RegisterEvent("UPDATE_BINDINGS")
