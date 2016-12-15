@@ -204,6 +204,7 @@ local function SkinDBM()
 
             if not progress.styled then
                 progress:SetStatusBarTexture(R["media"].normal)
+                R:SetStatusBarGradient(progress, true)
                 progress.styled=true
             end
             progress:ClearAllPoints()
@@ -307,7 +308,10 @@ local function SkinDBM()
     end
 
     local ForceOptions = function()
-        local db = DBT_AllPersistentOptions["Default"] or DBT_PersistentOptions["DBM"] or nil
+        local db
+        if DBT_AllPersistentOptions["Default"] then
+            db = DBT_AllPersistentOptions["Default"]["DBM"] or DBT_PersistentOptions["Default"]
+        end
         if not db then
             R:Print("DBM配置写入失败")
             return
