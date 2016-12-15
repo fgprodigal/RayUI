@@ -69,6 +69,7 @@ local function round(number, places)
 end
 
 local function NewInstance(width, height)
+    local S = RayUI[1]:GetModule("Skins")
 	lib.num_frames = lib.num_frames + 1
 
 	local frameName = ("%s_CopyFrame%d"):format(MAJOR, lib.num_frames)
@@ -84,6 +85,10 @@ local function NewInstance(width, height)
 	copyFrame:SetToplevel(true)
 
 	copyFrame:Hide()
+	copyFrame.Inset:Kill()
+    copyFrame:StripTextures(true)
+    S:CreateBD(copyFrame, 0.6)
+    S:ReskinClose(copyFrame.CloseButton)
 
 
 	local titleBackground = _G[frameName.."TitleBg"]
@@ -104,6 +109,7 @@ local function NewInstance(width, height)
 	local scrollArea = _G.CreateFrame("ScrollFrame", ("%sScroll"):format(frameName), copyFrame, "FauxScrollFrameTemplate")
 	scrollArea:SetPoint("TOPLEFT", copyFrame.Inset, 5, -5)
 	scrollArea:SetPoint("BOTTOMRIGHT", copyFrame.Inset, -27, 6)
+    S:ReskinScroll(scrollArea.ScrollBar)
 
 	function scrollArea:Update(start, wrappedLines, maxDisplayLines, allWrappedLines, lineHeight)
 		--print("Scroll:Update", start, lineHeight, maxDisplayLines)
@@ -167,6 +173,7 @@ local function NewInstance(width, height)
 	editBox:SetAutoFocus(false)
 	editBox:SetFontObject("SystemFont_Small")
 	editBox:SetAllPoints(scrollArea)
+    S:CreateBD(editBox, 0.6)
 
 	editBox:SetScript("OnEscapePressed", function()
 		_G.HideUIPanel(copyFrame)

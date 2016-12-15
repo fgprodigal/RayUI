@@ -4,30 +4,28 @@ local LTD = LibStub("LibTextDump-1.0-RayUI")
 
 --Cache global variables
 --Lua functions
-local select, tostring = select, tostring
-
---WoW API / Variables
+local select, tostring, string, pairs = select, tostring, string, pairs
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: RayUIDebug
 
 local debugger = {}
 local function CreateDebugFrame(mod)
-    if debugger[mod] then
+    if debugger[string.lower(mod)] then
         return
     end
     local function save(buffer)
         RayUIDebug[mod] = buffer
     end
-    debugger[mod] = LTD:New(("%s Debug Output"):format(mod), 640, 473, save)
-    debugger[mod].numDuped = 1
-    debugger[mod].prevLine = ""
-    return debugger[mod]
+    debugger[string.lower(mod)] = LTD:New(("%s Debug Output"):format(mod), 640, 473, save)
+    debugger[string.lower(mod)].numDuped = 1
+    debugger[string.lower(mod)].prevLine = ""
+    return debugger[string.lower(mod)]
 end
 
 local function Debug(mod, ...)
     mod = mod.GetName and mod:GetName() or mod
-    local modDebug = debugger[mod]
+    local modDebug = debugger[string.lower(mod)]
     if not modDebug then
         modDebug = CreateDebugFrame(mod)
     end
@@ -54,8 +52,20 @@ end
 
 local function DisplayDebug(mod)
     mod = mod.GetName and mod:GetName() or mod
+    mod = string.lower(mod)
     if not debugger[mod] then return end
     debugger[mod]:Display()
+end
+
+function D:ShowDebugWindow(arg)
+    local mod = tostring(arg)
+    if mod == "all" then
+        for mod in pairs(debugger) do
+            debugger[mod]:Display()
+        end
+    elseif mod then
+        DisplayDebug(mod)
+    end
 end
 
 function D:Initialize()
@@ -65,6 +75,7 @@ function D:Initialize()
         module.Debug = Debug
         module.DisplayDebug = DisplayDebug
     end
+    self:RegisterChatCommand("debug", "ShowDebugWindow")
 end
 
 R:RegisterModule(D:GetName())
