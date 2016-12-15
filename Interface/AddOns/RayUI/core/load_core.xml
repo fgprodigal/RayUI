@@ -1,4 +1,4 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/">	
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="consts.lua"/>
 	<Script file="api.lua"/>
 	<Script file="functions.lua"/>
@@ -9,4 +9,5 @@
 	<Script file="bit.lua"/>
 	<Script file="frame.lua"/>
 	<Script file="dropdown.lua"/>
+	<Script file="debug.lua"/>
 </Ui>

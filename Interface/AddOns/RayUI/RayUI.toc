@@ -5,10 +5,9 @@
 ## OptionalDeps: Blizzard_DebugTools,Skada,DBM-Core, BigWigs, AtlasLoot, SharedMedia
 ## RequiredDeps: Blizzard_CombatText
 ## X-Credits: Tukz, Elv, Haste, Haleth, Tekkub, Zork, Syncrow @Dethecus-EU
-## X-SpecialThanks: Yvette
 ## X-oUF: RayUF
 ## SavedVariables: RayUIData
-## SavedVariablesPerCharacter:RayUICharacterData
+## SavedVariablesPerCharacter: RayUICharacterData, RayUIDebug
 
 libs\load_libs.xml
 locales\load_locales.xml
