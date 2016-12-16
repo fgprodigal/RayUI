@@ -134,12 +134,12 @@ G.Raid.RaidDebuffs = {
         [1094] = {
             -- The Emerald Nightmare
             -- Nythendra
-            [204504] = Defaults(), -- Infested
-            [205043] = Defaults(), -- Infested mind
-            [203096] = Defaults(), -- Rot
-            [204463] = Defaults(), -- Volatile Rot
-            [203045] = Defaults(), -- Infested Ground
-            [203646] = Defaults(), -- Burst of Corruption
+            [204504] = Defaults(1), -- Infested
+            [205043] = Defaults(7), -- Infested mind
+            [203096] = Defaults(6), -- Rot
+            [204463] = Defaults(5), -- Volatile Rot
+            [203045] = Defaults(2), -- Infested Ground
+            [203646] = Defaults(3), -- Burst of Corruption
 
             -- Elerethe Renferal
             [210228] = Defaults(), -- Dripping Fangs
