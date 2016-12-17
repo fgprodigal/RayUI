@@ -55,6 +55,9 @@ function RA:Construct_RaidTankFrames()
     self:SetScript("OnLeave", RA.UnitFrame_OnLeave)
     RA:SecureHook(self, "UpdateAllElements", RA.UnitFrame_OnShow)
     self:SetScript("OnHide", RA.UnitFrame_OnHide)
+
+    self:RegisterEvent("PLAYER_TARGET_CHANGED", RA.UpdateTargetBorder)
+    self:RegisterEvent("GROUP_ROSTER_UPDATE", RA.UpdateTargetBorder)
 end
 
 RA["headerstoload"]["raidTank"] = { "MAINTANK", nil }
