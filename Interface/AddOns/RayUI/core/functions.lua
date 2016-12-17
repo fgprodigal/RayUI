@@ -1015,7 +1015,7 @@ function R:SetStatusBarGradient(bar, hook)
     local r, g, b = bar:GetStatusBarColor()
     bar:GetStatusBarTexture():SetGradient("VERTICAL", self:GetGradientColor(r, g, b))
 
-    if hook then
-        hooksecurefunc(bar, "SetStatusBarColor", function(self) R:SetStatusBarGradient(self) end)
+    if hook and R.global.general.textureStyle == 2 then
+        hooksecurefunc(bar, "SetStatusBarColor", function(self, r, g, b) bar:GetStatusBarTexture():SetGradient("VERTICAL", R:GetGradientColor(r, g, b)) end)
     end
 end
