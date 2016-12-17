@@ -236,7 +236,7 @@ function mod:ConfigureElement_HealthBar(frame, configuring)
     end
 
     --Texture
-    healthBar:SetStatusBarTexture(LSM:Fetch("statusbar", "RayUI Normal"))
+    healthBar:SetStatusBarTexture(LSM:Fetch("statusbar", R.global.media.normal))
     if(not configuring) and (frame.UnitType ~= "FRIENDLY_NPC" or frame.isTarget) then
         healthBar:Show()
     end

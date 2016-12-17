@@ -195,6 +195,9 @@ do
     L["界面风格"] = true
     L["阴影"] = true
     L["1像素"] = true
+    L["材质风格"] = true
+    L["普通"] = true
+    L["渐变"] = true
     L["解锁界面元素"] = true
     L["显示教程"] = true
     L["解锁并移动头像和动作条"] = true

@@ -1002,10 +1002,18 @@ function R:AddNonPetBattleFrames()
     self:UnregisterEvent("PLAYER_REGEN_DISABLED")
 end
 
+function R:GetGradientColor(r, g, b)
+    if R.global.general.colorStyle == 1 then
+        return r, g, b, r, g, b
+    else
+        return r, g, b, r/2, g/2, b/2
+    end
+end
+
 function R:SetStatusBarGradient(bar, hook)
     if not bar:GetStatusBarTexture() then return end
     local r, g, b = bar:GetStatusBarColor()
-    bar:GetStatusBarTexture():SetGradient("VERTICAL", r, g, b, r/2, g/2, b/2)
+    bar:GetStatusBarTexture():SetGradient("VERTICAL", self:GetGradientColor(r, g, b))
 
     if hook then
         hooksecurefunc(bar, "SetStatusBarColor", function(self) R:SetStatusBarGradient(self) end)

@@ -53,7 +53,7 @@ local function LoadSkin()
 		if index == 1 then
 			infoBar.HealthBarBackdrop:Point("TOPLEFT", infoBar.ActualHealthBar, "TOPLEFT", 0, 0)
 			infoBar.HealthBarBackdrop:Point("BOTTOMLEFT", infoBar.ActualHealthBar, "BOTTOMLEFT", 0, 0)
-            infoBar.ActualHealthBar:SetGradient("VERTICAL", 0, 1, 0, 0, .5, 0)
+            infoBar.ActualHealthBar:SetGradient("VERTICAL", R:GetGradientColor(0, 1, 0))
 			f.Ally2.iconPoint = infoBar.IconBackdrop
 			f.Ally3.iconPoint = infoBar.IconBackdrop
 
@@ -69,7 +69,7 @@ local function LoadSkin()
 		else
 			infoBar.HealthBarBackdrop:Point("TOPRIGHT", infoBar.ActualHealthBar, "TOPRIGHT", 0, 0)
 			infoBar.HealthBarBackdrop:Point("BOTTOMRIGHT", infoBar.ActualHealthBar, "BOTTOMRIGHT", 0, 0)
-            infoBar.ActualHealthBar:SetGradient("VERTICAL", 1, 0, 0, .5, 0, 0)
+            infoBar.ActualHealthBar:SetGradient("VERTICAL", R:GetGradientColor(1, 0, 0))
 			f.Enemy2.iconPoint = infoBar.IconBackdrop
 			f.Enemy3.iconPoint = infoBar.IconBackdrop
 
@@ -234,12 +234,12 @@ end)
 		end
 		if tt.ActualHealthBar then
 			tt.ActualHealthBar:SetTexture(R["media"].normal)
-            tt.ActualHealthBar:SetGradient("VERTICAL", 0, 1, 0, 0, .5, 0)
+            tt.ActualHealthBar:SetGradient("VERTICAL", R:GetGradientColor(0, 1, 0))
 		end
 		if tt.XPBar then
             local r, g, b = tt.XPBar:GetVertexColor()
 			tt.XPBar:SetTexture(R["media"].normal)
-            tt.XPBar:SetGradient("VERTICAL", r, g, b, r/2, g/2, b/2)
+            tt.XPBar:SetGradient("VERTICAL", R:GetGradientColor(r, g, b))
 		end
 		tt.BorderTop:SetTexture(nil)
 		tt.BorderTopLeft:SetTexture(nil)
@@ -290,7 +290,7 @@ end)
 		infoBar.ActualHealthBar:SetTexture(R["media"].normal)
 		infoBar.ActualHealthBar:ClearAllPoints()
 		infoBar.ActualHealthBar:SetPoint("TOPLEFT", infoBar, "BOTTOMLEFT", 0, -5)
-        infoBar.ActualHealthBar:SetGradient("VERTICAL", 0, 1, 0, 0, .5, 0)
+        infoBar.ActualHealthBar:SetGradient("VERTICAL", R:GetGradientColor(0, 1, 0))
 
 		infoBar.HealthBarBackdrop = CreateFrame("Frame", nil, infoBar)
 		infoBar.HealthBarBackdrop:SetFrameLevel(infoBar:GetFrameLevel() - 1)

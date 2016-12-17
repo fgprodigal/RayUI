@@ -2,7 +2,9 @@ local LSM = LibStub("LibSharedMedia-3.0")
 
 if LSM == nil then return end
 
-LSM:Register("statusbar","RayUI Normal", [[Interface\AddOns\RayUI\media\statusbar.tga]])
+LSM:Register("statusbar","RayUI Light", [[Interface\AddOns\RayUI\media\statusbar_light.tga]])
+LSM:Register("statusbar","RayUI Dark", [[Interface\AddOns\RayUI\media\statusbar_dark.tga]])
+LSM:Register("statusbar","RayUI Qulight", [[Interface\AddOns\RayUI\media\statusbar_qulight.tga]])
 LSM:Register("statusbar","RayUI Blank", [[Interface\BUTTONS\WHITE8X8]])
 LSM:Register("statusbar","RayUI Gloss", [[Interface\AddOns\RayUI\media\gloss.tga]])
 LSM:Register("border", "RayUI GlowBorder", [[Interface\AddOns\RayUI\media\glowTex.tga]])

@@ -53,8 +53,27 @@ R.Options.args = {
                     ["Pixel"] = L["1像素"],
                 },
             },
-            numberType = {
+            colorStyle = {
                 order = 3,
+                type = "toggle",
+                name = L["材质风格"],
+                type = "select",
+                values = {
+                    [1] = L["普通"],
+                    [2] = L["渐变"],
+                },
+                set = function(info, value)
+                    R.global.general.colorStyle = value
+                    if value == 1 then
+                        R.global.media.normal = "RayUI Dark"
+                    else
+                        R.global.media.normal = "RayUI Light"
+                    end
+                    StaticPopup_Show("CFG_RELOAD")
+                end,
+            },
+            numberType = {
+                order = 4,
                 type = "toggle",
                 name = L["数字单位"],
                 type = "select",
@@ -67,13 +86,13 @@ R.Options.args = {
                 end
             },
             spacer = {
-                order = 4,
+                order = 5,
                 name = " ",
                 desc = " ",
                 type = "description",
             },
             ToggleAnchors = {
-                order = 5,
+                order = 6,
                 type = "execute",
                 name = L["解锁界面元素"],
                 desc = L["解锁并移动头像和动作条"],
@@ -88,7 +107,7 @@ R.Options.args = {
             --func = function() StaticPopup_Show("RESETMOVER_CHECK") end,
             --},
             ChoosLayout = {
-                order = 6,
+                order = 7,
                 type = "execute",
                 name = L["选择布局"],
                 desc = L["选择一个预设布局"],
@@ -99,7 +118,7 @@ R.Options.args = {
                 end,
             },
             ToggleTutorial = {
-                order = 7,
+                order = 8,
                 type = "execute",
                 name = L["显示教程"],
                 func = function()
@@ -109,7 +128,7 @@ R.Options.args = {
                 end,
             },
             TestBossButton = {
-                order = 8,
+                order = 9,
                 type = "execute",
                 name = L["测试ExtraActionButton"],
                 desc = L["显示/隐藏ExtraActionButton"],

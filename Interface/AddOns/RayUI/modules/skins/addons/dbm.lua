@@ -321,8 +321,8 @@ local function SkinDBM()
         db.BarXOffset = 0
         db.BarYOffset = 6
         db.HugeBarYOffset = 6
-        db.Texture = "RayUI Normal"
-        db.Font = "RayUI Font"
+        db.Texture = R.global.media.normal
+        db.Font = R.global.media.font
     end
 
     local loadOptions = CreateFrame("Frame")

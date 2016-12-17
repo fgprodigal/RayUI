@@ -239,7 +239,7 @@ function mod:ConfigureElement_CastBar(frame)
     castBar.Time:SetFont(LSM:Fetch("font", R.global.media.font), R.global.media.fontsize, R.global.media.fontflag)
 
     --Texture
-    castBar:SetStatusBarTexture(LSM:Fetch("statusbar", "RayUI Normal"))
+    castBar:SetStatusBarTexture(LSM:Fetch("statusbar", R.global.media.normal))
 end
 
 function mod:ConstructElement_CastBar(parent)

@@ -94,7 +94,7 @@ function RA:PostHealth(unit)
             end
             local r, g, b = RayUF.ColorGradient(curhealth, maxhealth, unpack(RayUF.colors.smooth))
             self.bg:SetVertexColor(r, g, b)
-            self.bg:SetGradient("VERTICAL", r, g, b, r/2, g/2, b/2)
+            self.bg:SetGradient("VERTICAL", R:GetGradientColor(r, g, b))
             self:GetParent().gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
         end
     else

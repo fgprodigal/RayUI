@@ -70,6 +70,8 @@ end
 
 function D:Initialize()
     RayUIDebug = {}
+    R.Debug = Debug
+    R.DisplayDebug = DisplayDebug
     for i = 1, #R["RegisteredModules"] do
         local module = R:GetModule(R["RegisteredModules"][i])
         module.Debug = Debug

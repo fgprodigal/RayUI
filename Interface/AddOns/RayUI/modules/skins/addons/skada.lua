@@ -224,7 +224,7 @@ local function SkinSkada()
     local lib = LibStub("SpecializedLibBars-1.0")
     hooksecurefunc(lib.barPrototype, "UpdateColor", function(self)
             local r, g, b = self.texture:GetVertexColor()
-            self.texture:SetGradient("VERTICAL", r, g, b, r/2, g/2, b/2)
+            self.texture:SetGradient("VERTICAL", R:GetGradientColor(r, g, b))
             if not self.border then
                 self:CreateShadow()
                 self.border:SetFrameLevel(self:GetFrameLevel())
