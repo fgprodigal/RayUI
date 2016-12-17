@@ -78,7 +78,7 @@ end
 local function Friend_OnMouseUp(tooltipCell, playerEntry)
     if not playerEntry.name then return end
     if IsAltKeyDown() then
-        if playerEntry.toonid then
+        if playerEntry.toonid and playerEntry.toonid ~= "" then
             BNInviteFriend(playerEntry.toonid)
         elseif playerEntry.iname == "" then
             InviteUnit(playerEntry.name)
