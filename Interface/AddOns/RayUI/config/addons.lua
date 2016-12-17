@@ -138,6 +138,86 @@ function AddOn.MikScrollingBattleText()
     end
 end
 
+AddOn["xCT+"] = function()
+    if not xCTSavedDB.RayUI or xCTSavedDB.RayUI ~= 1 then
+        xCT_Plus.db:SetProfile("RayUI")
+        local profile = xCT_Plus.db.profile
+        profile.spells.formatAbbreviate = true
+
+        profile.showStartupText = false
+        profile.blizzardFCT.blizzardHeadNumbers = true
+        profile.blizzardFCT.enable = true
+        profile.blizzardFCT.font = "RayUI Combat"
+        profile.blizzardFCT.floatingCombatTextCombatDamage = true
+        profile.blizzardFCT.floatingCombatTextCombatHealing = true
+        profile.blizzardFCT.floatingCombatTextCombatDamageDirectionalScale = 0
+
+        local frames = profile.frames
+        frames.general.Width = 256
+        frames.general.font = "RayUI Font"
+        frames.general.iconsSize = 18
+        frames.general.showInterrupts = false
+        frames.general.showDispells = false
+        frames.general.showPartyKills = false
+
+        frames.outgoing.X = 382
+        frames.outgoing.Y = 58
+        frames.outgoing.Width = 128
+        frames.outgoing.Height = 260
+        frames.outgoing.font = "RayUI Font"
+        frames.outgoing.fontSize = 15
+        frames.outgoing.iconsSize = 22
+
+        frames.critical.enabledFrame = true
+        frames.critical.X = 230
+        frames.critical.Y = 70
+        frames.critical.Width = 180
+        frames.critical.font = "RayUI Font"
+
+        frames.damage.X = -325
+        frames.damage.Y = -30
+        frames.damage.Width = 190
+        frames.damage.Height = 144
+        frames.damage.font = "RayUI Font"
+        frames.damage.fontSize = 15
+        frames.damage.insertText = "bottom"
+        frames.damage.names.PLAYER.nameType = 0
+        frames.damage.names.PLAYER.NPC = 0
+        frames.damage.names.PLAYER.ENVIRONMENT = 0
+
+        frames.healing.X = -415
+        frames.healing.Y = 5
+        frames.healing.Width = 128
+        frames.healing.Height = 260
+        frames.healing.font = "RayUI Font"
+        frames.healing.fontSize = 15
+        frames.healing.names.PLAYER.nameType = 0
+        frames.healing.names.PLAYER.NPC = 0
+        frames.healing.names.PLAYER.ENVIRONMENT = 0
+
+        frames.class.enabledFrame = false
+        frames.procs.enabledFrame = false
+
+        frames.power.X = 0
+        frames.power.Y = -95
+        frames.power.Width = 180
+        frames.power.Height = 128
+        frames.power.font = "RayUI Font"
+        frames.power.fontSize = 15
+
+        frames.loot.Y = -245
+        frames.loot.Width = 325
+        frames.loot.font = "RayUI Font"
+
+        xCT_Plus:RefreshConfig()
+
+        xCTSavedDB.RayUI = 1
+    end
+
+    xCT_Plus.combatEvents:UnregisterEvent("PLAYER_REGEN_ENABLED")
+    xCT_Plus.combatEvents:UnregisterEvent("PLAYER_REGEN_DISABLED")
+end
+
 local eventFrame = CreateFrame("Frame")
 eventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 eventFrame:RegisterEvent("ADDON_LOADED")
