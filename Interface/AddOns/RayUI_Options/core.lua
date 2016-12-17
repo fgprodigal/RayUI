@@ -53,7 +53,7 @@ R.Options.args = {
                     ["Pixel"] = L["1像素"],
                 },
             },
-            colorStyle = {
+            textureStyle = {
                 order = 3,
                 type = "toggle",
                 name = L["材质风格"],
@@ -63,7 +63,7 @@ R.Options.args = {
                     [2] = L["渐变"],
                 },
                 set = function(info, value)
-                    R.global.general.colorStyle = value
+                    R.global.general.textureStyle = value
                     if value == 1 then
                         R.global.media.normal = "RayUI Dark"
                     else

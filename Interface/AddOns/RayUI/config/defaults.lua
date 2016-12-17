@@ -22,7 +22,7 @@ G["media"]={
 G["general"]={
     logo = true,
     theme = "Shadow",
-    colorStyle = 2,
+    textureStyle = 2,
     numberType = 1,
 }
 
