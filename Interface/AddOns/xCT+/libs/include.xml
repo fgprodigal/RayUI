@@ -10,4 +10,6 @@
   <Script  file="LibSharedMedia-3.0\LibSharedMedia-3.0.lua" />
   <Include file="AceGUI-3.0-SharedMediaWidgets\widget.xml" />
   <Include file="UTF8\include.xml" />
+  <Script  file="xCombatParser-1.0\xCombatParser-1.0.lua" />
+  <Script  file="LibSink-2.0\LibSink-2.0.lua" />
 </Ui>

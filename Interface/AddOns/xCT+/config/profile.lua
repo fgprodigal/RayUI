@@ -31,31 +31,43 @@ local function CreateComboSpellEntry(default, spellID, watchUnit)
     }
 end
 
+-- Upvalue
+local tostring = tostring
+
+
+-- Add Merge Spell to the DB before it gets used by the profile
+function addon.GenerateDefaultSpamSpells()
+  local default = addon.defaults.profile.spells.merge
+  for id, item in pairs(addon.merges) do
+    default[id] = item
+    default[id].enabled = true
+  end
+end
+
 addon.defaults = {
   profile = {
-    showStartupText = false,
+    showStartupText = true,
     hideConfig = true,
     bypassCVars = false,
 
     blizzardFCT = {
-      blizzardHeadNumbers = true,
-      enabled = true,
-      font = "RayUI Normal",
-      fontName = [[Interface\AddOns\]] .. ADDON_NAME .. [[\media\HOOGE.TTF]],
-      fontSize = 32,
-      fontOutline = "2OUTLINE",
+      blizzardHeadNumbers = false, -- enable the head numbers
+      enabled = false,             -- enable custom font for head numbers
+      font = "Condensed Bold (xCT+)",
+      fontName = [[Interface\AddOns\]] .. ADDON_NAME .. [[\media\OpenSans-CondBold.ttf]],
+      fontSize = 32, -- unused
+      fontOutline = "2OUTLINE", -- unused
 
       -- CVars
+      enableFloatingCombatText = false,
       floatingCombatTextAllSpellMechanics = false,
       floatingCombatTextAuras = false,
-      floatingCombatTextCombatDamage = true,
+      floatingCombatTextCombatDamage = false,
       floatingCombatTextCombatDamageAllAutos = false,
-      floatingCombatTextCombatDamageDirectionalOffset = false,
-      floatingCombatTextCombatDamageDirectionalScale = false,
-      floatingCombatTextCombatHealing = true,
+      floatingCombatTextCombatHealing = false,
       floatingCombatTextCombatHealingAbsorbSelf = false,
       floatingCombatTextCombatHealingAbsorbTarget = false,
-      floatingCombatTextCombatLogPeriodicSpells = true,
+      floatingCombatTextCombatLogPeriodicSpells = false,
       floatingCombatTextCombatState = false,
       floatingCombatTextComboPoints = false,
       floatingCombatTextDamageReduction = false,
@@ -66,12 +78,64 @@ addon.defaults = {
       floatingCombatTextHonorGains = false,
       floatingCombatTextLowManaHealth = false,
       floatingCombatTextPeriodicEnergyGains = false,
-      floatingCombatTextPetMeleeDamage = true,
+      floatingCombatTextPetMeleeDamage = false,
       floatingCombatTextPetSpellDamage = false,
       floatingCombatTextReactives = false,
       floatingCombatTextRepChanges = false,
       floatingCombatTextSpellMechanics = false,
       floatingCombatTextSpellMechanicsOther = false,
+
+      floatingCombatTextCombatDamageDirectionalOffset = 1,
+      floatingCombatTextCombatDamageDirectionalScale = 1,
+    },
+
+    SpellColors = {
+      -- Vanilla Schools
+      [tostring(SCHOOL_MASK_PHYSICAL)] = { enabled = false, desc = "Physical", default = { 1.00, 1.00, 1.00 } },
+      [tostring(SCHOOL_MASK_HOLY)]     = { enabled = false, desc = "Holy",     default = { 1.00, 1.00, 0.30 } },
+      [tostring(SCHOOL_MASK_FIRE)]     = { enabled = false, desc = "Fire",     default = { 1.00, 0.15, 0.18 } },
+      [tostring(SCHOOL_MASK_NATURE)]   = { enabled = false, desc = "Nature",   default = { 0.40, 1.00, 0.40 } },
+      [tostring(SCHOOL_MASK_FROST)]    = { enabled = false, desc = "Frost",    default = { 0.30, 0.30, 0.90 } },
+      [tostring(SCHOOL_MASK_SHADOW)]   = { enabled = false, desc = "Shadow",   default = { 1.00, 0.70, 1.00 } },
+      [tostring(SCHOOL_MASK_ARCANE)]   = { enabled = false, desc = "Arcane",   default = { 0.75, 0.75, 0.75 } },
+
+      -- Physical and a Magical
+      [tostring(SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_FIRE)]   = { enabled = false, desc = "Flamestrike",  default = { 1.00, 0.58, 0.59 } },
+      [tostring(SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_FROST)]  = { enabled = false, desc = "Froststrike",  default = { 0.65, 0.65, 0.95 } },
+      [tostring(SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_ARCANE)] = { enabled = false, desc = "Spellstrike",  default = { 0.87, 0.87, 0.87 } },
+      [tostring(SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_NATURE)] = { enabled = false, desc = "Stormstrike",  default = { 0.70, 1.00, 0.70 } },
+      [tostring(SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_SHADOW)] = { enabled = false, desc = "Shadowstrike", default = { 1.00, 0.85, 1.00 } },
+      [tostring(SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_HOLY)]   = { enabled = false, desc = "Holystrike",   default = { 1.00, 1.00, 0.83 } },
+
+      -- Two Magical Schools
+      [tostring(SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST)]    = { enabled = false, desc = "Frostfire",              default = { 0.65, 0.23, 0.54 } },
+      [tostring(SCHOOL_MASK_FIRE + SCHOOL_MASK_ARCANE)]   = { enabled = false, desc = "Spellfire",              default = { 0.87, 0.45, 0.47 } },
+      [tostring(SCHOOL_MASK_FIRE + SCHOOL_MASK_NATURE)]   = { enabled = false, desc = "Firestorm",              default = { 0.70, 0.58, 0.29 } },
+      [tostring(SCHOOL_MASK_FIRE + SCHOOL_MASK_SHADOW)]   = { enabled = false, desc = "Shadowflame",            default = { 1.00, 0.43, 0.59 } },
+      [tostring(SCHOOL_MASK_FIRE + SCHOOL_MASK_HOLY)]     = { enabled = false, desc = "Holyfire (Radiant)",     default = { 1.00, 0.58, 0.24 } },
+      [tostring(SCHOOL_MASK_FROST + SCHOOL_MASK_ARCANE)]  = { enabled = false, desc = "Spellfrost",             default = { 0.53, 0.53, 0.83 } },
+      [tostring(SCHOOL_MASK_FROST + SCHOOL_MASK_NATURE)]  = { enabled = false, desc = "Froststorm",             default = { 0.35, 0.65, 0.65 } },
+      [tostring(SCHOOL_MASK_FROST + SCHOOL_MASK_SHADOW)]  = { enabled = false, desc = "Shadowfrost",            default = { 0.65, 0.50, 0.95 } },
+      [tostring(SCHOOL_MASK_FROST + SCHOOL_MASK_HOLY)]    = { enabled = false, desc = "Holyfrost",              default = { 0.65, 0.65, 0.60 } },
+      [tostring(SCHOOL_MASK_ARCANE + SCHOOL_MASK_NATURE)] = { enabled = false, desc = "Spellstorm (Astral)",    default = { 0.58, 0.87, 0.58 } },
+      [tostring(SCHOOL_MASK_ARCANE + SCHOOL_MASK_SHADOW)] = { enabled = false, desc = "Spellshadow",            default = { 0.87, 0.73, 0.87 } },
+      [tostring(SCHOOL_MASK_ARCANE + SCHOOL_MASK_HOLY)]   = { enabled = false, desc = "Divine",                 default = { 0.87, 0.87, 0.53 } },
+      [tostring(SCHOOL_MASK_NATURE + SCHOOL_MASK_SHADOW)] = { enabled = false, desc = "Shadowstorm (Plague)",   default = { 0.70, 0.85, 0.70 } },
+      [tostring(SCHOOL_MASK_NATURE + SCHOOL_MASK_HOLY)]   = { enabled = false, desc = "Holystorm",              default = { 0.70, 1.00, 0.35 } },
+      [tostring(SCHOOL_MASK_SHADOW + SCHOOL_MASK_HOLY)]   = { enabled = false, desc = "Shadowlight (Twilight)", default = { 1.00, 0.85, 0.65 } },
+
+      -- Three or More Schools
+      [tostring(SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST + SCHOOL_MASK_NATURE)]
+        = { enabled = false, desc = "Elemental", default = { 0.57, 0.48, 0.49 } },
+
+      [tostring(SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST + SCHOOL_MASK_ARCANE + SCHOOL_MASK_NATURE + SCHOOL_MASK_SHADOW)]
+        = { enabled = false, desc = "Chromatic", default = { 0.69, 0.58, 0.65 } },
+
+      [tostring(SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST + SCHOOL_MASK_ARCANE + SCHOOL_MASK_NATURE + SCHOOL_MASK_SHADOW + SCHOOL_MASK_HOLY)]
+        = { enabled = false, desc = "Magic", default = { 0.74, 0.65, 0.59 } },
+
+      [tostring(SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST + SCHOOL_MASK_ARCANE + SCHOOL_MASK_NATURE + SCHOOL_MASK_SHADOW + SCHOOL_MASK_HOLY)]
+        = { enabled = false, desc = "Chaos", default = { 0.78, 0.70, 0.65 } },
     },
 
     frameSettings = {
@@ -84,6 +148,7 @@ addon.defaults = {
     megaDamage = {
       thousandSymbol = "|cffFF8000K|r",
       millionSymbol = "|cffFF0000M|r",
+      billionSymbol = "|cffFF0000G|r",
       decimalPoint = true,
     },
 
@@ -95,19 +160,25 @@ addon.defaults = {
         ["alpha"] = 100,
         ["megaDamage"] = true,
 
-      -- position
+        -- position
         ["X"] = 0,
         ["Y"] = 224,
-        ["Width"] = 256,
+        ["Width"] = 512,
         ["Height"] = 128,
 
-      -- fonts
-        ["font"] = "RayUI Normal",
+        -- fonts
+        ["font"] = "Condensed Bold (xCT+)",
         ["fontSize"] = 18,
         ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "CENTER",
 
-      -- font colors
+        -- font shadow
+        ["enableFontShadow"] = true,
+        ["fontShadowColor"] = { 0, 0, 0, 0.6 },
+        ["fontShadowOffsetX"] = 2,
+        ["fontShadowOffsetY"] = -2,
+
+        -- font colors
         colors = {
           ["interrupts"]   = { enabled = false, desc = "Interrupts",     default = { 1.00, 0.50, 0.00 } },
           ["killingBlow"]  = { enabled = false, desc = "Killing Blows",  default = { 0.20, 1.00, 0.20 } },
@@ -153,25 +224,25 @@ addon.defaults = {
           },
         },
 
-      -- icons
+        -- icons
         ["iconsEnabled"] = true,
-        ["iconsSize"] = 18,
+        ["iconsSize"] = 16,
 
-      -- scrollable
+        -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         ["scrollableInCombat"] = false,
 
-      -- fading text
+        -- fading text
         ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
 
-      -- special tweaks
-        ["showInterrupts"] = false,
-        ["showDispells"] = false,
-        ["showPartyKills"] = false,
+        -- special tweaks
+        ["showInterrupts"] = true,
+        ["showDispells"] = true,
+        ["showPartyKills"] = true,
         ["showBuffs"] = true,
         ["showDebuffs"] = true,
         ["showLowManaHealth"] = true,
@@ -187,35 +258,28 @@ addon.defaults = {
         ["alpha"] = 100,
         ["megaDamage"] = true,
 
-      -- position
-        ["X"] = 382,
-        ["Y"] = 58,
-        ["Width"] = 128,
-        ["Height"] = 260,
+        -- position
+        ["X"] = 400,
+        ["Y"] = 0,
+        ["Width"] = 164,
+        ["Height"] = 512,
 
-      -- fonts
-        ["font"] = "RayUI Normal",
-        ["fontSize"] = 15,
+        -- fonts
+        ["font"] = "Condensed Bold (xCT+)",
+        ["fontSize"] = 18,
         ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "RIGHT",
 
-      -- font colors
+        -- font shadow
+        ["enableFontShadow"] = true,
+        ["fontShadowColor"] = { 0, 0, 0, 0.6 },
+        ["fontShadowOffsetX"] = 2,
+        ["fontShadowOffsetY"] = -2,
+
+        -- font colors
         colors = {
           ['genericDamage']         = { enabled = false, desc = "Generic Damage",   default = { 1.00, 0.82, 0.00 } },
           ['misstypesOut']          = { enabled = false, desc = "Missed",           default = { 0.50, 0.50, 0.50 } },
-
-          ["spellSchools"] = {
-            enabled = false, desc = "Spell School Colors",
-            colors = {
-              ['SpellSchool_Physical']  = { enabled = false, desc = "Physical Damage",  default = { 1.00, 1.00, 0.00 } },
-              ['SpellSchool_Holy']      = { enabled = false, desc = "Holy Damage",      default = { 1.00, 0.90, 0.50 } },
-              ['SpellSchool_Fire']      = { enabled = false, desc = "Fire Damage",      default = { 1.00, 0.50, 0.00 } },
-              ['SpellSchool_Nature']    = { enabled = false, desc = "Nature Damage",    default = { 0.30, 1.00, 0.30 } },
-              ['SpellSchool_Frost']     = { enabled = false, desc = "Frost Damage",     default = { 0.50, 1.00, 1.00 } },
-              ['SpellSchool_Shadow']    = { enabled = false, desc = "Shadow Damage",    default = { 0.50, 0.50, 1.00 } },
-              ['SpellSchool_Arcane']    = { enabled = false, desc = "Arcane Damage",    default = { 1.00, 0.50, 1.00 } },
-            },
-          },
           ['healingSpells'] = {
             enabled = false, desc = "Healing Colors",
             colors = {
@@ -226,25 +290,78 @@ addon.defaults = {
           },
         },
 
-      -- icons
-        ["iconsEnabled"] = true,
-        ["iconsSize"] = 22,
+        -- name formatting
+        names = {
+          -- appearance
+          ["namePrefix"] = " |cffFFFFFF<|r",
+          ["namePostfix"] = "|cffFFFFFF>|r",
 
-      -- scrollable
+          -- events from a player's character
+          PLAYER = {
+            -- Name Types:
+            --   0 = None
+            --   1 = Source Name
+            --   2 = Spell Name
+            --   3 = Both ("Source Name - Spell Name")
+            --   4 = Both ("Spell Name - Source Name")
+            ["nameType"] = 0,
+
+            ["enableNameColor"] = true,
+            ["removeRealmName"] = true,
+            ["enableCustomNameColor"] = false,
+            ["customNameColor"] = { 1, 1, 1 },
+
+            ["enableSpellColor"] = true,
+            ["enableCustomSpellColor"] = false,
+            ["customSpellColor"] = { 1, 1, 1 },
+          },
+
+          -- events from a npc
+          NPC = {
+            -- Name Types:
+            --   0 = None
+            --   1 = Source Name
+            --   2 = Spell Name
+            --   3 = Both ("Source Name - Spell Name")
+            --   4 = Both ("Spell Name - Source Name")
+            ["nameType"] = 0,
+
+            ["enableNameColor"] = true,             -- Always On (Not in Options)
+            ["removeRealmName"] = false,            -- Always Off (Not in Options)
+            ["enableCustomNameColor"] = true,       -- Always On (Not in Options)
+            ["customNameColor"] = { .3, 0, .3 },
+
+            ["enableSpellColor"] = true,
+            ["enableCustomSpellColor"] = false,
+            ["customSpellColor"] = { 1, 1, 1 },
+          },
+
+          -- events from the envirornment
+          ENVIRONMENT = {
+            ["nameType"] = 0,
+          }
+        },
+
+        -- icons
+        ["iconsEnabled"] = true,
+        ["iconsSize"] = 16,
+
+        -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         ["scrollableInCombat"] = false,
 
-      -- fading text
+        -- fading text
         ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
 
-      -- special tweaks
+        -- special tweaks
         ["enableOutDmg"] = true,
         ["enableOutHeal"] = true,
         ["enablePetDmg"] = true,
+        ["enableVehicleDmg"] = true,
         ["enableAutoAttack"] = true,
         ["enableDotDmg"] = true,
         ["enableHots"] = true,
@@ -253,25 +370,31 @@ addon.defaults = {
       },
 
       critical = {
-        ["enabledFrame"] = false,
-        ["secondaryFrame"] = 2,
+        ["enabledFrame"] = true,
+        ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
         ["alpha"] = 100,
         ["megaDamage"] = true,
 
-      -- position
-        ["X"] = 256,
+        -- position
+        ["X"] = 192,
         ["Y"] = 0,
         ["Width"] = 256,
         ["Height"] = 140,
 
-      -- fonts
-        ["font"] = "RayUI Normal",
+        -- fonts
+        ["font"] = "Condensed Bold (xCT+)",
         ["fontSize"] = 24,
         ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "RIGHT",
 
-      -- font colors
+        -- font shadow
+        ["enableFontShadow"] = true,
+        ["fontShadowColor"] = { 0, 0, 0, 0.6 },
+        ["fontShadowOffsetX"] = 2,
+        ["fontShadowOffsetY"] = -2,
+
+        -- font colors
         colors = {
           ['genericDamageCritical']  = { enabled = false, desc = "Critical Generic Damage", default = { 1.00, 1.00, 0.00 } },
 
@@ -283,50 +406,111 @@ addon.defaults = {
           },
         },
 
-      -- critical appearance
+        -- name formatting
+        names = {
+
+          -- appearance
+          ["namePrefix"] = " |cffFFFFFF<|r",
+          ["namePostfix"] = "|cffFFFFFF>|r",
+
+          -- events from a player's character
+          PLAYER = {
+            -- Name Types:
+            --   0 = None
+            --   1 = Source Name
+            --   2 = Spell Name
+            --   3 = Both ("Source Name - Spell Name")
+            --   4 = Both ("Spell Name - Source Name")
+            ["nameType"] = 0,
+
+            ["enableNameColor"] = true,
+            ["removeRealmName"] = true,
+            ["enableCustomNameColor"] = false,
+            ["customNameColor"] = { 1, 1, 1 },
+
+            ["enableSpellColor"] = true,
+            ["enableCustomSpellColor"] = false,
+            ["customSpellColor"] = { 1, 1, 1 },
+          },
+
+          -- events from a npc
+          NPC = {
+            -- Name Types:
+            --   0 = None
+            --   1 = Source Name
+            --   2 = Spell Name
+            --   3 = Both ("Source Name - Spell Name")
+            --   4 = Both ("Spell Name - Source Name")
+            ["nameType"] = 0,
+
+            ["enableNameColor"] = true,             -- Always On (Not in Options)
+            ["removeRealmName"] = false,            -- Always Off (Not in Options)
+            ["enableCustomNameColor"] = true,       -- Always On (Not in Options)
+            ["customNameColor"] = { .3, 0, .3 },
+
+            ["enableSpellColor"] = true,
+            ["enableCustomSpellColor"] = false,
+            ["customSpellColor"] = { 1, 1, 1 },
+          },
+
+          -- events from the envirornment
+          ENVIRONMENT = {
+            ["nameType"] = 0, -- NOT SHOWN
+          }
+        },
+
+        -- critical appearance
         ["critPrefix"] = "|cffFF0000*|r",
         ["critPostfix"] = "|cffFF0000*|r",
 
-      -- icons
+        -- icons
         ["iconsEnabled"] = true,
-        ["iconsSize"] = 28,
+        ["iconsSize"] = 16,
 
-      -- scrollable
+        -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         ["scrollableInCombat"] = false,
 
-      -- fading text
+        -- fading text
         ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
 
-      -- special tweaks
+        -- special tweaks
         ["showSwing"] = true,
         ["prefixSwing"] = true,
+        ["petCrits"] = false,
+
       },
 
       damage = {
         ["enabledFrame"] = true,
         ["secondaryFrame"] = 0,
-        ["insertText"] = "bottom",
+        ["insertText"] = "top",
         ["alpha"] = 100,
-        ["megaDamage"] = false,
+        ["megaDamage"] = true,
 
-      -- position
-        ["X"] = -325,
-        ["Y"] = -30,
-        ["Width"] = 190,
-        ["Height"] = 144,
+        -- position
+        ["X"] = -288,
+        ["Y"] = -80,
+        ["Width"] = 448,
+        ["Height"] = 160,
 
-      -- fonts
-        ["font"] = "RayUI Normal",
-        ["fontSize"] = 15,
+        -- fonts
+        ["font"] = "Condensed Bold (xCT+)",
+        ["fontSize"] = 18,
         ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "LEFT",
 
-      -- font colors
+        -- font shadow
+        ["enableFontShadow"] = true,
+        ["fontShadowColor"] = { 0, 0, 0, 0.6 },
+        ["fontShadowOffsetX"] = 2,
+        ["fontShadowOffsetY"] = -2,
+
+        -- font colors
         colors = {
           ['damageTaken']               = { enabled = false, desc = "Physical Damage",          default = { 0.75, 0.10, 0.10 } },
           ['damageTakenCritical']       = { enabled = false, desc = "Critical Physical Damage", default = { 1.00, 0.10, 0.10 } },
@@ -340,8 +524,8 @@ addon.defaults = {
               ['missTypeDodge']   = { enabled = false, desc = "Dodged",   default = { 0.50, 0.50, 0.50 } },
               ['missTypeParry']   = { enabled = false, desc = "Parry",    default = { 0.50, 0.50, 0.50 } },
               ['missTypeEvade']   = { enabled = false, desc = "Evade",    default = { 0.50, 0.50, 0.50 } },
-              ['missTypeImmune']  = { enabled = false, desc = "Immune",   default = { 0.50, 0.50, 0.50 } },
               ['missTypeDeflect'] = { enabled = false, desc = "Deflect",  default = { 0.50, 0.50, 0.50 } },
+              ['missTypeImmune']  = { enabled = false, desc = "Immune",   default = { 0.50, 0.50, 0.50 } },
               ['missTypeReflect'] = { enabled = false, desc = "Reflect",  default = { 0.50, 0.50, 0.50 } },
               ['missTypeResist']  = { enabled = false, desc = "Resisted", default = { 0.50, 0.50, 0.50 } },
               ['missTypeBlock']   = { enabled = false, desc = "Blocked",  default = { 0.50, 0.50, 0.50 } },
@@ -359,18 +543,95 @@ addon.defaults = {
           },
         },
 
-      -- scrollable
+        -- critical appearance
+        ["critPrefix"] = "",
+        ["critPostfix"] = "",
+
+        -- name formatting
+        names = {
+
+          -- appearance
+          ["namePrefix"] = " |cffFFFFFF<|r",
+          ["namePostfix"] = "|cffFFFFFF>|r",
+
+          -- events from a player's character
+          PLAYER = {
+            -- Name Types:
+            --   0 = None
+            --   1 = Source Name
+            --   2 = Spell Name
+            --   3 = Both ("Source Name - Spell Name")
+            --   4 = Both ("Spell Name - Source Name")
+            ["nameType"] = 2,
+
+            ["enableNameColor"] = true,
+            ["removeRealmName"] = true,
+            ["enableCustomNameColor"] = false,
+            ["customNameColor"] = { 1, 1, 1 },
+
+            ["enableSpellColor"] = true,
+            ["enableCustomSpellColor"] = false,
+            ["customSpellColor"] = { 1, 1, 1 },
+          },
+
+          -- events from a npc
+          NPC = {
+            -- Name Types:
+            --   0 = None
+            --   1 = Source Name
+            --   2 = Spell Name
+            --   3 = Both ("Source Name - Spell Name")
+            --   4 = Both ("Spell Name - Source Name")
+            ["nameType"] = 2,
+
+            ["enableNameColor"] = true,             -- Always On (Not in Options)
+            ["removeRealmName"] = false,            -- Always Off (Not in Options)
+            ["enableCustomNameColor"] = true,       -- Always On (Not in Options)
+            ["customNameColor"] = { .3, 0, .3 },
+
+            ["enableSpellColor"] = true,
+            ["enableCustomSpellColor"] = false,
+            ["customSpellColor"] = { 1, 1, 1 },
+          },
+
+          -- events from the envirornment
+          ENVIRONMENT = {
+            -- Name Types:
+            --   0 = None
+            --   1 = Environment
+            --   2 = Environment Type
+            --   3 = Both ("Environment - Environment Type")
+            --   4 = Both ("Environment Type - Environment")
+            ["nameType"] = 2,
+
+            ["enableNameColor"] = true,
+            ["enableCustomNameColor"] = true,
+            ["removeRealmName"] = false,            -- Always Off (Not in Options)
+            ["customNameColor"] = { 0.32, 0.317, 0.1 },
+
+            ["enableSpellColor"] = true,
+            ["enableCustomSpellColor"] = false,
+            ["customSpellColor"] = { 1, 1, 1 },
+          }
+        },
+
+        -- icons
+        ["iconsEnabled"] = true,
+        ["iconsSize"] = 14,
+        ["iconsEnabledAutoAttack"] = true,
+
+        -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         ["scrollableInCombat"] = false,
 
-      -- fading text
+        -- fading text
         ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
 
-      -- Special Tweaks
+        -- Special Tweaks
         ["showDodgeParryMiss"] = true,
         ["showDamageReduction"] = true,
       },
@@ -382,19 +643,25 @@ addon.defaults = {
         ["alpha"] = 100,
         ["megaDamage"] = true,
 
-      -- positioon
-        ["X"] = -415,
-        ["Y"] = 5,
-        ["Width"] = 128,
-        ["Height"] = 260,
+        -- positioon
+        ["X"] = -288,
+        ["Y"] = 88,
+        ["Width"] = 448,
+        ["Height"] = 144,
 
-      -- fonts
-        ["font"] = "RayUI Normal",
-        ["fontSize"] = 15,
+        -- fonts
+        ["font"] = "Condensed Bold (xCT+)",
+        ["fontSize"] = 18,
         ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "LEFT",
 
-      -- font colors
+        -- font shadow
+        ["enableFontShadow"] = true,
+        ["fontShadowColor"] = { 0, 0, 0, 0.6 },
+        ["fontShadowOffsetX"] = 2,
+        ["fontShadowOffsetY"] = -2,
+
+        -- font colors
         colors = {
           ['shieldTaken']          = { enabled = false, desc = "Shields",          default = { 0.60, 0.65, 1.00 } },
           ['healingTaken']         = { enabled = false, desc = "Healing",          default = { 0.10, 0.75, 0.10 } },
@@ -403,43 +670,103 @@ addon.defaults = {
           ['healingTakenPeriodicCritical'] = { enabled = false, desc = "Critical Periodic Healing", default = { 0.10, 0.50, 0.10 } },
         },
 
-      -- scrollable
+        -- name formatting
+        names = {
+
+          -- appearance
+          ["namePrefix"] = " |cffFFFFFF<|r",
+          ["namePostfix"] = "|cffFFFFFF>|r",
+
+          -- events from a player's character
+          PLAYER = {
+            -- Name Types:
+            --   0 = None
+            --   1 = Source Name
+            --   2 = Spell Name
+            --   3 = Both ("Source Name - Spell Name")
+            --   4 = Both ("Spell Name - Source Name")
+            ["nameType"] = 1,
+
+            ["enableNameColor"] = true,
+            ["removeRealmName"] = true,
+            ["enableCustomNameColor"] = false,
+            ["customNameColor"] = { 1, 1, 1 },
+
+            ["enableSpellColor"] = true,
+            ["enableCustomSpellColor"] = false,
+            ["customSpellColor"] = { 1, 1, 1 },
+          },
+
+          -- events from a npc
+          NPC = {
+            -- Name Types:
+            --   0 = None
+            --   1 = Source Name
+            --   2 = Spell Name
+            --   3 = Both ("Source Name - Spell Name")
+            --   4 = Both ("Spell Name - Source Name")
+            ["nameType"] = 2,
+
+            ["enableNameColor"] = true,             -- Always On (Not in Options)
+            ["removeRealmName"] = false,            -- Always On (Not in Options)
+            ["enableCustomNameColor"] = true,       -- Always On (Not in Options)
+            ["customNameColor"] = { .3, 0, .3 },
+
+            ["enableSpellColor"] = true,
+            ["enableCustomSpellColor"] = false,
+            ["customSpellColor"] = { 1, 1, 1 },
+          },
+
+          -- events from the envirornment
+          ENVIRONMENT = {
+            ["nameType"] = 0, -- NOT SHOWN
+          }
+        },
+
+        -- icons
+        ["iconsEnabled"] = true,
+        ["iconsSize"] = 16,
+
+        -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         ["scrollableInCombat"] = false,
 
-      -- fading text
+        -- fading text
         ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
 
-      -- special tweaks
-        ["showFriendlyHealers"] = false,
-        ["enableClassNames"] = true,
-        ["enableRealmNames"] = false,
-        ["enableOverHeal"] = false,
+        -- special tweaks
+        ["enableOverHeal"] = true,
         ["enableSelfAbsorbs"] = true,
         ["showOnlyMyHeals"] = false,
         ["showOnlyPetHeals"] = false,
       },
 
       class = {
-        ["enabledFrame"] = false,
+        ["enabledFrame"] = true,
         ["alpha"] = 100,
 
-      -- position
+        -- position
         ["X"] = 0,
         ["Y"] = 64,
         ["Width"] = 64,
         ["Height"] = 64,
 
-      -- fonts
-        ["font"] = "HOOGE (xCT)",
+        -- fonts
+        ["font"] = "Condensed Bold (xCT+)",
         ["fontSize"] = 64,
         ["fontOutline"] = "2OUTLINE",
 
-      -- font colors
+        -- font shadow
+        ["enableFontShadow"] = true,
+        ["fontShadowColor"] = { 0, 0, 0, 0.6 },
+        ["fontShadowOffsetX"] = 2,
+        ["fontShadowOffsetY"] = -2,
+
+        -- font colors
         colors = {
           ['comboPoints']     = { enabled = false, desc = "Combo Points",     default = { 1.00, 0.82, 0.00 } },
           ['comboPointsMax']  = { enabled = false, desc = "Max Combo Points", default = { 0.00, 0.82, 1.00 } },
@@ -453,98 +780,125 @@ addon.defaults = {
         ["alpha"] = 100,
         ["megaDamage"] = true,
 
-      -- position
+        -- position
         ["X"] = 0,
-        ["Y"] = -95,
-        ["Width"] = 180,
-        ["Height"] = 128,
+        ["Y"] = -16,
+        ["Width"] = 128,
+        ["Height"] = 96,
 
-      -- fonts
-        ["font"] = "RayUI Normal",
-        ["fontSize"] = 15,
+        -- fonts
+        ["font"] = "Condensed Bold (xCT+)",
+        ["fontSize"] = 17,
         ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "CENTER",
 
-      -- font colors
+        -- font shadow
+        ["enableFontShadow"] = true,
+        ["fontShadowColor"] = { 0, 0, 0, 0.6 },
+        ["fontShadowOffsetX"] = 2,
+        ["fontShadowOffsetY"] = -2,
+
+        -- font colors
         -- TODO: Update these ( See http://www.wowinterface.com/forums/showthread.php?t=53140 )
         colors = {
-          ['color_MANA']             = { enabled = false, desc = MANA,        default = { 0.00, 0.00, 1.00 } },
-          ['color_RAGE']             = { enabled = false, desc = RAGE,        default = { 1.00, 0.00, 0.00 } },
-          ['color_FOCUS']            = { enabled = false, desc = FOCUS,       default = { 1.00, 0.50, 0.25 } },
-          ['color_ENERGY']           = { enabled = false, desc = ENERGY,      default = { 1.00, 1.00, 0.00 } },
-          ['color_CHI']              = { enabled = false, desc = CHI,         default = { 0.71, 1.00, 0.92 } },
-          ['color_RUNES']            = { enabled = false, desc = RUNES,       default = { 0.50, 0.50, 0.50 } },
-          ['color_RUNIC_POWER']      = { enabled = false, desc = RUNIC_POWER, default = { 0.00, 0.82, 1.00 } },
-          ['color_SOUL_SHARDS']      = { enabled = false, desc = SOUL_SHARDS, default = { 0.50, 0.32, 0.55 } },
-          ['color_HOLY_POWER']       = { enabled = false, desc = HOLY_POWER,  default = { 0.95, 0.90, 0.60 } },
-          ['color_ECLIPSE_positive'] = { enabled = false, desc = ECLIPSE .. " |cff798BDD(Positive)|r", default = { 0.80, 0.82, 0.60 } },
-          ['color_ECLIPSE_negative'] = { enabled = false, desc = ECLIPSE .. " |cff798BDD(Negative)|r", default = { 0.30, 0.52, 0.90 } },
+          ['color_MANA']            = { enabled = false, desc = MANA,           default = { 0.00, 0.00, 1.00 } },
+          ['color_RAGE']            = { enabled = false, desc = RAGE,           default = { 1.00, 0.00, 0.00 } },
+          ['color_FOCUS']           = { enabled = false, desc = FOCUS,          default = { 1.00, 0.50, 0.25 } },
+          ['color_ENERGY']          = { enabled = false, desc = ENERGY,         default = { 1.00, 1.00, 0.00 } },
+          ['color_RUNES']           = { enabled = false, desc = RUNES,          default = { 0.50, 0.50, 0.50 } },
+          ['color_RUNIC_POWER']     = { enabled = false, desc = RUNIC_POWER,    default = { 0.00, 0.82, 1.00 } },
+          ['color_SOUL_SHARDS']     = { enabled = false, desc = SOUL_SHARDS,    default = { 0.50, 0.32, 0.55 } },
+          ['color_LUNAR_POWER']     = { enabled = false, desc = LUNAR_POWER,    default = { 0.30, 0.52, 0.90 } },
+          ['color_HOLY_POWER']      = { enabled = false, desc = HOLY_POWER,     default = { 0.95, 0.90, 0.60 } },
+          ['color_MAELSTROM']       = { enabled = false, desc = MAELSTROM,      default = { 0.00, 0.50, 1.00 } },
+          ['color_INSANITY']        = { enabled = false, desc = INSANITY,       default = { 0.40, 0.00, 0.80 } },
+          ['color_CHI']             = { enabled = false, desc = CHI,            default = { 0.71, 1.00, 0.92 } },
+          ['color_ARCANE_CHARGES']  = { enabled = false, desc = ARCANE_CHARGES, default = { 0.10, 0.10, 0.98 } },
+          ['color_FURY']            = { enabled = false, desc = FURY,           default = { r = 0.788, g = 0.259, b = 0.992 } },
+          ['color_PAIN']            = { enabled = false, desc = PAIN,           default = { r = 1.000, g = 0.612, b = 0.000 } },
+          ["color_ALTERNATE_POWER"] = { enabled = false, desc = ALTERNATE_RESOURCE_TEXT, default = { r = 1.00, g = 1.00, b = 1.00 } },
         },
 
-      -- scrollable
+        -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         ["scrollableInCombat"] = false,
 
-      -- fading text
+        -- fading text
         ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
 
-      -- special tweaks
+        -- special tweaks
         ["showEnergyGains"] = true,
         ["showPeriodicEnergyGains"] = true,
         ["showEnergyType"] = true,
 
+
+        -- Generated from "Blizzard Add-On's/Constants.lua"
         ["disableResource_MANA"]             = false,
         ["disableResource_RAGE"]             = false,
         ["disableResource_FOCUS"]            = false,
         ["disableResource_ENERGY"]           = false,
-        ["disableResource_CHI"]              = true,
+
         ["disableResource_RUNES"]            = true,
         ["disableResource_RUNIC_POWER"]      = false,
         ["disableResource_SOUL_SHARDS"]      = false,
-        ["disableResource_ECLIPSE_negative"] = true,
-        ["disableResource_ECLIPSE_positive"] = true,
-        ["disableResource_HOLY_POWER"]       = false,
+        ["disableResource_LUNAR_POWER"]      = true,
 
+        ["disableResource_HOLY_POWER"]       = false,
+        ["disableResource_ALTERNATE_POWER"]  = true,
+        ["disableResource_CHI"]              = true,
+        ["disableResource_INSANITY"]         = false,
+
+        --["disableResource_OBSOLETE"]       = true,
+        --["disableResource_OBSOLETE2"]      = true,
+        ["disableResource_ARCANE_CHARGES"]   = false,
+        ["disableResource_FURY"]             = false,
+        ["disableResource_PAIN"]             = false,
       },
 
       procs = {
-        ["enabledFrame"] = false,
-        ["secondaryFrame"] = 1,
+        ["enabledFrame"] = true,
+        ["secondaryFrame"] = 0,
         ["insertText"] = "top",
         ["alpha"] = 100,
 
-      -- position
-        ["X"] = -237,
-        ["Y"] = -64,
+        -- position
+        ["X"] = 0,
+        ["Y"] = -256,
         ["Width"] = 294,
-        ["Height"] = 128,
+        ["Height"] = 64,
 
-      -- fonts
-        ["font"] = "RayUI Normal",
+        -- fonts
+        ["font"] = "Condensed Bold (xCT+)",
         ["fontSize"] = 24,
         ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "CENTER",
 
-      -- font colors
+        -- font shadow
+        ["enableFontShadow"] = true,
+        ["fontShadowColor"] = { 0, 0, 0, 0.6 },
+        ["fontShadowOffsetX"] = 2,
+        ["fontShadowOffsetY"] = -2,
+
+        -- font colors
         colors = {
           ['spellProc']     = { enabled = false, desc = "Spell Procs",    default = { 1.00, 0.82, 0.00 } },
           ['spellReactive'] = { enabled = false, desc = "Spell Reactive", default = { 1.00, 0.82, 0.00 } },
         },
 
-      -- icons
+        -- icons
         ["iconsEnabled"] = true,
         ["iconsSize"] = 16,
 
-      -- scrollable
+        -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         ["scrollableInCombat"] = false,
 
-      -- fading text
+        -- fading text
         ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
@@ -557,34 +911,40 @@ addon.defaults = {
         ["insertText"] = "top",
         ["alpha"] = 100,
 
-      -- position
+        -- position
         ["X"] = 0,
-        ["Y"] = -245,
-        ["Width"] = 325,
+        ["Y"] = -352,
+        ["Width"] = 512,
         ["Height"] = 128,
 
-      -- fonts
-        ["font"] = "RayUI Normal",
+        -- fonts
+        ["font"] = "Condensed Bold (xCT+)",
         ["fontSize"] = 18,
         ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "CENTER",
 
-      -- icons
+        -- font shadow
+        ["enableFontShadow"] = true,
+        ["fontShadowColor"] = { 0, 0, 0, 0.6 },
+        ["fontShadowOffsetX"] = 2,
+        ["fontShadowOffsetY"] = -2,
+
+        -- icons
         ["iconsEnabled"] = true,
         ["iconsSize"] = 16,
 
-      -- scrollable
+        -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         ["scrollableInCombat"] = false,
 
-      -- fading text
+        -- fading text
         ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
 
-      -- special tweaks
+        -- special tweaks
         ["showItems"] = true,
         ["showItemTypes"] = true,
         ["showMoney"] = true,
@@ -603,6 +963,10 @@ addon.defaults = {
       mergeSwings = true,
       mergeRanged = true,
       mergeDispells = true,
+      mergePet = true,
+      mergeVehicle = true,
+      mergePetColor = { 1, 0.5, 0 },
+      mergeVehicleColor = { 0, 0.5, 1 },
 
       -- Only one of these can be true
       mergeDontMergeCriticals = true,
@@ -689,8 +1053,7 @@ addon.defaults = {
 
       },
 
-      -- yes this is supposed to be blank :P
-      -- it is generated in merge.lua
+      -- This gets dynamically generated
       merge = { },
 
       -- yes this is supposed to be blank :P
@@ -704,6 +1067,8 @@ addon.defaults = {
       ["whitelistSpells"]   = false,
       ["whitelistProcs"]    = false,
       ["whitelistItems"]    = false,
+      ["whitelistDamage"]   = false,
+      ["whitelistHealing"]  = false,
       ["trackSpells"]       = true,
 
       listBuffs    = { },  -- Used to filter gains/fades of buffs    (Spell Name)
@@ -711,6 +1076,8 @@ addon.defaults = {
       listSpells   = { },  -- Used to filter outgoing spells         (Spell ID)
       listProcs    = { },  -- Used to filter spell procs             (Proc Name)
       listItems    = { },  -- Used to filter Items                   (Item ID)
+      listDamage   = { },  -- Used to filter incoming damage         (Spell ID)
+      listHealing    = { },  -- Used to filter incoming healing        (Spell ID)
 
       -- Minimal Spell Amount
       filterPowerValue = 0,

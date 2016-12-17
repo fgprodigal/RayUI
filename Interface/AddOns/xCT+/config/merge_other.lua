@@ -1,17 +1,17 @@
---[[   ____    ______      
+--[[   ____    ______
       /\  _`\ /\__  _\   __
- __  _\ \ \/\_\/_/\ \/ /_\ \___ 
+ __  _\ \ \/\_\/_/\ \/ /_\ \___
 /\ \/'\\ \ \/_/_ \ \ \/\___  __\
 \/>  </ \ \ \L\ \ \ \ \/__/\_\_/
  /\_/\_\ \ \____/  \ \_\  \/_/
  \//\/_/  \/___/    \/_/
- 
+
  [=====================================]
  [  Author: Dandraffbal-Stormreaver US ]
  [  xCT+ Version 4.x.x                 ]
  [  ©2015. All Rights Reserved.        ]
  [====================================]]
- 
+
 local ADDON_NAME, addon = ...
 
 -- =====================================================
@@ -27,7 +27,7 @@ local function CreateMergeSpellEntry(class, interval, desc, prep)
   return {
          class = class      or "ITEM",
       interval = interval   or 3,
-          prep = prep       or 0,
+          prep = prep       or interval or 3,
           desc = desc,
     }
 end

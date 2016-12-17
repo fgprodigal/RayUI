@@ -27,7 +27,7 @@ local function CreateMergeSpellEntry(class, interval, desc, prep)
   return {
          class = class      or "ITEM",
       interval = interval   or 3,
-          prep = prep       or 0,
+          prep = prep       or interval or 3,
           desc = desc,
     }
 end
@@ -41,7 +41,7 @@ end
 --    Creates a string for a category heading
 -- =====================================================
 local function CreateMergeHeader(expName, catName, expColor)
-    return "|cff".. expColor .. expName .. " |cff798BDD(" ..catName.. ")|r"
+    return "|cff".. expColor .. expName .. "|r™ |cff798BDD(" ..catName.. ")|r"
 end
 
 
@@ -49,10 +49,10 @@ end
 -- ---------------------------
 -- Merge Headers            --
 -- ---------------------------
-local Item_WOD  =  CreateMergeHeader("Warlords of Draenor|r™", "Items", "A32C12")
-local Bodyg_WOD =  CreateMergeHeader("Warlords of Draenor|r™", "Bodyguards", "A32C12")
-local Raid_WOD  =  CreateMergeHeader("Warlords of Draenor|r™", "Raids", "A32C12")
-local World_WOD =  CreateMergeHeader("Warlords of Draenor|r™", "World Zone", "A32C12")
+local Item_WOD  =  CreateMergeHeader("Warlords of Draenor", "Items", "A32C12")
+local Bodyg_WOD =  CreateMergeHeader("Warlords of Draenor", "Bodyguards", "A32C12")
+local Raid_WOD  =  CreateMergeHeader("Warlords of Draenor", "Raids", "A32C12")
+local World_WOD =  CreateMergeHeader("Warlords of Draenor", "World Zone", "A32C12")
 
 
 
@@ -71,11 +71,15 @@ addon.merges[187624]    = CreateMergeSpellEntry(Item_WOD, 0.5, "Legedary Ring: S
 
 -- WoD Trinkets
 addon.merges[184280]    = CreateMergeSpellEntry(Item_WOD, 3.5, "Mirror of the Blademaster")   -- Felstorm (every 2s for 20s)
-addon.merges[184256]    = CreateMergeSpellEntry(Item_WOD, 2.5, "Discordant Chorus")           -- Discordant Chorus
+addon.merges[184256]    = CreateMergeSpellEntry(Item_WOD, 2.5, "Empty Drinking Horn")         -- Empty Drinking Horn
+addon.merges[184248]    = CreateMergeSpellEntry(Item_WOD, 0.5, "Discordant Chorus")           -- Discordant Chorus
 addon.merges[185098]    = CreateMergeSpellEntry(Item_WOD, 4.5, "Soothing Breeze")             -- Monk Class Trinket (Sacred Draenic Incense)
 addon.merges[184075]    = CreateMergeSpellEntry(Item_WOD, 0.5, "Prophecy of Fear")            -- Propecy of Fear
+addon.merges[184559]    = CreateMergeSpellEntry(Item_WOD, 0.5, "Soul Capacitor")              -- Soul Capacitor (Spirit Eruption)
+addon.merges[185321]    = CreateMergeSpellEntry(Item_WOD, 1.5, "Seed of Creation (Guardian)") -- Class Trinket (Guardian Druid)
 
-
+-- Tier Gear
+addon.merges[188046]    = CreateMergeSpellEntry(Item_WOD, 1.5, "T18 Druid Balance 2P")        -- Fey Moonwing (Fey Missile)
 
 -- ---------------------------
 -- Pets / NPC's             --

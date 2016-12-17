@@ -165,6 +165,12 @@ x.cvar_update = function( force )
     end
   end
 
+  if x.db.profile.blizzardFCT.enableFloatingCombatText then
+    SetCVar("enableFloatingCombatText", 1)
+  else
+    SetCVar("enableFloatingCombatText", 0)
+  end
+
   if x.db.profile.blizzardFCT.floatingCombatTextAllSpellMechanics then
     SetCVar("floatingCombatTextAllSpellMechanics", 1)
   else
@@ -187,18 +193,6 @@ x.cvar_update = function( force )
     SetCVar("floatingCombatTextCombatDamageAllAutos", 1)
   else
     SetCVar("floatingCombatTextCombatDamageAllAutos", 0)
-  end
-
-  if x.db.profile.blizzardFCT.floatingCombatTextCombatDamageDirectionalOffset then
-    SetCVar("floatingCombatTextCombatDamageDirectionalOffset", 1)
-  else
-    SetCVar("floatingCombatTextCombatDamageDirectionalOffset", 0)
-  end
-
-  if x.db.profile.blizzardFCT.floatingCombatTextCombatDamageDirectionalScale then
-    SetCVar("floatingCombatTextCombatDamageDirectionalScale", 1)
-  else
-    SetCVar("floatingCombatTextCombatDamageDirectionalScale", 0)
   end
 
   if x.db.profile.blizzardFCT.floatingCombatTextCombatHealing then
@@ -320,6 +314,9 @@ x.cvar_update = function( force )
   else
     SetCVar("floatingCombatTextSpellMechanicsOther", 0)
   end
+
+  SetCVar("floatingCombatTextCombatDamageDirectionalOffset", x.db.profile.blizzardFCT.floatingCombatTextCombatDamageDirectionalOffset)
+  SetCVar("floatingCombatTextCombatDamageDirectionalScale", x.db.profile.blizzardFCT.floatingCombatTextCombatDamageDirectionalScale)
 end
 
 -- Generic Get/Set methods
@@ -328,6 +325,8 @@ local function set0(info, value) x.db.profile[info[#info-1]][info[#info]] = valu
 local function set0_update(info, value) x.db.profile[info[#info-1]][info[#info]] = value; x:UpdateFrames(); x.cvar_update() end
 local function get0_1(info) return x.db.profile[info[#info-2]][info[#info]] end
 local function set0_1(info, value) x.db.profile[info[#info-2]][info[#info]] = value; x.cvar_update() end
+local function getColor0_1(info) return unpack(x.db.profile[info[#info-2]][info[#info]] or blankTable) end
+local function setColor0_1(info, r, g, b) x.db.profile[info[#info-2]][info[#info]] = {r,g,b} end
 local function getTextIn0(info) return string_gsub(x.db.profile[info[#info-1]][info[#info]], "|", "||") end
 local function setTextIn0(info, value) x.db.profile[info[#info-1]][info[#info]] = string_gsub(value, "||", "|"); x.cvar_update() end
 local function get1(info) return x.db.profile.frames[info[#info-1]][info[#info]] end
@@ -339,10 +338,20 @@ local function set2_update(info, value) set2(info, value); x:UpdateFrames(info[#
 local function set2_update_force(info, value) set2(info, value); x:UpdateFrames(info[#info-2]); x.cvar_update(true) end
 local function getColor2(info) return unpack(x.db.profile.frames[info[#info-2]][info[#info]] or blankTable) end
 local function setColor2(info, r, g, b) x.db.profile.frames[info[#info-2]][info[#info]] = {r,g,b} end
+local function setColor2_alpha(info, r, g, b, a) x.db.profile.frames[info[#info-2]][info[#info]] = {r,g,b,a} end
 local function getTextIn2(info) return string_gsub(x.db.profile.frames[info[#info-2]][info[#info]], "|", "||") end
 local function setTextIn2(info, value) x.db.profile.frames[info[#info-2]][info[#info]] = string_gsub(value, "||", "|") end
 local function getNumber2(info) return tostring(x.db.profile[info[#info-2]][info[#info]]) end
 local function setNumber2(info, value) if tonumber(value) then x.db.profile[info[#info-2]][info[#info]] = tonumber(value) end end
+
+
+-- Man this is soooo getting out of hand D:
+local function getNameFormat(info) return x.db.profile.frames[info[#info-3]].names[info[#info-1]][info[#info]] end
+local function setNameFormat(info, value) x.db.profile.frames[info[#info-3]].names[info[#info-1]][info[#info]] = value end
+local function getNameFormatColor(info) return unpack(x.db.profile.frames[info[#info-3]].names[info[#info-1]][info[#info]] or blankTable) end
+local function setNameFormatColor(info, r, g, b) x.db.profile.frames[info[#info-3]].names[info[#info-1]][info[#info]] = {r,g,b} end
+local function getNameFormatText(info) return string_gsub(x.db.profile.frames[info[#info-2]].names[info[#info]], "|", "||") end
+local function setNameFormatText(info, value) x.db.profile.frames[info[#info-2]].names[info[#info]] = string_gsub(value, "||", "|") end
 
 local function outgoingSpellColorsHidden(info) return not x.db.profile.frames["outgoing"].standardSpellColor end
 
@@ -353,6 +362,7 @@ local function isFrameNotScrollable(info) return isFrameItemDisabled(info) or no
 local function isFrameUseCustomFade(info) return not x.db.profile.frames[info[#info-2]].enableCustomFade or isFrameItemDisabled(info) end
 local function isFrameFadingDisabled(info) return isFrameUseCustomFade(info) or not x.db.profile.frames[info[#info-2]].enableFade end
 local function isFrameIconDisabled(info) return isFrameItemDisabled(info) or not x.db.profile.frames[info[#info-2]].iconsEnabled end
+local function isFrameFontShadowDisabled(info) return isFrameItemDisabled(info) or not x.db.profile.frames[info[#info-2]].enableFontShadow end
 
 -- This is TEMP
 local function isFrameItemEnabled(info) return x.db.profile.frames[info[#info-2]].enabledFrame end
@@ -421,7 +431,7 @@ end
 local function IsTrackSpellsDisabled() return not x.db.profile.spellFilter.trackSpells end
 
 -- Lists that will be used to show tracked spells
-local buffHistory, debuffHistory, spellHistory, procHistory, itemHistory = { }, { }, { }, { }, { }
+local buffHistory, debuffHistory, spellHistory, procHistory, itemHistory, damageHistory, healingHistory = { }, { }, { }, { }, { }, { }, { }
 
 
 -- GetSpellTextureFormatted( spellID, message, multistrike, iconSize, justify, strColor, mergeOverride, forceOff )
@@ -432,7 +442,7 @@ local function GetBuffHistory()
   end
 
   for i in pairs(x.spellCache.buffs) do
-    buffHistory[i] = x:GetSpellTextureFormatted(i, "", 0, 16, nil, nil, nil, true).." "..i
+    buffHistory[i] = x:GetSpellTextureFormatted("", "", 0, 16, nil, nil, nil, true).." "..i
   end
 
   return buffHistory
@@ -444,7 +454,7 @@ local function GetDebuffHistory()
   end
 
   for i in pairs(x.spellCache.debuffs) do
-    debuffHistory[i] = x:GetSpellTextureFormatted(i, "", 0, 16, nil, nil, nil, true).." "..i
+    debuffHistory[i] = x:GetSpellTextureFormatted("", "", 0, 16, nil, nil, nil, true).." "..i
   end
 
   return debuffHistory
@@ -456,8 +466,8 @@ local function GetSpellHistory()
   end
 
   for i in pairs(x.spellCache.spells) do
-    local name = GetSpellInfo(i) or "Unknown Spell ID"
-    spellHistory[tostring(i)] = x:GetSpellTextureFormatted(i, "", 0, 16, nil, nil, nil, true).." "..name.." (|cff798BDD"..i.."|r)"
+    local name, _, icon = GetSpellInfo(i)
+    spellHistory[tostring(i)] = sformat("|T%s:%d:%d:0:0:64:64:5:59:5:59|t %s (|cff798BDD%d)", icon or 0, 16, 16, name or UNKNOWN, i)
   end
 
   return spellHistory
@@ -486,6 +496,28 @@ local function GetItemHistory()
   end
 
   return itemHistory
+end
+
+local function GetDamageIncomingHistory()
+  for i in pairs(damageHistory) do damageHistory[i] = nil end
+
+  for i in pairs(x.spellCache.damage) do
+    local name, _, icon = GetSpellInfo(i)
+    damageHistory[tostring(i)] = sformat("|T%s:%d:%d:0:0:64:64:5:59:5:59|t %s (|cff798BDD%d)", icon or 0, 16, 16, name or UNKNOWN, i)
+  end
+
+  return damageHistory
+end
+
+local function GetHealingIncomingHistory()
+  for i in pairs(healingHistory) do healingHistory[i] = nil end
+
+  for i in pairs(x.spellCache.healing) do
+    local name, _, icon = GetSpellInfo(i)
+    healingHistory[tostring(i)] = sformat("|T%s:%d:%d:0:0:64:64:5:59:5:59|t %s (|cff798BDD%d)", icon or 0, 16, 16, name or UNKNOWN, i)
+  end
+
+  return healingHistory
 end
 
 
@@ -578,6 +610,56 @@ addon.options.args["spells"] = {
         },
 
         listSpacer4 = {
+          type = "description",
+          order = 34,
+          name = "\n|cff798BDDMerge Pet Attacks|r:",
+          fontSize = 'large',
+        },
+
+        mergePet = {
+          order = 35,
+          type = 'toggle',
+          name = "Merge Pet Abilities",
+          desc = "Merges all pet abilities together and shows your pet's icon as the source.",
+          get = get0_1,
+          set = set0_1,
+        },
+
+        mergePetColor = {
+          order = 36,
+          type = 'color',
+          name = "Pet Color",
+          get = getColor0_1,
+          set = setColor0_1,
+        },
+
+        --[[
+        spacer1 = {
+          type = "description",
+          order = 37,
+          name = "",
+          width = 'full',
+        },
+
+        mergeVehicle = {
+          order = 38,
+          type = 'toggle',
+          name = "Merge Vehicle Abilities",
+          desc = "Merges all of your vehicle abilities together.",
+          get = get0_1,
+          set = set0_1,
+        },
+
+        mergeVehicleColor = {
+          order = 39,
+          type = 'color',
+          name = "Vehicle Color",
+          get = getColor0_1,
+          set = setColor0_1,
+        },
+        ]]
+
+        listSpacer5 = {
           type = "description",
           order = 40,
           name = "\n|cff798BDDMerge Critical Hits|r (Choose one):",
@@ -1011,7 +1093,7 @@ addon.options.args["spellFilter"] = {
     listItems = {
       name = "|cffFFFFFFFilter:|r |cff798BDDItems (Plus)|r",
       type = 'group',
-      order = 50,
+      order = 60,
       guiInline = false,
       args = {
         title = {
@@ -1060,13 +1142,115 @@ addon.options.args["spellFilter"] = {
     },
 
 
+    listDamage = {
+      name = "|cffFFFFFFFilter:|r |cff798BDDIncoming Damage|r",
+      type = 'group',
+      order = 70,
+      guiInline = false,
+      args = {
+        title = {
+          order = 0,
+          type = "description",
+          name = "These options allow you to filter out certain |cffFFFF00Spell ID|rs from |cff798BDDIncoming Damage|r to your character.  In order to add a new item, you need to type the |cffFFFF00Spell ID|r. Checking |cffFFFF00Remove|r and typing in a |cffFFFF00Spell ID|r will remove it from the list.\n",
+        },
+        whitelistDamage = {
+          order = 1,
+          type = 'toggle',
+          name = "Whitelist",
+          desc = "Temp Description",
+          set = set0_1,
+          get = get0_1,
+          width = "full",
+        },
+        spellName = {
+          order = 2,
+          type = 'input',
+          name = "Spell ID",
+          desc = "The Spell ID of the |cff798BDDSpell|r you want to filter.",
+          set = setSpell,
+          get = noop,
+        },
+        checkAdd = {
+          order = 3,
+          type = 'toggle',
+          name = "Remove",
+          desc = "Check to remove the spell from the filtered list.",
+          get = getCheckAdd,
+          set = setCheckAdd,
+        },
+
+        -- This is a feature option that I will enable when I get more time D:
+        selectTracked = {
+          order = 4,
+          type = 'select',
+          name = "Spell History:",
+          desc = "A list of |cff798BDDSpell|r IDs that have been seen. |cffFF0000Requires:|r |cff798BDDTrack Spell History|r",
+          disabled = IsTrackSpellsDisabled,
+          values = GetDamageIncomingHistory,
+          get = noop,
+          set = setSpell,
+        },
+      },
+    },
+
+    listHealing = {
+      name = "|cffFFFFFFFilter:|r |cff798BDDIncoming Healing|r",
+      type = 'group',
+      order = 80,
+      guiInline = false,
+      args = {
+        title = {
+          order = 0,
+          type = "description",
+          name = "These options allow you to filter out certain |cffFFFF00Spell ID|rs from |cff798BDDIncoming Healing|r to your character.  In order to add a new item, you need to type the |cffFFFF00Spell ID|r. Checking |cffFFFF00Remove|r and typing in a |cffFFFF00Spell ID|r will remove it from the list.\n",
+        },
+        whitelistHealing = {
+          order = 1,
+          type = 'toggle',
+          name = "Whitelist",
+          desc = "Temp Description",
+          set = set0_1,
+          get = get0_1,
+          width = "full",
+        },
+        spellName = {
+          order = 2,
+          type = 'input',
+          name = "Spell ID",
+          desc = "The Spell ID of the |cff798BDDSpell|r you want to filter.",
+          set = setSpell,
+          get = noop,
+        },
+        checkAdd = {
+          order = 3,
+          type = 'toggle',
+          name = "Remove",
+          desc = "Check to remove the spell from the filtered list.",
+          get = getCheckAdd,
+          set = setCheckAdd,
+        },
+
+        -- This is a feature option that I will enable when I get more time D:
+        selectTracked = {
+          order = 4,
+          type = 'select',
+          name = "Spell History:",
+          desc = "A list of |cff798BDDSpell|r IDs that have been seen. |cffFF0000Requires:|r |cff798BDDTrack Spell History|r",
+          disabled = IsTrackSpellsDisabled,
+          values = GetHealingIncomingHistory,
+          get = noop,
+          set = setSpell,
+        },
+      },
+    },
+
   },
 }
 
 addon.options.args["Credits"] = {
   name = "Credits",
   type = 'group',
-  order = 4,
+  order = 6,
   args = {
     title = {
       type = "header",
@@ -1148,14 +1332,14 @@ addon.options.args["Credits"] = {
     tukuiTitleLegion = {
       type = 'description',
       order = 34,
-      name = "|cffFFFF00Beta Testers - Version 4.2.0 for Legion|r",
+      name = "|cffFFFF00Beta Testers - Version 4.3.0+ (Legion)|r",
       fontSize = "large",
     },
     userName3Legion = {
       type = 'description',
       order = 35,
       fontSize = "medium",
-      name = " |cffAAAAFF Azazu|r,|cff8080EE Merathilis|r,|cffAAAAFF Torch|r,|cff8080EE Broni|r,|cffAAAAFF Zylos|r",
+      name = " |cffAAAAFF Azazu|r,|cff8080EE Broni|r,|cffAAAAFF CursedBunny|r,|cff8080EE Daemios|r,|cffAAAAFF Dajova|r,|cff8080EE Delerionn|r,|cffAAAAFF dunger|r,|cff8080EE feetss|r,|cffAAAAFF gesuntight|r,|cff8080EE Homaxz|r,|cffAAAAFF karamei|r,|cff8080EE Merathilis|r,|cffAAAAFF re1jo|r,|cff8080EE sammael666|r,|cffAAAAFF scathee|r,|cff8080EE Tonyleila|r,|cffAAAAFF Torch|r,|cff8080EE WetU|r,|cffAAAAFF Znuff|r,|cff8080EE Zylos|r",
     },
 
     testerTitleSpace4 = {
@@ -1202,43 +1386,18 @@ addon.options.args["FloatingCombatText"] = {
   name = "Floating Combat Text",
   type = 'group',
   order = 1,
+  childGroups = 'tab',
   args = {
     title2 = {
       order = 0,
       type = "description",
-      name = "|cffA0A0A0Some changes might require a full|r |cffD0D000Client Restart|r |cffA0A0A0(completely exit out of WoW). Do not|r |cffD00000Alt+F4|r |cffA0A0A0or|r |cffD00000Command+Q|r |cffA0A0A0or your settings might not save. Use '|r|cff798BDD/exit|r|cffA0A0A0' to close the client.|r\n\n",
-      fontSize = "small",
-    },
-
-    listSpacer1 = {
-      type = "description",
-      order = 3,
-      name = "\n\n|cff798BDDFloating Combat Text|r |cffFF0000Advanced Settings|r:",
-      fontSize = 'large',
-    },
-
-    bypassCVARUpdates = {
-      order = 4,
-      type = 'toggle',
-      name = "Bypass CVar Updates (requires |cffFF0000/reload|r)",
-      desc = "Allows you to bypass xCT+'s CVar engine. This option might help if you have FCT enabled, but it disappears after awhile. Once you set your FCT options, enable this. Requires a UI reload after changing.",
-      width = 'full',
-      get = function( info ) return x.db.profile.bypassCVars end,
-      set = function( info, value ) x.db.profile.bypassCVars = value end,
-    },
-
-    listSpacer2 = {
-      type = "description",
-      order = 5,
-      name = "\n\n",
-      fontSize = 'large',
+      name = "The following settings allow you to tweak Blizzard's Floating Combat Text.",
     },
 
     blizzardFCT = {
-      name = "", --Blizzard's Floating Combat Text |cffFFFFFF(Head Numbers)|r",
+      name = "General",
       type = 'group',
       order = 1,
-      guiInline = true,
       disabled = isCVarsDisabled,
       args = {
         listSpacer0 = {
@@ -1248,64 +1407,109 @@ addon.options.args["FloatingCombatText"] = {
           fontSize = 'large',
         },
 
+        enableFloatingCombatText = {
+          order = 1,
+          name = "Enable Scrolling Combat Text (Self)",
+          type = 'toggle',
+          desc = "Shows incoming damage and healing done to you. It is also required for a lot of the other events to work (as noted in their descriptions).\n\n|cffFF0000Changing this requires a UI Reload!|r",
+          width = 'double',
+          get = get0,
+          set = set0_update,
+        },
+
+        enableFCT_Header = {
+          type = "description",
+          order = 2,
+          name = "|CffFF0000Requires:|r |cff00FF33/reload|r after change",
+          fontSize = 'small',
+          width = 'normal'
+        },
+
+        enableFCT_Spacer = {
+          type = "description",
+          order = 3,
+          name = "\n",
+          fontSize = 'small',
+          width = 'normal'
+        },
+
+        headerAppearance = {
+          type = "description",
+          order = 4,
+          name = "|cffFFFF00Floating Combat Text Appearance:|r",
+          fontSize = 'medium',
+        },
+
+        floatingCombatTextCombatDamageDirectionalOffset = {
+          order = 5,
+          name = "Direction Offset",
+          desc = "The amount to offset the vertical origin of the directional damage numbers when they appear. (e.g. move them up and down)\n\n0 = Default",
+          type = 'range',
+          min = -20, max = 20, step = 0.1,
+          get = get0,
+          set = set0_update,
+        },
+
+        floatingCombatTextCombatDamageDirectionalScale = {
+          order = 6,
+          name = "Direction Scale",
+          desc = "The amount to scale the distance that directional damage numbers will move as they appear. Damage numbers will just scroll up if this is disabled.\n\n0 = Disabled\n1 = Default\n3.6 = Recommended",
+          type = 'range',
+          min = -5, max = 5, step = 0.1,
+          get = get0,
+          set = set0_update,
+        },
+
+
         -- Damage
         headerDamage = {
           type = "description",
-          order = 1,
+          order = 10,
           name = "|cffFFFF00Damage:|r",
           fontSize = 'medium',
         },
 
         floatingCombatTextCombatDamage = {
-          order = 2,
+          order = 11,
           name = "Show Damage",
           type = 'toggle',
-          desc = "Enable this option if you want to see your damage.",
+          desc = OPTION_TOOLTIP_SHOW_DAMAGE,
           get = get0,
           set = set0_update,
         },
 
         floatingCombatTextCombatLogPeriodicSpells = {
-          order = 3,
+          order = 12,
           name = "Show DoTs",
           type = 'toggle',
-          desc = "Enable this option if you want to see your damage over time.",
+          desc = OPTION_TOOLTIP_LOG_PERIODIC_EFFECTS,
           get = get0,
           set = set0_update,
         },
 
         floatingCombatTextCombatDamageAllAutos = {
-          order = 4,
+          order = 13,
           name = "Show Auto Attacks",
           type = 'toggle',
-          desc = "Enable this option if you want to see all auto-attack numbers, rather than hiding non-event numbers.",
+          desc = "Enable this option if you want to see all auto-attacks.",
           get = get0,
           set = set0_update,
         },
 
         floatingCombatTextPetMeleeDamage = {
-          order = 5,
+          order = 14,
           name = "Show Pet Melee",
           type = 'toggle',
-          desc = "Enable this option if you want to see pet's melee damage.",
+          desc = OPTION_TOOLTIP_SHOW_PET_MELEE_DAMAGE,
           get = get0,
           set = set0_update,
         },
 
         floatingCombatTextPetSpellDamage = {
-          order = 6,
+          order = 15,
           name = "Show Pet Spells",
           type = 'toggle',
-          desc = "Enable this option if you want to see pet's spell damage.",
-          get = get0,
-          set = set0_update,
-        },
-
-        floatingCombatTextDamageReduction = {
-          order = 7,
-          name = "Show Damage Reduction",
-          type = 'toggle',
-          desc = "New option in Legion. Updating description soon.",
+          desc = OPTION_TOOLTIP_SHOW_PET_MELEE_DAMAGE,
           get = get0,
           set = set0_update,
         },
@@ -1313,157 +1517,164 @@ addon.options.args["FloatingCombatText"] = {
         -- Healing and Absorbs
         headerHealingAbsorbs = {
           type = "description",
-          order = 10,
+          order = 20,
           name = "\n|cffFFFF00Healing and Absorbs:|r",
           fontSize = 'medium',
         },
 
         floatingCombatTextCombatHealing = {
-          order = 11,
+          order = 21,
           name = "Show Healing",
           type = 'toggle',
-          desc = "Enable this option if you want to see your healing.",
+          desc = OPTION_TOOLTIP_SHOW_COMBAT_HEALING,
           get = get0,
           set = set0_update,
         },
 
         floatingCombatTextFriendlyHealers = {
-          order = 12,
+          order = 22,
           name = "Show Friendly Healers",
           type = 'toggle',
-          desc = "New option in Legion. Updating description soon.",
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_FRIENDLY_NAMES .. "\n\n|cffFF0000Requires Self Scrolling Combat Text|r",
           get = get0,
           set = set0_update,
         },
 
         floatingCombatTextCombatHealingAbsorbSelf = {
-          order = 13,
+          order = 23,
           name = "Show Absorbs (Self)",
           type = 'toggle',
-          desc = "Enable this option if you want to see shields that are put on you.",
+          desc = OPTION_TOOLTIP_SHOW_COMBAT_HEALING_ABSORB_SELF .. "\n\n|cffFF0000Requires Self Scrolling Combat Text|r",
           get = get0,
           set = set0_update,
         },
 
         floatingCombatTextCombatHealingAbsorbTarget = {
-          order = 14,
+          order = 24,
           name = "Show Absorbs (Target)",
           type = 'toggle',
-          desc = "Enable this option if you want to see shields that are put on your target.",
+          desc = OPTION_TOOLTIP_SHOW_COMBAT_HEALING_ABSORB_TARGET,
           get = get0,
           set = set0_update,
         },
 
+        floatingCombatTextDamageReduction = {
+          order = 25,
+          name = "Show Damage Reduction",
+          type = 'toggle',
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_RESISTANCES .. "\n\n|cffFF0000Requires Self Scrolling Combat Text|r",
+          get = get0,
+          set = set0_update,
+        },
 
         -- Gains
         headerGains = {
           type = "description",
-          order = 20,
+          order = 30,
           name = "\n|cffFFFF00Player Gains:|r",
           fontSize = 'medium',
         },
 
         floatingCombatTextEnergyGains = {
-          order = 21,
+          order = 31,
           name = "Show Energy",
           type = 'toggle',
-          desc = "Enable this option if you want to see class engery gains.",
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_ENERGIZE .. "\n\n|cffFF0000Requires Self Scrolling Combat Text|r",
           get = get0,
           set = set0_update,
         },
 
         floatingCombatTextPeriodicEnergyGains = {
-          order = 21,
+          order = 31,
           name = "Show Energy (Periodic)",
           type = 'toggle',
-          desc = "Enable this option if you want to see class engery gains that happen over time.",
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_PERIODIC_ENERGIZE .. "\n\n|cffFF0000Requires Self Scrolling Combat Text|r",
           get = get0,
           set = set0_update,
         },
 
         floatingCombatTextComboPoints = {
-          order = 22,
+          order = 32,
           name = "Show Combo Points",
           type = 'toggle',
-          desc = "Enable this option if you want to see combo point gains.",
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_COMBO_POINTS .. "\n\n|cffFF0000Requires Self Scrolling Combat Text|r",
           get = get0,
           set = set0_update,
         },
 
         floatingCombatTextHonorGains = {
-          order = 23,
+          order = 33,
           name = "Show Honor",
           type = 'toggle',
-          desc = "Enable this option if you want to see your honor point gains.",
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_HONOR_GAINED .. "\n\n|cffFF0000Requires Self Scrolling Combat Text|r",
           get = get0,
           set = set0_update,
         },
 
         floatingCombatTextRepChanges = {
-          order = 24,
+          order = 34,
           name = "Show Rep Changes",
           type = 'toggle',
-          desc = "Enable this option if you want to see your reputation gains or losses.",
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_REPUTATION .. "\n\n|cffFF0000Requires Self Scrolling Combat Text|r",
           get = get0,
           set = set0_update,
         },
 
-
         -- Status Effects
         headerStatusEffects = {
           type = "description",
-          order = 30,
+          order = 40,
           name = "\n|cffFFFF00Status Effects:|r",
           fontSize = 'medium',
         },
 
         floatingCombatTextDodgeParryMiss = {
-          order = 31,
+          order = 41,
           name = "Show Miss Types",
           type = 'toggle',
-          desc = "Enable this option if you want to see misses (dodges, parries, etc).",
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_DODGE_PARRY_MISS,
           get = get0,
           set = set0_update,
         },
 
         floatingCombatTextAuras = {
-          order = 32,
+          order = 42,
           name = "Show Auras",
           type = 'toggle',
-          desc = "New option in Legion. Updating description soon.",
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_AURAS .. "\n\n|cffFF0000Requires Self Scrolling Combat Text|r",
           get = get0,
           set = set0_update,
         },
 
         floatingCombatTextSpellMechanics = {
-          order = 33,
+          order = 43,
           name = "Show Effects (Mine)",
           type = 'toggle',
-          desc = "Enable if you want to see your effects (snare, root, etc).",
+          desc = OPTION_TOOLTIP_SHOW_TARGET_EFFECTS,
           get = get0,
           set = set0_update,
         },
 
         floatingCombatTextSpellMechanicsOther = {
-          order = 34,
+          order = 44,
           name = "Show Effects (Group)",
           type = 'toggle',
-          desc = "Enable if you want to see other effects (snare, root, etc) from your group.",
+          desc = OPTION_TOOLTIP_SHOW_OTHER_TARGET_EFFECTS,
           get = get0,
           set = set0_update,
         },
 
         floatingCombatTextAllSpellMechanics = {
-          order = 35,
+          order = 45,
           name = "Show Effects (All)",
           type = 'toggle',
-          desc = "Enable if you want to see all effects (snare, root, etc) from anyone.",
+          desc = OPTION_TOOLTIP_SHOW_OTHER_TARGET_EFFECTS,
           get = get0,
           set = set0_update,
         },
 
         CombatThreatChanges = {
-          order = 36,
+          order = 46,
           type = 'toggle',
           name = "Show Threat Changes",
           desc = "Enable this option if you want to see threat changes.",
@@ -1471,235 +1682,94 @@ addon.options.args["FloatingCombatText"] = {
           set = set0_update,
         },
 
-
         -- Player's Status
         headerPlayerStatus = {
           type = "description",
-          order = 40,
+          order = 50,
           name = "\n|cffFFFF00Player Status:|r",
           fontSize = 'medium',
         },
 
         floatingCombatTextCombatState = {
-          order = 41,
+          order = 52,
           name = "Show Combat State",
           type = 'toggle',
-          desc = "Enable this option if you want to see when you are leaving and entering combat.",
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_COMBAT_STATE .. "\n\n|cffFF0000Requires Self Scrolling Combat Text|r",
           get = get0,
           set = set0_update,
         },
 
         floatingCombatTextLowManaHealth = {
-          order = 42,
+          order = 53,
           name = "Show Low HP/Mana",
           type = 'toggle',
-          desc = "Enable this option if you want to see when you are low mana and health.",
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_LOW_HEALTH_MANA .. "\n\n|cffFF0000Requires Self Scrolling Combat Text|r",
           get = get0,
           set = set0_update,
         },
 
         floatingCombatTextReactives = {
-          order = 43,
+          order = 54,
           name = "Show Reactives",
           type = 'toggle',
-          desc = "Enable this option if you want to see your spell reactives (Kill Shot, Shadow Word: Death, etc).",
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_REACTIVES .. "\n\n|cffFF0000Requires Self Scrolling Combat Text|r",
           get = get0,
           set = set0_update,
         },
-
-
-        -- Misc
-        --[[
-        headerMisc = {
-          type = "description",
-          order = 20,
-          name = "|cffFFFF00Misc:|r",
-          fontSize = 'medium',
-        },
-
-        floatingCombatTextCombatDamageDirectionalOffset = {
-          order = 51,
-          name = "Show Damage",
-          type = 'toggle',
-          desc = "Amount to offset directional damage numbers when they start.",
-          get = get0,
-          set = set0_update,
-        },
-
-        floatingCombatTextCombatDamageDirectionalScale = {
-          order = 51,
-          name = "Show Damage",
-          type = 'toggle',
-          desc = "Directional damage numbers movement scale (0 = no directional numbers)",
-          get = get0,
-          set = set0_update,
-        },
-
-        floatingCombatTextFloatMode = {
-          order = 51,
-          name = "Show Damage",
-          type = 'range',
-          desc = "The combat text float mode.",
-          
-          min = 1, max = 100,
-          get = get0,
-          set = set0_update,
-        },]]
-
-
-
-
-
-
-
-
-
-
-
-
-
-        --[==[
-        CombatDamage = {
-          order = 2,
-          type = 'toggle',
-          name = "Show Damage",
-          desc = "Enable this option if you want your damage as Floating Combat Text.",
-          get = get0,
-          set = set0_update,
-        },
-
-        CombatLogPeriodicSpells = {
-          order = 3,
-          type = 'toggle',
-          name = "Show Damage over Time",
-          desc = "Enable this option if you want your DoT's as Floating Combat Text.",
-          get = get0,
-          set = set0_update,
-          disabled = function(info) return isCVarsDisabled( ) or not x.db.profile.blizzardFCT.CombatDamage end,
-        },
-
-        PetMeleeDamage = {
-          order = 4,
-          type = 'toggle',
-          name = "Show Pet Melee Damage",
-          desc = "Enable this option if you want your pet's melee damage as Floating Combat Text.",
-          get = get0,
-          set = set0_update,
-          disabled = function(info) return isCVarsDisabled( ) or not x.db.profile.blizzardFCT.CombatDamage end,
-        },
-
-        CombatHealing = {
-          order = 5,
-          type = 'toggle',
-          name = "Show Healing",
-          desc = "Enable this option if you want your healing as Floating Combat Text.",
-          get = get0,
-          set = set0_update,
-        },
-
-        CombatHealingAbsorbTarget = {
-          order = 6,
-          type = 'toggle',
-          name = "Show Absorbs",
-          desc = "Enable this option if you want your aborbs as Floating Combat Text.",
-          get = get0,
-          set = set0_update,
-        },
-
-        
-
-        -- Floating Combat Text Effects
-        fctSpellMechanics = {
-          order = 8,
-          type = 'toggle',
-          name = "Show Effects",
-          desc = "Enable this option if you want to see your snares and roots.",
-          get = get0,
-          set = set0_update,
-        },
-
-        fctSpellMechanicsOther = {
-          order = 9,
-          type = 'toggle',
-          name = "Show Other's Effects",
-          desc = "Enable this option if you want to see other player's snares and roots too.",
-          get = get0,
-          set = set0_update,
-          disabled = function(info) return isCVarsDisabled( ) or not x.db.profile.blizzardFCT.fctSpellMechanics end,
-        },
-
-        listSpacer2 = {
-          type = "description",
-          order = 20,
-          name = "\n\n|cff798BDDFloating Combat Text Target Mode|r:",
-          fontSize = 'large',
-        },
-
-        CombatDamageStyle = {
-          type = "select",
-              order = 21,
-          name = "Target Mode:",
-          values = {
-            [1] = COMBAT_TARGET_MODE_NEW,
-            [2] = COMBAT_TARGET_MODE_OLD,
-          },
-          get = get0,
-          set = set0_update,
-          desc = "Allows you to change how your target's FCT is displayed.\n\n|cff798BDD"..COMBAT_TARGET_MODE_NEW.."|r - |cffFF8000(Fastest)|r displays damage on your target in an arc. New in WoD.\n\n|cff798BDD"..COMBAT_TARGET_MODE_OLD.."|r - |cffFF8000(Slower)|r displays damage floating up. This was the old default in MoP.",
-        },
-
-        listSpacer3 = {
-          type = "description",
-          order = 30,
-          name = "\n\n|cff798BDDFloating Combat Text Font|r:",
-          fontSize = 'large',
-        },
-
-        enabled = {
-          order = 31,
-          type = 'toggle',
-          name = "Customize",
-          get = get0,
-          set = set0_update,
-        },
-
-        font = {
-          type = 'select', dialogControl = 'LSM30_Font',
-          order = 32,
-          name = "Blizzard's FCT Font",
-          desc = "Set the font Blizzard's head numbers (|cffFFFF00Default:|r Friz Quadrata TT)",
-          values = AceGUIWidgetLSMlists.font,
-          get = get0,
-          set = function(info, value)
-            x.db.profile.blizzardFCT.font = value
-            x.db.profile.blizzardFCT.fontName = LSM:Fetch("font", value)
-
-            --x:UpdateFrames()
-            --x.cvar_update()
-          end,
-          disabled = function(info) return isCVarsDisabled( ) or not x.db.profile.blizzardFCT.enabled end,
-        },
-        ]==]
-
-
-
 
       },
     },
-    --[[
-    battlePetFCT = {
-      name = "Battle Pets",
+
+
+    advancedSettings = {
+      name = "Advanced",
       type = 'group',
       order = 2,
       args = {
-        title1 = {
-          order = 0,
+
+        listSpacer1 = {
           type = "description",
-          name = "Battle Pet Settings to go in here :)",
+          order = 3,
+          name = "|cff798BDDFloating Combat Text|r |cffFF0000Advanced Settings|r:\n",
+          fontSize = 'large',
         },
+
+        bypassCVARUpdates = {
+          order = 4,
+          type = 'toggle',
+          name = "Bypass CVar Updates (requires |cffFF0000/reload|r)",
+          desc = "Allows you to bypass xCT+'s CVar engine. This option might help if you have FCT enabled, but it disappears after awhile. Once you set your FCT options, enable this.\n\n|cffFF0000Changing this requires a UI Reload!|r",
+          width = 'double',
+          get = function( info ) return x.db.profile.bypassCVars end,
+          set = function( info, value ) x.db.profile.bypassCVars = value end,
+        },
+
+        enableFCT_Header = {
+          type = "description",
+          order = 5,
+          name = "|CffFF0000Requires:|r |cff00FF33/reload|r after change",
+          fontSize = 'small',
+          width = 'normal'
+        },
+
       },
     },
-    ]]
+
+
+  },
+}
+
+addon.options.args["SpellSchools"] = {
+  name = "Spell School Colors",
+  type = 'group',
+  order = 5,
+  args = {
+    title = {
+      type = "description",
+      order = 0,
+      name = "|cff798BDDCustomize Spell School Colors|r:\n",
+      fontSize = 'large',
+    },
   },
 }
 
@@ -1852,11 +1922,19 @@ addon.options.args["Frames"] = {
           get = getTextIn0,
           set = setTextIn0,
         },
+        billionSymbol = {
+          order = 14,
+          type = 'input',
+          name = "Billion",
+          desc = "Symbol for: |cffFF0000Billions|r |cff798BDD(10e+9)|r",
+          get = getTextIn0,
+          set = setTextIn0,
+        },
         decimalPoint = {
-          order = 13,
+          order = 15,
           type = 'toggle',
-          name = "Single Decimal",
-          desc = "Shows a single decimal when abbreviating the value (e.g. will show |cff798BDD5.9K|r instead of |cff798BDD6K|r).",
+          name = "Single Decimal Precision",
+          desc = "Shows a single digit of precision when abbreviating the value (e.g. will show |cff798BDD5.9K|r instead of |cff798BDD6K|r).",
           get = get0,
           set = set0,
         },
@@ -1998,7 +2076,7 @@ addon.options.args["Frames"] = {
         frameSettings = {
           order = 10,
           type = 'group',
-          name = "Frame Settings",
+          name = "Frame",
           args = {
             frameSettings = {
               type = 'description',
@@ -2150,7 +2228,7 @@ addon.options.args["Frames"] = {
         fonts = {
           order = 20,
           type = 'group',
-          name = "Font Settings",
+          name = "Font",
           args = {
             fontSettings = {
               type = 'description',
@@ -2210,38 +2288,92 @@ addon.options.args["Frames"] = {
               set = set2_update,
             },
 
-            iconSizeSettings = {
+            fontShadowSettings = {
               type = 'description',
               order = 10,
-              name = "\n|cff798BDDIcon Size Settings|r:",
+              name = "\n|cff798BDDFont Shadow Settings|r:",
+              fontSize = 'large',
+            },
+
+            enableFontShadow = {
+              order = 11,
+              type = 'toggle',
+              name = "Enable Font Shadow",
+              desc = "Shows a shadow behind the combat text fonts.",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+
+            fontShadowColor = {
+              order = 12,
+              type = 'color',
+              hasAlpha = true,
+              name = "Font Shadow Color",
+              get = getColor2,
+              set = setColor2_alpha,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetX = {
+              order = 13,
+              name = "Horizonal Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetY = {
+              order = 14,
+              name = "Vertical Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+          },
+        },
+
+        icons = {
+          order = 30,
+          type = 'group',
+          name = "Icons",
+          args = {
+            iconSizeSettings = {
+              type = 'description',
+              order = 1,
+              name = "|cff798BDDIcon Settings|r:",
               fontSize = 'large',
             },
             iconsEnabled = {
-              order = 11,
+              order = 2,
               type = 'toggle',
-              name = "Icons",
+              name = "Enable Icons",
               desc = "Show icons next to your damage.",
               get = get2,
               set = set2,
               disabled = isFrameItemDisabled,
             },
             iconsSize = {
-              order = 12,
-              name = "Icon Size",
-              desc = "Set the icon size.",
+              order = 3,
+              name = "Size",
+              desc = "Set the icon size. (Recommended value: 16)",
               type = 'range',
               min = 6, max = 22, step = 1,
               get = get2,
               set = set2,
               disabled = isFrameIconDisabled,
             },
-          },
+          }
         },
 
         fontColors = {
-          order = 30,
+          order = 40,
           type = 'group',
-          name = "Custom Colors",
+          name = "Colors",
           args = {
             customColors = {
               type = 'description',
@@ -2253,14 +2385,14 @@ addon.options.args["Frames"] = {
         },
 
         specialTweaks = {
-          order = 40,
-          name = "Special Tweaks",
+          order = 50,
+          name = "Misc",
           type = 'group',
           args = {
             specialTweaks = {
               type = 'description',
               order = 0,
-              name = "|cff798BDDSpecial Tweaks|r:",
+              name = "|cff798BDDMiscellaneous Settings|r:",
               fontSize = 'large',
             },
             showInterrupts = {
@@ -2351,7 +2483,7 @@ addon.options.args["Frames"] = {
         frameSettings = {
           order = 10,
           type = 'group',
-          name = "Frame Settings",
+          name = "Frame",
           args = {
             frameSettings = {
               type = 'description',
@@ -2503,7 +2635,7 @@ addon.options.args["Frames"] = {
         fonts = {
           order = 20,
           type = 'group',
-          name = "Font Settings",
+          name = "Font",
           args = {
             fontSettings = {
               type = 'description',
@@ -2563,38 +2695,92 @@ addon.options.args["Frames"] = {
               set = set2_update,
             },
 
-            iconSizeSettings = {
+            fontShadowSettings = {
               type = 'description',
               order = 10,
-              name = "\n|cff798BDDIcon Size Settings|r:",
+              name = "\n|cff798BDDFont Shadow Settings|r:",
+              fontSize = 'large',
+            },
+
+            enableFontShadow = {
+              order = 11,
+              type = 'toggle',
+              name = "Enable Font Shadow",
+              desc = "Shows a shadow behind the combat text fonts.",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+
+            fontShadowColor = {
+              order = 12,
+              type = 'color',
+              hasAlpha = true,
+              name = "Font Shadow Color",
+              get = getColor2,
+              set = setColor2_alpha,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetX = {
+              order = 13,
+              name = "Horizonal Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetY = {
+              order = 14,
+              name = "Vertical Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+          },
+        },
+
+        icons = {
+          order = 30,
+          type = 'group',
+          name = "Icons",
+          args = {
+            iconSizeSettings = {
+              type = 'description',
+              order = 1,
+              name = "|cff798BDDIcon Settings|r:",
               fontSize = 'large',
             },
             iconsEnabled = {
-              order = 11,
+              order = 2,
               type = 'toggle',
-              name = "Icons",
+              name = "Enable Icons",
               desc = "Show icons next to your damage.",
               get = get2,
               set = set2,
               disabled = isFrameItemDisabled,
             },
             iconsSize = {
-              order = 12,
-              name = "Icon Size",
-              desc = "Set the icon size.",
+              order = 3,
+              name = "Size",
+              desc = "Set the icon size. (Recommended value: 16)",
               type = 'range',
               min = 6, max = 22, step = 1,
               get = get2,
               set = set2,
               disabled = isFrameIconDisabled,
             },
-          },
+          }
         },
 
         fontColors = {
-          order = 30,
+          order = 40,
           type = 'group',
-          name = "Custom Colors",
+          name = "Colors",
           args = {
             customColors = {
               type = 'description',
@@ -2605,15 +2791,249 @@ addon.options.args["Frames"] = {
           },
         },
 
-        specialTweaks = {
-          order = 40,
+        names = {
+          order = 50,
           type = 'group',
-          name = "Special Tweaks",
+          name = "Names",
+          childGroups = 'select',
+          get = getNameFormat,
+          set = setNameFormat,
+          args = {
+            namesDescription = {
+              type = 'description',
+              order = 1,
+              name = "The |cffFFFF00Names Settings|r allows you to further format and customize your combat text frames. By selecting values from below, you will be able to see the source, destination or spell names of certain events.\n\n|cffFF8040NOTE:|r The |cffFFFF00Spam Merger|r will preempt formatting.",
+              fontSize = 'small'
+            },
+
+            nameAppearance = {
+              type = 'description',
+              order = 2,
+              name = "|cff798BDDName Appearance|r:\n\n",
+              fontSize = 'large',
+              width = 'normal'
+            },
+
+            namePrefix = {
+              order = 3,
+              type = 'input',
+              name = "Prefix",
+              desc = "Prefix this value to the beginning when displaying the name.",
+              get = getNameFormatText,
+              set = setNameFormatText,
+            },
+
+            namePostfix = {
+              order = 4,
+              type = 'input',
+              name = "Postfix",
+              desc = "Postfix this value to the end when displaying the name.",
+              get = getNameFormatText,
+              set = setNameFormatText,
+            },
+
+            PLAYER = {
+              order = 10,
+              type = 'group',
+              name = "Events to a Player",
+              args = {
+                playerNames = {
+                  type = 'description',
+                  order = 1,
+                  name = "|cff798BDDPlayer Name Format Settings|r:",
+                  fontSize = 'large',
+                },
+
+                enableNameColor = {
+                  order = 2,
+                  type = 'toggle',
+                  name = "Color Player Name",
+                  desc = "If the player's class is known (e.g. is a raid member), it will be colored.",
+                },
+
+                removeRealmName = {
+                  order = 3,
+                  type = 'toggle',
+                  name = "Remove Realm Name",
+                  desc = "If the player has a realm name attatched to her name, it will be removed.",
+                },
+
+                enableCustomNameColor = {
+                  order = 4,
+                  type = 'toggle',
+                  name = "Custom",
+                  desc = "Preempt an automatic color with a custom one.",
+                  width = 'half',
+                },
+
+                customNameColor = {
+                  order = 5,
+                  type = 'color',
+                  name = "Color",
+                  get = getNameFormatColor,
+                  set = setNameFormatColor,
+                  width = 'half',
+                },
+
+                playerSpellNames = {
+                  type = 'description',
+                  order = 10,
+                  name = "\n|cff798BDDSpell Name Format Settings|r:",
+                  fontSize = 'large',
+                },
+
+                enableSpellColor = {
+                  order = 11,
+                  type = 'toggle',
+                  name = "Color Spell Name",
+                  desc = "The spell name will be colored according to it's spell school.",
+                },
+
+                playerNames_Spacer1 = {
+                  type = 'description',
+                  order = 12,
+                  name = "",
+                  width = 'normal'
+                },
+
+                enableCustomSpellColor = {
+                  order = 13,
+                  type = 'toggle',
+                  name = "Custom",
+                  desc = "Preempt an automatic color with a custom one.",
+                  width = 'half'
+                },
+
+                customSpellColor = {
+                  order = 14,
+                  type = 'color',
+                  name = "Color",
+                  width = 'half',
+                  get = getNameFormatColor,
+                  set = setNameFormatColor,
+                  width = 'half'
+                },
+
+                playerNames_Spacer2 = {
+                  type = 'description',
+                  order = 20,
+                  name = "",
+                },
+
+                nameType = {
+                  type = 'select',
+                  order = 30,
+                  name = "Display Player Name",
+                  desc = "",
+                  width = 'double',
+                  style = 'radio',
+                  values = {
+                    [0] = "None",
+                    [1] = "Player Name",
+                    [2] = "Spell Name",
+                    [3] = "Both (Player Name - Spell Name)",
+                    [4] = "Both (Spell Name - Player Name)"
+                  },
+                },
+
+              }
+            },
+
+            NPC = {
+              order = 20,
+              type = 'group',
+              name = "Events to a NPC",
+              args = {
+                npcNames = {
+                  type = 'description',
+                  order = 1,
+                  name = "|cff798BDDNPC Name Format Settings|r:",
+                  fontSize = 'large',
+                },
+
+                customNameColor = {
+                  order = 2,
+                  type = 'color',
+                  name = "NPC Name's Color",
+                  get = getNameFormatColor,
+                  set = setNameFormatColor,
+                },
+
+                npcSpellNames = {
+                  type = 'description',
+                  order = 10,
+                  name = "\n|cff798BDDSpell Name Format Settings|r:",
+                  fontSize = 'large',
+                },
+
+                enableSpellColor = {
+                  order = 11,
+                  type = 'toggle',
+                  name = "Color Spell Name",
+                  desc = "The spell name will be colored according to it's spell school.",
+                },
+
+                npcNames_Spacer1 = {
+                  type = 'description',
+                  order = 12,
+                  name = "",
+                  width = 'normal'
+                },
+
+                enableCustomSpellColor = {
+                  order = 13,
+                  type = 'toggle',
+                  name = "Custom",
+                  desc = "Preempt an automatic color with a custom one.",
+                  width = 'half'
+                },
+
+                customSpellColor = {
+                  order = 14,
+                  type = 'color',
+                  name = "Color",
+                  width = 'half',
+                  get = getNameFormatColor,
+                  set = setNameFormatColor,
+                },
+
+                npcNames_Spacer2 = {
+                  type = 'description',
+                  order = 20,
+                  name = "",
+                },
+
+                nameType = {
+                  type = 'select',
+                  order = 21,
+                  name = "Display NPC Name",
+                  desc = "",
+                  width = 'double',
+                  style = 'radio',
+                  values = {
+                    [0] = "None",
+                    [1] = "NPC's Name",
+                    [2] = "Spell Name",
+                    [3] = "Both (NPC Name - Spell Name)",
+                    [4] = "Both (Spell Name - NPC Name)"
+                  },
+                },
+
+              },
+            },
+
+          }
+        },
+
+        specialTweaks = {
+          order = 60,
+          type = 'group',
+          name = "Misc",
           args = {
             specialTweaks = {
               type = 'description',
               order = 0,
-              name = "|cff798BDDSpecial Tweaks|r:",
+              name = "|cff798BDDMiscellaneous Settings|r:",
               fontSize = 'large',
             },
             enableOutDmg = {
@@ -2636,12 +3056,20 @@ addon.options.args["Frames"] = {
               order = 3,
               type = 'toggle',
               name = "Show Pet Damage",
-              desc = "Show your pet's damage.",
+              desc = "Show your pet's damage. Beast Mastery hunters should also look at vehicle damage.",
+              get = get2,
+              set = set2,
+            },
+            enableVehicleDmg = {
+              order = 4,
+              type = 'toggle',
+              name = "Show Vehicle Damage",
+              desc = "Show damage that your vehicle does. This can be anything from a vehicle you are controlling to Hati, the beast mastery pet.",
               get = get2,
               set = set2,
             },
             enableAutoAttack = {
-              order = 4,
+              order = 5,
               type = 'toggle',
               name = "Show Auto Attack",
               desc = "Show your auto attack damage.",
@@ -2649,7 +3077,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             enableDotDmg = {
-              order = 5,
+              order = 6,
               type = 'toggle',
               name = "Show DoTs",
               desc = "Show your Damage-Over-Time (DOT) damage. (|cffFF0000Requires:|r Outgoing Damage)",
@@ -2657,7 +3085,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             enableHots = {
-              order = 6,
+              order = 7,
               type = 'toggle',
               name = "Show HoTs",
               desc = "Show your Heal-Over-Time (HOT) healing. (|cffFF0000Requires:|r Outgoing Healing)",
@@ -2665,7 +3093,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             enableImmunes = {
-              order = 7,
+              order = 9,
               type = 'toggle',
               name = "Show Immunes",
               desc = "Display 'Immune' when your target cannot take damage.",
@@ -2673,7 +3101,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             enableMisses = {
-              order = 8,
+              order = 10,
               type = 'toggle',
               name = "Show Miss Types",
               desc = "Display 'Miss', 'Dodge', 'Parry' when you miss your target.",
@@ -2697,7 +3125,7 @@ addon.options.args["Frames"] = {
         frameSettings = {
           order = 10,
           type = 'group',
-          name = "Frame Settings",
+          name = "Frame",
           args = {
             frameSettings = {
               type = 'description',
@@ -2848,7 +3276,7 @@ addon.options.args["Frames"] = {
         fonts = {
           order = 20,
           type = 'group',
-          name = "Font Settings",
+          name = "Font",
           args = {
             fontSettings = {
               type = 'description',
@@ -2908,38 +3336,92 @@ addon.options.args["Frames"] = {
               set = set2_update,
             },
 
-            iconSizeSettings = {
+            fontShadowSettings = {
               type = 'description',
               order = 10,
-              name = "\n|cff798BDDIcon Size Settings|r:",
+              name = "\n|cff798BDDFont Shadow Settings|r:",
+              fontSize = 'large',
+            },
+
+            enableFontShadow = {
+              order = 11,
+              type = 'toggle',
+              name = "Enable Font Shadow",
+              desc = "Shows a shadow behind the combat text fonts.",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+
+            fontShadowColor = {
+              order = 12,
+              type = 'color',
+              hasAlpha = true,
+              name = "Font Shadow Color",
+              get = getColor2,
+              set = setColor2_alpha,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetX = {
+              order = 13,
+              name = "Horizonal Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetY = {
+              order = 14,
+              name = "Vertical Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+          },
+        },
+
+        icons = {
+          order = 30,
+          type = 'group',
+          name = "Icons",
+          args = {
+            iconSizeSettings = {
+              type = 'description',
+              order = 1,
+              name = "|cff798BDDIcon Settings|r:",
               fontSize = 'large',
             },
             iconsEnabled = {
-              order = 11,
+              order = 2,
               type = 'toggle',
-              name = "Icons",
+              name = "Enable Icons",
               desc = "Show icons next to your damage.",
               get = get2,
               set = set2,
               disabled = isFrameItemDisabled,
             },
             iconsSize = {
-              order = 12,
-              name = "Icon Size",
-              desc = "Set the icon size.",
+              order = 3,
+              name = "Size",
+              desc = "Set the icon size. (Recommended value: 16)",
               type = 'range',
               min = 6, max = 22, step = 1,
               get = get2,
               set = set2,
               disabled = isFrameIconDisabled,
             },
-          },
+          }
         },
 
         fontColors = {
-          order = 30,
+          order = 40,
           type = 'group',
-          name = "Custom Colors",
+          name = "Colors",
           args = {
             customColors = {
               type = 'description',
@@ -2950,15 +3432,249 @@ addon.options.args["Frames"] = {
           },
         },
 
-        specialTweaks = {
-          order = 40,
+        names = {
+          order = 50,
           type = 'group',
-          name = "Special Tweaks",
+          name = "Names",
+          childGroups = 'select',
+          get = getNameFormat,
+          set = setNameFormat,
+          args = {
+            namesDescription = {
+              type = 'description',
+              order = 1,
+              name = "The |cffFFFF00Names Settings|r allows you to further format and customize your combat text frames. By selecting values from below, you will be able to see the source, destination or spell names of certain events.\n\n|cffFF8040NOTE:|r The |cffFFFF00Spam Merger|r will preempt formatting.",
+              fontSize = 'small'
+            },
+
+            nameAppearance = {
+              type = 'description',
+              order = 2,
+              name = "|cff798BDDName Appearance|r:\n\n",
+              fontSize = 'large',
+              width = 'normal'
+            },
+
+            namePrefix = {
+              order = 3,
+              type = 'input',
+              name = "Prefix",
+              desc = "Prefix this value to the beginning when displaying the name.",
+              get = getNameFormatText,
+              set = setNameFormatText,
+            },
+
+            namePostfix = {
+              order = 4,
+              type = 'input',
+              name = "Postfix",
+              desc = "Postfix this value to the end when displaying the name.",
+              get = getNameFormatText,
+              set = setNameFormatText,
+            },
+
+            PLAYER = {
+              order = 10,
+              type = 'group',
+              name = "Events to a Player",
+              args = {
+                playerNames = {
+                  type = 'description',
+                  order = 1,
+                  name = "|cff798BDDPlayer Name Format Settings|r:",
+                  fontSize = 'large',
+                },
+
+                enableNameColor = {
+                  order = 2,
+                  type = 'toggle',
+                  name = "Color Player Name",
+                  desc = "If the player's class is known (e.g. is a raid member), it will be colored.",
+                },
+
+                removeRealmName = {
+                  order = 3,
+                  type = 'toggle',
+                  name = "Remove Realm Name",
+                  desc = "If the player has a realm name attatched to her name, it will be removed.",
+                },
+
+                enableCustomNameColor = {
+                  order = 4,
+                  type = 'toggle',
+                  name = "Custom",
+                  desc = "Preempt an automatic color with a custom one.",
+                  width = 'half',
+                },
+
+                customNameColor = {
+                  order = 5,
+                  type = 'color',
+                  name = "Color",
+                  get = getNameFormatColor,
+                  set = setNameFormatColor,
+                  width = 'half',
+                },
+
+                playerSpellNames = {
+                  type = 'description',
+                  order = 10,
+                  name = "\n|cff798BDDSpell Name Format Settings|r:",
+                  fontSize = 'large',
+                },
+
+                enableSpellColor = {
+                  order = 11,
+                  type = 'toggle',
+                  name = "Color Spell Name",
+                  desc = "The spell name will be colored according to it's spell school.",
+                },
+
+                playerNames_Spacer1 = {
+                  type = 'description',
+                  order = 12,
+                  name = "",
+                  width = 'normal'
+                },
+
+                enableCustomSpellColor = {
+                  order = 13,
+                  type = 'toggle',
+                  name = "Custom",
+                  desc = "Preempt an automatic color with a custom one.",
+                  width = 'half'
+                },
+
+                customSpellColor = {
+                  order = 14,
+                  type = 'color',
+                  name = "Color",
+                  width = 'half',
+                  get = getNameFormatColor,
+                  set = setNameFormatColor,
+                  width = 'half'
+                },
+
+                playerNames_Spacer2 = {
+                  type = 'description',
+                  order = 20,
+                  name = "",
+                },
+
+                nameType = {
+                  type = 'select',
+                  order = 30,
+                  name = "Display Player Name",
+                  desc = "",
+                  width = 'double',
+                  style = 'radio',
+                  values = {
+                    [0] = "None",
+                    [1] = "Player Name",
+                    [2] = "Spell Name",
+                    [3] = "Both (Player Name - Spell Name)",
+                    [4] = "Both (Spell Name - Player Name)"
+                  },
+                },
+
+              }
+            },
+
+            NPC = {
+              order = 20,
+              type = 'group',
+              name = "Events to a NPC",
+              args = {
+                npcNames = {
+                  type = 'description',
+                  order = 1,
+                  name = "|cff798BDDNPC Name Format Settings|r:",
+                  fontSize = 'large',
+                },
+
+                customNameColor = {
+                  order = 2,
+                  type = 'color',
+                  name = "NPC Name's Color",
+                  get = getNameFormatColor,
+                  set = setNameFormatColor,
+                },
+
+                npcSpellNames = {
+                  type = 'description',
+                  order = 10,
+                  name = "\n|cff798BDDSpell Name Format Settings|r:",
+                  fontSize = 'large',
+                },
+
+                enableSpellColor = {
+                  order = 11,
+                  type = 'toggle',
+                  name = "Color Spell Name",
+                  desc = "The spell name will be colored according to it's spell school.",
+                },
+
+                npcNames_Spacer1 = {
+                  type = 'description',
+                  order = 12,
+                  name = "",
+                  width = 'normal'
+                },
+
+                enableCustomSpellColor = {
+                  order = 13,
+                  type = 'toggle',
+                  name = "Custom",
+                  desc = "Preempt an automatic color with a custom one.",
+                  width = 'half'
+                },
+
+                customSpellColor = {
+                  order = 14,
+                  type = 'color',
+                  name = "Color",
+                  width = 'half',
+                  get = getNameFormatColor,
+                  set = setNameFormatColor,
+                },
+
+                npcNames_Spacer2 = {
+                  type = 'description',
+                  order = 20,
+                  name = "",
+                },
+
+                nameType = {
+                  type = 'select',
+                  order = 21,
+                  name = "Display NPC Name",
+                  desc = "",
+                  width = 'double',
+                  style = 'radio',
+                  values = {
+                    [0] = "None",
+                    [1] = "NPC's Name",
+                    [2] = "Spell Name",
+                    [3] = "Both (NPC Name - Spell Name)",
+                    [4] = "Both (Spell Name - NPC Name)"
+                  },
+                },
+
+              },
+            },
+
+          }
+        },
+
+        specialTweaks = {
+          order = 60,
+          type = 'group',
+          name = "Misc",
           args = {
             specialTweaks = {
               type = 'description',
               order = 0,
-              name = "|cff798BDDSpecial Tweaks|r:",
+              name = "|cff798BDDMiscellaneous Settings|r:",
               fontSize = 'large',
             },
             showSwing = {
@@ -2974,6 +3690,14 @@ addon.options.args["Frames"] = {
               type = 'toggle',
               name = "Show Auto Attacks (Pre)Postfix",
               desc = "Make Auto Attack and Swing criticals more visible by adding the prefix and postfix.",
+              get = get2,
+              set = set2,
+            },
+            petCrits = {
+              order = 3,
+              type = 'toggle',
+              name = "Allow Pet Crits",
+              desc = "Enable this to see when your pet's abilities critical strike, otherwise disable for less combat text spam.",
               get = get2,
               set = set2,
             },
@@ -3018,7 +3742,7 @@ addon.options.args["Frames"] = {
         frameSettings = {
           order = 10,
           type = 'group',
-          name = "Frame Settings",
+          name = "Frame",
           args = {
             frameSettings = {
               type = 'description',
@@ -3170,7 +3894,7 @@ addon.options.args["Frames"] = {
         fonts = {
           order = 20,
           type = 'group',
-          name = "Font Settings",
+          name = "Font",
           args = {
             fontSettings = {
               type = 'description',
@@ -3229,13 +3953,109 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
             },
+
+            fontShadowSettings = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDFont Shadow Settings|r:",
+              fontSize = 'large',
+            },
+
+            enableFontShadow = {
+              order = 11,
+              type = 'toggle',
+              name = "Enable Font Shadow",
+              desc = "Shows a shadow behind the combat text fonts.",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+
+            fontShadowColor = {
+              order = 12,
+              type = 'color',
+              hasAlpha = true,
+              name = "Font Shadow Color",
+              get = getColor2,
+              set = setColor2_alpha,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetX = {
+              order = 13,
+              name = "Horizonal Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetY = {
+              order = 14,
+              name = "Vertical Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
           },
         },
 
-        fontColors = {
+        icons = {
           order = 30,
           type = 'group',
-          name = "Custom Colors",
+          name = "Icons",
+          args = {
+            iconSizeSettings = {
+              type = 'description',
+              order = 1,
+              name = "|cff798BDDIcon Settings|r:",
+              fontSize = 'large',
+            },
+            iconsEnabled = {
+              order = 2,
+              type = 'toggle',
+              name = "Enable Icons",
+              desc = "Show icons next to your damage.",
+              get = get2,
+              set = set2,
+              disabled = isFrameItemDisabled,
+            },
+            iconsSize = {
+              order = 3,
+              name = "Size",
+              desc = "Set the icon size. (Recommended value: 16)",
+              type = 'range',
+              min = 6, max = 22, step = 1,
+              get = get2,
+              set = set2,
+              disabled = isFrameIconDisabled,
+            },
+
+            iconAdditionalSettings = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDAdditional Settings|r:",
+              fontSize = 'large',
+            },
+            iconsEnabledAutoAttack = {
+              order = 11,
+              type = 'toggle',
+              name = "Auto Attack",
+              desc = "Show icons from Auto Attacks.",
+              get = get2,
+              set = set2,
+              disabled = isFrameItemDisabled,
+            },
+          }
+        },
+
+        fontColors = {
+          order = 40,
+          type = 'group',
+          name = "Colors",
           args = {
             customColors = {
               type = 'description',
@@ -3246,15 +4066,361 @@ addon.options.args["Frames"] = {
           },
         },
 
+        names = {
+          order = 50,
+          type = 'group',
+          name = "Names",
+          childGroups = 'select',
+          get = getNameFormat,
+          set = setNameFormat,
+          args = {
+            namesDescription = {
+              type = 'description',
+              order = 1,
+              name = "The |cffFFFF00Names Settings|r allows you to further format and customize your combat text frames. By selecting values from below, you will be able to see the source, destination or spell names of certain events.\n\n|cffFF8040NOTE:|r The |cffFFFF00Spam Merger|r will preempt formatting.",
+              fontSize = 'small'
+            },
+
+            nameAppearance = {
+              type = 'description',
+              order = 2,
+              name = "|cff798BDDName Appearance|r:\n\n",
+              fontSize = 'large',
+              width = 'normal'
+            },
+
+            namePrefix = {
+              order = 3,
+              type = 'input',
+              name = "Prefix",
+              desc = "Prefix this value to the beginning when displaying the name.",
+              get = getNameFormatText,
+              set = setNameFormatText,
+            },
+
+            namePostfix = {
+              order = 4,
+              type = 'input',
+              name = "Postfix",
+              desc = "Postfix this value to the end when displaying the name.",
+              get = getNameFormatText,
+              set = setNameFormatText,
+            },
+
+            PLAYER = {
+              order = 10,
+              type = 'group',
+              name = "Events from a Player",
+              args = {
+                playerNames = {
+                  type = 'description',
+                  order = 1,
+                  name = "|cff798BDDPlayer Name Format Settings|r:",
+                  fontSize = 'large',
+                },
+
+                enableNameColor = {
+                  order = 2,
+                  type = 'toggle',
+                  name = "Color Player Name",
+                  desc = "If the player's class is known (e.g. is a raid member), it will be colored.",
+                },
+
+                removeRealmName = {
+                  order = 3,
+                  type = 'toggle',
+                  name = "Remove Realm Name",
+                  desc = "If the player has a realm name attatched to her name, it will be removed.",
+                },
+
+                enableCustomNameColor = {
+                  order = 4,
+                  type = 'toggle',
+                  name = "Custom",
+                  desc = "Preempt an automatic color with a custom one.",
+                  width = 'half',
+                },
+
+                customNameColor = {
+                  order = 5,
+                  type = 'color',
+                  name = "Color",
+                  get = getNameFormatColor,
+                  set = setNameFormatColor,
+                  width = 'half',
+                },
+
+                playerSpellNames = {
+                  type = 'description',
+                  order = 10,
+                  name = "\n|cff798BDDSpell Name Format Settings|r:",
+                  fontSize = 'large',
+                },
+
+                enableSpellColor = {
+                  order = 11,
+                  type = 'toggle',
+                  name = "Color Spell Name",
+                  desc = "The spell name will be colored according to it's spell school.",
+                },
+
+                playerNames_Spacer1 = {
+                  type = 'description',
+                  order = 12,
+                  name = "",
+                  width = 'normal'
+                },
+
+                enableCustomSpellColor = {
+                  order = 13,
+                  type = 'toggle',
+                  name = "Custom",
+                  desc = "Preempt an automatic color with a custom one.",
+                  width = 'half'
+                },
+
+                customSpellColor = {
+                  order = 14,
+                  type = 'color',
+                  name = "Color",
+                  width = 'half',
+                  get = getNameFormatColor,
+                  set = setNameFormatColor,
+                  width = 'half'
+                },
+
+                playerNames_Spacer2 = {
+                  type = 'description',
+                  order = 20,
+                  name = "",
+                },
+
+                nameType = {
+                  type = 'select',
+                  order = 30,
+                  name = "Display Player Name",
+                  desc = "",
+                  width = 'double',
+                  style = 'radio',
+                  values = {
+                    [0] = "None",
+                    [1] = "Player Name",
+                    [2] = "Spell Name",
+                    [3] = "Both (Player Name - Spell Name)",
+                    [4] = "Both (Spell Name - Player Name)"
+                  },
+                },
+
+              }
+            },
+
+            NPC = {
+              order = 20,
+              type = 'group',
+              name = "Events from a NPC",
+              args = {
+                npcNames = {
+                  type = 'description',
+                  order = 1,
+                  name = "|cff798BDDNPC Name Format Settings|r:",
+                  fontSize = 'large',
+                },
+
+                customNameColor = {
+                  order = 2,
+                  type = 'color',
+                  name = "NPC Name's Color",
+                  get = getNameFormatColor,
+                  set = setNameFormatColor,
+                },
+
+                npcSpellNames = {
+                  type = 'description',
+                  order = 10,
+                  name = "\n|cff798BDDSpell Name Format Settings|r:",
+                  fontSize = 'large',
+                },
+
+                enableSpellColor = {
+                  order = 11,
+                  type = 'toggle',
+                  name = "Color Spell Name",
+                  desc = "The spell name will be colored according to it's spell school.",
+                },
+
+                npcNames_Spacer1 = {
+                  type = 'description',
+                  order = 12,
+                  name = "",
+                  width = 'normal'
+                },
+
+                enableCustomSpellColor = {
+                  order = 13,
+                  type = 'toggle',
+                  name = "Custom",
+                  desc = "Preempt an automatic color with a custom one.",
+                  width = 'half'
+                },
+
+                customSpellColor = {
+                  order = 14,
+                  type = 'color',
+                  name = "Color",
+                  width = 'half',
+                  get = getNameFormatColor,
+                  set = setNameFormatColor,
+                },
+
+                npcNames_Spacer2 = {
+                  type = 'description',
+                  order = 20,
+                  name = "",
+                },
+
+                nameType = {
+                  type = 'select',
+                  order = 21,
+                  name = "Display NPC Name",
+                  desc = "",
+                  width = 'double',
+                  style = 'radio',
+                  values = {
+                    [0] = "None",
+                    [1] = "NPC's Name",
+                    [2] = "Spell Name",
+                    [3] = "Both (NPC Name - Spell Name)",
+                    [4] = "Both (Spell Name - NPC Name)"
+                  },
+                },
+
+              },
+            },
+
+            ENVIRONMENT = {
+              order = 30,
+              type = 'group',
+              name = "Events from the Environment",
+              args = {
+                environmentNames = {
+                  type = 'description',
+                  order = 1,
+                  name = "|cff798BDD\"Environment\" Format Settings|r:",
+                  fontSize = 'large',
+                },
+
+                enableNameColor = {
+                  order = 2,
+                  type = 'toggle',
+                  name = "Color \"Environment\"",
+                  desc = "The name will be colored according to it's environmental type.",
+                },
+
+                environmentNames_Spacer1 = {
+                  type = 'description',
+                  order = 3,
+                  name = "",
+                  width = 'normal',
+                },
+
+                enableCustomNameColor = {
+                  order = 4,
+                  type = 'toggle',
+                  name = "Custom",
+                  width = 'half',
+                },
+
+                customNameColor = {
+                  order = 5,
+                  type = 'color',
+                  name = "Color",
+                  width = 'half',
+                  get = getNameFormatColor,
+                  set = setNameFormatColor,
+                },
+
+                environmentSpellNames = {
+                  type = 'description',
+                  order = 10,
+                  name = "\n|cff798BDDSpell Name Format Settings|r:",
+                  fontSize = 'large',
+                },
+
+                enableSpellColor = {
+                  order = 11,
+                  type = 'toggle',
+                  name = "Color Type",
+                  desc = "The type will be colored according to it's environmental type.",
+                },
+
+                environmentNames_Spacer2 = {
+                  type = 'description',
+                  order = 12,
+                  name = "",
+                  width = 'normal',
+                },
+
+                enableCustomSpellColor = {
+                  order = 13,
+                  type = 'toggle',
+                  name = "Custom",
+                  width = 'half',
+                },
+
+                customSpellColor = {
+                  order = 14,
+                  type = 'color',
+                  name = "Color",
+                  width = 'half',
+                  get = getNameFormatColor,
+                  set = setNameFormatColor,
+                },
+
+                environmentNames_Spacer3 = {
+                  type = 'description',
+                  order = 20,
+                  name = "",
+                },
+
+                nameType = {
+                  type = 'select',
+                  order = 21,
+                  name = "Display Environment Name",
+                  desc = "Environment Damage Types:"..
+                    "\n|cffFFFF00"..ACTION_ENVIRONMENTAL_DAMAGE_DROWNING.."|r,"..
+                    " |cffFFFF00"..ACTION_ENVIRONMENTAL_DAMAGE_FALLING.."|r,"..
+                    " |cffFFFF00"..ACTION_ENVIRONMENTAL_DAMAGE_FATIGUE.."|r,"..
+                    "\n|cffFF8000"..ACTION_ENVIRONMENTAL_DAMAGE_FIRE.."|r,"..
+                    " |cffFF8000"..ACTION_ENVIRONMENTAL_DAMAGE_LAVA.."|r,"..
+                    " |cff4DFF4D"..ACTION_ENVIRONMENTAL_DAMAGE_SLIME.."|r",
+                  width = 'double',
+                  style = 'radio',
+                  values = {
+                    [0] = "None",
+                    [1] = "\"Environment\"",
+                    [2] = "Environmental Damage Type",
+                    [3] = "Both (\"Environment\" - Type)",
+                    [4] = "Both (Type - \"Environment\")"
+                  },
+                },
+              },
+            },
+
+
+
+
+          }
+        },
+
         specialTweaks = {
-          order = 40,
-          name = "Special Tweaks",
+          order = 60,
+          name = "Misc",
           type = 'group',
           args = {
             specialTweaks = {
               type = 'description',
               order = 0,
-              name = "|cff798BDDSpecial Tweaks|r:",
+              name = "|cff798BDDMiscellaneous Settings|r:",
               fontSize = 'large',
             },
             showDodgeParryMiss = {
@@ -3273,6 +4439,31 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
+
+            criticalAppearance = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDCritical Appearance|r:",
+              fontSize = 'large',
+            },
+            critPrefix = {
+              order = 11,
+              type = 'input',
+              name = "Prefix",
+              desc = "Prefix this value to the beginning when displaying a critical amount.",
+              get = getTextIn2,
+              set = setTextIn2,
+              disabled = isFrameItemDisabled,
+            },
+            critPostfix = {
+              order = 12,
+              type = 'input',
+              name = "Postfix",
+              desc = "Postfix this value to the end when displaying a critical amount.",
+              get = getTextIn2,
+              set = setTextIn2,
+              disabled = isFrameItemDisabled,
+            },
           },
         },
       },
@@ -3288,7 +4479,7 @@ addon.options.args["Frames"] = {
         frameSettings = {
           order = 10,
           type = 'group',
-          name = "Frame Settings",
+          name = "Frame",
           args = {
             frameSettings = {
               type = 'description',
@@ -3440,7 +4631,7 @@ addon.options.args["Frames"] = {
         fonts = {
           order = 20,
           type = 'group',
-          name = "Font Settings",
+          name = "Font",
           args = {
             fontSettings = {
               type = 'description',
@@ -3499,13 +4690,93 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
             },
+
+            fontShadowSettings = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDFont Shadow Settings|r:",
+              fontSize = 'large',
+            },
+
+            enableFontShadow = {
+              order = 11,
+              type = 'toggle',
+              name = "Enable Font Shadow",
+              desc = "Shows a shadow behind the combat text fonts.",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+
+            fontShadowColor = {
+              order = 12,
+              type = 'color',
+              hasAlpha = true,
+              name = "Font Shadow Color",
+              get = getColor2,
+              set = setColor2_alpha,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetX = {
+              order = 13,
+              name = "Horizonal Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetY = {
+              order = 14,
+              name = "Vertical Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
           },
         },
 
-        fontColors = {
+        icons = {
           order = 30,
           type = 'group',
-          name = "Custom Colors",
+          name = "Icons",
+          args = {
+            iconSizeSettings = {
+              type = 'description',
+              order = 1,
+              name = "|cff798BDDIcon Settings|r:",
+              fontSize = 'large',
+            },
+            iconsEnabled = {
+              order = 2,
+              type = 'toggle',
+              name = "Enable Icons",
+              desc = "Show icons next to your damage.",
+              get = get2,
+              set = set2,
+              disabled = isFrameItemDisabled,
+            },
+            iconsSize = {
+              order = 3,
+              name = "Size",
+              desc = "Set the icon size. (Recommended value: 16)",
+              type = 'range',
+              min = 6, max = 22, step = 1,
+              get = get2,
+              set = set2,
+              disabled = isFrameIconDisabled,
+            },
+          }
+        },
+
+        fontColors = {
+          order = 40,
+          type = 'group',
+          name = "Colors",
           args = {
             customColors = {
               type = 'description',
@@ -3516,40 +4787,250 @@ addon.options.args["Frames"] = {
           },
         },
 
+        names = {
+          order = 50,
+          type = 'group',
+          name = "Names",
+          childGroups = 'select',
+          get = getNameFormat,
+          set = setNameFormat,
+          args = {
+            namesDescription = {
+              type = 'description',
+              order = 1,
+              name = "The |cffFFFF00Names Settings|r allows you to further format and customize your combat text frames. By selecting values from below, you will be able to see the source, destination or spell names of certain events.\n\n|cffFF8040NOTE:|r The |cffFFFF00Spam Merger|r will preempt formatting.",
+              fontSize = 'small'
+            },
+
+            nameAppearance = {
+              type = 'description',
+              order = 2,
+              name = "|cff798BDDName Appearance|r:\n\n",
+              fontSize = 'large',
+              width = 'normal'
+            },
+
+            namePrefix = {
+              order = 3,
+              type = 'input',
+              name = "Prefix",
+              desc = "Prefix this value to the beginning when displaying the name.",
+              get = getNameFormatText,
+              set = setNameFormatText,
+            },
+
+            namePostfix = {
+              order = 4,
+              type = 'input',
+              name = "Postfix",
+              desc = "Postfix this value to the end when displaying the name.",
+              get = getNameFormatText,
+              set = setNameFormatText,
+            },
+
+            PLAYER = {
+              order = 10,
+              type = 'group',
+              name = "Events from a Player",
+              args = {
+                playerNames = {
+                  type = 'description',
+                  order = 1,
+                  name = "|cff798BDDPlayer Name Format Settings|r:",
+                  fontSize = 'large',
+                },
+
+                enableNameColor = {
+                  order = 2,
+                  type = 'toggle',
+                  name = "Color Player Name",
+                  desc = "If the player's class is known (e.g. is a raid member), it will be colored.",
+                },
+
+                removeRealmName = {
+                  order = 3,
+                  type = 'toggle',
+                  name = "Remove Realm Name",
+                  desc = "If the player has a realm name attatched to her name, it will be removed.",
+                },
+
+                enableCustomNameColor = {
+                  order = 4,
+                  type = 'toggle',
+                  name = "Custom",
+                  desc = "Preempt an automatic color with a custom one.",
+                  width = 'half',
+                },
+
+                customNameColor = {
+                  order = 5,
+                  type = 'color',
+                  name = "Color",
+                  get = getNameFormatColor,
+                  set = setNameFormatColor,
+                  width = 'half',
+                },
+
+                playerSpellNames = {
+                  type = 'description',
+                  order = 10,
+                  name = "\n|cff798BDDSpell Name Format Settings|r:",
+                  fontSize = 'large',
+                },
+
+                enableSpellColor = {
+                  order = 11,
+                  type = 'toggle',
+                  name = "Color Spell Name",
+                  desc = "The spell name will be colored according to it's spell school.",
+                },
+
+                playerNames_Spacer1 = {
+                  type = 'description',
+                  order = 12,
+                  name = "",
+                  width = 'normal'
+                },
+
+                enableCustomSpellColor = {
+                  order = 13,
+                  type = 'toggle',
+                  name = "Custom",
+                  desc = "Preempt an automatic color with a custom one.",
+                  width = 'half'
+                },
+
+                customSpellColor = {
+                  order = 14,
+                  type = 'color',
+                  name = "Color",
+                  width = 'half',
+                  get = getNameFormatColor,
+                  set = setNameFormatColor,
+                  width = 'half'
+                },
+
+                playerNames_Spacer2 = {
+                  type = 'description',
+                  order = 20,
+                  name = "",
+                },
+
+                nameType = {
+                  type = 'select',
+                  order = 30,
+                  name = "Display Player Name",
+                  desc = "",
+                  width = 'double',
+                  style = 'radio',
+                  values = {
+                    [0] = "None",
+                    [1] = "Player Name",
+                    [2] = "Spell Name",
+                    [3] = "Both (Player Name - Spell Name)",
+                    [4] = "Both (Spell Name - Player Name)"
+                  },
+                },
+
+              }
+            },
+
+            NPC = {
+              order = 20,
+              type = 'group',
+              name = "Events from a NPC",
+              args = {
+                npcNames = {
+                  type = 'description',
+                  order = 1,
+                  name = "|cff798BDDNPC Name Format Settings|r:",
+                  fontSize = 'large',
+                },
+
+                customNameColor = {
+                  order = 2,
+                  type = 'color',
+                  name = "NPC Name's Color",
+                  get = getNameFormatColor,
+                  set = setNameFormatColor,
+                },
+
+                npcSpellNames = {
+                  type = 'description',
+                  order = 10,
+                  name = "\n|cff798BDDSpell Name Format Settings|r:",
+                  fontSize = 'large',
+                },
+
+                enableSpellColor = {
+                  order = 11,
+                  type = 'toggle',
+                  name = "Color Spell Name",
+                  desc = "The spell name will be colored according to it's spell school.",
+                },
+
+                npcNames_Spacer1 = {
+                  type = 'description',
+                  order = 12,
+                  name = "",
+                  width = 'normal'
+                },
+
+                enableCustomSpellColor = {
+                  order = 13,
+                  type = 'toggle',
+                  name = "Custom",
+                  desc = "Preempt an automatic color with a custom one.",
+                  width = 'half'
+                },
+
+                customSpellColor = {
+                  order = 14,
+                  type = 'color',
+                  name = "Color",
+                  width = 'half',
+                  get = getNameFormatColor,
+                  set = setNameFormatColor,
+                },
+
+                npcNames_Spacer2 = {
+                  type = 'description',
+                  order = 20,
+                  name = "",
+                },
+
+                nameType = {
+                  type = 'select',
+                  order = 21,
+                  name = "Display NPC Name",
+                  desc = "",
+                  width = 'double',
+                  style = 'radio',
+                  values = {
+                    [0] = "None",
+                    [1] = "NPC's Name",
+                    [2] = "Spell Name",
+                    [3] = "Both (NPC Name - Spell Name)",
+                    [4] = "Both (Spell Name - NPC Name)"
+                  },
+                },
+
+              },
+            },
+
+          }
+        },
+
         specialTweaks = {
-          order = 40,
-          name = "Special Tweaks",
+          order = 60,
+          name = "Misc",
           type = 'group',
           args = {
             specialTweaks = {
               type = 'description',
               order = 0,
-              name = "|cff798BDDSpecial Tweaks|r:",
+              name = "|cff798BDDMiscellaneous Settings|r:",
               fontSize = 'large',
-            },
-            showFriendlyHealers = {
-              order = 1,
-              type = 'toggle',
-              name = "Show Names",
-              desc = "Shows the healer names next to incoming heals.\n|cffFF0000Requires:|r CVar Engine in order to change.",
-              get = get2,
-              set = set2,
-            },
-            enableClassNames = {
-              order = 2,
-              type = 'toggle',
-              name = "Class Color Names",
-              desc = "Color healer names by class. \n\n|cffFF0000Requires:|r Healer in |cffAAAAFFParty|r or |cffFF8000Raid|r",
-              get = get2,
-              set = set2,
-            },
-            enableRealmNames = {
-              order = 3,
-              type = 'toggle',
-              name = "Show Realm Names",
-              desc = "Show incoming healer names with their realm name.",
-              get = get2,
-              set = set2,
             },
             enableOverHeal = {
               order = 4,
@@ -3590,15 +5071,16 @@ addon.options.args["Frames"] = {
     },
 
     class = {
-      name = "|cffFFFFFFClass Combo Points|r",
+      name = "|cff808080Class Combo Points (Disabled)|r",
       type = 'group',
       order = 16,
       childGroups = 'tab',
+      disabled = true,
       args = {
         frameSettings = {
           order = 10,
           type = 'group',
-          name = "Frame Settings",
+          name = "Frame",
           args = {
             frameSettings = {
               type = 'description',
@@ -3668,7 +5150,7 @@ addon.options.args["Frames"] = {
         fonts = {
           order = 20,
           type = 'group',
-          name = "Font Settings",
+          name = "Font",
           args = {
             fontSettings = {
               type = 'description',
@@ -3714,13 +5196,60 @@ addon.options.args["Frames"] = {
               set = set2_update,
               disabled = isFrameItemDisabled,
             },
+
+            fontShadowSettings = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDFont Shadow Settings|r:",
+              fontSize = 'large',
+            },
+
+            enableFontShadow = {
+              order = 11,
+              type = 'toggle',
+              name = "Enable Font Shadow",
+              desc = "Shows a shadow behind the combat text fonts.",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+
+            fontShadowColor = {
+              order = 12,
+              type = 'color',
+              hasAlpha = true,
+              name = "Font Shadow Color",
+              get = getColor2,
+              set = setColor2_alpha,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetX = {
+              order = 13,
+              name = "Horizonal Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetY = {
+              order = 14,
+              name = "Vertical Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
           },
         },
 
         fontColors = {
           order = 30,
           type = 'group',
-          name = "Custom Colors",
+          name = "Colors",
           args = {
             customColors = {
               type = 'description',
@@ -3744,7 +5273,7 @@ addon.options.args["Frames"] = {
         frameSettings = {
           order = 10,
           type = 'group',
-          name = "Frame Settings",
+          name = "Frame",
           args = {
             frameSettings = {
               type = 'description',
@@ -3896,7 +5425,7 @@ addon.options.args["Frames"] = {
         fonts = {
           order = 20,
           type = 'group',
-          name = "Font Settings",
+          name = "Font",
           args = {
             fontSettings = {
               type = 'description',
@@ -3955,13 +5484,61 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
             },
+
+            fontShadowSettings = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDFont Shadow Settings|r:",
+              fontSize = 'large',
+            },
+
+            enableFontShadow = {
+              order = 11,
+              type = 'toggle',
+              name = "Enable Font Shadow",
+              desc = "Shows a shadow behind the combat text fonts.",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+
+            fontShadowColor = {
+              order = 12,
+              type = 'color',
+              hasAlpha = true,
+              name = "Font Shadow Color",
+              get = getColor2,
+              set = setColor2_alpha,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetX = {
+              order = 13,
+              name = "Horizonal Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetY = {
+              order = 14,
+              name = "Vertical Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
           },
         },
 
         fontColors = {
           order = 30,
           type = 'group',
-          name = "Custom Colors",
+          name = "Colors",
           args = {
             customColors = {
               type = 'description',
@@ -3974,13 +5551,13 @@ addon.options.args["Frames"] = {
 
         specialTweaks = {
           order = 40,
-          name = "Special Tweaks",
+          name = "Misc",
           type = 'group',
           args = {
             specialTweaks = {
               type = 'description',
               order = 0,
-              name = "|cff798BDDSpecial Tweaks|r:",
+              name = "|cff798BDDMiscellaneous Settings|r:",
               fontSize = 'large',
             },
             showEnergyGains = {
@@ -4022,94 +5599,139 @@ addon.options.args["Frames"] = {
             },
 
             disableResource_MANA = {
-              order = 20,
+              order = 100,
               type = 'toggle',
               name = "Disable |cff798BDD"..MANA,
               get = get2,
               set = set2,
-              width = "full",
+              width = "normal",
             },
+
             disableResource_RAGE = {
-              order = 21,
+              order = 101,
               type = 'toggle',
               name = "Disable |cff798BDD"..RAGE,
               get = get2,
               set = set2,
-              width = "full",
+              width = "normal",
             },
+
             disableResource_FOCUS = {
-              order = 22,
+              order = 102,
               type = 'toggle',
               name = "Disable |cff798BDD"..FOCUS,
               get = get2,
               set = set2,
-              width = "full",
+              width = "normal",
             },
+
             disableResource_ENERGY = {
-              order = 23,
+              order = 103,
               type = 'toggle',
               name = "Disable |cff798BDD"..ENERGY,
               get = get2,
               set = set2,
-              width = "full",
+              width = "normal",
             },
-            disableResource_CHI = {
-              order = 24,
-              type = 'toggle',
-              name = "Disable |cff798BDD"..CHI,
-              get = get2,
-              set = set2,
-              width = "full",
-            },
+
             disableResource_RUNES = {
-              order = 25,
+              order = 104,
               type = 'toggle',
               name = "Disable |cff798BDD"..RUNES,
               get = get2,
               set = set2,
-              width = "full",
+              width = "normal",
             },
+
             disableResource_RUNIC_POWER = {
-              order = 26,
+              order = 105,
               type = 'toggle',
               name = "Disable |cff798BDD"..RUNIC_POWER,
               get = get2,
               set = set2,
-              width = "full",
+              width = "normal",
             },
+
             disableResource_SOUL_SHARDS = {
-              order = 27,
+              order = 106,
               type = 'toggle',
               name = "Disable |cff798BDD"..SOUL_SHARDS,
               get = get2,
               set = set2,
-              width = "full",
+              width = "normal",
             },
-            disableResource_ECLIPSE_negative = {
-              order = 28,
+
+            disableResource_LUNAR_POWER = {
+              order = 107,
               type = 'toggle',
-              name = "Disable |cff798BDD"..ECLIPSE.."|r (Negative)",
+              name = "Disable |cff798BDD"..LUNAR_POWER,
               get = get2,
               set = set2,
-              width = "full",
+              width = "normal",
             },
-            disableResource_ECLIPSE_positive = {
-              order = 28,
-              type = 'toggle',
-              name = "Disable |cff798BDD"..ECLIPSE.."|r (Positive)",
-              get = get2,
-              set = set2,
-              width = "full",
-            },
+
             disableResource_HOLY_POWER = {
-              order = 29,
+              order = 108,
               type = 'toggle',
               name = "Disable |cff798BDD"..HOLY_POWER,
               get = get2,
               set = set2,
-              width = "full",
+              width = "normal",
             },
 
+            disableResource_CHI = {
+              order = 109,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..CHI,
+              get = get2,
+              set = set2,
+              width = "normal",
+            },
+
+            disableResource_INSANITY = {
+              order = 110,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..INSANITY,
+              get = get2,
+              set = set2,
+              width = "normal",
+            },
+
+            disableResource_ARCANE_CHARGES = {
+              order = 111,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..ARCANE_CHARGES,
+              get = get2,
+              set = set2,
+              width = "normal",
+            },
+
+            disableResource_FURY = {
+              order = 112,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..FURY,
+              get = get2,
+              set = set2,
+              width = "normal",
+            },
+
+            disableResource_PAIN = {
+              order = 113,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..PAIN,
+              get = get2,
+              set = set2,
+              width = "normal",
+            },
+
+            disableResource_ALTERNATE_POWER = {
+              order = 114,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..ALTERNATE_RESOURCE_TEXT,
+              get = get2,
+              set = set2,
+              width = "double",
+            },
           },
         },
       },
@@ -4125,7 +5747,7 @@ addon.options.args["Frames"] = {
         frameSettings = {
           order = 10,
           type = 'group',
-          name = "Frame Settings",
+          name = "Frame",
           args = {
             frameSettings = {
               type = 'description',
@@ -4268,7 +5890,7 @@ addon.options.args["Frames"] = {
         fonts = {
           order = 20,
           type = 'group',
-          name = "Font Settings",
+          name = "Font",
           args = {
             fontSettings = {
               type = 'description',
@@ -4328,38 +5950,92 @@ addon.options.args["Frames"] = {
               set = set2_update,
             },
 
-            iconSizeSettings = {
+            fontShadowSettings = {
               type = 'description',
               order = 10,
-              name = "\n|cff798BDDIcon Size Settings|r:",
+              name = "\n|cff798BDDFont Shadow Settings|r:",
+              fontSize = 'large',
+            },
+
+            enableFontShadow = {
+              order = 11,
+              type = 'toggle',
+              name = "Enable Font Shadow",
+              desc = "Shows a shadow behind the combat text fonts.",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+
+            fontShadowColor = {
+              order = 12,
+              type = 'color',
+              hasAlpha = true,
+              name = "Font Shadow Color",
+              get = getColor2,
+              set = setColor2_alpha,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetX = {
+              order = 13,
+              name = "Horizonal Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetY = {
+              order = 14,
+              name = "Vertical Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+          },
+        },
+
+        icons = {
+          order = 30,
+          type = 'group',
+          name = "Icons",
+          args = {
+            iconSizeSettings = {
+              type = 'description',
+              order = 1,
+              name = "|cff798BDDIcon Settings|r:",
               fontSize = 'large',
             },
             iconsEnabled = {
-              order = 11,
+              order = 2,
               type = 'toggle',
-              name = "Icons",
+              name = "Enable Icons",
               desc = "Show icons next to your damage.",
               get = get2,
               set = set2,
               disabled = isFrameItemDisabled,
             },
             iconsSize = {
-              order = 12,
-              name = "Icon Size",
-              desc = "Set the icon size.",
+              order = 3,
+              name = "Size",
+              desc = "Set the icon size. (Recommended value: 16)",
               type = 'range',
               min = 6, max = 22, step = 1,
               get = get2,
               set = set2,
               disabled = isFrameIconDisabled,
             },
-          },
+          }
         },
 
         fontColors = {
-          order = 30,
+          order = 40,
           type = 'group',
-          name = "Custom Colors",
+          name = "Colors",
           args = {
             customColors = {
               type = 'description',
@@ -4383,7 +6059,7 @@ addon.options.args["Frames"] = {
         frameSettings = {
           order = 10,
           type = 'group',
-          name = "Frame Settings",
+          name = "Frame",
           args = {
             frameSettings = {
               type = 'description',
@@ -4527,7 +6203,7 @@ addon.options.args["Frames"] = {
         fonts = {
           order = 20,
           type = 'group',
-          name = "Font Settings",
+          name = "Font",
           args = {
             fontSettings = {
               type = 'description',
@@ -4587,43 +6263,97 @@ addon.options.args["Frames"] = {
               set = set2_update,
             },
 
-            iconSizeSettings = {
+            fontShadowSettings = {
               type = 'description',
               order = 10,
-              name = "\n|cff798BDDIcon Size Settings|r:",
+              name = "\n|cff798BDDFont Shadow Settings|r:",
+              fontSize = 'large',
+            },
+
+            enableFontShadow = {
+              order = 11,
+              type = 'toggle',
+              name = "Enable Font Shadow",
+              desc = "Shows a shadow behind the combat text fonts.",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+
+            fontShadowColor = {
+              order = 12,
+              type = 'color',
+              hasAlpha = true,
+              name = "Font Shadow Color",
+              get = getColor2,
+              set = setColor2_alpha,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetX = {
+              order = 13,
+              name = "Horizonal Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetY = {
+              order = 14,
+              name = "Vertical Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+          },
+        },
+
+        icons = {
+          order = 30,
+          type = 'group',
+          name = "Icons",
+          args = {
+            iconSizeSettings = {
+              type = 'description',
+              order = 1,
+              name = "|cff798BDDIcon Settings|r:",
               fontSize = 'large',
             },
             iconsEnabled = {
-              order = 11,
+              order = 2,
               type = 'toggle',
-              name = "Icons",
+              name = "Enable Icons",
               desc = "Show icons next to your damage.",
               get = get2,
               set = set2,
               disabled = isFrameItemDisabled,
             },
             iconsSize = {
-              order = 12,
-              name = "Icon Size",
-              desc = "Set the icon size.",
+              order = 3,
+              name = "Size",
+              desc = "Set the icon size. (Recommended value: 16)",
               type = 'range',
               min = 6, max = 22, step = 1,
               get = get2,
               set = set2,
               disabled = isFrameIconDisabled,
             },
-          },
+          }
         },
 
         specialTweaks = {
           order = 40,
           type = 'group',
-          name = "Special Tweaks",
+          name = "Misc",
           args = {
             specialTweaks = {
               type = 'description',
               order = 0,
-              name = "|cff798BDDSpecial Tweaks|r:",
+              name = "|cff798BDDMiscellaneous Settings|r:",
               fontSize = 'large',
             },
             showMoney = {
