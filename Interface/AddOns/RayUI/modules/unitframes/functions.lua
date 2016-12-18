@@ -362,7 +362,7 @@ function UF:CustomSmartFilter(unit, icon, name, rank, texture, count, debuffType
         returnValue = false
     end
 
-    if (duration and (duration > 60)) or (duration == 0 or not duration) then
+    if (duration and (duration > 61)) or (duration == 0 or not duration) then
         returnValue = false
     end
 

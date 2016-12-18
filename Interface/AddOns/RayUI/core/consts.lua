@@ -7,7 +7,7 @@ R.myrealm            = GetRealmName()
 R.version            = GetAddOnMetadata(AddOnName, "Version")
 BINDING_HEADER_RAYUI = GetAddOnMetadata(AddOnName, "Title")
 
-RayUF.colors.power["MANA"] = { 0, 0.4, 1 }
+RayUF.colors.power["MANA"] = { 0, 0.5, 1 }
 
 RayUF["colors"].class = {
 	["DEATHKNIGHT"] = { 0.77,	0.12,		0.23 },
