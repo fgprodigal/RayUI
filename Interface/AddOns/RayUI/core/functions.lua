@@ -1003,6 +1003,9 @@ function R:AddNonPetBattleFrames()
 end
 
 function R:GetGradientColor(r, g, b)
+    r = r or 0
+    g = g or 0
+    b = b or 0
     if R.global.general.textureStyle == 1 then
         return r, g, b, r, g, b
     else

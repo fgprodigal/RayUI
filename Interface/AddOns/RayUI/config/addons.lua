@@ -185,10 +185,10 @@ AddOn["xCT+"] = function()
         frames.damage.names.PLAYER.NPC = 0
         frames.damage.names.PLAYER.ENVIRONMENT = 0
 
-        frames.healing.X = -415
-        frames.healing.Y = 5
-        frames.healing.Width = 128
-        frames.healing.Height = 260
+        frames.healing.X = -485
+        frames.healing.Y = -30
+        frames.healing.Width = 190
+        frames.healing.Height = 144
         frames.healing.font = "RayUI Font"
         frames.healing.fontSize = 15
         frames.healing.names.PLAYER.nameType = 0
