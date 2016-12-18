@@ -3,11 +3,11 @@ local S = R:GetModule("Skins")
 
 local function SkinClique()
 	local tab = _G["CliqueSpellTab"]
-	tab:GetRegions():Hide()
-	tab:SetCheckedTexture(R.checked)
+    tab:GetRegions():Kill()
+    tab.pushed = true
+    tab:CreateShadow("Background")
+    tab:StyleButton(true)
 	tab:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
-	S:CreateBG(tab)
-	S:CreateSD(tab, 5, 0, 0, 0, 1, 1)
 	select(4, tab:GetRegions()):SetTexCoord(.08, .92, .08, .92)
 	CliqueConfig:StripTextures()
 	CliqueConfigInset:StripTextures()

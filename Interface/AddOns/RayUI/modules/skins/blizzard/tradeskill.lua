@@ -5,7 +5,7 @@ local function LoadSkin()
 	-- MainFrame
 	TradeSkillFramePortrait:Kill()
 	TradeSkillFrame:StripTextures(true)
-	S:CreateBDFrame(TradeSkillFrame)
+	S:SetBD(TradeSkillFrame)
 	TradeSkillFrame:Height(TradeSkillFrame:GetHeight() + 12)
 	TradeSkillFrame.RankFrame:StripTextures()
 	TradeSkillFrame.RankFrame:SetStatusBarTexture(R["media"].normal)
@@ -61,7 +61,7 @@ local function LoadSkin()
 			local Button = TradeSkillFrame.DetailsFrame.Contents.Reagents[i]
 			local Icon = Button.Icon
 			local Count = Button.Count
-			
+
 			Icon:SetTexCoord(.08, .92, .08, .92)
 			Icon:SetDrawLayer("OVERLAY")
 			if not Icon.backdrop then
@@ -69,11 +69,11 @@ local function LoadSkin()
 				Icon.backdrop:SetFrameLevel(Button:GetFrameLevel() - 1)
 				S:CreateBG(Icon.backdrop)
 			end
-			
+
 			Icon:SetParent(Icon.backdrop)
 			Count:SetParent(Icon.backdrop)
 			Count:SetDrawLayer("OVERLAY")
-			
+
 			Button.NameFrame:Kill()
 		end
 	end)
