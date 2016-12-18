@@ -2,7 +2,6 @@
 	<Script file="unitframes.lua"/>
 	<Script file="classbars.lua"/>
 	<Script file="tags.lua"/>
-	<Script file="filter.lua"/>
 	<Script file="functions.lua"/>
 	<Include file="units\load_units.xml"/>
 </Ui>
