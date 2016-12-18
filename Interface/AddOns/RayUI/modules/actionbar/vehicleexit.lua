@@ -41,7 +41,6 @@ function AB:CreateVehicleExit()
 	veb:SetScript("OnClick", function(self)
 		if ( UnitOnTaxi("player") ) then
 			TaxiRequestEarlyLanding()
-			self:GetNormalTexture():SetVertexColor(1, 0, 0)
 			self:EnableMouse(false)
 		else
 			VehicleExit()
