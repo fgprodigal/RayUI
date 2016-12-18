@@ -66,7 +66,7 @@ R.Options.args.UnitFrames = {
                     order = 3,
                     name = L["法力条按职业着色"],
                     type = "toggle",
-                    hidden = function() return R.db.UnitFrames.transparent end,
+                    hidden = function() return R.db.UnitFrames.transparent or R.db.UnitFrames.healthColorClass end,
                 },
                 smooth = {
                     order = 4,
@@ -77,7 +77,7 @@ R.Options.args.UnitFrames = {
                     order = 5,
                     name = L["颜色随血量渐变"],
                     type = "toggle",
-                    hidden = function() return R.db.UnitFrames.transparent end,
+                    hidden = function() return R.db.UnitFrames.transparent or R.db.UnitFrames.healthColorClass end,
                 },
             },
         },

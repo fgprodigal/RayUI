@@ -165,7 +165,7 @@ function UF:Construct_PowerBar(frame, bg, text)
         power.value:SetParent(frame.RaisedElementParent)
     end
 
-    if self.db.powerColorClass == true then
+    if self.db.powerColorClass and not self.db.healthColorClass then
         power.colorClass = true
         power.colorReaction = true
     else
