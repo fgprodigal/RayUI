@@ -218,6 +218,39 @@ AddOn["xCT+"] = function()
     xCT_Plus.combatEvents:UnregisterEvent("PLAYER_REGEN_DISABLED")
 end
 
+function AddOn.xCT()
+    local settings = {
+        [1] = {
+            point = { "BOTTOMLEFT", "RayUF_Player", "TOPLEFT", 0, 20 },
+            height = 128,
+        },
+        [2] = {
+            point = { "BOTTOMRIGHT", "xCT1", "BOTTOMLEFT", -10, 0 },
+            height = 128,
+        },
+        [3] = {
+            point = { "BOTTOM", "RayUIParent", "CENTER", 0, 200 },
+            height = 128,
+        },
+        [4] = {
+            point = { "BOTTOMRIGHT", "RayUF_TargetTarget", "TOPRIGHT", 0, 20 },
+            height = 200,
+        },
+    }
+    ct.font = R["media"].dmgfont
+    ct.damagefont = R["media"].dmgfont
+    for i=1, #ct.frames do
+        local f = ct.frames[i]
+        f:SetFont(ct.font,ct.fontsize,ct.fontstyle)
+        if settings[i] then
+            f:ClearAllPoints()
+            f:SetPoint(unpack(settings[i].point))
+            f:SetHeight(settings[i].height)
+            f:SetMaxLines(f:GetHeight()/ct.fontsize)
+        end
+    end
+end
+
 local eventFrame = CreateFrame("Frame")
 eventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 eventFrame:RegisterEvent("ADDON_LOADED")
