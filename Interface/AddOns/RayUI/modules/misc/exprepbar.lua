@@ -294,6 +294,9 @@ function mod:CreateArtiBar()
 
     libAD.RegisterCallback(self, "ARTIFACT_POWER_CHANGED", "UpdateArtiBar")
     libAD.RegisterCallback(self, "ARTIFACT_ADDED", "UpdateArtiBar")
+    libAD.RegisterCallback(self, "ARTIFACT_EQUIPPED_CHANGED", "UpdateArtiBar")
+    self.ArtiBar:SetScript("OnEvent", function() self:UpdateArtiBar() end)
+    self.ArtiBar:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 
     self.ArtiBar:SetScript("OnEnter", function(self)
             if HasArtifactEquipped() then
