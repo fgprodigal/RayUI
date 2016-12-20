@@ -17,5 +17,6 @@
 	<Include file="tutorial\load_tutorial.xml"/>
 	<Include file="notification\load_notification.xml"/>
 	<Include file="reminder\load_reminder.xml"/>
+	<Include file="combattext\load_combattext.xml"/>
 	<Include file="misc\load_misc.xml"/>
 </Ui>

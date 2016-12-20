@@ -44,17 +44,6 @@ function mod:COMBAT_LOG_EVENT_UNFILTERED(event, timestamp, eventType, hideCaster
                 SendChatMessage(msg..": "..destName.." \124cff71d5ff\124Hspell:"..id..":0\124h["..effect.."]\124h\124r!", (not IsInGroup(LE_PARTY_CATEGORY_HOME) and IsInGroup(LE_PARTY_CATEGORY_INSTANCE)) and "INSTANCE_CHAT" or "PARTY")
             end
         end
-
-        if etype=="BUFF"then
-            color={0,1,.5}
-        else
-            color={1,0,.5}
-        end
-        if icon then
-            self.announceMessages:AddMessage(msg .. ": " .. effect .. " \124T"..icon..":"..iconsize..":"..iconsize..":0:0:64:64:5:59:5:59\124t",unpack(color))
-        else
-            self.announceMessages:AddMessage(msg .. ": " .. effect ,unpack(color))
-        end
     end
 end
 
@@ -246,24 +235,8 @@ function mod:AlertRun(f,r,g,b)
     flowingframe:Show()
 end
 
-local function CreateMessageFrame(name)
-    local f = CreateFrame("ScrollingMessageFrame", name, R.UIParent)
-    f:SetHeight(80)
-    f:SetWidth(500)
-    f:SetPoint("CENTER", 0, 120)
-    f:SetFrameStrata("HIGH")
-    f:SetTimeVisible(1.5)
-    f:SetFadeDuration(1.5)
-    f:SetMaxLines(3)
-    f:SetFont(R["media"].font, 20, "OUTLINE")
-    f:SetShadowOffset(1.5,-1.5)
-    return f
-end
-
 function mod:Initialize()
     if not M.db.anounce then return end
-
-    mod.announceMessages = CreateMessageFrame("fDispelFrame")
 
     self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
     self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")

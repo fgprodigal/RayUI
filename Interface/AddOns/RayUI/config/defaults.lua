@@ -363,3 +363,7 @@ P["CooldownFlash"]={
     enablePet = false,
     showSpellName = false,
 }
+
+P["CombatText"]={
+    enable = true
+}
