@@ -58,11 +58,6 @@ function mod:Spawn(type)
 
     local r, g, b = unpack(settings.colors[type])
 
-    local bg = frame:CreateTexture(nil, "BACKGROUND")
-    bg:SetAllPoints(frame)
-    bg:SetTexture(R["media"].blank)
-    bg:SetVertexColor(r * .2, g * .2, b * .2)
-
     local border = CreateFrame("Frame", nil, frame)
     border:SetAllPoints()
     border:CreateShadow("Background")
