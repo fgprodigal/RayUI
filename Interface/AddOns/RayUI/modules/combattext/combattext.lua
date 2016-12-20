@@ -414,7 +414,7 @@ function CT:CreateMessageFrame(name, width, height, justify)
 end
 
 function CT:Initialize()
-    if not self.db.enble then return end
+    if not self.db.enable then return end
     self.frames = {}
     self.frames["outgoing"] = self:CreateMessageFrame("OutGoing", 150, 200, "RIGHT")
     self.frames["outgoing"]:SetPoint("BOTTOMRIGHT", "RayUF_TargetTarget", "TOPRIGHT", 0, 20)
