@@ -5,7 +5,8 @@ local xCP = LibStub("xCombatParser-1.0-RayUI", true)
 
 --Cache global variables
 --Lua functions
-local _G, unpack, type, string = _G, unpack, type, string
+local _G, pairs, unpack, type, string, table = _G, pairs, unpack, type, string, table
+local tostring, tonumber = tostring, tonumber
 
 --WoW API / Variables
 local CreateFrame = CreateFrame
@@ -28,17 +29,13 @@ local showhots = true
 local ctshowpet = true
 local fadetime = 3
 
-local frames = {}
--- local spellColors = {
--- [0] = { 0, 1, 0 }, -- heal
--- [1] = { 1, 1, 0 }, -- physical
--- [2] = { 1, .9, .5 }, -- holy
--- [4] = { 1, .5, 0 }, -- fire
--- [8] = { .3, 1, .3 }, -- nature
--- [16] = { .5, 1, 1 }, -- frost
--- [32] = { .5, .5, 1 }, -- shadow
--- [64] = { 1, .5, 1 }, -- arcane
--- }
+local frameIndex = {
+    [1] = "outgoing",
+    [2] = "incoming",
+    [3] = "healing",
+    [4] = "message",
+}
+
 local spellColors = {
     -- Vanilla Schools
     [SCHOOL_MASK_PHYSICAL] = { 1.00, 1.00, 1.00 },
@@ -95,6 +92,12 @@ local spellColors = {
 
 local format_spell_icon = " |T%s:%d:%d:0:0:64:64:5:59:5:59|t"
 
+local function IsMerged(spellID)
+    local merged = false
+    spellID = CT.merge2h[spellID] or spellID
+    return CT.merges[spellID] ~= nil
+end
+
 function CT:GetSpellTextureFormatted( spellID, message, critical, iconSize, justify )
     iconSize = critical and ( iconSize + 10 ) or iconSize
     local icon = ""
@@ -119,34 +122,178 @@ function CT:GetSpellTextureFormatted( spellID, message, critical, iconSize, just
     return message
 end
 
-function CT:AddMessage( frame, message, color)
-    self.frames[frame]:AddMessage(message, unpack(color))
+function CT:AddMessage( framename, message, color)
+    self.frames[framename]:AddMessage(message, unpack(color))
+end
+
+local spamHeap, spamStack, now = {}, {}, 0
+local spam_format = "%s |cffffffffx%s|r"
+function CT:AddSpamMessage(framename, mergeID, message, color, interval, prep)
+    -- Check for a Secondary Spell ID
+    mergeID = CT.merge2h[mergeID] or mergeID
+
+    local heap, stack = spamHeap[framename], spamStack[framename]
+    if heap[mergeID] then
+        heap[mergeID].color = color
+        table.insert(heap[mergeID].entries, message)
+
+        if heap[mergeID].last + heap[mergeID].update <= now then
+            heap[mergeID].last = now
+        end
+    else
+        local db = CT.merges[mergeID]
+        heap[mergeID] = {
+            -- last update
+            last = now,
+
+            -- how often to update
+            update = interval or (db and db.interval) or 3,
+
+            prep = prep or (db and db.prep) or interval or 3,
+
+            -- entries to merge
+            entries = {
+                message,
+            },
+
+            -- color
+            color = color,
+        }
+        table.insert(stack, mergeID)
+    end
+end
+
+for _, frameName in pairs(frameIndex) do
+    spamHeap[frameName] = {}
+    spamStack[frameName] = {}
+end
+
+local index = 1
+local frames = {}
+
+function CT.OnSpamUpdate(self, elapsed)
+    -- Update 'now'
+    now = now + elapsed
+
+    -- Check to see if we are out of bounds
+    if index > #frameIndex then index = 1 end
+    if not frames[frameIndex[index]] then
+        frames[frameIndex[index]] = 1
+    end
+
+    local heap, stack, idIndex =
+    spamHeap[frameIndex[index]], -- the heap contains merge entries
+    spamStack[frameIndex[index]], -- the stack contains lookup values
+    frames[frameIndex[index]] -- this frame's last entry index
+
+    -- Check to see if we are out of bounds
+    if idIndex > #stack then
+        idIndex = 1
+    end
+
+    -- This item contains a lot of information about what we need to merge
+    local item = heap[stack[idIndex]]
+
+    --if item then print(item.last, "+", item.update, "<", now) end
+    if item and item.last + item.update <= now and #item.entries > 0 then
+        item.last = now
+
+        -- Add up all the entries
+        local total = 0
+        for _, amount in pairs(item.entries) do
+            if not tonumber(amount) then total = amount; break end
+            total = total + amount -- Add all the amounts
+        end
+
+        -- total as a string
+        local message = tostring(total)
+
+        -- Abbreviate the merged total
+        if tonumber(total) then
+            message = R:ShortValue(tonumber(total))
+        end
+
+        --local format_mergeCount = "%s |cffFFFFFFx%s|r"
+        local strColor = "ffffff"
+
+        -- Show healer name (colored)
+        if frameIndex[index] == "healing" then
+            --format_mergeCount = "%s |cffFFFF00x%s|r"
+            local strColor = "ffff00"
+            message = string.format("+%s", message)
+        end
+
+        -- Add merge count
+        if #item.entries > 1 then
+            message = string.format(spam_format, message, #item.entries)
+        end
+
+        -- Add Icons
+        if type(stack[idIndex]) == "number" then
+            message = CT:GetSpellTextureFormatted( stack[idIndex],
+                message,
+                nil,
+                iconSize,
+                CT.frames[frameIndex[index]].justify,
+                true, -- Merge Override = true
+                #item.entries )
+        elseif frameIndex[index] == "outgoing" then
+            message = CT:GetSpellTextureFormatted( stack[idIndex],
+                message,
+                nil,
+                iconSize,
+                CT.frames[frameIndex[index]].justify,
+                true, -- Merge Override = true
+                #item.entries )
+        else
+            if #item.entries > 1 then
+                message = string.format("%s |cff%sx%s|r", message, strColor, #item.entries)
+            end
+        end
+
+        CT:AddMessage(frameIndex[index], message, item.color)
+
+        -- Clear all the old entries, we dont need them anymore
+        for k in pairs(item.entries) do
+            item.entries[k] = nil
+        end
+    end
+
+    frames[frameIndex[index]] = idIndex + 1
+    index = index + 1
 end
 
 function CT:HealingOutgoing(args)
     local critical, spellID, isHoT, amount = args.critical, args.spellId, args.prefix == "SPELL_PERIODIC", args.amount
     if isHoT and not showhots then return end
     local message = CT:GetSpellTextureFormatted( spellID, R:ShortValue(amount), critical, iconSize, "RIGHT" )
-    CT:AddMessage("outgoing", message, spellColors["HEAL"] )
+    if IsMerged(spellID) then
+        CT:AddSpamMessage("outgoing", spellID, amount, spellColors["HEAL"])
+    else
+        CT:AddMessage("outgoing", message, spellColors["HEAL"] )
+    end
 end
 
 function CT:HealingIncoming(args)
     local critical, spellID, isHoT, amount = args.critical, args.spellId, args.prefix == "SPELL_PERIODIC", args.amount
     if isHoT and not showhots then return end
-    local message = CT:GetSpellTextureFormatted( spellID, R:ShortValue(amount), critical, iconSize, "LEFT" )
-    CT:AddMessage("incomingheal", message, spellColors["HEAL"] )
+    local message = CT:GetSpellTextureFormatted( spellID, "+"..R:ShortValue(amount), critical, iconSize, "LEFT" )
+    CT:AddMessage("healing", message, spellColors["HEAL"] )
 end
 
 function CT:DamageOutgoing(args)
     local critical, spellID, amount, merged = args.critical, args.spellId, args.amount
-    local isEnvironmental, isSwing, isAutoShot, isDoT = args.prefix == "ENVIRONMENTAL", args.prefix == "SWING", spellID == 75, args.prefix == "SPELL_PERIODIC"
     local message = CT:GetSpellTextureFormatted( spellID, R:ShortValue(amount), critical, iconSize, "RIGHT" )
-    CT:AddMessage("outgoing", message, spellColors[args.spellSchool] )
+    if IsMerged(spellID) then
+        CT:AddSpamMessage("outgoing", spellID, amount, spellColors[args.spellSchool])
+    else
+        CT:AddMessage("outgoing", message, spellColors[args.spellSchool] )
+    end
 end
 
 function CT:DamageIncoming(args)
     local critical, amount, spellID = args.critical, args.amount, args.spellId
-    local message = CT:GetSpellTextureFormatted( spellID, R:ShortValue(amount), critical, iconSize, "LEFT" )
+    local message = CT:GetSpellTextureFormatted( spellID, "-"..R:ShortValue(amount), critical, iconSize, "LEFT" )
     CT:AddMessage("incoming", message, spellColors[args.spellSchool] )
 end
 
@@ -229,6 +376,7 @@ function CT:CreateMessageFrame(name, width, height, justify)
     f:SetHeight(height)
     f:SetMaxLines(height/(R["media"].fontsize+2))
     f:SetJustifyH(justify)
+    f.justify = justify
 
     return f
 end
@@ -239,12 +387,15 @@ function CT:Initialize()
     self.frames["outgoing"]:SetPoint("BOTTOMRIGHT", "RayUF_TargetTarget", "TOPRIGHT", 0, 20)
     self.frames["incoming"] = self:CreateMessageFrame("InComing", 150, 200, "LEFT")
     self.frames["incoming"]:SetPoint("BOTTOMLEFT", "RayUF_Player", "TOPLEFT", -150, 20)
-    self.frames["incomingheal"] = self:CreateMessageFrame("InComingHeal", 150, 200, "LEFT")
-    self.frames["incomingheal"]:SetPoint("BOTTOMLEFT", "RayUF_Player", "TOPLEFT", -250, 20)
+    self.frames["healing"] = self:CreateMessageFrame("Healing", 150, 200, "LEFT")
+    self.frames["healing"]:SetPoint("BOTTOMLEFT", "RayUF_Player", "TOPLEFT", -250, 20)
     self.frames["message"] = self:CreateMessageFrame("Message", 256, 100, "CENTER")
     self.frames["message"]:SetPoint("BOTTOM", R.UIParent, "CENTER", 0, 200)
 
     xCP:RegisterCombat(self.CombatLogEvent)
+
+    CT.merge = CreateFrame("FRAME")
+    CT.merge:SetScript("OnUpdate", CT.OnSpamUpdate)
 
     CombatText:UnregisterAllEvents()
     CombatText:SetScript("OnLoad", nil)

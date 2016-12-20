@@ -1,3 +1,4 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="combattext.lua"/>
+	<Script file="merge.lua"/>
 </Ui>
