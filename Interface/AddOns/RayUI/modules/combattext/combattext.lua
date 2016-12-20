@@ -1,7 +1,7 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local CT = R:NewModule("CombatText", "AceEvent-3.0", "AceHook-3.0", "AceTimer-3.0", "AceConsole-3.0")
 local xCP = LibStub("xCombatParser-1.0-RayUI", true)
--- CT.modName = L["CombatText"]
+CT.modName = L["战斗文字"]
 
 --Cache global variables
 --Lua functions
@@ -16,6 +16,7 @@ local SetCVar = SetCVar
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: PET_ATTACK_TEXTURE, CombatText, InterfaceOptionsCombatPanelEnableFloatingCombatText, InterfaceOptionsCombatPanelEnableFloatingCombatTextText
+-- GLOBALS: SCROLLING_MESSAGE_FRAME_INSERT_MODE_TOP, RayUF
 
 local showreceived = true
 local showoutput = true
@@ -34,6 +35,7 @@ local frameIndex = {
     [2] = "incoming",
     [3] = "healing",
     [4] = "message",
+    [5] = "power",
 }
 
 local spellColors = {
@@ -88,6 +90,27 @@ local spellColors = {
     ["MISS"] = { 0.50, 0.50, 0.50 },
     ["DISPEL_BUFF"] = { 0, 1.00, 0.50 },
     ["INTERRUPT"] = { 1.00, 0, 0.50 },
+}
+
+local enablePower = {
+    ["MANA"] = true,
+    ["RAGE"] = true,
+    ["FOCUS"] = true,
+    ["ENERGY"] = true,
+
+    ["RUNES"] = false,
+    ["RUNIC_POWER"] = true,
+    ["SOUL_SHARDS"] = true,
+    ["LUNAR_POWER"] = false,
+
+    ["HOLY_POWER"] = false,
+    ["ALTERNATE_POWER"] = false,
+    ["CHI"] = false,
+    ["INSANITY"] = true,
+
+    ["ARCANE_CHARGES"] = false,
+    ["FURY"] = true,
+    ["PAIN"] = true,
 }
 
 local format_spell_icon = " |T%s:%d:%d:0:0:64:64:5:59:5:59|t"
@@ -366,6 +389,15 @@ function CT.CombatLogEvent(args)
     end
 end
 
+function CT:COMBAT_TEXT_UPDATE(event, subevent, ...)
+    if subevent == "ENERGIZE" or subevent == "PERIODIC_ENERGIZE" then
+        local amount, energy_type = ...
+        if enablePower[energy_type] then
+            CT:AddMessage("power", string.format("+%s %s", R:ShortValue(amount), _G[energy_type]), RayUF.colors.power[energy_type])
+        end
+    end
+end
+
 function CT:CreateMessageFrame(name, width, height, justify)
     local f = CreateFrame("ScrollingMessageFrame", "RayUI_CombatText_"..name, R.UIParent)
     f:SetFont(R["media"].dmgfont, R["media"].fontsize+2, "OUTLINE")
@@ -385,17 +417,28 @@ function CT:Initialize()
     self.frames = {}
     self.frames["outgoing"] = self:CreateMessageFrame("OutGoing", 150, 200, "RIGHT")
     self.frames["outgoing"]:SetPoint("BOTTOMRIGHT", "RayUF_TargetTarget", "TOPRIGHT", 0, 20)
+
     self.frames["incoming"] = self:CreateMessageFrame("InComing", 150, 200, "LEFT")
     self.frames["incoming"]:SetPoint("BOTTOMLEFT", "RayUF_Player", "TOPLEFT", -150, 20)
+
     self.frames["healing"] = self:CreateMessageFrame("Healing", 150, 200, "LEFT")
     self.frames["healing"]:SetPoint("BOTTOMLEFT", "RayUF_Player", "TOPLEFT", -250, 20)
+
     self.frames["message"] = self:CreateMessageFrame("Message", 256, 100, "CENTER")
     self.frames["message"]:SetPoint("BOTTOM", R.UIParent, "CENTER", 0, 200)
+
+    self.frames["power"] = self:CreateMessageFrame("Power", 256, 100, "CENTER")
+    self.frames["power"]:SetPoint("TOP", R.UIParent, "CENTER", 0, -100)
+
+    for _, frame in pairs(self.frames) do
+        R:CreateMover(frame, frame:GetName().." Mover", L[frame:GetName()], true, nil, "ALL,GENERAL")
+    end
 
     xCP:RegisterCombat(self.CombatLogEvent)
 
     CT.merge = CreateFrame("FRAME")
     CT.merge:SetScript("OnUpdate", CT.OnSpamUpdate)
+    CT:RegisterEvent("COMBAT_TEXT_UPDATE")
 
     CombatText:UnregisterAllEvents()
     CombatText:SetScript("OnLoad", nil)

@@ -541,3 +541,11 @@ do
     L["灵魂"] = "Ghost"
     L["离线"] = "Offline"
 end
+do
+    L["战斗文字"] = "CombatText"
+    L["RayUI_CombatText_OutGoing"] = "Combat Text(outgoing)"
+    L["RayUI_CombatText_InComing"] = "Combat Text(incoming)"
+    L["RayUI_CombatText_Healing"] = "Combat Text(healing)"
+    L["RayUI_CombatText_Message"] = "Combat Text(message)"
+    L["RayUI_CombatText_Power"] = "Combat Text(power)"
+end

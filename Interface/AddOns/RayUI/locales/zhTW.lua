@@ -539,3 +539,11 @@ do
     L["灵魂"] = "靈魂"
     L["离线"] = "離綫"
 end
+do
+    L["战斗文字"] = "戰鬥文字"
+    L["RayUI_CombatText_OutGoing"] = "戰鬥文字(輸出)"
+    L["RayUI_CombatText_InComing"] = "戰鬥文字(承受傷害)"
+    L["RayUI_CombatText_Healing"] = "戰鬥文字(承受治療)"
+    L["RayUI_CombatText_Message"] = "戰鬥文字(資訊)"
+    L["RayUI_CombatText_Power"] = "戰鬥文字(獲得能量)"
+end

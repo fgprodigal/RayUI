@@ -2,7 +2,7 @@
 	<Script file="ace3.lua"/>
 	<Script file="acp.lua"/>
 	<Script file="bauderrorframe.lua"/>
-	<Script file="bigwigs.lua"/>
+	<!-- <Script file="bigwigs.lua"/> -->
 	<Script file="bugsack.lua"/>
 	<Script file="clique.lua"/>
 	<Script file="dbm.lua"/>

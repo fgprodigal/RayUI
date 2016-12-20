@@ -541,3 +541,11 @@ do
 	L["灵魂"] = true
 	L["离线"] = true
 end
+do
+    L["战斗文字"] = true
+    L["RayUI_CombatText_OutGoing"] = "战斗文字(输出)"
+    L["RayUI_CombatText_InComing"] = "战斗文字(承受伤害)"
+    L["RayUI_CombatText_Healing"] = "战斗文字(承受治疗)"
+    L["RayUI_CombatText_Message"] = "战斗文字(信息)"
+    L["RayUI_CombatText_Power"] = "战斗文字(获得能量)"
+end
