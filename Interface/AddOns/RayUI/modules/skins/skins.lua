@@ -717,6 +717,7 @@ function S:ReskinIconSelectionFrame(frame, numIcons, buttonNameTemplate, frameNa
         local icon = _G[button:GetName().."Icon"]
         button:StripTextures()
         S:CreateBD(button, .25)
+        button.pushed = true
         button:StyleButton(1)
         icon:SetInside(button, 1, 1)
         icon:SetTexCoord(.08, .92, .08, .92)
