@@ -21,6 +21,7 @@ local GetLootSpecialization = GetLootSpecialization
 local GetSpecializationInfoByID = GetSpecializationInfoByID
 local SetLootSpecialization = SetLootSpecialization
 local TalentFrame_LoadUI = TalentFrame_LoadUI
+local UseEquipmentSet = UseEquipmentSet
 local ShowUIPanel = ShowUIPanel
 local HideUIPanel = HideUIPanel
 
@@ -150,8 +151,12 @@ local function Spec_Update(self)
     end
 end
 
-local function Spec_OnEvent(self)
+local function Spec_OnEvent(self, event)
     Spec_Update(self)
+    if event == "PLAYER_SPECIALIZATION_CHANGED" then
+        local _, specName = GetSpecializationInfo(GetSpecialization())
+        UseEquipmentSet(specName)
+    end
     if Tooltip and Tooltip:IsShown() then
         RenderTooltip(self)
     end
@@ -179,7 +184,7 @@ do -- Initialize
     info.title = TALENTS
     info.icon = 132222
     info.clickFunc = Spec_OnClick
-    info.events = { "PLAYER_ENTERING_WORLD", "CHARACTER_POINTS_CHANGED", "PLAYER_TALENT_UPDATE", "ACTIVE_TALENT_GROUP_CHANGED", "PLAYER_LOOT_SPEC_UPDATED" }
+    info.events = { "PLAYER_ENTERING_WORLD", "CHARACTER_POINTS_CHANGED", "PLAYER_TALENT_UPDATE", "ACTIVE_TALENT_GROUP_CHANGED", "PLAYER_LOOT_SPEC_UPDATED", "PLAYER_SPECIALIZATION_CHANGED" }
     info.eventFunc = Spec_OnEvent
     info.initFunc = Spec_OnEvent
     info.tooltipFunc = Spec_OnEnter
