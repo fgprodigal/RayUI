@@ -21,7 +21,7 @@ local SetCVar = SetCVar
 local showreceived = true
 local showoutput = true
 
-local iconSize = 30
+local iconSize = 25
 local msgiconSize = 22
 
 local showdots = true
@@ -306,6 +306,10 @@ end
 
 function CT:DamageOutgoing(args)
     local critical, spellID, amount, merged = args.critical, args.spellId, args.amount
+    local isSwing = args.prefix == "SWING"
+    if isSwing and (args:IsSourceMyPet() or args:IsSourceMyVehicle()) then
+        spellID = 0
+    end
     local message = CT:GetSpellTextureFormatted( spellID, R:ShortValue(amount), critical, iconSize, "RIGHT" )
     if IsMerged(spellID) then
         CT:AddSpamMessage("outgoing", spellID, amount, spellColors[args.spellSchool])
@@ -316,6 +320,10 @@ end
 
 function CT:DamageIncoming(args)
     local critical, amount, spellID = args.critical, args.amount, args.spellId
+    local isSwing = args.prefix == "SWING"
+    if isSwing then
+        spellID = 0
+    end
     local message = CT:GetSpellTextureFormatted( spellID, "-"..R:ShortValue(amount), critical, iconSize, "LEFT" )
     CT:AddMessage("incoming", message, spellColors[args.spellSchool] )
 end
@@ -406,7 +414,7 @@ function CT:CreateMessageFrame(name, width, height, justify)
     f:SetSpacing(2)
     f:SetWidth(width)
     f:SetHeight(height)
-    f:SetMaxLines(height/(R["media"].fontsize+2))
+    f:SetMaxLines(height/(iconSize + 10))
     f:SetJustifyH(justify)
     f.justify = justify
 
