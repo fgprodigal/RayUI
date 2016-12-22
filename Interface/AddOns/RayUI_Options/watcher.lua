@@ -9,6 +9,13 @@ local selectedDebuff = nil
 local selectedCooldown = nil
 local selectedItemCooldown = nil
 
+local function SaveGroupKey(key, value)
+    if not selectedGroup and not selectedSpell then return end
+    R.global.Watcher = R.global.Watcher or {}
+    R.global.Watcher[selectedGroup] = R.global.Watcher[selectedGroup] or {}
+    R.global.Watcher[selectedGroup][key] = value
+end
+
 local function SaveProfileKey(key, value)
     if not selectedGroup and not selectedSpell then return end
     R.global.Watcher = R.global.Watcher or {}
@@ -72,10 +79,13 @@ local function UpdateGroup()
                 name = L["模式"],
                 set = function(info, value)
                     RW.modules[selectedGroup].mode = value
-                    RW.modules[selectedGroup].mode = value
+                    SaveGroupKey("mode", value)
+                    if value == "BAR" then
+                        SaveGroupKey("barwidth", RW.modules[selectedGroup].barwidth or 150)
+                    else
+                        SaveGroupKey("barwidth", nil)
+                    end
                     RW.modules[selectedGroup]:ApplyStyle()
-                    RW.modules[selectedGroup].direction = RW.modules[selectedGroup].direction
-                    RW.modules[selectedGroup].barwidth = RW.modules[selectedGroup].barwidth
                 end,
                 get = function() return (RW.modules[selectedGroup].mode or "ICON") end,
                 disabled = function(info) return not RW.modules[selectedGroup].enable end,
@@ -90,7 +100,7 @@ local function UpdateGroup()
                 name = L["增长方向"],
                 set = function(info, value)
                     RW.modules[selectedGroup].direction = value
-                    RW.modules[selectedGroup].direction = value
+                    SaveGroupKey("direction", value)
                     RW.modules[selectedGroup]:ApplyStyle()
                 end,
                 get = function() return RW.modules[selectedGroup].direction end,
@@ -123,7 +133,7 @@ local function UpdateGroup()
                 name = L["图标大小"],
                 set = function(info, value)
                     RW.modules[selectedGroup].size = value
-                    RW.modules[selectedGroup].size = value
+                    SaveGroupKey("size", value)
                     RW.modules[selectedGroup]:ApplyStyle()
                 end,
                 get = function() return RW.modules[selectedGroup].size end,
@@ -136,7 +146,7 @@ local function UpdateGroup()
                 name = L["计时条长度"],
                 set = function(info, value)
                     RW.modules[selectedGroup].barwidth = value
-                    RW.modules[selectedGroup].barwidth = value
+                    SaveGroupKey("barwidth", value)
                     RW.modules[selectedGroup]:ApplyStyle()
                 end,
                 get = function() return (RW.modules[selectedGroup].barwidth or 150) end,
@@ -149,7 +159,7 @@ local function UpdateGroup()
                 name = L["图标位置"],
                 set = function(info, value)
                     RW.modules[selectedGroup].iconside = value
-                    RW.modules[selectedGroup].iconside = value
+                    SaveGroupKey("iconside", value)
                     RW.modules[selectedGroup]:ApplyStyle()
                 end,
                 get = function() return (RW.modules[selectedGroup].iconside or "LEFT") end,

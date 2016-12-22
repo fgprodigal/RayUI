@@ -90,7 +90,6 @@ function watcherPrototype:CreateButton(mode)
     button:StyleButton(true)
     button:SetPushedTexture(nil)
     button:SetSize(self.size, self.size)
-    self.parent:SetSize(self.size, self.size)
     button.icon = button:CreateTexture(nil, "BORDER")
     button.icon:SetAllPoints()
     button.icon:SetTexCoord(.08, .92, .08, .92)
@@ -395,6 +394,84 @@ function watcherPrototype:SetPosition(num)
         self.button[num]:ClearAllPoints()
         self.button[num]:SetPoint("BOTTOM", self.button[num-1], "TOP", 0, 6)
     end
+end
+
+function watcherPrototype:ApplyStyle()
+	for i =1, #self.button do
+		local button = self.button[i]
+		if self.mode == "BAR" then
+			if not button.statusbar then
+				self.barwidth = self.barwidth or 150
+				if self.direction == "LEFT" or self.direction == "RIGHT" then
+					self.direction = "UP"
+				end
+                button.statusbar = CreateFrame("StatusBar", nil, button)
+                button.statusbar:SetFrameStrata("BACKGROUND")
+                button.statusbar:CreateShadow("Background")
+                button.statusbar:SetWidth(self.barwidth - 6)
+                button.statusbar:SetHeight(5)
+                button.statusbar:SetStatusBarTexture(R["media"].normal)
+                button.statusbar:SetStatusBarColor(colors[R.myclass].r, colors[R.myclass].g, colors[R.myclass].b, 1)
+        		R:SetStatusBarGradient(button.statusbar)
+                if ( self.iconside == "RIGHT" ) then
+                    button.statusbar:SetPoint("BOTTOMRIGHT", button, "BOTTOMLEFT", -5, 0)
+                else
+                    button.statusbar:SetPoint("BOTTOMLEFT", button, "BOTTOMRIGHT", 5, 0)
+                end
+                button.statusbar:SetMinMaxValues(0, 1)
+                button.statusbar:SetValue(1)
+                local spark = button.statusbar:CreateTexture(nil, "OVERLAY")
+                spark:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]
+                spark:SetBlendMode("ADD")
+                spark:SetAlpha(.8)
+                spark:SetPoint("TOPLEFT", button.statusbar:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
+                spark:SetPoint("BOTTOMRIGHT", button.statusbar:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
+                button.time = button:CreateFontString(nil, "OVERLAY")
+                button.time:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
+                button.time:SetPoint("BOTTOMRIGHT", button.statusbar, "TOPRIGHT", 0, 2)
+                button.time:SetText("60")
+                button.name = button:CreateFontString(nil, "OVERLAY")
+                button.name:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
+                button.name:SetPoint("BOTTOMLEFT", button.statusbar, "TOPLEFT", 0, 2)
+                button.name:SetText("技能名称")
+				button.mode = "BAR"
+				button.cooldown:Hide()
+				button.cooldown = nil
+				button:SetScript("OnUpdate", nil)
+			end
+		end
+		if self.mode == "ICON" then
+			if not button.cooldown then
+                button.cooldown = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
+                button.cooldown:SetAllPoints(button.icon)
+                button.cooldown:SetReverse()
+                button.cooldown:SetFrameLevel(2)
+                button.cooldown:SetHideCountdownNumbers(true)
+                button.cooldown.SetHideCountdownNumbers = R.dummy
+                button.mode = "ICON"
+				button.statusbar:Hide()
+				button.statusbar = nil
+				button.time:Hide()
+				button.time = nil
+				button.name:Hide()
+				button.name = nil
+				button:SetScript("OnUpdate", nil)
+			end
+		end
+		button:SetSize(self.size, self.size)
+        self.holder:SetSize(self.size, self.size)
+		if button.mode == "BAR" then
+			button.statusbar:SetWidth(self.barwidth)
+			button.statusbar:ClearAllPoints()
+			if ( self.iconside == "RIGHT" ) then
+				button.statusbar:SetPoint("BOTTOMRIGHT", button, "BOTTOMLEFT", -5, 2)
+			else
+				button.statusbar:SetPoint("BOTTOMLEFT", button, "BOTTOMRIGHT", 5, 2)
+			end
+		end
+		self:SetPosition(i)
+		button.mode = self.mode
+	end
 end
 
 function watcherPrototype:OnEvent(event, unit)
