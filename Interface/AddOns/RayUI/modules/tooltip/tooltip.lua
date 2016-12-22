@@ -56,7 +56,7 @@ local GetCursorPosition = GetCursorPosition
 local UnitIsTapDenied = UnitIsTapDenied
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: GameTooltip, FACTION_BAR_COLORS, InspectFrame, RayUF_Raid, INVSLOT_OFFHAND, INVSLOT_MAINHAND
+-- GLOBALS: GameTooltip, FACTION_BAR_COLORS, InspectFrame, INVSLOT_OFFHAND, INVSLOT_MAINHAND
 -- GLOBALS: GameTooltipStatusBar, WorldMapTooltip, NumerationFrame, Skada, Examiner
 -- GLOBALS: RayUI_ContainerFrame, RayUI_ContainerFrameItemSets, RayUI_ContainerFrameConsumables
 -- GLOBALS: RayUI_ContainerFrameMain, STAT_AVERAGE_ITEM_LEVEL, FriendsTooltip
@@ -253,10 +253,7 @@ function TT:GameTooltip_SetDefaultAnchor(tooltip, parent)
         end
 
         tooltip:ClearAllPoints()
-        if owner and owner:match("RayUF_Raid") then
-            local parent = _G[owner:match("RayUF_RaidGroup%dUnitButton%d")]
-            tooltip:Point("BOTTOM", RayUF_Raid, "TOP", 0, 30)
-        elseif RayUI_ContainerFrame and RayUI_ContainerFrame:IsVisible() and (GetScreenWidth() - RayUI_ContainerFrame:GetRight()) < 250 then
+        if RayUI_ContainerFrame and RayUI_ContainerFrame:IsVisible() and (GetScreenWidth() - RayUI_ContainerFrame:GetRight()) < 250 then
             -- tooltip:Point("BOTTOMRIGHT", R.UIParent, "BOTTOMRIGHT", -50, RayUI_ContainerFrame:GetBottom() + RayUI_ContainerFrame:GetHeight() + 30)
             local parent = RayUI_ContainerFrameItemSets:IsVisible() and RayUI_ContainerFrameItemSets
             or RayUI_ContainerFrameConsumables:IsVisible() and RayUI_ContainerFrameConsumables
@@ -264,8 +261,6 @@ function TT:GameTooltip_SetDefaultAnchor(tooltip, parent)
             if parent:GetBottom() and parent:GetHeight() then
                 tooltip:Point("BOTTOMRIGHT", R.UIParent, "BOTTOMRIGHT", -50, parent:GetBottom() + parent:GetHeight() + 30)
             end
-        elseif NumerationFrame and NumerationFrame:IsVisible() and (GetScreenWidth() - NumerationFrame:GetRight()) < 250 then
-            tooltip:Point("BOTTOMRIGHT", R.UIParent, "BOTTOMRIGHT", -50, NumerationFrame:GetBottom() + NumerationFrame:GetHeight() + 30)
         elseif Skada then
             local windows = Skada:GetWindows()
             if #windows >= 1 and (GetScreenWidth() - windows[1].bargroup:GetRight()) < 250 then
