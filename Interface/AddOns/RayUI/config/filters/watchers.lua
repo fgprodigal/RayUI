@@ -1660,6 +1660,8 @@ R["Watcher"] = {
                 { spellID = 156428, unitId = "player", caster = "player", filter = "BUFF" },
                 -- Draenic Armor Potion
                 { spellID = 156430, unitId = "player", caster = "player", filter = "BUFF" },
+                -- 延时之力药水
+				{ spellID = 229206, unitId = "player", caster = "player", filter = "BUFF" },
 
                 --特殊buff
                 -- 嗜血術
