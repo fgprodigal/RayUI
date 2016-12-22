@@ -214,12 +214,20 @@ function S:ReskinScroll(f)
     assert(f, "doesn't exist!")
     if f:GetName() then
         local frame = f:GetName()
+        if f.Background then f.Background:SetTexture(nil) end
+		if f.trackBG then f.trackBG:SetTexture(nil) end
+		if f.Middle then f.Middle:SetTexture(nil) end
+		if f.Top then f.Top:SetTexture(nil) end
+		if f.Bottom then f.Bottom:SetTexture(nil) end
+		if f.ScrollBarTop then f.ScrollBarTop:SetTexture(nil) end
+		if f.ScrollBarBottom then f.ScrollBarBottom:SetTexture(nil) end
+		if f.ScrollBarMiddle then f.ScrollBarMiddle:SetTexture(nil) end
 
-        if _G[frame.."Track"] then _G[frame.."Track"]:Hide() end
-        if _G[frame.."BG"] then _G[frame.."BG"]:Hide() end
-        if _G[frame.."Top"] then _G[frame.."Top"]:Hide() end
-        if _G[frame.."Middle"] then _G[frame.."Middle"]:Hide() end
-        if _G[frame.."Bottom"] then _G[frame.."Bottom"]:Hide() end
+        if _G[frame.."Track"] then _G[frame.."Track"]:SetTexture(nil) end
+        if _G[frame.."BG"] then _G[frame.."BG"]:SetTexture(nil) end
+        if _G[frame.."Top"] then _G[frame.."Top"]:SetTexture(nil) end
+        if _G[frame.."Middle"] then _G[frame.."Middle"]:SetTexture(nil) end
+        if _G[frame.."Bottom"] then _G[frame.."Bottom"]:SetTexture(nil) end
 
         local bu = _G[frame.."ThumbTexture"]
         bu:SetAlpha(0)

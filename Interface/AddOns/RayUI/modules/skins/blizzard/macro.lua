@@ -2,6 +2,7 @@ local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, 
 local S = R:GetModule("Skins")
 
 local function LoadSkin()
+    MacroFrame:StripTextures()
     MacroPopupFrame:StripTextures()
     MacroPopupScrollFrame:StripTextures()
     MacroPopupFrame.BorderBox:StripTextures()
@@ -11,9 +12,8 @@ local function LoadSkin()
     S:CreateBD(MacroFrameScrollFrame, .25)
     S:CreateBD(MacroPopupFrame)
     S:CreateBD(MacroPopupEditBox, .25)
-    select(18, MacroFrame:GetRegions()):Hide()
     MacroHorizontalBarLeft:Hide()
-    select(21, MacroFrame:GetRegions()):Hide()
+    MacroFrameInset:Kill()
     for i = 1, 6 do
         select(i, MacroFrameTab1:GetRegions()):Hide()
         select(i, MacroFrameTab2:GetRegions()):Hide()
@@ -50,6 +50,7 @@ local function LoadSkin()
 
     S:ReskinClose(MacroFrameCloseButton)
     S:ReskinScroll(MacroButtonScrollFrameScrollBar)
+    MacroButtonScrollFrameMiddle:Kill()
     S:ReskinScroll(MacroFrameScrollFrameScrollBar)
     S:ReskinScroll(MacroPopupScrollFrameScrollBar)
 
