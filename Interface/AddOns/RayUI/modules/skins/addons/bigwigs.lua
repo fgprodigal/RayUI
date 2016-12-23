@@ -7,8 +7,6 @@ local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, 
 local S = R:GetModule("Skins")
 
 local function SkinBigWigs()
-	if not S.db.acp or not IsAddOnLoaded("BigWigs") then return end
-
 	local buttonsize = 19
 
 	-- init some tables to store backgrounds
@@ -91,8 +89,7 @@ local function SkinBigWigs()
 
 		bg:SetParent(bar)
 		bg:ClearAllPoints()
-		bg:Point("TOPLEFT", bar, "TOPLEFT", -3, 3)
-		bg:Point("BOTTOMRIGHT", bar, "BOTTOMRIGHT", 3, -3)
+		bg:SetAllPoints()
 		bg:SetFrameStrata("BACKGROUND")
 		bg:Show()
 		bar:Set("bigwigs:rayui:barbg", bg)
@@ -107,8 +104,7 @@ local function SkinBigWigs()
 			end
 			ibg:SetParent(bar)
 			ibg:ClearAllPoints()
-			ibg:Point("TOPLEFT", bar.candyBarIconFrame, "TOPLEFT", -3, 3)
-			ibg:Point("BOTTOMRIGHT", bar.candyBarIconFrame, "BOTTOMRIGHT", 3, -3)
+			ibg:SetAllPoints(bar.candyBarIconFrame)
 			ibg:SetFrameStrata("BACKGROUND")
 			ibg:Show()
 			bar:Set("bigwigs:rayui:iconbg", ibg)
@@ -134,6 +130,7 @@ local function SkinBigWigs()
 		bar.candyBarBar.OldSetPoint = bar.candyBarBar.SetPoint
 		bar.candyBarBar.SetPoint=R.dummy
 		bar.candyBarBar:SetStatusBarTexture(R["media"].normal)
+        R:SetStatusBarGradient(bar.candyBarBar, true)
 		bar.candyBarBackground:SetTexture(unpack(R["media"].backdropcolor))
 
 		-- setup icon positions and other things
@@ -162,11 +159,6 @@ local function SkinBigWigs()
 				BarStopped = freestyle,
 				GetStyleName = function() return "RayUI" end,
 			})
-		end
-		if prox and bars.db.profile.barStyle == "RayUI" then
-			hooksecurefunc(BigWigs.pluginCore.modules.Proximity, "RestyleWindow", function()
-				BigWigsProximityAnchor:CreateShadow("Background")
-			end)
 		end
 	end
 
@@ -213,4 +205,4 @@ local function SkinBigWigs()
 	end)
 end
 
--- S:AddCallbackForAddon("BigWigs", "BigWigs", SkinBigWigs)
+S:AddCallbackForAddon("BigWigs", "BigWigs", SkinBigWigs)

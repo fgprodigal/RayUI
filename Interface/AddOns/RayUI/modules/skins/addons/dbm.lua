@@ -238,8 +238,6 @@ local function SkinDBM()
     hooksecurefunc(DBM.BossHealth,"Show",SkinBossTitle)
     hooksecurefunc(DBM.BossHealth,"AddBoss",SkinBoss)
     hooksecurefunc(DBM.BossHealth,"UpdateSettings",SkinBoss)
-    DBM.RangeCheck:Show()
-    DBM.RangeCheck:Hide()
 
     local function SkinRange(self, range, filter, forceshow, redCircleNumPlayers)
         if DBMRangeCheck and not self.styled then
