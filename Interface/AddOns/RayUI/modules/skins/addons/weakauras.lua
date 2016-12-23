@@ -1,7 +1,7 @@
 local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local S = R:GetModule("Skins")
 
-local function SkinWeakAuras()
+local function LoadSkin()
     local function Skin_WeakAuras(frame, ftype)
         if ftype == "icon" then
             if not frame.shadow then
@@ -53,4 +53,4 @@ local function SkinWeakAuras()
     end
 end
 
-S:AddCallbackForAddon("WeakAuras", "WeakAuras", SkinWeakAuras)
+S:AddCallbackForAddon("WeakAuras", "WeakAuras", LoadSkin)
