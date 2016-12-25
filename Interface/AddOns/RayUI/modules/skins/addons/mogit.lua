@@ -2,7 +2,6 @@ local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, 
 local S = R:GetModule("Skins")
 
 local function SkinMogIt()
-	if not S.db.mogit then return end
 	local MogIt = MogIt
 	--Skinning MogIt Frames
 	MogItFrame:StripTextures()

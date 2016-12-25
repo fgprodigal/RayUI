@@ -329,17 +329,8 @@ P["Misc"]={
 
 P["Skins"]={
     enable = true,
-    skada = true,
     skadaposition = true,
-    dbm = true,
     dbmposition = true,
-    ace3 = true,
-    acp = true,
-    atlasloot = true,
-    bigwigs = true,
-    nugrunning = true,
-    mogit = true,
-    numeration = true,
 }
 
 P["Bags"]={

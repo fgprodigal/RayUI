@@ -43,16 +43,10 @@ R.Options.args.Skins = {
 			guiInline = true,
             hidden = function() return not R.db.Skins.enable end,
 			args = {
-				skada = {
-					order = 1,
-					name = L["启用"],
-					type = "toggle",
-				},
 				skadaposition = {
 					order = 2,
 					name = L["固定Skada位置"],
 					type = "toggle",
-					disabled = function() return not S.db.skada end,
 				},
 			},
 		},
@@ -63,99 +57,9 @@ R.Options.args.Skins = {
 			guiInline = true,
             hidden = function() return not R.db.Skins.enable end,
 			args = {
-				dbm = {
-					order = 1,
-					name = L["启用"],
-					type = "toggle",
-				},
 				dbmposition = {
 					order = 2,
 					name = L["固定DBM位置"],
-					type = "toggle",
-					disabled = function() return not S.db.dbm end,
-				},
-			},
-		},
-		ace3group = {
-			order = 7,
-			type = "group",
-			name = L["ACE3控制台"],
-			guiInline = true,
-            hidden = function() return not R.db.Skins.enable end,
-			args = {
-				ace3 = {
-					order = 1,
-					name = L["启用"],
-					type = "toggle",
-				},
-			},
-		},
-		acpgroup = {
-			order = 8,
-			type = "group",
-			name = L["ACP"],
-			guiInline = true,
-            hidden = function() return not R.db.Skins.enable end,
-			args = {
-				acp = {
-					order = 1,
-					name = L["启用"],
-					type = "toggle",
-				},
-			},
-		},
-		bigwigsgroup = {
-			order = 10,
-			type = "group",
-			name = L["BigWigs"],
-			guiInline = true,
-            hidden = function() return not R.db.Skins.enable end,
-			args = {
-				bigwigs = {
-					order = 1,
-					name = L["启用"],
-					type = "toggle",
-				},
-			},
-		},
-		nugrunninggroup = {
-			order = 11,
-			type = "group",
-			name = "NugRunning",
-			guiInline = true,
-            hidden = function() return not R.db.Skins.enable end,
-			args = {
-				nugrunning = {
-					order = 1,
-					name = L["启用"],
-					type = "toggle",
-				},
-			},
-		},
-		mogitgroup = {
-			order = 12,
-			type = "group",
-			name = "MogIt",
-			guiInline = true,
-            hidden = function() return not R.db.Skins.enable end,
-			args = {
-				mogit = {
-					order = 1,
-					name = L["启用"],
-					type = "toggle",
-				},
-			},
-		},
-		numerationgroup = {
-			order = 13,
-			type = "group",
-			name = "Numeration",
-			guiInline = true,
-            hidden = function() return not R.db.Skins.enable end,
-			args = {
-				numeration = {
-					order = 1,
-					name = L["启用"],
 					type = "toggle",
 				},
 			},

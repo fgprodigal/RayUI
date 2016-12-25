@@ -12,15 +12,18 @@ local function SkinDBM()
     local buttonsize = 20
 
     local function ApplyMyStyle(self)
-        if not S.db.dbm or not S.db.dbmposition then return end
-        if DBM_GUI_Option_57 then
-            DBM_GUI_Option_57:Kill()
-        end
+        if not S.db.dbmposition then return end
+        local screenQuadrant = R:GetScreenQuadrant(Minimap)
         self.options.BarYOffset = 6
         self.options.ExpandUpwards = false
+        local xOffset = ( MinimapButtonCollectFrame and MinimapButtonCollectFrame:GetWidth() or 0 ) + self.options.Width/2 + buttonsize + 50
         if self.mainAnchor then
             self.mainAnchor:ClearAllPoints()
-            self.mainAnchor:SetPoint("TOPLEFT", Minimap, "TOPRIGHT", self.options.Width/2 + 35 + buttonsize, self.options.BarYOffset)
+            if screenQuadrant:find("LEFT") then
+                self.mainAnchor:SetPoint("TOPLEFT", Minimap, "TOPRIGHT", xOffset, self.options.BarYOffset)
+            else
+                self.mainAnchor:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -xOffset, self.options.BarYOffset)
+            end
         end
         if self.secAnchor then
             self.secAnchor:ClearAllPoints()
@@ -69,7 +72,7 @@ local function SkinDBM()
                     else
                         tbar:SetStatusBarColor(bar.owner.options.StartColorR, bar.owner.options.StartColorG, bar.owner.options.StartColorB)
                     end
-					R:SetStatusBarGradient(tbar, true)
+                    R:SetStatusBarGradient(tbar, true)
 
                     if bar.enlarged then frame:Width(bar.owner.options.HugeWidth) else frame:Width(bar.owner.options.Width) end
                     if bar.enlarged then tbar:Width(bar.owner.options.HugeWidth) else tbar:Width(bar.owner.options.Width) end

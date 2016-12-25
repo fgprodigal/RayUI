@@ -40,10 +40,10 @@ local function LoadSkin()
     S:CreateBD(CharacterStatsPane.EnhancementsCategory, .5)
 
     GearManagerDialogPopup.BorderBox:StripTextures()
-	GearManagerDialogPopup:Point("LEFT", PaperDollFrame, "RIGHT", 4, 0)
-	GearManagerDialogPopup.BG:Kill()
-	GearManagerDialogPopupScrollFrame:StripTextures()
-	GearManagerDialogPopupEditBox:StripTextures()
+    GearManagerDialogPopup:Point("LEFT", PaperDollFrame, "RIGHT", 4, 0)
+    GearManagerDialogPopup.BG:Kill()
+    GearManagerDialogPopupScrollFrame:StripTextures()
+    GearManagerDialogPopupEditBox:StripTextures()
 
     S:ReskinClose(CharacterFrameCloseButton)
     S:ReskinScroll(PaperDollTitlesPaneScrollBar)
@@ -302,6 +302,17 @@ local function LoadSkin()
 
     ReputationFrame:HookScript("OnShow", UpdateFactionSkins)
     hooksecurefunc("ReputationFrame_OnEvent", UpdateFactionSkins)
+
+    CharacterStatsPane.ItemLevelFrame.Background:Kill()
+    CharacterFrame:HookScript("OnShow", function()
+        for k, v in next, {CharacterStatsPane:GetChildren()} do
+            if v.Background then
+                if v.Background:GetAtlas() then
+                    v.Background:SetAtlas(nil)
+                end
+            end
+        end
+    end)
 
     -- Pet stuff
     if R.myclass == "HUNTER" or R.myclass == "MAGE" or R.myclass == "DEATHKNIGHT" or R.myclass == "WARLOCK" then

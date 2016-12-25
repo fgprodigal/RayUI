@@ -4,7 +4,6 @@ local S = R:GetModule("Skins")
 local function SkinAce3()
 	local AceGUI = LibStub("AceGUI-3.0", true)
 	if not AceGUI then return end
-	if not S.db.ace3 then return end
 	local oldRegisterAsWidget = AceGUI.RegisterAsWidget
 
 	local r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b
