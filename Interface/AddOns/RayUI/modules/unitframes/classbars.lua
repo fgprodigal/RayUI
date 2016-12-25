@@ -21,7 +21,7 @@ function UF:Configure_ClassBar(frame, cur)
 
     bars.origParent = frame
     frame.CLASSBAR_HEIGHT = frame.CLASSBAR_HEIGHT or 5
-    local CLASSBAR_WIDTH = 200
+    local CLASSBAR_WIDTH = frame.UNIT_WIDTH - 20
     frame.BORDER = 1
     frame.SPACING = -2
 
@@ -151,7 +151,7 @@ function UF:Construct_ClassBar(frame)
     local bars = CreateFrame("Frame", nil, frame)
     bars:Point("BOTTOM", frame, "TOP", 0, 2)
 
-    local maxBars = max(UF['classMaxResourceBar'][R.myclass] or 0, MAX_COMBO_POINTS)
+    local maxBars = max(UF["classMaxResourceBar"][R.myclass] or 0, MAX_COMBO_POINTS)
     for i = 1, maxBars do
         bars[i] = CreateFrame("StatusBar", frame:GetName().."ClassIconButton"..i, bars)
         bars[i]:CreateShadow("Background")
