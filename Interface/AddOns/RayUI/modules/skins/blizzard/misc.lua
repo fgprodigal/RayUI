@@ -227,32 +227,32 @@ local function LoadSkin()
         local bg = parent:CreateTexture(nil, "BACKGROUND")
         bg:SetColorTexture(0, 0, 0, .5)
         bg:SetPoint("CENTER", texture)
-        bg:SetSize(12, 12)
+        bg:Size(12, 12)
         parent.bg = bg
 
         local left = parent:CreateTexture(nil, "BACKGROUND")
-        left:SetWidth(1)
+        left:Width(1)
         left:SetColorTexture(0, 0, 0)
         left:SetPoint("TOPLEFT", bg)
         left:SetPoint("BOTTOMLEFT", bg)
         parent.left = left
 
         local right = parent:CreateTexture(nil, "BACKGROUND")
-        right:SetWidth(1)
+        right:Width(1)
         right:SetColorTexture(0, 0, 0)
         right:SetPoint("TOPRIGHT", bg)
         right:SetPoint("BOTTOMRIGHT", bg)
         parent.right = right
 
         local top = parent:CreateTexture(nil, "BACKGROUND")
-        top:SetHeight(1)
+        top:Height(1)
         top:SetColorTexture(0, 0, 0)
         top:SetPoint("TOPLEFT", bg)
         top:SetPoint("TOPRIGHT", bg)
         parent.top = top
 
         local bottom = parent:CreateTexture(nil, "BACKGROUND")
-        bottom:SetHeight(1)
+        bottom:Height(1)
         bottom:SetColorTexture(0, 0, 0)
         bottom:SetPoint("BOTTOMLEFT", bg)
         bottom:SetPoint("BOTTOMRIGHT", bg)
@@ -313,20 +313,20 @@ local function LoadSkin()
                     yAddOffset = -offBottom
                 end
                 listFrame:ClearAllPoints()
-                listFrame:SetPoint(point, relativeTo, relativePoint, xOffset + xAddOffset, yOffset + yAddOffset)
+                listFrame:Point(point, relativeTo, relativePoint, xOffset + xAddOffset, yOffset + yAddOffset)
             elseif anchorName ~= "cursor" then
                 -- this part might be a bit unreliable
                 local _, _, relPoint, xOff, yOff = listFrame:GetPoint()
                 if relPoint == "BOTTOMLEFT" and xOff == 0 and _G.floor(yOff) == 5 then
-                    listFrame:SetPoint("TOPLEFT", anchorName, "BOTTOMLEFT", 16, 9)
+                    listFrame:Point("TOPLEFT", anchorName, "BOTTOMLEFT", 16, 9)
                 end
             end
         else
             local point, anchor, relPoint, _, y = listFrame:GetPoint()
             if point:find("RIGHT") then
-                listFrame:SetPoint(point, anchor, relPoint, -14, y)
+                listFrame:Point(point, anchor, relPoint, -14, y)
             else
-                listFrame:SetPoint(point, anchor, relPoint, 9, y)
+                listFrame:Point(point, anchor, relPoint, 9, y)
             end
         end
 
@@ -337,8 +337,8 @@ local function LoadSkin()
                 local hl = _G[prefix.."DropDownList"..level.."Button"..j.."Highlight"]
                 local check = _G[prefix.."DropDownList"..level.."Button"..j.."Check"]
 
-                hl:SetPoint("TOPLEFT", -x + 1, 0)
-                hl:SetPoint("BOTTOMRIGHT", listFrame:GetWidth() - bu:GetWidth() - x - 1, 0)
+                hl:Point("TOPLEFT", -x + 1, 0)
+                hl:Point("BOTTOMRIGHT", listFrame:GetWidth() - bu:GetWidth() - x - 1, 0)
 
                 if not bu.bg then
                     createBackdrop(bu, check)
@@ -347,7 +347,7 @@ local function LoadSkin()
 
                     local arrow = _G[prefix.."DropDownList"..level.."Button"..j.."ExpandArrow"]
                     arrow:SetNormalTexture(S["media"].arrowRight)
-                    arrow:SetSize(8, 8)
+                    arrow:Size(8, 8)
                 end
 
                 if not bu.notCheckable then
@@ -359,12 +359,12 @@ local function LoadSkin()
                     if co == 0 then
                         check:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
                         check:SetVertexColor(r, g, b, 1)
-                        check:SetSize(20, 20)
+                        check:Size(20, 20)
                         check:SetDesaturated(true)
                     else
                         check:SetTexture(R["media"].blank)
                         check:SetVertexColor(r, g, b, .6)
-                        check:SetSize(10, 10)
+                        check:Size(10, 10)
                         check:SetDesaturated(false)
                     end
 
