@@ -4,7 +4,7 @@ local WM = R:NewModule("WorldMap", "AceEvent-3.0", "AceHook-3.0", "AceTimer-3.0"
 --Cache global variables
 --Lua functions
 local _G = _G
-local select, unpack = select, unpack
+local select, unpack, string = select, unpack, string
 
 --WoW API / Variables
 local CreateFrame = CreateFrame
@@ -15,7 +15,7 @@ local GetPlayerMapPosition = GetPlayerMapPosition
 local GetCursorPosition = GetCursorPosition
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: WorldMapFrame, WorldMapFrameSizeUpButton, WorldMapFrameSizeDownButton, CoordsHolder, PLAYER
+-- GLOBALS: WorldMapFrame, WorldMapFrameSizeUpButton, WorldMapFrameSizeDownButton, RayUI_CoordsHolder, PLAYER
 -- GLOBALS: WorldMapDetailFrame, MOUSE_LABEL, DropDownList1, NumberFontNormal, BlackoutWorld, WorldMapTooltip
 -- GLOBALS: WORLDMAP_SETTINGS, WORLDMAP_FULLMAP_SIZE, WORLDMAP_WINDOWED_SIZE, WorldMapCompareTooltip1, WorldMapCompareTooltip2
 
@@ -84,8 +84,8 @@ function WM:PLAYER_ENTERING_WORLD()
         inRestrictedArea = true
         self:CancelTimer(self.CoordsTimer)
         self.CoordsTimer = nil
-        CoordsHolder.playerCoords:SetText("")
-        CoordsHolder.mouseCoords:SetText("")
+        RayUI_CoordsHolder.playerCoords:SetText("")
+        RayUI_CoordsHolder.mouseCoords:SetText("")
     elseif not self.CoordsTimer then
         inRestrictedArea = false
         self.CoordsTimer = self:ScheduleRepeatingTimer("UpdateCoords", 0.05)
@@ -101,9 +101,9 @@ function WM:UpdateCoords()
     y = R:Round(100 * y, 2)
 
     if x ~= 0 and y ~= 0 then
-        CoordsHolder.playerCoords:SetText(PLAYER..": "..x..", "..y)
+        RayUI_CoordsHolder.playerCoords:SetText(PLAYER..": "..string.format("%.2f", x)..", "..string.format("%.2f", y))
     else
-        CoordsHolder.playerCoords:SetText(nil)
+        RayUI_CoordsHolder.playerCoords:SetText(nil)
     end
 
     local scale = WorldMapDetailFrame:GetEffectiveScale()
@@ -117,23 +117,27 @@ function WM:UpdateCoords()
     if (adjustedX >= 0 and adjustedY >= 0 and adjustedX <= 1 and adjustedY <= 1) then
         adjustedX = R:Round(100 * adjustedX, 2)
         adjustedY = R:Round(100 * adjustedY, 2)
-        CoordsHolder.mouseCoords:SetText(MOUSE_LABEL..": "..adjustedX..", "..adjustedY)
+        RayUI_CoordsHolder.mouseCoords:SetText(MOUSE_LABEL..": "..string.format("%.2f", adjustedX)..", "..string.format("%.2f", adjustedY))
     else
-        CoordsHolder.mouseCoords:SetText(nil)
+        RayUI_CoordsHolder.mouseCoords:SetText(nil)
     end
 end
 
 function WM:Initialize()
-    local CoordsHolder = CreateFrame("Frame", "CoordsHolder", WorldMapFrame)
+    local CoordsHolder = CreateFrame("Frame", "RayUI_CoordsHolder", WorldMapFrame)
+    CoordsHolder:SetPoint("BOTTOMRIGHT", WorldMapFrame.UIElementsFrame, "BOTTOMRIGHT", -30, 5)
     CoordsHolder:SetFrameLevel(WorldMapDetailFrame:GetFrameLevel() + 1)
     CoordsHolder:SetFrameStrata(WorldMapDetailFrame:GetFrameStrata())
+    CoordsHolder:Size(150, 5)
     CoordsHolder.playerCoords = CoordsHolder:CreateFontString(nil, "OVERLAY")
+    CoordsHolder.playerCoords:SetJustifyH("LEFT")
     CoordsHolder.mouseCoords = CoordsHolder:CreateFontString(nil, "OVERLAY")
+    CoordsHolder.mouseCoords:SetJustifyH("LEFT")
     CoordsHolder.playerCoords:SetFontObject(NumberFontNormal)
     CoordsHolder.mouseCoords:SetFontObject(NumberFontNormal)
     CoordsHolder.playerCoords:SetText(PLAYER..": 0, 0")
     CoordsHolder.mouseCoords:SetText(MOUSE_LABEL..": 0, 0")
-    CoordsHolder.playerCoords:SetPoint("BOTTOMLEFT", WorldMapFrame.UIElementsFrame, "BOTTOMLEFT", 5, 5)
+    CoordsHolder.playerCoords:SetPoint("BOTTOMLEFT", CoordsHolder, "BOTTOMLEFT")
     CoordsHolder.mouseCoords:SetPoint("BOTTOMLEFT", CoordsHolder.playerCoords, "TOPLEFT")
 
     self.CoordsTimer = self:ScheduleRepeatingTimer("UpdateCoords", 0.05)
