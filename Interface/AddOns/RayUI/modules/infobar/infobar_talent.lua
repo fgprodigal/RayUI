@@ -152,9 +152,9 @@ local function Spec_Update(self)
     end
 end
 
-local function Spec_OnEvent(self, event)
+local function Spec_OnEvent(self, event, unit)
     Spec_Update(self)
-    if event == "PLAYER_SPECIALIZATION_CHANGED" and not InCombatLockdown() then
+    if event == "PLAYER_SPECIALIZATION_CHANGED" and unit == "player" then
         local _, specName = GetSpecializationInfo(GetSpecialization())
         UseEquipmentSet(specName)
     end
