@@ -2,27 +2,27 @@ local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, 
 local S = R:GetModule("Skins")
 
 local function GroupLootDropDown_Initialize()
-	local info = Lib_UIDropDownMenu_CreateInfo();
-	info.isTitle = 1;
-	info.text = MASTER_LOOTER;
-	info.fontObject = GameFontNormalLeft;
-	info.notCheckable = 1;
-	Lib_UIDropDownMenu_AddButton(info);
-	info = Lib_UIDropDownMenu_CreateInfo();
-	info.notCheckable = 1;
-	info.text = ASSIGN_LOOT;
-	info.func = MasterLooterFrame_Show;
-	Lib_UIDropDownMenu_AddButton(info);
-	info.text = REQUEST_ROLL;
-	info.func = function() DoMasterLootRoll(LootFrame.selectedSlot); end;
-	Lib_UIDropDownMenu_AddButton(info);
+	local info = Lib_UIDropDownMenu_CreateInfo()
+	info.isTitle = 1
+	info.text = MASTER_LOOTER
+	info.fontObject = GameFontNormalLeft
+	info.notCheckable = 1
+	Lib_UIDropDownMenu_AddButton(info)
+	info = Lib_UIDropDownMenu_CreateInfo()
+	info.notCheckable = 1
+	info.text = ASSIGN_LOOT
+	info.func = MasterLooterFrame_Show
+	Lib_UIDropDownMenu_AddButton(info)
+	info.text = REQUEST_ROLL
+	info.func = function() DoMasterLootRoll(LootFrame.selectedSlot) end
+	Lib_UIDropDownMenu_AddButton(info)
 end
 --Create the new group loot dropdown frame and initialize it
 local RayUIGroupLootDropDown = CreateFrame("Frame", "RayUIGroupLootDropDown", UIParent, "Lib_UIDropDownMenuTemplate")
 RayUIGroupLootDropDown:SetID(1)
 RayUIGroupLootDropDown:Hide()
-Lib_UIDropDownMenu_Initialize(RayUIGroupLootDropDown, nil, "MENU");
-RayUIGroupLootDropDown.initialize = GroupLootDropDown_Initialize;
+Lib_UIDropDownMenu_Initialize(RayUIGroupLootDropDown, nil, "MENU")
+RayUIGroupLootDropDown.initialize = GroupLootDropDown_Initialize
 
 local function LoadSkin()
     local autoLootTable = {}
@@ -271,7 +271,7 @@ local function LoadSkin()
 				end
 				self:Hide()
 			elseif event == "OPEN_MASTER_LOOT_LIST" then
-				Lib_ToggleDropDownMenu(1, nil, RayUIGroupLootDropDown, lootFrame.slots[ss], 0, 0)
+				Lib_ToggleDropDownMenu(1, nil, RayUIGroupLootDropDown, lootSlots[LootFrame.selectedSlot], 0, 0)
 			elseif event == "UPDATE_MASTER_LOOT_LIST" then
 				UIDropDownMenu_Refresh(GroupLootDropDown)
 				MasterLooterFrame_UpdatePlayers()
