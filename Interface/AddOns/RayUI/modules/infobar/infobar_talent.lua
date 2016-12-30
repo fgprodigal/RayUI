@@ -25,6 +25,9 @@ local UseEquipmentSet = UseEquipmentSet
 local ShowUIPanel = ShowUIPanel
 local HideUIPanel = HideUIPanel
 local InCombatLockdown = InCombatLockdown
+local GetInventoryItemQuality = GetInventoryItemQuality
+local EquipmentManager_UnequipItemInSlot = EquipmentManager_UnequipItemInSlot
+local EquipmentManager_RunAction = EquipmentManager_RunAction
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: TALENTS, ACTIVE_PETS, NONE, NORMAL_FONT_COLOR, EQUIPMENT_MANAGER, PlayerTalentFrame, RayUI_InfobarTooltipFont
@@ -152,11 +155,22 @@ local function Spec_Update(self)
     end
 end
 
+local function UnequipLegendary()
+    for slot = 1, 15 do
+        local quality = GetInventoryItemQuality("player", slot)
+        if quality and quality == 5 then
+            local action = EquipmentManager_UnequipItemInSlot(slot)
+            EquipmentManager_RunAction(action)
+        end
+    end
+end
+
 local function Spec_OnEvent(self, event, unit)
     Spec_Update(self)
     if event == "PLAYER_SPECIALIZATION_CHANGED" and unit == "player" then
         local _, specName = GetSpecializationInfo(GetSpecialization())
-        UseEquipmentSet(specName)
+        UnequipLegendary()
+        R:Delay(0.5, function() UseEquipmentSet(specName) end)
     end
     if Tooltip and Tooltip:IsShown() then
         RenderTooltip(self)
