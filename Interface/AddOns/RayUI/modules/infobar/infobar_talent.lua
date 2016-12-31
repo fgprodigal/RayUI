@@ -21,13 +21,13 @@ local GetLootSpecialization = GetLootSpecialization
 local GetSpecializationInfoByID = GetSpecializationInfoByID
 local SetLootSpecialization = SetLootSpecialization
 local TalentFrame_LoadUI = TalentFrame_LoadUI
-local UseEquipmentSet = UseEquipmentSet
 local ShowUIPanel = ShowUIPanel
 local HideUIPanel = HideUIPanel
 local InCombatLockdown = InCombatLockdown
 local GetInventoryItemQuality = GetInventoryItemQuality
 local EquipmentManager_UnequipItemInSlot = EquipmentManager_UnequipItemInSlot
 local EquipmentManager_RunAction = EquipmentManager_RunAction
+local EquipmentManager_EquipSet = EquipmentManager_EquipSet
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: TALENTS, ACTIVE_PETS, NONE, NORMAL_FONT_COLOR, EQUIPMENT_MANAGER, PlayerTalentFrame, RayUI_InfobarTooltipFont
@@ -165,12 +165,24 @@ local function UnequipLegendary()
     end
 end
 
+local oldSpecName = ""
+local function ChangeEquipmentSet()
+    local _, currentSpecName = GetSpecializationInfo(GetSpecialization())
+    if oldSpecName == currentSpecName then
+        print(2)
+        return
+    else
+        print(1)
+        oldSpecName = currentSpecName
+    end
+    EquipmentManager_EquipSet(currentSpecName)
+end
+
 local function Spec_OnEvent(self, event, unit)
     Spec_Update(self)
     if event == "PLAYER_SPECIALIZATION_CHANGED" and unit == "player" then
-        local _, specName = GetSpecializationInfo(GetSpecialization())
         UnequipLegendary()
-        R:Delay(0.5, function() UseEquipmentSet(specName) end)
+        R:Delay(0.5, ChangeEquipmentSet)
     end
     if Tooltip and Tooltip:IsShown() then
         RenderTooltip(self)
