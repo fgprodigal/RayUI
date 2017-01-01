@@ -16,4 +16,15 @@ P["Reminder"]["filters"] = {
 			["tree"] = 1,
 		}
 	},
+	MAGE = {
+		["奥术魔宠"] = {
+			["spellGroup"] = {
+				[210126] = true,
+				["defaultIcon"] = 210126
+			},
+			["enable"] = true,
+			["strictFilter"] = true,
+			["tree"] = 1,
+		}
+	},
 }

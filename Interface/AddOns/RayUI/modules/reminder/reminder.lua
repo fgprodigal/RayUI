@@ -33,7 +33,7 @@ local ActionButton_HideOverlayGlow = ActionButton_HideOverlayGlow
 function RM:PlayerHasFilteredBuff(frame, db, checkPersonal)
 	for buff, value in pairs(db) do
 		if value == true then
-			local name = GetSpellInfo(buff);
+			local name = GetSpellInfo(buff)
 			local _, _, icon, _, _, _, _, unitCaster, _, _, _ = UnitBuff("player", name)
 
 			if checkPersonal then
@@ -48,7 +48,7 @@ function RM:PlayerHasFilteredBuff(frame, db, checkPersonal)
 		end
 	end
 
-	return false;
+	return false
 end
 
 function RM:PlayerHasFilteredDebuff(frame, db)
@@ -133,7 +133,7 @@ end
 
 function RM:FilterCheck(frame, isReverse)
 	local _, instanceType = IsInInstance()
-	local roleCheck, treeCheck, combatCheck, instanceCheck, PVPCheck
+	local roleCheck, treeCheck, combatCheck, instanceCheck, PVPCheck, talentCheck
 
 	local db = P["Reminder"].filters[R.myclass][frame.groupName]
 
@@ -194,7 +194,7 @@ function RM:FilterCheck(frame, isReverse)
 end
 
 function RM:ReminderIcon_OnEvent(event, unit)
-	if (event == "UNIT_AURA" and unit ~= "player") then return; end
+	if (event == "UNIT_AURA" and unit ~= "player") then return end
 
 	local db = P["Reminder"].filters[R.myclass][self.groupName]
 
@@ -205,19 +205,19 @@ function RM:ReminderIcon_OnEvent(event, unit)
 	if not db or not db.enable or (not db.spellGroup and not db.weaponCheck and not db.CDSpell) or UnitIsDeadOrGhost("player") then
 		self:SetScript("OnUpdate", nil)
 		self:SetAlpha(0)
-		self.icon:SetTexture(nil);
+		self.icon:SetTexture(nil)
 
 		if not db then
 			RM.CreatedReminders[self.groupName] = nil
 		end
-		return;
+		return
 	end
 
 	--Level Check
-	if db.level and UnitLevel("player") < db.level and not self.ForceShow then return; end
+	if db.level and UnitLevel("player") < db.level and not self.ForceShow then return end
 
 	--Negate Spells Check
-	if db.negateGroup and RM:PlayerHasFilteredBuff(self, db.negateGroup) and not self.ForceShow then return; end
+	if db.negateGroup and RM:PlayerHasFilteredBuff(self, db.negateGroup) and not self.ForceShow then return end
 
 	local hasOffhandWeapon = OffhandHasWeapon()
 	local hasMainHandEnchant, _, _, hasOffHandEnchant, _, _ = GetWeaponEnchantInfo()
@@ -241,12 +241,9 @@ function RM:ReminderIcon_OnEvent(event, unit)
 
 		if (not self.icon:GetTexture() and event == "PLAYER_ENTERING_WORLD") then
 			self:UnregisterAllEvents()
-			self:RegisterEvent("LEARNED_SPELL_IN_TAB")
-			return
-		elseif (self.icon:GetTexture() and event == "LEARNED_SPELL_IN_TAB") then
-			self:UnregisterAllEvents()
 			self:RegisterEvent("UNIT_AURA")
 			self:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN")
+			self:RegisterEvent("PLAYER_TALENT_UPDATE")
 			if db.combat then
 				self:RegisterEvent("PLAYER_REGEN_ENABLED")
 				self:RegisterEvent("PLAYER_REGEN_DISABLED")
@@ -259,6 +256,7 @@ function RM:ReminderIcon_OnEvent(event, unit)
 			if db.role then
 				self:RegisterEvent("UNIT_INVENTORY_CHANGED")
 			end
+            return
 		end
 
 		hasBuff, hasDebuff = RM:PlayerHasFilteredBuff(self, db.spellGroup, db.personal), RM:PlayerHasFilteredDebuff(self, db.spellGroup)
@@ -295,10 +293,10 @@ function RM:ReminderIcon_OnEvent(event, unit)
 	end
 
 	if db.CDSpell then
-		if type(db.CDSpell) == "boolean" then return; end
+		if type(db.CDSpell) == "boolean" then return end
 		local name = GetSpellInfo(db.CDSpell)
 		local usable, nomana = IsUsableSpell(name)
-		if not usable then return; end
+		if not usable then return end
 
 		self:SetScript("OnUpdate", RM.ReminderIcon_OnUpdate)
 
@@ -315,7 +313,7 @@ function RM:ReminderIcon_OnEvent(event, unit)
 		return
 	end
 
-	if not self.icon:GetTexture() or UnitInVehicle("player") then return; end
+	if not self.icon:GetTexture() or UnitInVehicle("player") then return end
 
 	local filterCheck = RM:FilterCheck(self)
 	local reverseCheck = RM:FilterCheck(self, true)
@@ -403,14 +401,6 @@ function RM:CreateReminder(name, index)
 
 	frame:RegisterUnitEvent("UNIT_AURA", "player")
 	frame:RegisterEvent("PLAYER_ENTERING_WORLD")
-	frame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-	frame:RegisterEvent("UNIT_INVENTORY_CHANGED")
-	frame:RegisterEvent("PLAYER_REGEN_ENABLED")
-	frame:RegisterEvent("PLAYER_REGEN_DISABLED")
-	frame:RegisterEvent("UNIT_ENTERING_VEHICLE")
-	frame:RegisterEvent("UNIT_ENTERED_VEHICLE")
-	frame:RegisterEvent("UNIT_EXITING_VEHICLE")
-	frame:RegisterEvent("UNIT_EXITED_VEHICLE")
 	frame:SetScript("OnEvent", RM.ReminderIcon_OnEvent)
 
 	self.CreatedReminders[name] = frame

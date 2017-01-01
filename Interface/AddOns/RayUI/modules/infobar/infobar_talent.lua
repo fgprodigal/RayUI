@@ -156,10 +156,8 @@ local function Spec_Update(self)
     end
 end
 
-local oldSpecName = ""
+local oldSpecName
 local function UnequipLegendary()
-    local _, specName = GetSpecializationInfo(GetSpecialization())
-    if not GetEquipmentSetInfoByName(specName) or oldSpecName == specName then return end
     for slot = 1, 15 do
         local quality = GetInventoryItemQuality("player", slot)
         if quality and quality == 5 then
@@ -176,14 +174,18 @@ local function ChangeEquipmentSet()
     else
         oldSpecName = currentSpecName
     end
-    EquipmentManager_EquipSet(currentSpecName)
+    if not GetEquipmentSetInfoByName(currentSpecName) then return end
+    UnequipLegendary()
+    R:Delay(0.5, function() EquipmentManager_EquipSet(currentSpecName) end)
 end
 
 local function Spec_OnEvent(self, event, unit)
+    if not oldSpecName then
+        oldSpecName = select(2, GetSpecializationInfo(GetSpecialization()))
+    end
     Spec_Update(self)
     if event == "PLAYER_SPECIALIZATION_CHANGED" and unit == "player" then
-        UnequipLegendary()
-        R:Delay(0.5, ChangeEquipmentSet)
+        ChangeEquipmentSet()
     end
     if Tooltip and Tooltip:IsShown() then
         RenderTooltip(self)
