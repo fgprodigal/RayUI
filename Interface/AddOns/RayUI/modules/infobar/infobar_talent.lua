@@ -28,6 +28,7 @@ local GetInventoryItemQuality = GetInventoryItemQuality
 local EquipmentManager_UnequipItemInSlot = EquipmentManager_UnequipItemInSlot
 local EquipmentManager_RunAction = EquipmentManager_RunAction
 local EquipmentManager_EquipSet = EquipmentManager_EquipSet
+local GetEquipmentSetInfoByName = GetEquipmentSetInfoByName
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: TALENTS, ACTIVE_PETS, NONE, NORMAL_FONT_COLOR, EQUIPMENT_MANAGER, PlayerTalentFrame, RayUI_InfobarTooltipFont
@@ -156,6 +157,8 @@ local function Spec_Update(self)
 end
 
 local function UnequipLegendary()
+    local _, specName = GetSpecializationInfo(GetSpecialization())
+    if not GetEquipmentSetInfoByName(specName) then return end
     for slot = 1, 15 do
         local quality = GetInventoryItemQuality("player", slot)
         if quality and quality == 5 then
@@ -169,10 +172,8 @@ local oldSpecName = ""
 local function ChangeEquipmentSet()
     local _, currentSpecName = GetSpecializationInfo(GetSpecialization())
     if oldSpecName == currentSpecName then
-        print(2)
         return
     else
-        print(1)
         oldSpecName = currentSpecName
     end
     EquipmentManager_EquipSet(currentSpecName)
