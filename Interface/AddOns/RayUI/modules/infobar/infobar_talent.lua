@@ -156,9 +156,10 @@ local function Spec_Update(self)
     end
 end
 
+local oldSpecName = ""
 local function UnequipLegendary()
     local _, specName = GetSpecializationInfo(GetSpecialization())
-    if not GetEquipmentSetInfoByName(specName) then return end
+    if not GetEquipmentSetInfoByName(specName) or oldSpecName == specName then return end
     for slot = 1, 15 do
         local quality = GetInventoryItemQuality("player", slot)
         if quality and quality == 5 then
@@ -168,7 +169,6 @@ local function UnequipLegendary()
     end
 end
 
-local oldSpecName = ""
 local function ChangeEquipmentSet()
     local _, currentSpecName = GetSpecializationInfo(GetSpecialization())
     if oldSpecName == currentSpecName then

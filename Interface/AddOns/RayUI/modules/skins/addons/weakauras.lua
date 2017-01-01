@@ -18,6 +18,12 @@ local function LoadSkin()
                 frame.iconFrame:SetAllPoints(frame.icon)
                 frame.icon:SetTexCoord(.08, .92, .08, .92)
                 frame.icon.SetTexCoord = R.dummy
+                hooksecurefunc(frame.bar, "SetForegroundColor", function(self, r, g, b, a)
+                    self.fg:SetGradient("VERTICAL", R:GetGradientColor(r, g, b))
+                end)
+                hooksecurefunc(frame.bar, "SetBackgroundColor", function(self, r, g, b, a)
+                    self.bg:SetGradient("VERTICAL", R:GetGradientColor(r, g, b))
+                end)
             end
         end
     end
