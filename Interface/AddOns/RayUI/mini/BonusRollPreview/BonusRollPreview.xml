@@ -1,0 +1,6 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="encounters\Legion.lua"/>
+	<Script file="encounters\Draenor.lua"/>
+	<Script file="encounters\Pandaria.lua"/>
+	<Script file="BonusRollPreview.lua"/>
+</Ui>
