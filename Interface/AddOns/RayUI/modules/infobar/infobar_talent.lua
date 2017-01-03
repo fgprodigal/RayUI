@@ -176,7 +176,7 @@ local function ChangeEquipmentSet()
     end
     if not GetEquipmentSetInfoByName(currentSpecName) then return end
     UnequipLegendary()
-    R:Delay(0.5, function() EquipmentManager_EquipSet(currentSpecName) end)
+    R:Delay(1, function() EquipmentManager_EquipSet(currentSpecName) end)
 end
 
 local function Spec_OnEvent(self, event, unit)
