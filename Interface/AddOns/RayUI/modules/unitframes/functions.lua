@@ -1536,13 +1536,13 @@ function UF:ToggleUF(msg)
                 UF:UnforceShow(frame)
             end
         end
-    elseif msg == "raid25" or msg == "r25" then
+    elseif msg == "raid" or msg == "r" then
         local header = _G["RayUF_Raid"]
         if header then
             UF:HeaderConfig(header, header.forceShow ~= true or nil)
         end
-    elseif msg == "raid40" or msg == "r40" then
-        local header = _G["RayUF_Raid40"]
+    elseif msg == "party" or msg == "p" then
+        local header = _G["RayUF_Party"]
         if header then
             UF:HeaderConfig(header, header.forceShow ~= true or nil)
         end

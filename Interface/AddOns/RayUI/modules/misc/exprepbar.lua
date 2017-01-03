@@ -12,8 +12,6 @@ local min = math.min
 
 --WoW API / Variables
 local CreateFrame = CreateFrame
-local IsAddOnLoaded = IsAddOnLoaded
-local LoadAddOn = LoadAddOn
 local SocketInventoryItem = SocketInventoryItem
 local GetSpellInfo = GetSpellInfo
 local HideUIPanel = HideUIPanel

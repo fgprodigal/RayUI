@@ -142,7 +142,7 @@ function RA:CreateHeader(parent, name, groupFilter, template, layout)
         end
     end
 
-    local header = RayUF:SpawnHeader(name, template, nil,
+    local header = RayUF:SpawnHeader(name, nil, nil,
         "oUF-initialConfigFunction", ([[self:SetWidth(%d); self:SetHeight(%d);]]):format(R:Scale(RA.groupConfig[layout].width), R:Scale(RA.groupConfig[layout].height)),
         "xOffset", xoff,
         "yOffset", yoff,
@@ -157,7 +157,8 @@ function RA:CreateHeader(parent, name, groupFilter, template, layout)
         "maxColumns", 1,
         "unitsPerColumn", 5,
         "columnSpacing", RA.db.spacing,
-        "columnAnchorPoint", growth)
+        "columnAnchorPoint", growth,
+        template and "template", template)
 
     header:SetParent(parent)
     header:Show()
@@ -283,14 +284,14 @@ function RA:Initialize()
     self:RegisterEvent("GROUP_ROSTER_UPDATE", "HideBlizzard")
     UIParent:UnregisterEvent("GROUP_ROSTER_UPDATE")
 
-	for layout, config in pairs(self["headerstoload"]) do
+    for layout, config in pairs(self["headerstoload"]) do
         local stringTitle = R:StringTitle(layout)
-		local groupFilter, template = unpack(config)
+        local groupFilter, template = unpack(config)
         self["Fetch"..stringTitle.."Settings"](self)
         if self.groupConfig[layout].enable then
-    		self:CreateHeaderGroup(layout, groupFilter, template)
+            self:CreateHeaderGroup(layout, groupFilter, template)
         end
-	end
+    end
     self["headerstoload"] = nil
 
     self:RegisterDebuffs()
