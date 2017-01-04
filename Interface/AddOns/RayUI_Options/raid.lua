@@ -42,7 +42,7 @@ R.Options.args.Raid = {
             type = "execute",
             name = L["显示团队"],
             func = function()
-                UF:ToggleUF("r25")
+                UF:ToggleUF("raid")
             end,
             hidden = function() return not R.db.Raid.enable end,
         },
