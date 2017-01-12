@@ -217,7 +217,6 @@ G.UnitFrames.aurafilters["CCDebuffs"] = {
 
 G.UnitFrames.ChannelTicks = {
     --Warlock
-    [SpellName(689)] = 6, -- "Drain Life"
     [SpellName(198590)] = 6, -- "Drain Soul"
     -- [SpellName(108371)] = 6, -- "Harvest Life"
     [SpellName(5740)] = 4, -- "Rain of Fire"
@@ -225,8 +224,6 @@ G.UnitFrames.ChannelTicks = {
     -- [SpellName(103103)] = 4, --Malefic Grasp
     --Druid
     --Priest
-    [SpellName(48045)] = 5, -- "Mind Sear"
-    [SpellName(179338)] = 5, -- "Searing insanity"
     [SpellName(64843)] = 4, -- Divine Hymn
     [SpellName(15407)] = 4, -- Mind Flay
     --Mage
@@ -257,7 +254,6 @@ f:SetScript("OnEvent", function(self, event)
 
 G.UnitFrames.ChannelTicksSize = {
     --Warlock
-    [SpellName(689)] = 1, -- "Drain Life"
     [SpellName(198590)] = 1, -- "Drain Soul"
 }
 
