@@ -157,15 +157,6 @@ local function Spec_Update(self)
 end
 
 local oldSpecName
-local function UnequipLegendary()
-    for slot = 1, 15 do
-        local quality = GetInventoryItemQuality("player", slot)
-        if quality and quality == 5 then
-            local action = EquipmentManager_UnequipItemInSlot(slot)
-            EquipmentManager_RunAction(action)
-        end
-    end
-end
 
 local function ChangeEquipmentSet()
     local _, currentSpecName = GetSpecializationInfo(GetSpecialization())
@@ -175,8 +166,7 @@ local function ChangeEquipmentSet()
         oldSpecName = currentSpecName
     end
     if not GetEquipmentSetInfoByName(currentSpecName) then return end
-    UnequipLegendary()
-    R:Delay(1, function() EquipmentManager_EquipSet(currentSpecName) end)
+    EquipmentManager_EquipSet(currentSpecName)
 end
 
 local function Spec_OnEvent(self, event, unit)

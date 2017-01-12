@@ -1267,7 +1267,7 @@ function UF:UpdatePrep(event)
                 local _, spec, class, texture = nil, "UNKNOWN", "UNKNOWN", [[INTERFACE\ICONS\INV_MISC_QUESTIONMARK]]
 
                 if s and s > 0 then
-                    _, spec, _, texture, _, _, class = GetSpecializationInfoByID(s)
+                    _, spec, _, texture, _, class = GetSpecializationInfoByID(s)
                 end
 
                 if (i <= numOpps) then
