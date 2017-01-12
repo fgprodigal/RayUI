@@ -42,10 +42,9 @@ do
 		AddSpell(enemySpells, 403) -- Lightning Bolt (Resto) (40 yards)
 		AddSpell(friendlySpells, 8004) -- Healing Surge (Resto/Elemental) (40 yards)
 		AddSpell(friendlySpells, 188070) -- Healing Surge (Enhancement) (40 yards)
-		AddSpell(resSpells, 2008) -- Ancestral Spirit (40 yards) 
+		AddSpell(resSpells, 2008) -- Ancestral Spirit (40 yards)
 	elseif class == "WARLOCK" then
 		AddSpell(enemySpells, 5782) -- Fear (30 yards)
-		AddSpell(longEnemySpells, 689) -- Drain Life (40 yards)
 		AddSpell(longEnemySpells, 234153) -- Drain Life (40 yards)
 		AddSpell(longEnemySpells, 198590) -- Drain Soul (40 yards)
 		AddSpell(petSpells, 755) -- Health Funnel (45 yards)
@@ -103,7 +102,7 @@ local function getUnit(unit)
 	end
 end
 
-local function friendlyIsInRange(unit)	
+local function friendlyIsInRange(unit)
 	if CheckInteractDistance(unit, 1) and UnitInPhase(unit) then --Inspect (28 yards) and same phase as you
 		return true
 	end
@@ -128,7 +127,7 @@ local function friendlyIsInRange(unit)
 			end
 		end
 	end
-	
+
 	return false
 end
 
@@ -136,7 +135,7 @@ local function petIsInRange(unit)
 	if CheckInteractDistance(unit, 2) then
 		return true
 	end
-	
+
 	for _, spellID in ipairs(friendlySpells) do
 		if SpellRange.IsSpellInRange(spellID, unit) == 1 then
 			return true
@@ -147,7 +146,7 @@ local function petIsInRange(unit)
 			return true
 		end
 	end
-	
+
 	return false
 end
 
@@ -155,13 +154,13 @@ local function enemyIsInRange(unit)
 	if CheckInteractDistance(unit, 2) then
 		return true
 	end
-	
+
 	for _, spellID in ipairs(enemySpells) do
 		if SpellRange.IsSpellInRange(spellID, unit) == 1 then
 			return true
 		end
 	end
-	
+
 	return false
 end
 
@@ -171,7 +170,7 @@ local function enemyIsInLongRange(unit)
 			return true
 		end
 	end
-	
+
 	return false
 end
 
@@ -208,7 +207,7 @@ local OnRangeUpdate = function(self, elapsed)
 						end
 					end
 				else
-					object:SetAlpha(range.insideAlpha)	
+					object:SetAlpha(range.insideAlpha)
 				end
 			end
 		end
