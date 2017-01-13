@@ -19,17 +19,7 @@ local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
 local isMoving = false
 local hasNew = false
 local timeout = 0
-local whentoshow={
-    "say", "emote", "text_emote", "yell",
-    "monster_emote", "monster_party", "monster_say", "monster_whisper", "monster_yell",
-    "party", "party_leader", "party_guide",
-    "whisper", "system", "channel",
-    "guild", "officer",
-    "instance_chat", "instance_chat_leader",
-    "raid", "raid_leader", "raid_warning",
-    "bn_whisper",
-    "bn_inline_toast_broadcast",
-}
+
 local channelNumbers = {
     [1] = true,
     [2] = true,
@@ -162,21 +152,7 @@ function CH:AutoHide()
         ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", CheckWhisperWindows)
         ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_WHISPER", CheckWhisperWindows)
     else
-        for _, event in pairs(whentoshow) do
-            if(not event:match("[A-Z]")) then
-                event = "CHAT_MSG_"..event:upper()
-            end
-            self:RegisterEvent(event, "OnEvent")
-        end
         self:RegisterEvent("PLAYER_REGEN_DISABLED", "OnEvent")
-        self:RegisterEvent("BN_FRIEND_ACCOUNT_ONLINE", "OnEvent")
-        self:RegisterEvent("BN_FRIEND_ACCOUNT_OFFLINE", "OnEvent")
-        self:RegisterEvent("BN_CUSTOM_MESSAGE_CHANGED", "OnEvent")
-        self:RegisterEvent("BN_FRIEND_INVITE_ADDED", "OnEvent")
-        self:RegisterEvent("BN_FRIEND_INVITE_LIST_INITIALIZED", "OnEvent")
-        R:SecureHook(R, "Print", function()
-                self:OnEvent(self, "CHAT_MSG_SAY")
-            end)
     end
     local RayUIChatToggle = CreateFrame("Frame", "RayUIChatToggle", R.UIParent)
     RayUIChatToggle:CreatePanel("Default", 15, 140, "BOTTOMLEFT",R.UIParent,"BOTTOMLEFT", 0,30)

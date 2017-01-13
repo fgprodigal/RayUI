@@ -458,6 +458,9 @@ function CH:AddMessage(text, ...)
     text = string.gsub(text, "%[(%d+)%. .-%]", "[%1]")
     text = string.gsub(text, "(%[|HBNplayer:%S-|k:)(%d-)(:%S-|h)%[(%S-)%](|?h?)(%]:?)", changeBNetName)
     text = string.gsub(text, "EUI", "ElvUI")
+    if CH.db.autoshow and CH.OnEvent then
+        CH:OnEvent("CHAT_MSG_SAY")
+    end
     return self.OldAddMessage(self, text, ...)
 end
 
