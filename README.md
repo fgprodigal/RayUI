@@ -2,9 +2,12 @@
 
 简洁，实用，美观。
 
-## 链接
+## 概括
 
-网站：[rayui.me](http://rayui.me)
+[![Author](https://img.shields.io/badge/%E4%BD%9C%E8%80%85-Ray-blue.svg?style=flat)](https://rayui.me/RayUI)
+[![Download1](https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD-%E5%9B%BD%E5%86%85-brightgreen.svg?style=flat)](https://coding.net/u/fgprodigal/p/RayUI/git/archive/master)
+[![Download2](https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD-%E5%9B%BD%E5%A4%96-brightgreen.svg?style=flat)](https://github.com/fgprodigal/RayUI/archive/master.zip)
+![Version](https://img.shields.io/badge/WoW-7.15-blue.svg?style=flat)
 
 ## 使用
 
@@ -28,9 +31,12 @@
 
 Simple, functional, beautiful.
 
-## Links
+## General
 
-Website: [rayui.me](http://rayui.me)
+[![Author](https://img.shields.io/badge/author-Ray-blue.svg?style=flat)](https://rayui.me/RayUI)
+[![Download1](https://img.shields.io/badge/download-github-brightgreen.svg?style=flat)](https://github.com/fgprodigal/RayUI/archive/master.zip)
+[![Download2](https://img.shields.io/badge/download-coding-brightgreen.svg?style=flat)](https://coding.net/u/fgprodigal/p/RayUI/git/archive/master)
+![Version](https://img.shields.io/badge/WoW-7.15-blue.svg?style=flat)
 
 ## Usage
 
