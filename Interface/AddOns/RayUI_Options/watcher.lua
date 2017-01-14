@@ -10,14 +10,14 @@ local selectedCooldown = nil
 local selectedItemCooldown = nil
 
 local function SaveGroupKey(key, value)
-    if not selectedGroup and not selectedSpell then return end
+    if not selectedGroup or not selectedSpell then return end
     R.global.Watcher = R.global.Watcher or {}
     R.global.Watcher[selectedGroup] = R.global.Watcher[selectedGroup] or {}
     R.global.Watcher[selectedGroup][key] = value
 end
 
 local function SaveProfileKey(key, value)
-    if not selectedGroup and not selectedSpell then return end
+    if not selectedGroup or not selectedSpell then return end
     R.global.Watcher = R.global.Watcher or {}
     R.global.Watcher[selectedGroup] = R.global.Watcher[selectedGroup] or {}
     R.global.Watcher[selectedGroup][selectedSpell.filter] = R.global.Watcher[selectedGroup][selectedSpell.filter] or {}
