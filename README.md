@@ -1,13 +1,17 @@
-# RayUI
+<h1 align="center">
+  RayUI
+</h1>
 
-简洁，实用，美观。
+<p align="center">
+  简洁，实用，美观。
+</p>
 
-## 概括
-
-[![Author](https://img.shields.io/badge/%E4%BD%9C%E8%80%85-Ray-blue.svg?style=flat)](https://rayui.me/RayUI)
-[![Download1](https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD-%E5%9B%BD%E5%86%85-brightgreen.svg?style=flat)](https://coding.net/u/fgprodigal/p/RayUI/git/archive/master)
-[![Download2](https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD-%E5%9B%BD%E5%A4%96-brightgreen.svg?style=flat)](https://github.com/fgprodigal/RayUI/archive/master.zip)
-![Version](https://img.shields.io/badge/WoW-7.15-blue.svg?style=flat)
+<p align="center">
+  <a href="https://rayui.me/RayUI"><img src="https://img.shields.io/badge/%E4%BD%9C%E8%80%85-Ray-blue.svg?style=flat"></a>
+  <img src="https://img.shields.io/badge/WoW-7.15-blue.svg?style=flat">
+  <a href="https://coding.net/u/fgprodigal/p/RayUI/git/archive/maste"><img src="https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD-%E5%9B%BD%E5%86%85-brightgreen.svg?style=flat"></a>
+  <a href="https://github.com/fgprodigal/RayUI/archive/master.zip"><img src="https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD-%E5%9B%BD%E5%A4%96-brightgreen.svg?style=flat"></a>
+</p>
 
 ## 使用
 
@@ -27,16 +31,20 @@
 
 ---
 
-# RayUI
+<h1 align="center">
+  RayUI
+</h1>
 
-Simple, functional, beautiful.
+<p align="center">
+  Simple, functional, beautiful.
+</p>
 
-## General
-
-[![Author](https://img.shields.io/badge/author-Ray-blue.svg?style=flat)](https://rayui.me/RayUI)
-[![Download1](https://img.shields.io/badge/download-github-brightgreen.svg?style=flat)](https://github.com/fgprodigal/RayUI/archive/master.zip)
-[![Download2](https://img.shields.io/badge/download-coding-brightgreen.svg?style=flat)](https://coding.net/u/fgprodigal/p/RayUI/git/archive/master)
-![Version](https://img.shields.io/badge/WoW-7.15-blue.svg?style=flat)
+<p align="center">
+  <a href="https://rayui.me/RayUI"><img src="https://img.shields.io/badge/author-Ray-blue.svg?style=flat"></a>
+  <img src="https://img.shields.io/badge/WoW-7.15-blue.svg?style=flat">
+  <a href="https://coding.net/u/fgprodigal/p/RayUI/git/archive/maste"><img src="https://img.shields.io/badge/download-coding-brightgreen.svg?style=flat"></a>
+  <a href="https://github.com/fgprodigal/RayUI/archive/master.zip"><img src="https://img.shields.io/badge/download-github-brightgreen.svg?style=flat"></a>
+</p>
 
 ## Usage
 
