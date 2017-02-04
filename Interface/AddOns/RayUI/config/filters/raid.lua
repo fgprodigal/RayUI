@@ -213,7 +213,10 @@ G.Raid.RaidDebuffs = {
             [225901] = Defaults(), -- Time Bomb
             [207871] = Defaults(), -- Vortex (Mythic)
             [212099] = Defaults(), -- Temporal Charge
-
+            [219966] = Defaults(4), -- 时间释放（红）
+            [219965] = Defaults(4), -- 时间释放（黄）
+            [219964] = Defaults(4), -- 时间释放（绿）
+            [206617] = Defaults(3), -- 时间炸弹
             -- Trilliax
             [206488] = Defaults(), -- Arcane Seepage
             [206641] = Defaults(), -- Arcane Spear (Tank)
