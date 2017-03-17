@@ -231,7 +231,6 @@ R["Watcher"] = {
                 { spellID = 105919, unitId = "player", caster = "player", filter = "BUFF" },
                 --稳固集中
                 { spellID = 193534, unitId = "player", caster = "player", filter = "BUFF" },
-
                 --野性守護
                 { spellID = 193530, unitId = "player", caster = "player", filter = "BUFF" },
                 --箭雨
@@ -250,9 +249,10 @@ R["Watcher"] = {
                 { spellID = 201081, unitId = "player", caster = "player", filter = "BUFF" },
                 --貓鼬撕咬
                 { spellID = 190931, unitId = "player", caster = "player", filter = "BUFF" },
-
-                --擊殺命令
-                { spellID = 34026, filter = "CD" },
+		--狂野怒火
+                { spellID = 19574, unitId = "player", caster = "player", filter = "BUFF" },
+                --凶暴野兽（杀戮换凶暴应该会好些）
+                { spellID = 120679, filter = "CD" },
             },
             {
                 name = "目标重要buff&debuff",
@@ -262,6 +262,8 @@ R["Watcher"] = {
 
                 --翼龍釘刺
                 { spellID = 19386, unitId = "target", caster = "all", filter = "DEBUFF" },
+		--胁迫
+                { spellID = 24394, unitId = "target", caster = "all", filter = "DEBUFF" },
                 --毒蛇釘刺
                 { spellID = 118253, unitId = "target", caster = "player", filter = "DEBUFF" },
                 --黑鸦
@@ -313,6 +315,10 @@ R["Watcher"] = {
                 { spellID = 131894, filter = "CD" },
                 --强擊
                 { spellID = 193526, filter = "CD" },
+		--狂野怒火
+                { spellID = 19574, filter = "CD" },
+		--野性守护
+                { spellID = 19530, filter = "CD" },
             },
         },
         ["MAGE"] = {
