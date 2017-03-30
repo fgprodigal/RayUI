@@ -1,4 +1,4 @@
-## Interface: 70100
+## Interface: 70200
 ## Title: |cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r Options
 ## Author: Elv
 ## Version: 1.0
