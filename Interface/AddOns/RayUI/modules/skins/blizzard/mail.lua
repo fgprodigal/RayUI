@@ -63,7 +63,8 @@ local function LoadSkin()
 		"OpenMailReplyButton",
 		"OpenMailDeleteButton",
 		"OpenMailCancelButton",
-		"OpenMailReportSpamButton"
+		"OpenMailReportSpamButton",
+        "OpenAllMail"
 	}
 	for i = 1, #buttons do
 		local button = _G[buttons[i]]

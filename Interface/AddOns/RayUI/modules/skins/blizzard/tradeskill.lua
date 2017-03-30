@@ -55,7 +55,8 @@ local function LoadSkin()
 			ResultIcon:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
 		end
 		S:CreateBG(ResultIcon)
-		ResultIcon.Background:SetTexture(nil)
+        ResultIcon.bg = S:CreateBG(ResultIcon)
+		ResultIcon.ResultBorder:Hide()
 
 		for i = 1, #TradeSkillFrame.DetailsFrame.Contents.Reagents do
 			local Button = TradeSkillFrame.DetailsFrame.Contents.Reagents[i]

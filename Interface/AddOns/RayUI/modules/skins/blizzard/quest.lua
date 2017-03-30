@@ -85,10 +85,6 @@ local function LoadSkin()
 	for _, questButton in pairs({"QuestFrameAcceptButton", "QuestFrameDeclineButton", "QuestFrameCompleteQuestButton", "QuestFrameCompleteButton", "QuestFrameGoodbyeButton", "QuestFrameGreetingGoodbyeButton"}) do
 		S:Reskin(_G[questButton])
 	end
-	S:Reskin(QuestFrameDetailPanel.IgnoreButton)
-	S:Reskin(QuestFrameDetailPanel.UnignoreButton)
-	S:Reskin(QuestFrameProgressPanel.IgnoreButton)
-	S:Reskin(QuestFrameProgressPanel.UnignoreButton)
 
 	S:ReskinScroll(QuestProgressScrollFrameScrollBar)
 	S:ReskinScroll(QuestRewardScrollFrameScrollBar)
@@ -144,7 +140,7 @@ local function LoadSkin()
 	S:ReskinScroll(QuestNPCModelTextScrollFrameScrollBar)
 
 	--[[ Item text ]]
-	
+
 	select(18, ItemTextFrame:GetRegions()):Hide()
 	ItemTextFramePageBg:SetAlpha(0)
 	ItemTextPrevPageButton:GetRegions():Hide()

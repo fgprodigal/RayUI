@@ -156,27 +156,8 @@ local function Spec_Update(self)
     end
 end
 
-local oldSpecName
-
-local function ChangeEquipmentSet()
-    local _, currentSpecName = GetSpecializationInfo(GetSpecialization())
-    if oldSpecName == currentSpecName then
-        return
-    else
-        oldSpecName = currentSpecName
-    end
-    if not GetEquipmentSetInfoByName(currentSpecName) then return end
-    EquipmentManager_EquipSet(currentSpecName)
-end
-
-local function Spec_OnEvent(self, event, unit)
-    if not oldSpecName then
-        oldSpecName = select(2, GetSpecializationInfo(GetSpecialization()))
-    end
+local function Spec_OnEvent(self)
     Spec_Update(self)
-    if event == "PLAYER_SPECIALIZATION_CHANGED" and unit == "player" then
-        ChangeEquipmentSet()
-    end
     if Tooltip and Tooltip:IsShown() then
         RenderTooltip(self)
     end
@@ -204,7 +185,7 @@ do -- Initialize
     info.title = TALENTS
     info.icon = 132222
     info.clickFunc = Spec_OnClick
-    info.events = { "PLAYER_ENTERING_WORLD", "CHARACTER_POINTS_CHANGED", "PLAYER_TALENT_UPDATE", "PLAYER_LOOT_SPEC_UPDATED", "PLAYER_SPECIALIZATION_CHANGED" }
+    info.events = { "PLAYER_ENTERING_WORLD", "CHARACTER_POINTS_CHANGED", "PLAYER_TALENT_UPDATE", "PLAYER_LOOT_SPEC_UPDATED" }
     info.eventFunc = Spec_OnEvent
     info.initFunc = Spec_OnEvent
     info.tooltipFunc = Spec_OnEnter

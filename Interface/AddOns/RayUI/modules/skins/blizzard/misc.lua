@@ -634,7 +634,8 @@ local function LoadSkin()
         "InterfaceOptionsMousePanelClickToMove",
         "InterfaceOptionsAccessibilityPanelMovePad",
         "InterfaceOptionsAccessibilityPanelCinematicSubtitles",
-        "InterfaceOptionsAccessibilityPanelColorblindMode"
+        "InterfaceOptionsAccessibilityPanelColorblindMode",
+        "InterfaceOptionsSocialPanelAutoAcceptQuickJoinRequests"
     }
     for i = 1, #checkboxes do
         S:ReskinCheck(_G[checkboxes[i]])
