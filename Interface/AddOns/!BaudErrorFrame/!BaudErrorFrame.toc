@@ -1,4 +1,4 @@
-## Interface: 70100
+## Interface: 70200
 ## Title: Baud Error Frame
 ## Notes: Improved error reporting
 ## Author: Baudzilla, wolftankk, Affli@RU-Howling Fjord
