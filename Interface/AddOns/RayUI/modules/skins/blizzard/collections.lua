@@ -344,11 +344,8 @@ local function LoadSkin()
 
 	S:ReskinInput(ToyBox.searchBox)
 	S:ReskinFilterButton(ToyBoxFilterButton)
-	S:ReskinArrow(ToyBox.navigationFrame.prevPageButton, "left")
-	S:ReskinArrow(ToyBox.navigationFrame.nextPageButton, "right")
-
-	ToyBox.navigationFrame.prevPageButton:SetPoint("BOTTOMRIGHT", -320, 51)
-	ToyBox.navigationFrame.nextPageButton:SetPoint("BOTTOMRIGHT", -285, 51)
+	S:ReskinArrow(ToyBox.PagingFrame.PrevPageButton, "left")
+	S:ReskinArrow(ToyBox.PagingFrame.NextPageButton, "right")
 
 	-- Progress bar
 
@@ -423,11 +420,8 @@ local function LoadSkin()
 	S:ReskinInput(HeirloomsJournalSearchBox)
 	S:ReskinDropDown(HeirloomsJournalClassDropDown)
 	S:ReskinFilterButton(HeirloomsJournalFilterButton)
-	S:ReskinArrow(HeirloomsJournal.navigationFrame.prevPageButton, "left")
-	S:ReskinArrow(HeirloomsJournal.navigationFrame.nextPageButton, "right")
-
-	HeirloomsJournal.navigationFrame.prevPageButton:SetPoint("BOTTOMRIGHT", -320, 51)
-	HeirloomsJournal.navigationFrame.nextPageButton:SetPoint("BOTTOMRIGHT", -285, 51)
+	S:ReskinArrow(HeirloomsJournal.PagingFrame.PrevPageButton, "left")
+	S:ReskinArrow(HeirloomsJournal.PagingFrame.NextPageButton, "right")
 
 	-- Progress bar
 
@@ -446,20 +440,23 @@ local function LoadSkin()
 	local WardrobeCollectionFrame = WardrobeCollectionFrame
 	local ModelsFrame = WardrobeCollectionFrame.ModelsFrame
 
+    for i = 1, 2 do
+		for j = 1, 6 do
+			select(j, _G["WardrobeCollectionFrameTab"..i]:GetRegions()):Kill()
+		end
+	end
 	WardrobeCollectionFrameBg:Hide()
-	ModelsFrame:DisableDrawLayer("BACKGROUND")
-	ModelsFrame:DisableDrawLayer("BORDER")
-	ModelsFrame:DisableDrawLayer("ARTWORK")
-	ModelsFrame:DisableDrawLayer("OVERLAY")
+    local ItemsCollectionFrame = WardrobeCollectionFrame["ItemsCollectionFrame"]
+	ItemsCollectionFrame:DisableDrawLayer("BACKGROUND")
+	ItemsCollectionFrame:DisableDrawLayer("BORDER")
+	ItemsCollectionFrame:DisableDrawLayer("ARTWORK")
+	ItemsCollectionFrame:DisableDrawLayer("OVERLAY")
 
 	S:ReskinInput(WardrobeCollectionFrameSearchBox)
 	S:ReskinFilterButton(WardrobeCollectionFrame.FilterButton)
 	S:ReskinDropDown(WardrobeCollectionFrameWeaponDropDown)
-	S:ReskinArrow(WardrobeCollectionFrame.NavigationFrame.PrevPageButton, "left")
-	S:ReskinArrow(WardrobeCollectionFrame.NavigationFrame.NextPageButton, "right")
-
-	WardrobeCollectionFrame.NavigationFrame.PrevPageButton:SetPoint("BOTTOM", 23, 51)
-	WardrobeCollectionFrame.NavigationFrame.NextPageButton:SetPoint("BOTTOM", 58, 51)
+	S:ReskinArrow(ItemsCollectionFrame.PagingFrame.PrevPageButton, "left")
+	S:ReskinArrow(ItemsCollectionFrame.PagingFrame.NextPageButton, "right")
 
 	-- Progress bar
 
@@ -479,7 +476,7 @@ local function LoadSkin()
 
 	for i = 1, 3 do
 		for j = 1, 6 do
-			ModelsFrame["ModelR"..i.."C"..j]:GetRegions():Hide()
+			ItemsCollectionFrame["ModelR"..i.."C"..j]:GetRegions():Kill()
 		end
 	end
 

@@ -16,7 +16,7 @@ local UnitPowerMax = UnitPowerMax
 -- GLOBALS: RayUF
 
 function mod:UpdateElement_MaxPower(frame)
-    local maxValue = UnitPowerMax(frame.displayedUnit, frame.PowerToken);
+    local maxValue = UnitPowerMax(frame.displayedUnit, frame.PowerType);
     frame.PowerBar:SetMinMaxValues(0, maxValue);
 end
 
@@ -24,10 +24,10 @@ local temp = {1, 1, 1}
 function mod:UpdateElement_Power(frame)
     self:UpdateElement_MaxPower(frame)
 
-    local curValue = UnitPower(frame.displayedUnit, frame.PowerToken);
+    local curValue = UnitPower(frame.displayedUnit, frame.PowerType);
     frame.PowerBar:SetValue(curValue);
 
-    local color = RayUF.colors.power[frame.PowerToken] or temp
+    local color = RayUF.colors.power[frame.PowerType] or temp
 
     if(color) then
         frame.PowerBar:SetStatusBarColor(unpack(color))

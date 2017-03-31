@@ -65,6 +65,7 @@ local GetDetailedItemLevelInfo = GetDetailedItemLevelInfo
 local GetInventoryItemLink = GetInventoryItemLink
 local GetInventoryItemID = GetInventoryItemID
 local CanDualWield = CanDualWield
+local WardrobeCollectionFrame_OpenTransmogLink = WardrobeCollectionFrame_OpenTransmogLink
 local hooksecurefunc = hooksecurefunc
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
@@ -84,9 +85,9 @@ local hooksecurefunc = hooksecurefunc
 -- GLOBALS: CURRENCY_GAINED_MULTIPLE, ERR_LEARN_TRANSMOG_S, SLASH_LSADDTOAST1, SlashCmdList, DevTools_Dump
 -- GLOBALS: AchievementFrame_SelectAchievement, QuestUtils_IsQuestWorldQuest
 
-local INLINE_NEED = "|TInterface\\Buttons\\UI-GroupLoot-Dice-Up:0:0:0:0:32:32:0:32:0:31|t"
-local INLINE_GREED = "|TInterface\\Buttons\\UI-GroupLoot-Coin-Up:0:0:0:0:32:32:0:32:0:31|t"
-local INLINE_DE = "|TInterface\\Buttons\\UI-GroupLoot-DE-Up:0:0:0:0:32:32:0:32:0:31|t"
+local TITLE_NEED_TEMPLATE = "%s |cff00ff00%s|r|TInterface\\Buttons\\UI-GroupLoot-Dice-Up:0:0:0:0:32:32:0:32:0:31|t"
+local TITLE_GREED_TEMPLATE = "%s |cff00ff00%s|r|TInterface\\Buttons\\UI-GroupLoot-Coin-Up:0:0:0:0:32:32:0:32:0:31|t"
+local TITLE_DE_TEMPLATE = "%s |cff00ff00%s|r|TInterface\\Buttons\\UI-GroupLoot-DE-Up:0:0:0:0:32:32:0:32:0:31|t"
 local itemToasts = {}
 local missonToasts = {}
 local followerToasts = {}
@@ -287,12 +288,17 @@ end
 -- UTILS --
 -----------
 
-local function FixItemLink(itemLink)
-    itemLink = string.match(itemLink, "|H(.+)|h.+|h")
-    local linkTable = {string.split(":", itemLink)}
+local function ParseLink(link)
+    if not link or link == "[]" or link == "" then
+        return
+    end
+
+    local name
+    link, name = string.match(link, "|H(.+)|h%[(.+)%]|h")
+    local linkTable = {string.split(":", link)}
 
     if linkTable[1] ~= "item" then
-        return itemLink
+        return link, linkTable[1], name
     end
 
     if linkTable[12] ~= "" then
@@ -301,7 +307,7 @@ local function FixItemLink(itemLink)
         table.remove(linkTable, 15 + (tonumber(linkTable[14]) or 0))
     end
 
-    return table.concat(linkTable, ":")
+    return table.concat(linkTable, ":"), linkTable[1], name
 end
 
 -- XXX: Remove it, when it's implemented by Blizzard
@@ -533,6 +539,10 @@ local function ResetToast(toast)
     if toast.Rank then
         toast.Rank:SetText("")
     end
+
+    if toast.RankBG then
+		toast.RankBG:Hide()
+	end
 
     if toast.IconText then
         toast.IconText:SetText("")
@@ -1167,6 +1177,13 @@ local function GetToast(toastType)
             rank:SetJustifyH("RIGHT")
             toast.Rank = rank
 
+            local rankBG = toast:CreateTexture(nil, "ARTWORK", nil, 1)
+			rankBG:SetPoint("BOTTOMLEFT", toast.Icon, "BOTTOMLEFT", 2, 2)
+			rankBG:SetPoint("BOTTOMRIGHT", toast.Icon, "BOTTOMRIGHT", -2, 2)
+			rankBG:SetHeight(12)
+			rankBG:SetColorTexture(0, 0, 0, 0.6)
+			toast.RankBG = rankBG
+
             toast.type = "ability"
         end
     elseif toastType == "scenario" then
@@ -1674,15 +1691,21 @@ local function LootWonToast_Setup(itemLink, quantity, rollType, roll, showFactio
     if isItem then
         if itemLink then
             toast = GetToast("item")
-            itemLink = FixItemLink(itemLink)
+            itemLink = ParseLink(itemLink)
             local title = YOU_WON_LABEL
+            local soundFile = 31578
             local name, _, quality, _, _, _, _, _, _, icon = GetItemInfo(itemLink)
 
             if isPersonal or lessAwesome then
                 title = YOU_RECEIVED_LABEL
+
+                if lessAwesome then
+                    soundFile = 51402
+                end
             end
 
             if isUpgraded then
+                soundFile = 51561
                 title = ITEM_UPGRADED_LABEL
                 local upgradeTexture = LOOTUPGRADEFRAME_QUALITY_TEXTURES[quality or 2]
 
@@ -1696,11 +1719,11 @@ local function LootWonToast_Setup(itemLink, quantity, rollType, roll, showFactio
             end
 
             if rollType == LOOT_ROLL_TYPE_NEED then
-                title = title.." |cff00ff00"..roll.."|r"..INLINE_NEED
+                title = TITLE_NEED_TEMPLATE:format(title, roll)
             elseif rollType == LOOT_ROLL_TYPE_GREED then
-                title = title.." |cff00ff00"..roll.."|r"..INLINE_GREED
+                title = TITLE_GREED_TEMPLATE:format(title, roll)
             elseif rollType == LOOT_ROLL_TYPE_DISENCHANT then
-                title = title.." |cff00ff00"..roll.."|r"..INLINE_DE
+                title = TITLE_DE_TEMPLATE:format(title, roll)
             end
 
             if showFaction then
@@ -1779,7 +1802,7 @@ function AL:SHOW_LOOT_TOAST_LEGENDARY_LOOTED(...)
 
     if itemLink then
         local toast = GetToast("item")
-        itemLink = FixItemLink(itemLink)
+        itemLink = ParseLink(itemLink)
         local name, _, quality, _, _, _, _, _, _, icon = GetItemInfo(itemLink)
         local color = ITEM_QUALITY_COLORS[quality or 1]
 
@@ -1808,7 +1831,7 @@ function AL:SHOW_LOOT_TOAST_UPGRADE(...)
 
     if itemLink then
         local toast = GetToast("item")
-        itemLink = FixItemLink(itemLink)
+        itemLink = ParseLink(itemLink)
         local name, _, quality, _, _, _, _, _, _, icon = GetItemInfo(itemLink)
         local upgradeTexture = LOOTUPGRADEFRAME_QUALITY_TEXTURES[quality or 2]
         local color = ITEM_QUALITY_COLORS[quality or 1]
@@ -1906,7 +1929,7 @@ local LOOT_ITEM_MULTIPLE_PATTERN = (LOOT_ITEM_SELF_MULTIPLE):gsub("%%s", "(.+)")
 local LOOT_ITEM_PUSHED_MULTIPLE_PATTERN = (LOOT_ITEM_PUSHED_SELF_MULTIPLE):gsub("%%s", "(.+)"):gsub("%%d", "(%%d+)")
 
 local function LootCommonToast_Setup(itemLink, quantity)
-    itemLink = FixItemLink(itemLink)
+    itemLink = ParseLink(itemLink)
 
     if not GetToastToUpdate(itemLink, "item") then
         local name, quality, icon, _
@@ -2075,6 +2098,7 @@ function AL:NEW_RECIPE_LEARNED(...)
             toast.Text:SetText(recipeName)
             toast.BG:SetTexture("Interface\\AddOns\\RayUI\\media\\toast-bg-recipe")
             toast.Rank:SetText(rankTexture)
+            toast.RankBG:SetShown(not not rank)
             toast.Icon:SetTexture(C_TradeSkillUI.GetTradeSkillTexture(tradeSkillID))
             toast.soundFile = "UI_Professions_NewRecipeLearned_Toast"
             toast.id = recipeID
@@ -2098,46 +2122,59 @@ end
 -- WORLD --
 -----------
 
-local function InvasionToast_SetUp(questID)
-    -- XXX: To avoid possible spam
+local function InvasionToast_SetUp(questID, name, moneyReward, xpReward, numCurrencyRewards, isInvasion, isInvasionBonusComplete)
     if GetToastToUpdate(questID, "scenario") then
         return
     end
 
     local toast = GetToast("scenario")
-    local scenarioName, _, _, _, hasBonusStep, isBonusStepComplete, _, xp, money, _, areaName = C_Scenario.GetInfo()
-    -- local scenarioName, _, _, _, hasBonusStep, isBonusStepComplete, _, xp, money, _, areaName =
-    -- "Invasion: Azshara", 0, 0, 0, false, false, true, 12345, 12345, 4, "Azshara"
     local usedRewards = 0
 
-    if money > 0 then
+    if moneyReward and moneyReward > 0 then
         usedRewards = usedRewards + 1
         local reward = toast["Reward"..usedRewards]
 
         if reward then
             SetPortraitToTexture(reward.Icon, "Interface\\Icons\\inv_misc_coin_02")
-            reward.money = money
+            reward.money = moneyReward
             reward:Show()
         end
     end
 
-    if xp > 0 and UnitLevel("player") < MAX_PLAYER_LEVEL then
+    if xpReward and xpReward > 0 and UnitLevel("player") < MAX_PLAYER_LEVEL then
         usedRewards = usedRewards + 1
         local reward = toast["Reward"..usedRewards]
 
         if reward then
             SetPortraitToTexture(reward.Icon, "Interface\\Icons\\xp_icon")
-            reward.xp = xp
+            reward.xp = xpReward
             reward:Show()
         end
     end
 
-    if hasBonusStep and isBonusStepComplete then
+    for i = 1, numCurrencyRewards or 0 do
+			usedRewards = usedRewards + 1
+			local reward = toast["Reward"..usedRewards]
+
+			if reward then
+				local _, texture = _G.GetQuestLogRewardCurrencyInfo(i, questID)
+				local isOK = pcall(_G.SetPortraitToTexture, reward.Icon, texture)
+
+				if not isOK then
+					_G.SetPortraitToTexture(reward.Icon, "Interface\\Icons\\INV_Box_02")
+				end
+
+				reward.currency = i
+				reward:Show()
+			end
+		end
+
+    if isInvasionBonusComplete then
         toast.Bonus:Show()
     end
 
     toast.Title:SetText(SCENARIO_INVASION_COMPLETE)
-    toast.Text:SetText(areaName or scenarioName)
+    toast.Text:SetText(name)
     toast.BG:SetTexture("Interface\\AddOns\\RayUI\\media\\toast-bg-legion")
     toast.Icon:SetTexture("Interface\\Icons\\Ability_Warlock_DemonicPower")
     toast.Border:SetVertexColor(60 / 255, 255 / 255, 38 / 255) -- fel green #3cff26
@@ -2157,7 +2194,7 @@ local function WorldQuestToast_SetUp(questID)
 
     local toast = GetToast("scenario")
     local _, _, _, taskName = GetTaskInfo(questID)
-    local _, _, worldQuestType, rarity, _, tradeskillLineIndex = GetQuestTagInfo(questID)
+    local _, _, worldQuestType, rarity, _, _, tradeskillLineIndex = GetQuestTagInfo(questID)
     local color = WORLD_QUEST_QUALITY_COLORS[rarity] or WORLD_QUEST_QUALITY_COLORS[1]
     local money = GetQuestLogRewardMoney(questID)
     local xp = GetQuestLogRewardXP(questID)
@@ -2281,7 +2318,7 @@ end
 
 local function IsAppearanceKnown(sourceID)
     local data = C_TransmogCollection.GetSourceInfo(sourceID)
-    local sources = C_TransmogCollection.GetAppearanceSources(data.appearanceID)
+    local sources = C_TransmogCollection.GetAppearanceSources(data.visualID)
 
     if sources then
         for i = 1, #sources do
