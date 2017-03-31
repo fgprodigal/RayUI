@@ -1,4 +1,4 @@
-local Skada = LibStub("AceAddon-3.0"):NewAddon("Skada", "AceTimer-3.0")
+local Skada = LibStub("AceAddon-3.0"):NewAddon("Skada", "AceTimer-3.0", "LibNotify-1.0")
 _G.Skada = Skada
 
 local L = LibStub("AceLocale-3.0"):GetLocale("Skada", false)
@@ -1567,7 +1567,7 @@ function Skada:StartCombat()
 	self:UpdateDisplay(true)
 
 	-- Schedule timers for updating windows and detecting combat end.
-	update_timer = self:ScheduleRepeatingTimer("UpdateDisplay", 0.25)
+	update_timer = self:ScheduleRepeatingTimer("UpdateDisplay", self.db.profile.updatefrequency or 0.25)
 	-- ticket 363: It is NOT safe to use ENCOUNTER_END to replace combat detection
 	tick_timer = self:ScheduleRepeatingTimer("Tick", 1)
 end
@@ -2861,6 +2861,9 @@ do
 			self.db.profile.sets = nil
 		end
         
+        self:SetNotifyIcon("Interface\\Icons\\Spell_Lightning_LightningBolt01")
+        self:SetNotifyStorage(self.db.profile.versions)
+        self:NotifyOnce(self.versions)
 	end
 end
 

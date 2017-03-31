@@ -342,7 +342,7 @@ function barListPrototype:SetSmoothing(smoothing)
         
             if bars[self] then
                 for k, v in pairs(bars[self]) do
-                    if v.targetamount then
+                    if v.targetamount and v:IsShown() then
                         
                         local amt
                         if v.targetamount > v.lastamount then

@@ -1,4 +1,4 @@
-## Interface: 70100
+## Interface: 70200
 ## Title: Skada
 ## Notes: Modular damage meter.
 ## Notes-koKR: 데미지 미터 모듈입니다.
@@ -7,11 +7,11 @@
 ## Notes-frFR: Un damage meter.
 ## Notes-zhCN: 模块化伤害统计。
 ## Author: Zarnivoop
-## Version: 1.6.3
+## Version: 1.6.6
 ## SavedVariables: SkadaDB
 ## SavedVariablesPerCharacter: SkadaPerCharDB
 
-## OptionalDeps: Ace3, LibSharedMedia-3.0, LibWindow-1.1, LibDBIcon-1.0, AceGUI-3.0-SharedMediaWidgets, LibBossIDs-1.0, LibDualSpec-1.0
+## OptionalDeps: Ace3, LibSharedMedia-3.0, LibWindow-1.1, LibDBIcon-1.0, AceGUI-3.0-SharedMediaWidgets, LibBossIDs-1.0, LibDualSpec-1.0, LibNotify-1.0
 
 ## X-License: MIT/X
 ## X-Category: Combat
@@ -35,7 +35,6 @@ Options.lua
 BarDisplay.lua
 InlineDisplay.lua
 BrokerDisplay.lua
+Version.lua
 
 modules.xml
-
-

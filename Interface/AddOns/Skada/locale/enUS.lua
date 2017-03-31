@@ -495,3 +495,6 @@ L["The mode list will be sorted to reflect usage instead of alphabetically."] = 
 
 L["Smooth bars"] = true
 L["Animate bar changes smoothly rather than immediately."] = true
+
+L["Update frequency"] = true
+L["How often windows are updated. Shorter for faster updates. Increases CPU usage."] = true

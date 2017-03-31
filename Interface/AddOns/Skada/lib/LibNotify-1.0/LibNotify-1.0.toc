@@ -1,0 +1,16 @@
+## Interface: 70100
+## Version: @project-revision@
+
+## Title: Lib: Notify-1.0
+## Notes: A library to provide unobtrusive notifications.
+
+## Author: Zarnivoop
+## X-Category: Library
+## X-License: Public Domain
+## X-Website: https://www.wowace.com/addons/libnotify-1.0/
+
+## LoadOnDemand: 1
+## OptionalDependencies: LibStub
+LibStub\LibStub.lua
+
+lib.xml
