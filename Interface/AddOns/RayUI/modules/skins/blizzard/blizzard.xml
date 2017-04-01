@@ -16,6 +16,7 @@
 	<Script file='challenges.lua'/>
 	<Script file='character.lua'/>
 	<Script file='collections.lua'/>
+	<Script file='contribution.lua'/>
 	<Script file='debugtools.lua'/>
 	<Script file='deathrecap.lua'/>
 	<Script file='dressup.lua'/>
@@ -42,6 +43,7 @@
 	<Script file='merchant.lua'/>
 	<Script file='nonraid.lua'/>
 	<Script file='objectivetracker.lua'/>
+	<Script file='obliterum.lua'/>
 	<Script file='orderhall.lua'/>
 	<Script file='petbattle.lua'/>
 	<Script file='petition.lua'/>
