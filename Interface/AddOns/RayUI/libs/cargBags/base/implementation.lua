@@ -333,6 +333,9 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 			i.minLevel = level
 			i.link = clink
 		end
+		if (clink:find("keystone")) then
+			i.rarity = tonumber(rarity) or 4
+		end
 		--print("GetItemInfo:", i.isInSet, i.setName, i.name)
 	end
 	return i
