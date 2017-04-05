@@ -53,14 +53,17 @@ function mod:SkinBubble(frame)
 end
 
 function mod:IsChatBubble(frame)
-    for i = 1, frame:GetNumRegions() do
-        local region = select(i, frame:GetRegions())
-
-        if region.GetTexture and region:GetTexture() and type(region:GetTexture() == "string") then
-            if strfind(strlower(region:GetTexture()), "chatbubble%-background") then return true end
-        end
-    end
-    return false
+    if not frame:IsForbidden() then
+		for i = 1, frame:GetNumRegions() do
+			local region = select(i, frame:GetRegions())
+			if region.GetTexture and region:GetTexture() and type(region:GetTexture() == "string") then
+				if strfind(strlower(region:GetTexture()), "chatbubble%-background") then
+					return true
+				end
+			end
+		end
+	end
+	return false
 end
 
 local numChildren = 0
