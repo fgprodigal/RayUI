@@ -51,6 +51,7 @@ local function LoadSkin()
     OrderHallMissionFrame.GarrCorners:Hide()
     S:SetBD(OrderHallMissionFrame)
     S:ReskinClose(OrderHallMissionFrame.CloseButton)
+    S:ReskinClose(OrderHallMissionTutorialFrame.GlowBox.CloseButton)
     for i = 1, 3 do
         S:CreateTab(_G["OrderHallMissionFrameTab" .. i])
     end

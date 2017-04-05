@@ -34,6 +34,8 @@ local HasArtifactEquipped = HasArtifactEquipped
 local BreakUpLargeNumbers = BreakUpLargeNumbers
 local ShowUIPanel = ShowUIPanel
 local InCombatLockdown = InCombatLockdown
+local C_Reputation_GetFactionParagonInfo = C_Reputation.GetFactionParagonInfo
+local C_Reputation_IsFactionParagon = C_Reputation.IsFactionParagon
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: ArtifactFrame, GameTooltip, Minimap, XP, NORMAL_FONT_COLOR, HIGHLIGHT_FONT_COLOR, MAX_PLAYER_LEVEL_TABLE
@@ -225,6 +227,10 @@ function mod:CreateRepBar()
 
     self.RepBar:SetScript("OnEnter", function(self)
             local name, rank, start, cap, value, factionID = GetWatchedFactionInfo()
+            if (C_Reputation_IsFactionParagon(factionID)) then
+                local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
+                start, cap, value = 0, threshold, currentValue
+            end
             local friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
             GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -5)
             GameTooltip:ClearLines()
@@ -256,6 +262,10 @@ function mod:UpdateRepBar()
     local friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold
     if GetWatchedFactionInfo() then
         local name, rank, min, max, value, factionID = GetWatchedFactionInfo()
+        if (C_Reputation_IsFactionParagon(factionID)) then
+            local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
+            min, max, value = 0, threshold, currentValue
+        end
         local level
         if ( ReputationWatchBar.friendshipID ) then
             friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)

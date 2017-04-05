@@ -46,6 +46,7 @@ local function LoadSkin()
     GearManagerDialogPopupEditBox:StripTextures()
 
     S:ReskinClose(CharacterFrameCloseButton)
+    S:ReskinClose(CharacterFrame.ReputationTabHelpBox.CloseButton)
     S:ReskinScroll(PaperDollTitlesPaneScrollBar)
     S:ReskinScroll(PaperDollEquipmentManagerPaneScrollBar)
     S:ReskinScroll(ReputationListScrollFrameScrollBar)
