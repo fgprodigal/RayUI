@@ -2194,7 +2194,7 @@ local function WorldQuestToast_SetUp(questID)
 
     local toast = GetToast("scenario")
     local _, _, _, taskName = GetTaskInfo(questID)
-    local _, _, worldQuestType, rarity, _, _, tradeskillLineIndex = GetQuestTagInfo(questID)
+    local _, _, worldQuestType, rarity, _, tradeskillLineIndex = GetQuestTagInfo(questID)
     local color = WORLD_QUEST_QUALITY_COLORS[rarity] or WORLD_QUEST_QUALITY_COLORS[1]
     local money = GetQuestLogRewardMoney(questID)
     local xp = GetQuestLogRewardXP(questID)
