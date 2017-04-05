@@ -76,7 +76,7 @@ local function LoadSkin()
 
 	S:Reskin(BonusFrame.DiceButton)
 
-	for _, bonusButton in pairs({"RandomBGButton", "Arena1Button", "AshranButton"}) do
+	for _, bonusButton in pairs({"RandomBGButton", "Arena1Button", "AshranButton", "BrawlButton"}) do
 		local bu = BonusFrame[bonusButton]
 		local reward = bu.Reward
 
