@@ -33,7 +33,7 @@ local UnitLevel = UnitLevel
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: DEFAULT_CHAT_FRAME, FRIENDS_BNET_NAME_COLOR, FRIENDS_TEXTURE_AFK, FRIENDS_TEXTURE_DND
 -- GLOBALS: FRIENDS_TEXTURE_ONLINE, FACTION_HORDE, FACTION_ALLIANCE, NAME, LEVEL_ABBR
--- GLOBALS: ZONE, FACTION, FRIENDS, GAME, RayUI_InfobarTooltipFont, BATTLENET_FRIEND
+-- GLOBALS: ZONE, FACTION, FRIENDS, GAME, RayUI_InfobarTooltipFont, BATTLENET_FRIEND, GREEN_FONT_COLOR_CODE
 
 local FriendsTabletData = {}
 IF.FriendsTabletDataNames = {}
@@ -126,21 +126,26 @@ local function RenderTooltip(anchorFrame)
     Tooltip:SetLineTextColor(headerLine, 0.9, 0.8, 0.7)
     Tooltip:AddSeparator(1, 1, 1, 1, 0.8)
 
-    for _, val in ipairs(FriendsTabletData) do
-        local line = Tooltip:AddLine()
-        local cname, level, zone, faction, clientIcon, presenceName, note, name, toonid, showPresenceName = unpack(val)
-        Tooltip:SetCell(line, 1, clientIcon, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
-        Tooltip:SetCell(line, 2, showPresenceName, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
-        Tooltip:SetCell(line, 3, level, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
-        Tooltip:SetCell(line, 4, cname, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
-        Tooltip:SetCell(line, 5, zone, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
-        Tooltip:SetCell(line, 6, faction, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
-        local playerEntry = {
-            name = presenceName,
-            iname = name,
-            toonid = toonid,
-        }
-        Tooltip:SetLineScript(line, "OnMouseUp", Friend_OnMouseUp, playerEntry)
+    if #FriendsTabletData <= 50 then
+        for _, val in ipairs(FriendsTabletData) do
+            local line = Tooltip:AddLine()
+            local cname, level, zone, faction, clientIcon, presenceName, note, name, toonid, showPresenceName = unpack(val)
+            Tooltip:SetCell(line, 1, clientIcon, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+            Tooltip:SetCell(line, 2, showPresenceName, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+            Tooltip:SetCell(line, 3, level, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+            Tooltip:SetCell(line, 4, cname, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+            Tooltip:SetCell(line, 5, zone, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+            Tooltip:SetCell(line, 6, faction, RayUI_InfobarTooltipFont, nil, nil, nil, paddingLeft, paddingRight)
+            local playerEntry = {
+                name = presenceName,
+                iname = name,
+                toonid = toonid,
+            }
+            Tooltip:SetLineScript(line, "OnMouseUp", Friend_OnMouseUp, playerEntry)
+        end
+    else
+        Tooltip:SetCell(Tooltip:AddLine(), 1, GREEN_FONT_COLOR_CODE..L["在线人数过多, 点击信息条查看"], RayUI_InfobarTooltipFont, "CENTER", NUM_TOOLTIP_COLUMNS)
+        Tooltip:AddLine("")
     end
 
     Tooltip:Show()

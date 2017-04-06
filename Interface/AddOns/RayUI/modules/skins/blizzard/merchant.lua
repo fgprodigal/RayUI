@@ -67,6 +67,7 @@ local function LoadSkin()
 
 	MerchantBuyBackItemSlotTexture:Hide()
 	MerchantBuyBackItemNameFrame:Hide()
+    MerchantBuyBackItemItemButton.IconBorder:Kill()
 	MerchantBuyBackItemItemButton:SetNormalTexture("")
 	MerchantBuyBackItemItemButton:StyleButton(1)
 

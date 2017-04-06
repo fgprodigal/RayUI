@@ -5,6 +5,7 @@ local function LoadSkin()
 	local r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b
 	local function restyleRewardButton(bu, isMapQuestInfo)
 		bu.NameFrame:Hide()
+        bu.IconBorder:Kill()
 
 		bu.Icon:SetDrawLayer("BACKGROUND", 1)
 		S:ReskinIcon(bu.Icon)
