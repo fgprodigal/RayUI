@@ -58,7 +58,7 @@ local function GetMoneyString(money)
     end
 
     if gold >= 10000 then
-        string = format(GOLD_AMOUNT_TEXTURE_STRING, R:ShortValue(gold))
+        string = format(GOLD_AMOUNT_TEXTURE_STRING, R:ShortValue(gold).." ")
     elseif gold >= 100 then
         string = goldText..silverText
     elseif gold > 0 then
@@ -172,7 +172,7 @@ local function Money_OnEnter(self)
         table.sort(GetInfoBarDataBase(serverName), SortMoney)
 
         -- Display all connected realms
-        if realmlist then
+        if realmlist and #realmlist > 0 then
             local header
 
             for _, realm in pairs(realmlist) do
@@ -233,7 +233,7 @@ local function Money_OnEnter(self)
         end
 
         -- Display only the actual realm
-        if not realmlist then
+        if not realmlist or #realmlist == 0 then
             local dataBase = GetInfoBarDataBase(serverName)
 
             GameTooltip:AddLine(serverName,1,1,1)
