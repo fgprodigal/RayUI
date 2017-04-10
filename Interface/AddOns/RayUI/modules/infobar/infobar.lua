@@ -62,7 +62,7 @@ local function OpenMenu(infobar)
     for infobarType, info in pairs(infobarTypes) do
         local isUsed = usedInfoBar[infobarType]
 
-        if not isUsed then
+        if not isUsed and numShown <= maxMenuButtons then
             numShown = numShown + 1
 
             -- Add InfoBar Button to the menu
