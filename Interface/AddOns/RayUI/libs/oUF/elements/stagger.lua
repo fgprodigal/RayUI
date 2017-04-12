@@ -74,7 +74,7 @@ local Update = function(self, event, unit)
 
 
 	local maxHealth = UnitHealthMax("player")
-	local stagger = UnitStagger("player")
+	local stagger = UnitStagger("player") or 0
 	local staggerPercent = stagger / maxHealth
 
 	element:SetMinMaxValues(0, maxHealth)
@@ -116,7 +116,7 @@ local Visibility = function(self, event, unit)
 			self:UnregisterEvent('UNIT_AURA', Path)
 			stateChanged = true
 		end
-		
+
 		if(self.Stagger.PostUpdateVisibility) then
 			self.Stagger.PostUpdateVisibility(self, event, unit, false, stateChanged)
 		end
@@ -126,7 +126,7 @@ local Visibility = function(self, event, unit)
 			self:RegisterEvent('UNIT_AURA', Path)
 			stateChanged = true
 		end
-		
+
 		if(self.Stagger.PostUpdateVisibility) then
 			self.Stagger.PostUpdateVisibility(self, event, unit, true, stateChanged)
 		end
