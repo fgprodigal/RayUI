@@ -1245,7 +1245,7 @@ local function StartChargeCooldown(parent, chargeStart, chargeDuration, chargeMo
 		end
 		cooldown:SetParent(parent)
 		cooldown:SetAllPoints(parent)
-		cooldown:SetFrameStrata("TOOLTIP")
+		-- cooldown:SetFrameStrata("TOOLTIP")
 		cooldown:Show()
 		parent.chargeCooldown = cooldown
 		cooldown.parent = parent
