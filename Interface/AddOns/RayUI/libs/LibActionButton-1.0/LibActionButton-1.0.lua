@@ -1284,7 +1284,7 @@ function UpdateCooldown(self)
 			self.cooldown:SetHideCountdownNumbers(true)
 			self.cooldown.currentCooldownType = COOLDOWN_TYPE_LOSS_OF_CONTROL
 		end
-		CooldownFrame_Set(self.cooldown, locStart, locDuration, true, true, modRate)
+		CooldownFrame_Set(self.cooldown, locStart, locDuration, true, true)
 	else
 		if self.cooldown.currentCooldownType ~= COOLDOWN_TYPE_NORMAL then
 			self.cooldown:SetEdgeTexture("Interface\\Cooldown\\edge")
@@ -1297,11 +1297,11 @@ function UpdateCooldown(self)
 		end
 
 		if charges and maxCharges and charges > 0 and charges < maxCharges then
-			StartChargeCooldown(self, chargeStart, chargeDuration, chargeModRate)
+			StartChargeCooldown(self, chargeStart, chargeDuration)
 		elseif self.chargeCooldown then
 			EndChargeCooldown(self.chargeCooldown)
 		end
-		CooldownFrame_Set(self.cooldown, start, duration, enable, false, modRate)
+		CooldownFrame_Set(self.cooldown, start, duration, enable, false)
 	end
 end
 
