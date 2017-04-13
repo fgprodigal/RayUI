@@ -30,7 +30,7 @@ local EXPIRING_FORMAT = R:RGBToHex(1,0,0)..'%.1f|r' --format for timers that are
 local SECONDS_FORMAT = R:RGBToHex(1,1,0)..'%d|r' --format for timers that have seconds remaining
 local MINUTES_FORMAT = R:RGBToHex(1,1,1)..'%dm|r' --format for timers that have minutes remaining
 local HOURS_FORMAT = R:RGBToHex(0.4,1,1)..'%dh|r' --format for timers that have hours remaining
-local DAYS_FORMAT = R:RGBToHex(0.4,0.4,1)..'%dh|r' --format for timers that have days remaining
+local DAYS_FORMAT = R:RGBToHex(0.4,0.4,1)..'%dd|r' --format for timers that have days remaining
 
 local cooldown = getmetatable(ActionButton1Cooldown).__index
 
