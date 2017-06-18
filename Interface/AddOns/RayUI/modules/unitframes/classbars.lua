@@ -167,12 +167,30 @@ function UF:Construct_ClassBar(frame)
     return bars
 end
 
-function UF:UpdateClassBar(cur, max, hasMaxChanged, powerType, event)
+function UF:UpdateClassBar(cur, max, hasMaxChanged, powerType)
     local frame = self.origParent or self:GetParent()
+    local isShown = self:IsShown()
+	local stateChanged
 
+	if not frame.USE_CLASSBAR or cur == 0 or max == nil then
+		self:Hide()
+		if isShown then
+			stateChanged = true
+		end
+	else
+		self:Show()
+		if not isShown then
+			stateChanged = true
+		end
+	end
     --Update this first, as we want to update the .bg colors after
-    if hasMaxChanged or event == "ClassPowerEnable" then
+    if hasMaxChanged then
         frame.MAX_CLASS_BAR = max
+        UF:Configure_ClassBar(frame, cur)
+    elseif stateChanged then
+        UF:Configure_ClassBar(frame, cur)
+    elseif not frame.CLASSBAR_INITIALED then
+        frame.CLASSBAR_INITIALED = true
         UF:Configure_ClassBar(frame, cur)
     end
 

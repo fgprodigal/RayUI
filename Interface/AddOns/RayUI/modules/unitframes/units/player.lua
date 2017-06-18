@@ -4,6 +4,7 @@ local oUF = RayUF or oUF
 
 --Cache global variables
 --Lua functions
+local _G = _G
 local tinsert = table.insert
 local max, ceil = math.max, math.ceil
 
@@ -14,6 +15,9 @@ local UnitIsFriend = UnitIsFriend
 local UnitFactionGroup = UnitFactionGroup
 local UnitIsPVPFreeForAll = UnitIsPVPFreeForAll
 local UnitIsPVP = UnitIsPVP
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: MAX_COMBO_POINTS
 
 function UF:Construct_PlayerFrame(frame, unit)
     frame.mouseovers = {}
@@ -120,7 +124,8 @@ function UF:Construct_PlayerFrame(frame, unit)
         frame.AdditionalPower = self:Construct_AdditionalPowerBar(frame)
     end
     frame.USE_CLASSBAR = true
-    frame.MAX_CLASS_BAR = 0
+    frame.MAX_CLASS_BAR = frame.MAX_CLASS_BAR or max(UF.classMaxResourceBar[R.myclass] or 0, MAX_COMBO_POINTS)
+    frame.CLASSBAR_INITIALED = false
 
     if UF.db.aurabar then
         frame.AuraBars = self:Construct_AuraBarHeader(frame)
@@ -128,5 +133,21 @@ function UF:Construct_PlayerFrame(frame, unit)
         frame.AuraBars:SetPoint("BOTTOMRIGHT", frame, "TOPRIGHT", 0, 33)
     end
 end
+
+local function UpdateClassBar()
+	local frame = _G["RayUF_Player"]
+	if frame and frame.ClassBar then
+		frame:UpdateElement(frame.ClassBar)
+		UF.ToggleResourceBar(frame[frame.ClassBar])
+	end
+end
+
+local f = CreateFrame("Frame")
+f:RegisterEvent("PLAYER_ENTERING_WORLD")
+f:SetScript("OnEvent", function(self, event)
+	self:UnregisterEvent(event)
+	if not R.db.UnitFrames.enable then return end
+	UpdateClassBar()
+end)
 
 tinsert(UF["unitstoload"], "player")
