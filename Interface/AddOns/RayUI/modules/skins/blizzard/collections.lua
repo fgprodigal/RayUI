@@ -461,9 +461,6 @@ local function LoadSkin()
 	-- Progress bar
 
 	local progressBar = WardrobeCollectionFrame.progressBar
-	progressBar.borderLeft:Hide()
-	progressBar.borderMid:Hide()
-	progressBar.borderRight:Hide()
 	progressBar:DisableDrawLayer("BACKGROUND")
 
 	progressBar.text:SetPoint("CENTER", 0, 1)
