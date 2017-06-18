@@ -857,7 +857,7 @@ function R:ThrowError(err)
         elseif BaudErrorFrameHandler then
             BaudErrorFrameHandler(err)
         else
-            ScriptErrorsFrame_OnError(err, false)
+            -- ScriptErrorsFrame_OnError(err, false)
         end
     end
 end

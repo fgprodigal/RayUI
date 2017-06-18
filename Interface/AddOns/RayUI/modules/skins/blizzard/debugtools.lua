@@ -49,11 +49,11 @@ local function LoadSkin()
 	S:CreateBD(bg, .6)
 
 	S:ReskinClose(ScriptErrorsFrameClose)
-	S:Reskin(ScriptErrorsFrame.close)
-	S:ReskinScroll(ScriptErrorsFrameScrollFrameScrollBar)
-	S:Reskin(ScriptErrorsFrame.reload)
-	S:ReskinArrow(ScriptErrorsFrame.previous, "left")
-	S:ReskinArrow(ScriptErrorsFrame.next, "right")
+	S:Reskin(ScriptErrorsFrame.Close)
+	S:ReskinScroll(ScriptErrorsFrameScrollBar)
+	S:Reskin(ScriptErrorsFrame.Reload)
+	S:ReskinArrow(ScriptErrorsFrame.PreviousError, "left")
+	S:ReskinArrow(ScriptErrorsFrame.NextError, "right")
 
 	local texs = {
 		"TopLeft",

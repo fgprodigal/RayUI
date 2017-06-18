@@ -5,10 +5,12 @@ local mod = M:NewModule("BubbleSkin", "AceTimer-3.0")
 --Cache global variables
 --Lua functions
 local select, unpack, type = select, unpack, type
+local pairs = pairs
 local strfind, strlower = string.find, string.lower
 
 --WoW API / Variables
 local CreateFrame = CreateFrame
+local C_ChatBubbles_GetAllChatBubbles = C_ChatBubbles.GetAllChatBubbles
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: UIParent, WorldFrame
@@ -50,44 +52,27 @@ function mod:SkinBubble(frame)
     frame:SetBackdropColor(.1, .1, .1, .6)
     mod.UpdateBubbleBorder(frame)
     frame:HookScript("OnShow", mod.UpdateBubbleBorder)
+    frame.isSkinned = true
 end
 
-function mod:IsChatBubble(frame)
-    if not frame:IsForbidden() then
-		for i = 1, frame:GetNumRegions() do
-			local region = select(i, frame:GetRegions())
-			if region.GetTexture and region:GetTexture() and type(region:GetTexture() == "string") then
-				if strfind(strlower(region:GetTexture()), "chatbubble%-background") then
-					return true
-				end
-			end
+local function ChatBubble_OnUpdate(self, elapsed)
+	if not mod.lastupdate then
+		mod.lastupdate = -2 -- wait 2 seconds before hooking frames
+	end
+	mod.lastupdate = mod.lastupdate + elapsed
+	if (mod.lastupdate < .1) then return end
+	mod.lastupdate = 0
+	for _, chatBubble in pairs(C_ChatBubbles_GetAllChatBubbles()) do
+		if not chatBubble.isSkinned then
+			mod:SkinBubble(chatBubble)
 		end
 	end
-	return false
 end
 
-local numChildren = 0
 function mod:Initialize()
-    local frame = CreateFrame('Frame')
-    frame.lastupdate = -2
+    local frame = CreateFrame("Frame")
 
-    frame:SetScript("OnUpdate", function(self, elapsed)
-            self.lastupdate = self.lastupdate + elapsed
-            if (self.lastupdate < .1) then return end
-            self.lastupdate = 0
-
-            local count = WorldFrame:GetNumChildren()
-            if(count ~= numChildren) then
-                for i = numChildren + 1, count do
-                    local frame = select(i, WorldFrame:GetChildren())
-
-                    if mod:IsChatBubble(frame) then
-                        mod:SkinBubble(frame)
-                    end
-                end
-                numChildren = count
-            end
-        end)
+    frame:SetScript("OnUpdate", ChatBubble_OnUpdate)
 end
 
 M:RegisterMiscModule(mod:GetName())

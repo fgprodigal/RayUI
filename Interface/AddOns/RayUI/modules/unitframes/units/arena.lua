@@ -35,7 +35,7 @@ function UF:Construct_ArenaFrame(frame, unit)
 
     frame.Name = self:Construct_NameText(frame)
     frame.Mouseover = self:Construct_Highlight(frame)
-    frame.RaidIcon = self:Construct_RaidIcon(frame)
+    frame.RaidTargetIndicator = self:Construct_RaidIcon(frame)
 
     self:EnableHealPredictionAndAbsorb(frame)
 

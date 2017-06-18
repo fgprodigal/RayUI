@@ -8,7 +8,7 @@ local GetRaidTargetIndex = GetRaidTargetIndex
 local SetRaidTargetIconTexture = SetRaidTargetIconTexture
 
 function mod:UpdateElement_RaidIcon(frame)
-    local icon = frame.RaidIcon;
+    local icon = frame.RaidTargetIndicator;
     local index = GetRaidTargetIndex(frame.unit);
     icon:ClearAllPoints()
     if(frame.HealthBar:IsShown()) then

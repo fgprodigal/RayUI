@@ -58,7 +58,7 @@ function RA:UpdateThreat(event, unit)
             self.Health.border:SetBackdropBorderColor(0, 0, 0)
         end
     end
-    self.Threat:Show()
+    self.ThreatIndicator:Show()
 end
 
 function RA:PostHealth(unit)
@@ -184,7 +184,7 @@ function RA:PostPower(unit, min, max)
     end
 
     if (perc < 10 and UnitIsConnected(unit) and ptype == "MANA" and not UnitIsDeadOrGhost(unit)) then
-        owner.Threat:SetBackdropBorderColor(0, 0, 1, 1)
+        owner.ThreatIndicator:SetBackdropBorderColor(0, 0, 1, 1)
     else
         -- pass the coloring back to the threat func
         RA.UpdateThreat(owner, nil, unit)

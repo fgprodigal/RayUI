@@ -194,9 +194,9 @@ function mod:UpdateElement_HealPrediction(frame)
     frame.PersonalHealPrediction:SetValue(myIncomingHeal)
     frame.PersonalHealPrediction:Show()
 
-    frame.HealPrediction:SetMinMaxValues(0, maxHealth)
-    frame.HealPrediction:SetValue(otherIncomingHeal)
-    frame.HealPrediction:Show()
+    frame.HealthPrediction:SetMinMaxValues(0, maxHealth)
+    frame.HealthPrediction:SetValue(otherIncomingHeal)
+    frame.HealthPrediction:Show()
 
     frame.AbsorbBar:SetMinMaxValues(0, maxHealth)
     frame.AbsorbBar:SetValue(totalAbsorb)
@@ -204,7 +204,7 @@ function mod:UpdateElement_HealPrediction(frame)
 
     local previousTexture = frame.HealthBar:GetStatusBarTexture();
     previousTexture = UpdateFillBar(frame.HealthBar, previousTexture, frame.PersonalHealPrediction , myIncomingHeal);
-    previousTexture = UpdateFillBar(frame.HealthBar, previousTexture, frame.HealPrediction, allIncomingHeal);
+    previousTexture = UpdateFillBar(frame.HealthBar, previousTexture, frame.HealthPrediction, allIncomingHeal);
     previousTexture = UpdateFillBar(frame.HealthBar, previousTexture, frame.AbsorbBar, totalAbsorb);
 end
 
@@ -255,10 +255,10 @@ function mod:ConstructElement_HealthBar(parent)
     parent.AbsorbBar:SetStatusBarColor(1, 1, 0, 0.25)
 	R:SetStatusBarGradient(parent.AbsorbBar)
 
-    parent.HealPrediction = CreateFrame("StatusBar", "$parentHealPrediction", frame)
-    parent.HealPrediction:SetStatusBarTexture(LSM:Fetch("background", "RayUI Blank"))
-    parent.HealPrediction:SetStatusBarColor(0, 1, 0, 0.25)
-	R:SetStatusBarGradient(parent.HealPrediction)
+    parent.HealthPrediction = CreateFrame("StatusBar", "$parentHealPrediction", frame)
+    parent.HealthPrediction:SetStatusBarTexture(LSM:Fetch("background", "RayUI Blank"))
+    parent.HealthPrediction:SetStatusBarColor(0, 1, 0, 0.25)
+	R:SetStatusBarGradient(parent.HealthPrediction)
 
     parent.PersonalHealPrediction = CreateFrame("StatusBar", "$parentPersonalHealPrediction", frame)
     parent.PersonalHealPrediction:SetStatusBarTexture(LSM:Fetch("background", "RayUI Blank"))

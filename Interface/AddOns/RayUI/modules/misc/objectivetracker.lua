@@ -34,4 +34,4 @@ function mod:Initialize()
         end)
 end
 
-M:RegisterMiscModule(mod:GetName())
+-- M:RegisterMiscModule(mod:GetName())

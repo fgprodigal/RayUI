@@ -58,10 +58,8 @@ local UnitIsPVP = UnitIsPVP
 local UnitIsTapDenied = UnitIsTapDenied
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: SLASH_TestUF1, FriendsDropDown, INTERRUPT, SPELL_POWER_ECLIPSE, RayUF, PLAYER_OFFLINE
--- GLOBALS: DEAD, MAX_COMBO_POINTS, DebuffTypeColor, SPELL_POWER_HOLY_POWER, SPELL_POWER_CHI
--- GLOBALS: SPELL_POWER_DEMONIC_FURY, SPEC_WARLOCK_DEMONOLOGY, SHADOW_ORB_MINOR_TALENT_ID
--- GLOBALS: LOCALIZED_CLASS_NAMES_MALE, CLASS_SORT_ORDER, RayUFRaid40_6, MAX_BOSS_FRAMES
+-- GLOBALS: SLASH_TestUF1, INTERRUPT, RayUF, PLAYER_OFFLINE
+-- GLOBALS: DEAD, DebuffTypeColor, LOCALIZED_CLASS_NAMES_MALE, CLASS_SORT_ORDER, MAX_BOSS_FRAMES
 -- GLOBALS: UnitFrame_OnEnter, UnitFrame_OnLeave, PVP
 
 function UF:UnitFrame_OnEnter()
@@ -220,31 +218,31 @@ end
 function UF:UpdatePvPIndicator(event, unit)
     if(unit ~= self.unit) then return end
 
-    if(self.PvP) then
+    if(self.PvPIndicator) then
         local factionGroup = UnitFactionGroup(unit)
         if factionGroup == "Neutral" then
-            self.PvP:SetTexture(nil)
-            self.PvP:Hide()
+            self.PvPIndicator:SetTexture(nil)
+            self.PvPIndicator:Hide()
         else
             if(UnitIsPVPFreeForAll(unit)) then
-                self.PvP:SetTexture[[Interface\TargetingFrame\UI-PVP-FFA]]
-                self.PvP:Show()
+                self.PvPIndicator:SetTexture[[Interface\TargetingFrame\UI-PVP-FFA]]
+                self.PvPIndicator:Show()
             elseif(factionGroup and UnitIsPVP(unit)) then
-                self.PvP:SetTexture([[Interface\AddOns\RayUI\media\UI-PVP-]]..factionGroup)
-                self.PvP:Show()
+                self.PvPIndicator:SetTexture([[Interface\AddOns\RayUI\media\UI-PVP-]]..factionGroup)
+                self.PvPIndicator:Show()
             else
-                self.PvP:Hide()
+                self.PvPIndicator:Hide()
             end
         end
     end
 end
 
 function UF:Construct_PvPIndicator(frame)
-    local PvP = frame.RaisedElementParent:CreateTexture(nil, "BORDER")
-    PvP:Size(35, 35)
-    PvP:Point("TOPRIGHT", frame, 22, 8)
-    PvP.Override = UF.UpdatePvPIndicator
-    return PvP
+    local PvPIndicator = frame.RaisedElementParent:CreateTexture(nil, "BORDER")
+    PvPIndicator:Size(35, 35)
+    PvPIndicator:Point("TOPRIGHT", frame, 22, 8)
+    PvPIndicator.Override = UF.UpdatePvPIndicator
+    return PvPIndicator
 end
 
 function UF:Construct_CombatIndicator(frame)
@@ -259,23 +257,23 @@ function UF:Construct_CombatIndicator(frame)
 end
 
 function UF:Construct_RestingIndicator(frame)
-    local Resting = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY")
-    Resting:SetFont(R["media"].font, 10, R["media"].fontflag)
-    Resting:Point("BOTTOM", frame.Combat, "BOTTOM", 0, 25)
-    Resting:SetText("zZz")
-    Resting:SetTextColor(255/255, 255/255, 255/255, 0.70)
+    local RestingIndicator = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY")
+    RestingIndicator:SetFont(R["media"].font, 10, R["media"].fontflag)
+    RestingIndicator:Point("BOTTOM", frame.CombatIndicator, "BOTTOM", 0, 25)
+    RestingIndicator:SetText("zZz")
+    RestingIndicator:SetTextColor(255/255, 255/255, 255/255, 0.70)
 
-    return Resting
+    return RestingIndicator
 end
 
 function UF:Construct_QuestIcon(frame)
-    local QuestIcon = frame.RaisedElementParent:CreateTexture(nil, "BORDER")
-    QuestIcon:Size(24, 24)
-    QuestIcon:Point("BOTTOMRIGHT", frame, 15, -2)
-    QuestIcon:SetTexture("Interface\\AddOns\\RayUI\\media\\quest")
-    QuestIcon:SetVertexColor(0.8, 0.8, 0.8)
+    local QuestIndicator = frame.RaisedElementParent:CreateTexture(nil, "BORDER")
+    QuestIndicator:Size(24, 24)
+    QuestIndicator:Point("BOTTOMRIGHT", frame, 15, -2)
+    QuestIndicator:SetTexture("Interface\\AddOns\\RayUI\\media\\quest")
+    QuestIndicator:SetVertexColor(0.8, 0.8, 0.8)
 
-    return QuestIcon
+    return QuestIndicator
 end
 
 function UF:Construct_RaidIcon(frame)
@@ -906,7 +904,7 @@ function UF:PostUpdateHealth(unit, cur, max)
     end
 end
 
-function UF:PostUpdatePower(unit, cur, max)
+function UF:PostUpdatePower(unit, cur, min, max)
     local shown = self:IsShown()
     if max == 0 then
         if shown then

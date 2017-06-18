@@ -35,8 +35,8 @@ function UF:Construct_BossFrame(frame, unit)
 
     frame.Name = self:Construct_NameText(frame)
     frame.Mouseover = self:Construct_Highlight(frame)
-    frame.QuestIcon = self:Construct_QuestIcon(frame)
-    frame.RaidIcon = self:Construct_RaidIcon(frame)
+    frame.QuestIndicator = self:Construct_QuestIcon(frame)
+    frame.RaidTargetIndicator = self:Construct_RaidIcon(frame)
 
     self:EnableHealPredictionAndAbsorb(frame)
 

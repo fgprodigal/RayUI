@@ -28,8 +28,8 @@ function UF:Configure_ClassBar(frame, cur)
     bars:Width(CLASSBAR_WIDTH)
     bars:Height(frame.CLASSBAR_HEIGHT)
 
-    if (frame.ClassBar == "ClassIcons" or frame.ClassBar == "Runes") then
-        if frame.ClassBar == "ClassIcons" and not cur then
+    if (frame.ClassBar == "ClassPower" or frame.ClassBar == "Runes") then
+        if frame.ClassBar == "ClassPower" and not cur then
             cur = 0
         end
         local maxClassBarButtons = max(UF.classMaxResourceBar[R.myclass] or 0, MAX_COMBO_POINTS)
@@ -89,8 +89,8 @@ function UF:Configure_ClassBar(frame, cur)
     end
 
     if frame.USE_CLASSBAR then
-        if frame.ClassIcons and not frame:IsElementEnabled("ClassIcons") then
-            frame:EnableElement("ClassIcons")
+        if frame.ClassPower and not frame:IsElementEnabled("ClassPower") then
+            frame:EnableElement("ClassPower")
         end
         if frame.AdditionalPower and not frame:IsElementEnabled("AdditionalPower") then
             frame:EnableElement("AdditionalPower")
@@ -102,8 +102,8 @@ function UF:Configure_ClassBar(frame, cur)
             frame:EnableElement("Stagger")
         end
     else
-        if frame.ClassIcons and frame:IsElementEnabled("ClassIcons") then
-            frame:DisableElement("ClassIcons")
+        if frame.ClassPower and frame:IsElementEnabled("ClassPower") then
+            frame:DisableElement("ClassPower")
         end
         if frame.AdditionalPower and frame:IsElementEnabled("AdditionalPower") then
             frame:DisableElement("AdditionalPower")
@@ -158,6 +158,7 @@ function UF:Construct_ClassBar(frame)
     end
 
     bars.PostUpdate = UF.UpdateClassBar
+    bars.UpdateColor = function() return end
     bars.UpdateTexture = function() return end
 
     bars:SetScript("OnShow", ToggleResourceBar)
@@ -208,6 +209,7 @@ function UF:Construct_DeathKnightResourceBar(frame)
     end
 
     runes.PostUpdateVisibility = UF.PostVisibilityRunes
+    runes.UpdateColor = function() return end
     runes.PostUpdate = UF.PostUpdateRunes
     runes:SetScript("OnShow", ToggleResourceBar)
     runes:SetScript("OnHide", ToggleResourceBar)
@@ -230,7 +232,7 @@ function UF:PostVisibilityRunes(enabled, stateChanged)
         frame.ClassBar = "Runes"
         frame.MAX_CLASS_BAR = #self
     else
-        frame.ClassBar = "ClassIcons"
+        frame.ClassBar = "ClassPower"
         frame.MAX_CLASS_BAR = MAX_COMBO_POINTS
     end
 
@@ -306,7 +308,7 @@ function UF:PostVisibilityAdditionalPower(enabled, stateChanged)
     if enabled then
         frame.ClassBar = 'AdditionalPower'
     else
-        frame.ClassBar = 'ClassIcons'
+        frame.ClassBar = 'ClassPower'
         self.text:SetText()
     end
 
@@ -338,7 +340,7 @@ function UF:PostUpdateVisibilityStagger(event, unit, isShown, stateChanged)
     if(isShown) then
         frame.ClassBar = 'Stagger'
     else
-        frame.ClassBar = 'ClassIcons'
+        frame.ClassBar = 'ClassPower'
     end
 
     --Only update when necessary

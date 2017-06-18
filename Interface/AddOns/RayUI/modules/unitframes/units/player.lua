@@ -33,13 +33,12 @@ function UF:Construct_PlayerFrame(frame, unit)
 
     frame.Name = self:Construct_NameText(frame)
     frame.Mouseover = self:Construct_Highlight(frame)
-    frame.ThreatHlt = self:Construct_Highlight(frame)
-    frame.PvP = self:Construct_PvPIndicator(frame)
-    frame.QuestIcon = self:Construct_QuestIcon(frame)
-    frame.RaidIcon = self:Construct_RaidIcon(frame)
-    frame.Combat = self:Construct_CombatIndicator(frame)
-    frame.Resting = self:Construct_RestingIndicator(frame)
-    frame.Threat = self:Construct_Threat(frame)
+    frame.PvPIndicator = self:Construct_PvPIndicator(frame)
+    frame.QuestIndicator = self:Construct_QuestIcon(frame)
+    frame.RaidTargetIndicator = self:Construct_RaidIcon(frame)
+    frame.CombatIndicator = self:Construct_CombatIndicator(frame)
+    frame.RestingIndicator = self:Construct_RestingIndicator(frame)
+    frame.ThreatIndicator = self:Construct_Threat(frame)
 
     self:EnableHealPredictionAndAbsorb(frame)
 
@@ -105,8 +104,8 @@ function UF:Construct_PlayerFrame(frame, unit)
 
     frame.Fader = self:Construct_Fader(frame)
 
-    frame.ClassIcons = self:Construct_ClassBar(frame)
-    frame.ClassBar = "ClassIcons"
+    frame.ClassPower = self:Construct_ClassBar(frame)
+    frame.ClassBar = "ClassPower"
 
     if R.myclass == "DEATHKNIGHT" then
         frame.Runes = self:Construct_DeathKnightResourceBar(frame)

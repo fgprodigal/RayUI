@@ -144,4 +144,4 @@ function D:Initialize()
     self.HideFrame:Hide()
 end
 
-M:RegisterMiscModule(D:GetName())
+-- M:RegisterMiscModule(D:GetName())
