@@ -71,7 +71,7 @@ function D:ModifyErrorFrame()
     S:Reskin(lastButton)
 end
 
-function D:ScriptErrorsFrame:UpdateButtons()
+function D:ScriptErrorsFrame_UpdateButtons()
     local numErrors = #ScriptErrorsFrame.order
     local index = ScriptErrorsFrame.index
     if ( index == 0 ) then
@@ -127,7 +127,7 @@ function D:Initialize()
 
     SetCVar("scriptErrors", 1)
     self:ModifyErrorFrame()
-    self:SecureHook(ScriptErrorsFrame, "UpdateButtons", D.ScriptErrorsFrame:UpdateButtons)
+    self:SecureHook(ScriptErrorsFrame, "UpdateButtons", D.ScriptErrorsFrame_UpdateButtons)
  	self:SecureHook(ScriptErrorsFrame, "OnError", D.ScriptErrorsFrame_OnError)
     self:SecureHook('StaticPopup_Show')
     self:RegisterEvent("PLAYER_REGEN_DISABLED")
