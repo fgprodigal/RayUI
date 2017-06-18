@@ -7,8 +7,6 @@ local S = R:GetModule("Skins")
 --WoW API / Variables
 local CreateFrame = CreateFrame
 local hooksecurefunc = hooksecurefunc
-local ScriptErrorsFrame_Update = ScriptErrorsFrame_Update
-local ScriptErrorsFrame_OnError = ScriptErrorsFrame_OnError
 local InCombatLockdown = InCombatLockdown
 local GetCVarBool = GetCVarBool
 local SetCVar = SetCVar
@@ -18,29 +16,29 @@ local StaticPopup_Hide = StaticPopup_Hide
 local LoadAddOn = LoadAddOn
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: ScriptErrorsFrame, ScriptErrorsFrameScrollFrameText, ScriptErrorsFrameScrollFrame, UIParent
+-- GLOBALS: ScriptErrorsFrame, UIParent
 
 --Enhanced debugtools from ElvUI
 local D = M:NewModule("DebugTools", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 
 function D:ModifyErrorFrame()
-    ScriptErrorsFrameScrollFrameText.cursorOffset = 0
-    ScriptErrorsFrameScrollFrameText.cursorHeight = 0
-    ScriptErrorsFrameScrollFrameText:SetScript("OnEditFocusGained", nil)
+    ScriptErrorsFrame.ScrollFrame.Text.cursorOffset = 0
+    ScriptErrorsFrame.ScrollFrame.Text.cursorHeight = 0
+    ScriptErrorsFrame.ScrollFrame.Text:SetScript("OnEditFocusGained", nil)
 
     local function ScriptErrors_UnHighlightText()
-        ScriptErrorsFrameScrollFrameText:HighlightText(0, 0)
+        ScriptErrorsFrame.ScrollFrame.Text:HighlightText(0, 0)
     end
-    hooksecurefunc('ScriptErrorsFrame_Update', ScriptErrors_UnHighlightText)
+    hooksecurefunc(ScriptErrorsFrame, "Update", ScriptErrors_UnHighlightText)
 
     -- Unhighlight text when focus is hit
     local function UnHighlightText(self)
         self:HighlightText(0, 0)
     end
-    ScriptErrorsFrameScrollFrameText:HookScript("OnEscapePressed", UnHighlightText)
+    ScriptErrorsFrame.ScrollFrame.Text:HookScript("OnEscapePressed", UnHighlightText)
 
     ScriptErrorsFrame:Size(500, 300)
-    ScriptErrorsFrameScrollFrame:Size(ScriptErrorsFrame:GetWidth() - 45, ScriptErrorsFrame:GetHeight() - 71)
+    ScriptErrorsFrame.ScrollFrame:Size(ScriptErrorsFrame:GetWidth() - 45, ScriptErrorsFrame:GetHeight() - 71)
 
     local BUTTON_WIDTH = 75
     local BUTTON_HEIGHT = 24
@@ -54,7 +52,7 @@ function D:ModifyErrorFrame()
     firstButton:Width(BUTTON_WIDTH)
     firstButton:SetScript("OnClick", function(self)
             ScriptErrorsFrame.index = 1
-            ScriptErrorsFrame_Update()
+            ScriptErrorsFrame:Update()
         end)
     ScriptErrorsFrame.firstButton = firstButton
     S:Reskin(firstButton)
@@ -67,13 +65,13 @@ function D:ModifyErrorFrame()
     lastButton:SetText(L["最后页"])
     lastButton:SetScript("OnClick", function(self)
             ScriptErrorsFrame.index = #(ScriptErrorsFrame.order)
-            ScriptErrorsFrame_Update()
+            ScriptErrorsFrame:Update()
         end)
     ScriptErrorsFrame.lastButton = lastButton
     S:Reskin(lastButton)
 end
 
-function D:ScriptErrorsFrame_UpdateButtons()
+function D:ScriptErrorsFrame:UpdateButtons()
     local numErrors = #ScriptErrorsFrame.order
     local index = ScriptErrorsFrame.index
     if ( index == 0 ) then
@@ -91,14 +89,14 @@ function D:ScriptErrorsFrame_UpdateButtons()
 end
 
 function D:ScriptErrorsFrame_OnError(_, _, keepHidden)
-    if keepHidden or self.MessagePrinted or not InCombatLockdown() or GetCVarBool("scriptErrors") ~= true then return end
+    if keepHidden or D.MessagePrinted or not InCombatLockdown() or GetCVarBool("scriptErrors") ~= true then return end
 
-    self.MessagePrinted = true
+    D.MessagePrinted = true
 end
 
 function D:PLAYER_REGEN_ENABLED()
 	ScriptErrorsFrame:SetParent(UIParent)
-	self.MessagePrinted = nil
+	D.MessagePrinted = nil
 end
 
 function D:PLAYER_REGEN_DISABLED()
@@ -108,7 +106,7 @@ end
 function D:TaintError(event, addonName, addonFunc)
     if GetCVarBool("scriptErrors") ~= true or addonName ~= "RayUI" then return end
     R:ThrowError(L["%s: %s 尝试调用保护函数 '%s'."]:format(event, addonName or "<name>", addonFunc or "<func>"))
-    -- ScriptErrorsFrame_OnError(L["%s: %s 尝试调用保护函数 '%s'."]:format(event, addonName or "<name>", addonFunc or "<func>"), nil, false)
+    ScriptErrorsFrame:OnError(L["%s: %s 尝试调用保护函数 '%s'."]:format(event, addonName or "<name>", addonFunc or "<func>"), false, false)
 end
 
 function D:ShowScriptErrorsFrame()
@@ -129,8 +127,8 @@ function D:Initialize()
 
     SetCVar("scriptErrors", 1)
     self:ModifyErrorFrame()
-    self:SecureHook("ScriptErrorsFrame_UpdateButtons")
-    self:SecureHook("ScriptErrorsFrame_OnError")
+    self:SecureHook(ScriptErrorsFrame, "UpdateButtons", D.ScriptErrorsFrame:UpdateButtons)
+ 	self:SecureHook(ScriptErrorsFrame, "OnError", D.ScriptErrorsFrame_OnError)
     self:SecureHook('StaticPopup_Show')
     self:RegisterEvent("PLAYER_REGEN_DISABLED")
     self:RegisterEvent("PLAYER_REGEN_ENABLED")
@@ -144,4 +142,4 @@ function D:Initialize()
     self.HideFrame:Hide()
 end
 
--- M:RegisterMiscModule(D:GetName())
+M:RegisterMiscModule(D:GetName())

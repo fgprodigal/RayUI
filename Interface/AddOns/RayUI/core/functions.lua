@@ -62,7 +62,7 @@ local C_Timer = C_Timer
 local hooksecurefunc = hooksecurefunc
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: UIParent, LibStub, MAX_PLAYER_LEVEL, ScriptErrorsFrame_OnError, BaudErrorFrameHandler, UISpecialFrames, xCT_Plus
+-- GLOBALS: UIParent, LibStub, MAX_PLAYER_LEVEL, BaudErrorFrameHandler, UISpecialFrames, xCT_Plus
 -- GLOBALS: Advanced_UIScaleSlider, Advanced_UseUIScale, RayUIConfigTutorial, RayUIWarningFrameScrollScrollBar, WorldMapFrame
 -- GLOBALS: SLASH_RELOAD1, COMBAT_RATING_RESILIENCE_PLAYER_DAMAGE_TAKEN, FIRST_NUMBER_CAP, SECOND_NUMBER_CAP, RayUISplashScreen
 
@@ -857,7 +857,7 @@ function R:ThrowError(err)
         elseif BaudErrorFrameHandler then
             BaudErrorFrameHandler(err)
         else
-            -- ScriptErrorsFrame_OnError(err, false)
+			ScriptErrorsFrame:OnError(err, false, false)
         end
     end
 end
