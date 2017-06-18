@@ -40,7 +40,7 @@ function RA:Construct_RaidTankFrames()
     self.AuraWatch = RA:Construct_AuraWatch(self)
     self.AFKtext = RA:Construct_AFKText(self)
     if RA.db.roleicon then
-        self.LFDRole = RA:Construct_RoleIcon(self)
+        self.GroupRoleIndicator = RA:Construct_RoleIcon(self)
     end
     self.Range = {
         insideAlpha = 1,

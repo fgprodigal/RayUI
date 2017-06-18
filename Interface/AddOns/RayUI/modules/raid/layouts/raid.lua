@@ -38,13 +38,13 @@ function RA:Construct_RaidFrames()
     self.Healtext = RA:Construct_HealText(self)
     self.Highlight = RA:Construct_Highlight(self)
     self.RaidTargetIndicator = RA:Construct_RaidIcon(self)
-    self.ResurrectIcon = RA:Construct_ResurectionIcon(self)
-    self.ReadyCheck = RA:Construct_ReadyCheck(self)
+    self.ResurrectIndicator = RA:Construct_ResurectionIcon(self)
+    self.ReadyCheckIndicator = RA:Construct_ReadyCheck(self)
     self.RaidDebuffs = RA:Construct_RaidDebuffs(self)
     self.AuraWatch = RA:Construct_AuraWatch(self)
     self.RaidRoleFramesAnchor = RA:Construct_RaidRoleFrames(self)
     if RA.db.roleicon then
-        self.LFDRole = RA:Construct_RoleIcon(self)
+        self.GroupRoleIndicator = RA:Construct_RoleIcon(self)
     end
     self.AFKtext = RA:Construct_AFKText(self)
     self.Range = {

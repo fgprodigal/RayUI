@@ -461,17 +461,17 @@ end
 function RA:Construct_RaidRoleFrames(frame)
     local anchor = CreateFrame("Frame", nil, frame.RaisedElementParent)
 
-    frame.Leader = anchor:CreateTexture(nil, "OVERLAY")
-    frame.Leader:SetPoint("TOPLEFT", frame, 0, 8)
-    frame.Leader:SetSize(RA.db.leadersize, RA.db.leadersize)
+    frame.LeaderIndicator = anchor:CreateTexture(nil, "OVERLAY")
+    frame.LeaderIndicator:SetPoint("TOPLEFT", frame, 0, 8)
+    frame.LeaderIndicator:SetSize(RA.db.leadersize, RA.db.leadersize)
 
-    frame.Assistant = anchor:CreateTexture(nil, "OVERLAY")
-    frame.Assistant:SetPoint("TOPLEFT", frame, 0, 8)
-    frame.Assistant:SetSize(RA.db.leadersize, RA.db.leadersize)
+    frame.AssistantIndicator = anchor:CreateTexture(nil, "OVERLAY")
+    frame.AssistantIndicator:SetPoint("TOPLEFT", frame, 0, 8)
+    frame.AssistantIndicator:SetSize(RA.db.leadersize, RA.db.leadersize)
 
-    frame.MasterLooter = anchor:CreateTexture(nil, "OVERLAY")
-    frame.MasterLooter:SetSize(RA.db.leadersize, RA.db.leadersize)
-    frame.MasterLooter:SetPoint("LEFT", frame.Leader, "RIGHT")
+    frame.MasterLooterIndicator = anchor:CreateTexture(nil, "OVERLAY")
+    frame.MasterLooterIndicator:SetSize(RA.db.leadersize, RA.db.leadersize)
+    frame.MasterLooterIndicator:SetPoint("LEFT", frame.Leader, "RIGHT")
 
     return anchor
 end
