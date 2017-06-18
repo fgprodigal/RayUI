@@ -1,10 +1,37 @@
-local parent, ns = ...
+--[[
+# Element: Range Fader
+
+Changes the opacity of a unit frame based on whether the frame's unit is in the player's range.
+
+## Widget
+
+Range - A table containing opacity values.
+
+## Notes
+
+Offline units are handled as if they are in range.
+
+## Options
+
+.outsideAlpha - Opacity when the unit is out of range. Defaults to 0.55 (number)[0-1].
+.insideAlpha  - Opacity when the unit is within range. Defaults to 1 (number)[0-1].
+
+## Examples
+
+    -- Register with oUF
+    self.Range = {
+        insideAlpha = 1,
+        outsideAlpha = 1/2,
+    }
+--]]
+
+local _, ns = ...
 local oUF = ns.oUF
 
 local _FRAMES = {}
 local OnRangeFrame
 
-local UnitIsConnected = UnitIsConnected
+local UnitInRange, UnitIsConnected = UnitInRange, UnitIsConnected
 local tinsert, tremove, twipe = table.insert, table.remove, table.wipe
 
 local friendlySpells, resSpells, longEnemySpells, enemySpells, petSpells = {}, {}, {}, {}, {}
@@ -25,12 +52,9 @@ do
 		AddSpell(friendlySpells, 17) -- Power Word: Shield (40 yards)
 		AddSpell(resSpells, 2006) -- Resurrection (40 yards)
 	elseif class == "DRUID" then
-		AddSpell(enemySpells, 339) -- Entangling Roots (35 yards)
-		AddSpell(longEnemySpells, 8921) -- Moonfire (40 yards)
-		AddSpell(friendlySpells, 2782) -- Remove Corruption (Balance/Feral/Guardian) (40 yards)
-		AddSpell(friendlySpells, 88423) -- Nature's Cure (Resto) (40 yards)
-		AddSpell(resSpells, 50769) -- Revive (40 yards)
-		AddSpell(resSpells, 20484) -- Rebirth (40 yards)
+		AddSpell(enemySpells, 8921) -- Moonfire (40 yards, all specs, lvl 3)
+		AddSpell(friendlySpells, 8936) -- Regrowth (40 yards, all specs, lvl 5)
+		AddSpell(resSpells, 50769) -- Revive (40 yards, all specs, lvl 14)
 	elseif class == "PALADIN" then
 		AddSpell(enemySpells, 20271) -- Judgement (30 yards)
 		AddSpell(longEnemySpells, 20473) -- Holy Shock (40 yards)
@@ -42,12 +66,13 @@ do
 		AddSpell(enemySpells, 403) -- Lightning Bolt (Resto) (40 yards)
 		AddSpell(friendlySpells, 8004) -- Healing Surge (Resto/Elemental) (40 yards)
 		AddSpell(friendlySpells, 188070) -- Healing Surge (Enhancement) (40 yards)
-		AddSpell(resSpells, 2008) -- Ancestral Spirit (40 yards)
+		AddSpell(resSpells, 2008) -- Ancestral Spirit (40 yards) 
 	elseif class == "WARLOCK" then
 		AddSpell(enemySpells, 5782) -- Fear (30 yards)
 		AddSpell(longEnemySpells, 234153) -- Drain Life (40 yards)
-		AddSpell(longEnemySpells, 198590) -- Drain Soul (40 yards)
-        AddSpell(longEnemySpells, 232670) --Shadow Bolt (40 yards, lvl 1 spell)
+		AddSpell(longEnemySpells, 198590) --Drain Soul (40 yards)
+		AddSpell(longEnemySpells, 232670) --Shadow Bolt (40 yards, lvl 1 spell)
+		AddSpell(longEnemySpells, 686) --Shadow Bolt (Demonology) (40 yards, lvl 1 spell)
 		AddSpell(petSpells, 755) -- Health Funnel (45 yards)
 		AddSpell(friendlySpells, 20707) -- Soulstone (40 yards)
 	elseif class == "MAGE" then
@@ -103,7 +128,7 @@ local function getUnit(unit)
 	end
 end
 
-local function friendlyIsInRange(unit)
+local function friendlyIsInRange(unit)	
 	if CheckInteractDistance(unit, 1) and UnitInPhase(unit) then --Inspect (28 yards) and same phase as you
 		return true
 	end
@@ -128,7 +153,7 @@ local function friendlyIsInRange(unit)
 			end
 		end
 	end
-
+	
 	return false
 end
 
@@ -136,7 +161,7 @@ local function petIsInRange(unit)
 	if CheckInteractDistance(unit, 2) then
 		return true
 	end
-
+	
 	for _, spellID in ipairs(friendlySpells) do
 		if SpellRange.IsSpellInRange(spellID, unit) == 1 then
 			return true
@@ -147,7 +172,7 @@ local function petIsInRange(unit)
 			return true
 		end
 	end
-
+	
 	return false
 end
 
@@ -155,13 +180,13 @@ local function enemyIsInRange(unit)
 	if CheckInteractDistance(unit, 2) then
 		return true
 	end
-
+	
 	for _, spellID in ipairs(enemySpells) do
 		if SpellRange.IsSpellInRange(spellID, unit) == 1 then
 			return true
 		end
 	end
-
+	
 	return false
 end
 
@@ -171,13 +196,63 @@ local function enemyIsInLongRange(unit)
 			return true
 		end
 	end
-
+	
 	return false
 end
 
--- updating of range.
+local function Update(self, event)
+	local element = self.Range
+	local unit = self.unit
+
+	--[[ Callback: Range:PreUpdate()
+	Called before the element has been updated.
+
+	* self - the Range element
+	--]]
+	if(element.PreUpdate) then
+		element:PreUpdate()
+	end
+
+	local inRange, checkedRange
+	local connected = UnitIsConnected(unit)
+	if(connected) then
+		inRange, checkedRange = UnitInRange(unit)
+		if(checkedRange and not inRange) then
+			self:SetAlpha(element.outsideAlpha)
+		else
+			self:SetAlpha(element.insideAlpha)
+		end
+	else
+		self:SetAlpha(element.insideAlpha)
+	end
+
+	--[[ Callback: Range:PostUpdate(object, inRange, checkedRange, isConnected)
+	Called after the element has been updated.
+
+	* self         - the Range element
+	* object       - the parent object
+	* inRange      - indicates if the unit was within 40 yards of the player (boolean)
+	* checkedRange - indicates if the range check was actually performed (boolean)
+	* isConnected  - indicates if the unit is online (boolean)
+	--]]
+	if(element.PostUpdate) then
+		return element:PostUpdate(self, inRange, checkedRange, connected)
+	end
+end
+
+local function Path(self, ...)
+	--[[ Override: Range.Override(self, event)
+	Used to completely override the internal update function.
+
+	* self  - the parent object
+	* event - the event triggering the update (string)
+	--]]
+	return (self.Range.Override or Update) (self, ...)
+end
+
+-- Internal updating method
 local timer = 0
-local OnRangeUpdate = function(self, elapsed)
+local function OnRangeUpdate(_, elapsed)
 	timer = timer + elapsed
 
 	if(timer >= .20) then
@@ -208,8 +283,10 @@ local OnRangeUpdate = function(self, elapsed)
 						end
 					end
 				else
-					object:SetAlpha(range.insideAlpha)
+					object:SetAlpha(range.insideAlpha)	
 				end
+
+				--Path(object, 'OnUpdate')
 			end
 		end
 
@@ -217,32 +294,35 @@ local OnRangeUpdate = function(self, elapsed)
 	end
 end
 
-local Enable = function(self)
-	local range = self.Range
-	if(range and range.insideAlpha and range.outsideAlpha) then
-		tinsert(_FRAMES, self)
+local function Enable(self)
+	local element = self.Range
+	if(element) then
+		element.__owner = self
+		element.insideAlpha = element.insideAlpha or 1
+		element.outsideAlpha = element.outsideAlpha or 0.55
 
 		if(not OnRangeFrame) then
-			OnRangeFrame = CreateFrame"Frame"
-			OnRangeFrame:SetScript("OnUpdate", OnRangeUpdate)
+			OnRangeFrame = CreateFrame('Frame')
+			OnRangeFrame:SetScript('OnUpdate', OnRangeUpdate)
 		end
 
+		table.insert(_FRAMES, self)
 		OnRangeFrame:Show()
 
 		return true
 	end
 end
 
-local Disable = function(self)
-	local range = self.Range
-	if(range) then
-		for k, frame in next, _FRAMES do
+local function Disable(self)
+	local element = self.Range
+	if(element) then
+		for index, frame in next, _FRAMES do
 			if(frame == self) then
-				tremove(_FRAMES, k)
-				frame:SetAlpha(1)
+				table.remove(_FRAMES, index)
 				break
 			end
 		end
+		self:SetAlpha(element.insideAlpha)
 
 		if(#_FRAMES == 0) then
 			OnRangeFrame:Hide()
