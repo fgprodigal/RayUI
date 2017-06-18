@@ -562,7 +562,7 @@ function UF:PostCastStart(unit, name, rank, castid)
         r, g, b = 95/255, 182/255, 255/255
     elseif UnitIsPlayer(unit) and UnitIsFriend(unit, "player") then
         r, g, b = unpack(oUF.colors.class[select(2, UnitClass(unit))])
-    elseif self.interrupt then
+    elseif self.notInterruptible then
         r, g, b = unpack(oUF.colors.reaction[1])
     else
         r, g, b = unpack(oUF.colors.reaction[5])
