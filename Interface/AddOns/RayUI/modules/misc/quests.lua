@@ -67,6 +67,7 @@ local AcknowledgeAutoAcceptQuest = AcknowledgeAutoAcceptQuest
 local IsQuestIgnored = IsQuestIgnored
 local UnitIsDeadOrGhost = UnitIsDeadOrGhost
 local ShowQuestOffer = ShowQuestOffer
+local QuestLogPushQuest = QuestLogPushQuest
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: ENABLE_COLORBLIND_MODE, ITEM_MIN_LEVEL, ERR_QUEST_ALREADY_DONE, ERR_QUEST_FAILED_LOW_LEVEL, QuestFrame_OnEvent
@@ -416,9 +417,7 @@ QuickQuest:Register("QUEST_AUTOCOMPLETE", AttemptAutoComplete)
 QuickQuest:Register("QUEST_ACCEPT_CONFIRM", AcceptQuest)
 
 QuickQuest:Register("QUEST_ACCEPTED", function(id)
-        if(QuestFrame:IsShown() and QuestGetAutoAccept()) then
-            CloseQuest()
-        end
+        QuestLogPushQuest(id)
     end)
 
 local choiceQueue
