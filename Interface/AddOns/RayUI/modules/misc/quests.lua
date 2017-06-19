@@ -71,10 +71,10 @@ local QuestLogPushQuest = QuestLogPushQuest
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: ENABLE_COLORBLIND_MODE, ITEM_MIN_LEVEL, ERR_QUEST_ALREADY_DONE, ERR_QUEST_FAILED_LOW_LEVEL, QuestFrame_OnEvent
--- GLOBALS: ERR_QUEST_NEED_PREREQS, MINIMAP_TRACKING_TRIVIAL_QUESTS, QuestFrame, MINIMAP_TRACKING_HIDDEN_QUESTS
+-- GLOBALS: ERR_QUEST_NEED_PREREQS, MINIMAP_TRACKING_TRIVIAL_QUESTS, QuestFrame, MINIMAP_TRACKING_HIDDEN_QUESTS, QuestInfoItem_OnClick
 
 local function IsTrackingHidden()
-	for index = 1, GetNumTrackingTypes() do
+    for index = 1, GetNumTrackingTypes() do
 		local name, _, active = GetTrackingInfo(index)
 		if(name == (MINIMAP_TRACKING_TRIVIAL_QUESTS or MINIMAP_TRACKING_HIDDEN_QUESTS)) then
 			return active
@@ -152,16 +152,16 @@ local ignoreQuestNPC = {
 
 local function GetQuestLogQuests(onlyComplete)
     local quests = {}
-    for index = 1, GetNumQuestLogEntries() do
-        local title, _, _, isHeader, _, isComplete, _, questID = GetQuestLogTitle(index)
-        if(not isHeader) then
-            if(onlyComplete and isComplete or not onlyComplete) then
-                quests[title] = questID
-            end
-        end
-    end
+	for index = 1, GetNumQuestLogEntries() do
+		local title, _, _, isHeader, _, isComplete, _, questID = GetQuestLogTitle(index)
+		if(not isHeader) then
+			if(onlyComplete and isComplete or not onlyComplete) then
+				quests[title] = questID
+			end
+		end
+	end
 
-    return quests
+	return quests
 end
 
 QuickQuest:Register("QUEST_GREETING", function()
@@ -199,15 +199,6 @@ QuickQuest:Register("QUEST_GREETING", function()
             end
         end
     end)
-
--- This should be part of the API, really
-local function IsGossipQuestCompleted(index)
-    return not not select(((index * 5) - 5) + 4, GetGossipActiveQuests())
-end
-
-local function IsGossipQuestTrivial(index)
-    return not not select(((index * 6) - 6) + 3, GetGossipAvailableQuests())
-end
 
 local ignoreGossipNPC = {
     -- Bodyguards
@@ -304,6 +295,7 @@ QuickQuest:Register("GOSSIP_SHOW", function()
     end)
 
 local ignoredItems = {
+    -- Inscription weapons
     [31690] = 79343, -- Inscribed Tiger Staff
     [31691] = 79340, -- Inscribed Crane Staff
     [31692] = 79341, -- Inscribed Serpent Staff
@@ -320,11 +312,11 @@ local ignoredItems = {
     [29464] = 71716, -- Soothsayer's Runes
 
     -- Tiller Gifts
-    ['progress_79264'] = 79264, -- Ruby Shard
-    ['progress_79265'] = 79265, -- Blue Feather
-    ['progress_79266'] = 79266, -- Jade Cat
-    ['progress_79267'] = 79267, -- Lovely Apple
-    ['progress_79268'] = 79268, -- Marsh Lily
+    ["progress_79264"] = 79264, -- Ruby Shard
+    ["progress_79265"] = 79265, -- Blue Feather
+    ["progress_79266"] = 79266, -- Jade Cat
+    ["progress_79267"] = 79267, -- Lovely Apple
+    ["progress_79268"] = 79268, -- Marsh Lily
 
     -- Garrison scouting missives
     [38180] = 122424, -- Scouting Missive: Broken Precipice
@@ -451,6 +443,13 @@ QuickQuest:Register("QUEST_PROGRESS", function()
         end
     end)
 
+QuickQuest:Register("QUEST_COMPLETE", function()
+    	local choices = GetNumQuestChoices()
+    	if(choices <= 1) then
+    		GetQuestReward(1)
+    	end
+    end)
+
 local cashRewards = {
     [45724] = 1e5, -- Champion's Purse
     [64491] = 2e6, -- Royal Reward
@@ -487,90 +486,10 @@ QuickQuest:Register("QUEST_COMPLETE", function()
             end
 
             if(bestIndex) then
-                QuestInfoRewardsFrame.RewardButtons[bestIndex]:Click()
+                QuestInfoItem_OnClick(QuestInfoRewardsFrame.RewardButtons[bestIndex])
             end
         end
     end)
-
-QuickQuest:Register("QUEST_FINISHED", function()
-        choiceQueue = nil
-        autoCompleteIndex = nil
-
-        if(GetNumAutoQuestPopUps() > 0) then
-            QuickQuest:QUEST_AUTOCOMPLETE()
-        end
-    end)
-
-QuickQuest:Register("BAG_UPDATE_DELAYED", function()
-        if(autoCompleteIndex) then
-            ShowQuestComplete(autoCompleteIndex)
-            autoCompleteIndex = nil
-        end
-    end)
-
-QuickQuest:Register("MERCHANT_SHOW", function()
-        atMerchant = true
-    end)
-
-QuickQuest:Register("MERCHANT_CLOSED", function()
-        atMerchant = false
-    end)
-
-QuickQuest:Register("BANKFRAME_OPENED", function()
-        atBank = true
-    end)
-
-QuickQuest:Register("BANKFRAME_CLOSED", function()
-        atBank = false
-    end)
-
-QuickQuest:Register("GUILDBANKFRAME_OPENED", function()
-        atBank = true
-    end)
-
-QuickQuest:Register("GUILDBANKFRAME_CLOSED", function()
-        atBank = false
-    end)
-
-QuickQuest:Register("MAIL_SHOW", function()
-        atMail = true
-    end)
-
-QuickQuest:Register("MAIL_CLOSED", function()
-        atMail = false
-    end)
-
-local questTip = CreateFrame("GameTooltip", "QuickQuestTip", R.UIParent, "GameTooltipTemplate")
-local questLevel = string.gsub(ITEM_MIN_LEVEL, "%%d", "(%%d+)")
-
-local function GetQuestItemLevel()
-    for index = 1, questTip:NumLines() do
-        local level = tonumber(string.match(_G["QuickQuestTipTextLeft" .. index]:GetText(), questLevel))
-        if(level) then
-            return tonumber(level)
-        end
-    end
-end
-
-local function BagUpdate(bag)
-    if(atBank or atMail or atMerchant) then return end
-
-    for slot = 1, GetContainerNumSlots(bag) do
-        local _, id, active = GetContainerItemQuestInfo(bag, slot)
-        if(id and not active and not IsQuestFlaggedCompleted(id) and not ignoredItems[id]) then
-            questTip:SetOwner(R.UIParent, "ANCHOR_NONE")
-            questTip:ClearLines()
-            questTip:SetBagItem(bag, slot)
-            questTip:Show()
-
-            local level = GetQuestItemLevel()
-            questTip:Hide()
-            if(not level or level <= UnitLevel("player")) then
-                UseContainerItem(bag, slot)
-            end
-        end
-    end
-end
 
 local errors = {
     [ERR_QUEST_ALREADY_DONE] = true,
