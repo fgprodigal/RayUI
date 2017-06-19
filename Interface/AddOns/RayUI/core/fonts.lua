@@ -71,7 +71,7 @@ function R:UpdateBlizzardFonts()
 	SetFont(SubZoneTextString,					NORMAL, 25, "OUTLINE")
 	SetFont(PVPInfoTextString,					NORMAL, 22, "THINOUTLINE")
 	SetFont(PVPArenaTextString,					NORMAL, 22, "THINOUTLINE")
-	SetFont(CombatTextFont,                     COMBAT, 100, "THINOUTLINE") -- number here just increase the font quality.
+	SetFont(CombatTextFont,                     COMBAT, 200, "THINOUTLINE") -- number here just increase the font quality.
 	SetFont(FriendsFont_Normal, 				NORMAL, self.global.media.fontsize)
 	SetFont(FriendsFont_Small,					NORMAL, self.global.media.fontsize)
 	SetFont(FriendsFont_Large, 					NORMAL, self.global.media.fontsize)
