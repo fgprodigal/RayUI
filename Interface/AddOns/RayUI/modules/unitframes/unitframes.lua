@@ -10,6 +10,7 @@ local gsub = string.gsub
 --WoW API / Variables
 local CreateFrame = CreateFrame
 local IsAddOnLoaded = IsAddOnLoaded
+local InCombatLockdown = InCombatLockdown
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: RayUF, RayUF_Player, RayUF_Target, RayUIPetBar, RayUF_Focus, MAX_BOSS_FRAMES, SpellActivationOverlayFrame
@@ -18,6 +19,7 @@ UF.modName = L["头像"]
 
 UF.Layouts = {}
 UF.unitstoload = {}
+UF.units = {}
 
 UF.classMaxResourceBar = {
     ["DEATHKNIGHT"] = 6,
@@ -72,6 +74,7 @@ function UF:LoadUnitFrames()
         frameName = frameName:gsub("t(arget)", "T%1")
         if not self[unit] then
             self[unit] = RayUF:Spawn(unit, "RayUF_"..frameName)
+            self["units"][unit] = unit
             R:CreateMover(self[unit], self[unit]:GetName().."Mover", L[frameName.." Mover"], nil, nil, "ALL,GENERAL,RAID")
         end
     end
@@ -92,9 +95,6 @@ function UF:LoadUnitFrames()
             self.arena[i]:Show()
         end
         R:CreateMover(ArenaHeader, "ArenaHeaderMover", "Arena", nil, nil, "ALL,ARENA")
-        self:RegisterEvent("ARENA_PREP_OPPONENT_SPECIALIZATIONS", "UpdatePrep")
-        self:RegisterEvent("ARENA_OPPONENT_UPDATE", "UpdatePrep")
-        self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdatePrep")
     end
 
     if self.db.units.boss.enable then
@@ -122,12 +122,40 @@ function UF:LoadUnitFrames()
     end
 end
 
+function UF:PLAYER_REGEN_ENABLED()
+	self:Update_AllFrames()
+	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+end
+
+function UF:UpdateFrame(frame)
+    frame:UpdateAllElements("RayUI_UpdateAllElements")
+    UF:Configure_ClassBar(frame)
+end
+
+function UF:Update_AllFrames()
+	if InCombatLockdown() then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return end
+
+	for unit in pairs(self["units"]) do
+		self[unit]:Enable()
+        UF:UpdateFrame(self[unit])
+	end
+end
+
+local hasEnteredWorld = false
+function UF:PLAYER_ENTERING_WORLD()
+	if not hasEnteredWorld then
+		self:Update_AllFrames()
+		hasEnteredWorld = true
+	end
+end
+
 function UF:Initialize()
     if self.db.enable then
         RayUF:RegisterStyle("RayUF", function(frame, unit)
                 UF:Construct_UnitFrames(frame, unit)
             end)
         self:LoadUnitFrames()
+        self:RegisterEvent("PLAYER_ENTERING_WORLD")
     else
         self:LoadFakeUnitFrames()
     end

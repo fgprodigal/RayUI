@@ -125,7 +125,6 @@ function UF:Construct_PlayerFrame(frame, unit)
     end
     frame.USE_CLASSBAR = true
     frame.MAX_CLASS_BAR = frame.MAX_CLASS_BAR or max(UF.classMaxResourceBar[R.myclass] or 0, MAX_COMBO_POINTS)
-    frame.CLASSBAR_INITIALED = false
 
     if UF.db.aurabar then
         frame.AuraBars = self:Construct_AuraBarHeader(frame)

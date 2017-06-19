@@ -189,9 +189,6 @@ function UF:UpdateClassBar(cur, max, hasMaxChanged, powerType)
         UF:Configure_ClassBar(frame, cur)
     elseif stateChanged then
         UF:Configure_ClassBar(frame, cur)
-    elseif not frame.CLASSBAR_INITIALED then
-        frame.CLASSBAR_INITIALED = true
-        UF:Configure_ClassBar(frame, cur)
     end
 
     local r, g, b
@@ -213,7 +210,7 @@ function UF:Construct_DeathKnightResourceBar(frame)
     local runes = CreateFrame("Frame", nil, frame)
     runes:Point("BOTTOM", frame, "TOP", 0, 2)
 
-    for i = 1, UF['classMaxResourceBar'][R.myclass] do
+    for i = 1, UF["classMaxResourceBar"][R.myclass] do
         runes[i] = CreateFrame("StatusBar", frame:GetName().."RuneButton"..i, runes)
         runes[i]:CreateShadow("Background")
         runes[i]:SetStatusBarTexture(R["media"].normal)

@@ -81,6 +81,13 @@ function UF:Construct_ArenaFrame(frame, unit)
         frame.prepFrame = CreateFrame("Frame", frame:GetName().."PrepFrame", R.UIParent)
         frame.prepFrame:SetFrameStrata("BACKGROUND")
         frame.prepFrame:SetAllPoints(frame)
+		frame.prepFrame:SetScript("OnEvent", UF.UpdatePrep)
+
+        frame.prepFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+		frame.prepFrame:RegisterEvent("ARENA_OPPONENT_UPDATE")
+		frame.prepFrame:RegisterEvent("UNIT_NAME_UPDATE")
+		frame.prepFrame:RegisterEvent("ARENA_PREP_OPPONENT_SPECIALIZATIONS")
+
         frame.prepFrame.Health = CreateFrame("StatusBar", nil, frame.prepFrame)
         frame.prepFrame.Health:SetStatusBarTexture(R["media"].normal)
         frame.prepFrame.Health:SetAllPoints()
