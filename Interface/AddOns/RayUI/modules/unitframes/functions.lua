@@ -906,8 +906,9 @@ end
 
 function UF:PostUpdatePower(unit, cur, min, max)
     local shown = self:IsShown()
-    if max == 0 then
+    if not max then
         if shown then
+            self.value:SetText(nil)
             self:Hide()
         end
         return
