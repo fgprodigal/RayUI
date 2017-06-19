@@ -7,7 +7,7 @@ local GetChatWindowInfo = GetChatWindowInfo
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: CHAT_FONT_HEIGHTS, UNIT_NAME_FONT, DAMAGE_TEXT_FONT, STANDARD_TEXT_FONT
 -- GLOBALS: GameTooltipHeader, SystemFont_Shadow_Large_Outline, NumberFont_OutlineThick_Mono_Small
--- GLOBALS: NumberFont_Outline_Huge, NumberFont_Outline_Large, NumberFont_Outline_Med
+-- GLOBALS: NumberFont_Outline_Huge, NumberFont_Outline_Large, NumberFont_Outline_Med, GameFontHighlightMedium
 -- GLOBALS: NumberFont_Shadow_Med, NumberFont_Shadow_Small, QuestFont, QuestFont_Large
 -- GLOBALS: SystemFont_Large, GameFontNormalMed3, SystemFont_Shadow_Huge1, SystemFont_Med1
 -- GLOBALS: SystemFont_Med3, SystemFont_OutlineThick_Huge2, SystemFont_Outline_Small
@@ -16,7 +16,6 @@ local GetChatWindowInfo = GetChatWindowInfo
 -- GLOBALS: SystemFont_Tiny, Tooltip_Med,  Tooltip_Small, ZoneTextString, SubZoneTextString
 -- GLOBALS: PVPInfoTextString, PVPArenaTextString, CombatTextFont, FriendsFont_Normal
 -- GLOBALS: FriendsFont_Small, FriendsFont_Large, FriendsFont_UserText
--- GLOBALS: GameFontNormal, ErrorFont, SubZoneTextFont, ZoneTextFont, PVPInfoTextFont
 
 local function SetFont(obj, font, size, style, r, g, b, sr, sg, sb, sox, soy)
 	obj:SetFont(font, size, style)
@@ -41,8 +40,6 @@ function R:UpdateBlizzardFonts()
 	STANDARD_TEXT_FONT = NORMAL
 
 	-- Base fonts
-	SetFont(GameFontNormal,                  NORMAL, self.global.media.fontsize)
-	-- SetFont(GameFontNormalSmall,                NORMAL, self.global.media.fontsize)
 	SetFont(GameTooltipHeader,                  NORMAL, self.global.media.fontsize)
 	SetFont(NumberFont_OutlineThick_Mono_Small, NUMBER, self.global.media.fontsize, "OUTLINE")
 	SetFont(SystemFont_Shadow_Large_Outline,	NUMBER, 20, "OUTLINE")
@@ -52,12 +49,10 @@ function R:UpdateBlizzardFonts()
 	SetFont(NumberFont_Shadow_Med,              NORMAL, self.global.media.fontsize) --chat editbox uses this
 	SetFont(NumberFont_Shadow_Small,            NORMAL, self.global.media.fontsize)
 	SetFont(QuestFont,                          NORMAL, self.global.media.fontsize)
-	SetFont(ErrorFont,                          NORMAL, 15, "THINOUTLINE") -- Quest Progress & Errors
-	SetFont(SubZoneTextFont,                          NORMAL, 26, "THINOUTLINE", nil, nil, nil, 0, 0, 0, R.mult, -R.mult)
-	SetFont(ZoneTextFont,                          NORMAL, 112, "THINOUTLINE", nil, nil, nil, 0, 0, 0, R.mult, -R.mult)
-	SetFont(PVPInfoTextFont,                          NORMAL, 20, "THINOUTLINE", nil, nil, nil, 0, 0, 0, R.mult, -R.mult)
 	SetFont(QuestFont_Large,                    NORMAL, 14)
 	SetFont(SystemFont_Large,                   NORMAL, 15)
+    SetFont(GameFontNormalMed3,					NORMAL, 15)
+	SetFont(GameFontHighlightMedium,            NORMAL, 15)
 	SetFont(SystemFont_Shadow_Huge1,			NORMAL, 20, "THINOUTLINE") -- Raid Warning, Boss emote frame too
 	SetFont(SystemFont_Med1,                    NORMAL, self.global.media.fontsize)
 	SetFont(SystemFont_Med3,                    NORMAL, self.global.media.fontsize*1.1)
