@@ -22,7 +22,7 @@ local StaticPopup_Hide = StaticPopup_Hide
 local UnitIsGroupLeader = UnitIsGroupLeader
 local UnitIsGroupAssistant = UnitIsGroupAssistant
 local InviteUnit = InviteUnit
-local BNGetToonInfo = BNGetToonInfo
+local BNGetGameAccountInfo = BNGetGameAccountInfo
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: QueueStatusMinimapButton
@@ -88,7 +88,7 @@ function mod:AutoInvite(event, arg1, arg2, ...)
                 if event == "CHAT_MSG_WHISPER" then
                     InviteUnit(arg2)
                 elseif event == "CHAT_MSG_BN_WHISPER" then
-                    local _, toonName, _, realmName = BNGetToonInfo(select(11, ...))
+                    local _, toonName, _, realmName = BNGetGameAccountInfo(select(11, ...))
                     InviteUnit(toonName.."-"..realmName)
                 end
                 return
