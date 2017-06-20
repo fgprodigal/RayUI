@@ -41,9 +41,9 @@ function UF:Configure_ClassBar(frame, cur)
                 if frame.MAX_CLASS_BAR == 1 then
                     bars[i]:SetWidth(CLASSBAR_WIDTH)
                 elseif frame.USE_MINI_CLASSBAR then
-                    bars[i]:SetWidth((CLASSBAR_WIDTH - ((5 + (frame.BORDER*2 + frame.SPACING*2))*(frame.MAX_CLASS_BAR - 1)))/frame.MAX_CLASS_BAR) --Width accounts for 5px spacing between each button, excluding borders
+                    bars[i]:SetWidth((CLASSBAR_WIDTH - ((5 + (frame.BORDER * 2 + frame.SPACING * 2)) * (frame.MAX_CLASS_BAR - 1))) / frame.MAX_CLASS_BAR) --Width accounts for 5px spacing between each button, excluding borders
                 elseif i ~= frame.MAX_CLASS_BAR then
-                    bars[i]:Width((CLASSBAR_WIDTH - ((frame.MAX_CLASS_BAR-1)*(frame.BORDER-frame.SPACING))) / frame.MAX_CLASS_BAR) --classbar width minus total width of dividers between each button, divided by number of buttons
+                    bars[i]:Width((CLASSBAR_WIDTH - ((frame.MAX_CLASS_BAR - 1) * (frame.BORDER - frame.SPACING))) / frame.MAX_CLASS_BAR) --classbar width minus total width of dividers between each button, divided by number of buttons
                 end
 
                 bars[i]:GetStatusBarTexture():SetHorizTile(false)
@@ -52,10 +52,10 @@ function UF:Configure_ClassBar(frame, cur)
                     bars[i]:Point("LEFT", bars)
                 else
                     if i == frame.MAX_CLASS_BAR then
-                        bars[i]:Point("LEFT", bars[i-1], "RIGHT", frame.BORDER-frame.SPACING, 0)
+                        bars[i]:Point("LEFT", bars[i - 1], "RIGHT", frame.BORDER - frame.SPACING, 0)
                         bars[i]:Point("RIGHT", bars)
                     else
-                        bars[i]:Point("LEFT", bars[i-1], "RIGHT", frame.BORDER-frame.SPACING, 0)
+                        bars[i]:Point("LEFT", bars[i - 1], "RIGHT", frame.BORDER - frame.SPACING, 0)
                     end
                 end
 
@@ -170,19 +170,19 @@ end
 function UF:UpdateClassBar(cur, max, hasMaxChanged, powerType)
     local frame = self.origParent or self:GetParent()
     local isShown = self:IsShown()
-	local stateChanged
+    local stateChanged
 
-	if not frame.USE_CLASSBAR or cur == 0 or max == nil then
-		self:Hide()
-		if isShown then
-			stateChanged = true
-		end
-	else
-		self:Show()
-		if not isShown then
-			stateChanged = true
-		end
-	end
+    if not frame.USE_CLASSBAR or cur == 0 or max == nil then
+        self:Hide()
+        if isShown then
+            stateChanged = true
+        end
+    else
+        self:Show()
+        if not isShown then
+            stateChanged = true
+        end
+    end
     --Update this first, as we want to update the .bg colors after
     if hasMaxChanged then
         frame.MAX_CLASS_BAR = max
@@ -192,7 +192,7 @@ function UF:UpdateClassBar(cur, max, hasMaxChanged, powerType)
     end
 
     local r, g, b
-    for i=1, #self do
+    for i = 1, #self do
         r, g, b = self[i]:GetStatusBarColor()
         self[i].bg:SetVertexColor(r, g, b, 0.15)
         if(max and (i <= max)) then
@@ -280,7 +280,7 @@ function UF:Construct_AdditionalPowerBar(frame)
     additionalPower.text = frame:CreateFontString(nil, "OVERLAY")
     additionalPower.text:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
     additionalPower.text:SetShadowColor(0, 0, 0, 0.2)
-    additionalPower.text:SetShadowOffset(R.mult, -R.mult)
+    additionalPower.text:SetShadowOffset(R.mult, - R.mult)
 
     additionalPower:SetScript("OnShow", ToggleResourceBar)
     additionalPower:SetScript("OnHide", ToggleResourceBar)
@@ -321,9 +321,9 @@ function UF:PostVisibilityAdditionalPower(enabled, stateChanged)
     local frame = self.origParent or self:GetParent()
 
     if enabled then
-        frame.ClassBar = 'AdditionalPower'
+        frame.ClassBar = "AdditionalPower"
     else
-        frame.ClassBar = 'ClassPower'
+        frame.ClassBar = "ClassPower"
         self.text:SetText()
     end
 
@@ -353,9 +353,9 @@ function UF:PostUpdateVisibilityStagger(event, unit, isShown, stateChanged)
     local frame = self
 
     if(isShown) then
-        frame.ClassBar = 'Stagger'
+        frame.ClassBar = "Stagger"
     else
-        frame.ClassBar = 'ClassPower'
+        frame.ClassBar = "ClassPower"
     end
 
     --Only update when necessary

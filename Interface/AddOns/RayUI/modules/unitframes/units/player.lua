@@ -46,8 +46,8 @@ function UF:Construct_PlayerFrame(frame, unit)
 
     self:EnableHealPredictionAndAbsorb(frame)
 
-    frame.Health.value:Point("TOPRIGHT", frame.Health, "TOPRIGHT", -8, -2)
-    frame.Power.value:Point("BOTTOMRIGHT", frame.Health, "BOTTOMRIGHT", -8, 2)
+    frame.Health.value:Point("TOPRIGHT", frame.Health, "TOPRIGHT", - 8, - 2)
+    frame.Power.value:Point("BOTTOMRIGHT", frame.Health, "BOTTOMRIGHT", - 8, 2)
 
     if self.db.healthColorClass then
         frame:Tag(frame.Name, "[RayUF:name] [RayUF:info]")
@@ -62,7 +62,7 @@ function UF:Construct_PlayerFrame(frame, unit)
     if self.db.castBar then
         local castbar = self:Construct_CastBar(frame)
         castbar:ClearAllPoints()
-        castbar:Point("BOTTOM",R.UIParent,"BOTTOM",0,305)
+        castbar:Point("BOTTOM", R.UIParent, "BOTTOM", 0, 305)
         castbar:Width(self.db.units[unit].castbar.width)
         castbar:Height(self.db.units[unit].castbar.height)
         castbar.Iconbg:Size(max(self.db.units[unit].castbar.height, 20))
@@ -73,14 +73,14 @@ function UF:Construct_PlayerFrame(frame, unit)
         end
         castbar.Iconbg:ClearAllPoints()
         if self.db.units[unit].castbar.iconposition == "LEFT" then
-            castbar.Iconbg:SetPoint("BOTTOMRIGHT", castbar, "BOTTOMLEFT", -5, 0)
+            castbar.Iconbg:SetPoint("BOTTOMRIGHT", castbar, "BOTTOMLEFT", - 5, 0)
         else
             castbar.Iconbg:SetPoint("BOTTOMLEFT", castbar, "BOTTOMRIGHT", 5, 0)
         end
         castbar.Text:ClearAllPoints()
-        castbar.Text:SetPoint("BOTTOMLEFT", castbar, "TOPLEFT", 5, -2)
+        castbar.Text:SetPoint("BOTTOMLEFT", castbar, "TOPLEFT", 5, - 2)
         castbar.Time:ClearAllPoints()
-        castbar.Time:SetPoint("BOTTOMRIGHT", castbar, "TOPRIGHT", -5, -2)
+        castbar.Time:SetPoint("BOTTOMRIGHT", castbar, "TOPRIGHT", - 5, - 2)
 
         castbar.SafeZone = castbar:CreateTexture(nil, "OVERLAY")
         castbar.SafeZone:SetDrawLayer("OVERLAY", 5)
@@ -134,19 +134,19 @@ function UF:Construct_PlayerFrame(frame, unit)
 end
 
 local function UpdateClassBar()
-	local frame = _G["RayUF_Player"]
-	if frame and frame.ClassBar then
-		frame:UpdateElement(frame.ClassBar)
-		UF.ToggleResourceBar(frame[frame.ClassBar])
-	end
+    local frame = _G["RayUF_Player"]
+    if frame and frame.ClassBar then
+        frame:UpdateElement(frame.ClassBar)
+        UF.ToggleResourceBar(frame[frame.ClassBar])
+    end
 end
 
 local f = CreateFrame("Frame")
 f:RegisterEvent("PLAYER_ENTERING_WORLD")
 f:SetScript("OnEvent", function(self, event)
-	self:UnregisterEvent(event)
-	if not R.db.UnitFrames.enable then return end
-	UpdateClassBar()
+    self:UnregisterEvent(event)
+    if not R.db.UnitFrames.enable then return end
+    UpdateClassBar()
 end)
 
 tinsert(UF["unitstoload"], "player")

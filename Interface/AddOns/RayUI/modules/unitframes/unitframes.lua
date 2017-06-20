@@ -53,7 +53,7 @@ end
 
 function UF:LoadFakeUnitFrames()
     local player = CreateFrame("Frame", "RayUF_Player", R.UIParent)
-    player:Point("BOTTOMRIGHT", R.UIParent, "BOTTOM", -80, 390)
+    player:Point("BOTTOMRIGHT", R.UIParent, "BOTTOM", - 80, 390)
     player:Size(220, 32)
     player:Show()
 
@@ -63,7 +63,7 @@ function UF:LoadFakeUnitFrames()
     target:Show()
 
     local focus = CreateFrame("Frame", "RayUF_Focus", R.UIParent)
-    focus:Point("BOTTOMRIGHT", RayUF_Player, "TOPLEFT", -20, 20)
+    focus:Point("BOTTOMRIGHT", RayUF_Player, "TOPLEFT", - 20, 20)
     focus:Size(170, 32)
     focus:Show()
 end
@@ -81,16 +81,16 @@ function UF:LoadUnitFrames()
 
     if self.db.units.arena.enable and not IsAddOnLoaded("Gladius") then
         local ArenaHeader = CreateFrame("Frame", nil, R.UIParent)
-        ArenaHeader:Point("TOPRIGHT", R.UIParent, "RIGHT", -110, 200)
+        ArenaHeader:Point("TOPRIGHT", R.UIParent, "RIGHT", - 110, 200)
         ArenaHeader:Width(self.db.units.arena.width)
-        ArenaHeader:Height(R:Scale(self.db.units.arena.height)*5 + R:Scale(36)*4)
+        ArenaHeader:Height(R:Scale(self.db.units.arena.height) * 5 + R:Scale(36) * 4)
         self.arena = {}
         for i = 1, 5 do
             self.arena[i] = RayUF:Spawn("arena"..i, "RayUF_Arena"..i)
             if i == 1 then
                 self.arena[i]:Point("TOPRIGHT", ArenaHeader, "TOPRIGHT", 0, 0)
             else
-                self.arena[i]:Point("TOP", self.arena[i-1], "BOTTOM", 0, -50)
+                self.arena[i]:Point("TOP", self.arena[i - 1], "BOTTOM", 0, - 50)
             end
             self.arena[i]:Show()
         end
@@ -99,16 +99,16 @@ function UF:LoadUnitFrames()
 
     if self.db.units.boss.enable then
         local BossHeader = CreateFrame("Frame", nil, R.UIParent)
-        BossHeader:Point("TOPRIGHT", R.UIParent, "RIGHT", -80, 200)
+        BossHeader:Point("TOPRIGHT", R.UIParent, "RIGHT", - 80, 200)
         BossHeader:Width(self.db.units.boss.width)
-        BossHeader:Height(R:Scale(self.db.units.boss.height)*MAX_BOSS_FRAMES + R:Scale(36)*(MAX_BOSS_FRAMES-1))
+        BossHeader:Height(R:Scale(self.db.units.boss.height) * MAX_BOSS_FRAMES + R:Scale(36) * (MAX_BOSS_FRAMES - 1))
         local boss = {}
         for i = 1, MAX_BOSS_FRAMES do
             boss[i] = RayUF:Spawn("boss"..i, "RayUF_Boss"..i)
             if i == 1 then
                 boss[i]:Point("TOPRIGHT", BossHeader, "TOPRIGHT", 0, 0)
             else
-                boss[i]:Point("TOP", boss[i-1], "BOTTOM", 0, -50)
+                boss[i]:Point("TOP", boss[i - 1], "BOTTOM", 0, - 50)
             end
             boss[i]:Size(self.db.units.boss.width, self.db.units.boss.height)
             boss[i]:Show()
@@ -123,8 +123,8 @@ function UF:LoadUnitFrames()
 end
 
 function UF:PLAYER_REGEN_ENABLED()
-	self:Update_AllFrames()
-	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+    self:Update_AllFrames()
+    self:UnregisterEvent("PLAYER_REGEN_ENABLED")
 end
 
 function UF:UpdateFrame(frame)
@@ -133,27 +133,27 @@ function UF:UpdateFrame(frame)
 end
 
 function UF:Update_AllFrames()
-	if InCombatLockdown() then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return end
+    if InCombatLockdown() then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return end
 
-	for unit in pairs(self["units"]) do
-		self[unit]:Enable()
+    for unit in pairs(self["units"]) do
+        self[unit]:Enable()
         UF:UpdateFrame(self[unit])
-	end
+    end
 end
 
 local hasEnteredWorld = false
 function UF:PLAYER_ENTERING_WORLD()
-	if not hasEnteredWorld then
-		self:Update_AllFrames()
-		hasEnteredWorld = true
-	end
+    if not hasEnteredWorld then
+        self:Update_AllFrames()
+        hasEnteredWorld = true
+    end
 end
 
 function UF:Initialize()
     if self.db.enable then
         RayUF:RegisterStyle("RayUF", function(frame, unit)
-                UF:Construct_UnitFrames(frame, unit)
-            end)
+            UF:Construct_UnitFrames(frame, unit)
+        end)
         self:LoadUnitFrames()
         self:RegisterEvent("PLAYER_ENTERING_WORLD")
     else
