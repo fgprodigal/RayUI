@@ -62,7 +62,7 @@ local C_Timer = C_Timer
 local hooksecurefunc = hooksecurefunc
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: UIParent, LibStub, MAX_PLAYER_LEVEL, BaudErrorFrameHandler, UISpecialFrames, xCT_Plus
+-- GLOBALS: UIParent, LibStub, MAX_PLAYER_LEVEL, BaudErrorFrameHandler, UISpecialFrames, xCT_Plus, ScriptErrorsFrame
 -- GLOBALS: Advanced_UIScaleSlider, Advanced_UseUIScale, RayUIConfigTutorial, RayUIWarningFrameScrollScrollBar, WorldMapFrame
 -- GLOBALS: SLASH_RELOAD1, COMBAT_RATING_RESILIENCE_PLAYER_DAMAGE_TAKEN, FIRST_NUMBER_CAP, SECOND_NUMBER_CAP, RayUISplashScreen
 
@@ -188,6 +188,7 @@ end
 
 function R:RegisterModule(name)
     if self.initialized then
+        R:Debug(1, "%s Initializing ...", name)
         self:GetModule(name):Initialize()
         tinsert(self["RegisteredModules"], name)
     else
@@ -297,6 +298,7 @@ function R:InitializeModules()
         for i = 1, #self["RegisteredModules"] do
             local module = self:GetModule(self["RegisteredModules"][i])
             if module.Initialize then
+                R:Debug(1, "%s Initializing...", module.GetName and module:GetName() or module)
                 local _, catch = pcall(module.Initialize, module)
                 self:ThrowError(catch)
             end
@@ -848,6 +850,7 @@ function R:LoadDeveloperConfig()
     P["UnitFrames"].smartAura = true
     P["Misc"].cooldowns.enable = true
     P["Watcher"].enable = false
+    G["general"].logLevel = 1
 end
 
 function R:ThrowError(err)

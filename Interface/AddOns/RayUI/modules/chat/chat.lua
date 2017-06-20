@@ -1,5 +1,6 @@
 ﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
 local CH = R:NewModule("Chat", "AceEvent-3.0", "AceHook-3.0", "AceTimer-3.0", "AceConsole-3.0")
+local D = R:GetModule("Debug")
 CH.modName = L["聊天栏"]
 
 --Cache global variables
@@ -432,6 +433,8 @@ end
 
 function CH:AddMessage(text, ...)
     if text:find(INTERFACE_ACTION_BLOCKED) then return end
+    local isDebug = select(5,...)
+
     if string.find(text, "EUI:.*") then return end
     if not text:find("BN_CONVERSATION") then
         text = text:gsub("|h%[(%d+)%. .-%]|h", "|h[%1]|h")
@@ -452,7 +455,7 @@ function CH:AddMessage(text, ...)
             text = ("|cffffffff|HTimeCopy|h|r%s|h%s"):format(BetterDate("|cff7F7F7F[%H:%M]|r ", CH.timeOverride), text)
         end
         CH.timeOverride = nil
-    else
+    elseif not isDebug then
         text = ("|cffffffff|HTimeCopy|h|r%s|h%s"):format(BetterDate(CHAT_TIMESTAMP_FORMAT or "|cff64C2F5[%H:%M]|r ", time()), text)
     end
     text = string.gsub(text, "%[(%d+)%. .-%]", "[%1]")

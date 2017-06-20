@@ -123,7 +123,7 @@ function RA:PostHealth(unit)
     end
 
     if not owner:IsElementEnabled("ReadyCheck") then
-        RA:Debug(owner:GetName().." ReadyCheck Disabled")
+        RA:Debug(2, "%s ReadyCheck Disabled", owner:GetName())
         owner:EnableElement("ReadyCheck")
     end
 end

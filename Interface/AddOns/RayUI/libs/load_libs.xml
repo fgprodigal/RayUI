@@ -23,6 +23,5 @@
 	<Script file="LibQTip-1.0\LibQTip-1.0.lua"/>
 	<Script file="LibArtifactData-1.0\LibArtifactData-1.0.lua"/>
     <Include file="DropDownMenu\DropDownMenu.xml"/>
-    <Script file="LibTextDump-1.0\LibTextDump-1.0.lua"/>
     <Script file="xCombatParser-1.0\xCombatParser-1.0.lua"/>
 </Ui>
