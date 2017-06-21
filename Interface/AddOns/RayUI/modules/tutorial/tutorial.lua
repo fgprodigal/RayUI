@@ -386,7 +386,7 @@ function T:InitTutorial()
 	btnClose:SetPoint("CENTER", HelpPlate, "CENTER", 0, 0)
 	btnClose:SetText(ButtonTexts.finished)
 	btnClose:SetAttribute("type", "macro")
-	btnClose:SetAttribute("macrotext", "/testuf r25\n/clearfocus\n/cleartarget\n/run RayUITutorial_HelpPlate_Hide()\n/run RayUITutorialButtonClose:Hide()\n/run UIFrameFadeOut(RayUITutorialBG, 0.3, 0.5, 0)\n/run RayUI[1].global.Tutorial.tutorialdone = true")
+	btnClose:SetAttribute("macrotext", "/testuf r25\n/clearfocus\n/cleartarget\n/run RayUITutorial_HelpPlate_Hide()\n/run RayUITutorialButtonClose:Hide()\n/run UIFrameFadeOut(RayUITutorialBG, 0.3, 0.5, 0)\n/run _LoadRayUIEnv_() R.global.Tutorial.tutorialdone = true")
 	btnClose:Hide()
 
 	-- Skin Buttons

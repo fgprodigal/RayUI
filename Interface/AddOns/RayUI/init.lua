@@ -25,13 +25,6 @@ L = Locale
 P = AddOn.DF["profile"]
 G = AddOn.DF["global"]
 
-_G[_AddOnName] = {
-	[1] = R,
-	[2] = P,
-	[3] = G,
-	[4] = L,
-}
-
 BINDING_HEADER_RAYUI = GetAddOnMetadata(..., "Title")
 
 function AddOn:OnProfileChanged(event, database, newProfileKey)

@@ -194,7 +194,7 @@ function mod:CreateRepBar()
     self.RepBar:SetScript("OnEnter", function(self)
             local name, rank, start, cap, value, factionID = GetWatchedFactionInfo()
             if (C_Reputation.IsFactionParagon(factionID)) then
-                local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
+                local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
                 start, cap, value = 0, threshold, currentValue
             end
             local friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
@@ -229,7 +229,7 @@ function mod:UpdateRepBar()
     if GetWatchedFactionInfo() then
         local name, rank, min, max, value, factionID = GetWatchedFactionInfo()
         if (C_Reputation.IsFactionParagon(factionID)) then
-            local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
+            local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
             min, max, value = 0, threshold, currentValue
         end
         local level

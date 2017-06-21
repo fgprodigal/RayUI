@@ -1,3 +1,9 @@
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+_LoadRayUIEnv_()
+
+
 local addon, ns = ...
 local cargBags = ns.cargBags
 local LibItemLevel = LibStub:GetLibrary("LibItemLevel-RayUI")
@@ -5,7 +11,7 @@ local LibItemLevel = LibStub:GetLibrary("LibItemLevel-RayUI")
 local function noop() end
 
 local function ItemButton_Scaffold(self)
-	self:SetSize(RayUI[1].db.Bags.bagSize, RayUI[1].db.Bags.bagSize)
+	self:SetSize(R.db.Bags.bagSize, R.db.Bags.bagSize)
 
 	local name = self:GetName()
 	self.Icon = _G[name.."IconTexture"]
@@ -16,7 +22,7 @@ local function ItemButton_Scaffold(self)
 
 	self.Icon:SetTexCoord(.08, .92, .08, .92)
 
-	if not self.itemLevel and RayUI[1].db.Bags.itemLevel then
+	if not self.itemLevel and R.db.Bags.itemLevel then
 		self.itemLevel = self:CreateFontString(nil, "OVERLAY")
 		self.itemLevel:SetPoint("TOPRIGHT", 1, -2)
 		self.itemLevel:FontTemplate(nil, nil, "OUTLINE")
@@ -28,7 +34,7 @@ local function ItemButton_Scaffold(self)
 		border:SetFrameLevel(self:GetFrameLevel()+1)
 		self.border = border
 		self.border:CreateBorder()
-		RayUI[1]:GetModule("Skins"):CreateBackdropTexture(self, 0.6)
+		R.Skins:CreateBackdropTexture(self, 0.6)
 	end
 end
 
@@ -59,7 +65,7 @@ local function ItemButton_Update(self, item)
 	self:UpdateLock(item)
 
 	if (item.link) then
-		if RayUI[1]:IsItemUnusable(item.link) then
+		if R:IsItemUnusable(item.link) then
 			SetItemButtonTextureVertexColor(self, RED_FONT_COLOR.r, RED_FONT_COLOR.g, RED_FONT_COLOR.b)
 		else
 			SetItemButtonTextureVertexColor(self, 1, 1, 1)
@@ -85,13 +91,13 @@ local function ItemButton_Update(self, item)
 			self.Icon:SetAllPoints()
 			self:StyleButton(true)
 			self:SetBackdropColor(0, 0, 0, 0, 0)
-			self.border:SetBackdropBorderColor(unpack(RayUI[1]["media"].bordercolor))
+			self.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 		end
 	else
 		self.Icon:SetAllPoints()
 		self:StyleButton(true)
 		self:SetBackdropColor(0, 0, 0, 0)
-		self.border:SetBackdropBorderColor(unpack(RayUI[1]["media"].bordercolor))
+		self.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 	end
 
 	if (self.JunkIcon) then
@@ -117,7 +123,7 @@ local function ItemButton_Update(self, item)
 		ActionButton_HideOverlayGlow(self)
 	end
 
-	if RayUI[1].db.Bags.itemLevel then
+	if R.db.Bags.itemLevel then
 		self.itemLevel:SetText("")
 		local clink = GetContainerItemLink(item.bagID, item.slotID)
 		if (clink) then

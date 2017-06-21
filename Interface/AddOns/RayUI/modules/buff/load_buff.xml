@@ -6,7 +6,8 @@
 		</Attributes>
 		<Scripts>
 			<OnLoad>
-				RayUI[1]:GetModule("Auras"):CreateIcon(self)
+				_LoadRayUIEnv_()
+				R.Auras:CreateIcon(self)
 				self:RegisterForClicks("LeftButtonUp", "RightButtonUp")
 			</OnLoad>
 			<OnEnter>

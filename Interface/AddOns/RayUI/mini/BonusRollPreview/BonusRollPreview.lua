@@ -1,3 +1,9 @@
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+_LoadRayUIEnv_()
+
+
 local _, ns = ...
 
 
@@ -53,7 +59,7 @@ local function HotspotEnter()
                 Icon:SetAllPoints()
                 Icon:SetTexture(texture)
 
-                local Bg = RayUI[1]:GetModule("Skins"):CreateBG(SpecButton)
+                local Bg = R.Skins:CreateBG(SpecButton)
             end
 
             Buttons:SetSize(numSpecs * 28 + 34, 38)
@@ -182,7 +188,6 @@ end
 local function GetItemLine(index)
     local ItemButton = itemButtons[index]
     if(not ItemButton) then
-        local S = RayUI[1]:GetModule("Skins")
         ItemButton = CreateFrame("Button", nil, Container.ScrollChild)
         ItemButton:Point("TOPLEFT", 6, (index - 1) * -40)
         ItemButton:Point("TOPRIGHT", -22, (index - 1) * -40)
@@ -192,7 +197,7 @@ local function GetItemLine(index)
         Icon:SetTexCoord(.08, .92, .08, .92)
         Icon:Point("TOPLEFT", 1, -1)
         Icon:Size(36, 36)
-        Icon.b = S:CreateBG(Icon)
+        Icon.b = R.Skins:CreateBG(Icon)
         ItemButton.Icon = Icon
 
         local Name = ItemButton:CreateFontString(nil, "ARTWORK", "GameFontNormalMed3")
@@ -366,7 +371,6 @@ function Container:SPELL_CONFIRMATION_TIMEOUT()
 end
 
 function Container:PLAYER_LOGIN()
-    local S = RayUI[1]:GetModule("Skins")
     local ScrollChild = CreateFrame("Frame", nil, self)
     ScrollChild:SetHeight(1)
     self.ScrollChild = ScrollChild
@@ -397,8 +401,8 @@ function Container:PLAYER_LOGIN()
     Thumb.bg = CreateFrame("Frame", nil, Scroll)
     Thumb.bg:Point("TOPLEFT", Thumb, 0, -2)
     Thumb.bg:Point("BOTTOMRIGHT", Thumb, 0, 4)
-    S:CreateBD(Thumb.bg, 0)
-    S:CreateBackdropTexture(Scroll)
+    R.Skins:CreateBD(Thumb.bg, 0)
+    R.Skins:CreateBackdropTexture(Scroll)
     Scroll.backdropTexture:SetInside(Thumb.bg, 1, 1)
 
     local Up = CreateFrame("Button", nil, Slider)
@@ -412,7 +416,7 @@ function Container:PLAYER_LOGIN()
     uptex:Size(8, 8)
     uptex:SetPoint("CENTER")
     uptex:SetVertexColor(1, 1, 1)
-    S:Reskin(Up)
+    R.Skins:Reskin(Up)
 
     local Down = CreateFrame("Button", nil, Slider)
     Down:SetPoint("TOP", Slider, "BOTTOM")
@@ -425,7 +429,7 @@ function Container:PLAYER_LOGIN()
     uptex:Size(8, 8)
     uptex:SetPoint("CENTER")
     uptex:SetVertexColor(1, 1, 1)
-    S:Reskin(Down)
+    R.Skins:Reskin(Down)
 
     Slider:SetScript("OnValueChanged", function(self, value)
             local min, max = self:GetMinMaxValues()
@@ -479,8 +483,8 @@ function Container:PLAYER_LOGIN()
     hooksecurefunc("BonusRollFrame_StartBonusRoll", HookStartRoll)
     hooksecurefunc(BonusRollFrame, "SetPoint", HandlePosition)
 
-    S:Reskin(Handle)
-    S:CreateBD(Container)
+    R.Skins:Reskin(Handle)
+    R.Skins:CreateBD(Container)
 end
 
 Container:SetScript("OnEvent", function(self, event, ...) self[event](self, event, ...) end)

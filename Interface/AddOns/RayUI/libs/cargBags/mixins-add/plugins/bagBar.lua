@@ -32,6 +32,12 @@ CALLBACKS
 	BagButton:OnCreate(bagID)
 ]]
 
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+_LoadRayUIEnv_()
+
+
 local addon, ns = ...
 local cargBags = ns.cargBags
 local Implementation = cargBags.classes.Implementation
@@ -61,7 +67,7 @@ function BagButton:Create(bagID)
 	button:RegisterForDrag("LeftButton", "RightButton")
 	button:RegisterForClicks("anyUp")
 
-	button:SetSize(RayUI[1].db.Bags.bagSize, RayUI[1].db.Bags.bagSize)
+	button:SetSize(R.db.Bags.bagSize, R.db.Bags.bagSize)
 
 	button.Icon = 		_G[name.."IconTexture"]
 	button.Count = 		_G[name.."Count"]
@@ -80,7 +86,7 @@ function BagButton:Create(bagID)
 		border:SetFrameLevel(button:GetFrameLevel()+1)
 		button.border = border
 		button.border:CreateBorder()
-		RayUI[1]:GetModule("Skins"):CreateBackdropTexture(button, 0.6)
+		R.Skins:CreateBackdropTexture(button, 0.6)
 	end
 
 	cargBags.SetScriptHandlers(button, "OnClick", "OnReceiveDrag", "OnEnter", "OnLeave", "OnDragStart")

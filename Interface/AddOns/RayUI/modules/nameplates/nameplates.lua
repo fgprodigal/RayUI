@@ -99,7 +99,7 @@ end
 
 function mod:GetNamePlateForUnit(unit)
     if unit ~= "player" then
-        return C_NamePlate_GetNamePlateForUnit(unit)
+        return C_NamePlate.GetNamePlateForUnit(unit)
     end
 end
 
@@ -320,7 +320,7 @@ function mod:ConfigureAll()
 end
 
 function mod:ForEachPlate(functionToRun, ...)
-    for _, frame in pairs(C_NamePlate_GetNamePlates()) do
+    for _, frame in pairs(C_NamePlate.GetNamePlates()) do
         if(frame and frame.UnitFrame) then
             self[functionToRun](self, frame.UnitFrame, ...)
         end

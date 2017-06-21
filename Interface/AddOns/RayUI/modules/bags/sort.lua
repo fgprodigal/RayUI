@@ -148,8 +148,8 @@ local function DefaultSort(a, b)
     if (not aID) or (not bID) then return aID end
 
     if bagPetIDs[a] and bagPetIDs[b] then
-        local aName, _, aType = C_PetJournalGetPetInfoBySpeciesID(aID);
-        local bName, _, bType = C_PetJournalGetPetInfoBySpeciesID(bID);
+        local aName, _, aType = C_PetJournal.GetPetInfoBySpeciesID(aID);
+        local bName, _, bType = C_PetJournal.GetPetInfoBySpeciesID(bID);
 
         if aType and bType and aType ~= bType then
             return aType > bType
