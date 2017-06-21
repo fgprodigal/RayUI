@@ -33,11 +33,26 @@
                 self:RegisterForClicks("AnyUp")
                 self.update = 0
             </OnLoad>
-            <OnClick function="RayUI_InfoBarButton_OnClick"/>
-            <OnEvent function="RayUI_InfoBarButton_OnEvent"/>
-            <OnUpdate function="RayUI_InfoBarButton_OnUpdate"/>
-            <OnEnter function="RayUI_InfoBarButton_OnEnter"/>
-            <OnLeave function="RayUI_InfoBarButton_OnLeave"/>
+            <OnClick>
+				_LoadRayUIEnv_()
+				RayUI_InfoBarButton_OnClick(self, button)
+			</OnClick>
+            <OnEvent>
+				_LoadRayUIEnv_()
+				RayUI_InfoBarButton_OnEvent(self, event)
+			</OnEvent>
+            <OnUpdate>
+				_LoadRayUIEnv_()
+				RayUI_InfoBarButton_OnUpdate(self, elapsed)
+			</OnUpdate>
+            <OnEnter>
+				_LoadRayUIEnv_()
+				RayUI_InfoBarButton_OnEnter(self)
+			</OnEnter>
+            <OnLeave>
+				_LoadRayUIEnv_()
+				RayUI_InfoBarButton_OnLeave(self)
+			</OnLeave>
         </Scripts>
     </Button>
 
@@ -46,7 +61,10 @@
             <OnLoad>
                 self.Highlight:SetPoint("TOPLEFT",28,-8) self.Text:SetPoint("TOPLEFT",28,-8)
             </OnLoad>
-            <OnClick function="RayUI_InfoBarMenuButton_OnClick"/>
+            <OnClick>
+				_LoadRayUIEnv_()
+				RayUI_InfoBarMenuButton_OnClick(self, button)
+			</OnClick>
         </Scripts>
     </Button>
 
@@ -134,7 +152,10 @@
             <OnLoad>
                 self:RegisterEvent("PLAYER_LOGIN")
             </OnLoad>
-            <OnEvent function="RayUI_InfoBarMenu_OnInit"/>
+            <OnEvent>
+				_LoadRayUIEnv_()
+				RayUI_InfoBarMenu_OnInit(self)
+			</OnEvent>
             <OnHide>
                 local frame = self.ref if frame and not frame.infobarType then frame:SetAlpha(0) end
             </OnHide>
