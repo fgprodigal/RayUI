@@ -1,4 +1,9 @@
-local R, L, P, G = unpack(RayUI) --Import: Engine, Locales, ProfileDB, GlobalDB
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+_LoadRayUIEnv_()
+
+
 local CF = R:GetModule("CooldownFlash")
 
 R.Options.args.CooldownFlash = {

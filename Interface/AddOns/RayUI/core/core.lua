@@ -1,4 +1,9 @@
-﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+﻿----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+_LoadRayUIEnv_()
+
+
 local LSM = LibStub("LibSharedMedia-3.0")
 
 --Cache global variables
@@ -67,7 +72,7 @@ local hooksecurefunc = hooksecurefunc
 -- GLOBALS: SLASH_RELOAD1, COMBAT_RATING_RESILIENCE_PLAYER_DAMAGE_TAKEN, FIRST_NUMBER_CAP, SECOND_NUMBER_CAP, RayUISplashScreen
 
 SlashCmdList["RELOAD"] = function() ReloadUI() end
-SLASH_RELOAD1 = "/rl"
+_G["SLASH_RELOAD1"] = "/rl"
 
 R["RegisteredModules"] = {}
 R.FrameLocks = {}

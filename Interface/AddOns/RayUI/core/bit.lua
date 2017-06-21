@@ -1,4 +1,9 @@
-﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+﻿----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+_LoadRayUIEnv_()
+
+
 
 if bit.bnot(0) ~= 0xFFFFFFFF then
     local _bnot = bit.bnot

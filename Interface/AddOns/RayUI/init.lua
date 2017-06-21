@@ -1,6 +1,11 @@
-﻿local AddOnName, Engine = ...
-local AddOn = LibStub("AceAddon-3.0"):NewAddon(AddOnName, "AceConsole-3.0", "AceEvent-3.0", "AceHook-3.0")
-local Locale = LibStub("AceLocale-3.0"):GetLocale(AddOnName, false)
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+_LoadRayUIEnv_()
+
+
+local AddOn = LibStub("AceAddon-3.0"):NewAddon(_AddOnName, "AceConsole-3.0", "AceEvent-3.0", "AceHook-3.0")
+local Locale = LibStub("AceLocale-3.0"):GetLocale(_AddOnName, false)
 
 --Cache global variables
 --Lua functions
@@ -30,16 +35,21 @@ AddOn.DF["profile"] = {}
 AddOn.DF["global"] = {}
 AddOn.Options = {
     type = "group",
-    name = AddOnName,
+    name = _AddOnName,
     args = {},
 }
 
-Engine[1] = AddOn
-Engine[2] = Locale
-Engine[3] = AddOn.DF["profile"]
-Engine[4] = AddOn.DF["global"]
+R = AddOn
+L = Locale
+P = AddOn.DF["profile"]
+G = AddOn.DF["global"]
 
-_G[AddOnName] = Engine
+_G[_AddOnName] = {
+	[1] = R,
+	[2] = P,
+	[3] = G,
+	[4] = L,
+}
 
 BINDING_HEADER_RAYUI = GetAddOnMetadata(..., "Title")
 
@@ -50,11 +60,11 @@ end
 function AddOn:PositionGameMenuButton()
 	GameMenuFrame:SetHeight(GameMenuFrame:GetHeight() + GameMenuButtonLogout:GetHeight() - 4)
 	local _, relTo, _, _, offY = GameMenuButtonLogout:GetPoint()
-	if relTo ~= GameMenuFrame[AddOnName] then
-		GameMenuFrame[AddOnName]:ClearAllPoints()
-		GameMenuFrame[AddOnName]:Point("TOPLEFT", relTo, "BOTTOMLEFT", 0, -1)
+	if relTo ~= GameMenuFrame[_AddOnName] then
+		GameMenuFrame[_AddOnName]:ClearAllPoints()
+		GameMenuFrame[_AddOnName]:Point("TOPLEFT", relTo, "BOTTOMLEFT", 0, -1)
 		GameMenuButtonLogout:ClearAllPoints()
-		GameMenuButtonLogout:Point("TOPLEFT", GameMenuFrame[AddOnName], "BOTTOMLEFT", 0, offY)
+		GameMenuButtonLogout:Point("TOPLEFT", GameMenuFrame[_AddOnName], "BOTTOMLEFT", 0, offY)
 	end
 end
 
@@ -73,7 +83,7 @@ function AddOn:OnInitialize()
             HideUIPanel(GameMenuFrame)
             self:OpenConfig()
         end)
-    GameMenuFrame[AddOnName] = configButton
+    GameMenuFrame[_AddOnName] = configButton
 
 	configButton:Size(GameMenuButtonLogout:GetWidth(), GameMenuButtonLogout:GetHeight())
 	configButton:Point("TOPLEFT", GameMenuButtonAddons, "BOTTOMLEFT", 0, -1)
@@ -119,9 +129,9 @@ function AddOn:PLAYER_REGEN_DISABLED()
     if IsAddOnLoaded("RayUI_Options") then
         local ACD = LibStub("AceConfigDialog-3.0")
 
-        if ACD.OpenFrames[AddOnName] then
+        if ACD.OpenFrames[_AddOnName] then
             self:RegisterEvent("PLAYER_REGEN_ENABLED")
-            ACD:Close(AddOnName)
+            ACD:Close(_AddOnName)
             err = true
         end
     end
@@ -157,9 +167,9 @@ function AddOn:OpenConfig()
     local ACD = LibStub("AceConfigDialog-3.0")
 
     local mode = "Close"
-    if not ACD.OpenFrames[AddOnName] then
+    if not ACD.OpenFrames[_AddOnName] then
         mode = "Open"
     end
-    ACD[mode](ACD, AddOnName)
+    ACD[mode](ACD, _AddOnName)
     GameTooltip:Hide()
 end

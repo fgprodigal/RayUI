@@ -1,4 +1,9 @@
-﻿local R, L, P, G = unpack(RayUI) --Import: Engine, Locales, ProfileDB, GlobalDB
+﻿----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+_LoadRayUIEnv_()
+
+
 local AceConfig = LibStub("AceConfig-3.0")
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 

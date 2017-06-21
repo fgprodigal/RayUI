@@ -1,7 +1,12 @@
 -----------------------------------------------------
 -- Credit Tukz, Elv
 -----------------------------------------------------
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+_LoadRayUIEnv_()
+
+
 local LSM = LibStub("LibSharedMedia-3.0")
 
 --Cache global variables

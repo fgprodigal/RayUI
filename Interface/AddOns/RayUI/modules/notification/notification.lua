@@ -1,5 +1,10 @@
 -- Notification from FreeUI
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+_LoadRayUIEnv_()
+
+
 local NF = R:NewModule("Notification", "AceEvent-3.0", "AceHook-3.0")
 local S = R:GetModule("Skins")
 

@@ -1,4 +1,9 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+_LoadRayUIEnv_()
+
+
 local M = R:NewModule("Misc", "AceEvent-3.0", "AceTimer-3.0")
 
 --Cache global variables

@@ -9,6 +9,7 @@
 ## SavedVariables: RayUIData
 ## SavedVariablesPerCharacter: RayUICharacterData, RayUIDebug
 
+env.lua
 libs\load_libs.xml
 locales\load_locales.xml
 media\load_media.xml

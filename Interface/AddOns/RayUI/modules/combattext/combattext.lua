@@ -1,4 +1,9 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+_LoadRayUIEnv_()
+
+
 local CT = R:NewModule("CombatText", "AceEvent-3.0", "AceHook-3.0", "AceTimer-3.0", "AceConsole-3.0")
 local xCP = LibStub("xCombatParser-1.0-RayUI", true)
 CT.modName = L["战斗文字"]

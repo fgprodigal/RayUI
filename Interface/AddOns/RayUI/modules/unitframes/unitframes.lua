@@ -1,4 +1,9 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+_LoadRayUIEnv_()
+
+
 local UF = R:NewModule("UnitFrames", "AceEvent-3.0", "AceTimer-3.0")
 local oUF = RayUF or oUF
 
