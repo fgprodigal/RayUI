@@ -7,19 +7,6 @@ _LoadRayUIEnv_()
 local UF = R:GetModule("UnitFrames")
 local oUF = RayUF or oUF
 
---Cache global variables
---Lua functions
-local tinsert = table.insert
-local max, ceil = math.max, math.ceil
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local UnitIsEnemy = UnitIsEnemy
-local UnitIsFriend = UnitIsFriend
-local UnitFactionGroup = UnitFactionGroup
-local UnitIsPVPFreeForAll = UnitIsPVPFreeForAll
-local UnitIsPVP = UnitIsPVP
-
 function UF:Construct_TargetFrame(frame, unit)
     frame.mouseovers = {}
     frame.UNIT_WIDTH = self.db.units[unit].width

@@ -7,37 +7,6 @@ _LoadRayUIEnv_()
 local M = R:GetModule("Misc")
 local mod = M:NewModule("LootRoll", "AceEvent-3.0")
 
---Cache global variables
---Lua functions
-local _G = _G
-local pairs, unpack, ipairs, next, table = pairs, unpack, ipairs, next, table
-local tonumber, select, math = tonumber, select, math
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local RollOnLoot = RollOnLoot
-local ResetCursor = ResetCursor
-local IsShiftKeyDown = IsShiftKeyDown
-local GameTooltip_ShowCompareItem = GameTooltip_ShowCompareItem
-local IsModifiedClick = IsModifiedClick
-local ShowInspectCursor = ShowInspectCursor
-local CursorOnUpdate = CursorOnUpdate
-local IsControlKeyDown = IsControlKeyDown
-local DressUpItemLink = DressUpItemLink
-local ChatEdit_InsertLink = ChatEdit_InsertLink
-local GetLootRollTimeLeft = GetLootRollTimeLeft
-local GetLootRollItemInfo = GetLootRollItemInfo
-local GetLootRollItemLink = GetLootRollItemLink
-local SetDesaturation = SetDesaturation
-local C_LootHistory = C_LootHistory
-local UnitLevel = UnitLevel
-local IsSpellKnown = IsSpellKnown
-local GetItemInfo = GetItemInfo
-local GetItemQualityColor = GetItemQualityColor
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: GameTooltip, NEED, GREED, PASS, ROLL_DISENCHANT, AlertFrame, ITEM_QUALITY_COLORS
--- GLOBALS: MAX_PLAYER_LEVEL, WorldFrame, UIParent, SlashCmdList, SLASH_LFrames1
 
 R.rollBars = {}
 local testMode = false

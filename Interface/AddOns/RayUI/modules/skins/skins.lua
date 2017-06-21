@@ -7,21 +7,6 @@ _LoadRayUIEnv_()
 local S = R:NewModule("Skins", "AceEvent-3.0")
 local LSM = LibStub("LibSharedMedia-3.0")
 
---Cache global variables
---Lua functions
-local _G = _G
-local select, unpack, assert, pairs, type = select, unpack, assert, pairs, type
-local tinsert = table.insert
-local wipe = table.wipe
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local IsAddOnLoaded = IsAddOnLoaded
-local EnumerateFrames = EnumerateFrames
-local hooksecurefunc = hooksecurefunc
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: WorldFrame
 
 S.modName = L["插件美化"]
 

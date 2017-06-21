@@ -5,26 +5,6 @@ _LoadRayUIEnv_()
 
 
 
---Cache global variables
---Lua functions
-local pairs, select, ipairs = pairs, select, ipairs
-local tinsert = table.insert
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local IsLoggedIn = IsLoggedIn
-local InCombatLockdown = InCombatLockdown
-local GetProfessions = GetProfessions
-local GetProfessionInfo = GetProfessionInfo
-local IsPassiveSpell = IsPassiveSpell
-local IsAddOnLoaded = IsAddOnLoaded
-local UnitClass = UnitClass
-local GetSpellBookItemInfo = GetSpellBookItemInfo
-local IsCurrentSpell = IsCurrentSpell
-local GetSpellInfo = GetSpellInfo
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: BOOKTYPE_PROFESSION, TradeSkillFrame, GameTooltip
 
 local TradeTabs = CreateFrame("Frame","TradeTabs")
 

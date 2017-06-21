@@ -7,16 +7,6 @@ _LoadRayUIEnv_()
 local M = R:GetModule("Misc")
 local mod = M:NewModule("ObjectiveTracker", "AceEvent-3.0")
 
---Cache global variables
---Lua functions
---WoW API / Variables
-local CreateFrame = CreateFrame
-local GetScreenHeight = GetScreenHeight
-local hooksecurefunc = hooksecurefunc
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: WatchFrameMover, ObjectiveTrackerFrame
-
 function mod:Initialize()
     local screenheight = GetScreenHeight()
     local ObjectiveTrackerFrameHolder = CreateFrame("Frame", "ObjectiveTrackerFrameHolder", R.UIParent)

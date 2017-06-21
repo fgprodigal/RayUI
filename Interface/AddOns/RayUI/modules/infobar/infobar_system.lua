@@ -7,18 +7,6 @@ _LoadRayUIEnv_()
 local IF = R:GetModule("InfoBar")
 local LibQTip = LibStub("LibQTip-1.0")
 
---Cache global variables
---Lua functions
-local select = select
-local floor, min, max = math.floor, math.min, math.max
-local format = string.format
-
---WoW API / Variables
-local GetNetStats = GetNetStats
-local GetFramerate = GetFramerate
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: MILLISECONDS_ABBR, RayUI_InfobarTooltipFont, HOME, CHANNEL_CATEGORY_WORLD, FPS_FORMAT
 
 local Tooltip
 local LatencyColor = {

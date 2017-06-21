@@ -9,28 +9,6 @@ local RA = R:NewModule("Raid", "AceEvent-3.0", "AceTimer-3.0", "AceHook-3.0")
 local _, ns = ...
 local oUF = RayUF or oUF
 
---Cache global variables
---Lua functions
-local _G = _G
-local next = next
-local type, unpack, pairs = type, unpack, pairs
-local upper = string.upper
-local tinsert = table.insert
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local SetMapToCurrentZone = SetMapToCurrentZone
-local IsInInstance = IsInInstance
-local GetCurrentMapAreaID = GetCurrentMapAreaID
-local InCombatLockdown = InCombatLockdown
-local CompactRaidFrameManager_GetSetting = CompactRaidFrameManager_GetSetting
-local CompactRaidFrameManager_SetSetting = CompactRaidFrameManager_SetSetting
-local CompactUnitFrame_UnregisterEvents = CompactUnitFrame_UnregisterEvents
-local RegisterStateDriver = RegisterStateDriver
-local hooksecurefunc = hooksecurefunc
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: UIParent, oUF_RaidDebuffs, CompactRaidFrameManager, CompactRaidFrameContainer, RayUF, DebuffTypeColor
 
 RA.modName = L["团队"]
 RA.labels = {}

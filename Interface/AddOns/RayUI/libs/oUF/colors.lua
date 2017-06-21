@@ -24,7 +24,6 @@ local colors = {
 }
 
 -- We do this because people edit the vars directly, and changing the default
--- globals makes SPICE FLOW!
 local function customClassColors()
 	if(CUSTOM_CLASS_COLORS) then
 		local function updateColors()

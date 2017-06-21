@@ -10,18 +10,6 @@ local UF = R:GetModule("UnitFrames")
 local _, ns = ...
 local RayUF = ns.oUF
 
---Cache global variables
---Lua functions
-local type, unpack, table = type, unpack, table
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local InCombatLockdown = InCombatLockdown
-local IsInInstance = IsInInstance
-local GetInstanceInfo = GetInstanceInfo
-local RegisterStateDriver = RegisterStateDriver
-local UnregisterStateDriver = UnregisterStateDriver
-
 function RA:FetchRaid40Settings()
     self.groupConfig.raid40 = {
         enable = true,

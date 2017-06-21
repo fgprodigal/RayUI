@@ -8,36 +8,6 @@ local M = R:GetModule("Misc")
 local mod = M:NewModule("RaidUtility", "AceEvent-3.0")
 local S = R:GetModule("Skins")
 
---Cache global variables
---Lua functions
-local _G = _G
-local pairs = pairs
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local IsInInstance = IsInInstance
-local GetNumSubgroupMembers = GetNumSubgroupMembers
-local UnitInRaid = UnitInRaid
-local UnitIsGroupLeader = UnitIsGroupLeader
-local UnitIsGroupAssistant = UnitIsGroupAssistant
-local InCombatLockdown = InCombatLockdown
-local UninviteUnit = UninviteUnit
-local GetNumGroupMembers = GetNumGroupMembers
-local GetRaidRosterInfo = GetRaidRosterInfo
-local UnitExists = UnitExists
-local UnitName = UnitName
-local LeaveParty = LeaveParty
-local StaticPopup_Show = StaticPopup_Show
-local InitiateRolePoll = InitiateRolePoll
-local DoReadyCheck = DoReadyCheck
-local ToggleFriendsFrame = ToggleFriendsFrame
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: MAX_PARTY_MEMBERS, RaidUtilityShowButton, CLOSE, RaidUtilityCloseButton
--- GLOBALS: DisbandRaidButton, ROLE_POLL, RoleCheckButton, MAINTANK, MainTankButton
--- GLOBALS: MAINASSIST, MainAssistButton, READY_CHECK, ReadyCheckButton
--- GLOBALS: CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton, CompactRaidFrameManagerDisplayFrameLeaderOptionsInitiateReadyCheck, CompactRaidFrameManagerDisplayFrameLeaderOptionsInitiateRolePoll, CompactRaidFrameManagerDisplayFrameLockedModeToggle, CompactRaidFrameManagerDisplayFrameHiddenModeToggle
--- GLOBALS: RAID_CONTROL, RaidControlButton, SlashCmdList, SLASH_GROUPDISBAND1, ACCEPT, CANCEL, StaticPopupDialogs
 
 local function CheckRaidStatus()
     local inInstance, instanceType = IsInInstance()

@@ -10,32 +10,6 @@ local UF = R:GetModule("UnitFrames")
 local _, ns = ...
 local RayUF = ns.oUF
 
---Cache global variables
---Lua functions
-local type, unpack, math, pairs, table = type, unpack, math, pairs, table
-local tinsert = table.insert
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local UnitIsUnit = UnitIsUnit
-local UnitThreatSituation = UnitThreatSituation
-local GetThreatStatusColor = GetThreatStatusColor
-local UnitName = UnitName
-local UnitClass = UnitClass
-local UnitHealth = UnitHealth
-local UnitHealthMax = UnitHealthMax
-local UnitIsDeadOrGhost = UnitIsDeadOrGhost
-local UnitIsConnected = UnitIsConnected
-local UnitPowerType = UnitPowerType
-local UnitPowerMax = UnitPowerMax
-local UnitFrame_OnEnter = UnitFrame_OnEnter
-local UnitFrame_OnLeave = UnitFrame_OnLeave
-local GetSpellInfo = GetSpellInfo
-local InCombatLockdown = InCombatLockdown
-local GetTexCoordsForRoleSmallCircle = GetTexCoordsForRoleSmallCircle
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: GameTooltip, READY_CHECK_READY_TEXTURE, READY_CHECK_NOT_READY_TEXTURE, READY_CHECK_WAITING_TEXTURE
 
 function RA:Hex(r, g, b)
     if(type(r) == "table") then

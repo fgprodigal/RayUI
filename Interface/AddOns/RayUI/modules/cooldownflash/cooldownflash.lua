@@ -7,32 +7,6 @@ _LoadRayUIEnv_()
 local CF = R:NewModule("CooldownFlash", "AceEvent-3.0", "AceHook-3.0")
 CF.modName = L["中部冷却闪光"]
 
---Cache global variables
---Lua functions
-local GetTime = GetTime
-local select, pairs, bit = select, pairs, bit
-local string = string
-local wipe = wipe
-local tinsert, tremove = table.insert, table.remove
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local GetPetActionInfo = GetPetActionInfo
-local GetSpellInfo = GetSpellInfo
-local GetSpellTexture = GetSpellTexture
-local GetSpellCooldown = GetSpellCooldown
-local GetItemInfo = GetItemInfo
-local GetItemCooldown = GetItemCooldown
-local GetPetActionCooldown = GetPetActionCooldown
-local IsInInstance = IsInInstance
-local GetActionInfo = GetActionInfo
-local GetActionTexture = GetActionTexture
-local GetInventoryItemID = GetInventoryItemID
-local GetInventoryItemTexture = GetInventoryItemTexture
-local GetContainerItemID = GetContainerItemID
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: NUM_PET_ACTION_SLOTS, COMBATLOG_OBJECT_TYPE_PET, COMBATLOG_OBJECT_AFFILIATION_MINE
 
 CF.cooldowns, CF.animating, CF.watching = { }, { }, { }
 local testtable

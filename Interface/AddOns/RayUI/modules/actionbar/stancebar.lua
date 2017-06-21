@@ -6,21 +6,6 @@ _LoadRayUIEnv_()
 
 local AB = R:GetModule("ActionBar")
 
---Cache global variables
---Lua functions
-local _G = _G
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local RegisterStateDriver = RegisterStateDriver
-local InCombatLockdown = InCombatLockdown
-local UIFrameFadeIn = UIFrameFadeIn
-local UIFrameFadeOut = UIFrameFadeOut
-local hooksecurefunc = hooksecurefunc
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: NUM_STANCE_SLOTS, NUM_POSSESS_SLOTS, RayUIActionBarHider
--- GLOBALS: StanceBarFrame, PossessBarFrame, StanceButton1
 
 function AB:CreateStanceBar()
 	local num = NUM_STANCE_SLOTS

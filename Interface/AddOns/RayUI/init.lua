@@ -7,25 +7,6 @@ _LoadRayUIEnv_()
 local AddOn = LibStub("AceAddon-3.0"):NewAddon(_AddOnName, "AceConsole-3.0", "AceEvent-3.0", "AceHook-3.0")
 local Locale = LibStub("AceLocale-3.0"):GetLocale(_AddOnName, false)
 
---Cache global variables
---Lua functions
-local _G = _G
-local pairs = pairs
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local ToggleHelpFrame = ToggleHelpFrame
-local StaticPopup_Show = StaticPopup_Show
-local InCombatLockdown = InCombatLockdown
-local IsAddOnLoaded = IsAddOnLoaded
-local GetAddOnInfo = GetAddOnInfo
-local LoadAddOn = LoadAddOn
-local HideUIPanel = HideUIPanel
-local hooksecurefunc = hooksecurefunc
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: ERR_NOT_IN_COMBAT, LibStub, RayUICharacterData, BINDING_HEADER_RAYUI, GameTooltip, RayUIConfigTutorial
--- GLOBALS: GameMenuFrame, GameMenuButtonContinue, GameMenuButtonLogout, GameMenuButtonAddons
 
 local DEFAULT_WIDTH = 850
 local DEFAULT_HEIGHT = 650

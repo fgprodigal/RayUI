@@ -7,45 +7,6 @@ _LoadRayUIEnv_()
 local IF = R:GetModule("InfoBar")
 local LibQTip = LibStub("LibQTip-1.0")
 
---Cache global variables
---Lua functions
-local select, string, ipairs, type, unpack = select, string, ipairs, type, unpack
-local math = math
-local wipe = table.wipe
-local tinsert = table.insert
-local strsplit = string.split
-
---WoW API / Variables
-local IsAltKeyDown = IsAltKeyDown
-local IsControlKeyDown = IsControlKeyDown
-local InviteUnit = InviteUnit
-local InviteToGroup = InviteToGroup
-local GetNumGuildMembers = GetNumGuildMembers
-local GetGuildRosterInfo = GetGuildRosterInfo
-local ChatFrame_GetMobileEmbeddedTexture = ChatFrame_GetMobileEmbeddedTexture
-local CanViewOfficerNote = CanViewOfficerNote
-local IsInGuild = IsInGuild
-local GetGuildInfo = GetGuildInfo
-local GetGuildRosterMOTD = GetGuildRosterMOTD
-local IsAddOnLoaded = IsAddOnLoaded
-local LoadAddOn = LoadAddOn
-local GuildRoster = GuildRoster
-local InCombatLockdown = InCombatLockdown
-local HideDropDownMenu = HideDropDownMenu
-local GetRelativeDifficultyColor = GetRelativeDifficultyColor
-local PlaySound = PlaySound
-local CanEditPublicNote = CanEditPublicNote
-local SetGuildRosterSelection = SetGuildRosterSelection
-local StaticPopup_Show = StaticPopup_Show
-local CanEditOfficerNote = CanEditOfficerNote
-local CloseDropDownMenus = CloseDropDownMenus
-local GuildControlGetNumRanks = GuildControlGetNumRanks
-local UnitLevel = UnitLevel
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: SetItemRef, REMOTE_CHAT, NAME, LEVEL_ABBR, ZONE, RANK, GUILD_OFFICERNOTES_LABEL
--- GLOBALS: GUILD_RANK0_DESC, GuildFrame, ERR_FRIEND_ONLINE_SS, GUILD, LABEL_NOTE, GuildFrame_Toggle
--- GLOBALS: RayUI_InfobarTooltipFont, ChatFrame_SendTell, GREEN_FONT_COLOR_CODE, GuildRoster_ShowMemberDropDown
 
 local GuildMemeberData = {}
 local PlayerStatusValToStr = {

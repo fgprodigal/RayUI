@@ -8,33 +8,6 @@ _LoadRayUIEnv_()
 local _, ns = ...
 local oUF = RayUF or oUF
 
---Cache global variables
---Lua functions
-local type, unpack, math = type, unpack, math
-local format = string.format
-local floor = math.floor
-
---WoW API / Variables
-local UnitLevel = UnitLevel
-local UnitClassification = UnitClassification
-local GetQuestDifficultyColor = GetQuestDifficultyColor
-local UnitIsPlayer = UnitIsPlayer
-local UnitClass = UnitClass
-local UnitIsTapDenied = UnitIsTapDenied
-local UnitIsEnemy = UnitIsEnemy
-local UnitReaction = UnitReaction
-local UnitHealth = UnitHealth
-local UnitHealthMax = UnitHealthMax
-local UnitPowerType = UnitPowerType
-local UnitPower = UnitPower
-local UnitPowerMax = UnitPowerMax
-local UnitName = UnitName
-local UnitIsDead = UnitIsDead
-local UnitIsGhost = UnitIsGhost
-local UnitIsConnected = UnitIsConnected
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: ALTERNATE_POWER_INDEX, DEAD, QuestDifficultyColors
 
 local utf8sub = function(string, i, dots)
     local bytes = string:len()

@@ -7,28 +7,6 @@ _LoadRayUIEnv_()
 local B = R:NewModule("Bags", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0")
 local S = R:GetModule("Skins")
 
---Cache global variables
---Lua functions
-local _G = _G
-local string = string
-local select = select
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local GetContainerNumFreeSlots = GetContainerNumFreeSlots
-local SortReagentBankBags = SortReagentBankBags
-local DepositReagentBank = DepositReagentBank
-local IsReagentBankUnlocked = IsReagentBankUnlocked
-local CloseBankFrame = CloseBankFrame
-local CloseAllBags = CloseAllBags
-local PlaySound = PlaySound
-local StaticPopup_Show = StaticPopup_Show
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: GameTooltip, EQUIPMENT_SETS, AUCTION_CATEGORY_CONSUMABLES, LE_ITEM_QUALITY_POOR
--- GLOBALS: TradeFrame, BankFrame, ReagentBankFrame, RayUI_ContainerFrameItemSets, RayUI_ContainerFrameConsumables
--- GLOBALS: RayUI_ContainerFrameBankItemSets, RayUI_ContainerFrameBankConsumables, SEARCH, REAGENT_BANK
--- GLOBALS: REAGENTBANK_DEPOSIT, BANK, BANKSLOTPURCHASE, REAGENT_BANK_HELP
 
 local cargBags = select(2, ...).cargBags
 local consumable = AUCTION_CATEGORY_CONSUMABLES

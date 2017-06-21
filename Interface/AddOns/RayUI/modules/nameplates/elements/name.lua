@@ -7,19 +7,6 @@ _LoadRayUIEnv_()
 local mod = R:GetModule('NamePlates')
 local LSM = LibStub("LibSharedMedia-3.0")
 
---Cache global variables
---Lua functions
-local unpack = unpack
-
---WoW API / Variables
-local UnitClass = UnitClass
-local UnitName = UnitName
-local UnitReaction = UnitReaction
-local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS
-local RAID_CLASS_COLORS = RAID_CLASS_COLORS
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RayUF
 
 function mod:UpdateElement_Name(frame)
     local name, realm = UnitName(frame.displayedUnit)

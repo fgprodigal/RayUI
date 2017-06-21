@@ -4,14 +4,6 @@
 _LoadRayUIEnv_()
 
 
-
---Cache global variables
---Lua functions
-local unpack = unpack
-
---WoW API / Variables
-local GetSpellInfo = GetSpellInfo
-
 local function ClassBuff(id, point, color, anyUnit, onlyShowMissing)
     local r, g, b = unpack(color)
     return {["enabled"] = true, ["id"] = id, ["point"] = point, ["color"] = {["r"] = r, ["g"] = g, ["b"] = b}, ["anyUnit"] = anyUnit, ["onlyShowMissing"] = onlyShowMissing}

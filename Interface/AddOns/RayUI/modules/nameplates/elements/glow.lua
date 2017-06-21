@@ -7,14 +7,6 @@ _LoadRayUIEnv_()
 local mod = R:GetModule('NamePlates')
 local LSM = LibStub("LibSharedMedia-3.0")
 
---Cache global variables
---Lua functions
---WoW API / Variables
-local CreateFrame = CreateFrame
-local UnitHealth = UnitHealth
-local UnitHealthMax = UnitHealthMax
-local UnitIsUnit = UnitIsUnit
-
 function mod:UpdateElement_Glow(frame)
     if(not frame.HealthBar:IsShown()) then return end
     local r, g, b, shouldShow;

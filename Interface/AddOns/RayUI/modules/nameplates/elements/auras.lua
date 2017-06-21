@@ -7,16 +7,6 @@ _LoadRayUIEnv_()
 local mod = R:GetModule('NamePlates')
 local LSM = LibStub("LibSharedMedia-3.0")
 
---Cache global variables
---Lua functions
-local select, unpack = select, unpack
-local tinsert, tremove = table.insert, table.remove
---WoW API / Variables
-local CreateFrame = CreateFrame
-local UnitBuff = UnitBuff
-local UnitDebuff = UnitDebuff
-local BUFF_STACKS_OVERFLOW = BUFF_STACKS_OVERFLOW
-
 local auraCache = {}
 
 function mod:SetAura(aura, index, name, icon, count, duration, expirationTime)

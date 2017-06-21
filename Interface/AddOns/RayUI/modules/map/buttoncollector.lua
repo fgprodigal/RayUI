@@ -6,18 +6,6 @@ _LoadRayUIEnv_()
 
 local MM = R:GetModule("MiniMap")
 
---Cache global variables
---Lua functions
-local select, unpack, pairs, ipairs, string, math, type = select, unpack, pairs, ipairs, string, math, type
-local tinsert = table.insert
-local strfind = string.find
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: VendomaticButton, VendomaticButtonIcon, Minimap, BaudErrorFrameMinimapButton
 
 local MBCF
 local buttons = {}

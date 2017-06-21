@@ -8,41 +8,6 @@ _LoadRayUIEnv_()
 local NF = R:NewModule("Notification", "AceEvent-3.0", "AceHook-3.0")
 local S = R:GetModule("Skins")
 
---Cache global variables
---Lua functions
-local select, unpack, type, pairs = select, unpack, type, pairs
-local table = table
-local tinsert = table.insert
-local floor = math.floor
-local format = string.format
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local UnitIsAFK = UnitIsAFK
-local GetScreenWidth = GetScreenWidth
-local IsShiftKeyDown = IsShiftKeyDown
-local HasNewMail = HasNewMail
-local GetInventoryItemLink = GetInventoryItemLink
-local GetInventoryItemDurability = GetInventoryItemDurability
-local CalendarGetDate = CalendarGetDate
-local CalendarGetNumGuildEvents = CalendarGetNumGuildEvents
-local CalendarGetGuildEventInfo = CalendarGetGuildEventInfo
-local CalendarGetNumDayEvents = CalendarGetNumDayEvents
-local CalendarGetDayEvent = CalendarGetDayEvent
-local LoadAddOn = LoadAddOn
-local CalendarGetNumPendingInvites = CalendarGetNumPendingInvites
-local C_Vignettes = C_Vignettes
-local PlaySoundFile = PlaySoundFile
-local PlaySound = PlaySound
-local C_Timer = C_Timer
-local GetGameTime = GetGameTime
-local PlaySoundKitID = PlaySoundKitID
-local CreateAnimationGroup = CreateAnimationGroup
-local CalendarGetAbsMonth = CalendarGetAbsMonth
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: SLASH_TESTNOTIFICATION1, MAIL_LABEL, HAVE_MAIL, MINIMAP_TRACKING_REPAIR, CalendarFrame
--- GLOBALS: CALENDAR, Calendar_Toggle
 
 local bannerWidth = 300
 local max_active_toasts = 3

@@ -8,18 +8,6 @@ local M = R:GetModule("Misc")
 local mod = M:NewModule("SetRole", "AceEvent-3.0")
 local S = R:GetModule("Skins")
 
---Cache global variables
---Lua functions
---WoW API / Variables
-local GetSpecialization = GetSpecialization
-local InCombatLockdown = InCombatLockdown
-local UnitLevel = UnitLevel
-local UnitGroupRolesAssigned = UnitGroupRolesAssigned
-local UnitSetRole = UnitSetRole
-local GetNumGroupMembers = GetNumGroupMembers
-local RolePollPopup = RolePollPopup
-local StaticPopupSpecial_Hide = StaticPopupSpecial_Hide
-
 function mod:SetRole()
     local spec = GetSpecialization()
     if UnitLevel("player") >= 10 and not InCombatLockdown() then

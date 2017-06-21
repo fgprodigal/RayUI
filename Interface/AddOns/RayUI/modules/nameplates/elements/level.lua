@@ -7,15 +7,6 @@ _LoadRayUIEnv_()
 local mod = R:GetModule('NamePlates')
 local LSM = LibStub("LibSharedMedia-3.0")
 
---Cache global variables
---Lua functions
-local strfind = string.find
-
---WoW API / Variables
-local GetCreatureDifficultyColor = GetCreatureDifficultyColor
-local UnitLevel = UnitLevel
-local UnitClassification = UnitClassification
-
 function mod:UpdateElement_Level(frame)
     if frame.UnitType ~= "ENEMY_PLAYER" and frame.UnitType ~= "ENEMY_NPC" then frame.Level:SetText() return end
     local level = UnitLevel(frame.displayedUnit)

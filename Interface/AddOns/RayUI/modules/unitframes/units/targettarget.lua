@@ -7,21 +7,6 @@ _LoadRayUIEnv_()
 local UF = R:GetModule("UnitFrames")
 local oUF = RayUF or oUF
 
---Cache global variables
---Lua functions
-local tinsert = table.insert
-local max, ceil = math.max, math.ceil
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local UnitIsEnemy = UnitIsEnemy
-local UnitIsFriend = UnitIsFriend
-local UnitFactionGroup = UnitFactionGroup
-local UnitIsPVPFreeForAll = UnitIsPVPFreeForAll
-local UnitIsPVP = UnitIsPVP
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RayUF_Target
 
 function UF:Construct_TargetTargetFrame(frame, unit)
     frame.mouseovers = {}

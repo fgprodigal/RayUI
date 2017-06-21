@@ -6,21 +6,6 @@ _LoadRayUIEnv_()
 
 local CH = R:GetModule("Chat")
 
---Cache global variables
---Lua functions
-local select, pairs, ipairs = select, pairs, ipairs
-local strsub = string.sub
-local tostring = tostring
-
---WoW API / Variables
-local IsInGroup = IsInGroup
-local IsInRaid = IsInRaid
-local IsInInstance = IsInInstance
-local IsInGuild = IsInGuild
-local IsShiftKeyDown = IsShiftKeyDown
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RayUITabChannelTutorial, ChatEdit_UpdateHeader
 
 local cycles = {
 	{

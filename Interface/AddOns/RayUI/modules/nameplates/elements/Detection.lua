@@ -6,11 +6,6 @@ _LoadRayUIEnv_()
 
 local mod = R:GetModule('NamePlates')
 
---Cache global variables
---WoW API / Variables
-local CreateFrame = CreateFrame
-local UnitAura = UnitAura
-
 --Cache detection buff names
 local DETECTION_BUFF = GetSpellInfo(203761) --Detector
 local DETECTION_BUFF2 = GetSpellInfo(213486) --Demonic Vision

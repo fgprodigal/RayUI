@@ -6,14 +6,6 @@ _LoadRayUIEnv_()
 
 local M = R:NewModule("Misc", "AceEvent-3.0", "AceTimer-3.0")
 
---Cache global variables
---Lua functions
-local table, pairs, pcall = table, pairs, pcall
-
---WoW API / Variables
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RaidCDAnchor, RaidCDMover
 
 M.modName = L["小玩意儿"]
 local error=error

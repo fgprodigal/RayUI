@@ -6,70 +6,6 @@ _LoadRayUIEnv_()
 
 local LSM = LibStub("LibSharedMedia-3.0")
 
---Cache global variables
---Lua functions
-local _G = _G
-local string = string
-local math = math
-local tinsert = tinsert
-local type = type
-local next = next
-local pairs = pairs
-local collectgarbage = collectgarbage
-local pcall = pcall
-local error = error
-local wipe = wipe
-local select = select
-local tostring = tostring
-local tremove = tremove
-local table = table
-local floor = floor
-local unpack = unpack
-local tonumber = tonumber
-local geterrorhandler = geterrorhandler
-local upper = string.upper
-local twipe = table.wipe
-local debugprofilestart, debugprofilestop = debugprofilestart, debugprofilestop
-
---WoW API / Variables
-local ReloadUI = ReloadUI
-local GetAddOnInfo = GetAddOnInfo
-local CreateFrame = CreateFrame
-local GetNumAddOns = GetNumAddOns
-local DisableAddOn = DisableAddOn
-local RequestTimePlayed = RequestTimePlayed
-local SetCVar = SetCVar
-local InCombatLockdown = InCombatLockdown
-local HideUIPanel = HideUIPanel
-local GetSpecialization = GetSpecialization
-local GetCombatRatingBonus = GetCombatRatingBonus
-local GetDodgeChance = GetDodgeChance
-local GetParryChance = GetParryChance
-local UnitLevel = UnitLevel
-local UnitStat = UnitStat
-local UnitAttackPower = UnitAttackPower
-local GetScreenWidth = GetScreenWidth
-local GetScreenHeight = GetScreenHeight
-local GetItemInfo = GetItemInfo
-local GetFunctionCPUUsage = GetFunctionCPUUsage
-local GetCVar = GetCVar
-local GetCVarBool = GetCVarBool
-local IsAddOnLoaded = IsAddOnLoaded
-local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
-local GameMenuButtonContinue = GameMenuButtonContinue
-local UnitGroupRolesAssigned = UnitGroupRolesAssigned
-local GetSpecializationRole = GetSpecializationRole
-local ResetCPUUsage = ResetCPUUsage
-local GetAddOnCPUUsage = GetAddOnCPUUsage
-local UpdateAddOnCPUUsage = UpdateAddOnCPUUsage
-local ToggleHelpFrame = ToggleHelpFrame
-local C_Timer = C_Timer
-local hooksecurefunc = hooksecurefunc
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: UIParent, LibStub, MAX_PLAYER_LEVEL, BaudErrorFrameHandler, UISpecialFrames, xCT_Plus, ScriptErrorsFrame
--- GLOBALS: Advanced_UIScaleSlider, Advanced_UseUIScale, RayUIConfigTutorial, RayUIWarningFrameScrollScrollBar, WorldMapFrame
--- GLOBALS: SLASH_RELOAD1, COMBAT_RATING_RESILIENCE_PLAYER_DAMAGE_TAKEN, FIRST_NUMBER_CAP, SECOND_NUMBER_CAP, RayUISplashScreen
 
 SlashCmdList["RELOAD"] = function() ReloadUI() end
 _G["SLASH_RELOAD1"] = "/rl"
@@ -157,7 +93,7 @@ function R:Scale(x)
 end
 
 function R:StringTitle(str)
-	return str:gsub("(.)", upper, 1)
+	return str:gsub("(.)", string.upper, 1)
 end
 
 R.LockedCVars = {}
@@ -192,9 +128,10 @@ function R:LockCVar(cvarName, value)
 end
 
 function R:RegisterModule(name)
+	if not R[name] then R[name] = R:GetModule(name) end
 	if self.initialized then
 		R:Debug(1, "%s Initializing ...", name)
-		self:GetModule(name):Initialize()
+		R:GetModule(name):Initialize()
 		tinsert(self["RegisteredModules"], name)
 	else
 		tinsert(self["RegisteredModules"], name)
@@ -302,8 +239,10 @@ function R:InitializeModules()
 	else
 		for i = 1, #self["RegisteredModules"] do
 			local module = self:GetModule(self["RegisteredModules"][i])
+			local name =  module.GetName and module:GetName() or module
+			if not R[name] then R[name] = module end
 			if module.Initialize then
-				R:Debug(1, "%s Initializing...", module.GetName and module:GetName() or module)
+				R:Debug(1, "%s Initializing...", name)
 				local _, catch = pcall(module.Initialize, module)
 				self:ThrowError(catch)
 			end
@@ -915,7 +854,7 @@ function R:GetTopCPUFunc(msg)
 	delay = (delay == "nil" and nil) or tonumber(delay) or 5
 	minCalls = (minCalls == "nil" and nil) or tonumber(minCalls) or 15
 
-	twipe(CPU_USAGE)
+	table.wipe(CPU_USAGE)
 	if module == "all" then
 		for _, registeredModule in pairs(self['RegisteredModules']) do
 			mod = self:GetModule(registeredModule, true) or self

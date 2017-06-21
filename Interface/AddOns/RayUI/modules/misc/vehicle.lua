@@ -7,15 +7,6 @@ _LoadRayUIEnv_()
 local M = R:GetModule("Misc")
 local mod = M:NewModule("VehicleMove")
 
---Cache global variables
---Lua functions
-local _G = _G
-
---WoW API / Variables
-local hooksecurefunc = hooksecurefunc
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: VehicleSeatIndicator, VehicleSeatMover
 
 function mod:Initialize()
     hooksecurefunc(VehicleSeatIndicator,"SetPoint",function(_,_,parent) -- vehicle seat indicator

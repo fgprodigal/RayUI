@@ -8,57 +8,6 @@ _LoadRayUIEnv_()
 local AB = R:NewModule("ActionBar", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 local LAB = LibStub("LibActionButton-1.0-RayUI")
 
---Cache global variables
---Lua functions
-local _G = _G
-local unpack = unpack
-local string = string
-local select = select
-local pairs = pairs
-local hooksecurefunc = hooksecurefunc
-local format = string.format
-local ceil = math.ceil
-local gsub = string.gsub
-local strfind = string.find
-
---WoW API / Variables
-local SetCVar = SetCVar
-local RegisterStateDriver = RegisterStateDriver
-local GetBindingKey = GetBindingKey
-local UnitExists = UnitExists
-local VehicleExit = VehicleExit
-local GetActionCooldown = GetActionCooldown
-local GetShapeshiftFormCooldown = GetShapeshiftFormCooldown
-local CooldownFrame_Set = CooldownFrame_Set
-local CreateFrame = CreateFrame
-local InCombatLockdown = InCombatLockdown
-local GetMouseFocus = GetMouseFocus
-local SetClampedTextureRotation = SetClampedTextureRotation
-local PetDismiss = PetDismiss
-local GetFlyoutID = GetFlyoutID
-local GetNumFlyouts = GetNumFlyouts
-local GetFlyoutInfo = GetFlyoutInfo
-local UnregisterStateDriver = UnregisterStateDriver
-local SetActionBarToggles = SetActionBarToggles
-local ClearOverrideBindings = ClearOverrideBindings
-local SetOverrideBindingClick = SetOverrideBindingClick
-local IsEquippedAction = IsEquippedAction
-local SetModifiedClick = SetModifiedClick
-local C_PetBattlesIsInBattle = C_PetBattles.IsInBattle
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: InterfaceOptionsActionBarsPanelAlwaysShowActionBars, InterfaceOptionsActionBarsPanelLockActionBars, InterfaceOptionsActionBarsPanelBottomRight
--- GLOBALS: InterfaceOptionsActionBarsPanelBottomLeft, InterfaceOptionsActionBarsPanelRightTwo, InterfaceOptionsActionBarsPanelRight
--- GLOBALS: SpellFlyout, NUM_PET_ACTION_SLOTS, NUM_ACTIONBAR_BUTTONS
--- GLOBALS: MainMenuBar, MultiBarLeft, MultiBarRight, MainMenuExpBar, SpellFlyoutHorizontalBackground
--- GLOBALS: SpellFlyoutVerticalBackground, SpellFlyoutBackgroundEnd, NUM_STANCE_SLOTS, NUM_POSSESS_SLOTS
--- GLOBALS: MultiBarBottomLeft, MultiBarBottomRight, ReputationWatchBar, MainMenuBarArtFrame
--- GLOBALS: OverrideActionBar, MultiCastActionBarFrame, IconIntroTracker, TalentMicroButtonAlert
--- GLOBALS: PossessBackground1, PossessBackground2, StanceBarLeft, StanceBarMiddle, StanceBarRight
--- GLOBALS: ActionBar1Mover, RayUIActionBarHider, RayUI_InfoPanel_Talent, LOCK_ACTIONBAR
--- GLOBALS: KEY_BUTTON3, KEY_PAGEUP, KEY_PAGEDOWN, KEY_SPACE, KEY_INSERT, KEY_HOME
--- GLOBALS: KEY_DELETE, KEY_MOUSEWHEELUP, KEY_MOUSEWHEELDOWN, visibility, ArtifactWatchBar
-
 AB.modName = L["动作条"]
 AB["Handled"] = {}
 AB["Skinned"] = {}
@@ -559,7 +508,7 @@ function AB:Initialize()
     self:RegisterEvent("PET_BATTLE_OPENING_DONE", "RemoveBindings")
     self:PLAYER_ENTERING_WORLD()
 
-    if C_PetBattlesIsInBattle() then
+    if C_PetBattles.IsInBattle() then
         self:RemoveBindings()
     else
         self:ReassignBindings()

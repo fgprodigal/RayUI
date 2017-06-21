@@ -9,26 +9,6 @@ local RA = R:GetModule("Raid")
 local _, ns = ...
 local RayUF = ns.oUF
 
---Cache global variables
---Lua functions
-local _G = _G
-local floor = math.floor
-local format = string.format
-local GetTime = GetTime
-
---WoW API / Variables
-local UnitIsAFK = UnitIsAFK
-local UnitIsDead = UnitIsDead
-local UnitIsGhost = UnitIsGhost
-local UnitIsConnected = UnitIsConnected
-local UnitHealthMax = UnitHealthMax
-local UnitGetIncomingHeals = UnitGetIncomingHeals
-local UnitIsPlayer = UnitIsPlayer
-local UnitReaction = UnitReaction
-local UnitIsUnit = UnitIsUnit
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: ALTERNATE_POWER_INDEX, DEAD, UNKNOWN, UNITNAME_SUMMON_TITLE17, UnitClass, UnitHealth, UnitName
 
 RayUF.Tags.Methods["RayUFRaid:name"] = function(u, r)
     local name = UnitName(u)

@@ -6,18 +6,6 @@ _LoadRayUIEnv_()
 
 local IF = R:GetModule("InfoBar")
 
---Cache global variables
---Lua functions
-local pairs, math = pairs, math
-local tostring = tostring
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local GetInventoryItemDurability = GetInventoryItemDurability
-local ToggleCharacter = ToggleCharacter
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: GameTooltip, DURABILITY
 
 local slots = {
     [ 1] = HEADSLOT,

@@ -7,15 +7,6 @@ _LoadRayUIEnv_()
 local M = R:GetModule("Misc")
 local mod = M:NewModule("AltPower", "AceEvent-3.0")
 
---Cache global variables
---Lua functions
---WoW API / Variables
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: UIParent, PlayerPowerBarAlt, AltPowerBarHolder
-
 function mod:Initialize()
     local holder = CreateFrame("Frame", "AltPowerBarHolder", UIParent)
     holder:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 70)

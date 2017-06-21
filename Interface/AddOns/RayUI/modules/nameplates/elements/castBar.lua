@@ -7,17 +7,6 @@ _LoadRayUIEnv_()
 local mod = R:GetModule('NamePlates')
 local LSM = LibStub("LibSharedMedia-3.0")
 
---Cache global variables
---Lua functions
-local select, unpack = select, unpack
---WoW API / Variables
-local CreateFrame = CreateFrame
-local GetTime = GetTime
-local UnitCastingInfo = UnitCastingInfo
-local UnitChannelInfo = UnitChannelInfo
-local FAILED = FAILED
-local INTERRUPTED = INTERRUPTED
-
 function mod:UpdateElement_CastBarOnUpdate(elapsed)
     if ( self.casting ) then
         self.value = self.value + elapsed;

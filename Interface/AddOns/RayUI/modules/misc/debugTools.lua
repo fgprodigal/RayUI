@@ -7,22 +7,6 @@ _LoadRayUIEnv_()
 local M = R:GetModule("Misc")
 local S = R:GetModule("Skins")
 
---Cache global variables
---Lua functions
---WoW API / Variables
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-local InCombatLockdown = InCombatLockdown
-local GetCVarBool = GetCVarBool
-local SetCVar = SetCVar
-local PlaySoundFile = PlaySoundFile
-local IsAddOnLoaded = IsAddOnLoaded
-local StaticPopup_Hide = StaticPopup_Hide
-local LoadAddOn = LoadAddOn
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: ScriptErrorsFrame, UIParent
-
 --Enhanced debugtools from ElvUI
 local D = M:NewModule("DebugTools", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 

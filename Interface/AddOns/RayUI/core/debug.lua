@@ -6,12 +6,6 @@ _LoadRayUIEnv_()
 
 local D = R:NewModule("Debug", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0", "AceTimer-3.0")
 
---Cache global variables
---Lua functions
-local _G, select, tostring, string, pairs, print, date = _G, select, tostring, string, pairs, print, date
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: DEFAULT_CHAT_FRAME, CHAT_FRAMES, FCF_StartAlertFlash
 
 D.Prefix = {
 	[1] = "|cff808080[%s] [DEBUG] [%s] ",

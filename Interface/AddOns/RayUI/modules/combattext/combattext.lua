@@ -8,20 +8,6 @@ local CT = R:NewModule("CombatText", "AceEvent-3.0", "AceHook-3.0", "AceTimer-3.
 local xCP = LibStub("xCombatParser-1.0-RayUI", true)
 CT.modName = L["战斗文字"]
 
---Cache global variables
---Lua functions
-local _G, pairs, unpack, type, string, table = _G, pairs, unpack, type, string, table
-local tostring, tonumber = tostring, tonumber
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local GetSpellTexture = GetSpellTexture
-local UnitGUID = UnitGUID
-local SetCVar = SetCVar
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: PET_ATTACK_TEXTURE, CombatText, InterfaceOptionsCombatPanelEnableFloatingCombatText, InterfaceOptionsCombatPanelEnableFloatingCombatTextText
--- GLOBALS: SCROLLING_MESSAGE_FRAME_INSERT_MODE_TOP, RayUF
 
 local showreceived = true
 local showoutput = true

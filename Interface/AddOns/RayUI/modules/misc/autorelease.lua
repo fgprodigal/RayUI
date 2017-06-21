@@ -7,14 +7,6 @@ _LoadRayUIEnv_()
 local M = R:GetModule("Misc")
 local mod = M:NewModule("AutoRelease", "AceEvent-3.0")
 
---Cache global variables
---Lua functions
---WoW API / Variables
-local GetSpellInfo = GetSpellInfo
-local UnitBuff = UnitBuff
-local GetBattlefieldStatus = GetBattlefieldStatus
-local RepopMe = RepopMe
-
 function mod:PLAYER_DEAD()
     if not M.db.autorelease then return end
     local soulstone = GetSpellInfo(20707)

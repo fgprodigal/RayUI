@@ -7,16 +7,6 @@ _LoadRayUIEnv_()
 local mod = R:GetModule('NamePlates')
 local LSM = LibStub("LibSharedMedia-3.0")
 
---Cache global variables
---Lua functions
---WoW API / Variables
-local IsInGroup = IsInGroup
-local IsInRaid = IsInRaid
-local UnitDetailedThreatSituation = UnitDetailedThreatSituation
-local UnitExists = UnitExists
-local UnitGroupRolesAssigned = UnitGroupRolesAssigned
-local UnitIsUnit = UnitIsUnit
-
 --Get Data For All Group Members Threat on Each Nameplate
 function mod:Update_ThreatList(frame)
     if frame.UnitType ~= "ENEMY_NPC" then return end

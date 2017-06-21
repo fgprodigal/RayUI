@@ -7,18 +7,6 @@ _LoadRayUIEnv_()
 local M = R:GetModule("Misc")
 local mod = M:NewModule("Mirror", "AceEvent-3.0")
 
---Cache global variables
---Lua functions
-local unpack, next, type, setmetatable = unpack, next, type, setmetatable
-local strsplit = string.split
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local GetMirrorTimerProgress = GetMirrorTimerProgress
-local GetMirrorTimerInfo = GetMirrorTimerInfo
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: Stop, MIRRORTIMER_NUMTIMERS, UIParent
 
 ---------------------------------------------------------------------
 -- original by haste, edited for Elvui :), styled for RayUI

@@ -7,12 +7,6 @@ _LoadRayUIEnv_()
 local M = R:GetModule("Misc")
 local mod = M:NewModule("AutoScreeshot", "AceEvent-3.0")
 
---Cache global variables
---Lua functions
---WoW API / Variables
-local Screenshot = Screenshot
-local C_Timer = C_Timer
-
 function mod:TakeScreenshot(event, ...)
     C_Timer.After(1, Screenshot)
 end

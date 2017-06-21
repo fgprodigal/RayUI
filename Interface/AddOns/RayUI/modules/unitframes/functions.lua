@@ -8,64 +8,6 @@ local RC = LibStub("LibRangeCheck-2.0")
 local UF = R:GetModule("UnitFrames")
 local oUF = RayUF or oUF
 
---Cache global variables
---Lua functions
-local _G = _G
-local select, unpack, tonumber, pairs, ipairs = select, unpack, tonumber, pairs, ipairs
-local type, getfenv, setfenv = type, getfenv, setfenv
-local math, string = math, string
-local abs, floor = math.abs, math.floor
-local format = string.format
-local tinsert, tsort = table.insert, table.sort
-local setmetatable = setmetatable
-local GetTime = GetTime
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local GetNetStats = GetNetStats
-local UnitIsPlayer = UnitIsPlayer
-local UnitIsFriend = UnitIsFriend
-local UnitClass = UnitClass
-local UnitSpellHaste = UnitSpellHaste
-local UnitBuff = UnitBuff
-local UnitHealth = UnitHealth
-local UnitHealthMax = UnitHealthMax
-local UnitIsConnected = UnitIsConnected
-local UnitIsDeadOrGhost = UnitIsDeadOrGhost
-local UnitIsGhost = UnitIsGhost
-local UnitIsEnemy = UnitIsEnemy
-local UnitReaction = UnitReaction
-local UnitPowerType = UnitPowerType
-local UnitPower = UnitPower
-local UnitPowerMax = UnitPowerMax
-local UnitThreatSituation = UnitThreatSituation
-local GetThreatStatusColor = GetThreatStatusColor
-local UnitAlternatePowerInfo = UnitAlternatePowerInfo
-local UnitHasVehicleUI = UnitHasVehicleUI
-local UnitAura = UnitAura
-local GetEclipseDirection = GetEclipseDirection
-local GetSpecialization = GetSpecialization
-local IsSpellKnown = IsSpellKnown
-local UnitExists = UnitExists
-local UnitIsUnit = UnitIsUnit
-local IsShiftKeyDown = IsShiftKeyDown
-local GetNumArenaOpponentSpecs = GetNumArenaOpponentSpecs
-local GetArenaOpponentSpec = GetArenaOpponentSpec
-local GetSpecializationInfoByID = GetSpecializationInfoByID
-local UnitName = UnitName
-local InCombatLockdown = InCombatLockdown
-local UnregisterUnitWatch = UnregisterUnitWatch
-local RegisterUnitWatch = RegisterUnitWatch
-local RegisterStateDriver = RegisterStateDriver
-local UnitFactionGroup = UnitFactionGroup
-local UnitIsPVPFreeForAll = UnitIsPVPFreeForAll
-local UnitIsPVP = UnitIsPVP
-local UnitIsTapDenied = UnitIsTapDenied
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: SLASH_TestUF1, INTERRUPT, RayUF, PLAYER_OFFLINE
--- GLOBALS: DEAD, DebuffTypeColor, LOCALIZED_CLASS_NAMES_MALE, CLASS_SORT_ORDER, MAX_BOSS_FRAMES
--- GLOBALS: UnitFrame_OnEnter, UnitFrame_OnLeave, PVP
 
 function UF:UnitFrame_OnEnter()
     UnitFrame_OnEnter(self)
@@ -452,7 +394,7 @@ local function SortAurasByPriorityAndTime(a, b)
 end
 
 function UF:SortAuras()
-    tsort(self, SortAurasByPriorityAndTime)
+    table.sort(self, SortAurasByPriorityAndTime)
 
     return 1, #self
 end

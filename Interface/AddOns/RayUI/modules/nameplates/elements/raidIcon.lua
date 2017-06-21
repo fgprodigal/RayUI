@@ -6,12 +6,6 @@ _LoadRayUIEnv_()
 
 local mod = R:GetModule('NamePlates')
 
---Cache global variables
---Lua functions
---WoW API / Variables
-local GetRaidTargetIndex = GetRaidTargetIndex
-local SetRaidTargetIconTexture = SetRaidTargetIconTexture
-
 function mod:UpdateElement_RaidIcon(frame)
     local icon = frame.RaidTargetIndicator;
     local index = GetRaidTargetIndex(frame.unit);

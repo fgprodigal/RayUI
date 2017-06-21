@@ -8,45 +8,6 @@ local M = R:GetModule("Misc")
 local mod = M:NewModule("Exprepbar", "AceEvent-3.0")
 local libAD = LibStub("LibArtifactData-1.0")
 
---Cache global variables
---Lua functions
-local _G = _G
-local pairs, ipairs, select, string, unpack = pairs, ipairs, select, string, unpack
-local format = string.format
-local min = math.min
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local SocketInventoryItem = SocketInventoryItem
-local GetSpellInfo = GetSpellInfo
-local HideUIPanel = HideUIPanel
-local UnitXP = UnitXP
-local UnitXPMax = UnitXPMax
-local GetXPExhaustion = GetXPExhaustion
-local GetExpansionLevel = GetExpansionLevel
-local UnitLevel = UnitLevel
-local UnitHonor = UnitHonor
-local UnitHonorMax = UnitHonorMax
-local UnitHonorLevel = UnitHonorLevel
-local GetMaxPlayerHonorLevel = GetMaxPlayerHonorLevel
-local CanPrestige = CanPrestige
-local GetHonorRestState = GetHonorRestState
-local GetWatchedFactionInfo = GetWatchedFactionInfo
-local GetFriendshipReputation = GetFriendshipReputation
-local ToggleCharacter = ToggleCharacter
-local GetFriendshipReputationRanks = GetFriendshipReputationRanks
-local HasArtifactEquipped = HasArtifactEquipped
-local BreakUpLargeNumbers = BreakUpLargeNumbers
-local ShowUIPanel = ShowUIPanel
-local InCombatLockdown = InCombatLockdown
-local C_Reputation_GetFactionParagonInfo = C_Reputation.GetFactionParagonInfo
-local C_Reputation_IsFactionParagon = C_Reputation.IsFactionParagon
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: ArtifactFrame, GameTooltip, Minimap, XP, NORMAL_FONT_COLOR, HIGHLIGHT_FONT_COLOR, MAX_PLAYER_LEVEL_TABLE
--- GLOBALS: HONOR, PVP_HONOR_PRESTIGE_AVAILABLE, HONOR_LEVEL_LABEL, MAX_HONOR_LEVEL, HONOR_BAR
--- GLOBALS: MAX_PLAYER_LEVEL, STANDING, RayUF, REPUTATION, ReputationWatchBar, ARTIFACT_POWER_TOOLTIP_TITLE
--- GLOBALS: ARTIFACT_POWER_TOOLTIP_BODY, LEVEL
 
 local function AddPerks()
     local _, traits = libAD:GetArtifactTraits()
@@ -232,7 +193,7 @@ function mod:CreateRepBar()
 
     self.RepBar:SetScript("OnEnter", function(self)
             local name, rank, start, cap, value, factionID = GetWatchedFactionInfo()
-            if (C_Reputation_IsFactionParagon(factionID)) then
+            if (C_Reputation.IsFactionParagon(factionID)) then
                 local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
                 start, cap, value = 0, threshold, currentValue
             end
@@ -267,7 +228,7 @@ function mod:UpdateRepBar()
     local friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold
     if GetWatchedFactionInfo() then
         local name, rank, min, max, value, factionID = GetWatchedFactionInfo()
-        if (C_Reputation_IsFactionParagon(factionID)) then
+        if (C_Reputation.IsFactionParagon(factionID)) then
             local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
             min, max, value = 0, threshold, currentValue
         end

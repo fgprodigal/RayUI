@@ -6,11 +6,6 @@ _LoadRayUIEnv_()
 
 local mod = R:GetModule('NamePlates')
 
---Cache global variables
---Lua functions
---WoW API / Variables
-local UnitClassification = UnitClassification
-
 function mod:UpdateElement_Elite(frame)
     local icon = frame.Elite
     local c = UnitClassification(frame.unit)

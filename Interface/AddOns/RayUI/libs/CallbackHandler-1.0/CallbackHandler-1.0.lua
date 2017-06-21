@@ -14,7 +14,6 @@ local next, select, pairs, type, tostring = next, select, pairs, type, tostring
 
 -- Global vars/functions that we don't upvalue since they might get hooked, or upgraded
 -- List them here for Mikk's FindGlobals script
--- GLOBALS: geterrorhandler
 
 local xpcall = xpcall
 

@@ -7,21 +7,6 @@ _LoadRayUIEnv_()
 local T = R:NewModule("Tutorial", "AceEvent-3.0")
 local ADDON_NAME = ...
 
---Cache global variables
---Lua functions
-local _G = _G
-local select = select
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local HelpPlate_GetButton = HelpPlate_GetButton
-local HelpPlate_IsShowing = HelpPlate_IsShowing
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RayUITutorial_HelpPlate_AnimateOnFinished, RayUITutorial_HelpPlate_Hide, RayUIShowTutorial_Stage1
--- GLOBALS: GameFontHighlightLeft, RayUITutorialWindow, UIParent, GameFontNormal, GameFontHighlight, CLOSE
--- GLOBALS: GameMenuFrame, GameMenuFrame, ChatFrame1EditBox, HELP_PLATE_BUTTONS, HelpPlate, RayUI_HelpPlate
--- GLOBALS: RayUITutorialButton, RayUITutorialButtonOpen, RayUITutorialBG, NumberFontNormal
 
 T.TutorialList = {
 	L["到 https://github.com/fgprodigal/RayUI 创建issue来反馈问题"],

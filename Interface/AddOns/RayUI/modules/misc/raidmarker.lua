@@ -7,24 +7,6 @@ _LoadRayUIEnv_()
 local M = R:GetModule("Misc")
 local mod = M:NewModule("RaidMarker", "AceEvent-3.0")
 
---Cache global variables
---Lua functions
-local sin, cos = math.sin, math.cos
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local GetNumGroupMembers = GetNumGroupMembers
-local UnitIsGroupLeader = UnitIsGroupLeader
-local UnitIsGroupAssistant = UnitIsGroupAssistant
-local UnitExists = UnitExists
-local UnitIsDead = UnitIsDead
-local GetCursorPosition = GetCursorPosition
-local PlaySound = PlaySound
-local SetRaidTarget = SetRaidTarget
-local SetRaidTargetIconTexture = SetRaidTargetIconTexture
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: UIParent, RaidMark_HotkeyPressed, BINDING_NAME_RAIDMARKER, UIErrorsFrame, UIERRORS_HOLD_TIME
 
 BINDING_NAME_RAIDMARKER = L["快速团队标记"]
 local ButtonIsDown

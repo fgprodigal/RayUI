@@ -6,16 +6,6 @@ _LoadRayUIEnv_()
 
 local AB = R:GetModule("ActionBar")
 
---Cache global variables
---Lua functions
-local _G = _G
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local RegisterStateDriver = RegisterStateDriver
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: OverrideActionBar, NUM_OVERRIDE_BUTTONS
 
 function AB:CreateOverrideBar()
     local num = NUM_OVERRIDE_BUTTONS

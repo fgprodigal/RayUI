@@ -9,13 +9,6 @@ local RA = R:GetModule("Raid")
 local _, ns = ...
 local RayUF = ns.oUF
 
---Cache global variables
---Lua functions
---WoW API / Variables
-local GetSpellInfo = GetSpellInfo
-local UnitClass = UnitClass
-local IsAddOnLoaded = IsAddOnLoaded
-
 local classList = {
     ["DRUID"] = {
         combat = GetSpellInfo(20484), -- Rebirth

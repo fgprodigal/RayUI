@@ -1,44 +1,5 @@
 local _, ns = ...
 
---Cache global variables
---Lua functions
-local math, next, unpack, select = math, next, unpack, select
-local print = print
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local UnitClass = UnitClass
-local SetLootSpecialization = SetLootSpecialization
-local GetNumSpecializations = GetNumSpecializations
-local GetSpecializationInfo = GetSpecializationInfo
-local GameTooltip_Hide = GameTooltip_Hide
-local GetMouseFocus = GetMouseFocus
-local GetLootSpecialization = GetLootSpecialization
-local GetSpecialization = GetSpecialization
-local IsModifiedClick = IsModifiedClick
-local GetCVarBool = GetCVarBool
-local IsEquippedItem = IsEquippedItem
-local GameTooltip_ShowCompareItem = GameTooltip_ShowCompareItem
-local ShowInspectCursor = ShowInspectCursor
-local ResetCursor = ResetCursor
-local HandleModifiedItemClick = HandleModifiedItemClick
-local EJ_GetNumLoot = EJ_GetNumLoot
-local EJ_GetLootInfoByIndex = EJ_GetLootInfoByIndex
-local C_Timer = C_Timer
-local EJ_SelectInstance = EJ_SelectInstance
-local EJ_SelectEncounter = EJ_SelectEncounter
-local EJ_SetDifficulty = EJ_SetDifficulty
-local EJ_SetLootFilter = EJ_SetLootFilter
-local GetInstanceInfo = GetInstanceInfo
-local GetCurrencyInfo = GetCurrencyInfo
-local hooksecurefunc = hooksecurefunc
-local BonusRollFrame_StartBonusRoll = BonusRollFrame_StartBonusRoll
-local GetItemInfo = GetItemInfo
-local GetSpellConfirmationPromptsInfo = GetSpellConfirmationPromptsInfo
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RayUI, GameTooltip, SLASH_TestBonusRollPreview1, BonusRollFrame, ShoppingTooltip1
--- GLOBALS: ShoppingTooltip2, EncounterJournal, LE_SPELL_CONFIRMATION_PROMPT_TYPE_BONUS_ROLL, CONFIRMATION_PROMPT_BONUS_ROLL
 
 local currentEncounterInfo
 local itemButtons = {}

@@ -9,20 +9,6 @@ _LoadRayUIEnv_()
 
 local LSM = LibStub("LibSharedMedia-3.0")
 
---Cache global variables
---Lua functions
-local _G = _G
-local type = type
-local hooksecurefunc = hooksecurefunc
-local unpack = unpack
-local select = select
-local getmetatable = getmetatable
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local UIFrameFadeIn = UIFrameFadeIn
-local UIFrameFadeOut = UIFrameFadeOut
-
 local function Size(frame, width, height)
     frame:SetSize(R:Scale(width), R:Scale(height or width))
 end

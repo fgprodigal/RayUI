@@ -7,34 +7,6 @@ _LoadRayUIEnv_()
 local mod = R:GetModule('NamePlates')
 local LSM = LibStub("LibSharedMedia-3.0")
 
---Cache global variables
---Lua functions
-local max = math.max
-local unpack = unpack
-local format = format
-
---WoW API / Variables
-local CreateAnimationGroup = CreateAnimationGroup
-local CreateFrame = CreateFrame
-local IsInGroup = IsInGroup
-local IsInRaid = IsInRaid
-local UnitClass = UnitClass
-local UnitDetailedThreatSituation = UnitDetailedThreatSituation
-local UnitGetIncomingHeals = UnitGetIncomingHeals
-local UnitGetTotalAbsorbs = UnitGetTotalAbsorbs
-local UnitGetTotalHealAbsorbs = UnitGetTotalHealAbsorbs
-local UnitHealth = UnitHealth
-local UnitHealthMax = UnitHealthMax
-local UnitIsConnected = UnitIsConnected
-local UnitIsTapDenied = UnitIsTapDenied
-local UnitIsUnit = UnitIsUnit
-local UnitPlayerControlled = UnitPlayerControlled
-local UnitReaction = UnitReaction
-local RAID_CLASS_COLORS = RAID_CLASS_COLORS
-local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RayUF
 
 local goodR, goodG, goodB = unpack(RayUF["colors"].reaction[5])
 local badR, badG, badB = unpack(RayUF["colors"].reaction[1])

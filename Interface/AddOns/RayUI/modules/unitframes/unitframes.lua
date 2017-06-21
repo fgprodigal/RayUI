@@ -7,18 +7,6 @@ _LoadRayUIEnv_()
 local UF = R:NewModule("UnitFrames", "AceEvent-3.0", "AceTimer-3.0")
 local oUF = RayUF or oUF
 
---Cache global variables
---Lua functions
-local unpack, pairs = unpack, pairs
-local gsub = string.gsub
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local IsAddOnLoaded = IsAddOnLoaded
-local InCombatLockdown = InCombatLockdown
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RayUF, RayUF_Player, RayUF_Target, RayUIPetBar, RayUF_Focus, MAX_BOSS_FRAMES, SpellActivationOverlayFrame
 
 UF.modName = L["头像"]
 

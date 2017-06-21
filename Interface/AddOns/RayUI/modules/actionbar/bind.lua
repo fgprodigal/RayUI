@@ -6,38 +6,6 @@ _LoadRayUIEnv_()
 
 local AB = R:GetModule("ActionBar")
 
---Cache global variables
---Lua functions
-local _G = _G
-local pairs = pairs
-local tonumber = tonumber
-local floor = floor
-local select = select
-
---WoW API / Variables
-local LoadBindings = LoadBindings
-local GetCurrentBindingSet = GetCurrentBindingSet
-local SetBinding = SetBinding
-local SaveBindings = SaveBindings
-local IsAltKeyDown = IsAltKeyDown
-local IsControlKeyDown = IsControlKeyDown
-local IsShiftKeyDown = IsShiftKeyDown
-local StaticPopup_Show = StaticPopup_Show
-local StaticPopup_Hide = StaticPopup_Hide
-local InCombatLockdown = InCombatLockdown
-local SpellBook_GetSpellBookSlot = SpellBook_GetSpellBookSlot
-local GetSpellBookItemName = GetSpellBookItemName
-local GetMacroInfo = GetMacroInfo
-local GetBindingKey = GetBindingKey
-local IsModifiedClick = IsModifiedClick
-local hooksecurefunc = hooksecurefunc
-local EnumerateFrames = EnumerateFrames
-local IsAddOnLoaded = IsAddOnLoaded
-local GameTooltip_ShowCompareItem = GameTooltip_ShowCompareItem
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: GameTooltip, SpellBookFrame, ShoppingTooltip1, StanceButton1
--- GLOBALS: PetActionButton1, MacroFrameTab1Text, ActionButton1, StanceButton1
 
 local bind = CreateFrame("Frame", "HoverBind", R.UIParent)
 

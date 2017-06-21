@@ -7,17 +7,6 @@ _LoadRayUIEnv_()
 local M = R:GetModule("Misc")
 local mod = M:NewModule("TotemBar", "AceEvent-3.0")
 
---Cache global variables
---Lua functions
-local _G = _G
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local GetTotemInfo = GetTotemInfo
-local CooldownFrame_Set = CooldownFrame_Set
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: MAX_TOTEMS, RayUIActionBar1
 
 local eventFrame = CreateFrame("Frame")
 

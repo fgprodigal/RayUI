@@ -7,13 +7,6 @@ _LoadRayUIEnv_()
 local M = R:GetModule("Misc")
 local mod = M:NewModule("TimeTracker", "AceEvent-3.0")
 
---Cache global variables
---Lua functions
-local select, pairs = select, pairs
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: TimerTracker
-
 function mod:SkinIt(bar)
     for i=1, bar:GetNumRegions() do
         local region = select(i, bar:GetRegions())

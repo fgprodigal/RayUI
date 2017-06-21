@@ -7,29 +7,6 @@ _LoadRayUIEnv_()
 local A = R:NewModule("Auras", "AceEvent-3.0", "AceHook-3.0")
 local LSM = LibStub("LibSharedMedia-3.0")
 
---Cache global variables
---Lua functions
-local select, pairs = select, pairs
-local string, math = string, math
-local format = string.format
-local floor = math.floor
-local GetTime = GetTime
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local GetWeaponEnchantInfo = GetWeaponEnchantInfo
-local IsShiftKeyDown = IsShiftKeyDown
-local UnitAura = UnitAura
-local SecureButton_GetUnit = SecureButton_GetUnit
-local GetInventoryItemQuality = GetInventoryItemQuality
-local GetInventoryItemTexture = GetInventoryItemTexture
-local GetItemQualityColor = GetItemQualityColor
-local RegisterStateDriver = RegisterStateDriver
-local InCombatLockdown = InCombatLockdown
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RayUIPlayerDebuffs, RayUIPlayerBuffs, NORMAL_FONT_COLOR_CODE, DebuffTypeColor, AurasHolder
--- GLOBALS: BuffFrame, TemporaryEnchantFrame, InterfaceOptionsFrameCategoriesButton12
 
 A.modName = L["BUFF"]
 

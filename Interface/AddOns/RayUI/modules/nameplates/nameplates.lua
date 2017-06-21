@@ -8,39 +8,6 @@ _LoadRayUIEnv_()
 local mod = R:NewModule('NamePlates', 'AceHook-3.0', 'AceEvent-3.0', 'AceTimer-3.0')
 local LSM = LibStub("LibSharedMedia-3.0")
 
---Cache global variables
---Lua functions
-local pairs, type = pairs, type
-local twipe = table.wipe
-local string = string
-local format, match = string.format, string.match
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
-local C_NamePlate_GetNamePlates = C_NamePlate.GetNamePlates
-local GetArenaOpponentSpec = GetArenaOpponentSpec
-local GetBattlefieldScore = GetBattlefieldScore
-local GetNumArenaOpponentSpecs = GetNumArenaOpponentSpecs
-local GetNumBattlefieldScores = GetNumBattlefieldScores
-local GetSpecializationInfoByID = GetSpecializationInfoByID
-local hooksecurefunc = hooksecurefunc
-local IsInInstance = IsInInstance
-local RegisterUnitWatch = RegisterUnitWatch
-local SetCVar = SetCVar
-local UnitCanAttack = UnitCanAttack
-local UnitExists = UnitExists
-local UnitGroupRolesAssigned = UnitGroupRolesAssigned
-local UnitHasVehicleUI = UnitHasVehicleUI
-local UnitIsPlayer = UnitIsPlayer
-local UnitIsUnit = UnitIsUnit
-local UnitName = UnitName
-local UnitPowerType = UnitPowerType
-local UnregisterUnitWatch = UnregisterUnitWatch
-local UNKNOWN = UNKNOWN
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: NamePlateDriverFrame, UIParent, InterfaceOptionsNamesPanelUnitNameplates
 
 --Taken from Blizzard_TalentUI.lua
 local healerSpecIDs = {
@@ -99,7 +66,7 @@ function mod:CheckArenaHealers()
 end
 
 function mod:PLAYER_ENTERING_WORLD()
-    twipe(self.Healers)
+    table.wipe(self.Healers)
     local inInstance, instanceType = IsInInstance()
     if inInstance and instanceType == 'pvp' and self.db.markHealers then
         self.CheckHealerTimer = self:ScheduleRepeatingTimer("CheckBGHealers", 3)

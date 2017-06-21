@@ -6,11 +6,6 @@ _LoadRayUIEnv_()
 
 local mod = R:GetModule('NamePlates')
 
---Cache global variables
---Lua functions
---WoW API / Variables
-local UnitName = UnitName
-
 function mod:UpdateElement_HealerIcon(frame)
     local icon = frame.HealerIcon;
     local name = UnitName(frame.unit)

@@ -6,21 +6,6 @@ _LoadRayUIEnv_()
 
 local CH = R:GetModule("Chat")
 
---Cache global variables
---Lua functions
-local _G = _G
-local select, pairs, ipairs, type, next = select, pairs, ipairs, type, next
-local getkeystring = getkeystring
-local tostring = tostring
-local rawget = rawget
-local pcall = pcall
-local getmetatable = getmetatable
-local loadstring = loadstring
-local table, string = table, string
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: AceConsole, DEFAULT_CHAT_FRAME, _g, ignoreCaseSort
-
 local function isList(t)
     local n = #t
     for k,v in pairs(t) do

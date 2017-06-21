@@ -7,38 +7,6 @@ _LoadRayUIEnv_()
 local IF = R:GetModule("InfoBar")
 local LibQTip = LibStub("LibQTip-1.0")
 
---Cache global variables
---Lua functions
-local ipairs, select, type, unpack = ipairs, select, type, unpack
-local wipe = table.wipe
-local string = string
-local tonumber = tonumber
-local tinsert = table.insert
-
---WoW API / Variables
-local IsAltKeyDown = IsAltKeyDown
-local BNInviteFriend = BNInviteFriend
-local InviteUnit = InviteUnit
-local ChatFrame_SendSmartTell = ChatFrame_SendSmartTell
-local ChatFrame_SendTell = ChatFrame_SendTell
-local GetNumFriends = GetNumFriends
-local GetFriendInfo = GetFriendInfo
-local UnitFactionGroup = UnitFactionGroup
-local BNGetNumFriends = BNGetNumFriends
-local BNGetFriendInfo = BNGetFriendInfo
-local BNet_GetClientTexture = BNet_GetClientTexture
-local BNGetGameAccountInfo = BNGetGameAccountInfo
-local GetRealmName = GetRealmName
-local ToggleFriendsFrame = ToggleFriendsFrame
-local InCombatLockdown = InCombatLockdown
-local ShowFriends = ShowFriends
-local GetRelativeDifficultyColor = GetRelativeDifficultyColor
-local UnitLevel = UnitLevel
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: DEFAULT_CHAT_FRAME, FRIENDS_BNET_NAME_COLOR, FRIENDS_TEXTURE_AFK, FRIENDS_TEXTURE_DND
--- GLOBALS: FRIENDS_TEXTURE_ONLINE, FACTION_HORDE, FACTION_ALLIANCE, NAME, LEVEL_ABBR
--- GLOBALS: ZONE, FACTION, FRIENDS, GAME, RayUI_InfobarTooltipFont, BATTLENET_FRIEND, GREEN_FONT_COLOR_CODE
 
 local FriendsTabletData = {}
 IF.FriendsTabletDataNames = {}

@@ -8,17 +8,6 @@ _LoadRayUIEnv_()
 local UF = R:GetModule("UnitFrames")
 local oUF = RayUF or oUF
 
---Cache global variables
---Lua functions
-local unpack = unpack
-local max, floor = math.max, math.floor
-local strsub, strfind, gsub = string.sub, string.find, string.gsub
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RayUF, MAX_COMBO_POINTS
 
 function UF:Configure_ClassBar(frame, cur)
     local bars = frame[frame.ClassBar]

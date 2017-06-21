@@ -6,64 +6,6 @@ _LoadRayUIEnv_()
 
 local MM = R:NewModule("MiniMap", "AceEvent-3.0", "AceHook-3.0")
 
---Cache global variables
---Lua functions
-local _G = _G
-local select, unpack, pairs, string, math = select, unpack, pairs, string, math
-local strfind, gsub = string.find, string.gsub
-local floor = math.floor
-local sqrt = math.sqrt
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local GetWorldPVPAreaInfo = GetWorldPVPAreaInfo
-local GameTime_UpdateTooltip = GameTime_UpdateTooltip
-local GetMinimapShape = GetMinimapShape
-local UIFrameFadeIn = UIFrameFadeIn
-local UIFrameFadeOut = UIFrameFadeOut
-local CalendarGetNumPendingInvites = CalendarGetNumPendingInvites
-local ToggleCharacter = ToggleCharacter
-local ShowUIPanel = ShowUIPanel
-local HideUIPanel = HideUIPanel
-local ToggleAchievementFrame = ToggleAchievementFrame
-local ToggleFriendsFrame = ToggleFriendsFrame
-local IsInGuild = IsInGuild
-local ToggleFrame = ToggleFrame
-local IsAddOnLoaded = IsAddOnLoaded
-local LoadAddOn = LoadAddOn
-local ToggleCollectionsJournal = ToggleCollectionsJournal
-local ToggleHelpFrame = ToggleHelpFrame
-local GarrisonLandingPageMinimapButton_OnClick = GarrisonLandingPageMinimapButton_OnClick
-local IsShiftKeyDown = IsShiftKeyDown
-local GetCursorPosition = GetCursorPosition
-local Minimap_SetPing = Minimap_SetPing
-local Minimap_ZoomIn = Minimap_ZoomIn
-local Minimap_ZoomOut = Minimap_ZoomOut
-local ToggleGuildFrame = ToggleGuildFrame
-local ToggleLFDParentFrame = ToggleLFDParentFrame
-local Minimap_OnClick = Minimap_OnClick
-local GetNumTrackingTypes = GetNumTrackingTypes
-local UnitClass = UnitClass
-local ClearAllTracking = ClearAllTracking
-local GetTrackingInfo = GetTrackingInfo
-local MiniMapTrackingDropDown_IsNoTrackingActive = MiniMapTrackingDropDown_IsNoTrackingActive
-local MiniMapTrackingDropDownButton_IsActive = MiniMapTrackingDropDownButton_IsActive
-local MiniMapTracking_SetTracking = MiniMapTracking_SetTracking
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: GameTooltip, Minimap, HIGHLIGHT_FONT_COLOR, NORMAL_FONT_COLOR, TimeManagerClockButton, Settings
--- GLOBALS: TIMEMANAGER_ALARM_TOOLTIP_TURN_OFF, GAMETIME_TOOLTIP_TOGGLE_CLOCK, GarrisonLandingPageMinimapButton
--- GLOBALS: MinimapCluster, MiniMapTracking, MiniMapInstanceDifficulty, Lib_UIDropDownMenu_CreateInfo, MINIMAP_TRACKING_NONE
--- GLOBALS: GuildInstanceDifficulty, MiniMapChallengeMode, MiniMapMailFrame, MiniMapMailIcon, GameTimeCalendarInvitesTexture
--- GLOBALS: FeedbackUIButton, StreamingIcon, MinimapZoneText, DropDownList1, LFGDungeonReadyStatus, HelpOpenTicketButton
--- GLOBALS: CHARACTER_BUTTON, SPELLBOOK_ABILITIES_BUTTON, TALENTS_BUTTON, ACHIEVEMENT_BUTTON, SOCIAL_BUTTON
--- GLOBALS: LookingForGuildFrame, StopwatchFrame, ACHIEVEMENTS_GUILD_TAB, ENCOUNTER_JOURNAL, COLLECTIONS
--- GLOBALS: LFG_TITLE, BLIZZARD_STORE, HELP_BUTTON, GARRISON_LANDING_PAGE_TITLE, CALENDAR, LOOT_ROLLS
--- GLOBALS: SpellBookFrame, PlayerTalentFrame, GuildFrame, EncounterJournal, RaidFinderFrame, StoreMicroButton
--- GLOBALS: CalendarFrame, LootHistoryFrame, MiniMapTrackingDropDown, BlizzardStopwatchOptions, GameTimeFrame, TimeManagerFrame
--- GLOBALS: GuildFrame_LoadUI, EncounterJournal_LoadUI, TalentFrame_LoadUI, UIParent, MinimapButtonCollectFrame
--- GLOBALS: MinimapZoomIn, MinimapZoomOut, Lib_UIDropDownMenu_AddButton, HUNTER_TRACKING, HUNTER_TRACKING_TEXT, TOWNSFOLK_TRACKING_TEXT
--- GLOBALS: TOWNSFOLK, LIB_UIDROPDOWNMENU_MENU_VALUE, Lib_ToggleDropDownMenu
 
 MM.modName = L["小地图"]
 

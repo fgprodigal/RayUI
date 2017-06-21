@@ -7,37 +7,6 @@ _LoadRayUIEnv_()
 local IF = R:GetModule("InfoBar")
 local LibQTip = LibStub("LibQTip-1.0")
 
---Cache global variables
---Lua functions
-local ipairs, select, unpack = ipairs, select, unpack
-local string = string
-local wipe = table.wipe
-local format = string.format
-
---WoW API / Variables
-local GetSpecialization = GetSpecialization
-local SetSpecialization = SetSpecialization
-local GetNumSpecGroups = GetNumSpecGroups
-local GetSpecializationInfo = GetSpecializationInfo
-local GetNumSpecializations = GetNumSpecializations
-local UnitLevel = UnitLevel
-local GetActiveSpecGroup = GetActiveSpecGroup
-local GetLootSpecialization = GetLootSpecialization
-local GetSpecializationInfoByID = GetSpecializationInfoByID
-local SetLootSpecialization = SetLootSpecialization
-local TalentFrame_LoadUI = TalentFrame_LoadUI
-local ShowUIPanel = ShowUIPanel
-local HideUIPanel = HideUIPanel
-local InCombatLockdown = InCombatLockdown
-local GetInventoryItemQuality = GetInventoryItemQuality
-local EquipmentManager_UnequipItemInSlot = EquipmentManager_UnequipItemInSlot
-local EquipmentManager_RunAction = EquipmentManager_RunAction
-local EquipmentManager_EquipSet = EquipmentManager_EquipSet
-local GetEquipmentSetInfoByName = GetEquipmentSetInfoByName
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: TALENTS, ACTIVE_PETS, NONE, NORMAL_FONT_COLOR, EQUIPMENT_MANAGER, PlayerTalentFrame, RayUI_InfobarTooltipFont
--- GLOBALS: SELECT_LOOT_SPECIALIZATION, UNKNOWN
 
 local Tooltip
 local ActiveColor = {0, 0.9, 0}

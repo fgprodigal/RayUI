@@ -6,32 +6,6 @@ _LoadRayUIEnv_()
 
 local AB = R:GetModule("ActionBar")
 
---Cache global variables
---Lua functions
-local _G = _G
-local ceil = ceil
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local IsPetAttackAction = IsPetAttackAction
-local GetPetActionInfo = GetPetActionInfo
-local PetActionButton_StartFlash = PetActionButton_StartFlash
-local PetActionButton_StopFlash = PetActionButton_StopFlash
-local AutoCastShine_AutoCastStart = AutoCastShine_AutoCastStart
-local AutoCastShine_AutoCastStop = AutoCastShine_AutoCastStop
-local GetPetActionSlotUsable = GetPetActionSlotUsable
-local SetDesaturation = SetDesaturation
-local PetHasActionBar = PetHasActionBar
-local hooksecurefunc = hooksecurefunc
-local PetActionBar_UpdateCooldowns = PetActionBar_UpdateCooldowns
-local UnregisterStateDriver = UnregisterStateDriver
-local UIFrameFadeIn = UIFrameFadeIn
-local UIFrameFadeOut = UIFrameFadeOut
-local RegisterStateDriver = RegisterStateDriver
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: PetActionBarFrame, NUM_PET_ACTION_SLOTS, RayUIActionBarHider
--- GLOBALS: RayUIPetBar
 
 function AB:CreateBarPet()
 	local num = NUM_PET_ACTION_SLOTS

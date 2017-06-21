@@ -6,20 +6,6 @@ _LoadRayUIEnv_()
 
 local CH = R:GetModule("Chat")
 
---Cache global variables
---Lua functions
-local _G = _G
-local select, pairs = select, pairs
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local ChatEdit_ClearChat = ChatEdit_ClearChat
-local GetCursorPosition = GetCursorPosition
-local InCombatLockdown = InCombatLockdown
-local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RayUIChatBG, ChatFrame1EditBox, RayUIChatToggle, GameTooltip, ChatTypeInfo
 
 local isMoving = false
 local hasNew = false

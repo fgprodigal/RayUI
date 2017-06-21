@@ -6,23 +6,6 @@ _LoadRayUIEnv_()
 
 local AB = R:GetModule("ActionBar")
 
---Cache global variables
---Lua functions
-local _G = _G
-local pairs = pairs
-local GetTime = GetTime
-local tonumber = tonumber
-local max = math.max
-local floor = math.floor
-local min = math.min
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-local GetActionCooldown = GetActionCooldown
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: UIParent, ActionBarButtonEventsFrame
 
 local DAY, HOUR, MINUTE = 86400, 3600, 60 --used for formatting text
 local DAYISH, HOURISH, MINUTEISH = 3600 * 23.5, 60 * 59.5, 59.5 --used for formatting text at transition points

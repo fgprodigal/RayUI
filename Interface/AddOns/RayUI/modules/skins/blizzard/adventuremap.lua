@@ -8,13 +8,6 @@ local S = R:GetModule("Skins")
 
 --form ElvUI
 
---Cache global variables
---Lua functions
-
---WoW API / Variables
-
---Global variables that we don't cache, list them here for mikk's FindGlobals script
--- GLOBALS: 
 
 local function LoadSkin()
 	--Quest Choise

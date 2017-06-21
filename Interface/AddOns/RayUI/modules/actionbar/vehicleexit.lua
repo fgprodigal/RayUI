@@ -7,22 +7,6 @@ _LoadRayUIEnv_()
 local AB = R:GetModule("ActionBar")
 local S = R:GetModule("Skins")
 
---Cache global variables
---Lua functions
-local _G = _G
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local MainMenuBarVehicleLeaveButton_OnEnter = MainMenuBarVehicleLeaveButton_OnEnter
-local GameTooltip_Hide = GameTooltip_Hide
-local UnitOnTaxi = UnitOnTaxi
-local TaxiRequestEarlyLanding = TaxiRequestEarlyLanding
-local VehicleExit = VehicleExit
-local CanExitVehicle = CanExitVehicle
-local ActionBarController_GetCurrentActionBarState = ActionBarController_GetCurrentActionBarState
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: LE_ACTIONBAR_STATE_MAIN
 
 function AB:CreateVehicleExit()
 	local holder = CreateFrame("Frame", nil, R.UIParent, "SecureHandlerStateTemplate")

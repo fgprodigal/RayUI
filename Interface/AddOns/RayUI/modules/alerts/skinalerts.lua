@@ -7,11 +7,6 @@ _LoadRayUIEnv_()
 local AL = R:GetModule("Alerts")
 local S = R:GetModule("Skins")
 
---Cache global variables
---Lua functions
---WoW API / Variables
-local CreateFrame = CreateFrame
-
 function AL:SkinToast(toast, toastType)
     local r, g, b = toast.Border:GetVertexColor()
     local w, h = toast.Icon:GetSize()

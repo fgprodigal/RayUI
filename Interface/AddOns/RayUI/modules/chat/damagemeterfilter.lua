@@ -6,13 +6,6 @@ _LoadRayUIEnv_()
 
 local CH = R:GetModule("Chat")
 
---Cache global variables
---Lua functions
-local string, pairs, ipairs, time, table = string, pairs, ipairs, time, table
-
---WoW API / Variables
-local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
-
 -------------------------------------------------------------------------------
 -- By Lockslap (US, Bleeding Hollow)
 -- <Borderline Amazing>, http://ba-guild.com

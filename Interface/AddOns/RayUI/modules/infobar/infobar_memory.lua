@@ -6,24 +6,6 @@ _LoadRayUIEnv_()
 
 local IF = R:GetModule("InfoBar")
 
---Cache global variables
---Lua functions
-local string, table = string, table
-local tostring = tostring
-local gcinfo = gcinfo
-local collectgarbage = collectgarbage
-local tinsert = table.insert
-
---WoW API / Variables
-local ResetCPUUsage = ResetCPUUsage
-local UpdateAddOnMemoryUsage = UpdateAddOnMemoryUsage
-local GetNumAddOns = GetNumAddOns
-local IsAddOnLoaded = IsAddOnLoaded
-local GetAddOnMemoryUsage = GetAddOnMemoryUsage
-local GetAddOnInfo = GetAddOnInfo
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: GameTooltip
 
 local AddOnMemory = {}
 

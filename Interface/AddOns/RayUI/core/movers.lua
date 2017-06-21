@@ -7,29 +7,6 @@ _LoadRayUIEnv_()
 
 local AddOnName = ...
 
---Cache global variables
---Lua functions
-local _G = _G
-local string = string
-local ipairs = ipairs
-local floor = floor
-local tonumber = tonumber
-local type = type
-local pairs = pairs
-
---WoW API / Variables
-local InCombatLockdown = InCombatLockdown
-local CreateFrame = CreateFrame
-local GetScreenWidth = GetScreenWidth
-local GetScreenHeight = GetScreenHeight
-local PlaySound = PlaySound
-local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT
-local RESET = RESET
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RayUIParent, GameTooltip, UIDropDownMenu_SetSelectedValue, UIDropDownMenu_Initialize
--- GLOBALS: UIDropDownMenu_CreateInfo, UIDropDownMenu_AddButton, EditBox_ClearFocus, SquareButton_SetIcon
--- GLOBALS: RayUIMoverPopupWindow, GameFontNormal, RayUIMoverPopupWindowDropDown
 
 local grid, nudgeWindow
 local gridSize = 50
