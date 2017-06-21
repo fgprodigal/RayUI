@@ -7,7 +7,6 @@ _LoadRayUIEnv_()
 local A = R:NewModule("Auras", "AceEvent-3.0", "AceHook-3.0")
 local LSM = LibStub("LibSharedMedia-3.0")
 
-
 A.modName = L["BUFF"]
 
 local buttonsize = 30 -- Buff Size
@@ -236,7 +235,7 @@ function A:CreateAuraHeader(filter)
     RegisterStateDriver(header, "visibility", "[petbattle] hide; show")
 
     if filter == "HELPFUL" then
-        header:SetAttribute('consolidateDuration', -1)
+        header:SetAttribute("consolidateDuration", -1)
         header:SetAttribute("includeWeapons", 1)
     end
 
@@ -248,7 +247,7 @@ end
 
 function A:PostDrag(position)
     if InCombatLockdown() then return end
-    local headers = {RayUIPlayerBuffs,RayUIPlayerDebuffs}
+    local headers = { RayUIPlayerBuffs,RayUIPlayerDebuffs }
     for _, header in pairs(headers) do
         if header then
             if not position then position = R:GetScreenQuadrant(header) end

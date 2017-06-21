@@ -36,22 +36,27 @@
             <OnClick>
 				_LoadRayUIEnv_()
 				RayUI_InfoBarButton_OnClick(self, button)
+				_LoadDefaultEnv_()
 			</OnClick>
             <OnEvent>
 				_LoadRayUIEnv_()
 				RayUI_InfoBarButton_OnEvent(self, event)
+				_LoadDefaultEnv_()
 			</OnEvent>
             <OnUpdate>
 				_LoadRayUIEnv_()
 				RayUI_InfoBarButton_OnUpdate(self, elapsed)
+				_LoadDefaultEnv_()
 			</OnUpdate>
             <OnEnter>
 				_LoadRayUIEnv_()
 				RayUI_InfoBarButton_OnEnter(self)
+				_LoadDefaultEnv_()
 			</OnEnter>
             <OnLeave>
 				_LoadRayUIEnv_()
 				RayUI_InfoBarButton_OnLeave(self)
+				_LoadDefaultEnv_()
 			</OnLeave>
         </Scripts>
     </Button>

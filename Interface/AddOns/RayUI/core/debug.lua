@@ -35,7 +35,7 @@ local function Debug(mod, logLevel, msg, ...)
 			end
 		end
 		ChatFrame:AddMessage(msg, nil, nil, nil, nil, true)
-		_G["FCF_StartAlertFlash"](ChatFrame)
+		if ChatFrame ~= _G.ChatFrame1 then _G["FCF_StartAlertFlash"](ChatFrame) end
 	end
 end
 R.Debug = Debug
