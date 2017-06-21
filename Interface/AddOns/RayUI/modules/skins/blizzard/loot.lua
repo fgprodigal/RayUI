@@ -377,7 +377,7 @@ local function LoadSkin()
                 end
             end
         end
-        SLASH_AUTOLOOT1 = "/autoloot"
+        _G["SLASH_AUTOLOOT1"] = "/autoloot"
 
 	end
 end

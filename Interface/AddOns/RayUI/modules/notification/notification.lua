@@ -248,7 +248,7 @@ end
 SlashCmdList.TESTNOTIFICATION = function(b)
     NF:DisplayToast("RayUI", "This is an example of a notification.", testCallback, b == "true" and "INTERFACE\\ICONS\\SPELL_FROST_ARCTICWINDS" or nil, .08, .92, .08, .92)
 end
-SLASH_TESTNOTIFICATION1 = "/testnotification"
+_G["SLASH_TESTNOTIFICATION1"] = "/testnotification"
 
 function NF:Initialize()
     anchorFrame = CreateFrame("Frame", nil, R.UIParent)

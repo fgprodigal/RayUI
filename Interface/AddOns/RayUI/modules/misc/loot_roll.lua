@@ -317,7 +317,7 @@ function mod:Initialize()
             end
         end
     end
-    SLASH_LFrames1 = "/lframes"
+    _G["SLASH_LFrames1"] = "/lframes"
 end
 
 M:RegisterMiscModule(mod:GetName())

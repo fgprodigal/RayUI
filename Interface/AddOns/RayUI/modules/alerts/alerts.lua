@@ -2522,7 +2522,7 @@ end
 function AL:Initialize()
     AL:RegisterEvent("PLAYER_LOGIN")
 
-    SLASH_LSADDTOAST1 = "/testalerts"
+    _G["SLASH_LSADDTOAST1"] = "/testalerts"
     SlashCmdList["LSADDTOAST"] = SpawnTestToast
 end
 

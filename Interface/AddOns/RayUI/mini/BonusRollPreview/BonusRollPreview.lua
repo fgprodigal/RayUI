@@ -491,7 +491,7 @@ Container:SetScript("OnEvent", function(self, event, ...) self[event](self, even
 Container:RegisterEvent("PLAYER_ENTERING_WORLD")
 Container:RegisterEvent("PLAYER_LOGIN")
 
-SLASH_TestBonusRollPreview1 = "/testbonusroll"
+_G["SLASH_TestBonusRollPreview1"] = "/testbonusroll"
 SlashCmdList.TestBonusRollPreview = function()
     BonusRollFrame_StartBonusRoll(123, "123", 120, 994)
     Container:SPELL_CONFIRMATION_PROMPT("SPELL_CONFIRMATION_PROMPT", 139691, CONFIRMATION_PROMPT_BONUS_ROLL, nil, nil, 0)

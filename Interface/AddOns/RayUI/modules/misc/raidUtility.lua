@@ -212,7 +212,7 @@ function mod:Initialize()
     SlashCmdList["GROUPDISBAND"] = function()
         StaticPopup_Show("DISBAND_RAID")
     end
-    SLASH_GROUPDISBAND1 = '/rd'
+    _G["SLASH_GROUPDISBAND1"] = "/rd"
 
     StaticPopupDialogs["DISBAND_RAID"] = {
         text = L["是否确定解散队伍?"],
