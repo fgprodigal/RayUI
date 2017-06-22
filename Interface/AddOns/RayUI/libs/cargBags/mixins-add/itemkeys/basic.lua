@@ -21,8 +21,13 @@ LICENSE
 DESCRIPTION:
 	A few simple item keys, mostly ones resulting through pattern matching
 ]]
-local parent, ns = ...
-local cargBags = ns.cargBags
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Bags")
+
+
+local cargBags = _cargBags
 
 -- Returns the numeric item id (12345)
 cargBags.itemKeys["id"] = function(i)

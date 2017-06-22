@@ -24,8 +24,13 @@ DESCRIPTION
 DEPENDENCIES
 	mixins/api-common.lua
 ]]
-local addon, ns = ...
-local cargBags = ns.cargBags
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Bags")
+
+
+local cargBags = _cargBags
 
 local function noop() end
 
@@ -90,7 +95,6 @@ end
 	@param item <table> The itemTable holding information, see Implementation:GetItemInfo()
 	@callback OnUpdate(item)
 ]]
-local L = cargBags:GetLocalizedTypes()
 local ilvlTypes = {[AUCTION_CATEGORY_ARMOR] = true, [AUCTION_CATEGORY_WEAPONS] = true}
 local function ItemButton_Update(self, item)
 	if item.texture then

@@ -39,8 +39,13 @@ DEPENDENCIES
 CALLBACKS
 	:OnTagUpdate(event) - When the tag is updated
 ]]
-local _, ns = ...
-local cargBags = ns.cargBags
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Bags")
+
+
+local cargBags = _cargBags
 
 local tagPool, tagEvents, object = {}, {}
 local function tagger(tag, ...) return object.tags[tag] and object.tags[tag](object, ...) or "" end
@@ -49,7 +54,7 @@ local function tagger(tag, ...) return object.tags[tag] and object.tags[tag](obj
 local function updater(self, event)
 	object = self
 	self:SetText(self.tagString:gsub("%[([^%]:]+):?(.-)%]", tagger))
-	
+
 	if(self.OnTagUpdate) then self:OnTagUpdate(event) end
 end
 
@@ -136,14 +141,6 @@ end
 tagEvents["currencies"] = tagEvents["currency"]
 
 tagPool["money"] = function(self)
-	local money = GetMoney() or 0
-	local str
-
-	local g,s,c = floor(money/1e4), floor(money/100) % 100, money % 100
-
-	if(g > 0) then str = (str and str.." " or "") .. g .. createIcon("Interface\\MoneyFrame\\UI-GoldIcon", self.iconValues) end
-	if(s > 0) then str = (str and str.." " or "") .. s .. createIcon("Interface\\MoneyFrame\\UI-SilverIcon", self.iconValues) end
-	if(c > 0) then str = (str and str.." " or "") .. c .. createIcon("Interface\\MoneyFrame\\UI-CopperIcon", self.iconValues) end
-	return str
+    return GetMoneyString(GetMoney(), true)
 end
 tagEvents["money"] = { "PLAYER_MONEY" }

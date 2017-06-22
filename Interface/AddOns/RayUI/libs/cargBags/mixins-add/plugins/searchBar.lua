@@ -25,9 +25,13 @@ DESCRIPTION:
 DEPENDENCIES
 	mixins/textFilter.lua
 ]]
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Bags")
 
-local addon, ns = ...
-local cargBags = ns.cargBags
+
+local cargBags = _cargBags
 
 local function apply(self, container, text, mode)
 	if(text == "" or not text) then

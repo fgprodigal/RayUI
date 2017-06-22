@@ -8,7 +8,7 @@ local B = R:NewModule("Bags", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0")
 local S = R.Skins
 
 
-local cargBags = select(2, ...).cargBags
+local cargBags = _cargBags
 local consumable = AUCTION_CATEGORY_CONSUMABLES
 
 B.modName = L["背包"]
@@ -37,21 +37,21 @@ function B:CloseBags()
 	cargBags.blizzard:Hide()
 end
 
-local equipSetTip = CreateFrame("GameTooltip", "RayUICheckEquipSetTip", R.UIParent, "GameTooltipTemplate")
+-- local equipSetTip = CreateFrame("GameTooltip", "RayUICheckEquipSetTip", R.UIParent, "GameTooltipTemplate")
 
 local function CheckEquipmentSet(item)
 	if not item.bagID or not item.slotID then return false end
-	equipSetTip:SetOwner(R.UIParent, "ANCHOR_NONE")
-	equipSetTip:ClearLines()
-	equipSetTip:SetBagItem(item.bagID, item.slotID)
-	equipSetTip:Show()
-
-	for index = 1, equipSetTip:NumLines() do
-		if string.match(_G["RayUICheckEquipSetTipTextLeft" .. index]:GetText(), string.gsub(EQUIPMENT_SETS,"%%s\124r","")) then
-			return true
-		end
-	end
-	return false
+	-- equipSetTip:SetOwner(R.UIParent, "ANCHOR_NONE")
+	-- equipSetTip:ClearLines()
+	-- equipSetTip:SetBagItem(item.bagID, item.slotID)
+	-- equipSetTip:Show()
+    --
+	-- for index = 1, equipSetTip:NumLines() do
+	-- 	if string.match(_G["RayUICheckEquipSetTipTextLeft" .. index]:GetText(), string.gsub(EQUIPMENT_SETS,"%%s\124r","")) then
+	-- 		return true
+	-- 	end
+	-- end
+	return item.isInSet
 end
 
 function B:IsConsumableItem(item)
@@ -76,13 +76,13 @@ function B:Initialize()
 	function RayUI_ContainerFrame:OnInit()
 		-- The filters control which items go into which container
 		local INVERTED = -1 -- with inverted filters (using -1), everything goes into this bag when the filter returns false
-		local onlyBags = function(item) return item.bagID >= 0 and item.bagID <= 4 and not CheckEquipmentSet(item) and not B:IsConsumableItem(item) end
-		local onlyBank =		function(item) return item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11 and not CheckEquipmentSet(item) and not B:IsConsumableItem(item) end
-		local onlyReagent =		function(item) return item.bagID == -3 end
-		local onlyBagSets =		function(item) return CheckEquipmentSet(item) and not (item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11) end
-		local onlyBagConsumables =		function(item) return B:IsConsumableItem(item) and not (item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11) end
-		local onlyBankSets =	function(item) return CheckEquipmentSet(item) and not (item.bagID >= 0 and item.bagID <= 4) end
-		local onlyBankConsumables =		function(item) return B:IsConsumableItem(item) and not (item.bagID >= 0 and item.bagID <= 4) end
+		local onlyBags = function(item) return item.bagID >= BACKPACK_CONTAINER and item.bagID <= NUM_BAG_SLOTS and not CheckEquipmentSet(item) and not B:IsConsumableItem(item) end
+		local onlyBank =		function(item) return item.bagID == BANK_CONTAINER or item.bagID >= NUM_BAG_SLOTS+1 and item.bagID <= NUM_BAG_SLOTS + NUM_BANKBAGSLOTS and not CheckEquipmentSet(item) and not B:IsConsumableItem(item) end
+		local onlyReagent =		function(item) return item.bagID == REAGENTBANK_CONTAINER end
+		local onlyBagSets =		function(item) return CheckEquipmentSet(item) and not (item.bagID == BANK_CONTAINER or item.bagID >= NUM_BAG_SLOTS+1 and item.bagID <= NUM_BAG_SLOTS + NUM_BANKBAGSLOTS) end
+		local onlyBagConsumables =		function(item) return B:IsConsumableItem(item) and not (item.bagID == BANK_CONTAINER or item.bagID >= NUM_BAG_SLOTS+1 and item.bagID <= NUM_BAG_SLOTS + NUM_BANKBAGSLOTS) end
+		local onlyBankSets =	function(item) return CheckEquipmentSet(item) and not (item.bagID >= BACKPACK_CONTAINER and item.bagID <= NUM_BAG_SLOTS) end
+		local onlyBankConsumables =		function(item) return B:IsConsumableItem(item) and not (item.bagID >= BACKPACK_CONTAINER and item.bagID <= NUM_BAG_SLOTS) end
 		local onlyRareEpics =	function(item) return item.rarity and item.rarity > 3 end
 		local onlyEpics =		function(item) return item.rarity and item.rarity > 3 end
 		local hideJunk =		function(item) return not item.rarity or item.rarity > 0 end
@@ -300,7 +300,7 @@ function B:Initialize()
 			infoFrame:Point("TOPRIGHT", self, "TOPRIGHT", -5, -21)
 			infoFrame:SetHeight(20)
 
-			-- This one shows currencies, ammo and - most important - money!
+			-- money!
 			local tagDisplay = self:SpawnPlugin("TagDisplay", "[money]", infoFrame)
 			tagDisplay:SetFont(R["media"].font, R["media"].fontsize)
 			tagDisplay:SetPoint("RIGHT", infoFrame, "RIGHT", 0, 0)
@@ -495,8 +495,6 @@ function B:Initialize()
 		end
 	end
 
-	self:OpenBags()
-	self:CloseBags()
 	self:RawHook("OpenBag","OpenBags", true)
 	self:HookScript(TradeFrame, "OnShow", "OpenBags")
 	self:HookScript(TradeFrame, "OnHide", "CloseBags")

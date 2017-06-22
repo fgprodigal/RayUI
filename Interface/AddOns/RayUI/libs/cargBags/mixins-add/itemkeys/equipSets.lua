@@ -23,8 +23,13 @@ DESCRIPTION
 DEPENDENCIES
 	mixins-add/itemkeys/basic.lua
 ]]
-local parent, ns = ...
-local cargBags = ns.cargBags
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Bags")
+
+
+local cargBags = _cargBags
 
 local ItemKeys = cargBags.itemKeys
 
@@ -65,4 +70,3 @@ ItemKeys["set"] = function(i)
 	local setID = i.setID
 	return setID and GetEquipmentSetInfo(setID)
 end
-

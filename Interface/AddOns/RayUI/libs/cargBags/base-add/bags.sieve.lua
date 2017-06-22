@@ -24,8 +24,13 @@ DESCRIPTION
 DEPENDENCIES
 	mixins\parseBags.lua (optional)
 ]]
-local _, ns = ...
-local cargBags = ns.cargBags
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Bags")
+
+
+local cargBags = _cargBags
 
 local Implementation = cargBags.classes.Implementation
 

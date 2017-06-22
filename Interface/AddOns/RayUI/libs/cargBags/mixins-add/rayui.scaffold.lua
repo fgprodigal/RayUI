@@ -1,11 +1,10 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-RayUI:LoadEnv("Skins")
+RayUI:LoadEnv("Bags")
 
 
-local addon, ns = ...
-local cargBags = ns.cargBags
+local cargBags = _cargBags
 local LibItemLevel = LibStub:GetLibrary("LibItemLevel-RayUI")
 
 local function noop() end
@@ -34,7 +33,7 @@ local function ItemButton_Scaffold(self)
 		border:SetFrameLevel(self:GetFrameLevel()+1)
 		self.border = border
 		self.border:CreateBorder()
-		_Skins:CreateBackdropTexture(self, 0.6)
+		R.Skins:CreateBackdropTexture(self, 0.6)
 	end
 end
 

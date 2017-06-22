@@ -23,8 +23,13 @@ DESCRIPTION
 	It is not compatible with other container sieves, especially not
 	with the ones using Implementation:GetContainerForItem()
 ]]
-local _, ns = ...
-local cargBags = ns.cargBags
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Bags")
+
+
+local cargBags = _cargBags
 local Implementation = cargBags.classes.Implementation
 local Container = cargBags.classes.Container
 
@@ -163,4 +168,3 @@ function Container:FilterForFunction(func, filters)
 		func(button, result)
 	end
 end
-
