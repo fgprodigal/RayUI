@@ -1,7 +1,7 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv()
 
 
 local CH = R:GetModule("Chat")

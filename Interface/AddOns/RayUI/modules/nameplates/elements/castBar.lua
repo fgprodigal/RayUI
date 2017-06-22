@@ -1,10 +1,10 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("NamePlates")
 
 
-local mod = R:GetModule('NamePlates')
+local mod = _NamePlates
 local LSM = LibStub("LibSharedMedia-3.0")
 
 function mod:UpdateElement_CastBarOnUpdate(elapsed)

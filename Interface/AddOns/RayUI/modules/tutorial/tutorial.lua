@@ -1,12 +1,11 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Tutorial")
 
 
 local T = R:NewModule("Tutorial", "AceEvent-3.0")
-local ADDON_NAME = ...
-
+_Tutorial = T
 
 T.TutorialList = {
 	L["到 https://github.com/fgprodigal/RayUI 创建issue来反馈问题"],
@@ -14,7 +13,7 @@ T.TutorialList = {
 }
 
 function T:CreateTutorialFrame(name, parent, width, height, text)
-	local S = R:GetModule("Skins")
+	local S = R.Skins
 	local frame = CreateFrame("Frame", name, parent, "GlowBoxTemplate")
 	frame:SetSize(width, height)
 	frame:SetFrameStrata("FULLSCREEN_DIALOG")
@@ -60,7 +59,7 @@ function T:SetPrevTutorial()
 end
 
 function T:SpawnTutorialFrame()
-	local S = R:GetModule("Skins")
+	local S = R.Skins
 
 	local f = CreateFrame("Frame", "RayUITutorialWindow", UIParent)
 	f:SetFrameStrata("DIALOG")
@@ -386,12 +385,12 @@ function T:InitTutorial()
 	btnClose:SetPoint("CENTER", HelpPlate, "CENTER", 0, 0)
 	btnClose:SetText(ButtonTexts.finished)
 	btnClose:SetAttribute("type", "macro")
-	btnClose:SetAttribute("macrotext", "/testuf r25\n/clearfocus\n/cleartarget\n/run RayUITutorial_HelpPlate_Hide()\n/run RayUITutorialButtonClose:Hide()\n/run UIFrameFadeOut(RayUITutorialBG, 0.3, 0.5, 0)\n/run _LoadRayUIEnv_() R.global.Tutorial.tutorialdone = true")
+	btnClose:SetAttribute("macrotext", "/testuf r25\n/clearfocus\n/cleartarget\n/run RayUITutorial_HelpPlate_Hide()\n/run RayUITutorialButtonClose:Hide()\n/run UIFrameFadeOut(RayUITutorialBG, 0.3, 0.5, 0)\n/run RayUI:LoadEnv() R.global.Tutorial.tutorialdone = true")
 	btnClose:Hide()
 
 	-- Skin Buttons
-	R:GetModule("Skins"):Reskin(btnOpen)
-	R:GetModule("Skins"):Reskin(btnClose)
+	R.Skins:Reskin(btnOpen)
+	R.Skins:Reskin(btnClose)
 end
 
 function T:ShowTutorial()

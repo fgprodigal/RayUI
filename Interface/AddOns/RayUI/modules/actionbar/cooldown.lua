@@ -1,10 +1,10 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("ActionBar")
 
 
-local AB = R:GetModule("ActionBar")
+local AB = _ActionBar
 
 
 local DAY, HOUR, MINUTE = 86400, 3600, 60 --used for formatting text

@@ -1,7 +1,7 @@
 ﻿----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv()
 
 
 local LSM = LibStub("LibSharedMedia-3.0")
@@ -150,7 +150,7 @@ local function CreateWarningFrame()
 	for index in pairs(AddonNotSupported) do
 		R:Print(GetAddOnInfo(index))
 	end
-	local S = R:GetModule("Skins")
+	local S = R.Skins
 	local frame = CreateFrame("Frame", "RayUIWarningFrame", R.UIParent)
 	S:SetBD(frame)
 	frame:Size(400, 400)
@@ -723,7 +723,7 @@ function R:UpdateMedia()
 end
 
 function R:CreateDemoFrame()
-	local S = R:GetModule("Skins")
+	local S = R.Skins
 	demoFrame = CreateFrame("Frame", "RayUIDemoFrame", LibStub("AceConfigDialog-3.0").OpenFrames["RayUI"].frame)
 	demoFrame:Size(300, 200)
 	demoFrame:Point("LEFT", LibStub("AceConfigDialog-3.0").OpenFrames["RayUI"].frame, "RIGHT", 20, 0)

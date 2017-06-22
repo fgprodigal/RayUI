@@ -1,7 +1,7 @@
 ﻿----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv()
 
 
 local function ClassBuff(id, point, color, anyUnit, onlyShowMissing)

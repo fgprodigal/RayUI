@@ -1,10 +1,10 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("InfoBar")
 
 
-local IF = R:GetModule("InfoBar")
+local IF = _InfoBar
 local LibQTip = LibStub("LibQTip-1.0")
 
 
@@ -102,7 +102,7 @@ local function RenderTooltip(anchorFrame)
         Tooltip:SetHighlightTexture([[Interface\QuestFrame\UI-QuestTitleHighlight]])
         Tooltip:CreateShadow("Background")
         if not Tooltip.stripesthin then
-            R:GetModule("Skins"):CreateStripesThin(Tooltip)
+            R.Skins:CreateStripesThin(Tooltip)
             Tooltip.stripesthin:SetInside(Tooltip, 1, 1)
         end
 

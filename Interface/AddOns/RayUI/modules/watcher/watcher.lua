@@ -1,13 +1,13 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Watcher")
 
 
 local RW = R:NewModule("Watcher", "AceEvent-3.0")
 
-
 RW.modName = L["法术监视"]
+_Watcher = RW
 
 local colors = R.colors.class
 RW.modules = {}

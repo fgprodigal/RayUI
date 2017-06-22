@@ -2,12 +2,14 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("NamePlates")
 
 
-local mod = R:NewModule('NamePlates', 'AceHook-3.0', 'AceEvent-3.0', 'AceTimer-3.0')
+local mod = R:NewModule("NamePlates", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0")
 local LSM = LibStub("LibSharedMedia-3.0")
 
+mod.modName = L["姓名板"]
+_NamePlates = mod
 
 --Taken from Blizzard_TalentUI.lua
 local healerSpecIDs = {
@@ -606,6 +608,5 @@ end
 function mod:Info()
     return L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r姓名板模块."]
 end
-mod.modName = L["姓名板"]
 
 R:RegisterModule(mod:GetName())

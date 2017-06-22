@@ -1,10 +1,10 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Chat")
 
 
-local CH = R:GetModule("Chat")
+local CH = _Chat
 
 local function isList(t)
     local n = #t
@@ -327,7 +327,7 @@ local findGlobal = setmetatable({}, {__index=function(self, t)
 
     function CH:Dump(text)
         text = text:trim():match("^(.-);*$")
-        local f, err = loadstring("_LoadRayUIEnv_() R.Chat:PrintLiteral(" .. text .. ")")
+        local f, err = loadstring("RayUI:LoadEnv() R.Chat:PrintLiteral(" .. text .. ")")
         if not f then
             R:Print("|cffff0000Error:|r", err)
         else

@@ -1,26 +1,45 @@
-do
-    local _G, rawset    = _G, rawset
-	local _OrigEnv      = getfenv(1)
-    local _RayUIEnv     = setmetatable({}, {
-        __index         = function(self, k)
+RayUI = {}
+local _Envs = {}
+local _G, rawset = _G, rawset
+local _RayUIEnv = setmetatable({}, {
+		__index = function(self, k)
 			local v = _G[k]
 			if v ~= nil then
 				rawset(self, k, v)
 				return v
 			end
 		end,
-        __metatable     = true,
-    })
-    _RayUIEnv._RayUIEnv = _RayUIEnv
-    _RayUIEnv._AddOnName = "RayUI"
+		__metatable = true,
+	})
+_RayUIEnv._RayUIEnv = _RayUIEnv
+_RayUIEnv._AddOnName = "RayUI"
 
-	_LoadRayUIEnv_ = function()
-		setfenv(2, _RayUIEnv)
-	end
+_Envs[_RayUIEnv._AddOnName] = _RayUIEnv
+_Envs["Origin"] = _G
 
-	_LoadDefaultEnv_ = function()
-		setfenv(2, _OrigEnv)
-	end
-
-    setfenv(1, _RayUIEnv)
+local function NewEnvironment(name)
+	_Envs[name] = setmetatable({}, {
+			__index = function(self, k)
+				local v = _RayUIEnv[k]
+				if v ~= nil then
+					rawset(self, k, v)
+					return v
+				end
+			end,
+			__metatable = true,
+		})
 end
+
+function RayUI:LoadEnv(module)
+	module = module or _RayUIEnv._AddOnName
+	if not _Envs[module] then
+		NewEnvironment(module)
+	end
+	setfenv(2, _Envs[module])
+end
+
+function RayUI:LoadDefaultEnv(module)
+	setfenv(2, _Envs["Origin"])
+end
+
+RayUI:LoadEnv()

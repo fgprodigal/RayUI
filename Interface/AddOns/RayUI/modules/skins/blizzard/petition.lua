@@ -1,10 +1,10 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Skins")
 
 
-local S = R:GetModule("Skins")
+local S = _Skins
 
 local function LoadSkin()
     select(18, PetitionFrame:GetRegions()):Hide()

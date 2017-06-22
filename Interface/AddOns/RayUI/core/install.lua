@@ -1,7 +1,7 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv()
 
 
 
@@ -82,13 +82,13 @@ function R:SetLayout(layout)
 	end
 	R:SetMoversPositions()
     for i = 1, 5 do
-        R:GetModule("ActionBar"):UpdatePositionAndSize("bar"..i)
+        R.ActionBar:UpdatePositionAndSize("bar"..i)
     end
 end
 
 function R:ChooseLayout()
 	if not RayUILayoutChooser then
-		local S = R:GetModule("Skins")
+		local S = R.Skins
 		local f = CreateFrame("Frame", "RayUILayoutChooser", R.UIParent)
 		f:SetFrameStrata("TOOLTIP")
 		f:Size(500, 250)

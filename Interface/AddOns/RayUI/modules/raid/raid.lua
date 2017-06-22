@@ -1,7 +1,7 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Raid")
 
 
 local RA = R:NewModule("Raid", "AceEvent-3.0", "AceTimer-3.0", "AceHook-3.0")
@@ -11,6 +11,8 @@ local oUF = RayUF or oUF
 
 
 RA.modName = L["团队"]
+_Raid = RA
+
 RA.labels = {}
 RA.headers = {}
 RA.colorCache = {}

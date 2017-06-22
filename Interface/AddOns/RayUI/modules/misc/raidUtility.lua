@@ -1,12 +1,12 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Misc")
 
 
-local M = R:GetModule("Misc")
+local M = _Misc
 local mod = M:NewModule("RaidUtility", "AceEvent-3.0")
-local S = R:GetModule("Skins")
+local S = R.Skins
 
 
 local function CheckRaidStatus()

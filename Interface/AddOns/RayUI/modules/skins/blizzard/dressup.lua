@@ -1,10 +1,10 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Skins")
 
 
-local S = R:GetModule("Skins")
+local S = _Skins
 
 local function LoadSkin()
 	S:SetBD(DressUpFrame, 10, -12, -34, 74)

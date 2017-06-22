@@ -1,7 +1,7 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Skins")
 
 
 local _, ns = ...
@@ -59,7 +59,7 @@ local function HotspotEnter()
                 Icon:SetAllPoints()
                 Icon:SetTexture(texture)
 
-                local Bg = R.Skins:CreateBG(SpecButton)
+                local Bg = _Skins:CreateBG(SpecButton)
             end
 
             Buttons:SetSize(numSpecs * 28 + 34, 38)
@@ -197,7 +197,7 @@ local function GetItemLine(index)
         Icon:SetTexCoord(.08, .92, .08, .92)
         Icon:Point("TOPLEFT", 1, -1)
         Icon:Size(36, 36)
-        Icon.b = R.Skins:CreateBG(Icon)
+        Icon.b = _Skins:CreateBG(Icon)
         ItemButton.Icon = Icon
 
         local Name = ItemButton:CreateFontString(nil, "ARTWORK", "GameFontNormalMed3")
@@ -401,8 +401,8 @@ function Container:PLAYER_LOGIN()
     Thumb.bg = CreateFrame("Frame", nil, Scroll)
     Thumb.bg:Point("TOPLEFT", Thumb, 0, -2)
     Thumb.bg:Point("BOTTOMRIGHT", Thumb, 0, 4)
-    R.Skins:CreateBD(Thumb.bg, 0)
-    R.Skins:CreateBackdropTexture(Scroll)
+    _Skins:CreateBD(Thumb.bg, 0)
+    _Skins:CreateBackdropTexture(Scroll)
     Scroll.backdropTexture:SetInside(Thumb.bg, 1, 1)
 
     local Up = CreateFrame("Button", nil, Slider)
@@ -416,7 +416,7 @@ function Container:PLAYER_LOGIN()
     uptex:Size(8, 8)
     uptex:SetPoint("CENTER")
     uptex:SetVertexColor(1, 1, 1)
-    R.Skins:Reskin(Up)
+    _Skins:Reskin(Up)
 
     local Down = CreateFrame("Button", nil, Slider)
     Down:SetPoint("TOP", Slider, "BOTTOM")
@@ -429,7 +429,7 @@ function Container:PLAYER_LOGIN()
     uptex:Size(8, 8)
     uptex:SetPoint("CENTER")
     uptex:SetVertexColor(1, 1, 1)
-    R.Skins:Reskin(Down)
+    _Skins:Reskin(Down)
 
     Slider:SetScript("OnValueChanged", function(self, value)
             local min, max = self:GetMinMaxValues()
@@ -483,8 +483,8 @@ function Container:PLAYER_LOGIN()
     hooksecurefunc("BonusRollFrame_StartBonusRoll", HookStartRoll)
     hooksecurefunc(BonusRollFrame, "SetPoint", HandlePosition)
 
-    R.Skins:Reskin(Handle)
-    R.Skins:CreateBD(Container)
+    _Skins:Reskin(Handle)
+    _Skins:CreateBD(Container)
 end
 
 Container:SetScript("OnEvent", function(self, event, ...) self[event](self, event, ...) end)

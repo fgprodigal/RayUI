@@ -1,11 +1,10 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("MiniMap")
 
 
-local MM = R:GetModule("MiniMap")
-
+local MM = _MiniMap
 
 local MBCF
 local buttons = {}
@@ -172,7 +171,7 @@ local function SetMinimapButton(btn)
         tinsert(buttons, btn)
     else
         btn.shadow:SetBackdropBorderColor(1, 0, 0)
-        R:GetModule("Skins"):CreatePulse(btn.shadow, 1, 1)
+        R.Skins:CreatePulse(btn.shadow, 1, 1)
     end
 end
 

@@ -1,11 +1,11 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Alerts")
 
 
-local AL = R:GetModule("Alerts")
-local S = R:GetModule("Skins")
+local AL = _Alerts
+local S = R.Skins
 
 function AL:SkinToast(toast, toastType)
     local r, g, b = toast.Border:GetVertexColor()

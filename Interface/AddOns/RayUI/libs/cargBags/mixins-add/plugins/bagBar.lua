@@ -35,7 +35,7 @@ CALLBACKS
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Skins")
 
 
 local addon, ns = ...
@@ -86,7 +86,7 @@ function BagButton:Create(bagID)
 		border:SetFrameLevel(button:GetFrameLevel()+1)
 		button.border = border
 		button.border:CreateBorder()
-		R.Skins:CreateBackdropTexture(button, 0.6)
+		_Skins:CreateBackdropTexture(button, 0.6)
 	end
 
 	cargBags.SetScriptHandlers(button, "OnClick", "OnReceiveDrag", "OnEnter", "OnLeave", "OnDragStart")

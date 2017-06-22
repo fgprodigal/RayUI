@@ -1,13 +1,14 @@
 ﻿----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Auras")
 
 
-local A = R:NewModule("Auras", "AceEvent-3.0", "AceHook-3.0")
+A = R:NewModule("Auras", "AceEvent-3.0", "AceHook-3.0")
 local LSM = LibStub("LibSharedMedia-3.0")
 
 A.modName = L["BUFF"]
+_Auras = A
 
 local buttonsize = 30 -- Buff Size
 local spacing = 8 -- Buff Spacing

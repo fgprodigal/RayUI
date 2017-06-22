@@ -1,10 +1,10 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("CombatText")
 
 
-local CT = R:GetModule("CombatText")
+local CT = _CombatText
 
 CT.merges = {}
 CT.merge2h = {}

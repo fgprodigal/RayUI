@@ -1,11 +1,11 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("UnitFrames")
 
 
 local RC = LibStub("LibRangeCheck-2.0")
-local UF = R:GetModule("UnitFrames")
+local UF = _UnitFrames
 local oUF = RayUF or oUF
 
 

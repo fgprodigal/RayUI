@@ -1,11 +1,12 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("CooldownFlash")
 
 
 local CF = R:NewModule("CooldownFlash", "AceEvent-3.0", "AceHook-3.0")
 CF.modName = L["中部冷却闪光"]
+_CooldownFlash = CF
 
 
 CF.cooldowns, CF.animating, CF.watching = { }, { }, { }

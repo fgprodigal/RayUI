@@ -1,10 +1,10 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Raid")
 
 
-local RA = R:GetModule("Raid")
+local RA = _Raid
 
 local _, ns = ...
 local RayUF = ns.oUF

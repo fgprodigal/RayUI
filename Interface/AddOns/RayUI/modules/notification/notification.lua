@@ -2,11 +2,12 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Notification")
 
 
 local NF = R:NewModule("Notification", "AceEvent-3.0", "AceHook-3.0")
-local S = R:GetModule("Skins")
+local S = R.Skins
+_Notification = NF
 
 
 local bannerWidth = 300

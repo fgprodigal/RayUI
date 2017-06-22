@@ -34,29 +34,29 @@
                 self.update = 0
             </OnLoad>
             <OnClick>
-				_LoadRayUIEnv_()
+				RayUI:LoadEnv("InfoBar")
 				RayUI_InfoBarButton_OnClick(self, button)
-				_LoadDefaultEnv_()
+				RayUI:LoadDefaultEnv()
 			</OnClick>
             <OnEvent>
-				_LoadRayUIEnv_()
+				RayUI:LoadEnv("InfoBar")
 				RayUI_InfoBarButton_OnEvent(self, event)
-				_LoadDefaultEnv_()
+				RayUI:LoadDefaultEnv()
 			</OnEvent>
             <OnUpdate>
-				_LoadRayUIEnv_()
+				RayUI:LoadEnv("InfoBar")
 				RayUI_InfoBarButton_OnUpdate(self, elapsed)
-				_LoadDefaultEnv_()
+				RayUI:LoadDefaultEnv()
 			</OnUpdate>
             <OnEnter>
-				_LoadRayUIEnv_()
+				RayUI:LoadEnv("InfoBar")
 				RayUI_InfoBarButton_OnEnter(self)
-				_LoadDefaultEnv_()
+				RayUI:LoadDefaultEnv()
 			</OnEnter>
             <OnLeave>
-				_LoadRayUIEnv_()
+				RayUI:LoadEnv("InfoBar")
 				RayUI_InfoBarButton_OnLeave(self)
-				_LoadDefaultEnv_()
+				RayUI:LoadDefaultEnv()
 			</OnLeave>
         </Scripts>
     </Button>
@@ -67,7 +67,7 @@
                 self.Highlight:SetPoint("TOPLEFT",28,-8) self.Text:SetPoint("TOPLEFT",28,-8)
             </OnLoad>
             <OnClick>
-				_LoadRayUIEnv_()
+				RayUI:LoadEnv("InfoBar")
 				RayUI_InfoBarMenuButton_OnClick(self, button)
 			</OnClick>
         </Scripts>
@@ -158,7 +158,7 @@
                 self:RegisterEvent("PLAYER_LOGIN")
             </OnLoad>
             <OnEvent>
-				_LoadRayUIEnv_()
+				RayUI:LoadEnv("InfoBar")
 				RayUI_InfoBarMenu_OnInit(self)
 			</OnEvent>
             <OnHide>

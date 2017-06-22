@@ -1,11 +1,11 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Misc")
 
 
-local M = R:GetModule("Misc")
-local S = R:GetModule("Skins")
+local M = _Misc
+local S = R.Skins
 
 --Enhanced debugtools from ElvUI
 local D = M:NewModule("DebugTools", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")

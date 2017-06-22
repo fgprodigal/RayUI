@@ -1,14 +1,14 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Misc")
 
 
 local M = R:NewModule("Misc", "AceEvent-3.0", "AceTimer-3.0")
 
-
 M.modName = L["小玩意儿"]
-local error=error
+_Misc = M
+
 M.Modules = {}
 
 function M:RegisterMiscModule(name)

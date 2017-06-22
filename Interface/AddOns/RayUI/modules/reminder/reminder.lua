@@ -1,12 +1,12 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Reminder")
 
 
 local RM = R:NewModule("Reminder", "AceTimer-3.0")
+_Reminder = RM
 RM.CreatedReminders = {}
-
 
 function RM:PlayerHasFilteredBuff(frame, db, checkPersonal)
 	for buff, value in pairs(db) do

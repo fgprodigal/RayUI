@@ -1,14 +1,14 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("UnitFrames")
 
 
 local UF = R:NewModule("UnitFrames", "AceEvent-3.0", "AceTimer-3.0")
 local oUF = RayUF or oUF
 
-
 UF.modName = L["头像"]
+_UnitFrames = UF
 
 UF.Layouts = {}
 UF.unitstoload = {}

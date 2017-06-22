@@ -1,13 +1,13 @@
 ﻿----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("MiniMap")
 
 
 local MM = R:NewModule("MiniMap", "AceEvent-3.0", "AceHook-3.0")
 
-
 MM.modName = L["小地图"]
+_MiniMap = MM
 
 local function MiniMapTrackingDropDown_Initialize(self, level)
     local name, texture, active, category, nested, numTracking;
@@ -253,13 +253,13 @@ function MM:CheckMail()
     local mail = MiniMapMailFrame:IsShown() and true or false
     if inv > 0 and mail then -- New invites and mail
         Minimap.shadow:SetBackdropBorderColor(1, .5, 0)
-        R:GetModule("Skins"):CreatePulse(Minimap.shadow, 1, 1)
+        R.Skins:CreatePulse(Minimap.shadow, 1, 1)
     elseif inv > 0 and not mail then -- New invites and no mail
         Minimap.shadow:SetBackdropBorderColor(1, 30/255, 60/255)
-        R:GetModule("Skins"):CreatePulse(Minimap.shadow, 1, 1)
+        R.Skins:CreatePulse(Minimap.shadow, 1, 1)
     elseif inv==0 and mail then -- No invites and new mail
         Minimap.shadow:SetBackdropBorderColor(.5, 1, 1)
-        R:GetModule("Skins"):CreatePulse(Minimap.shadow, 1, 1)
+        R.Skins:CreatePulse(Minimap.shadow, 1, 1)
     else -- None of the above
         Minimap.shadow:SetScript("OnUpdate", nil)
         if not R.PixelMode then
@@ -320,8 +320,8 @@ end
 
 function MM:CreateMenu()
     Minimap:SetScript("OnMouseUp", MM.Minimap_OnMouseUp)
-    R:GetModule("Skins"):CreateBD(menuFrame)
-    R:GetModule("Skins"):CreateStripesThin(menuFrame)
+    R.Skins:CreateBD(menuFrame)
+    R.Skins:CreateStripesThin(menuFrame)
 end
 
 function MM:Info()

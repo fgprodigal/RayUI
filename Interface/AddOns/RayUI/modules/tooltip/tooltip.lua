@@ -1,17 +1,17 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Tooltip")
 
 
 local TT = R:NewModule("Tooltip", "AceEvent-3.0", "AceHook-3.0", "AceTimer-3.0")
 local LibItemLevel = LibStub:GetLibrary("LibItemLevel-RayUI")
 
+TT.modName = L["鼠标提示"]
+_Tooltip = TT
 
 local TalentFrame = CreateFrame("Frame", nil)
 TalentFrame:Hide()
-
-TT.modName = L["鼠标提示"]
 
 local TALENTS_PREFIX = TALENTS
 local NO_TALENTS = NONE..TALENTS
@@ -407,7 +407,7 @@ function TT:SetStyle(tooltip)
     end
     if not tooltip.styled then
         tooltip:SetBackdrop(nil)
-        R:GetModule("Skins"):CreateStripesThin(tooltip)
+        R.Skins:CreateStripesThin(tooltip)
         tooltip:CreateShadow("Background")
         tooltip.stripesthin:SetInside(tooltip)
         --tooltip.border:SetInside(tooltip)
@@ -562,7 +562,7 @@ function TT:GameTooltip_ShowStatusBar(tooltip, min, max, value, text)
         statusBar.border = CreateFrame("Frame", nil, statusBar)
         statusBar.border:SetFrameLevel(0)
         statusBar.border:SetOutside(statusBar, 1, 1)
-        R:GetModule("Skins"):CreateBD(statusBar.border)
+        R.Skins:CreateBD(statusBar.border)
         statusBar.styled=true
     end
 end

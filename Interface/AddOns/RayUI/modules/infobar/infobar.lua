@@ -1,12 +1,14 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("InfoBar")
 
 
 local IF = R:NewModule("InfoBar", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0", "AceTimer-3.0")
 local LDB = LibStub:GetLibrary("LibDataBroker-1.1")
 local LibQTip = LibStub("LibQTip-1.0")
+
+_InfoBar = IF
 
 
 local maxMenuButtons, infobarTypes, usedInfoBar = 10, {}, {}
@@ -432,7 +434,7 @@ function IF:Initialize()
     clear.Background:SetInside(clear, 8, 8)
     clear.Background:CreateShadow("Background")
 
-    local S = R:GetModule("Skins")
+    local S = R.Skins
     S:SetBD(RayUI_InfoBarMenu, -10, 0, 10, 0)
     S:ReskinClose(RayUI_InfoBarMenu.Close, "TOPRIGHT", RayUI_InfoBarMenu, "TOPRIGHT", 8, -2)
 end

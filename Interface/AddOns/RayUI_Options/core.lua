@@ -1,7 +1,7 @@
 ﻿----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv()
 
 
 local AceConfig = LibStub("AceConfig-3.0")

@@ -1,17 +1,18 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Bags")
 
 
 local B = R:NewModule("Bags", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0")
-local S = R:GetModule("Skins")
+local S = R.Skins
 
 
 local cargBags = select(2, ...).cargBags
 local consumable = AUCTION_CATEGORY_CONSUMABLES
 
 B.modName = L["背包"]
+_Bags = B
 
 function B:Tooltip_Show()
 	GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, 4)
@@ -486,10 +487,10 @@ function B:Initialize()
 		end
 		if name == "Main" or name == "ItemSets" or name == "Consumables" then
 			self:HookScript("OnShow", function()
-				R:GetModule("Tooltip"):GameTooltip_SetDefaultAnchor(GameTooltip)
+				R.Tooltip:GameTooltip_SetDefaultAnchor(GameTooltip)
 			end)
 			self:HookScript("OnHide", function()
-				R:GetModule("Tooltip"):GameTooltip_SetDefaultAnchor(GameTooltip)
+				R.Tooltip:GameTooltip_SetDefaultAnchor(GameTooltip)
 			end)
 		end
 	end

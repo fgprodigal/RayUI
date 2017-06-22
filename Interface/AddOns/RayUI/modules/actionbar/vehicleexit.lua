@@ -1,11 +1,11 @@
 ﻿----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("ActionBar")
 
 
-local AB = R:GetModule("ActionBar")
-local S = R:GetModule("Skins")
+local AB = _ActionBar
+local S = R.Skins
 
 
 function AB:CreateVehicleExit()

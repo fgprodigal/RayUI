@@ -1,10 +1,10 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Chat")
 
 
-local CH = R:GetModule("Chat")
+local CH = _Chat
 
 -------------------------------------------------------------------------------
 -- By Lockslap (US, Bleeding Hollow)

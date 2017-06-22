@@ -1,7 +1,7 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Skins")
 
 
 local addon, ns = ...
@@ -34,7 +34,7 @@ local function ItemButton_Scaffold(self)
 		border:SetFrameLevel(self:GetFrameLevel()+1)
 		self.border = border
 		self.border:CreateBorder()
-		R.Skins:CreateBackdropTexture(self, 0.6)
+		_Skins:CreateBackdropTexture(self, 0.6)
 	end
 end
 

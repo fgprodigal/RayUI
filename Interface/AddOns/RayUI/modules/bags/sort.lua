@@ -1,10 +1,10 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Bags")
 
 
-local B = R:GetModule("Bags")
+local B = _Bags
 
 
 local bankBags = {BANK_CONTAINER}

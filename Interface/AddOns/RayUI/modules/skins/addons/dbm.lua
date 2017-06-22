@@ -6,10 +6,10 @@ All rights reserved.
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Skins")
 
 
-local S = R:GetModule("Skins")
+local S = _Skins
 
 local function SkinDBM()
     local croprwicons = true -- crops blizz shitty borders from icons in RaidWarning messages

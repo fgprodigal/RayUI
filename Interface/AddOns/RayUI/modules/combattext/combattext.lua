@@ -1,12 +1,13 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("CombatText")
 
 
 local CT = R:NewModule("CombatText", "AceEvent-3.0", "AceHook-3.0", "AceTimer-3.0", "AceConsole-3.0")
 local xCP = LibStub("xCombatParser-1.0-RayUI", true)
 CT.modName = L["战斗文字"]
+_CombatText = CT
 
 
 local showreceived = true

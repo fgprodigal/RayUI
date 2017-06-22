@@ -79,7 +79,7 @@ SlashCmdList["FRAMELIST"] = function(msg)
 		CopyChatFrame:Hide()
 	end
 
-	_LoadRayUIEnv_()
+	RayUI:LoadEnv()
 	R.Chat:CopyChat(ChatFrame1)
 	if(not isPreviouslyShown) then
 		FrameStackTooltip_Toggle()
@@ -105,7 +105,7 @@ local function TextureList(frame)
 		CopyChatFrame:Hide()
 	end
 
-	_LoadRayUIEnv_()
+	RayUI:LoadEnv()
 	R.Chat:CopyChat(ChatFrame1)
 end
 

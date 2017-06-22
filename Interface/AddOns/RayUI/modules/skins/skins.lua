@@ -1,7 +1,7 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Skins")
 
 
 local S = R:NewModule("Skins", "AceEvent-3.0")
@@ -9,6 +9,7 @@ local LSM = LibStub("LibSharedMedia-3.0")
 
 
 S.modName = L["插件美化"]
+_Skins = S
 
 S.allowBypass = {}
 S.addonCallbacks = {}

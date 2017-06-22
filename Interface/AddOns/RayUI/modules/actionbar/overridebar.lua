@@ -1,10 +1,10 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("ActionBar")
 
 
-local AB = R:GetModule("ActionBar")
+local AB = _ActionBar
 
 
 function AB:CreateOverrideBar()

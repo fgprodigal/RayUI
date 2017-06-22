@@ -1,10 +1,10 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Skins")
 
 
-local S = R:GetModule("Skins")
+local S = _Skins
 
 local function LoadSkin()
 	local f = PetBattleFrame
@@ -256,7 +256,7 @@ end)
 		tt.BorderBottomLeft:SetTexture(nil)
         tt:SetBackdrop(nil)
         tt:CreateShadow("Background")
-        R:GetModule("Skins"):CreateStripesThin(tt)
+        R.Skins:CreateStripesThin(tt)
 		tt.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 		tt.shadow:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 	end

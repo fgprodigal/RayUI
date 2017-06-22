@@ -1,13 +1,13 @@
 ﻿----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("WorldMap")
 
 
 local WM = R:NewModule("WorldMap", "AceEvent-3.0", "AceHook-3.0", "AceTimer-3.0")
 
-
 WM.modName = L["世界地图"]
+_WorldMap = WM
 
 local function FixTooltip()
     WorldMapTooltip:SetFrameStrata("TOOLTIP")

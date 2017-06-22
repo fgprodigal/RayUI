@@ -2,13 +2,15 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("ActionBar")
 
 
 local AB = R:NewModule("ActionBar", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 local LAB = LibStub("LibActionButton-1.0-RayUI")
 
 AB.modName = L["动作条"]
+_ActionBar = AB
+
 AB["Handled"] = {}
 AB["Skinned"] = {}
 AB["handledbuttons"] = {}

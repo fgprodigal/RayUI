@@ -1,10 +1,10 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Misc")
 
 
-local M = R:GetModule("Misc")
+local M = _Misc
 local mod = M:NewModule("BubbleSkin", "AceTimer-3.0")
 
 function mod:UpdateBubbleBorder()

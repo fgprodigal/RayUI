@@ -1,10 +1,10 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("NamePlates")
 
 
-local mod = R:GetModule('NamePlates')
+local mod = _NamePlates
 
 function mod:UpdateElement_Elite(frame)
     local icon = frame.Elite

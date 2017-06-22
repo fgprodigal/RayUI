@@ -1,7 +1,7 @@
 ﻿----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv()
 
 
 local function SetFont(obj, font, size, style, r, g, b, sr, sg, sb, sox, soy)

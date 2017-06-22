@@ -1,7 +1,7 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv()
 
 
 local TradeTabs = CreateFrame("Frame","TradeTabs")
@@ -139,7 +139,6 @@ local function createClickStopper(button)
 end
 
 function TradeTabs:CreateTab(i, parent, spellID)
-    local S = R:GetModule("Skins")
     local spell, _, texture = GetSpellInfo(spellID)
     local button = CreateFrame("CheckButton","TradeTabsTab"..i,parent,"SpellBookSkillLineTabTemplate,SecureActionButtonTemplate")
     button.tooltip = spell

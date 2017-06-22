@@ -1,12 +1,13 @@
 ﻿----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
+RayUI:LoadEnv("Chat")
 
 
 local CH = R:NewModule("Chat", "AceEvent-3.0", "AceHook-3.0", "AceTimer-3.0", "AceConsole-3.0")
-local D = R:GetModule("Debug")
+
 CH.modName = L["聊天栏"]
+_Chat = CH
 
 
 local ChatHistoryEvent = CreateFrame("Frame")
@@ -100,7 +101,7 @@ function CH:GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8
 end
 
 local function CreatCopyFrame()
-	local S = R:GetModule("Skins")
+	local S = R.Skins
 	frame = CreateFrame("Frame", "CopyChatFrame", R.UIParent)
 	table.insert(UISpecialFrames, frame:GetName())
 	S:SetBD(frame)
@@ -693,7 +694,7 @@ function CH:ApplyStyle(event, ...)
 			end
 			local bb = _G[frameName.."ButtonFrameBottomButton"]
 			local flash = _G[frameName.."ButtonFrameBottomButtonFlash"]
-			R:GetModule("Skins"):ReskinArrow(bb, "down")
+			R.Skins:ReskinArrow(bb, "down")
 			bb:SetParent(cf)
 			bb:ClearAllPoints()
 			bb:SetPoint("TOPRIGHT", cf, "TOPRIGHT", 0, -20)

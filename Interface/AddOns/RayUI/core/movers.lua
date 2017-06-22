@@ -2,10 +2,7 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-_LoadRayUIEnv_()
-
-
-local AddOnName = ...
+RayUI:LoadEnv()
 
 
 local grid, nudgeWindow
@@ -245,7 +242,7 @@ local function SetNudge()
 end
 
 local function CreatePopup()
-	local S = R:GetModule("Skins")
+	local S = R.Skins
 	local f = CreateFrame("Frame", "RayUIMoverPopupWindow", R.UIParent)
 	f:SetFrameStrata("DIALOG")
 	f:SetToplevel(true)
@@ -499,7 +496,7 @@ local function CreateMover(parent, name, text, overlay, postdrag, ignoreSizeChan
 	if not parent then return end
 	if R.CreatedMovers[name].Created then return end
 
-	local S = R:GetModule("Skins")
+	local S = R.Skins
 
 	if overlay == nil then overlay = true end
 
