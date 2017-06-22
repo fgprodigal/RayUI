@@ -17,7 +17,7 @@ local channelNumbers = {
     [3] = true,
     [4] = true,
 }
-CH.ChatIn = true
+_chatIn = true
 
 function CH:SetUpAnimGroup(self)
     self.anim = self:CreateAnimationGroup("Flash")
@@ -52,7 +52,7 @@ local on_update = R.simple_move
 
 function CH:MoveOut()
     isMoving = true
-    CH.ChatIn = false
+    _chatIn = false
     RayUIChatBG:SetPoint("BOTTOMLEFT", R.UIParent, "BOTTOMLEFT", 15, 30)
     local fadeInfo = {}
     fadeInfo.mode = "OUT"
@@ -70,7 +70,7 @@ end
 
 function CH:MoveIn()
     isMoving = true
-    CH.ChatIn = true
+    _chatIn = true
     RayUIChatBG:SetPoint("BOTTOMLEFT", R.UIParent, "BOTTOMLEFT", -CH.db.width, 30)
     R:Slide(RayUIChatBG, "RIGHT", CH.db.width + 15, 195)
     RayUIChatBG:Show()
@@ -79,7 +79,7 @@ end
 
 function CH:ToggleChat()
     timeout = 0
-    if CH.ChatIn == true then
+    if _chatIn == true then
         CH:MoveOut()
     else
         CH:MoveIn()
@@ -90,7 +90,7 @@ function CH:OnEvent(event, ...)
     -- if event == "CHAT_MSG_CHANNEL" and channelNumbers and not channelNumbers[select(8,...)] and not select(9,...):find("TCForwarder") and not select(9,...):find("LFGForwarder") then return end
     if event == "CHAT_MSG_CHANNEL" and (select(1,...):find("^%^LFW_") or select(9,...):find("友团")) then return end
     timeout = 0
-    if CH.ChatIn == false then
+    if not _chatIn then
         if isMoving then
             isMoving = false
             RayUIChatBG:SetScript("OnUpdate", nil)
@@ -99,7 +99,7 @@ function CH:OnEvent(event, ...)
         RayUIChatBG:ClearAllPoints()
         RayUIChatBG:SetPoint("BOTTOMLEFT",R.UIParent,"BOTTOMLEFT",15,30)
         R:UIFrameFadeIn(RayUIChatBG, .7, 0, 1)
-        CH.ChatIn = true
+        _chatIn = true
         hasNew = false
     end
 end
@@ -108,7 +108,7 @@ function CH:OnUpdate()
     local x, y = GetCursorPosition()
     local cursor = ( x > RayUIChatBG:GetLeft() and x < RayUIChatBG:GetLeft() + RayUIChatBG:GetWidth() ) and ( y > RayUIChatBG:GetBottom() and y < RayUIChatBG:GetBottom() + RayUIChatBG:GetHeight() )
     timeout = timeout + 1
-    if timeout>CH.db.autohidetime and CH.ChatIn == true and not ChatFrame1EditBox:IsShown() and not InCombatLockdown() and not cursor then
+    if timeout>CH.db.autohidetime and _chatIn == true and not ChatFrame1EditBox:IsShown() and not InCombatLockdown() and not cursor then
         CH:MoveOut()
     end
 end
@@ -117,7 +117,7 @@ function CH:AutoHide()
     if not self.db.autoshow then
         local function CheckWhisperWindows(self, event)
             local chat = self:GetName()
-            if chat == "ChatFrame1" and CH.ChatIn == false then
+            if chat == "ChatFrame1" and _chatIn == false then
                 if event == "CHAT_MSG_WHISPER" then
                     hasNew = true
                     RayUIChatToggle:SetAlpha(1)
@@ -128,7 +128,7 @@ function CH:AutoHide()
                     RayUIChatToggle.shadow:SetBackdropBorderColor(ChatTypeInfo["BN_WHISPER"].r,ChatTypeInfo["BN_WHISPER"].g,ChatTypeInfo["BN_WHISPER"].b, 1)
                 end
                 RayUIChatToggle:SetScript("OnUpdate", function(self)
-                        if not CH.ChatIn then
+                        if not _chatIn then
                             CH:Flash(self.shadow, 1)
                         else
                             CH:StopFlash(self.shadow)
@@ -151,7 +151,7 @@ function CH:AutoHide()
     RayUIChatToggle:SetScript("OnEnter",function(self)
             GameTooltip:SetOwner(self, "ANCHOR_RIGHT", 0, 0)
             GameTooltip:ClearLines()
-            if CH.ChatIn then
+            if _chatIn then
                 GameTooltip:AddLine(L["点击隐藏聊天栏"])
             else
                 GameTooltip:AddLine(L["点击显示聊天栏"])
@@ -176,7 +176,7 @@ function CH:AutoHide()
         end)
     ChatFrame1EditBox:HookScript("OnShow", function(self)
             timeout = 0
-            if CH.ChatIn == false then
+            if not _chatIn then
                 if isMoving then
                     isMoving = false
                     RayUIChatBG:SetScript("OnUpdate", nil)
@@ -185,7 +185,7 @@ function CH:AutoHide()
                 RayUIChatBG:ClearAllPoints()
                 RayUIChatBG:SetPoint("BOTTOMLEFT",R.UIParent,"BOTTOMLEFT",15,30)
                 R:UIFrameFadeIn(RayUIChatBG, .7, 0, 1)
-                CH.ChatIn = true
+                _chatIn = true
                 hasNew = false
             end
         end)
