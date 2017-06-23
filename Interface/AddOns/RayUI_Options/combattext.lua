@@ -1,10 +1,10 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-RayUI:LoadEnv()
+RayUI:LoadEnv("CombatText")
 
 
-local CT = R:GetModule("CombatText")
+local CT = _CombatText
 
 R.Options.args.CombatText = {
     type = "group",

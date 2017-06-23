@@ -1,10 +1,10 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-RayUI:LoadEnv()
+RayUI:LoadEnv("Watcher")
 
 
-local RW = R:GetModule("Watcher")
+local RW = _Watcher
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 
 local selectedGroup = nil

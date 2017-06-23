@@ -1,10 +1,10 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-RayUI:LoadEnv()
+RayUI:LoadEnv("ActionBar")
 
 
-local AB = R:GetModule("ActionBar")
+local AB = _ActionBar
 
 R.Options.args.ActionBar = {
     type = "group",

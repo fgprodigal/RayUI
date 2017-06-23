@@ -1,10 +1,10 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-RayUI:LoadEnv()
+RayUI:LoadEnv("Chat")
 
 
-local CH = R:GetModule("Chat")
+local CH = _Chat
 
 R.Options.args.Chat = {
     type = "group",

@@ -1,10 +1,10 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-RayUI:LoadEnv()
+RayUI:LoadEnv("NamePlates")
 
 
-local NP = R:GetModule("NamePlates")
+local NP = _NamePlates
 
 R.Options.args.NamePlates = {
     type = "group",

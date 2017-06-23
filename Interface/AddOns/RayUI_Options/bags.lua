@@ -1,10 +1,10 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-RayUI:LoadEnv()
+RayUI:LoadEnv("Bags")
 
 
-local B = R:GetModule("Bags")
+local B = _Bags
 
 R.Options.args.Bags = {
     type = "group",
