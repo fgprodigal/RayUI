@@ -6,7 +6,6 @@ RayUI:LoadEnv("Bags")
 
 local B = _Bags
 
-
 local bankBags = {BANK_CONTAINER}
 local MAX_MOVE_TIME = 1.25
 for i = NUM_BAG_SLOTS + 1, NUM_BAG_SLOTS + NUM_BANKBAGSLOTS do

@@ -7,7 +7,6 @@ RayUI:LoadEnv("Bags")
 local B = R:NewModule("Bags", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0")
 local S = R.Skins
 
-
 local cargBags = _cargBags
 local consumable = AUCTION_CATEGORY_CONSUMABLES
 
