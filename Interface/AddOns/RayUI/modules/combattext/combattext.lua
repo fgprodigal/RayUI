@@ -109,8 +109,8 @@ local format_spell_icon = " |T%s:%d:%d:0:0:64:64:5:59:5:59|t"
 
 local function IsMerged(spellID)
     local merged = false
-    spellID = CT.merge2h[spellID] or spellID
-    return CT.merges[spellID] ~= nil
+    spellID = _Merges2H[spellID] or spellID
+    return _Merges[spellID] ~= nil
 end
 
 function CT:GetSpellTextureFormatted( spellID, message, critical, iconSize, justify )
@@ -145,7 +145,7 @@ local spamHeap, spamStack, now = {}, {}, 0
 local spam_format = "%s |cffffffffx%s|r"
 function CT:AddSpamMessage(framename, mergeID, message, color, interval, prep)
     -- Check for a Secondary Spell ID
-    mergeID = CT.merge2h[mergeID] or mergeID
+    mergeID = _Merges2H[mergeID] or mergeID
 
     local heap, stack = spamHeap[framename], spamStack[framename]
     if heap[mergeID] then
@@ -156,7 +156,7 @@ function CT:AddSpamMessage(framename, mergeID, message, color, interval, prep)
             heap[mergeID].last = now
         end
     else
-        local db = CT.merges[mergeID]
+        local db = _Merges[mergeID]
         heap[mergeID] = {
             -- last update
             last = now,
