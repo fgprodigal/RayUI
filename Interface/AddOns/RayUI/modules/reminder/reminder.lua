@@ -6,7 +6,7 @@ RayUI:LoadEnv("Reminder")
 
 local RM = R:NewModule("Reminder", "AceTimer-3.0")
 _Reminder = RM
-RM.CreatedReminders = {}
+_CreatedReminders = {}
 
 function RM:PlayerHasFilteredBuff(frame, db, checkPersonal)
 	for buff, value in pairs(db) do
@@ -186,7 +186,7 @@ function RM:ReminderIcon_OnEvent(event, unit)
 		self.icon:SetTexture(nil)
 
 		if not db then
-			RM.CreatedReminders[self.groupName] = nil
+			_CreatedReminders[self.groupName] = nil
 		end
 		return
 	end
@@ -341,7 +341,7 @@ function RM:ThrottleSound()
 end
 
 function RM:GetReminderIcon(name)
-	return self.CreatedReminders[name]
+	return _CreatedReminders[name]
 end
 
 function RM:ToggleIcon(name)
@@ -357,7 +357,7 @@ function RM:ToggleIcon(name)
 end
 
 function RM:CreateReminder(name, index)
-	if self.CreatedReminders[name] then return end
+	if _CreatedReminders[name] then return end
 
 	local frame = CreateFrame("Button", "ReminderIcon"..index, R.UIParent)
 	frame:CreateShadow("Background")
@@ -381,7 +381,7 @@ function RM:CreateReminder(name, index)
 	frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 	frame:SetScript("OnEvent", RM.ReminderIcon_OnEvent)
 
-	self.CreatedReminders[name] = frame
+	_CreatedReminders[name] = frame
 end
 
 function RM:CheckForNewReminders()
