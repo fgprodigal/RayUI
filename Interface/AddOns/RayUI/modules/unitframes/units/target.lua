@@ -116,4 +116,4 @@ function UF:Construct_TargetFrame(frame, unit)
     self:ScheduleRepeatingTimer("RangeDisplayUpdate", 0.25, frame)
 end
 
-tinsert(UF["unitstoload"], "target")
+tinsert(_UnitsToLoad, "target")

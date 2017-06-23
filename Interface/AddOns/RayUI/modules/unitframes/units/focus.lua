@@ -98,4 +98,4 @@ function UF:Construct_FocusFrame(frame, unit)
     end
 end
 
-tinsert(UF["unitstoload"], "focus")
+tinsert(_UnitsToLoad, "focus")

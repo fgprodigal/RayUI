@@ -51,4 +51,4 @@ function UF:Construct_FocusTargetFrame(frame, unit)
     end
 end
 
-tinsert(UF["unitstoload"], "focustarget")
+tinsert(_UnitsToLoad, "focustarget")

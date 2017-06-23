@@ -10,11 +10,9 @@ local oUF = RayUF or oUF
 UF.modName = L["头像"]
 _UnitFrames = UF
 
-UF.Layouts = {}
-UF.unitstoload = {}
-UF.units = {}
-
-UF.classMaxResourceBar = {
+_UnitsToLoad = {}
+_Units = {}
+_ClassMaxResourceBar = {
     ["DEATHKNIGHT"] = 6,
     ["PALADIN"] = 5,
     ["WARLOCK"] = 5,
@@ -62,12 +60,12 @@ function UF:LoadFakeUnitFrames()
 end
 
 function UF:LoadUnitFrames()
-    for _, unit in pairs(self["unitstoload"]) do
+    for _, unit in pairs(_UnitsToLoad) do
         local frameName = R:StringTitle(unit)
         frameName = frameName:gsub("t(arget)", "T%1")
         if not self[unit] then
             self[unit] = RayUF:Spawn(unit, "RayUF_"..frameName)
-            self["units"][unit] = unit
+            _Units[unit] = unit
             R:CreateMover(self[unit], self[unit]:GetName().."Mover", L[frameName.." Mover"], nil, nil, "ALL,GENERAL,RAID")
         end
     end
@@ -128,7 +126,7 @@ end
 function UF:Update_AllFrames()
     if InCombatLockdown() then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return end
 
-    for unit in pairs(self["units"]) do
+    for unit in pairs(_Units) do
         self[unit]:Enable()
         UF:UpdateFrame(self[unit])
     end

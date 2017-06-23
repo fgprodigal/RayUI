@@ -69,4 +69,4 @@ function UF:Construct_TargetTargetFrame(frame, unit)
     frame.Debuffs:Point("BOTTOMLEFT", frame, "TOPLEFT", 0, 8)
 end
 
-tinsert(UF["unitstoload"], "targettarget")
+tinsert(_UnitsToLoad, "targettarget")
