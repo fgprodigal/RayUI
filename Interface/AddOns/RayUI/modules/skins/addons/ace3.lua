@@ -11,7 +11,7 @@ local function SkinAce3()
 	if not AceGUI then return end
 	local oldRegisterAsWidget = AceGUI.RegisterAsWidget
 
-	local r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b
+	local r, g, b = _r, _g, _b
 
 	AceGUI.RegisterAsWidget = function(self, widget)
 		if widget.skinned then return oldRegisterAsWidget(self, widget) end
