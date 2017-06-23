@@ -8,7 +8,6 @@ local MM = _MiniMap
 
 local MBCF
 local buttons = {}
-
 local AcceptedFrames = {
     "BagSync_MinimapButton",
     "VendomaticButtonFrame",
