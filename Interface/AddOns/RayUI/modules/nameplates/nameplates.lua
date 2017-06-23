@@ -21,14 +21,14 @@ local healerSpecIDs = {
     264, --Shaman Restoration
 }
 
-mod.HealerSpecs = {}
-mod.Healers = {};
+_HealerSpecs = {}
+_Healers = {}
 
 --Get localized healing spec names
 for _, specID in pairs(healerSpecIDs) do
     local _, name = GetSpecializationInfoByID(specID)
-    if name and not mod.HealerSpecs[name] then
-        mod.HealerSpecs[name] = true
+    if name and not _HealerSpecs[name] then
+        _HealerSpecs[name] = true
     end
 end
 
@@ -38,10 +38,10 @@ function mod:CheckBGHealers()
         name, _, _, _, _, _, _, _, _, _, _, _, _, _, _, talentSpec = GetBattlefieldScore(i);
         if name then
             name = name:match("(.+)%-.+") or name
-            if name and self.HealerSpecs[talentSpec] then
-                self.Healers[name] = talentSpec
-            elseif name and self.Healers[name] then
-                self.Healers[name] = nil;
+            if name and _HealerSpecs[talentSpec] then
+                _Healers[name] = talentSpec
+            elseif name and _Healers[name] then
+                _Healers[name] = nil;
             end
         end
     end
@@ -60,25 +60,25 @@ function mod:CheckArenaHealers()
                 _, talentSpec = GetSpecializationInfoByID(s)
             end
 
-            if talentSpec and talentSpec ~= UNKNOWN and self.HealerSpecs[talentSpec] then
-                self.Healers[name] = talentSpec
+            if talentSpec and talentSpec ~= UNKNOWN and _HealerSpecs[talentSpec] then
+                _Healers[name] = talentSpec
             end
         end
     end
 end
 
 function mod:PLAYER_ENTERING_WORLD()
-    table.wipe(self.Healers)
+    table.wipe(_Healers)
     local inInstance, instanceType = IsInInstance()
-    if inInstance and instanceType == 'pvp' and self.db.markHealers then
+    if inInstance and instanceType == "pvp" and self.db.markHealers then
         self.CheckHealerTimer = self:ScheduleRepeatingTimer("CheckBGHealers", 3)
         self:CheckBGHealers()
-    elseif inInstance and instanceType == 'arena' and self.db.markHealers then
-        self:RegisterEvent('UNIT_NAME_UPDATE', 'CheckArenaHealers')
-        self:RegisterEvent("ARENA_OPPONENT_UPDATE", 'CheckArenaHealers');
+    elseif inInstance and instanceType == "arena" and self.db.markHealers then
+        self:RegisterEvent("UNIT_NAME_UPDATE", "CheckArenaHealers")
+        self:RegisterEvent("ARENA_OPPONENT_UPDATE", "CheckArenaHealers");
         self:CheckArenaHealers()
     else
-        self:UnregisterEvent('UNIT_NAME_UPDATE')
+        self:UnregisterEvent("UNIT_NAME_UPDATE")
         self:UnregisterEvent("ARENA_OPPONENT_UPDATE")
         if self.CheckHealerTimer then
             self:CancelTimer(self.CheckHealerTimer)

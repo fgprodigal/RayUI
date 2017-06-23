@@ -15,7 +15,7 @@ function mod:UpdateElement_HealerIcon(frame)
     else
         icon:SetPoint("BOTTOM", frame.Name, "TOP", 0, 3)
     end
-    if mod.Healers[name] and frame.UnitType == "ENEMY_PLAYER" then
+    if _Healers[name] and frame.UnitType == "ENEMY_PLAYER" then
         icon:Show();
     else
         icon:Hide();
