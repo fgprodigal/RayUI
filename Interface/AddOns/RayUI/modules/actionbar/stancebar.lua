@@ -6,7 +6,6 @@ RayUI:LoadEnv("ActionBar")
 
 local AB = _ActionBar
 
-
 function AB:CreateStanceBar()
 	local num = NUM_STANCE_SLOTS
 	local num2 = NUM_POSSESS_SLOTS

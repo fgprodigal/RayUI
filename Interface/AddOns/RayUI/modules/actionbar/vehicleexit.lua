@@ -7,7 +7,6 @@ RayUI:LoadEnv("ActionBar")
 local AB = _ActionBar
 local S = R.Skins
 
-
 function AB:CreateVehicleExit()
 	local holder = CreateFrame("Frame", nil, R.UIParent, "SecureHandlerStateTemplate")
 	holder:SetHeight(AB.db.buttonsize)

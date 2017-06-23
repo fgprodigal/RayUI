@@ -6,7 +6,6 @@ RayUI:LoadEnv("ActionBar")
 
 local AB = _ActionBar
 
-
 local bind = CreateFrame("Frame", "HoverBind", R.UIParent)
 
 function AB:ActivateBindMode()
@@ -275,7 +274,7 @@ function AB:LoadKeyBinder()
 		b = EnumerateFrames(b)
 	end
 
-	for b, _ in pairs(self["handledbuttons"]) do
+	for b, _ in pairs(_HandledButtons) do
 		self:RegisterButtonBind(b, true);
 	end
 

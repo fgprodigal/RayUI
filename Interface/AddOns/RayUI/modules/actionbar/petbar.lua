@@ -6,7 +6,6 @@ RayUI:LoadEnv("ActionBar")
 
 local AB = _ActionBar
 
-
 function AB:CreateBarPet()
 	local num = NUM_PET_ACTION_SLOTS
     local buttonsize = self.db.barpet.buttonsize

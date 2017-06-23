@@ -1,4 +1,4 @@
-﻿--ActionBar from ElvUI
+--ActionBar from ElvUI
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
@@ -11,55 +11,55 @@ local LAB = LibStub("LibActionButton-1.0-RayUI")
 AB.modName = L["动作条"]
 _ActionBar = AB
 
-AB["Handled"] = {}
-AB["Skinned"] = {}
-AB["handledbuttons"] = {}
+_HandledBars = {}
+_HandledButtons = {}
+_Skinned = {}
 
-AB["barDefaults"] = {
-    ["bar1"] = {
-        ["page"] = 1,
-        ["bindButtons"] = "ACTIONBUTTON",
-        ["conditions"] = format("[vehicleui] %d; [possessbar] %d; [overridebar] %d; [shapeshift] 13; [form,noform] 0; [bar:2] 2; [bar:3] 3; [bar:4] 4; [bar:5] 5; [bar:6] 6;", GetVehicleBarIndex(), GetVehicleBarIndex(), GetOverrideBarIndex()),
-        ["paging"] = {
-            ["DRUID"] = "[bonusbar:1,nostealth] 7; [bonusbar:1,stealth] 8; [bonusbar:2] 8; [bonusbar:3] 9; [bonusbar:4] 10;",
-            ["PRIEST"] = "[bonusbar:1] 7;",
-            ["ROGUE"] = "[stance:1] 7; [stance:2] 7; [stance:3] 7;", -- set to "[stance:1] 7; [stance:3] 10;" if you want a shadow dance bar
-            ["MONK"] = "[bonusbar:1] 7; [bonusbar:2] 8; [bonusbar:3] 9;",
-            ["WARRIOR"] = "[bonusbar:1] 7; [bonusbar:2] 8;"
+_BarDefaults = {
+    bar1 = {
+        page = 1,
+        bindButtons = "ACTIONBUTTON",
+        conditions = format("[vehicleui] %d; [possessbar] %d; [overridebar] %d; [shapeshift] 13; [form,noform] 0; [bar:2] 2; [bar:3] 3; [bar:4] 4; [bar:5] 5; [bar:6] 6;", GetVehicleBarIndex(), GetVehicleBarIndex(), GetOverrideBarIndex()),
+        paging = {
+            DRUID = "[bonusbar:1,nostealth] 7; [bonusbar:1,stealth] 8; [bonusbar:2] 8; [bonusbar:3] 9; [bonusbar:4] 10;",
+            PRIEST = "[bonusbar:1] 7;",
+            ROGUE = "[stance:1] 7; [stance:2] 7; [stance:3] 7;", -- set to "[stance:1] 7; [stance:3] 10;" if you want a shadow dance bar
+            MONK = "[bonusbar:1] 7; [bonusbar:2] 8; [bonusbar:3] 9;",
+            WARRIOR = "[bonusbar:1] 7; [bonusbar:2] 8;"
         },
-        ["visibility"] = "[petbattle] hide; show",
+        visibility = "[petbattle] hide; show",
     },
-    ["bar2"] = {
-        ["page"] = 5,
-        ["bindButtons"] = "MULTIACTIONBAR2BUTTON",
-        ["conditions"] = "",
-        ["paging"] = {},
-        ["visibility"] = "[vehicleui] hide; [overridebar] hide; [petbattle] hide; show",
+    bar2 = {
+        page = 5,
+        bindButtons = "MULTIACTIONBAR2BUTTON",
+        conditions = "",
+        paging = {},
+        visibility = "[vehicleui] hide; [overridebar] hide; [petbattle] hide; show",
     },
-    ["bar3"] = {
-        ["page"] = 6,
-        ["bindButtons"] = "MULTIACTIONBAR1BUTTON",
-        ["conditions"] = "",
-        ["paging"] = {},
-        ["visibility"] = "[vehicleui] hide; [overridebar] hide; [petbattle] hide; show",
+    bar3 = {
+        page = 6,
+        bindButtons = "MULTIACTIONBAR1BUTTON",
+        conditions = "",
+        paging = {},
+        visibility = "[vehicleui] hide; [overridebar] hide; [petbattle] hide; show",
     },
-    ["bar4"] = {
-        ["page"] = 4,
-        ["bindButtons"] = "MULTIACTIONBAR4BUTTON",
-        ["conditions"] = "",
-        ["paging"] = {},
-        ["visibility"] = "[vehicleui] hide; [overridebar] hide; [petbattle] hide; show",
+    bar4 = {
+        page = 4,
+        bindButtons = "MULTIACTIONBAR4BUTTON",
+        conditions = "",
+        paging = {},
+        visibility = "[vehicleui] hide; [overridebar] hide; [petbattle] hide; show",
     },
-    ["bar5"] = {
-        ["page"] = 3,
-        ["bindButtons"] = "MULTIACTIONBAR3BUTTON",
-        ["conditions"] = "",
-        ["paging"] = {},
-        ["visibility"] = "[vehicleui] hide; [overridebar] hide; [petbattle] hide; show",
+    bar5 = {
+        page = 3,
+        bindButtons = "MULTIACTIONBAR3BUTTON",
+        conditions = "",
+        paging = {},
+        visibility = "[vehicleui] hide; [overridebar] hide; [petbattle] hide; show",
     },
 }
 
-AB.customExitButton = {
+_CustomExitButton = {
     func = function(button)
         if UnitExists("vehicle") then
             VehicleExit()
@@ -220,7 +220,7 @@ function AB:HideBlizz()
 end
 
 function AB:GetPage(bar, defaultPage, condition)
-    local page = self.barDefaults[bar]["paging"][R.myclass]
+    local page = _BarDefaults[bar]["paging"][R.myclass]
     if not condition then condition = "" end
     if not page then page = "" end
     if page then
@@ -263,7 +263,7 @@ function AB:CreateBar(id)
     bar:Point(point, anchor, attachTo, x, y)
     bar.id = id
     bar.buttons = {}
-    bar.bindButtons = self["barDefaults"]["bar"..id].bindButtons
+    bar.bindButtons = _BarDefaults["bar"..id].bindButtons
     for i=1, 12 do
         bar.buttons[i] = LAB:CreateButton(i, format(bar:GetName().."Button%d", i), bar, nil)
         bar.buttons[i]:SetState(0, "action", i)
@@ -272,7 +272,7 @@ function AB:CreateBar(id)
         end
 
         if i == 12 then
-            bar.buttons[i]:SetState(12, "custom", AB.customExitButton)
+            bar.buttons[i]:SetState(12, "custom", _CustomExitButton)
         end
     end
     self:UpdateButtonConfig(bar, bar.bindButtons)
@@ -301,13 +301,13 @@ function AB:CreateBar(id)
         end
         ]]);
 
-    self["Handled"]["bar"..id] = bar
+    _HandledBars["bar"..id] = bar
     self:UpdatePositionAndSize("bar"..id)
     R:CreateMover(bar, "ActionBar" .. id .. "Mover", L["动作条" .. id .. "锚点"], true, nil, "ALL,ACTIONBARS")
 end
 
 function AB:UpdatePositionAndSize(barName)
-    local bar = self["Handled"][barName]
+    local bar = _HandledBars[barName]
     local buttonsPerRow = self.db[barName].buttonsPerRow
     local buttonsize = self.db[barName].buttonsize
     local buttonspacing = self.db[barName].buttonspacing
@@ -316,7 +316,7 @@ function AB:UpdatePositionAndSize(barName)
     bar:SetWidth(buttonsize*buttonsPerRow + buttonspacing*(buttonsPerRow - 1))
     bar:SetHeight(buttonsize*numColumns + buttonspacing*(numColumns - 1))
 
-    local page = self:GetPage(barName, self["barDefaults"][barName].page, self["barDefaults"][barName].conditions)
+    local page = self:GetPage(barName, _BarDefaults[barName].page, _BarDefaults[barName].conditions)
     if AB["barDefaults"]["bar"..bar.id].conditions:find("[form,noform]") then
         bar:SetAttribute("hasTempBar", true)
 
@@ -328,15 +328,15 @@ function AB:UpdatePositionAndSize(barName)
     end
 
     bar:Show()
-    RegisterStateDriver(bar, "visibility", self.barDefaults[barName].visibility)
+    RegisterStateDriver(bar, "visibility", _BarDefaults[barName].visibility)
     RegisterStateDriver(bar, "page", page)
 
     if not self.db.bar2.enable and not self.db.bar3.enable and not ( R.db.movers and R.db.movers.ActionBar1Mover ) then
-        local bar = ActionBar1Mover or self["Handled"]["bar1"]
+        local bar = ActionBar1Mover or _HandledBars["bar1"]
         bar:ClearAllPoints()
         bar:Point("BOTTOM", R.UIParent, "BOTTOM", 0, 235)
     elseif not ( R.db.movers and R.db.movers.ActionBar1Mover ) then
-        local bar = ActionBar1Mover or self["Handled"]["bar1"]
+        local bar = ActionBar1Mover or _HandledBars["bar1"]
         local point, anchor, attachTo, x, y = string.split(",", self["DefaultPosition"]["bar1"])
         bar:Point(point, anchor, attachTo, x, y)
     end
@@ -399,8 +399,8 @@ function AB:UpdatePositionAndSize(barName)
 
         self:Style(button)
         button:SetCheckedTexture("")
-        if(not self.handledbuttons[button]) then
-            self.handledbuttons[button] = true
+        if(not _HandledButtons[button]) then
+            _HandledButtons[button] = true
         end
     end
 
@@ -421,7 +421,7 @@ function AB:ReassignBindings(event)
     self:UnregisterEvent("PLAYER_REGEN_DISABLED")
 
     if InCombatLockdown() then return end
-    for _, bar in pairs(self["Handled"]) do
+    for _, bar in pairs(_HandledBars) do
         if not bar or not bar.buttons then return end
 
         ClearOverrideBindings(bar)
@@ -440,7 +440,7 @@ end
 
 function AB:RemoveBindings()
     if InCombatLockdown() then return end
-    for _, bar in pairs(self["Handled"]) do
+    for _, bar in pairs(_HandledBars) do
         if not bar then return end
 
         ClearOverrideBindings(bar)
@@ -478,11 +478,11 @@ function AB:Initialize()
         self:CreateBar(i)
     end
 
-    for button, _ in pairs(self["handledbuttons"]) do
+    for button, _ in pairs(_HandledButtons) do
         if button then
             self:StyleFlyout(button)
         else
-            self["handledbuttons"][button] = nil
+            _HandledButtons[button] = nil
         end
     end
     self:CreateBarPet()
@@ -603,7 +603,7 @@ function AB:Style(button)
         end
     end
 
-    if self["Skinned"][button] then return end
+    if _Skinned[button] then return end
 
     local Icon = _G[name.."Icon"]
     local Count = _G[name.."Count"]
@@ -666,7 +666,7 @@ function AB:Style(button)
     button:StyleButton(true)
     self:UpdateHotkey(button)
     button.FlyoutUpdateFunc = AB.StyleFlyout
-    self["Skinned"][button] = true
+    _Skinned[button] = true
 end
 
 function AB:StyleShift()

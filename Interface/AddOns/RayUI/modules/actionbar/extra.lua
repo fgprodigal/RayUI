@@ -6,7 +6,6 @@ RayUI:LoadEnv("ActionBar")
 
 local AB = _ActionBar
 
-
 function R:TestBossButton()
 	if ExtraActionBarFrame:IsShown() then
 		ExtraActionBarFrame.intro:Stop()

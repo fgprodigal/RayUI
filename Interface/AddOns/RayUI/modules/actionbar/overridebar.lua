@@ -6,7 +6,6 @@ RayUI:LoadEnv("ActionBar")
 
 local AB = _ActionBar
 
-
 function AB:CreateOverrideBar()
     local num = NUM_OVERRIDE_BUTTONS
     local bar = CreateFrame("Frame","RayUIOverrideBar", R.UIParent, "SecureHandlerStateTemplate")
