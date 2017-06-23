@@ -276,7 +276,7 @@ function AB:CreateBar(id)
     end
     self:UpdateButtonConfig(bar, bar.bindButtons)
 
-    if AB["barDefaults"]["bar"..id].conditions:find("[form]") then
+    if barDefaults["bar"..id].conditions:find("[form]") then
         bar:SetAttribute("hasTempBar", true)
     else
         bar:SetAttribute("hasTempBar", false)
@@ -316,11 +316,11 @@ function AB:UpdatePositionAndSize(barName)
     bar:SetHeight(buttonsize*numColumns + buttonspacing*(numColumns - 1))
 
     local page = self:GetPage(barName, barDefaults[barName].page, barDefaults[barName].conditions)
-    if AB["barDefaults"]["bar"..bar.id].conditions:find("[form,noform]") then
+    if barDefaults["bar"..bar.id].conditions:find("[form,noform]") then
         bar:SetAttribute("hasTempBar", true)
 
         local newCondition = page
-        newCondition = gsub(AB["barDefaults"]["bar"..bar.id].conditions, " %[form,noform%] 0; ", "")
+        newCondition = gsub(barDefaults["bar"..bar.id].conditions, " %[form,noform%] 0; ", "")
         bar:SetAttribute("newCondition", newCondition)
     else
         bar:SetAttribute("hasTempBar", false)

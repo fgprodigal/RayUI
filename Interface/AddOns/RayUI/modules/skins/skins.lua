@@ -791,19 +791,19 @@ end
 function S:ADDON_LOADED(event, addon)
     if IsAddOnLoaded("Skinner") or IsAddOnLoaded("Aurora") or addon == "RayUI" then return end
     if allowBypass[addon] then
-        if S.addonCallbacks[addon] then
+        if addonCallbacks[addon] then
             --Fire events to the skins that rely on this addon
-            for event in pairs(S.addonCallbacks[addon]) do
-                S.addonCallbacks[addon][event] = nil
+            for event in pairs(addonCallbacks[addon]) do
+                addonCallbacks[addon][event] = nil
                 R.callbacks:Fire(event)
             end
         end
         return
     end
 
-    if S.addonCallbacks[addon] then
-        for event in pairs(S.addonCallbacks[addon]) do
-            S.addonCallbacks[addon][event] = nil
+    if addonCallbacks[addon] then
+        for event in pairs(addonCallbacks[addon]) do
+            addonCallbacks[addon][event] = nil
             R.callbacks:Fire(event)
         end
     end

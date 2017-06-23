@@ -111,13 +111,13 @@ function AB:CreateBarPet()
 		end
 	end)
 
-    self["Handled"]["barpet"] = bar
+    _HandledBars["barpet"] = bar
     self:UpdatePetBar()
 	R:CreateMover(bar, "PetBarMover", L["宠物动作条锚点"], true, nil, "ALL,ACTIONBARS")
 end
 
 function AB:UpdatePetBar()
-    local bar = self["Handled"]["barpet"]
+    local bar = _HandledBars["barpet"]
     local buttonsPerRow = self.db.barpet.buttonsPerRow
     local buttonsize = self.db.barpet.buttonsize
     local buttonspacing = self.db.barpet.buttonspacing
