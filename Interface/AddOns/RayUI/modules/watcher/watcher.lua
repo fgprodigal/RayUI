@@ -10,14 +10,13 @@ RW.modName = L["法术监视"]
 _Watcher = RW
 
 local colors = R.colors.class
-RW.modules = {}
-
 local defaults = {}
 local watcherPrototype = {}
-local _G, UnitBuff, UnitDebuff = _G, UnitBuff, UnitDebuff
 local BUFF_FLASH_TIME_ON = 0.75
 local BUFF_FLASH_TIME_OFF = 0.75
 local BUFF_MIN_ALPHA = 0.2
+
+_Modules = {}
 
 function watcherPrototype:OnEnable()
     if self.parent then
@@ -611,7 +610,7 @@ function RW:NewWatcher(data)
     else
         module.enable = true
     end
-    RW.modules[name] = module
+    _Modules[name] = module
 end
 
 R:RegisterModule(RW:GetName())
