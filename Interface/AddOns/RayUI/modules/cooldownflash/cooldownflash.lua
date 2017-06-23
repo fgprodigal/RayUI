@@ -8,23 +8,23 @@ local CF = R:NewModule("CooldownFlash", "AceEvent-3.0", "AceHook-3.0")
 CF.modName = L["中部冷却闪光"]
 _CooldownFlash = CF
 
-
-CF.cooldowns, CF.animating, CF.watching = { }, { }, { }
+local cooldowns = {}
+local animating = {}
+local watching = {}
 local testtable
 
-local DCP = CreateFrame("frame", nil, R.UIParent)
-DCP:SetAlpha(0)
-DCP:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
-DCP.TextFrame = DCP:CreateFontString(nil, "ARTWORK")
-DCP.TextFrame:SetPoint("TOP",DCP,"BOTTOM",0,-5)
-DCP.TextFrame:SetWidth(185)
-DCP.TextFrame:SetJustifyH("CENTER")
-DCP.TextFrame:SetTextColor(1,1,1)
-CF.DCP = DCP
+_DCP = CreateFrame("frame", nil, R.UIParent)
+_DCP:SetAlpha(0)
+_DCP:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
+_DCP.TextFrame = _DCP:CreateFontString(nil, "ARTWORK")
+_DCP.TextFrame:SetPoint("TOP",_DCP,"BOTTOM",0,-5)
+_DCP.TextFrame:SetWidth(185)
+_DCP.TextFrame:SetJustifyH("CENTER")
+_DCP.TextFrame:SetTextColor(1,1,1)
 
-local DCPT = DCP:CreateTexture(nil,"BACKGROUND")
+local DCPT = _DCP:CreateTexture(nil,"BACKGROUND")
 DCPT:SetTexCoord(.08, .92, .08, .92)
-DCPT:SetAllPoints(DCP)
+DCPT:SetAllPoints(_DCP)
 
 -----------------------
 -- Utility Functions --
@@ -54,7 +54,7 @@ local runtimer = 0
 local function OnUpdate(_,update)
     elapsed = elapsed + update
     if (elapsed > 0.05) then
-        for i,v in pairs(CF.watching) do
+        for i,v in pairs(watching) do
             if (GetTime() >= v[1] + 0.5) then
                 local start, duration, enabled, texture, isPet, name
                 if (v[2] == "spell") then
@@ -72,15 +72,15 @@ local function OnUpdate(_,update)
                 end
                 if (enabled ~= 0) then
                     if (duration and duration > 2.0 and texture) then
-                        CF.cooldowns[i] = { start, duration, texture, isPet, name, v[3], v[2] }
+                        cooldowns[i] = { start, duration, texture, isPet, name, v[3], v[2] }
                     end
                 end
                 if (not (enabled == 0 and v[2] == "spell")) then
-                    CF.watching[i] = nil
+                    watching[i] = nil
                 end
             end
         end
-        for i,v in pairs(CF.cooldowns) do
+        for i,v in pairs(cooldowns) do
             local start, duration, remaining, enabled
             if (v[7] == "spell") then
                 start, duration = GetSpellCooldown(v[6])
@@ -95,34 +95,34 @@ local function OnUpdate(_,update)
                 remaining = v[2]-(GetTime()-v[1])
             end
             if (remaining <= 0) then
-                tinsert(CF.animating, {v[3],v[4],v[5]})
-                CF.cooldowns[i] = nil
+                tinsert(animating, {v[3],v[4],v[5]})
+                cooldowns[i] = nil
             end
         end
 
         elapsed = 0
-        if (#CF.animating == 0 and tcount(CF.watching) == 0 and tcount(CF.cooldowns) == 0) then
-            DCP:SetScript("OnUpdate", nil)
+        if (#animating == 0 and tcount(watching) == 0 and tcount(cooldowns) == 0) then
+            _DCP:SetScript("OnUpdate", nil)
             return
         end
     end
 
-    if (#CF.animating > 0) then
+    if (#animating > 0) then
         runtimer = runtimer + update
         if (runtimer > (CF.db.fadeInTime + CF.db.holdTime + CF.db.fadeOutTime)) then
-            tremove(CF.animating,1)
+            tremove(animating,1)
             runtimer = 0
-            DCP.TextFrame:SetText(nil)
+            _DCP.TextFrame:SetText(nil)
             DCPT:SetTexture(nil)
             DCPT:SetVertexColor(1,1,1)
-            DCP:SetAlpha(0)
-            DCP:SetSize(CF.db.iconSize, CF.db.iconSize)
+            _DCP:SetAlpha(0)
+            _DCP:SetSize(CF.db.iconSize, CF.db.iconSize)
         elseif CF.db.enable then
             if (not DCPT:GetTexture()) then
-                if (CF.animating[1][3] ~= nil and CF.db.showSpellName) then
-                    DCP.TextFrame:SetText(CF.animating[1][3])
+                if (animating[1][3] ~= nil and CF.db.showSpellName) then
+                    _DCP.TextFrame:SetText(animating[1][3])
                 end
-                DCPT:SetTexture(CF.animating[1][1])
+                DCPT:SetTexture(animating[1][1])
             end
             local alpha = CF.db.maxAlpha
             if (runtimer < CF.db.fadeInTime) then
@@ -130,10 +130,10 @@ local function OnUpdate(_,update)
             elseif (runtimer >= CF.db.fadeInTime + CF.db.holdTime) then
                 alpha = CF.db.maxAlpha - ( CF.db.maxAlpha * ((runtimer - CF.db.holdTime - CF.db.fadeInTime) / CF.db.fadeOutTime))
             end
-            DCP:SetAlpha(alpha)
+            _DCP:SetAlpha(alpha)
             local scale = CF.db.iconSize+(CF.db.iconSize*((CF.db.animScale-1)*(runtimer/(CF.db.fadeInTime+CF.db.holdTime+CF.db.fadeOutTime))))
-            DCP:SetWidth(scale)
-            DCP:SetHeight(scale)
+            _DCP:SetWidth(scale)
+            _DCP:SetHeight(scale)
         end
     end
 end
@@ -141,23 +141,23 @@ end
 --------------------
 -- Event Handlers --
 --------------------
-function DCP:UNIT_SPELLCAST_SUCCEEDED(unit,spell,rank)
+function _DCP:UNIT_SPELLCAST_SUCCEEDED(unit,spell,rank)
     if (unit == "player") then
-        CF.watching[spell] = {GetTime(),"spell",spell.."("..rank..")"}
+        watching[spell] = {GetTime(),"spell",spell.."("..rank..")"}
         self:SetScript("OnUpdate", OnUpdate)
     end
 end
 
-function DCP:COMBAT_LOG_EVENT_UNFILTERED(...)
+function _DCP:COMBAT_LOG_EVENT_UNFILTERED(...)
     local _,event,_,_,_,sourceFlags,_,_,_,_,_,spellID = ...
     if (event == "SPELL_CAST_SUCCESS") then
         if (bit.band(sourceFlags,COMBATLOG_OBJECT_TYPE_PET) == COMBATLOG_OBJECT_TYPE_PET and bit.band(sourceFlags,COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE) then
             local name = GetSpellInfo(spellID)
             local index = GetPetActionIndexByName(name)
             if (index and not select(7,GetPetActionInfo(index))) then
-                CF.watching[name] = {GetTime(),"pet",index}
+                watching[name] = {GetTime(),"pet",index}
             elseif (not index and name) then
-                CF.watching[name] = {GetTime(),"spell",name}
+                watching[name] = {GetTime(),"spell",name}
             else
                 return
             end
@@ -166,12 +166,12 @@ function DCP:COMBAT_LOG_EVENT_UNFILTERED(...)
     end
 end
 
-function DCP:PLAYER_ENTERING_WORLD()
+function _DCP:PLAYER_ENTERING_WORLD()
     local inInstance,instanceType = IsInInstance()
     if (inInstance and instanceType == "arena") then
         self:SetScript("OnUpdate", nil)
-        wipe(CF.cooldowns)
-        wipe(CF.watching)
+        wipe(cooldowns)
+        wipe(watching)
     end
 end
 
@@ -179,8 +179,8 @@ function CF:UseAction(slot)
     local actionType,itemID = GetActionInfo(slot)
     if (actionType == "item") then
         local texture = GetActionTexture(slot)
-        CF.watching[itemID] = {GetTime(),"item",texture}
-        DCP:SetScript("OnUpdate", OnUpdate)
+        watching[itemID] = {GetTime(),"item",texture}
+        _DCP:SetScript("OnUpdate", OnUpdate)
     end
 end
 
@@ -188,8 +188,8 @@ function CF:UseInventoryItem(slot)
     local itemID = GetInventoryItemID("player", slot);
     if (itemID) then
         local texture = GetInventoryItemTexture("player", slot)
-        CF.watching[itemID] = {GetTime(),"item",texture}
-        DCP:SetScript("OnUpdate", OnUpdate)
+        watching[itemID] = {GetTime(),"item",texture}
+        _DCP:SetScript("OnUpdate", OnUpdate)
     end
 end
 
@@ -197,8 +197,8 @@ function CF:UseContainerItem(bag,slot)
     local itemID = GetContainerItemID(bag, slot)
     if (itemID) then
         local texture = select(10, GetItemInfo(itemID))
-        CF.watching[itemID] = {GetTime(),"item",texture}
-        DCP:SetScript("OnUpdate", OnUpdate)
+        watching[itemID] = {GetTime(),"item",texture}
+        _DCP:SetScript("OnUpdate", OnUpdate)
     end
 end
 
@@ -209,8 +209,8 @@ function CF:UseItemByName(itemName)
     end
     if (itemID) then
         local texture = select(10, GetItemInfo(itemID))
-        CF.watching[itemID] = {GetTime(),"item",texture}
-        DCP:SetScript("OnUpdate", OnUpdate)
+        watching[itemID] = {GetTime(),"item",texture}
+        _DCP:SetScript("OnUpdate", OnUpdate)
     end
 end
 
@@ -219,10 +219,10 @@ function CF:EnableCooldownFlash()
     self:SecureHook("UseInventoryItem")
     self:SecureHook("UseAction")
     self:SecureHook("UseItemByName")
-    DCP:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
-    DCP:RegisterEvent("PLAYER_ENTERING_WORLD")
+    _DCP:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
+    _DCP:RegisterEvent("PLAYER_ENTERING_WORLD")
     if self.db.enablePet then
-        DCP:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+        _DCP:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
     end
 end
 
@@ -231,29 +231,29 @@ function CF:DisableCooldownFlash()
     self:Unhook("UseInventoryItem")
     self:Unhook("UseAction")
     self:Unhook("UseItemByName")
-    DCP:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED")
-    DCP:UnregisterEvent("PLAYER_ENTERING_WORLD")
-    DCP:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-    --DCP:SetScript("OnUpdate", nil)
-    --wipe(CF.cooldowns)
-    --wipe(CF.watching)
+    _DCP:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED")
+    _DCP:UnregisterEvent("PLAYER_ENTERING_WORLD")
+    _DCP:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+    --_DCP:SetScript("OnUpdate", nil)
+    --wipe(cooldowns)
+    --wipe(watching)
 end
 
 function CF:TestMode()
-    tinsert(CF.animating, testtable)
-    DCP:SetScript("OnUpdate", OnUpdate)
+    tinsert(animating, testtable)
+    _DCP:SetScript("OnUpdate", OnUpdate)
 end
 
 function CF:Initialize()
-    DCP:SetSize(CF.db.iconSize, CF.db.iconSize)
-    DCP:CreateShadow("Background")
-    DCP.TextFrame:SetFont(R["media"].font, 18, "OUTLINE")
-    DCP.TextFrame:SetShadowOffset(2, -2)
+    _DCP:SetSize(CF.db.iconSize, CF.db.iconSize)
+    _DCP:CreateShadow("Background")
+    _DCP.TextFrame:SetFont(R["media"].font, 18, "OUTLINE")
+    _DCP.TextFrame:SetShadowOffset(2, -2)
     if self.db.enable then
         self:EnableCooldownFlash()
     end
-    DCP:SetPoint("CENTER", R.UIParent, "CENTER")
-    R:CreateMover(DCP, "CooldownFlashMover", L["中部冷却闪光"], true, nil)
+    _DCP:SetPoint("CENTER", R.UIParent, "CENTER")
+    R:CreateMover(_DCP, "CooldownFlashMover", L["中部冷却闪光"], true, nil)
     local spellname, _, icon = GetSpellInfo(16914)
     testtable = { icon, nil, spellname }
 end
