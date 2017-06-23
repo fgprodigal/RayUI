@@ -23,16 +23,15 @@ local sizes = {
 	":12:20",
 	":14",
 }
-
-CH.LinkHoverShow = {
-	["achievement"] = true,
-	["enchant"] = true,
-	["glyph"] = true,
-	["item"] = true,
-	["quest"] = true,
-	["spell"] = true,
-	["talent"] = true,
-	["unit"] = true,
+local linkHoverShow = {
+	achievement = true,
+	enchant = true,
+	glyph = true,
+	item = true,
+	quest = true,
+	spell = true,
+	talent = true,
+	unit = true,
 }
 
 local function GetTimeForSavedMessage()
@@ -294,7 +293,7 @@ local hyperLinkEntered
 function CH:OnHyperlinkEnter(frame, linkData, link)
 	if InCombatLockdown() then return; end
 	local t = linkData:match("^(.-):")
-	if CH.LinkHoverShow[t] then
+	if linkHoverShow[t] then
 		ShowUIPanel(GameTooltip)
 		GameTooltip:SetOwner(RayUIChatBG, "ANCHOR_RIGHT", 6, 0)
 		GameTooltip:SetHyperlink(link)
@@ -813,9 +812,9 @@ function CH:SetItemRef(link, text, button, chatFrame)
 			ItemRefTooltip:SetOwner(R.UIParent, "ANCHOR_PRESERVE")
 		end
 		ItemRefTooltip:ClearLines()
-		ItemRefTooltip:AddLine(CH.meters[meterID].title)
-		ItemRefTooltip:AddLine(string.format(L["发布者"]..": %s", CH.meters[meterID].source))
-		for k, v in ipairs(CH.meters[meterID].data) do
+		ItemRefTooltip:AddLine(_DamageMeters[meterID].title)
+		ItemRefTooltip:AddLine(string.format(L["发布者"]..": %s", _DamageMeters[meterID].source))
+		for k, v in ipairs(_DamageMeters[meterID].data) do
 			local left, right = v:match("^(.*) (.*)$")
 			if left and right then
 				ItemRefTooltip:AddDoubleLine(left, right, 1, 1, 1, 1, 1, 1)

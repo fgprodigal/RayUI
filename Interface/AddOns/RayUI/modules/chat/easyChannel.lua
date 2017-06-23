@@ -6,7 +6,6 @@ RayUI:LoadEnv("Chat")
 
 local CH = _Chat
 
-
 local cycles = {
 	{
         chatType = "SAY",   --SAY

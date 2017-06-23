@@ -15,7 +15,7 @@ _HandledBars = {}
 _HandledButtons = {}
 _Skinned = {}
 
-_BarDefaults = {
+local barDefaults = {
     bar1 = {
         page = 1,
         bindButtons = "ACTIONBUTTON",
@@ -58,8 +58,7 @@ _BarDefaults = {
         visibility = "[vehicleui] hide; [overridebar] hide; [petbattle] hide; show",
     },
 }
-
-_CustomExitButton = {
+local customExitButton = {
     func = function(button)
         if UnitExists("vehicle") then
             VehicleExit()
@@ -220,7 +219,7 @@ function AB:HideBlizz()
 end
 
 function AB:GetPage(bar, defaultPage, condition)
-    local page = _BarDefaults[bar]["paging"][R.myclass]
+    local page = barDefaults[bar]["paging"][R.myclass]
     if not condition then condition = "" end
     if not page then page = "" end
     if page then
@@ -263,7 +262,7 @@ function AB:CreateBar(id)
     bar:Point(point, anchor, attachTo, x, y)
     bar.id = id
     bar.buttons = {}
-    bar.bindButtons = _BarDefaults["bar"..id].bindButtons
+    bar.bindButtons = barDefaults["bar"..id].bindButtons
     for i=1, 12 do
         bar.buttons[i] = LAB:CreateButton(i, format(bar:GetName().."Button%d", i), bar, nil)
         bar.buttons[i]:SetState(0, "action", i)
@@ -272,7 +271,7 @@ function AB:CreateBar(id)
         end
 
         if i == 12 then
-            bar.buttons[i]:SetState(12, "custom", _CustomExitButton)
+            bar.buttons[i]:SetState(12, "custom", customExitButton)
         end
     end
     self:UpdateButtonConfig(bar, bar.bindButtons)
@@ -316,7 +315,7 @@ function AB:UpdatePositionAndSize(barName)
     bar:SetWidth(buttonsize*buttonsPerRow + buttonspacing*(buttonsPerRow - 1))
     bar:SetHeight(buttonsize*numColumns + buttonspacing*(numColumns - 1))
 
-    local page = self:GetPage(barName, _BarDefaults[barName].page, _BarDefaults[barName].conditions)
+    local page = self:GetPage(barName, barDefaults[barName].page, barDefaults[barName].conditions)
     if AB["barDefaults"]["bar"..bar.id].conditions:find("[form,noform]") then
         bar:SetAttribute("hasTempBar", true)
 
@@ -328,7 +327,7 @@ function AB:UpdatePositionAndSize(barName)
     end
 
     bar:Show()
-    RegisterStateDriver(bar, "visibility", _BarDefaults[barName].visibility)
+    RegisterStateDriver(bar, "visibility", barDefaults[barName].visibility)
     RegisterStateDriver(bar, "page", page)
 
     if not self.db.bar2.enable and not self.db.bar3.enable and not ( R.db.movers and R.db.movers.ActionBar1Mover ) then
