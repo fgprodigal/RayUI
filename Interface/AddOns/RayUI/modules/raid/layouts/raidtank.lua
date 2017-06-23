@@ -11,7 +11,7 @@ local _, ns = ...
 local RayUF = ns.oUF
 
 function RA:FetchRaidTankSettings()
-    self.groupConfig.raidTank = {
+    _GroupConfig.raidTank = {
         enable = self.db.showTank,
         width = self.db.tankwidth,
         height = self.db.tankheight,
@@ -53,4 +53,4 @@ function RA:Construct_RaidTankFrames()
     self:RegisterEvent("GROUP_ROSTER_UPDATE", RA.UpdateTargetBorder)
 end
 
-RA["headerstoload"]["raidTank"] = { "MAINTANK", nil }
+_HeadersToLoad["raidTank"] = { "MAINTANK", nil }

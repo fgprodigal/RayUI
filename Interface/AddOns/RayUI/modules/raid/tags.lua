@@ -50,7 +50,7 @@ RayUF.Tags.Methods["RayUIRaid:stat"] = function(u)
         local perc = RayUF.Tags.Methods["perhp"](u)
         if perc < 90 then
             local _, class = UnitClass(u)
-            local color = RA.colorCache[class]
+            local color = _ColorCache[class]
 
             return color..perc.."%|r"
         end
@@ -61,7 +61,7 @@ RayUF.Tags.Methods["RayUIRaid:stat"] = function(u)
 
         if per < 0.9 then
             local _, class = UnitClass(u)
-            local color = RA.colorCache[class]
+            local color = _ColorCache[class]
             if color then
                 return color..(RA.db.deficit and "-"..R:ShortValue(max-cur) or R:ShortValue(cur)).."|r"
             end

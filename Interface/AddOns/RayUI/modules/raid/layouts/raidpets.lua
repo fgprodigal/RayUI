@@ -11,7 +11,7 @@ local _, ns = ...
 local RayUF = ns.oUF
 
 function RA:FetchRaidPetsSettings()
-    self.groupConfig.raidPets = {
+    _GroupConfig.raidPets = {
         enable = self.db.showPets,
         width = self.db.petwidth,
         height = self.db.petheight,
@@ -59,7 +59,7 @@ function RA:RaidPetsSmartVisibility(event)
             UnregisterStateDriver(self, "state-visibility")
             self:Show()
         else
-            RegisterStateDriver(self, "visibility", RA.groupConfig.raid.visibility)
+            RegisterStateDriver(self, "visibility", _GroupConfig.raid.visibility)
         end
     else
         self:RegisterEvent("PLAYER_REGEN_ENABLED")
@@ -67,4 +67,4 @@ function RA:RaidPetsSmartVisibility(event)
     end
 end
 
-RA["headerstoload"]["raidPets"] = { nil, "SecureGroupPetHeaderTemplate" }
+_HeadersToLoad["raidPets"] = { nil, "SecureGroupPetHeaderTemplate" }

@@ -11,7 +11,7 @@ local _, ns = ...
 local RayUF = ns.oUF
 
 function RA:FetchRaidSettings()
-    self.groupConfig.raid = {
+    _GroupConfig.raid = {
         enable = true,
         width = self.db.width,
         height = self.db.height,
@@ -64,8 +64,8 @@ function RA:RaidSmartVisibility(event)
     if event == "PLAYER_REGEN_ENABLED" then self:UnregisterEvent("PLAYER_REGEN_ENABLED") end
     if not InCombatLockdown() then
         if(inInstance and (instanceType == "raid" or instanceType == "pvp")) then
-            if RA.mapIDs[mapID] then
-                maxPlayers = RA.mapIDs[mapID]
+            if _MapIDs[mapID] then
+                maxPlayers = _MapIDs[mapID]
             end
             UnregisterStateDriver(self, "visibility")
             if maxPlayers <= 25 then
@@ -74,14 +74,14 @@ function RA:RaidSmartVisibility(event)
                 self:Hide()
             end
         else
-            RegisterStateDriver(self, "visibility", RA.groupConfig.raid.visibility)
+            RegisterStateDriver(self, "visibility", _GroupConfig.raid.visibility)
         end
     else
         self:RegisterEvent("PLAYER_REGEN_ENABLED")
         return
     end
     ]]
-    RegisterStateDriver(self, "visibility", RA.groupConfig.raid.visibility)
+    RegisterStateDriver(self, "visibility", _GroupConfig.raid.visibility)
 end
 
-RA["headerstoload"]["raid"] = { nil, nil }
+_HeadersToLoad["raid"] = { nil, nil }

@@ -13,13 +13,11 @@ local oUF = RayUF or oUF
 RA.modName = L["团队"]
 _Raid = RA
 
-RA.labels = {}
-RA.headers = {}
-RA.colorCache = {}
-RA.debuffColor = {}
-RA.groupConfig = {}
-RA.headerstoload = {}
-RA["mapIDs"] = {
+_ColorCache = {}
+_DebuffColor = {}
+_GroupConfig = {}
+_HeadersToLoad = {}
+_MapIDs = {
     [30] = 40, -- Alterac Valley
     [489] = 10, -- Warsong Gulch
     [529] = 15, -- Arathi Basin
@@ -94,17 +92,6 @@ local function CreateLabel(frame)
     return label
 end
 
-function RA:UpdateLabelVisibility()
-    for _, label in pairs(self.labels) do
-        local header = label.__owner
-        label:Hide()
-        for i = 1, #header do
-            local frame = header[i]
-            if frame:IsShown() then label:Show() end
-        end
-    end
-end
-
 function RA:CreateHeader(parent, name, groupFilter, template, layout)
     local point, growth, xoff, yoff
     if RA.db.horizontal then
@@ -128,7 +115,7 @@ function RA:CreateHeader(parent, name, groupFilter, template, layout)
     end
 
     local header = RayUF:SpawnHeader(name, nil, nil,
-        "oUF-initialConfigFunction", ([[self:SetWidth(%d); self:SetHeight(%d);]]):format(R:Scale(RA.groupConfig[layout].width), R:Scale(RA.groupConfig[layout].height)),
+        "oUF-initialConfigFunction", ([[self:SetWidth(%d); self:SetHeight(%d);]]):format(R:Scale(_GroupConfig[layout].width), R:Scale(_GroupConfig[layout].height)),
         "xOffset", xoff,
         "yOffset", yoff,
         "point", point,
@@ -155,16 +142,16 @@ function RA:CreateHeaderGroup(layout, groupFilter, template)
     RayUF:RegisterStyle("RayUF_"..stringTitle, RA["Construct_"..stringTitle.."Frames"])
     RayUF:SetActiveStyle("RayUF_"..stringTitle)
 
-    local numGroups = RA.groupConfig[layout].numGroups
+    local numGroups = _GroupConfig[layout].numGroups
     if numGroups then
         self[layout] = CreateFrame("Frame", "RayUF_"..stringTitle, R.UIParent, "SecureHandlerStateTemplate")
         self[layout].groups = {}
-        self[layout]:Point(unpack(RA.groupConfig[layout].defaultPosition))
+        self[layout]:Point(unpack(_GroupConfig[layout].defaultPosition))
 
         if RA.db.horizontal then
-            self[layout]:Size(RA.groupConfig[layout].width*5 + RA.db.spacing*4, RA.groupConfig[layout].height*numGroups + RA.db.spacing*(numGroups-1))
+            self[layout]:Size(_GroupConfig[layout].width*5 + RA.db.spacing*4, _GroupConfig[layout].height*numGroups + RA.db.spacing*(numGroups-1))
         else
-            self[layout]:Size(RA.groupConfig[layout].width*numGroups + RA.db.spacing*(numGroups-1), RA.groupConfig[layout].height*5 + RA.db.spacing*4)
+            self[layout]:Size(_GroupConfig[layout].width*numGroups + RA.db.spacing*(numGroups-1), _GroupConfig[layout].height*5 + RA.db.spacing*4)
         end
         R:CreateMover(self[layout], "RayUF_"..stringTitle.."Mover", L[stringTitle.." Mover"], nil, nil, "ALL,RAID", true)
 
@@ -172,7 +159,7 @@ function RA:CreateHeaderGroup(layout, groupFilter, template)
             local group = self:CreateHeader(self[layout], "RayUF_"..stringTitle.."Group"..i, i, template, layout)
             if RA.db.showlabel then
                 group.label = CreateLabel(group)
-                group.label.text:SetText(RA.groupConfig[layout].label or i)
+                group.label.text:SetText(_GroupConfig[layout].label or i)
             end
 
             if i == 1 then
@@ -209,20 +196,20 @@ function RA:CreateHeaderGroup(layout, groupFilter, template)
         end
     else
         self[layout] = self:CreateHeader(R.UIParent, "RayUF_"..stringTitle, groupFilter, template, layout)
-        self[layout]:Point(unpack(RA.groupConfig[layout].defaultPosition))
-        if RA.db.showlabel and RA.groupConfig[layout].label then
+        self[layout]:Point(unpack(_GroupConfig[layout].defaultPosition))
+        if RA.db.showlabel and _GroupConfig[layout].label then
             self[layout].label = CreateLabel(self[layout])
-            self[layout].label.text:SetText(RA.groupConfig[layout].label)
+            self[layout].label.text:SetText(_GroupConfig[layout].label)
         end
         if RA.db.horizontal then
-            self[layout]:Size(RA.groupConfig[layout].width*5 + RA.db.spacing*4, RA.groupConfig[layout].height)
+            self[layout]:Size(_GroupConfig[layout].width*5 + RA.db.spacing*4, _GroupConfig[layout].height)
         else
-            self[layout]:Size(RA.groupConfig[layout].width, RA.groupConfig[layout].height*5 + RA.db.spacing*4)
+            self[layout]:Size(_GroupConfig[layout].width, _GroupConfig[layout].height*5 + RA.db.spacing*4)
         end
         R:CreateMover(self[layout], "RayUF_"..stringTitle.."Mover", L[stringTitle.." Mover"], nil, nil, "ALL,RAID", true)
     end
 
-    self[layout].visibility = RA.groupConfig[layout].visibility
+    self[layout].visibility = _GroupConfig[layout].visibility
     if RA[stringTitle.."SmartVisibility"] then
         self[layout]:SetScript("OnEvent", RA[stringTitle.."SmartVisibility"])
         RA[stringTitle.."SmartVisibility"](self[layout])
@@ -233,11 +220,11 @@ function RA:Initialize()
     if not self.db.enable then return end
 
     for class, color in next, RayUF.colors.class do
-        RA.colorCache[class] = RA:Hex(color)
+        _ColorCache[class] = RA:Hex(color)
     end
 
     for dtype, color in next, DebuffTypeColor do
-        RA.debuffColor[dtype] = RA:Hex(color)
+        _DebuffColor[dtype] = RA:Hex(color)
     end
 
     for i = 1, 4 do
@@ -269,15 +256,15 @@ function RA:Initialize()
     self:RegisterEvent("GROUP_ROSTER_UPDATE", "HideBlizzard")
     UIParent:UnregisterEvent("GROUP_ROSTER_UPDATE")
 
-    for layout, config in pairs(self["headerstoload"]) do
+    for layout, config in pairs(_HeadersToLoad) do
         local stringTitle = R:StringTitle(layout)
         local groupFilter, template = unpack(config)
         self["Fetch"..stringTitle.."Settings"](self)
-        if self.groupConfig[layout].enable then
+        if _GroupConfig[layout].enable then
             self:CreateHeaderGroup(layout, groupFilter, template)
         end
     end
-    self["headerstoload"] = nil
+    _HeadersToLoad = nil
 
     self:RegisterDebuffs()
     local ORD = ns.oUF_RaidDebuffs or oUF_RaidDebuffs
