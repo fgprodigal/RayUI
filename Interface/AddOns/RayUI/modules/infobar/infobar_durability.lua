@@ -6,7 +6,6 @@ RayUI:LoadEnv("InfoBar")
 
 local IF = _InfoBar
 
-
 local slots = {
     [ 1] = HEADSLOT,
     [ 3] = SHOULDERSLOT,

@@ -10,7 +10,6 @@ local LibQTip = LibStub("LibQTip-1.0")
 
 _InfoBar = IF
 
-
 local maxMenuButtons, infobarTypes, usedInfoBar = 10, {}, {}
 local brokerTooltip
 

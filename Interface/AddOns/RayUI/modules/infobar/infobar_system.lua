@@ -7,7 +7,6 @@ RayUI:LoadEnv("InfoBar")
 local IF = _InfoBar
 local LibQTip = LibStub("LibQTip-1.0")
 
-
 local Tooltip
 local LatencyColor = {
     [1] = "007FFF", -- Blue

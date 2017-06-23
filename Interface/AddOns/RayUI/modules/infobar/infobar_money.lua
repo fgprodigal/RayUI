@@ -6,9 +6,7 @@ RayUI:LoadEnv("InfoBar")
 
 local IF = _InfoBar
 
-
 local session, init
-
 local function GetInfoBarDataBase(serverName)
     R.global["InfoBar"] = R.global["InfoBar"] or {}
     R.global["InfoBar"]["CharInfo"] = R.global["InfoBar"]["CharInfo"] or {}

@@ -6,9 +6,7 @@ RayUI:LoadEnv("InfoBar")
 
 local IF = _InfoBar
 
-
 local AddOnMemory = {}
-
 local MemoryColor = {
     [1] = "007FFF", -- Light Blue (0-100 KB)
     [2] = "00FF00", -- Green (0.1-1 MB)

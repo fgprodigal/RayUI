@@ -7,7 +7,6 @@ RayUI:LoadEnv("InfoBar")
 local IF = _InfoBar
 local LibQTip = LibStub("LibQTip-1.0")
 
-
 local Tooltip
 local ActiveColor = {0, 0.9, 0}
 local InactiveColor = {0.3, 0.3, 0.3}
