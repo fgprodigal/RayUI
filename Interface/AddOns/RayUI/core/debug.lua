@@ -34,7 +34,7 @@ local function Debug(mod, logLevel, msg, ...)
 				break
 			end
 		end
-		ChatFrame:AddMessage(msg, nil, nil, nil, nil, true)
+		ChatFrame:AddMessage(msg, nil, nil, nil, nil, nil, nil, true)
 		if ChatFrame ~= _G.ChatFrame1 then _G["FCF_StartAlertFlash"](ChatFrame) end
 	end
 end
