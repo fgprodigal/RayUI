@@ -1,12 +1,10 @@
 ﻿----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-RayUI:LoadEnv()
+RayUI:LoadEnv("Reminder")
 
 
-P["Reminder"] = {}
-
-P["Reminder"]["filters"] = {
+_ReminderList = {
 	ROGUE = {
 		["伤害性毒药"] = {
 			["spellGroup"] = {

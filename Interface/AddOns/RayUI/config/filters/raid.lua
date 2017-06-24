@@ -1,7 +1,7 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-RayUI:LoadEnv()
+RayUI:LoadEnv("Raid")
 
 
 local function ClassBuff(id, point, color, anyUnit, onlyShowMissing)
@@ -23,7 +23,7 @@ local function Defaults(priorityOverride)
     return {["enable"] = true, ["priority"] = priorityOverride or 0, ["stackThreshold"] = 0}
 end
 
-G.Raid.AuraWatch = {
+_AuraWatchList = {
     PRIEST = {
         [194384] = ClassBuff(194384, "TOPRIGHT", {1, 0, 0.75}, true), -- Atonement
         [41635] = ClassBuff(41635, "BOTTOMRIGHT", {0.2, 0.7, 0.2}), -- Prayer of Mending
@@ -78,11 +78,11 @@ G.Raid.AuraWatch = {
     DEATHKNIGHT = {},
 }
 
-G.ReverseTimer = {
+_ReverseTimerList = {
 
 }
 
-G.Raid.RaidDebuffs = {
+_RaidDebuffsList = {
     -- Ascending aura timer
     -- Add spells to this list to have the aura time count up from 0
     -- NOTE: This does not show the aura, it needs to be in one of the other list too.

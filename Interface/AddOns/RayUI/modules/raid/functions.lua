@@ -264,14 +264,14 @@ function RA:ConfigureAuraWatch(frame)
     local auras = frame.AuraWatch
     auras:Show()
 
-    if not R.global["Raid"].AuraWatch[R.myclass] then R.global["Raid"].AuraWatch[R.myclass] = {} end
+    if not _AuraWatchList[R.myclass] then _AuraWatchList[R.myclass] = {} end
 
-    if frame.unit == "pet" and R.global["Raid"].AuraWatch.PET then
-        for _, value in pairs(R.global["Raid"].AuraWatch.PET) do
+    if frame.unit == "pet" and _AuraWatchList.PET then
+        for _, value in pairs(_AuraWatchList.PET) do
             tinsert(buffs, value)
         end
     else
-        for _, value in pairs(R.global["Raid"].AuraWatch[R.myclass]) do
+        for _, value in pairs(_AuraWatchList[R.myclass]) do
             tinsert(buffs, value)
         end
     end

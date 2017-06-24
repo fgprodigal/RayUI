@@ -1,7 +1,7 @@
 ----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-RayUI:LoadEnv()
+RayUI:LoadEnv("Raid")
 
 
 
@@ -210,7 +210,7 @@ local function UpdateDebuff(self, name, icon, count, debuffType, duration, endTi
             end
         end
 
-        if spellId and G.ReverseTimer[spellId] then
+        if spellId and _ReverseTimerList[spellId] then
             f.reverse = true
         else
             f.reverse = nil

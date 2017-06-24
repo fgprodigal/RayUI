@@ -479,17 +479,17 @@ function RW:Initialize()
     if not self.db.enable then return end
     SpellActivationOverlayFrame:SetFrameStrata("BACKGROUND")
     SpellActivationOverlayFrame:SetFrameLevel(0)
-    if type(R["Watcher"]["filters"][R.myclass]) == "table" then
-        for _, t in ipairs(R["Watcher"]["filters"][R.myclass]) do
+    if type(_WatcherList[R.myclass]) == "table" then
+        for _, t in ipairs(_WatcherList[R.myclass]) do
             self:NewWatcher(t)
         end
     end
-    if type(R["Watcher"]["filters"]["ALL"]) == "table" then
-        for _, t in ipairs(R["Watcher"]["filters"]["ALL"]) do
+    if type(_WatcherList["ALL"]) == "table" then
+        for _, t in ipairs(_WatcherList["ALL"]) do
             self:NewWatcher(t)
         end
     end
-    wipe(R["Watcher"]["filters"])
+    wipe(_WatcherList)
     self.AlphaFrame = CreateFrame("Frame")
     self.AlphaFrame.BuffAlphaValue = 1
     self.AlphaFrame.BuffFrameFlashState = 1

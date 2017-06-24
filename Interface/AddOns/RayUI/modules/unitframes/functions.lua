@@ -311,22 +311,22 @@ function UF:CustomSmartFilter(unit, icon, name, rank, texture, count, debuffType
         returnValue = false
     end
 
-    if R.global["UnitFrames"]["aurafilters"]["Blacklist"][spellID] then
+    if _AuraFilters["Blacklist"][spellID] then
         returnValue = false
     end
 
-    if R.global["UnitFrames"]["aurafilters"]["Whitelist"][spellID] then
-        icon.priority = R.global["UnitFrames"]["aurafilters"]["Whitelist"][spellID].priority
+    if _AuraFilters["Whitelist"][spellID] then
+        icon.priority = _AuraFilters["Whitelist"][spellID].priority
         returnValue = true
     end
 
-    if R.global["UnitFrames"]["aurafilters"]["TurtleBuffs"][spellID] then
-        icon.priority = R.global["UnitFrames"]["aurafilters"]["TurtleBuffs"][spellID].priority
+    if _AuraFilters["TurtleBuffs"][spellID] then
+        icon.priority = _AuraFilters["TurtleBuffs"][spellID].priority
         returnValue = true
     end
 
-    if R.global["UnitFrames"]["aurafilters"]["CCDebuffs"][spellID] then
-        icon.priority = R.global["UnitFrames"]["aurafilters"]["CCDebuffs"][spellID].priority
+    if _AuraFilters["CCDebuffs"][spellID] then
+        icon.priority = _AuraFilters["CCDebuffs"][spellID].priority
         returnValue = true
     end
 
@@ -525,8 +525,7 @@ function UF:PostCastStart(unit, name, rank, castid)
     self.unit = unit
 
     if unit == "player" then
-        local unitframe = R.global.UnitFrames
-        local baseTicks = unitframe.ChannelTicks[name]
+        local baseTicks = _ChannelTicks[name]
 
         -- Detect channeling spell and if it's the same as the previously channeled one
         if baseTicks and name == self.prevSpellCast then
@@ -536,7 +535,7 @@ function UF:PostCastStart(unit, name, rank, castid)
             self.prevSpellCast = name
         end
 
-        if baseTicks and unitframe.ChannelTicksSize[name] and unitframe.HastedChannelTicks[name] then
+        if baseTicks and _ChannelTicksSize[name] and _HastedChannelTicks[name] then
             local tickIncRate = 1 / baseTicks
             local curHaste = UnitSpellHaste("player") * 0.01
             local firstTickInc = tickIncRate / 2
@@ -553,15 +552,15 @@ function UF:PostCastStart(unit, name, rank, castid)
                 end
             end
 
-            local baseTickSize = unitframe.ChannelTicksSize[name]
+            local baseTickSize = _ChannelTicksSize[name]
             local hastedTickSize = baseTickSize / (1 + curHaste)
             local extraTick = self.max - hastedTickSize * (baseTicks + bonusTicks)
             local extraTickRatio = extraTick / hastedTickSize
 
             UF:SetCastTicks(self, baseTicks + bonusTicks, extraTickRatio)
-        elseif baseTicks and unitframe.ChannelTicksSize[name] then
+        elseif baseTicks and _ChannelTicksSize[name] then
             local curHaste = UnitSpellHaste("player") * 0.01
-            local baseTickSize = unitframe.ChannelTicksSize[name]
+            local baseTickSize = _ChannelTicksSize[name]
             local hastedTickSize = baseTickSize / (1 + curHaste)
             local extraTick = self.max - hastedTickSize * (baseTicks)
             local extraTickRatio = extraTick / hastedTickSize
@@ -605,8 +604,7 @@ end
 function UF:PostChannelUpdate(unit, name)
     if not (unit == "player" or unit == "vehicle") then return end
 
-    local unitframe = R.global.UnitFrames
-    local baseTicks = unitframe.ChannelTicks[name]
+    local baseTicks = _ChannelTicks[name]
 
     if baseTicks then
         local extraTick = 0
@@ -1065,7 +1063,7 @@ function UF:EnableHealPredictionAndAbsorb(frame)
 end
 
 function UF:AuraBarFilter(unit, name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellID)
-    if R.global.UnitFrames.InvalidSpells[spellID] then
+    if _InvalidSpells[spellID] then
         return false
     end
     local returnValue = true
@@ -1085,11 +1083,11 @@ function UF:AuraBarFilter(unit, name, rank, icon, count, debuffType, duration, e
         returnValue = false
     end
 
-    if R.global["UnitFrames"]["aurafilters"]["Blacklist"][name] then
+    if _AuraFilters["Blacklist"][name] then
         returnValue = false
     end
 
-    if R.global["UnitFrames"]["aurafilters"]["Whitelist"][name] then
+    if _AuraFilters["Whitelist"][name] then
         returnValue = true
     end
 
@@ -1177,7 +1175,7 @@ function UF:Construct_AuraBars()
             local auraName = self:GetParent().aura.name
 
             if auraName then
-                R.global["UnitFrames"]["aurafilters"]["Blacklist"][auraName] = true
+                _AuraFilters["Blacklist"][auraName] = true
             end
         end)
 end

@@ -57,7 +57,7 @@ local function LoadSkin()
 
 	DetailsFrame:GetRegions():Hide()
 	select(2, DetailsFrame:GetRegions()):Hide()
-	select(3, DetailsFrame:GetRegions()):Hide()
+	select(4, DetailsFrame:GetRegions()):Hide()
 	select(6, DetailsFrame.ShareButton:GetRegions()):Hide()
 	select(7, DetailsFrame.ShareButton:GetRegions()):Hide()
 

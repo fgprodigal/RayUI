@@ -1,8 +1,7 @@
 ﻿----------------------------------------------------------
 -- Load RayUI Environment
 ----------------------------------------------------------
-RayUI:LoadEnv()
-
+RayUI:LoadEnv("UnitFrames")
 
 
 local function SpellName(id)
@@ -19,13 +18,13 @@ local function Defaults(priorityOverride)
     return {["enable"] = true, ["priority"] = priorityOverride or 0, ["stackThreshold"] = 0}
 end
 
-G.UnitFrames.aurafilters = {}
+_AuraFilters = {}
 
-G.UnitFrames.InvalidSpells = {
+_InvalidSpells = {
     [65148] = true,
 }
 
-G.UnitFrames.aurafilters["Blacklist"] = {
+_AuraFilters["Blacklist"] = {
     [36900] = Defaults(), --Soul Split: Evil!
     [36901] = Defaults(), --Soul Split: Good
     [36893] = Defaults(), --Transporter Malfunction
@@ -58,7 +57,7 @@ G.UnitFrames.aurafilters["Blacklist"] = {
     [95809] = Defaults(), --Insanity debuff (Hunter Pet heroism)
 }
 
-G.UnitFrames.aurafilters["Whitelist"] = {
+_AuraFilters["Whitelist"] = {
     [31821] = Defaults(), -- Devotion Aura
     [2825] = Defaults(), -- Bloodlust
     [32182] = Defaults(), -- Heroism
@@ -72,7 +71,7 @@ G.UnitFrames.aurafilters["Whitelist"] = {
     [192133] = Defaults(), -- Mystic Empowerment: Holy (Hyrja, Halls of Valor)
 }
 
-G.UnitFrames.aurafilters["TurtleBuffs"] = {
+_AuraFilters["TurtleBuffs"] = {
     --Mage
     [45438] = Defaults(5), -- Ice Block
     [115610] = Defaults(), -- Temporal Shield
@@ -132,7 +131,7 @@ G.UnitFrames.aurafilters["TurtleBuffs"] = {
     [20594] = Defaults(), -- Stoneform
 }
 
-G.UnitFrames.aurafilters["CCDebuffs"] = {
+_AuraFilters["CCDebuffs"] = {
     -- Death Knight
     [47476] = Defaults(), --Strangulate
     [91800] = Defaults(), --Gnaw (Pet)
@@ -220,7 +219,7 @@ G.UnitFrames.aurafilters["CCDebuffs"] = {
     [107079] = Defaults(), --Quaking Palm
 }
 
-G.UnitFrames.ChannelTicks = {
+_ChannelTicks = {
     --Warlock
     [SpellName(198590)] = 6, -- "Drain Soul"
     -- [SpellName(108371)] = 6, -- "Harvest Life"
@@ -254,15 +253,15 @@ f:SetScript("OnEvent", function(self, event)
         if equippedPriestTier17 >= 2 then
             penanceTicks = 4
         end
-        R.global.UnitFrames.ChannelTicks[SpellName(47540)] = penanceTicks --Penance
+        _ChannelTicks[SpellName(47540)] = penanceTicks --Penance
     end)
 
-G.UnitFrames.ChannelTicksSize = {
+_ChannelTicksSize = {
     --Warlock
     [SpellName(198590)] = 1, -- "Drain Soul"
 }
 
 --Spells Effected By Haste
-G.UnitFrames.HastedChannelTicks = {
+_HastedChannelTicks = {
 
 }

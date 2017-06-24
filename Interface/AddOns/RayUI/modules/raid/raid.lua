@@ -42,8 +42,8 @@ function RA:RegisterDebuffs()
         ORD:ResetDebuffData()
 
         if instanceType == "party" or instanceType == "raid" then
-            if G.Raid.RaidDebuffs.instances[zone] then
-                ORD:RegisterDebuffs(G.Raid.RaidDebuffs.instances[zone])
+            if _RaidDebuffsList.instances[zone] then
+                ORD:RegisterDebuffs(_RaidDebuffsList.instances[zone])
             end
         end
     end
