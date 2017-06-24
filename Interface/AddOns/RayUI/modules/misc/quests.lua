@@ -3,28 +3,26 @@
 ----------------------------------------------------------
 RayUI:LoadEnv("Misc")
 
-
 local M = _Misc
 local mod = M:NewModule("Quest", "AceEvent-3.0", "AceHook-3.0")
 
-
 local function IsTrackingHidden()
     for index = 1, GetNumTrackingTypes() do
-		local name, _, active = GetTrackingInfo(index)
-		if(name == (MINIMAP_TRACKING_TRIVIAL_QUESTS or MINIMAP_TRACKING_HIDDEN_QUESTS)) then
-			return active
-		end
-	end
+        local name, _, active = GetTrackingInfo(index)
+        if(name == (MINIMAP_TRACKING_TRIVIAL_QUESTS or MINIMAP_TRACKING_HIDDEN_QUESTS)) then
+            return active
+        end
+    end
 end
 
 local function GetAvailableGossipQuestInfo(index)
-	local name, level, isTrivial, frequency, isRepeatable, isLegendary, isIgnored = select(((index * 7) - 7) + 1, GetGossipAvailableQuests())
-	return name, level, isTrivial, isIgnored, isRepeatable, frequency == 2, frequency == 3, isLegendary
+    local name, level, isTrivial, frequency, isRepeatable, isLegendary, isIgnored = select(((index * 7) - 7) + 1, GetGossipAvailableQuests())
+    return name, level, isTrivial, isIgnored, isRepeatable, frequency == 2, frequency == 3, isLegendary
 end
 
 local function GetActiveGossipQuestInfo(index)
-	local name, level, isTrivial, isComplete, isLegendary, isIgnored = select(((index * 6) - 6) + 1, GetGossipActiveQuests())
-	return name, level, isTrivial, isIgnored, isComplete, isLegendary
+    local name, level, isTrivial, isComplete, isLegendary, isIgnored = select(((index * 6) - 6) + 1, GetGossipActiveQuests())
+    return name, level, isTrivial, isIgnored, isComplete, isLegendary
 end
 
 function mod:QuestLogQuests_Update()
@@ -52,9 +50,6 @@ local metatable = {
         end
     end
 }
-
-local atBank, atMail, atMerchant
-local choiceQueue, autoCompleteIndex
 
 function QuickQuest:Register(event, method, override)
     local newmethod
@@ -87,16 +82,16 @@ local ignoreQuestNPC = {
 
 local function GetQuestLogQuests(onlyComplete)
     local quests = {}
-	for index = 1, GetNumQuestLogEntries() do
-		local title, _, _, isHeader, _, isComplete, _, questID = GetQuestLogTitle(index)
-		if(not isHeader) then
-			if(onlyComplete and isComplete or not onlyComplete) then
-				quests[title] = questID
-			end
-		end
-	end
+    for index = 1, GetNumQuestLogEntries() do
+        local title, _, _, isHeader, _, isComplete, _, questID = GetQuestLogTitle(index)
+        if(not isHeader) then
+            if(onlyComplete and isComplete or not onlyComplete) then
+                quests[title] = questID
+            end
+        end
+    end
 
-	return quests
+    return quests
 end
 
 QuickQuest:Register("QUEST_GREETING", function()
@@ -343,16 +338,13 @@ QuickQuest:Register("PLAYER_LOGIN", AttemptAutoComplete)
 QuickQuest:Register("QUEST_AUTOCOMPLETE", AttemptAutoComplete)
 QuickQuest:Register("QUEST_ACCEPT_CONFIRM", AcceptQuest)
 
-QuickQuest:Register("QUEST_ACCEPTED", function(id)
-        QuestLogPushQuest(id)
-    end)
 
 local choiceQueue
 QuickQuest:Register("QUEST_ITEM_UPDATE", function(...)
         if(choiceQueue and QuickQuest[choiceQueue]) then
             QuickQuest[choiceQueue]()
         end
-    end)
+    end, true)
 
 QuickQuest:Register("QUEST_PROGRESS", function()
         if(IsQuestCompletable()) then
@@ -361,7 +353,7 @@ QuickQuest:Register("QUEST_PROGRESS", function()
                 for index = 1, requiredItems do
                     local link = GetQuestItemLink("required", index)
                     if(link) then
-                        local id = tonumber(string.match(link, "item:(%d+)"))
+                        local id = GetItemInfoFromHyperlink(link)
                         for _, itemID in pairs(ignoredItems) do
                             if(itemID == id) then
                                 return
@@ -379,10 +371,10 @@ QuickQuest:Register("QUEST_PROGRESS", function()
     end)
 
 QuickQuest:Register("QUEST_COMPLETE", function()
-    	local choices = GetNumQuestChoices()
-    	if(choices <= 1) then
-    		GetQuestReward(1)
-    	end
+        local choices = GetNumQuestChoices()
+        if(choices <= 1) then
+            GetQuestReward(1)
+        end
     end)
 
 local cashRewards = {
@@ -400,16 +392,14 @@ local cashRewards = {
 
 QuickQuest:Register("QUEST_COMPLETE", function()
         local choices = GetNumQuestChoices()
-        if(choices <= 1) then
-            GetQuestReward(1)
-        elseif(choices > 1) then
+        if(choices > 1) then
             local bestValue, bestIndex = 0
 
             for index = 1, choices do
                 local link = GetQuestItemLink("choice", index)
                 if(link) then
                     local _, _, _, _, _, _, _, _, _, _, value = GetItemInfo(link)
-                    value = cashRewards[tonumber(string.match(link, "item:(%d+):"))] or value
+                    value = cashRewards[(GetItemInfoFromHyperlink(link))] or value
 
                     if(value > bestValue) then
                         bestValue, bestIndex = value, index

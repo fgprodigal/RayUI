@@ -8,7 +8,7 @@ local LSM = LibStub("LibSharedMedia-3.0")
 
 
 SlashCmdList["RELOAD"] = function() ReloadUI() end
-_G["SLASH_RELOAD1"] = "/rl"
+_G.SLASH_RELOAD1 = "/rl"
 
 R["RegisteredModules"] = {}
 R.FrameLocks = {}

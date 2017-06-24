@@ -4,8 +4,6 @@
 RayUI:LoadEnv()
 
 
-
-
 local hooked = false
 
 local function ShowFinish(text, subtext)

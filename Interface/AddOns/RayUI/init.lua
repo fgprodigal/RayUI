@@ -43,8 +43,8 @@ function AddOn:PositionGameMenuButton()
 end
 
 function AddOn:OnInitialize()
-    if not RayUICharacterData then
-        RayUICharacterData = {}
+    if not _G.RayUICharacterData then
+        _G.RayUICharacterData = {}
     end
 
     local configButton = CreateFrame("Button", nil, GameMenuFrame, "GameMenuButtonTemplate")

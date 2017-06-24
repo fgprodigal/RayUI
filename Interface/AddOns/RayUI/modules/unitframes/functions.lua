@@ -994,6 +994,7 @@ function UF:PostCreateIcon(button)
     button.backdropTexture:SetAlpha(1)
     button.overlay:Hide()
     button.cd:SetReverse(true)
+    button.cd:SetDrawEdge(false)
 
     if self.isSmartAura then
         button.value = button.RaisedElementParent:CreateFontString(nil, "OVERLAY")
@@ -1506,4 +1507,4 @@ function UF:ToggleUF(msg)
 end
 
 SlashCmdList.TestUF = function(...) UF:ToggleUF(...) end
-_G["SLASH_TestUF1"] = "/testuf"
+_G.SLASH_TestUF1 = "/testuf"
