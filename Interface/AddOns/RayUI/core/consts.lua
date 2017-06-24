@@ -1,11 +1,13 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local AddOnName = ...
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv()
 
 R.myclass            = select(2, UnitClass("player"))
 R.myname             = UnitName("player")
 R.myrealm            = GetRealmName()
-R.version            = GetAddOnMetadata(AddOnName, "Version")
-BINDING_HEADER_RAYUI = GetAddOnMetadata(AddOnName, "Title")
+R.version            = GetAddOnMetadata(_AddOnName, "Version")
+_G.BINDING_HEADER_RAYUI = GetAddOnMetadata(_AddOnName, "Title")
 
 RayUF.colors.power["MANA"] = { 0, 0.5, 1 }
 

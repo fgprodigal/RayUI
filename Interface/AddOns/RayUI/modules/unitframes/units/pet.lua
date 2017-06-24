@@ -1,22 +1,12 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local UF = R:GetModule("UnitFrames")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("UnitFrames")
+
+
+local UF = _UnitFrames
 local oUF = RayUF or oUF
 
---Cache global variables
---Lua functions
-local tinsert = table.insert
-local max, ceil = math.max, math.ceil
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local UnitIsEnemy = UnitIsEnemy
-local UnitIsFriend = UnitIsFriend
-local UnitFactionGroup = UnitFactionGroup
-local UnitIsPVPFreeForAll = UnitIsPVPFreeForAll
-local UnitIsPVP = UnitIsPVP
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RayUIPetBar
 
 function UF:Construct_PetFrame(frame, unit)
     frame.mouseovers = {}
@@ -65,4 +55,4 @@ function UF:Construct_PetFrame(frame, unit)
     frame.Debuffs:Point("BOTTOMRIGHT", frame, "TOPRIGHT", 0, 8)
 end
 
-tinsert(UF["unitstoload"], "pet")
+tinsert(_UnitsToLoad, "pet")

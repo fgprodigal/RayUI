@@ -1,44 +1,11 @@
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Skins")
+
+
 local _, ns = ...
 
---Cache global variables
---Lua functions
-local math, next, unpack, select = math, next, unpack, select
-local print = print
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local UnitClass = UnitClass
-local SetLootSpecialization = SetLootSpecialization
-local GetNumSpecializations = GetNumSpecializations
-local GetSpecializationInfo = GetSpecializationInfo
-local GameTooltip_Hide = GameTooltip_Hide
-local GetMouseFocus = GetMouseFocus
-local GetLootSpecialization = GetLootSpecialization
-local GetSpecialization = GetSpecialization
-local IsModifiedClick = IsModifiedClick
-local GetCVarBool = GetCVarBool
-local IsEquippedItem = IsEquippedItem
-local GameTooltip_ShowCompareItem = GameTooltip_ShowCompareItem
-local ShowInspectCursor = ShowInspectCursor
-local ResetCursor = ResetCursor
-local HandleModifiedItemClick = HandleModifiedItemClick
-local EJ_GetNumLoot = EJ_GetNumLoot
-local EJ_GetLootInfoByIndex = EJ_GetLootInfoByIndex
-local C_Timer = C_Timer
-local EJ_SelectInstance = EJ_SelectInstance
-local EJ_SelectEncounter = EJ_SelectEncounter
-local EJ_SetDifficulty = EJ_SetDifficulty
-local EJ_SetLootFilter = EJ_SetLootFilter
-local GetInstanceInfo = GetInstanceInfo
-local GetCurrencyInfo = GetCurrencyInfo
-local hooksecurefunc = hooksecurefunc
-local BonusRollFrame_StartBonusRoll = BonusRollFrame_StartBonusRoll
-local GetItemInfo = GetItemInfo
-local GetSpellConfirmationPromptsInfo = GetSpellConfirmationPromptsInfo
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RayUI, GameTooltip, SLASH_TestBonusRollPreview1, BonusRollFrame, ShoppingTooltip1
--- GLOBALS: ShoppingTooltip2, EncounterJournal, LE_SPELL_CONFIRMATION_PROMPT_TYPE_BONUS_ROLL, CONFIRMATION_PROMPT_BONUS_ROLL
 
 local currentEncounterInfo
 local itemButtons = {}
@@ -92,7 +59,7 @@ local function HotspotEnter()
                 Icon:SetAllPoints()
                 Icon:SetTexture(texture)
 
-                local Bg = RayUI[1]:GetModule("Skins"):CreateBG(SpecButton)
+                local Bg = _Skins:CreateBG(SpecButton)
             end
 
             Buttons:SetSize(numSpecs * 28 + 34, 38)
@@ -221,7 +188,6 @@ end
 local function GetItemLine(index)
     local ItemButton = itemButtons[index]
     if(not ItemButton) then
-        local S = RayUI[1]:GetModule("Skins")
         ItemButton = CreateFrame("Button", nil, Container.ScrollChild)
         ItemButton:Point("TOPLEFT", 6, (index - 1) * -40)
         ItemButton:Point("TOPRIGHT", -22, (index - 1) * -40)
@@ -231,7 +197,7 @@ local function GetItemLine(index)
         Icon:SetTexCoord(.08, .92, .08, .92)
         Icon:Point("TOPLEFT", 1, -1)
         Icon:Size(36, 36)
-        Icon.b = S:CreateBG(Icon)
+        Icon.b = _Skins:CreateBG(Icon)
         ItemButton.Icon = Icon
 
         local Name = ItemButton:CreateFontString(nil, "ARTWORK", "GameFontNormalMed3")
@@ -405,7 +371,6 @@ function Container:SPELL_CONFIRMATION_TIMEOUT()
 end
 
 function Container:PLAYER_LOGIN()
-    local S = RayUI[1]:GetModule("Skins")
     local ScrollChild = CreateFrame("Frame", nil, self)
     ScrollChild:SetHeight(1)
     self.ScrollChild = ScrollChild
@@ -436,8 +401,8 @@ function Container:PLAYER_LOGIN()
     Thumb.bg = CreateFrame("Frame", nil, Scroll)
     Thumb.bg:Point("TOPLEFT", Thumb, 0, -2)
     Thumb.bg:Point("BOTTOMRIGHT", Thumb, 0, 4)
-    S:CreateBD(Thumb.bg, 0)
-    S:CreateBackdropTexture(Scroll)
+    _Skins:CreateBD(Thumb.bg, 0)
+    _Skins:CreateBackdropTexture(Scroll)
     Scroll.backdropTexture:SetInside(Thumb.bg, 1, 1)
 
     local Up = CreateFrame("Button", nil, Slider)
@@ -451,7 +416,7 @@ function Container:PLAYER_LOGIN()
     uptex:Size(8, 8)
     uptex:SetPoint("CENTER")
     uptex:SetVertexColor(1, 1, 1)
-    S:Reskin(Up)
+    _Skins:Reskin(Up)
 
     local Down = CreateFrame("Button", nil, Slider)
     Down:SetPoint("TOP", Slider, "BOTTOM")
@@ -464,7 +429,7 @@ function Container:PLAYER_LOGIN()
     uptex:Size(8, 8)
     uptex:SetPoint("CENTER")
     uptex:SetVertexColor(1, 1, 1)
-    S:Reskin(Down)
+    _Skins:Reskin(Down)
 
     Slider:SetScript("OnValueChanged", function(self, value)
             local min, max = self:GetMinMaxValues()
@@ -518,15 +483,15 @@ function Container:PLAYER_LOGIN()
     hooksecurefunc("BonusRollFrame_StartBonusRoll", HookStartRoll)
     hooksecurefunc(BonusRollFrame, "SetPoint", HandlePosition)
 
-    S:Reskin(Handle)
-    S:CreateBD(Container)
+    _Skins:Reskin(Handle)
+    _Skins:CreateBD(Container)
 end
 
 Container:SetScript("OnEvent", function(self, event, ...) self[event](self, event, ...) end)
 Container:RegisterEvent("PLAYER_ENTERING_WORLD")
 Container:RegisterEvent("PLAYER_LOGIN")
 
-SLASH_TestBonusRollPreview1 = "/testbonusroll"
+_G.SLASH_TestBonusRollPreview1 = "/testbonusroll"
 SlashCmdList.TestBonusRollPreview = function()
     BonusRollFrame_StartBonusRoll(123, "123", 120, 994)
     Container:SPELL_CONFIRMATION_PROMPT("SPELL_CONFIRMATION_PROMPT", 139691, CONFIRMATION_PROMPT_BONUS_ROLL, nil, nil, 0)

@@ -1,23 +1,10 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local AB = R:GetModule("ActionBar")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("ActionBar")
 
---Cache global variables
---Lua functions
-local _G = _G
-local pairs = pairs
-local GetTime = GetTime
-local tonumber = tonumber
-local max = math.max
-local floor = math.floor
-local min = math.min
 
---WoW API / Variables
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-local GetActionCooldown = GetActionCooldown
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: UIParent, ActionBarButtonEventsFrame
+local AB = _ActionBar
 
 local DAY, HOUR, MINUTE = 86400, 3600, 60 --used for formatting text
 local DAYISH, HOURISH, MINUTEISH = 3600 * 23.5, 60 * 59.5, 59.5 --used for formatting text at transition points
@@ -75,11 +62,16 @@ function AB:Cooldown_OnSizeChanged(cd, width, height)
 		return
 	end
 
+    cd.text.font = R["media"].cdfont
+    cd.text.fontsize = max(fontScale * (override or FONT_SIZE), 12)
+    cd.text.fontflag = "OUTLINE"
+
 	cd.fontScale = fontScale
+
 	if fontScale < MIN_SCALE then
 		cd:Hide()
 	else
-		cd.text:SetFont(R["media"].cdfont, max(fontScale * (override or FONT_SIZE), 12), "OUTLINE")
+		cd.text:SetFont(cd.text.font, cd.text.fontsize, cd.text.fontflag)
 		cd.text:SetShadowColor(0, 0, 0, 0.5)
 		cd.text:SetShadowOffset(2, -2)
 		if cd.enabled then
@@ -136,11 +128,12 @@ end
 function AB:OnSetCooldown(cd, start, duration, charges, maxCharges)
 	if cd.noOCC then return end
 	cd:SetHideCountdownNumbers(true)
+    local timer = cd.timer or self:CreateCooldownTimer(cd)
 
-	local remainingCharges = charges or 0
+    timer.charging = cd:GetDrawEdge()
+
 	--start timer
-	if start > 0 and duration > MIN_DURATION and remainingCharges == 0 then
-		local timer = cd.timer or self:CreateCooldownTimer(cd)
+	if start > 0 and duration > MIN_DURATION then
 		timer.start = start
 		timer.duration = duration
 		timer.enabled = true
@@ -153,6 +146,12 @@ function AB:OnSetCooldown(cd, start, duration, charges, maxCharges)
 			self:Cooldown_StopTimer(timer)
 		end
 	end
+
+    if timer.charging then
+        timer.text:SetFont(timer.text.font, timer.text.fontsize * .75, timer.text.fontflag)
+    else
+        timer.text:SetFont(timer.text.font, timer.text.fontsize, timer.text.fontflag)
+    end
 end
 
 local active, hooked = {}, {}
@@ -167,8 +166,9 @@ end
 function AB:UpdateCooldown(cd)
 	local button = cd:GetParent()
 	local start, duration, enable = GetActionCooldown(button.action)
+    local charges = GetActionCharges(cooldown.omniccAction)
 
-	self:OnSetCooldown(cd, start, duration)
+	self:OnSetCooldown(cd, start, duration, charges)
 end
 
 function AB:ACTIONBAR_UPDATE_COOLDOWN()

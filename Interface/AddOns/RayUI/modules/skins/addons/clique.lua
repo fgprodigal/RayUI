@@ -1,5 +1,10 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local S = R:GetModule("Skins")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Skins")
+
+
+local S = _Skins
 
 local function SkinClique()
 	local tab = _G["CliqueSpellTab"]

@@ -1,5 +1,10 @@
-local R, L, P, G = unpack(RayUI) --Import: Engine, Locales, ProfileDB, GlobalDB
-local AB = R:GetModule("ActionBar")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("ActionBar")
+
+
+local AB = _ActionBar
 
 R.Options.args.ActionBar = {
     type = "group",

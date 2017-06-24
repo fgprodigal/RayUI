@@ -1,24 +1,17 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local RA = R:GetModule("Raid")
-local UF = R:GetModule("UnitFrames")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Raid")
+
+
+local RA = _Raid
+local UF = R.UnitFrames
 
 local _, ns = ...
 local RayUF = ns.oUF
 
---Cache global variables
---Lua functions
-local type, unpack, table = type, unpack, table
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local InCombatLockdown = InCombatLockdown
-local IsInInstance = IsInInstance
-local GetInstanceInfo = GetInstanceInfo
-local RegisterStateDriver = RegisterStateDriver
-local UnregisterStateDriver = UnregisterStateDriver
-
 function RA:FetchRaid40Settings()
-    self.groupConfig.raid40 = {
+    _GroupConfig.raid40 = {
         enable = true,
         width = self.db.raid40width,
         height = self.db.raid40height,
@@ -66,13 +59,13 @@ function RA:Raid40SmartVisibility(event)
     local inInstance, instanceType = IsInInstance()
     local _, _, _, _, maxPlayers, _, _, mapID, instanceGroupSize = GetInstanceInfo()
     if event == "PLAYER_REGEN_ENABLED" then self:UnregisterEvent("PLAYER_REGEN_ENABLED") end
-    if RA.mapIDs[mapID] then
-        maxPlayers = RA.mapIDs[mapID]
+    if _MapIDs[mapID] then
+        maxPlayers = _MapIDs[mapID]
     end
     if not InCombatLockdown() then
         if(inInstance and (instanceType == "raid" or instanceType == "pvp")) then
-            if RA.mapIDs[mapID] then
-                maxPlayers = RA.mapIDs[mapID]
+            if _MapIDs[mapID] then
+                maxPlayers = _MapIDs[mapID]
             end
             UnregisterStateDriver(self, "visibility")
             if maxPlayers >25 then
@@ -81,7 +74,7 @@ function RA:Raid40SmartVisibility(event)
                 self:Hide()
             end
         else
-            RegisterStateDriver(self, "visibility", RA.groupConfig.raid40.visibility)
+            RegisterStateDriver(self, "visibility", _GroupConfig.raid40.visibility)
         end
     else
         self:RegisterEvent("PLAYER_REGEN_ENABLED")
@@ -89,4 +82,4 @@ function RA:Raid40SmartVisibility(event)
     end
 end
 
--- RA["headerstoload"]["raid40"] = { nil, nil }
+-- _MapIDs["raid40"] = { nil, nil }

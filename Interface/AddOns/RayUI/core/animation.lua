@@ -1,20 +1,8 @@
-﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+﻿----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv()
 
---Cache global variables
---Lua functions
-local max = max
-local abs = abs
-local tinsert = tinsert
-local tremove = tremove
-local pairs = pairs
-local math = math
-
---WoW API / Variables
-local UIFrameFadeOut = UIFrameFadeOut
-local UIFrameFadeIn = UIFrameFadeIn
-local InCombatLockdown = InCombatLockdown
-local GetFramerate = GetFramerate
-local CreateFrame = CreateFrame
 
 local function OnUpdate(self)
 	if self.parent:GetAlpha() == 0 then

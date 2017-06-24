@@ -1,5 +1,10 @@
-local R, L, P, G = unpack(RayUI) --Import: Engine, Locales, ProfileDB, GlobalDB
-local NP = R:GetModule("NamePlates")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("NamePlates")
+
+
+local NP = _NamePlates
 
 R.Options.args.NamePlates = {
     type = "group",

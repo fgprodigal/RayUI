@@ -1,5 +1,10 @@
-local R, L, P, G = unpack(RayUI) --Import: Engine, Locales, ProfileDB, GlobalDB
-local UF = R:GetModule("UnitFrames")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("UnitFrames")
+
+
+local UF = _UnitFrames
 
 R.Options.args.UnitFrames = {
     type = "group",

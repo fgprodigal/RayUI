@@ -1,16 +1,12 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local M = R:GetModule("Misc")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Misc")
+
+
+local M = _Misc
 local mod = M:NewModule("VehicleMove")
 
---Cache global variables
---Lua functions
-local _G = _G
-
---WoW API / Variables
-local hooksecurefunc = hooksecurefunc
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: VehicleSeatIndicator, VehicleSeatMover
 
 function mod:Initialize()
     hooksecurefunc(VehicleSeatIndicator,"SetPoint",function(_,_,parent) -- vehicle seat indicator

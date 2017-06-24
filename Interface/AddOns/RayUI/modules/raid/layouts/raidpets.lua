@@ -1,24 +1,17 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local RA = R:GetModule("Raid")
-local UF = R:GetModule("UnitFrames")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Raid")
+
+
+local RA = _Raid
+local UF = R.UnitFrames
 
 local _, ns = ...
 local RayUF = ns.oUF
 
---Cache global variables
---Lua functions
-local type, unpack, table = type, unpack, table
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local InCombatLockdown = InCombatLockdown
-local IsInInstance = IsInInstance
-local GetInstanceInfo = GetInstanceInfo
-local RegisterStateDriver = RegisterStateDriver
-local UnregisterStateDriver = UnregisterStateDriver
-
 function RA:FetchRaidPetsSettings()
-    self.groupConfig.raidPets = {
+    _GroupConfig.raidPets = {
         enable = self.db.showPets,
         width = self.db.petwidth,
         height = self.db.petheight,
@@ -66,7 +59,7 @@ function RA:RaidPetsSmartVisibility(event)
             UnregisterStateDriver(self, "state-visibility")
             self:Show()
         else
-            RegisterStateDriver(self, "visibility", RA.groupConfig.raid.visibility)
+            RegisterStateDriver(self, "visibility", _GroupConfig.raid.visibility)
         end
     else
         self:RegisterEvent("PLAYER_REGEN_ENABLED")
@@ -74,4 +67,4 @@ function RA:RaidPetsSmartVisibility(event)
     end
 end
 
-RA["headerstoload"]["raidPets"] = { nil, "SecureGroupPetHeaderTemplate" }
+_HeadersToLoad["raidPets"] = { nil, "SecureGroupPetHeaderTemplate" }

@@ -1,27 +1,18 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("UnitFrames")
+
+
 local UF = R:NewModule("UnitFrames", "AceEvent-3.0", "AceTimer-3.0")
 local oUF = RayUF or oUF
 
---Cache global variables
---Lua functions
-local unpack, pairs = unpack, pairs
-local gsub = string.gsub
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local IsAddOnLoaded = IsAddOnLoaded
-local InCombatLockdown = InCombatLockdown
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RayUF, RayUF_Player, RayUF_Target, RayUIPetBar, RayUF_Focus, MAX_BOSS_FRAMES, SpellActivationOverlayFrame
-
 UF.modName = L["头像"]
+_UnitFrames = UF
 
-UF.Layouts = {}
-UF.unitstoload = {}
-UF.units = {}
-
-UF.classMaxResourceBar = {
+_UnitsToLoad = {}
+_Units = {}
+_ClassMaxResourceBar = {
     ["DEATHKNIGHT"] = 6,
     ["PALADIN"] = 5,
     ["WARLOCK"] = 5,
@@ -69,12 +60,12 @@ function UF:LoadFakeUnitFrames()
 end
 
 function UF:LoadUnitFrames()
-    for _, unit in pairs(self["unitstoload"]) do
+    for _, unit in pairs(_UnitsToLoad) do
         local frameName = R:StringTitle(unit)
         frameName = frameName:gsub("t(arget)", "T%1")
         if not self[unit] then
             self[unit] = RayUF:Spawn(unit, "RayUF_"..frameName)
-            self["units"][unit] = unit
+            _Units[unit] = unit
             R:CreateMover(self[unit], self[unit]:GetName().."Mover", L[frameName.." Mover"], nil, nil, "ALL,GENERAL,RAID")
         end
     end
@@ -135,7 +126,7 @@ end
 function UF:Update_AllFrames()
     if InCombatLockdown() then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return end
 
-    for unit in pairs(self["units"]) do
+    for unit in pairs(_Units) do
         self[unit]:Enable()
         UF:UpdateFrame(self[unit])
     end

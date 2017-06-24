@@ -1,15 +1,13 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local RA = R:GetModule("Raid")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Raid")
+
+
+local RA = _Raid
 
 local _, ns = ...
 local RayUF = ns.oUF
-
---Cache global variables
---Lua functions
---WoW API / Variables
-local GetSpellInfo = GetSpellInfo
-local UnitClass = UnitClass
-local IsAddOnLoaded = IsAddOnLoaded
 
 local classList = {
     ["DRUID"] = {

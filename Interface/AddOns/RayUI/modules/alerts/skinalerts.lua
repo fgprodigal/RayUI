@@ -1,11 +1,11 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local AL = R:GetModule("Alerts")
-local S = R:GetModule("Skins")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Alerts")
 
---Cache global variables
---Lua functions
---WoW API / Variables
-local CreateFrame = CreateFrame
+
+local AL = _Alerts
+local S = R.Skins
 
 function AL:SkinToast(toast, toastType)
     local r, g, b = toast.Border:GetVertexColor()

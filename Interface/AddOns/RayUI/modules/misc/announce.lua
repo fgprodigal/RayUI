@@ -1,32 +1,13 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local M = R:GetModule("Misc")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Misc")
+
+
+local M = _Misc
 local mod = M:NewModule("Announce", "AceEvent-3.0")
 local LSM = LibStub("LibSharedMedia-3.0")
 
---Cache global variables
---Lua functions
-local _G = _G
-local unpack, string = unpack, string
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local UnitGUID = UnitGUID
-local GetSpellTexture = GetSpellTexture
-local IsInRaid = IsInRaid
-local SendChatMessage = SendChatMessage
-local IsInGroup = IsInGroup
-local GetZonePVPInfo = GetZonePVPInfo
-local UnitIsEnemy = UnitIsEnemy
-local GetNumGroupMembers = GetNumGroupMembers
-local IsInInstance = IsInInstance
-local IsInLFGDungeon = IsInLFGDungeon
-local UnitName = UnitName
-local UnitIsDead = UnitIsDead
-local SetCVar = SetCVar
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: LE_PARTY_CATEGORY_HOME, LE_PARTY_CATEGORY_INSTANCE, LEAVING_COMBAT, ENTERING_COMBAT
--- GLOBALS: UIErrorsFrame, ChatTypeInfo, CombatText
 
 local iconsize = 24
 

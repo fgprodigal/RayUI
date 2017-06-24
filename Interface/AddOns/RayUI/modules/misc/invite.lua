@@ -1,31 +1,12 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local M = R:GetModule("Misc")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Misc")
+
+
+local M = _Misc
 local mod = M:NewModule("AutoInvite", "AceEvent-3.0")
 
---Cache global variables
---Lua functions
-local pairs, string, select = pairs, string, select
-
---WoW API / Variables
-local IsInGroup = IsInGroup
-local GetNumFriends = GetNumFriends
-local ShowFriends = ShowFriends
-local IsInGuild = IsInGuild
-local GuildRoster = GuildRoster
-local GetFriendInfo = GetFriendInfo
-local AcceptGroup = AcceptGroup
-local GetNumGuildMembers = GetNumGuildMembers
-local GetGuildRosterInfo = GetGuildRosterInfo
-local BNGetNumFriends = BNGetNumFriends
-local BNGetFriendInfo = BNGetFriendInfo
-local StaticPopup_Hide = StaticPopup_Hide
-local UnitIsGroupLeader = UnitIsGroupLeader
-local UnitIsGroupAssistant = UnitIsGroupAssistant
-local InviteUnit = InviteUnit
-local BNGetGameAccountInfo = BNGetGameAccountInfo
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: QueueStatusMinimapButton
 
 local hideStatic = false
 function mod:AutoAcceptInvite(event, leaderName)

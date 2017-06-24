@@ -1,19 +1,11 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local M = R:GetModule("Misc")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Misc")
+
+
+local M = _Misc
 local mod = M:NewModule("BubbleSkin", "AceTimer-3.0")
-
---Cache global variables
---Lua functions
-local select, unpack, type = select, unpack, type
-local pairs = pairs
-local strfind, strlower = string.find, string.lower
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local C_ChatBubbles_GetAllChatBubbles = C_ChatBubbles.GetAllChatBubbles
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: UIParent, WorldFrame
 
 function mod:UpdateBubbleBorder()
     if not self.text then return end
@@ -62,7 +54,7 @@ local function ChatBubble_OnUpdate(self, elapsed)
 	mod.lastupdate = mod.lastupdate + elapsed
 	if (mod.lastupdate < .1) then return end
 	mod.lastupdate = 0
-	for _, chatBubble in pairs(C_ChatBubbles_GetAllChatBubbles()) do
+	for _, chatBubble in pairs(C_ChatBubbles.GetAllChatBubbles()) do
 		if not chatBubble.isSkinned then
 			mod:SkinBubble(chatBubble)
 		end

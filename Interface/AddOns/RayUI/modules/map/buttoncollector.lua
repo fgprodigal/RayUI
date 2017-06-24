@@ -1,22 +1,13 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local MM = R:GetModule("MiniMap")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("MiniMap")
 
---Cache global variables
---Lua functions
-local select, unpack, pairs, ipairs, string, math, type = select, unpack, pairs, ipairs, string, math, type
-local tinsert = table.insert
-local strfind = string.find
 
---WoW API / Variables
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: VendomaticButton, VendomaticButtonIcon, Minimap, BaudErrorFrameMinimapButton
+local MM = _MiniMap
 
 local MBCF
 local buttons = {}
-
 local AcceptedFrames = {
     "BagSync_MinimapButton",
     "VendomaticButtonFrame",
@@ -179,7 +170,7 @@ local function SetMinimapButton(btn)
         tinsert(buttons, btn)
     else
         btn.shadow:SetBackdropBorderColor(1, 0, 0)
-        R:GetModule("Skins"):CreatePulse(btn.shadow, 1, 1)
+        R.Skins:CreatePulse(btn.shadow, 1, 1)
     end
 end
 

@@ -1,5 +1,10 @@
-local R, L, P, G = unpack(RayUI) --Import: Engine, Locales, ProfileDB, GlobalDB
-local TT = R:GetModule("Tooltip")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Tooltip")
+
+
+local TT = _Tooltip
 
 R.Options.args.Tooltip = {
     type = "group",

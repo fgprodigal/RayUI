@@ -1,12 +1,11 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local M = R:GetModule("Misc")
-local mod = M:NewModule("AutoScreeshot", "AceEvent-3.0")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Misc")
 
---Cache global variables
---Lua functions
---WoW API / Variables
-local Screenshot = Screenshot
-local C_Timer = C_Timer
+
+local M = _Misc
+local mod = M:NewModule("AutoScreeshot", "AceEvent-3.0")
 
 function mod:TakeScreenshot(event, ...)
     C_Timer.After(1, Screenshot)

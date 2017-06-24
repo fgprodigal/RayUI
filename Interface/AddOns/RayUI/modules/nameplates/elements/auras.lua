@@ -1,16 +1,11 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local mod = R:GetModule('NamePlates')
-local LSM = LibStub("LibSharedMedia-3.0")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("NamePlates")
 
---Cache global variables
---Lua functions
-local select, unpack = select, unpack
-local tinsert, tremove = table.insert, table.remove
---WoW API / Variables
-local CreateFrame = CreateFrame
-local UnitBuff = UnitBuff
-local UnitDebuff = UnitDebuff
-local BUFF_STACKS_OVERFLOW = BUFF_STACKS_OVERFLOW
+
+local mod = _NamePlates
+local LSM = LibStub("LibSharedMedia-3.0")
 
 local auraCache = {}
 

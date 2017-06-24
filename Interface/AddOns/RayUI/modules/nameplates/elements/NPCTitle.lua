@@ -1,19 +1,12 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local mod = R:GetModule('NamePlates')
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("NamePlates")
+
+
+local mod = _NamePlates
 local LSM = LibStub("LibSharedMedia-3.0")
 
---Cache global variables
---Lua functions
-local unpack = unpack
-
---WoW API / Variables
-local UnitIsPlayer = UnitIsPlayer
-local UnitIsUnit = UnitIsUnit
-local UnitPlayerControlled = UnitPlayerControlled
-local UnitReaction = UnitReaction
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: UIParent, RayUI_NPCTitleTextLeft2, RayUF, LEVEL
 
 local tooltip = CreateFrame("GameTooltip", "RayUI_NPCTitle", UIParent, "GameTooltipTemplate")
 tooltip:SetPoint("CENTER")

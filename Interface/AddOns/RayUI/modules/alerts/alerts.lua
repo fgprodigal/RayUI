@@ -1,89 +1,13 @@
 --AlertSystem from ls: Toasts
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Alerts")
+
+
 local AL = R:NewModule("Alerts", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
+_Alerts = AL
 
---Cache global variables
---Lua functions
-local _G = _G
-local math, string, table, tonumber, pairs = math, string, table, tonumber, pairs
-local pcall, type, unpack, select = pcall, type, unpack, select
-
---WoW API / Variables
-local Lerp = Lerp
-local CreateFrame = CreateFrame
-local InCombatLockdown = InCombatLockdown
-local SetPortraitToTexture = SetPortraitToTexture
-local C_Garrison = C_Garrison
-local C_TransmogCollection = C_TransmogCollection
-local GetItemInfoInstant = GetItemInfoInstant
-local PlaySoundKitID = PlaySoundKitID
-local PlaySound = PlaySound
-local ShowUIPanel = ShowUIPanel
-local Garrison_LoadUI = Garrison_LoadUI
-local ShowGarrisonLandingPage = ShowGarrisonLandingPage
-local CollectionsJournal_LoadUI = CollectionsJournal_LoadUI
-local GarrisonFollowerTooltip_Show = GarrisonFollowerTooltip_Show
-local BattlePetToolTip_Show = BattlePetToolTip_Show
-local IsModifiedClick = IsModifiedClick
-local GetCVarBool = GetCVarBool
-local GameTooltip_ShowCompareItem = GameTooltip_ShowCompareItem
-local C_Timer = C_Timer
-local GetMoneyString = GetMoneyString
-local GetAchievementInfo = GetAchievementInfo
-local AchievementFrame_LoadUI = AchievementFrame_LoadUI
-local GetArchaeologyRaceInfoByID = GetArchaeologyRaceInfoByID
-local UIParentLoadAddOn = UIParentLoadAddOn
-local C_Scenario = C_Scenario
-local GetInstanceInfo = GetInstanceInfo
-local GetLFGCompletionReward = GetLFGCompletionReward
-local UnitLevel = UnitLevel
-local GetLFGCompletionRewardItem = GetLFGCompletionRewardItem
-local GetItemInfo = GetItemInfo
-local UnitFactionGroup = UnitFactionGroup
-local GroupLootContainer_RemoveFrame = GroupLootContainer_RemoveFrame
-local C_PetJournal = C_PetJournal
-local GetCurrencyInfo = GetCurrencyInfo
-local C_TradeSkillUI = C_TradeSkillUI
-local GetSpellInfo = GetSpellInfo
-local GetSpellRank = GetSpellRank
-local GetTaskInfo = GetTaskInfo
-local GetQuestTagInfo = GetQuestTagInfo
-local GetQuestLogRewardMoney = GetQuestLogRewardMoney
-local GetQuestLogRewardXP = GetQuestLogRewardXP
-local GetNumQuestLogRewardCurrencies = GetNumQuestLogRewardCurrencies
-local GetQuestLogRewardCurrencyInfo = GetQuestLogRewardCurrencyInfo
-local GetProfessionInfo = GetProfessionInfo
-local QuestUtils_IsQuestWorldQuest = QuestUtils_IsQuestWorldQuest
-local GetCurrentMapAreaID = GetCurrentMapAreaID
-local C_TaskQuest = C_TaskQuest
-local HaveQuestData = HaveQuestData
-local GetNumQuestLogRewards = GetNumQuestLogRewards
-local GetQuestLogRewardInfo = GetQuestLogRewardInfo
-local GetCurrencyLink = GetCurrencyLink
-local IsUsableItem = IsUsableItem
-local GetDetailedItemLevelInfo = GetDetailedItemLevelInfo
-local GetInventoryItemLink = GetInventoryItemLink
-local GetInventoryItemID = GetInventoryItemID
-local CanDualWield = CanDualWield
-local WardrobeCollectionFrame_OpenTransmogLink = WardrobeCollectionFrame_OpenTransmogLink
-local hooksecurefunc = hooksecurefunc
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: GameTooltip, GarrisonShipyardFollowerTooltip, GarrisonFollowerTooltip, AlertFrame, AchievementFrame
--- GLOBALS: GarrisonLandingPage, GarrisonFollowerOptions, CollectionsJournal, LE_FOLLOWER_TYPE_SHIPYARD_6_2
--- GLOBALS: BattlePetTooltip, ShoppingTooltip1, ShoppingTooltip2, YOU_RECEIVED, BONUS_OBJECTIVE_EXPERIENCE_FORMAT
--- GLOBALS: ACHIEVEMENT_PROGRESSED, ACHIEVEMENT_UNLOCKED, ARCHAEOLOGY_DIGSITE_COMPLETE_TOAST_FRAME_TITLE
--- GLOBALS: ArchaeologyFrame, ArcheologyDigsiteProgressBar, LE_FOLLOWER_TYPE_GARRISON_7_0, LE_GARRISON_TYPE_7_0
--- GLOBALS: LE_FOLLOWER_TYPE_GARRISON_6_0, LE_GARRISON_TYPE_6_0, ITEM_QUALITY_COLORS, GARRISON_MISSION_ADDED_TOAST1
--- GLOBALS: GARRISON_MISSION_COMPLETE, LOOTUPGRADEFRAME_QUALITY_TEXTURES, GARRISON_UPDATE, GARRISON_TALENT_ORDER_ADVANCEMENT
--- GLOBALS: DUNGEON_COMPLETED, MAX_PLAYER_LEVEL, SCENARIO_COMPLETED, LFG_SUBTYPEID_HEROIC, LE_SCENARIO_TYPE_LEGION_INVASION
--- GLOBALS: YOU_WON_LABEL, YOU_RECEIVED_LABEL, ITEM_UPGRADED_LABEL, LOOT_ROLL_TYPE_NEED, LOOT_ROLL_TYPE_GREED
--- GLOBALS: LOOT_ROLL_TYPE_DISENCHANT, LEGENDARY_ITEM_LOOT_LABEL, LOOTUPGRADEFRAME_TITLE, GroupLootContainer
--- GLOBALS: BLIZZARD_STORE_PURCHASE_COMPLETE, BonusRollFrame, UPGRADED_RECIPE_LEARNED_TITLE, UIPARENT_MANAGED_FRAME_POSITIONS
--- GLOBALS: NEW_RECIPE_LEARNED_TITLE, SCENARIO_INVASION_COMPLETE, WORLD_QUEST_QUALITY_COLORS, WORLD_QUEST_COMPLETE
--- GLOBALS: LE_QUEST_TAG_TYPE_PVP, LE_QUEST_TAG_TYPE_PET_BATTLE, LE_QUEST_TAG_TYPE_PROFESSION, LE_QUEST_TAG_TYPE_DUNGEON
--- GLOBALS: CURRENCY_GAINED_MULTIPLE, ERR_LEARN_TRANSMOG_S, SLASH_LSADDTOAST1, SlashCmdList, DevTools_Dump
--- GLOBALS: AchievementFrame_SelectAchievement, QuestUtils_IsQuestWorldQuest
 
 local TITLE_NEED_TEMPLATE = "%s |cff00ff00%s|r|TInterface\\Buttons\\UI-GroupLoot-Dice-Up:0:0:0:0:32:32:0:32:0:31|t"
 local TITLE_GREED_TEMPLATE = "%s |cff00ff00%s|r|TInterface\\Buttons\\UI-GroupLoot-Coin-Up:0:0:0:0:32:32:0:32:0:31|t"
@@ -2599,7 +2523,7 @@ end
 function AL:Initialize()
     AL:RegisterEvent("PLAYER_LOGIN")
 
-    SLASH_LSADDTOAST1 = "/testalerts"
+    _G.SLASH_LSADDTOAST1 = "/testalerts"
     SlashCmdList["LSADDTOAST"] = SpawnTestToast
 end
 

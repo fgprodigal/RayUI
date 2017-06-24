@@ -1,18 +1,10 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local IF = R:GetModule("InfoBar")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("InfoBar")
 
---Cache global variables
---Lua functions
-local pairs, math = pairs, math
-local tostring = tostring
 
---WoW API / Variables
-local CreateFrame = CreateFrame
-local GetInventoryItemDurability = GetInventoryItemDurability
-local ToggleCharacter = ToggleCharacter
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: GameTooltip, DURABILITY
+local IF = _InfoBar
 
 local slots = {
     [ 1] = HEADSLOT,

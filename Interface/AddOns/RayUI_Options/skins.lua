@@ -1,5 +1,10 @@
-local R, L, P, G = unpack(RayUI) --Import: Engine, Locales, ProfileDB, GlobalDB
-local S = R:GetModule("Skins")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Skins")
+
+
+local S = _Skins
 
 R.Options.args.Skins = {
     type = "group",

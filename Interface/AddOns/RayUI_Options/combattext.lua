@@ -1,5 +1,10 @@
-local R, L, P, G = unpack(RayUI) --Import: Engine, Locales, ProfileDB, GlobalDB
-local CT = R:GetModule("CombatText")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("CombatText")
+
+
+local CT = _CombatText
 
 R.Options.args.CombatText = {
     type = "group",

@@ -1,5 +1,10 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local S = R:GetModule("Skins")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Skins")
+
+
+local S = _Skins
 
 local function LoadSkin()
 	local f = PetBattleFrame
@@ -251,7 +256,7 @@ end)
 		tt.BorderBottomLeft:SetTexture(nil)
         tt:SetBackdrop(nil)
         tt:CreateShadow("Background")
-        R:GetModule("Skins"):CreateStripesThin(tt)
+        R.Skins:CreateStripesThin(tt)
 		tt.border:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 		tt.shadow:SetBackdropBorderColor(unpack(R["media"].bordercolor))
 	end

@@ -22,8 +22,13 @@ DESCRIPTION
 	They are only used in the layout and more experienced user
 	may replace the functions with their own in their implementation.
 ]]
-local addon, ns = ...
-local cargBags = ns.cargBags
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Bags")
+
+
+local cargBags = _cargBags
 local Implementation = cargBags.classes.Implementation
 local Container = cargBags.classes.Container
 local ItemButton = cargBags.classes.ItemButton

@@ -1,27 +1,14 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("InfoBar")
+
+
 local IF = R:NewModule("InfoBar", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0", "AceTimer-3.0")
 local LDB = LibStub:GetLibrary("LibDataBroker-1.1")
 local LibQTip = LibStub("LibQTip-1.0")
 
---Cache global variables
---Lua functions
-local _G = _G
-local pairs, type, unpack = pairs, type, unpack
-local strlen = string.len
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local GameTooltip_Hide = GameTooltip_Hide
-local UnitGUID = UnitGUID
-local CreateFont = CreateFont
-local IsShiftKeyDown = IsShiftKeyDown
-local C_Timer = C_Timer
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RayUI_InfoBarButton_OnClick, RayUI_InfoBarButton_OnEnter, RayUI_InfoBarButton_OnLeave
--- GLOBALS: RayUI_InfoBarButton_OnUpdate, RayUI_InfoBarButton_OnEvent, RayUI_InfoBarButton_OnReset
--- GLOBALS: GameTooltip, RayUI_InfoBarMenu, RayUI_InfoBarMenu_OnInit, RayUI_InfoBarMenuButton_OnClick
--- GLOBALS: RayUI_RegisterLDB, RayUF, GameTooltip_SetDefaultAnchor
+_InfoBar = IF
 
 local maxMenuButtons, infobarTypes, usedInfoBar = 10, {}, {}
 local brokerTooltip
@@ -446,7 +433,7 @@ function IF:Initialize()
     clear.Background:SetInside(clear, 8, 8)
     clear.Background:CreateShadow("Background")
 
-    local S = R:GetModule("Skins")
+    local S = R.Skins
     S:SetBD(RayUI_InfoBarMenu, -10, 0, 10, 0)
     S:ReskinClose(RayUI_InfoBarMenu.Close, "TOPRIGHT", RayUI_InfoBarMenu, "TOPRIGHT", 8, -2)
 end

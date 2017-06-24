@@ -1,23 +1,10 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv()
 
---Cache global variables
---Lua functions
-local _G = _G
-local select, tonumber, string = select, tonumber, string
-local strfind = string.find
 
---WoW API / Variables
-local CreateFrame = CreateFrame
-local GetItemInfo = GetItemInfo
-local GetItemCount = GetItemCount
-local UnitAura = UnitAura
-local UnitName = UnitName
-local GetMouseFocus = GetMouseFocus
-local GetTradeSkillItemLink = GetTradeSkillItemLink
-local GetTradeSkillReagentItemLink = GetTradeSkillReagentItemLink
 
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: ItemRefTooltip, TradeSkillFrame
 
 local f = CreateFrame("Frame")
 f:RegisterEvent("ADDON_LOADED")

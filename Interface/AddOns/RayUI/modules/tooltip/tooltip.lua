@@ -1,75 +1,17 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Tooltip")
+
+
 local TT = R:NewModule("Tooltip", "AceEvent-3.0", "AceHook-3.0", "AceTimer-3.0")
 local LibItemLevel = LibStub:GetLibrary("LibItemLevel-RayUI")
 
---Cache global variables
---Lua functions
-local _G = _G
-local select, pairs, ipairs, unpack = select, pairs, ipairs, unpack
-local string, math, table = string, math, table
-local tremove = table.remove
-local wipe = wipe
-local floor = floor
-local GetTime = GetTime
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local UnitLevel = UnitLevel
-local GetInspectSpecialization = GetInspectSpecialization
-local GetSpecialization = GetSpecialization
-local GetSpecializationInfoByID = GetSpecializationInfoByID
-local GetSpecializationInfo = GetSpecializationInfo
-local CopyTable = CopyTable
-local UnitIsPlayer = UnitIsPlayer
-local GetMouseFocus = GetMouseFocus
-local UnitExists = UnitExists
-local UnitName = UnitName
-local UnitGUID = UnitGUID
-local UnitIsUnit = UnitIsUnit
-local CanInspect = CanInspect
-local NotifyInspect = NotifyInspect
-local GetScreenWidth = GetScreenWidth
-local UnitReaction = UnitReaction
-local UnitClass = UnitClass
-local GetItemInfo = GetItemInfo
-local GetAverageItemLevel = GetAverageItemLevel
-local InCombatLockdown = InCombatLockdown
-local IsEquippableItem = IsEquippableItem
-local GetItemQualityColor = GetItemQualityColor
-local UnitClassification = UnitClassification
-local UnitCreatureType = UnitCreatureType
-local GetQuestDifficultyColor = GetQuestDifficultyColor
-local UnitRace = UnitRace
-local GetGuildInfo = GetGuildInfo
-local IsInGuild = IsInGuild
-local UnitFactionGroup = UnitFactionGroup
-local UnitIsAFK = UnitIsAFK
-local UnitIsDND = UnitIsDND
-local UnitIsWildBattlePet = UnitIsWildBattlePet
-local UnitIsBattlePetCompanion = UnitIsBattlePetCompanion
-local UnitBattlePetLevel = UnitBattlePetLevel
-local UnitBattlePetType = UnitBattlePetType
-local SetCVar = SetCVar
-local UnitHealth = UnitHealth
-local UnitHealthMax = UnitHealthMax
-local GetCursorPosition = GetCursorPosition
-local UnitIsTapDenied = UnitIsTapDenied
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: GameTooltip, FACTION_BAR_COLORS, InspectFrame, INVSLOT_OFFHAND, INVSLOT_MAINHAND
--- GLOBALS: GameTooltipStatusBar, WorldMapTooltip, NumerationFrame, Skada, Examiner
--- GLOBALS: RayUI_ContainerFrame, RayUI_ContainerFrameItemSets, RayUI_ContainerFrameConsumables
--- GLOBALS: RayUI_ContainerFrameMain, STAT_AVERAGE_ITEM_LEVEL, FriendsTooltip
--- GLOBALS: ItemRefTooltip, ItemRefShoppingTooltip1, ItemRefShoppingTooltip2, ItemRefShoppingTooltip3, ShoppingTooltip1
--- GLOBALS: ShoppingTooltip2, ShoppingTooltip3, WorldMapCompareTooltip1, WorldMapCompareTooltip2, WorldMapCompareTooltip3
--- GLOBALS: ChatMenu, EmoteMenu, LanguageMenu, QuestDifficultyColors, YOU, TARGET, GameTooltipTextLeft2, GameTooltipTextLeft1, PLAYER
--- GLOBALS: AFK, DND, LEVEL, PVP_ENABLED, FACTION_HORDE, FACTION_ALLIANCE, VoiceMacroMenu, GameTooltip_UnitColor
--- GLOBALS: BNToastFrame, RayUIArtiBar, RayUF
+TT.modName = L["鼠标提示"]
+_Tooltip = TT
 
 local TalentFrame = CreateFrame("Frame", nil)
 TalentFrame:Hide()
-
-TT.modName = L["鼠标提示"]
 
 local TALENTS_PREFIX = TALENTS
 local NO_TALENTS = NONE..TALENTS
@@ -465,7 +407,7 @@ function TT:SetStyle(tooltip)
     end
     if not tooltip.styled then
         tooltip:SetBackdrop(nil)
-        R:GetModule("Skins"):CreateStripesThin(tooltip)
+        R.Skins:CreateStripesThin(tooltip)
         tooltip:CreateShadow("Background")
         tooltip.stripesthin:SetInside(tooltip)
         --tooltip.border:SetInside(tooltip)
@@ -620,7 +562,7 @@ function TT:GameTooltip_ShowStatusBar(tooltip, min, max, value, text)
         statusBar.border = CreateFrame("Frame", nil, statusBar)
         statusBar.border:SetFrameLevel(0)
         statusBar.border:SetOutside(statusBar, 1, 1)
-        R:GetModule("Skins"):CreateBD(statusBar.border)
+        R.Skins:CreateBD(statusBar.border)
         statusBar.styled=true
     end
 end

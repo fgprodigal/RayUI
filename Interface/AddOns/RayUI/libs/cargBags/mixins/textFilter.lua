@@ -25,8 +25,13 @@ DESCRIPTION
 DEPENDENCIES:
 	base-add/filters.sieve.lua
 ]]
-local addon, ns = ...
-local cargBags = ns.cargBags
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Bags")
+
+
+local cargBags = _cargBags
 local Container = cargBags.classes.Container
 local Implementation = cargBags.classes.Implementation
 
@@ -47,7 +52,7 @@ local defaultFilters = {
 	@param filters <FilterSet> table to store resulting filters in [optional]
 	@param textFilters <table> table of text filters to parse from [optional]
 
-	@note Basically works like this: text ----textFilters----> filters,filterInfo	
+	@note Basically works like this: text ----textFilters----> filters,filterInfo
 ]]
 function Implementation:ParseTextFilter(text, filters, textFilters)
 	filters = filters or cargBags.classes.FilterSet:New()

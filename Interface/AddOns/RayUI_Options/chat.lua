@@ -1,5 +1,10 @@
-local R, L, P, G = unpack(RayUI) --Import: Engine, Locales, ProfileDB, GlobalDB
-local CH = R:GetModule("Chat")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Chat")
+
+
+local CH = _Chat
 
 R.Options.args.Chat = {
     type = "group",

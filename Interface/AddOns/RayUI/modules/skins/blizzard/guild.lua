@@ -1,8 +1,13 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local S = R:GetModule("Skins")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Skins")
+
+
+local S = _Skins
 
 local function LoadSkin()
-    local r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b
+    local r, g, b = _r, _g, _b
     S:SetBD(GuildFrame)
     S:CreateBD(GuildMemberDetailFrame)
     S:CreateBD(GuildMemberNoteBackground, .25)

@@ -1,8 +1,13 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local S = R:GetModule("Skins")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Skins")
+
+
+local S = _Skins
 
 local function LoadSkin()
-    TELLMEWHEN_ICONSPACING = R.Border
+    _G.TELLMEWHEN_ICONSPACING = R.Border
 
     TMW.Classes.Icon:PostHookMethod("OnNewInstance", function(self, icon)
         self:CreateShadow("Background")

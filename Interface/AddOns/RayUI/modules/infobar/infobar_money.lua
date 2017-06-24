@@ -1,35 +1,12 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local IF = R:GetModule("InfoBar")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("InfoBar")
 
---Cache global variables
---Lua functions
-local select, pairs, table, unpack = select, pairs, table, unpack
-local string, math = string, math
-local floor, mod = math.floor, mod
-local format = string.format
-local tinsert = table.insert
 
---WoW API / Variables
-local BreakUpLargeNumbers = BreakUpLargeNumbers
-local GetMoney = GetMoney
-local UnitName = UnitName
-local UnitClass = UnitClass
-local GetRealmName = GetRealmName
-local UnitGUID = UnitGUID
-local GetAutoCompleteRealms = GetAutoCompleteRealms
-local GetCurrencyListSize = GetCurrencyListSize
-local GetCurrencyListInfo = GetCurrencyListInfo
-local C_Timer = C_Timer
-local GetMouseFocus = GetMouseFocus
-local GameTooltip_Hide = GameTooltip_Hide
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: GOLD_AMOUNT_TEXTURE, COPPER_AMOUNT_TEXTURE, SILVER_AMOUNT_TEXTURE, SECOND_NUMBER_CAP
--- GLOBALS: GOLD_AMOUNT_TEXTURE_STRING, GameTooltip, TOTAL, RayUF, CLASS_ICON_TCOORDS
--- GLOBALS: RETRIEVING_TRADESKILL_INFO, CURRENCY, UNUSED
+local IF = _InfoBar
 
 local session, init
-
 local function GetInfoBarDataBase(serverName)
     R.global["InfoBar"] = R.global["InfoBar"] or {}
     R.global["InfoBar"]["CharInfo"] = R.global["InfoBar"]["CharInfo"] or {}

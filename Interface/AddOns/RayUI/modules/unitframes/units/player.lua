@@ -1,23 +1,12 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local UF = R:GetModule("UnitFrames")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("UnitFrames")
+
+
+local UF = _UnitFrames
 local oUF = RayUF or oUF
 
---Cache global variables
---Lua functions
-local _G = _G
-local tinsert = table.insert
-local max, ceil = math.max, math.ceil
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local UnitIsEnemy = UnitIsEnemy
-local UnitIsFriend = UnitIsFriend
-local UnitFactionGroup = UnitFactionGroup
-local UnitIsPVPFreeForAll = UnitIsPVPFreeForAll
-local UnitIsPVP = UnitIsPVP
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: MAX_COMBO_POINTS
 
 function UF:Construct_PlayerFrame(frame, unit)
     frame.mouseovers = {}
@@ -124,7 +113,7 @@ function UF:Construct_PlayerFrame(frame, unit)
         frame.AdditionalPower = self:Construct_AdditionalPowerBar(frame)
     end
     frame.USE_CLASSBAR = true
-    frame.MAX_CLASS_BAR = frame.MAX_CLASS_BAR or max(UF.classMaxResourceBar[R.myclass] or 0, MAX_COMBO_POINTS)
+    frame.MAX_CLASS_BAR = frame.MAX_CLASS_BAR or max(_ClassMaxResourceBar[R.myclass] or 0, MAX_COMBO_POINTS)
 
     if UF.db.aurabar then
         frame.AuraBars = self:Construct_AuraBarHeader(frame)
@@ -149,4 +138,4 @@ f:SetScript("OnEvent", function(self, event)
     UpdateClassBar()
 end)
 
-tinsert(UF["unitstoload"], "player")
+tinsert(_UnitsToLoad, "player")

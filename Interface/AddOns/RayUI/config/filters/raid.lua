@@ -1,11 +1,8 @@
-﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv()
 
---Cache global variables
---Lua functions
-local unpack = unpack
-
---WoW API / Variables
-local GetSpellInfo = GetSpellInfo
 
 local function ClassBuff(id, point, color, anyUnit, onlyShowMissing)
     local r, g, b = unpack(color)

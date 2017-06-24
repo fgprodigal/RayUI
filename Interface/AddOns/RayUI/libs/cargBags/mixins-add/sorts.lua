@@ -23,8 +23,13 @@ DESCRIPTION
 DEPENDENCIES
 	mixins/api-common.lua
 ]]
-local addon, ns = ...
-local sorts = ns.cargBags.classes.Container.sorts
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Bags")
+
+
+local sorts = _cargBags.classes.Container.sorts
 
 --[[!
 	Sorts the buttons depending on their bagSlot

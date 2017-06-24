@@ -1,28 +1,19 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Skins")
+
+
 local S = R:NewModule("Skins", "AceEvent-3.0")
 local LSM = LibStub("LibSharedMedia-3.0")
 
---Cache global variables
---Lua functions
-local _G = _G
-local select, unpack, assert, pairs, type = select, unpack, assert, pairs, type
-local tinsert = table.insert
-local wipe = table.wipe
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local IsAddOnLoaded = IsAddOnLoaded
-local EnumerateFrames = EnumerateFrames
-local hooksecurefunc = hooksecurefunc
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: WorldFrame
 
 S.modName = L["插件美化"]
+_Skins = S
 
-S.allowBypass = {}
-S.addonCallbacks = {}
-S.nonAddonCallbacks = {}
+local allowBypass = {}
+local addonCallbacks = {}
+local nonAddonCallbacks = {}
 
 local alpha
 local backdropcolorr, backdropcolorg, backdropcolorb
@@ -38,8 +29,9 @@ S["media"] = {
     ["classcolours"] = R.colors.class
 }
 
-local r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b
+local r, g, b = R.colors.class[R.myclass].r, R.colors.class[R.myclass].g, R.colors.class[R.myclass].b
 S["media"].r, S["media"].g, S["media"].b = r, g, b
+_r, _g, _b = r, g, b
 
 function S:CreateGradient(f)
     assert(f, "doesn't exist!")
@@ -747,15 +739,15 @@ function S:AddCallbackForAddon(addonName, eventName, loadFunc, forceLoad, bypass
     end
 
     if bypass then
-        self.allowBypass[addonName] = true
+        allowBypass[addonName] = true
     end
 
     --Create an event registry for this addon, so that we can fire multiple events when this addon is loaded
-    if not self.addonCallbacks[addonName] then
-        self.addonCallbacks[addonName] = {}
+    if not addonCallbacks[addonName] then
+        addonCallbacks[addonName] = {}
     end
 
-    if self.addonCallbacks[addonName][eventName] then
+    if addonCallbacks[addonName][eventName] then
         --Don't allow a registered callback to be overwritten
         R:Print("Invalid argument #2 to S:AddCallbackForAddon (event name is already registered, please use a unique event name)")
         return
@@ -768,7 +760,7 @@ function S:AddCallbackForAddon(addonName, eventName, loadFunc, forceLoad, bypass
         R.callbacks:Fire(eventName)
     else
         --Insert eventName in this addons' registry
-        self.addonCallbacks[addonName][eventName] = true
+        addonCallbacks[addonName][eventName] = true
     end
 end
 
@@ -783,14 +775,14 @@ function S:AddCallback(eventName, loadFunc)
         return
     end
 
-    if self.nonAddonCallbacks[eventName] then
+    if nonAddonCallbacks[eventName] then
         --Don't allow a registered callback to be overwritten
         R:Print("Invalid argument #1 to S:AddCallback (event name is already registered, please use a unique event name)")
         return
     end
 
     --Add event name to registry
-    self.nonAddonCallbacks[eventName] = true
+    nonAddonCallbacks[eventName] = true
 
     --Register loadFunc to be called when event is fired
     R.RegisterCallback(R, eventName, loadFunc)
@@ -798,20 +790,20 @@ end
 
 function S:ADDON_LOADED(event, addon)
     if IsAddOnLoaded("Skinner") or IsAddOnLoaded("Aurora") or addon == "RayUI" then return end
-    if self.allowBypass[addon] then
-        if S.addonCallbacks[addon] then
+    if allowBypass[addon] then
+        if addonCallbacks[addon] then
             --Fire events to the skins that rely on this addon
-            for event in pairs(S.addonCallbacks[addon]) do
-                S.addonCallbacks[addon][event] = nil
+            for event in pairs(addonCallbacks[addon]) do
+                addonCallbacks[addon][event] = nil
                 R.callbacks:Fire(event)
             end
         end
         return
     end
 
-    if S.addonCallbacks[addon] then
-        for event in pairs(S.addonCallbacks[addon]) do
-            S.addonCallbacks[addon][event] = nil
+    if addonCallbacks[addon] then
+        for event in pairs(addonCallbacks[addon]) do
+            addonCallbacks[addon][event] = nil
             R.callbacks:Fire(event)
         end
     end
@@ -819,8 +811,8 @@ end
 
 function S:Initialize()
     if not self.db.enable then
-        wipe(self.addonCallbacks)
-        wipe(self.nonAddonCallbacks)
+        wipe(addonCallbacks)
+        wipe(nonAddonCallbacks)
         return
     end
 
@@ -829,17 +821,17 @@ function S:Initialize()
     bordercolorr, bordercolorg, bordercolorb = unpack(R["media"].bordercolor)
 
     --Fire events for Blizzard addons that are already loaded
-    for addon, events in pairs(self.addonCallbacks) do
+    for addon, events in pairs(addonCallbacks) do
         if IsAddOnLoaded(addon) then
             for event in pairs(events) do
-                self.addonCallbacks[addon][event] = nil
+                addonCallbacks[addon][event] = nil
                 R.callbacks:Fire(event)
             end
         end
     end
     --Fire event for all skins that doesn't rely on a Blizzard addon
-    for eventName in pairs(self.nonAddonCallbacks) do
-        self.addonCallbacks[eventName] = nil
+    for eventName in pairs(nonAddonCallbacks) do
+        addonCallbacks[eventName] = nil
         R.callbacks:Fire(eventName)
     end
 

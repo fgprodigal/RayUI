@@ -1,73 +1,14 @@
-﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+﻿----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Chat")
+
+
 local CH = R:NewModule("Chat", "AceEvent-3.0", "AceHook-3.0", "AceTimer-3.0", "AceConsole-3.0")
-local D = R:GetModule("Debug")
+
 CH.modName = L["聊天栏"]
+_Chat = CH
 
---Cache global variables
---Lua functions
-local _G = _G
-local GetTime, time = GetTime, time
-local select, pairs, ipairs, unpack = select, pairs, ipairs, unpack
-local string, math, table = string, math, table
-local strsub, strlen, format, strsplit = string.sub, string.len, string.format, string.split
-local tostring = tostring
-local type = type
-local tonumber = tonumber
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local SetCVar = SetCVar
-local InCombatLockdown = InCombatLockdown
-local IsMouseButtonDown = IsMouseButtonDown
-local BNGetFriendInfoByID = BNGetFriendInfoByID
-local BNGetGameAccountInfo = BNGetGameAccountInfo
-local ChangeChatColor = ChangeChatColor
-local ToggleChatColorNamesByClassGroup = ToggleChatColorNamesByClassGroup
-local Ambiguate = Ambiguate
-local GetPlayerInfoByGUID = GetPlayerInfoByGUID
-local FCF_SetChatWindowFontSize = FCF_SetChatWindowFontSize
-local FCF_GetChatWindowInfo = FCF_GetChatWindowInfo
-local FCF_SavePositionAndDimensions = FCF_SavePositionAndDimensions
-local FCF_OpenNewWindow = FCF_OpenNewWindow
-local FCF_SetWindowAlpha = FCF_SetWindowAlpha
-local FCF_SetLocked = FCF_SetLocked
-local FCF_DockFrame = FCF_DockFrame
-local FCF_Close = FCF_Close
-local FCFDock_SelectWindow = FCFDock_SelectWindow
-local GetChatWindowSavedPosition = GetChatWindowSavedPosition
-local ToggleFrame = ToggleFrame
-local ShowUIPanel = ShowUIPanel
-local HideUIPanel = HideUIPanel
-local IsShiftKeyDown = IsShiftKeyDown
-local IsControlKeyDown = IsControlKeyDown
-local BetterDate = BetterDate
-local GetChatWindowInfo = GetChatWindowInfo
-local ChatFrame_AddMessageGroup = ChatFrame_AddMessageGroup
-local ChatFrame_MessageEventHandler = ChatFrame_MessageEventHandler
-local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
-local ChatFrame_RemoveAllMessageGroups = ChatFrame_RemoveAllMessageGroups
-local UIFrameFadeIn = UIFrameFadeIn
-local GetMouseFocus = GetMouseFocus
-local ChatEdit_ChooseBoxForSend = ChatEdit_ChooseBoxForSend
-local ChatEdit_ActivateChat = ChatEdit_ActivateChat
-local StaticPopup_Show = StaticPopup_Show
-local RegisterStateDriver = RegisterStateDriver
-local hooksecurefunc = hooksecurefunc
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: GameTooltip, CHAT_TIMESTAMP_FORMAT, LOCALIZED_CLASS_NAMES_FEMALE, LOCALIZED_CLASS_NAMES_MALE
--- GLOBALS: RayUICharacterData, CHAT_FRAME_TEXTURES, ChatFrame1, ItemRefTooltip, ChatFrameMenuButton
--- GLOBALS: QuickJoinToastButton, ChatTypeInfo, UISpecialFrames, CopyScrollScrollBar, ChatFontNormal
--- GLOBALS: ChatMenu, CHAT_FRAMES, RayUIChatBG, INTERFACE_ACTION_BLOCKED, COMBATLOG, CombatLogQuickButtonFrame_Custom
--- GLOBALS: SELECTED_CHAT_FRAME, DEFAULT_CHAT_FRAME, WHISPER, GENERAL_CHAT_DOCK, PET_BATTLE_COMBAT_LOG
--- GLOBALS: CopyChatFrame, GeneralDockManager, CHAT_INSTANCE_CHAT_GET, CHAT_INSTANCE_CHAT_LEADER_GET
--- GLOBALS: CHAT_BN_WHISPER_GET, CHAT_GUILD_GET, CHAT_OFFICER_GET, CHAT_PARTY_GET, CHAT_PARTY_GUIDE_GET
--- GLOBALS: CHAT_PARTY_LEADER_GET, CHAT_RAID_GET, CHAT_RAID_LEADER_GET, CHAT_RAID_WARNING_GET, CHAT_SAY_GET
--- GLOBALS: CHAT_WHISPER_GET, CHAT_YELL_GET, ERR_FRIEND_ONLINE_SS, ERR_FRIEND_OFFLINE_S, TIMESTAMP_FORMAT_HHMM
--- GLOBALS: TIMESTAMP_FORMAT_HHMMSS, TIMESTAMP_FORMAT_HHMMSS_24HR, TIMESTAMP_FORMAT_HHMMSS_AMPM
--- GLOBALS: TIMESTAMP_FORMAT_HHMM_24HR, TIMESTAMP_FORMAT_HHMM_AMPM, CHAT_FRAME_TAB_NORMAL_NOMOUSE_ALPHA
--- GLOBALS: CHAT_FRAME_TAB_SELECTED_NOMOUSE_ALPHA, InterfaceOptionsSocialPanelTimestamps
--- GLOBALS: InterfaceOptionsSocialPanelChatStyle, InterfaceOptionsSocialPanelProfanityFilter
 
 local ChatHistoryEvent = CreateFrame("Frame")
 local tokennum, matchTable = 1, {}
@@ -82,16 +23,15 @@ local sizes = {
 	":12:20",
 	":14",
 }
-
-CH.LinkHoverShow = {
-	["achievement"] = true,
-	["enchant"] = true,
-	["glyph"] = true,
-	["item"] = true,
-	["quest"] = true,
-	["spell"] = true,
-	["talent"] = true,
-	["unit"] = true,
+local linkHoverShow = {
+	achievement = true,
+	enchant = true,
+	glyph = true,
+	item = true,
+	quest = true,
+	spell = true,
+	talent = true,
+	unit = true,
 }
 
 local function GetTimeForSavedMessage()
@@ -160,7 +100,7 @@ function CH:GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8
 end
 
 local function CreatCopyFrame()
-	local S = R:GetModule("Skins")
+	local S = R.Skins
 	frame = CreateFrame("Frame", "CopyChatFrame", R.UIParent)
 	table.insert(UISpecialFrames, frame:GetName())
 	S:SetBD(frame)
@@ -353,7 +293,7 @@ local hyperLinkEntered
 function CH:OnHyperlinkEnter(frame, linkData, link)
 	if InCombatLockdown() then return; end
 	local t = linkData:match("^(.-):")
-	if CH.LinkHoverShow[t] then
+	if linkHoverShow[t] then
 		ShowUIPanel(GameTooltip)
 		GameTooltip:SetOwner(RayUIChatBG, "ANCHOR_RIGHT", 6, 0)
 		GameTooltip:SetHyperlink(link)
@@ -753,7 +693,7 @@ function CH:ApplyStyle(event, ...)
 			end
 			local bb = _G[frameName.."ButtonFrameBottomButton"]
 			local flash = _G[frameName.."ButtonFrameBottomButtonFlash"]
-			R:GetModule("Skins"):ReskinArrow(bb, "down")
+			R.Skins:ReskinArrow(bb, "down")
 			bb:SetParent(cf)
 			bb:ClearAllPoints()
 			bb:SetPoint("TOPRIGHT", cf, "TOPRIGHT", 0, -20)
@@ -872,9 +812,9 @@ function CH:SetItemRef(link, text, button, chatFrame)
 			ItemRefTooltip:SetOwner(R.UIParent, "ANCHOR_PRESERVE")
 		end
 		ItemRefTooltip:ClearLines()
-		ItemRefTooltip:AddLine(CH.meters[meterID].title)
-		ItemRefTooltip:AddLine(string.format(L["发布者"]..": %s", CH.meters[meterID].source))
-		for k, v in ipairs(CH.meters[meterID].data) do
+		ItemRefTooltip:AddLine(_DamageMeters[meterID].title)
+		ItemRefTooltip:AddLine(string.format(L["发布者"]..": %s", _DamageMeters[meterID].source))
+		for k, v in ipairs(_DamageMeters[meterID].data) do
 			local left, right = v:match("^(.*) (.*)$")
 			if left and right then
 				ItemRefTooltip:AddDoubleLine(left, right, 1, 1, 1, 1, 1, 1)

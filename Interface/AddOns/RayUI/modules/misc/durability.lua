@@ -1,24 +1,13 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local M = R:GetModule("Misc")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Misc")
+
+
+local M = _Misc
 local mod = M:NewModule("Durability", "AceEvent-3.0")
 local LibItemLevel = LibStub:GetLibrary("LibItemLevel-RayUI")
 
---Cache global variables
---Lua functions
-local _G = _G
-local pairs, math, string, rawget, select = pairs, math, string, rawget, select
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local GetInventoryItemDurability = GetInventoryItemDurability
-local GetInventoryItemLink = GetInventoryItemLink
-local GetDetailedItemLevelInfo = GetDetailedItemLevelInfo
-local GetItemInfo = GetItemInfo
-local GetItemQualityColor = GetItemQualityColor
-local GetInventorySlotInfo = GetInventorySlotInfo
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: LE_ITEM_QUALITY_ARTIFACT, INVSLOT_OFFHAND, INVSLOT_MAINHAND
 
 local SLOTIDS, LEFT_SLOT = {}, {}
 

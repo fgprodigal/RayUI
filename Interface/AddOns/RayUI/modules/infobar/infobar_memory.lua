@@ -1,27 +1,12 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local IF = R:GetModule("InfoBar")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("InfoBar")
 
---Cache global variables
---Lua functions
-local string, table = string, table
-local tostring = tostring
-local gcinfo = gcinfo
-local collectgarbage = collectgarbage
-local tinsert = table.insert
 
---WoW API / Variables
-local ResetCPUUsage = ResetCPUUsage
-local UpdateAddOnMemoryUsage = UpdateAddOnMemoryUsage
-local GetNumAddOns = GetNumAddOns
-local IsAddOnLoaded = IsAddOnLoaded
-local GetAddOnMemoryUsage = GetAddOnMemoryUsage
-local GetAddOnInfo = GetAddOnInfo
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: GameTooltip
+local IF = _InfoBar
 
 local AddOnMemory = {}
-
 local MemoryColor = {
     [1] = "007FFF", -- Light Blue (0-100 KB)
     [2] = "00FF00", -- Green (0.1-1 MB)

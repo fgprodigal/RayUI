@@ -1,32 +1,14 @@
-﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local A = R:NewModule("Auras", "AceEvent-3.0", "AceHook-3.0")
+﻿----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Auras")
+
+
+A = R:NewModule("Auras", "AceEvent-3.0", "AceHook-3.0")
 local LSM = LibStub("LibSharedMedia-3.0")
 
---Cache global variables
---Lua functions
-local select, pairs = select, pairs
-local string, math = string, math
-local format = string.format
-local floor = math.floor
-local GetTime = GetTime
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local GetWeaponEnchantInfo = GetWeaponEnchantInfo
-local IsShiftKeyDown = IsShiftKeyDown
-local UnitAura = UnitAura
-local SecureButton_GetUnit = SecureButton_GetUnit
-local GetInventoryItemQuality = GetInventoryItemQuality
-local GetInventoryItemTexture = GetInventoryItemTexture
-local GetItemQualityColor = GetItemQualityColor
-local RegisterStateDriver = RegisterStateDriver
-local InCombatLockdown = InCombatLockdown
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RayUIPlayerDebuffs, RayUIPlayerBuffs, NORMAL_FONT_COLOR_CODE, DebuffTypeColor, AurasHolder
--- GLOBALS: BuffFrame, TemporaryEnchantFrame, InterfaceOptionsFrameCategoriesButton12
-
 A.modName = L["BUFF"]
+_Auras = A
 
 local buttonsize = 30 -- Buff Size
 local spacing = 8 -- Buff Spacing
@@ -254,7 +236,7 @@ function A:CreateAuraHeader(filter)
     RegisterStateDriver(header, "visibility", "[petbattle] hide; show")
 
     if filter == "HELPFUL" then
-        header:SetAttribute('consolidateDuration', -1)
+        header:SetAttribute("consolidateDuration", -1)
         header:SetAttribute("includeWeapons", 1)
     end
 
@@ -266,7 +248,7 @@ end
 
 function A:PostDrag(position)
     if InCombatLockdown() then return end
-    local headers = {RayUIPlayerBuffs,RayUIPlayerDebuffs}
+    local headers = { RayUIPlayerBuffs,RayUIPlayerDebuffs }
     for _, header in pairs(headers) do
         if header then
             if not position then position = R:GetScreenQuadrant(header) end

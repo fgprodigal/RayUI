@@ -1,13 +1,5 @@
 local addon = CreateFrame("Frame")
 
---Cache global variables
---Lua functions
-local _G = _G
-local pairs, string, type = pairs, string, type
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: DEFAULT_CHAT_FRAME
-
 -- Based on the frame list from NDragIt by Nemes.
 -- These frames are hooked on login.
 local frames = {

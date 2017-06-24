@@ -1,17 +1,10 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local AB = R:GetModule("ActionBar")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("ActionBar")
 
---Cache global variables
---WoW API / Variables
-local UnitAffectingCombat = UnitAffectingCombat
-local UnitExists = UnitExists
-local UnitInVehicle = UnitInVehicle
-local SpellBookFrame = SpellBookFrame
-local IsAddOnLoaded = IsAddOnLoaded
-local InCombatLockdown = InCombatLockdown
 
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: MacroFrame, HoverBind, RayUIActionBarHider
+local AB = _ActionBar
 
 local hider = CreateFrame("Frame", "RayUIActionBarHider", R.UIParent, "SecureHandlerStateTemplate")
 hider:SetFrameStrata("LOW")

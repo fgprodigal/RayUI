@@ -1,95 +1,28 @@
-﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local M = R:GetModule("Misc")
+﻿----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Misc")
+
+local M = _Misc
 local mod = M:NewModule("Quest", "AceEvent-3.0", "AceHook-3.0")
-
---Cache global variables
---Lua functions
-local _G = _G
-local string, unpack, select, table, next = string, unpack, select, table, next
-local tonumber, pairs = tonumber, pairs
-local setmetatable = setmetatable
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local GetNumQuestLogEntries = GetNumQuestLogEntries
-local GetQuestLogTitle = GetQuestLogTitle
-local QuestLogQuests_GetTitleButton = QuestLogQuests_GetTitleButton
-local AcceptQuest = AcceptQuest
-local GetNumAutoQuestPopUps = GetNumAutoQuestPopUps
-local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
-local C_Timer = C_Timer
-local QuestInfoDescriptionText = QuestInfoDescriptionText
-local IsShiftKeyDown = IsShiftKeyDown
-local GetNumTrackingTypes = GetNumTrackingTypes
-local GetTrackingInfo = GetTrackingInfo
-local UnitGUID = UnitGUID
-local GetNumActiveQuests = GetNumActiveQuests
-local GetActiveTitle = GetActiveTitle
-local SelectActiveQuest = SelectActiveQuest
-local GetNumAvailableQuests = GetNumAvailableQuests
-local SelectAvailableQuest = SelectAvailableQuest
-local GetGossipActiveQuests = GetGossipActiveQuests
-local GetGossipAvailableQuests = GetGossipAvailableQuests
-local GetNumGossipActiveQuests = GetNumGossipActiveQuests
-local SelectGossipActiveQuest = SelectGossipActiveQuest
-local GetNumGossipAvailableQuests = GetNumGossipAvailableQuests
-local SelectGossipAvailableQuest = SelectGossipAvailableQuest
-local GetNumGossipOptions = GetNumGossipOptions
-local SelectGossipOption = SelectGossipOption
-local GetInstanceInfo = GetInstanceInfo
-local StaticPopup_Hide = StaticPopup_Hide
-local QuestGetAutoAccept = QuestGetAutoAccept
-local CloseQuest = CloseQuest
-local IsQuestCompletable = IsQuestCompletable
-local GetNumQuestItems = GetNumQuestItems
-local GetQuestItemLink = GetQuestItemLink
-local CompleteQuest = CompleteQuest
-local GetNumQuestChoices = GetNumQuestChoices
-local GetQuestReward = GetQuestReward
-local GetItemInfo = GetItemInfo
-local GetQuestItemInfo = GetQuestItemInfo
-local QuestInfoRewardsFrame = QuestInfoRewardsFrame
-local GetAutoQuestPopUp = GetAutoQuestPopUp
-local GetQuestLogIndexByID = GetQuestLogIndexByID
-local ShowQuestComplete = ShowQuestComplete
-local GetContainerNumSlots = GetContainerNumSlots
-local GetContainerItemQuestInfo = GetContainerItemQuestInfo
-local IsQuestFlaggedCompleted = IsQuestFlaggedCompleted
-local UnitLevel = UnitLevel
-local UseContainerItem = UseContainerItem
-local GetQuestTagInfo = GetQuestTagInfo
-local GetAvailableQuestInfo = GetAvailableQuestInfo
-local GetNumGroupMembers = GetNumGroupMembers
-local QuestIsFromAreaTrigger = QuestIsFromAreaTrigger
-local QuickQuestBlacklistDB = QuickQuestBlacklistDB
-local GetQuestID = GetQuestID
-local AcknowledgeAutoAcceptQuest = AcknowledgeAutoAcceptQuest
-local IsQuestIgnored = IsQuestIgnored
-local UnitIsDeadOrGhost = UnitIsDeadOrGhost
-local ShowQuestOffer = ShowQuestOffer
-local QuestLogPushQuest = QuestLogPushQuest
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: ENABLE_COLORBLIND_MODE, ITEM_MIN_LEVEL, ERR_QUEST_ALREADY_DONE, ERR_QUEST_FAILED_LOW_LEVEL, QuestFrame_OnEvent
--- GLOBALS: ERR_QUEST_NEED_PREREQS, MINIMAP_TRACKING_TRIVIAL_QUESTS, QuestFrame, MINIMAP_TRACKING_HIDDEN_QUESTS, QuestInfoItem_OnClick
 
 local function IsTrackingHidden()
     for index = 1, GetNumTrackingTypes() do
-		local name, _, active = GetTrackingInfo(index)
-		if(name == (MINIMAP_TRACKING_TRIVIAL_QUESTS or MINIMAP_TRACKING_HIDDEN_QUESTS)) then
-			return active
-		end
-	end
+        local name, _, active = GetTrackingInfo(index)
+        if(name == (MINIMAP_TRACKING_TRIVIAL_QUESTS or MINIMAP_TRACKING_HIDDEN_QUESTS)) then
+            return active
+        end
+    end
 end
 
 local function GetAvailableGossipQuestInfo(index)
-	local name, level, isTrivial, frequency, isRepeatable, isLegendary, isIgnored = select(((index * 7) - 7) + 1, GetGossipAvailableQuests())
-	return name, level, isTrivial, isIgnored, isRepeatable, frequency == 2, frequency == 3, isLegendary
+    local name, level, isTrivial, frequency, isRepeatable, isLegendary, isIgnored = select(((index * 7) - 7) + 1, GetGossipAvailableQuests())
+    return name, level, isTrivial, isIgnored, isRepeatable, frequency == 2, frequency == 3, isLegendary
 end
 
 local function GetActiveGossipQuestInfo(index)
-	local name, level, isTrivial, isComplete, isLegendary, isIgnored = select(((index * 6) - 6) + 1, GetGossipActiveQuests())
-	return name, level, isTrivial, isIgnored, isComplete, isLegendary
+    local name, level, isTrivial, isComplete, isLegendary, isIgnored = select(((index * 6) - 6) + 1, GetGossipActiveQuests())
+    return name, level, isTrivial, isIgnored, isComplete, isLegendary
 end
 
 function mod:QuestLogQuests_Update()
@@ -117,9 +50,6 @@ local metatable = {
         end
     end
 }
-
-local atBank, atMail, atMerchant
-local choiceQueue, autoCompleteIndex
 
 function QuickQuest:Register(event, method, override)
     local newmethod
@@ -152,16 +82,16 @@ local ignoreQuestNPC = {
 
 local function GetQuestLogQuests(onlyComplete)
     local quests = {}
-	for index = 1, GetNumQuestLogEntries() do
-		local title, _, _, isHeader, _, isComplete, _, questID = GetQuestLogTitle(index)
-		if(not isHeader) then
-			if(onlyComplete and isComplete or not onlyComplete) then
-				quests[title] = questID
-			end
-		end
-	end
+    for index = 1, GetNumQuestLogEntries() do
+        local title, _, _, isHeader, _, isComplete, _, questID = GetQuestLogTitle(index)
+        if(not isHeader) then
+            if(onlyComplete and isComplete or not onlyComplete) then
+                quests[title] = questID
+            end
+        end
+    end
 
-	return quests
+    return quests
 end
 
 QuickQuest:Register("QUEST_GREETING", function()
@@ -408,16 +338,13 @@ QuickQuest:Register("PLAYER_LOGIN", AttemptAutoComplete)
 QuickQuest:Register("QUEST_AUTOCOMPLETE", AttemptAutoComplete)
 QuickQuest:Register("QUEST_ACCEPT_CONFIRM", AcceptQuest)
 
-QuickQuest:Register("QUEST_ACCEPTED", function(id)
-        QuestLogPushQuest(id)
-    end)
 
 local choiceQueue
 QuickQuest:Register("QUEST_ITEM_UPDATE", function(...)
         if(choiceQueue and QuickQuest[choiceQueue]) then
             QuickQuest[choiceQueue]()
         end
-    end)
+    end, true)
 
 QuickQuest:Register("QUEST_PROGRESS", function()
         if(IsQuestCompletable()) then
@@ -426,7 +353,7 @@ QuickQuest:Register("QUEST_PROGRESS", function()
                 for index = 1, requiredItems do
                     local link = GetQuestItemLink("required", index)
                     if(link) then
-                        local id = tonumber(string.match(link, "item:(%d+)"))
+                        local id = GetItemInfoFromHyperlink(link)
                         for _, itemID in pairs(ignoredItems) do
                             if(itemID == id) then
                                 return
@@ -444,10 +371,10 @@ QuickQuest:Register("QUEST_PROGRESS", function()
     end)
 
 QuickQuest:Register("QUEST_COMPLETE", function()
-    	local choices = GetNumQuestChoices()
-    	if(choices <= 1) then
-    		GetQuestReward(1)
-    	end
+        local choices = GetNumQuestChoices()
+        if(choices <= 1) then
+            GetQuestReward(1)
+        end
     end)
 
 local cashRewards = {
@@ -465,16 +392,14 @@ local cashRewards = {
 
 QuickQuest:Register("QUEST_COMPLETE", function()
         local choices = GetNumQuestChoices()
-        if(choices <= 1) then
-            GetQuestReward(1)
-        elseif(choices > 1) then
+        if(choices > 1) then
             local bestValue, bestIndex = 0
 
             for index = 1, choices do
                 local link = GetQuestItemLink("choice", index)
                 if(link) then
                     local _, _, _, _, _, _, _, _, _, _, value = GetItemInfo(link)
-                    value = cashRewards[tonumber(string.match(link, "item:(%d+):"))] or value
+                    value = cashRewards[(GetItemInfoFromHyperlink(link))] or value
 
                     if(value > bestValue) then
                         bestValue, bestIndex = value, index

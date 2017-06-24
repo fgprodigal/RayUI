@@ -1,29 +1,14 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local RA = R:GetModule("Raid")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Raid")
+
+
+local RA = _Raid
 
 local _, ns = ...
 local RayUF = ns.oUF
 
---Cache global variables
---Lua functions
-local _G = _G
-local floor = math.floor
-local format = string.format
-local GetTime = GetTime
-
---WoW API / Variables
-local UnitIsAFK = UnitIsAFK
-local UnitIsDead = UnitIsDead
-local UnitIsGhost = UnitIsGhost
-local UnitIsConnected = UnitIsConnected
-local UnitHealthMax = UnitHealthMax
-local UnitGetIncomingHeals = UnitGetIncomingHeals
-local UnitIsPlayer = UnitIsPlayer
-local UnitReaction = UnitReaction
-local UnitIsUnit = UnitIsUnit
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: ALTERNATE_POWER_INDEX, DEAD, UNKNOWN, UNITNAME_SUMMON_TITLE17, UnitClass, UnitHealth, UnitName
 
 RayUF.Tags.Methods["RayUFRaid:name"] = function(u, r)
     local name = UnitName(u)
@@ -65,7 +50,7 @@ RayUF.Tags.Methods["RayUIRaid:stat"] = function(u)
         local perc = RayUF.Tags.Methods["perhp"](u)
         if perc < 90 then
             local _, class = UnitClass(u)
-            local color = RA.colorCache[class]
+            local color = _ColorCache[class]
 
             return color..perc.."%|r"
         end
@@ -76,7 +61,7 @@ RayUF.Tags.Methods["RayUIRaid:stat"] = function(u)
 
         if per < 0.9 then
             local _, class = UnitClass(u)
-            local color = RA.colorCache[class]
+            local color = _ColorCache[class]
             if color then
                 return color..(RA.db.deficit and "-"..R:ShortValue(max-cur) or R:ShortValue(cur)).."|r"
             end

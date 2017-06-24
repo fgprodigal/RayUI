@@ -3,8 +3,13 @@ Author: Affli@RU-Howling Fjord,
 Modified: Elv
 All rights reserved.
 ]]--
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local S = R:GetModule("Skins")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Skins")
+
+
+local S = _Skins
 
 local function SkinDBM()
     local croprwicons = true -- crops blizz shitty borders from icons in RaidWarning messages

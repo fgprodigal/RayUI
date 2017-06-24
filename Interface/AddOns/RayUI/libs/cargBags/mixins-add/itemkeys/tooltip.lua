@@ -21,17 +21,22 @@ LICENSE
 DESCRIPTION:
 	Item keys which require tooltip parsing to work
 ]]
-local parent, ns = ...
-local cargBags = ns.cargBags
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Bags")
 
-local tipName = parent.."Tooltip"
+
+local cargBags = _cargBags
+
+local tipName = "cargBagsTooltip"
 local tooltip
 
 local function generateTooltip()
 	tooltip = CreateFrame("GameTooltip", tipName)
-	tooltip:SetOwner(WorldFrame, "ANCHOR_NONE") 
-	tooltip:AddFontStrings( 
-		tooltip:CreateFontString("$parentTextLeft1", nil, "GameTooltipText"), 
+	tooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
+	tooltip:AddFontStrings(
+		tooltip:CreateFontString("$parentTextLeft1", nil, "GameTooltipText"),
 		tooltip:CreateFontString("$parentTextRight1", nil, "GameTooltipText")
 	)
 end
@@ -56,4 +61,3 @@ cargBags.itemKeys["bindOn"] = function(i)
 	i.bindOn = bindOn
 	return bindOn
 end
-

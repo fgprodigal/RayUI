@@ -1,18 +1,12 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local M = R:GetModule("Misc")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Misc")
+
+
+local M = _Misc
 local mod = M:NewModule("Focuser", "AceEvent-3.0")
 
---Cache global variables
---Lua functions
-local pairs = pairs
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local InCombatLockdown = InCombatLockdown
-local SetOverrideBindingClick = SetOverrideBindingClick
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RayUF
 
 local modifier = "shift" -- shift, alt or ctrl
 local mouseButton = "1" -- 1 = left, 2 = right, 3 = middle, 4 and 5 = thumb buttons if there are any

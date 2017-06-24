@@ -1,14 +1,11 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local M = R:GetModule("Misc")
-local mod = M:NewModule("AutoRelease", "AceEvent-3.0")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Misc")
 
---Cache global variables
---Lua functions
---WoW API / Variables
-local GetSpellInfo = GetSpellInfo
-local UnitBuff = UnitBuff
-local GetBattlefieldStatus = GetBattlefieldStatus
-local RepopMe = RepopMe
+
+local M = _Misc
+local mod = M:NewModule("AutoRelease", "AceEvent-3.0")
 
 function mod:PLAYER_DEAD()
     if not M.db.autorelease then return end

@@ -1,5 +1,10 @@
-local R, L, P, G = unpack(RayUI) --Import: Engine, Locales, ProfileDB, GlobalDB
-local RW = R:GetModule("Watcher")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Watcher")
+
+
+local RW = _Watcher
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 
 local selectedGroup = nil

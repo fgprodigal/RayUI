@@ -1,16 +1,10 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local AB = R:GetModule("ActionBar")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("ActionBar")
 
---Cache global variables
---Lua functions
-local _G = _G
 
---WoW API / Variables
-local CreateFrame = CreateFrame
-local RegisterStateDriver = RegisterStateDriver
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: OverrideActionBar, NUM_OVERRIDE_BUTTONS
+local AB = _ActionBar
 
 function AB:CreateOverrideBar()
     local num = NUM_OVERRIDE_BUTTONS

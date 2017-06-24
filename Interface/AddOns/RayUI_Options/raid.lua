@@ -1,6 +1,11 @@
-local R, L, P, G = unpack(RayUI) --Import: Engine, Locales, ProfileDB, GlobalDB
-local RA = R:GetModule("Raid")
-local UF = R:GetModule("UnitFrames")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Raid")
+
+
+local RA = _Raid
+local UF = R.UnitFrames
 
 R.Options.args.Raid = {
     type = "group",

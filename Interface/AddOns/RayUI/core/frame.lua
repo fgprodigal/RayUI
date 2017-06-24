@@ -1,16 +1,3 @@
---Cache global variables
---Lua functions
-local _G = _G
-local print, tostring, select = print, tostring, select
-local format = format
-
---WoW API / Variables
-local GetMouseFocus = GetMouseFocus
-local FrameStackTooltip_Toggle = FrameStackTooltip_Toggle
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: SLASH_FRAME1, SLASH_FRAMELIST1, SLASH_TEXLIST1, FRAME, ChatFrame1
--- GLOBALS: FrameStackTooltip, UIParentLoadAddOn, CopyChatFrame, RayUI
 
 --[[
 	Command to grab frame information when mouseing over a frame
@@ -92,7 +79,8 @@ SlashCmdList["FRAMELIST"] = function(msg)
 		CopyChatFrame:Hide()
 	end
 
-	RayUI[1]:GetModule("Chat"):CopyChat(ChatFrame1)
+	RayUI:LoadEnv()
+	R.Chat:CopyChat(ChatFrame1)
 	if(not isPreviouslyShown) then
 		FrameStackTooltip_Toggle()
 	end
@@ -117,7 +105,8 @@ local function TextureList(frame)
 		CopyChatFrame:Hide()
 	end
 
-	RayUI[1]:GetModule("Chat"):CopyChat(ChatFrame1)
+	RayUI:LoadEnv()
+	R.Chat:CopyChat(ChatFrame1)
 end
 
 SLASH_TEXLIST1 = "/texlist"

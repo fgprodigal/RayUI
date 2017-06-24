@@ -1,32 +1,10 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local AB = R:GetModule("ActionBar")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("ActionBar")
 
---Cache global variables
---Lua functions
-local _G = _G
-local ceil = ceil
 
---WoW API / Variables
-local CreateFrame = CreateFrame
-local IsPetAttackAction = IsPetAttackAction
-local GetPetActionInfo = GetPetActionInfo
-local PetActionButton_StartFlash = PetActionButton_StartFlash
-local PetActionButton_StopFlash = PetActionButton_StopFlash
-local AutoCastShine_AutoCastStart = AutoCastShine_AutoCastStart
-local AutoCastShine_AutoCastStop = AutoCastShine_AutoCastStop
-local GetPetActionSlotUsable = GetPetActionSlotUsable
-local SetDesaturation = SetDesaturation
-local PetHasActionBar = PetHasActionBar
-local hooksecurefunc = hooksecurefunc
-local PetActionBar_UpdateCooldowns = PetActionBar_UpdateCooldowns
-local UnregisterStateDriver = UnregisterStateDriver
-local UIFrameFadeIn = UIFrameFadeIn
-local UIFrameFadeOut = UIFrameFadeOut
-local RegisterStateDriver = RegisterStateDriver
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: PetActionBarFrame, NUM_PET_ACTION_SLOTS, RayUIActionBarHider
--- GLOBALS: RayUIPetBar
+local AB = _ActionBar
 
 function AB:CreateBarPet()
 	local num = NUM_PET_ACTION_SLOTS
@@ -133,13 +111,13 @@ function AB:CreateBarPet()
 		end
 	end)
 
-    self["Handled"]["barpet"] = bar
+    _HandledBars["barpet"] = bar
     self:UpdatePetBar()
 	R:CreateMover(bar, "PetBarMover", L["宠物动作条锚点"], true, nil, "ALL,ACTIONBARS")
 end
 
 function AB:UpdatePetBar()
-    local bar = self["Handled"]["barpet"]
+    local bar = _HandledBars["barpet"]
     local buttonsPerRow = self.db.barpet.buttonsPerRow
     local buttonsize = self.db.barpet.buttonsize
     local buttonspacing = self.db.barpet.buttonspacing

@@ -23,8 +23,13 @@ DESCRIPTION
 DEPENDENCIES
 	mixins/api-common.lua
 ]]
-local addon, ns = ...
-local layouts = ns.cargBags.classes.Container.layouts
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Bags")
+
+
+local layouts = _cargBags.classes.Container.layouts
 
 function layouts.grid(self, columns, spacing, xOffset, yOffset)
 	columns, spacing = columns or 8, spacing or 5

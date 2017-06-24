@@ -1,8 +1,13 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local S = R:GetModule("Skins")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Skins")
+
+
+local S = _Skins
 
 local function LoadSkin()
-	local r, g, b = S["media"].classcolours[R.myclass].r, S["media"].classcolours[R.myclass].g, S["media"].classcolours[R.myclass].b
+	local r, g, b = _r, _g, _b
 	S:SetBD(AuctionFrame, 2, -10, 0, 10)
 	S:CreateBD(AuctionProgressFrame)
 	S:ReskinCheck(ExactMatchCheckButton)
@@ -39,7 +44,7 @@ local function LoadSkin()
 	BidQualitySort:DisableDrawLayer("BACKGROUND")
 	BidLevelSort:DisableDrawLayer("BACKGROUND")
 	BidDurationSort:DisableDrawLayer("BACKGROUND")
-	BidBuyoutSort:DisableDrawLayer("BACKGROUND")
+	BidBuyoutable.sort:DisableDrawLayer("BACKGROUND")
 	BidStatusSort:DisableDrawLayer("BACKGROUND")
 	BidBidSort:DisableDrawLayer("BACKGROUND")
 	AuctionsQualitySort:DisableDrawLayer("BACKGROUND")

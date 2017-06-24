@@ -1,16 +1,11 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local M = R:GetModule("Misc")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Misc")
+
+
+local M = _Misc
 local mod = M:NewModule("ObjectiveTracker", "AceEvent-3.0")
-
---Cache global variables
---Lua functions
---WoW API / Variables
-local CreateFrame = CreateFrame
-local GetScreenHeight = GetScreenHeight
-local hooksecurefunc = hooksecurefunc
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: WatchFrameMover, ObjectiveTrackerFrame
 
 function mod:Initialize()
     local screenheight = GetScreenHeight()

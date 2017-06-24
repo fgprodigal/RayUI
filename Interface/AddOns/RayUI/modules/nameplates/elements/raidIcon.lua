@@ -1,11 +1,10 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local mod = R:GetModule('NamePlates')
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("NamePlates")
 
---Cache global variables
---Lua functions
---WoW API / Variables
-local GetRaidTargetIndex = GetRaidTargetIndex
-local SetRaidTargetIconTexture = SetRaidTargetIconTexture
+
+local mod = _NamePlates
 
 function mod:UpdateElement_RaidIcon(frame)
     local icon = frame.RaidTargetIndicator;

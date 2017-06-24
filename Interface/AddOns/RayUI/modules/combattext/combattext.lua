@@ -1,22 +1,14 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("CombatText")
+
+
 local CT = R:NewModule("CombatText", "AceEvent-3.0", "AceHook-3.0", "AceTimer-3.0", "AceConsole-3.0")
 local xCP = LibStub("xCombatParser-1.0-RayUI", true)
 CT.modName = L["战斗文字"]
+_CombatText = CT
 
---Cache global variables
---Lua functions
-local _G, pairs, unpack, type, string, table = _G, pairs, unpack, type, string, table
-local tostring, tonumber = tostring, tonumber
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local GetSpellTexture = GetSpellTexture
-local UnitGUID = UnitGUID
-local SetCVar = SetCVar
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: PET_ATTACK_TEXTURE, CombatText, InterfaceOptionsCombatPanelEnableFloatingCombatText, InterfaceOptionsCombatPanelEnableFloatingCombatTextText
--- GLOBALS: SCROLLING_MESSAGE_FRAME_INSERT_MODE_TOP, RayUF
 
 local showreceived = true
 local showoutput = true
@@ -117,8 +109,8 @@ local format_spell_icon = " |T%s:%d:%d:0:0:64:64:5:59:5:59|t"
 
 local function IsMerged(spellID)
     local merged = false
-    spellID = CT.merge2h[spellID] or spellID
-    return CT.merges[spellID] ~= nil
+    spellID = _Merges2H[spellID] or spellID
+    return _Merges[spellID] ~= nil
 end
 
 function CT:GetSpellTextureFormatted( spellID, message, critical, iconSize, justify )
@@ -153,7 +145,7 @@ local spamHeap, spamStack, now = {}, {}, 0
 local spam_format = "%s |cffffffffx%s|r"
 function CT:AddSpamMessage(framename, mergeID, message, color, interval, prep)
     -- Check for a Secondary Spell ID
-    mergeID = CT.merge2h[mergeID] or mergeID
+    mergeID = _Merges2H[mergeID] or mergeID
 
     local heap, stack = spamHeap[framename], spamStack[framename]
     if heap[mergeID] then
@@ -164,7 +156,7 @@ function CT:AddSpamMessage(framename, mergeID, message, color, interval, prep)
             heap[mergeID].last = now
         end
     else
-        local db = CT.merges[mergeID]
+        local db = _Merges[mergeID]
         heap[mergeID] = {
             -- last update
             last = now,

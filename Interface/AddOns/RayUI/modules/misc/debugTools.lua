@@ -1,22 +1,11 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local M = R:GetModule("Misc")
-local S = R:GetModule("Skins")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Misc")
 
---Cache global variables
---Lua functions
---WoW API / Variables
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-local InCombatLockdown = InCombatLockdown
-local GetCVarBool = GetCVarBool
-local SetCVar = SetCVar
-local PlaySoundFile = PlaySoundFile
-local IsAddOnLoaded = IsAddOnLoaded
-local StaticPopup_Hide = StaticPopup_Hide
-local LoadAddOn = LoadAddOn
 
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: ScriptErrorsFrame, UIParent
+local M = _Misc
+local S = R.Skins
 
 --Enhanced debugtools from ElvUI
 local D = M:NewModule("DebugTools", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")

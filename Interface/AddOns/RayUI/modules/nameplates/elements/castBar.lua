@@ -1,17 +1,11 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local mod = R:GetModule('NamePlates')
-local LSM = LibStub("LibSharedMedia-3.0")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("NamePlates")
 
---Cache global variables
---Lua functions
-local select, unpack = select, unpack
---WoW API / Variables
-local CreateFrame = CreateFrame
-local GetTime = GetTime
-local UnitCastingInfo = UnitCastingInfo
-local UnitChannelInfo = UnitChannelInfo
-local FAILED = FAILED
-local INTERRUPTED = INTERRUPTED
+
+local mod = _NamePlates
+local LSM = LibStub("LibSharedMedia-3.0")
 
 function mod:UpdateElement_CastBarOnUpdate(elapsed)
     if ( self.casting ) then

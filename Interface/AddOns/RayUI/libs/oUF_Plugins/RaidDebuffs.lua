@@ -1,4 +1,9 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv()
+
+
 
 local _, ns = ...
 local oUF = ns.oUF or oUF
@@ -205,7 +210,7 @@ local function UpdateDebuff(self, name, icon, count, debuffType, duration, endTi
             end
         end
 
-        if spellId and RayUI[4].ReverseTimer[spellId] then
+        if spellId and G.ReverseTimer[spellId] then
             f.reverse = true
         else
             f.reverse = nil

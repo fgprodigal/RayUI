@@ -1,14 +1,11 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local mod = R:GetModule('NamePlates')
-local LSM = LibStub("LibSharedMedia-3.0")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("NamePlates")
 
---Cache global variables
---Lua functions
---WoW API / Variables
-local CreateFrame = CreateFrame
-local UnitHealth = UnitHealth
-local UnitHealthMax = UnitHealthMax
-local UnitIsUnit = UnitIsUnit
+
+local mod = _NamePlates
+local LSM = LibStub("LibSharedMedia-3.0")
 
 function mod:UpdateElement_Glow(frame)
     if(not frame.HealthBar:IsShown()) then return end

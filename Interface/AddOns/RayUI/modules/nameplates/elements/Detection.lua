@@ -1,10 +1,10 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local mod = R:GetModule('NamePlates')
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("NamePlates")
 
---Cache global variables
---WoW API / Variables
-local CreateFrame = CreateFrame
-local UnitAura = UnitAura
+
+local mod = _NamePlates
 
 --Cache detection buff names
 local DETECTION_BUFF = GetSpellInfo(203761) --Detector

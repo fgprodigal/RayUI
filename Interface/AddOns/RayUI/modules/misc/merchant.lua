@@ -1,34 +1,12 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local M = R:GetModule("Misc")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Misc")
+
+
+local M = _Misc
 local mod = M:NewModule("Merchant", "AceEvent-3.0", "AceHook-3.0")
 
---Cache global variables
---Lua functions
-local select, math = select, math
-
---WoW API / Variables
-local GetContainerNumSlots = GetContainerNumSlots
-local GetContainerItemLink = GetContainerItemLink
-local GetItemInfo = GetItemInfo
-local GetContainerItemInfo = GetContainerItemInfo
-local UseContainerItem = UseContainerItem
-local PickupMerchantItem = PickupMerchantItem
-local IsShiftKeyDown = IsShiftKeyDown
-local CanMerchantRepair = CanMerchantRepair
-local GetRepairAllCost = GetRepairAllCost
-local IsInGuild = IsInGuild
-local CanGuildBankRepair = CanGuildBankRepair
-local GetGuildBankWithdrawMoney = GetGuildBankWithdrawMoney
-local GetGuildBankMoney = GetGuildBankMoney
-local RepairAllItems = RepairAllItems
-local GetMoney = GetMoney
-local IsAltKeyDown = IsAltKeyDown
-local GetMerchantItemLink = GetMerchantItemLink
-local BuyMerchantItem = BuyMerchantItem
-local GetMerchantItemMaxStack = GetMerchantItemMaxStack
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: DEFAULT_CHAT_FRAME
 
 function mod:MERCHANT_SHOW()
     local c = 0

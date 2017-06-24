@@ -1,25 +1,13 @@
-﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+﻿----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("WorldMap")
+
+
 local WM = R:NewModule("WorldMap", "AceEvent-3.0", "AceHook-3.0", "AceTimer-3.0")
 
---Cache global variables
---Lua functions
-local _G = _G
-local select, unpack, string = select, unpack, string
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local InCombatLockdown = InCombatLockdown
-local SetUIPanelAttribute = SetUIPanelAttribute
-local IsInInstance = IsInInstance
-local GetPlayerMapPosition = GetPlayerMapPosition
-local GetCursorPosition = GetCursorPosition
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: WorldMapFrame, WorldMapFrameSizeUpButton, WorldMapFrameSizeDownButton, RayUI_CoordsHolder, PLAYER
--- GLOBALS: WorldMapDetailFrame, MOUSE_LABEL, DropDownList1, NumberFontNormal, BlackoutWorld, WorldMapTooltip
--- GLOBALS: WORLDMAP_SETTINGS, WORLDMAP_FULLMAP_SIZE, WORLDMAP_WINDOWED_SIZE, WorldMapCompareTooltip1, WorldMapCompareTooltip2
-
 WM.modName = L["世界地图"]
+_WorldMap = WM
 
 local function FixTooltip()
     WorldMapTooltip:SetFrameStrata("TOOLTIP")

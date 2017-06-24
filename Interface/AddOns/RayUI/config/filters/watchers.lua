@@ -1,4 +1,9 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv()
+
+
 
 local positions = {
     player_buff_icon = { "BOTTOMRIGHT", "RayUF_Player", "TOPRIGHT", 0, 105 }, -- "玩家buff&debuff"

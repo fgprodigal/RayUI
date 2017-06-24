@@ -1,19 +1,12 @@
-﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local M = R:GetModule("Misc")
-local mod = M:NewModule("SetRole", "AceEvent-3.0")
-local S = R:GetModule("Skins")
+﻿----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Misc")
 
---Cache global variables
---Lua functions
---WoW API / Variables
-local GetSpecialization = GetSpecialization
-local InCombatLockdown = InCombatLockdown
-local UnitLevel = UnitLevel
-local UnitGroupRolesAssigned = UnitGroupRolesAssigned
-local UnitSetRole = UnitSetRole
-local GetNumGroupMembers = GetNumGroupMembers
-local RolePollPopup = RolePollPopup
-local StaticPopupSpecial_Hide = StaticPopupSpecial_Hide
+
+local M = _Misc
+local mod = M:NewModule("SetRole", "AceEvent-3.0")
+local S = R.Skins
 
 function mod:SetRole()
     local spec = GetSpecialization()

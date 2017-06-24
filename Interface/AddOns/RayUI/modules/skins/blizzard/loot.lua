@@ -1,5 +1,10 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local S = R:GetModule("Skins")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Skins")
+
+
+local S = _Skins
 
 local function GroupLootDropDown_Initialize()
 	local info = Lib_UIDropDownMenu_CreateInfo()
@@ -372,7 +377,7 @@ local function LoadSkin()
                 end
             end
         end
-        SLASH_AUTOLOOT1 = "/autoloot"
+        _G.SLASH_AUTOLOOT1 = "/autoloot"
 
 	end
 end

@@ -1,43 +1,12 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local M = R:GetModule("Misc")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Misc")
+
+
+local M = _Misc
 local mod = M:NewModule("Cooldowns", "AceEvent-3.0", "AceHook-3.0")
 
---Cache global variables
---Lua functions
-local select, string, pairs, math = select, string, pairs, math
-local table, tinsert = table, table.insert
-local GetTime = GetTime
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local GetActionInfo = GetActionInfo
-local GetActionTexture = GetActionTexture
-local GetInventoryItemID = GetInventoryItemID
-local GetItemInfo = GetItemInfo
-local GetInventoryItemTexture = GetInventoryItemTexture
-local GetContainerItemID = GetContainerItemID
-local GetSpellInfo = GetSpellInfo
-local GetSpellTexture = GetSpellTexture
-local GetSpellCooldown = GetSpellCooldown
-local GetInventoryItemCooldown = GetInventoryItemCooldown
-local GetContainerItemCooldown = GetContainerItemCooldown
-local GetPetActionInfo = GetPetActionInfo
-local GetPetActionCooldown = GetPetActionCooldown
-local GetContainerItemInfo = GetContainerItemInfo
-local CooldownFrame_Set = CooldownFrame_Set
-local GetSpellTabInfo = GetSpellTabInfo
-local GetSpellBookItemName = GetSpellBookItemName
-local GetSpellBookItemInfo = GetSpellBookItemInfo
-local GetFlyoutInfo = GetFlyoutInfo
-local GetFlyoutSlotInfo = GetFlyoutSlotInfo
-local GetSpellCharges = GetSpellCharges
-local GetContainerNumSlots = GetContainerNumSlots
-local HasPetUI = HasPetUI
-local UnitExists = UnitExists
-local C_Timer = C_Timer
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: NUM_PET_ACTION_SLOTS, BOOKTYPE_SPELL, BOOKTYPE_PET, GameTooltip
 
 local spells, chargespells = { [BOOKTYPE_SPELL] = { }, [BOOKTYPE_PET] = { }, }, { [BOOKTYPE_SPELL] = { }, [BOOKTYPE_PET] = { }, }
 local visible = 0

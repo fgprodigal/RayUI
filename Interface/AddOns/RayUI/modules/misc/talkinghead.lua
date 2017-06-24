@@ -1,18 +1,12 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local M = R:GetModule("Misc")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Misc")
+
+
+local M = _Misc
 local mod = M:NewModule("TalkingHead", "AceEvent-3.0")
 
---Cache global variables
---Lua functions
-local table, ipairs = table, ipairs
-
---WoW API / Variables
-local Model_ApplyUICamera = Model_ApplyUICamera
-local TalkingHead_LoadUI = TalkingHead_LoadUI
-local IsAddOnLoaded = IsAddOnLoaded
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: TalkingHeadFrame, AlertFrame, UIPARENT_MANAGED_FRAME_POSITIONS
 
 function mod:ScaleTalkingHeadFrame()
     local scale = 1

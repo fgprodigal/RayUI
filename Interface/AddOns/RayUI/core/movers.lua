@@ -1,30 +1,9 @@
 --Create a Mover frame by Elv
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local AddOnName = ...
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv()
 
---Cache global variables
---Lua functions
-local _G = _G
-local string = string
-local ipairs = ipairs
-local floor = floor
-local tonumber = tonumber
-local type = type
-local pairs = pairs
-
---WoW API / Variables
-local InCombatLockdown = InCombatLockdown
-local CreateFrame = CreateFrame
-local GetScreenWidth = GetScreenWidth
-local GetScreenHeight = GetScreenHeight
-local PlaySound = PlaySound
-local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT
-local RESET = RESET
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RayUIParent, GameTooltip, UIDropDownMenu_SetSelectedValue, UIDropDownMenu_Initialize
--- GLOBALS: UIDropDownMenu_CreateInfo, UIDropDownMenu_AddButton, EditBox_ClearFocus, SquareButton_SetIcon
--- GLOBALS: RayUIMoverPopupWindow, GameFontNormal, RayUIMoverPopupWindowDropDown
 
 local grid, nudgeWindow
 local gridSize = 50
@@ -263,7 +242,7 @@ local function SetNudge()
 end
 
 local function CreatePopup()
-	local S = R:GetModule("Skins")
+	local S = R.Skins
 	local f = CreateFrame("Frame", "RayUIMoverPopupWindow", R.UIParent)
 	f:SetFrameStrata("DIALOG")
 	f:SetToplevel(true)
@@ -517,7 +496,7 @@ local function CreateMover(parent, name, text, overlay, postdrag, ignoreSizeChan
 	if not parent then return end
 	if R.CreatedMovers[name].Created then return end
 
-	local S = R:GetModule("Skins")
+	local S = R.Skins
 
 	if overlay == nil then overlay = true end
 

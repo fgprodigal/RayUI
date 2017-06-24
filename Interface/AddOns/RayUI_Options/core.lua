@@ -1,16 +1,11 @@
-﻿local R, L, P, G = unpack(RayUI) --Import: Engine, Locales, ProfileDB, GlobalDB
+﻿----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv()
+
+
 local AceConfig = LibStub("AceConfig-3.0")
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
-
---Cache global variables
---Lua functions
-local unpack = unpack
-
---WoW API / Variables
-local GetLocale = GetLocale
-local ReloadUI = ReloadUI
-local GameTooltip_Hide = GameTooltip_Hide
-local StaticPopup_Show = StaticPopup_Show
 
 AceConfig:RegisterOptionsTable("RayUI", R.Options)
 AceConfigDialog:SetDefaultSize("RayUI", 850, 650)

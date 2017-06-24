@@ -1,41 +1,15 @@
 ﻿-- Nameplate from ElvUI
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local mod = R:NewModule('NamePlates', 'AceHook-3.0', 'AceEvent-3.0', 'AceTimer-3.0')
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("NamePlates")
+
+
+local mod = R:NewModule("NamePlates", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0")
 local LSM = LibStub("LibSharedMedia-3.0")
 
---Cache global variables
---Lua functions
-local pairs, type = pairs, type
-local twipe = table.wipe
-local string = string
-local format, match = string.format, string.match
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
-local C_NamePlate_GetNamePlates = C_NamePlate.GetNamePlates
-local GetArenaOpponentSpec = GetArenaOpponentSpec
-local GetBattlefieldScore = GetBattlefieldScore
-local GetNumArenaOpponentSpecs = GetNumArenaOpponentSpecs
-local GetNumBattlefieldScores = GetNumBattlefieldScores
-local GetSpecializationInfoByID = GetSpecializationInfoByID
-local hooksecurefunc = hooksecurefunc
-local IsInInstance = IsInInstance
-local RegisterUnitWatch = RegisterUnitWatch
-local SetCVar = SetCVar
-local UnitCanAttack = UnitCanAttack
-local UnitExists = UnitExists
-local UnitGroupRolesAssigned = UnitGroupRolesAssigned
-local UnitHasVehicleUI = UnitHasVehicleUI
-local UnitIsPlayer = UnitIsPlayer
-local UnitIsUnit = UnitIsUnit
-local UnitName = UnitName
-local UnitPowerType = UnitPowerType
-local UnregisterUnitWatch = UnregisterUnitWatch
-local UNKNOWN = UNKNOWN
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: NamePlateDriverFrame, UIParent, InterfaceOptionsNamesPanelUnitNameplates
+mod.modName = L["姓名板"]
+_NamePlates = mod
 
 --Taken from Blizzard_TalentUI.lua
 local healerSpecIDs = {
@@ -47,14 +21,14 @@ local healerSpecIDs = {
     264, --Shaman Restoration
 }
 
-mod.HealerSpecs = {}
-mod.Healers = {};
+_HealerSpecs = {}
+_Healers = {}
 
 --Get localized healing spec names
 for _, specID in pairs(healerSpecIDs) do
     local _, name = GetSpecializationInfoByID(specID)
-    if name and not mod.HealerSpecs[name] then
-        mod.HealerSpecs[name] = true
+    if name and not _HealerSpecs[name] then
+        _HealerSpecs[name] = true
     end
 end
 
@@ -64,10 +38,10 @@ function mod:CheckBGHealers()
         name, _, _, _, _, _, _, _, _, _, _, _, _, _, _, talentSpec = GetBattlefieldScore(i);
         if name then
             name = name:match("(.+)%-.+") or name
-            if name and self.HealerSpecs[talentSpec] then
-                self.Healers[name] = talentSpec
-            elseif name and self.Healers[name] then
-                self.Healers[name] = nil;
+            if name and _HealerSpecs[talentSpec] then
+                _Healers[name] = talentSpec
+            elseif name and _Healers[name] then
+                _Healers[name] = nil;
             end
         end
     end
@@ -86,25 +60,25 @@ function mod:CheckArenaHealers()
                 _, talentSpec = GetSpecializationInfoByID(s)
             end
 
-            if talentSpec and talentSpec ~= UNKNOWN and self.HealerSpecs[talentSpec] then
-                self.Healers[name] = talentSpec
+            if talentSpec and talentSpec ~= UNKNOWN and _HealerSpecs[talentSpec] then
+                _Healers[name] = talentSpec
             end
         end
     end
 end
 
 function mod:PLAYER_ENTERING_WORLD()
-    twipe(self.Healers)
+    table.wipe(_Healers)
     local inInstance, instanceType = IsInInstance()
-    if inInstance and instanceType == 'pvp' and self.db.markHealers then
+    if inInstance and instanceType == "pvp" and self.db.markHealers then
         self.CheckHealerTimer = self:ScheduleRepeatingTimer("CheckBGHealers", 3)
         self:CheckBGHealers()
-    elseif inInstance and instanceType == 'arena' and self.db.markHealers then
-        self:RegisterEvent('UNIT_NAME_UPDATE', 'CheckArenaHealers')
-        self:RegisterEvent("ARENA_OPPONENT_UPDATE", 'CheckArenaHealers');
+    elseif inInstance and instanceType == "arena" and self.db.markHealers then
+        self:RegisterEvent("UNIT_NAME_UPDATE", "CheckArenaHealers")
+        self:RegisterEvent("ARENA_OPPONENT_UPDATE", "CheckArenaHealers");
         self:CheckArenaHealers()
     else
-        self:UnregisterEvent('UNIT_NAME_UPDATE')
+        self:UnregisterEvent("UNIT_NAME_UPDATE")
         self:UnregisterEvent("ARENA_OPPONENT_UPDATE")
         if self.CheckHealerTimer then
             self:CancelTimer(self.CheckHealerTimer)
@@ -127,7 +101,7 @@ end
 
 function mod:GetNamePlateForUnit(unit)
     if unit ~= "player" then
-        return C_NamePlate_GetNamePlateForUnit(unit)
+        return C_NamePlate.GetNamePlateForUnit(unit)
     end
 end
 
@@ -348,7 +322,7 @@ function mod:ConfigureAll()
 end
 
 function mod:ForEachPlate(functionToRun, ...)
-    for _, frame in pairs(C_NamePlate_GetNamePlates()) do
+    for _, frame in pairs(C_NamePlate.GetNamePlates()) do
         if(frame and frame.UnitFrame) then
             self[functionToRun](self, frame.UnitFrame, ...)
         end
@@ -634,6 +608,5 @@ end
 function mod:Info()
     return L["|cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r姓名板模块."]
 end
-mod.modName = L["姓名板"]
 
 R:RegisterModule(mod:GetName())

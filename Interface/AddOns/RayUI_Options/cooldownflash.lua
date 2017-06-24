@@ -1,5 +1,10 @@
-local R, L, P, G = unpack(RayUI) --Import: Engine, Locales, ProfileDB, GlobalDB
-local CF = R:GetModule("CooldownFlash")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("CooldownFlash")
+
+
+local CF = _CooldownFlash
 
 R.Options.args.CooldownFlash = {
     type = "group",
@@ -52,7 +57,7 @@ R.Options.args.CooldownFlash = {
             name = L["图标大小"],
             type = "range",
             min = 30, max = 125, step = 1,
-            set = function(info, value) R.db.CooldownFlash[ info[#info] ] = value; CF.DCP:SetSize(value, value) end,
+            set = function(info, value) R.db.CooldownFlash[ info[#info] ] = value; _DCP:SetSize(value, value) end,
             hidden = function() return not R.db.CooldownFlash.enable end,
         },
         fadeInTime = {
@@ -105,9 +110,9 @@ R.Options.args.CooldownFlash = {
             set = function(info, value)
                 R.db.CooldownFlash[ info[#info] ] = value
                 if value then
-                    CF.DCP:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+                    _DCP:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
                 else
-                    CF.DCP:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+                    _DCP:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
                 end
             end,
             hidden = function() return not R.db.CooldownFlash.enable end,

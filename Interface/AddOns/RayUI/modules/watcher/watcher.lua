@@ -1,41 +1,22 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Watcher")
+
+
 local RW = R:NewModule("Watcher", "AceEvent-3.0")
 
---Cache global variables
---Lua functions
-local _G = _G
-local select, unpack, pairs, ipairs, type, next = select, unpack, pairs, ipairs, type, next
-local table = table
-local wipe = wipe
-local getmetatable = getmetatable
-local setmetatable = setmetatable
-local GetTime = GetTime
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local GameTooltip_Hide = GameTooltip_Hide
-local GetItemInfo = GetItemInfo
-local CooldownFrame_Set = CooldownFrame_Set
-local GetInventoryItemLink = GetInventoryItemLink
-local GetSpellInfo = GetSpellInfo
-local GetInventoryItemCooldown = GetInventoryItemCooldown
-local GetSpellCooldown = GetSpellCooldown
-local GetItemCooldown = GetItemCooldown
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: GameTooltip, SpellActivationOverlayFrame
-
 RW.modName = L["法术监视"]
+_Watcher = RW
 
 local colors = R.colors.class
-RW.modules = {}
-
 local defaults = {}
 local watcherPrototype = {}
-local _G, UnitBuff, UnitDebuff = _G, UnitBuff, UnitDebuff
 local BUFF_FLASH_TIME_ON = 0.75
 local BUFF_FLASH_TIME_OFF = 0.75
 local BUFF_MIN_ALPHA = 0.2
+
+_Modules = {}
 
 function watcherPrototype:OnEnable()
     if self.parent then
@@ -629,7 +610,7 @@ function RW:NewWatcher(data)
     else
         module.enable = true
     end
-    RW.modules[name] = module
+    _Modules[name] = module
 end
 
 R:RegisterModule(RW:GetName())

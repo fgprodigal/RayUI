@@ -1,20 +1,10 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local CH = R:GetModule("Chat")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Chat")
 
---Cache global variables
---Lua functions
-local _G = _G
-local select, pairs, ipairs, type, next = select, pairs, ipairs, type, next
-local getkeystring = getkeystring
-local tostring = tostring
-local rawget = rawget
-local pcall = pcall
-local getmetatable = getmetatable
-local loadstring = loadstring
-local table, string = table, string
 
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: AceConsole, DEFAULT_CHAT_FRAME, _g, ignoreCaseSort
+local CH = _Chat
 
 local function isList(t)
     local n = #t
@@ -337,7 +327,7 @@ local findGlobal = setmetatable({}, {__index=function(self, t)
 
     function CH:Dump(text)
         text = text:trim():match("^(.-);*$")
-        local f, err = loadstring("unpack(RayUI):GetModule('Chat'):PrintLiteral(" .. text .. ")")
+        local f, err = loadstring("RayUI:LoadEnv() R.Chat:PrintLiteral(" .. text .. ")")
         if not f then
             R:Print("|cffff0000Error:|r", err)
         else

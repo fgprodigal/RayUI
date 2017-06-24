@@ -1,24 +1,17 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local RA = R:GetModule("Raid")
-local UF = R:GetModule("UnitFrames")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Raid")
+
+
+local RA = _Raid
+local UF = R.UnitFrames
 
 local _, ns = ...
 local RayUF = ns.oUF
 
---Cache global variables
---Lua functions
-local type, unpack, table = type, unpack, table
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local InCombatLockdown = InCombatLockdown
-local IsInInstance = IsInInstance
-local GetInstanceInfo = GetInstanceInfo
-local RegisterStateDriver = RegisterStateDriver
-local UnregisterStateDriver = UnregisterStateDriver
-
 function RA:FetchRaidTankSettings()
-    self.groupConfig.raidTank = {
+    _GroupConfig.raidTank = {
         enable = self.db.showTank,
         width = self.db.tankwidth,
         height = self.db.tankheight,
@@ -60,4 +53,4 @@ function RA:Construct_RaidTankFrames()
     self:RegisterEvent("GROUP_ROSTER_UPDATE", RA.UpdateTargetBorder)
 end
 
-RA["headerstoload"]["raidTank"] = { "MAINTANK", nil }
+_HeadersToLoad["raidTank"] = { "MAINTANK", nil }

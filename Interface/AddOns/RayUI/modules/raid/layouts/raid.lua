@@ -1,24 +1,17 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local RA = R:GetModule("Raid")
-local UF = R:GetModule("UnitFrames")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Raid")
+
+
+local RA = _Raid
+local UF = R.UnitFrames
 
 local _, ns = ...
 local RayUF = ns.oUF
 
---Cache global variables
---Lua functions
-local type, unpack, table = type, unpack, table
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local InCombatLockdown = InCombatLockdown
-local IsInInstance = IsInInstance
-local GetInstanceInfo = GetInstanceInfo
-local RegisterStateDriver = RegisterStateDriver
-local UnregisterStateDriver = UnregisterStateDriver
-
 function RA:FetchRaidSettings()
-    self.groupConfig.raid = {
+    _GroupConfig.raid = {
         enable = true,
         width = self.db.width,
         height = self.db.height,
@@ -71,8 +64,8 @@ function RA:RaidSmartVisibility(event)
     if event == "PLAYER_REGEN_ENABLED" then self:UnregisterEvent("PLAYER_REGEN_ENABLED") end
     if not InCombatLockdown() then
         if(inInstance and (instanceType == "raid" or instanceType == "pvp")) then
-            if RA.mapIDs[mapID] then
-                maxPlayers = RA.mapIDs[mapID]
+            if _MapIDs[mapID] then
+                maxPlayers = _MapIDs[mapID]
             end
             UnregisterStateDriver(self, "visibility")
             if maxPlayers <= 25 then
@@ -81,14 +74,14 @@ function RA:RaidSmartVisibility(event)
                 self:Hide()
             end
         else
-            RegisterStateDriver(self, "visibility", RA.groupConfig.raid.visibility)
+            RegisterStateDriver(self, "visibility", _GroupConfig.raid.visibility)
         end
     else
         self:RegisterEvent("PLAYER_REGEN_ENABLED")
         return
     end
     ]]
-    RegisterStateDriver(self, "visibility", RA.groupConfig.raid.visibility)
+    RegisterStateDriver(self, "visibility", _GroupConfig.raid.visibility)
 end
 
-RA["headerstoload"]["raid"] = { nil, nil }
+_HeadersToLoad["raid"] = { nil, nil }

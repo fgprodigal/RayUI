@@ -1,16 +1,10 @@
-﻿local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local AB = R:GetModule("ActionBar")
+﻿----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("ActionBar")
 
---Cache global variables
---Lua functions
-local _G = _G
 
---WoW API / Variables
-local CreateFrame = CreateFrame
-local HasExtraActionBar = HasExtraActionBar
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: ExtraActionBarFrame, ZoneAbilityFrame
+local AB = _ActionBar
 
 function R:TestBossButton()
 	if ExtraActionBarFrame:IsShown() then

@@ -1,13 +1,11 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local M = R:GetModule("Misc")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Misc")
+
+
+local M = _Misc
 local mod = M:NewModule("TimeTracker", "AceEvent-3.0")
-
---Cache global variables
---Lua functions
-local select, pairs = select, pairs
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: TimerTracker
 
 function mod:SkinIt(bar)
     for i=1, bar:GetNumRegions() do

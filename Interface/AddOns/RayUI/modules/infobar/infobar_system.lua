@@ -1,19 +1,11 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local IF = R:GetModule("InfoBar")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("InfoBar")
+
+
+local IF = _InfoBar
 local LibQTip = LibStub("LibQTip-1.0")
-
---Cache global variables
---Lua functions
-local select = select
-local floor, min, max = math.floor, math.min, math.max
-local format = string.format
-
---WoW API / Variables
-local GetNetStats = GetNetStats
-local GetFramerate = GetFramerate
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: MILLISECONDS_ABBR, RayUI_InfobarTooltipFont, HOME, CHANNEL_CATEGORY_WORLD, FPS_FORMAT
 
 local Tooltip
 local LatencyColor = {
@@ -81,7 +73,7 @@ local function RenderTooltip(anchorFrame)
         Tooltip:SetHighlightTexture([[Interface\QuestFrame\UI-QuestTitleHighlight]])
         Tooltip:CreateShadow("Background")
         if not Tooltip.stripesthin then
-            R:GetModule("Skins"):CreateStripesThin(Tooltip)
+            R.Skins:CreateStripesThin(Tooltip)
             Tooltip.stripesthin:SetInside(Tooltip, 1, 1)
         end
 

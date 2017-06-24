@@ -1,15 +1,12 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local S = R:GetModule("Skins")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Skins")
+
+
+local S = _Skins
 
 --form ElvUI
-
---Cache global variables
---Lua functions
-
---WoW API / Variables
-
---Global variables that we don't cache, list them here for mikk's FindGlobals script
--- GLOBALS: 
 
 local function LoadSkin()
 	--Quest Choise

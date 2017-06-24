@@ -1,19 +1,12 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local mod = R:GetModule('NamePlates')
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("NamePlates")
+
+
+local mod = _NamePlates
 local LSM = LibStub("LibSharedMedia-3.0")
 
---Cache global variables
---Lua functions
-local unpack = unpack
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local PowerBarColor = PowerBarColor
-local UnitPower = UnitPower
-local UnitPowerMax = UnitPowerMax
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: RayUF
 
 function mod:UpdateElement_MaxPower(frame)
     local maxValue = UnitPowerMax(frame.displayedUnit, frame.PowerType);

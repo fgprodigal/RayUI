@@ -1,12 +1,11 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv()
+
+
 local D = R:NewModule("Debug", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0", "AceTimer-3.0")
 
---Cache global variables
---Lua functions
-local _G, select, tostring, string, pairs, print, date = _G, select, tostring, string, pairs, print, date
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: DEFAULT_CHAT_FRAME, CHAT_FRAMES, FCF_StartAlertFlash
 
 D.Prefix = {
 	[1] = "|cff808080[%s] [DEBUG] [%s] ",
@@ -36,7 +35,7 @@ local function Debug(mod, logLevel, msg, ...)
 			end
 		end
 		ChatFrame:AddMessage(msg, nil, nil, nil, nil, nil, nil, true)
-		FCF_StartAlertFlash(ChatFrame)
+		if ChatFrame ~= _G.ChatFrame1 then _G["FCF_StartAlertFlash"](ChatFrame) end
 	end
 end
 R.Debug = Debug

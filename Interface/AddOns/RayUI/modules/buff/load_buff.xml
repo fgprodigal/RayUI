@@ -6,8 +6,10 @@
 		</Attributes>
 		<Scripts>
 			<OnLoad>
-				RayUI[1]:GetModule("Auras"):CreateIcon(self)
+				RayUI:LoadEnv("Auras")
+				_Auras:CreateIcon(self)
 				self:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+				RayUI:LoadDefaultEnv()
 			</OnLoad>
 			<OnEnter>
 				GameTooltip:SetOwner(self, "ANCHOR_BOTTOMLEFT", -5, -5)

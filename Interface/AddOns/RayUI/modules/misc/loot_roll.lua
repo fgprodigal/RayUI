@@ -1,38 +1,12 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
-local M = R:GetModule("Misc")
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv("Misc")
+
+
+local M = _Misc
 local mod = M:NewModule("LootRoll", "AceEvent-3.0")
 
---Cache global variables
---Lua functions
-local _G = _G
-local pairs, unpack, ipairs, next, table = pairs, unpack, ipairs, next, table
-local tonumber, select, math = tonumber, select, math
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local RollOnLoot = RollOnLoot
-local ResetCursor = ResetCursor
-local IsShiftKeyDown = IsShiftKeyDown
-local GameTooltip_ShowCompareItem = GameTooltip_ShowCompareItem
-local IsModifiedClick = IsModifiedClick
-local ShowInspectCursor = ShowInspectCursor
-local CursorOnUpdate = CursorOnUpdate
-local IsControlKeyDown = IsControlKeyDown
-local DressUpItemLink = DressUpItemLink
-local ChatEdit_InsertLink = ChatEdit_InsertLink
-local GetLootRollTimeLeft = GetLootRollTimeLeft
-local GetLootRollItemInfo = GetLootRollItemInfo
-local GetLootRollItemLink = GetLootRollItemLink
-local SetDesaturation = SetDesaturation
-local C_LootHistory = C_LootHistory
-local UnitLevel = UnitLevel
-local IsSpellKnown = IsSpellKnown
-local GetItemInfo = GetItemInfo
-local GetItemQualityColor = GetItemQualityColor
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: GameTooltip, NEED, GREED, PASS, ROLL_DISENCHANT, AlertFrame, ITEM_QUALITY_COLORS
--- GLOBALS: MAX_PLAYER_LEVEL, WorldFrame, UIParent, SlashCmdList, SLASH_LFrames1
 
 R.rollBars = {}
 local testMode = false
@@ -316,6 +290,9 @@ function mod:Initialize()
     self:RegisterEvent("START_LOOT_ROLL")
     self:RegisterEvent("LOOT_HISTORY_ROLL_CHANGED")
 
+    GetItemInfo(34334)
+    GetItemInfo(77949)
+
     SlashCmdList["LFrames"] = function()
         local items = { 34334, 77949 }
         for _, f in pairs(R.rollBars) do
@@ -343,7 +320,7 @@ function mod:Initialize()
             end
         end
     end
-    SLASH_LFrames1 = "/lframes"
+    _G.SLASH_LFrames1 = "/lframes"
 end
 
 M:RegisterMiscModule(mod:GetName())

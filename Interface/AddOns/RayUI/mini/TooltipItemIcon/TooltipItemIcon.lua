@@ -13,21 +13,6 @@ local version = 1.59
 -- VARIABLES
 --------------------------------------------------------------------------------
 
---Cache global variables
---Lua functions
-local pairs, type = pairs, type
-local format, strlower = string.format, string.lower
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: TooltipItemIcon_HookFrame, TooltipItemIcon_DisplayIcon, TooltipItemIcon_Saved, DEFAULT_CHAT_FRAME
--- GLOBALS: GameTooltip, ShoppingTooltip1, ShoppingTooltip2, ShoppingTooltip3, ItemRefTooltip
--- GLOBALS: ItemRefShoppingTooltip1, ItemRefShoppingTooltip2, ItemRefShoppingTooltip3, LinkWrangler
--- GLOBALS: ComparisonTooltip1, ComparisonTooltip2, AtlasLootTooltip, SLASH_TOOLTIPITEMICON1, SLASH_TOOLTIPITEMICON2
--- GLOBALS: SlashCmdList
 
 local IconDataTable = {}
 local LocationTable = {
@@ -934,8 +919,8 @@ local function OnEvent(frame) -- only event is VARIABLES_LOADED
     end
 
     -- slash commands
-    SLASH_TOOLTIPITEMICON1 = "/tooltipitemicon"
-    SLASH_TOOLTIPITEMICON2 = "/ttii"
+    _G.SLASH_TOOLTIPITEMICON1 = "/tooltipitemicon"
+    _G.SLASH_TOOLTIPITEMICON2 = "/ttii"
     SlashCmdList["TOOLTIPITEMICON"] = SlashCommand
     -- unregister unneeded functions to free up memory
     frame:UnregisterEvent("VARIABLES_LOADED")

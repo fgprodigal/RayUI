@@ -1,25 +1,8 @@
-local R, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, GlobalDB
+----------------------------------------------------------
+-- Load RayUI Environment
+----------------------------------------------------------
+RayUI:LoadEnv()
 
---Cache global variables
---Lua functions
-local pairs, select, ipairs = pairs, select, ipairs
-local tinsert = table.insert
-
---WoW API / Variables
-local CreateFrame = CreateFrame
-local IsLoggedIn = IsLoggedIn
-local InCombatLockdown = InCombatLockdown
-local GetProfessions = GetProfessions
-local GetProfessionInfo = GetProfessionInfo
-local IsPassiveSpell = IsPassiveSpell
-local IsAddOnLoaded = IsAddOnLoaded
-local UnitClass = UnitClass
-local GetSpellBookItemInfo = GetSpellBookItemInfo
-local IsCurrentSpell = IsCurrentSpell
-local GetSpellInfo = GetSpellInfo
-
---Global variables that we don't cache, list them here for the mikk's Find Globals script
--- GLOBALS: BOOKTYPE_PROFESSION, TradeSkillFrame, GameTooltip
 
 local TradeTabs = CreateFrame("Frame","TradeTabs")
 
@@ -114,7 +97,7 @@ function TradeTabs:Initialize()
 
         local point,relPoint,x,y = "TOPLEFT", "BOTTOMLEFT", 0, -17
         if not prev then
-            prev, relPoint, x, y = parent, "TOPRIGHT", RayUI[1].Border, -44
+            prev, relPoint, x, y = parent, "TOPRIGHT", R.Border, -44
         end
         tab:SetPoint(point, prev, relPoint, x, y)
 
@@ -156,7 +139,6 @@ local function createClickStopper(button)
 end
 
 function TradeTabs:CreateTab(i, parent, spellID)
-    local S = R:GetModule("Skins")
     local spell, _, texture = GetSpellInfo(spellID)
     local button = CreateFrame("CheckButton","TradeTabsTab"..i,parent,"SpellBookSkillLineTabTemplate,SecureActionButtonTemplate")
     button.tooltip = spell
