@@ -433,7 +433,7 @@ end
 
 function CH:AddMessage(text, ...)
 	if text:find(INTERFACE_ACTION_BLOCKED) then return end
-	local isDebug = select(5,...)
+	local isDebug = select(7,...)
 
 	if string.find(text, "EUI:.*") then return end
 	if not text:find("BN_CONVERSATION") then

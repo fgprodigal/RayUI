@@ -35,7 +35,7 @@ local function Debug(mod, logLevel, msg, ...)
 				break
 			end
 		end
-		ChatFrame:AddMessage(msg, nil, nil, nil, nil, true)
+		ChatFrame:AddMessage(msg, nil, nil, nil, nil, nil, nil, true)
 		FCF_StartAlertFlash(ChatFrame)
 	end
 end
