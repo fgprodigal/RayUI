@@ -3,6 +3,7 @@
 .DS_Store
 
 /*
+!/pre-commit
 !/Interface/
 !/.gitignore
 !/.gitlab
