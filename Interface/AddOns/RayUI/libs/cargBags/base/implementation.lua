@@ -424,6 +424,7 @@ function Implementation:GetItemInfo(bagID, slotID)
     item.subType = subType
     item.typeID = typeID
     item.subTypeID = subTypeID
+    item.cdStart, item.cdFinish, item.cdEnable = GetContainerItemCooldown(bagID, slotID)
 
     if mustGather then
         if not infoGather[id] then infoGather[id] = {} end

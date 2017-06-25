@@ -166,9 +166,8 @@ end
 function AB:UpdateCooldown(cd)
 	local button = cd:GetParent()
 	local start, duration, enable = GetActionCooldown(button.action)
-    local charges = GetActionCharges(cooldown.omniccAction)
 
-	self:OnSetCooldown(cd, start, duration, charges)
+	self:OnSetCooldown(cd, start, duration)
 end
 
 function AB:ACTIONBAR_UPDATE_COOLDOWN()

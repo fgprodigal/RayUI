@@ -20,6 +20,7 @@ local function ItemButton_Scaffold(self)
 	self.Border = _G[name.."NormalTexture"]
 
 	self.Icon:SetTexCoord(.08, .92, .08, .92)
+    self.Cooldown:SetDrawEdge(false)
 
 	if not self.itemLevel and R.db.Bags.itemLevel then
 		self.itemLevel = self:CreateFontString(nil, "OVERLAY")
