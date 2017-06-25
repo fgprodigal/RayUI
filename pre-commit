@@ -1,15 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 
 tocver=$(grep -E "Version" "Interface/Addons/RayUI/RayUI.toc" | sed "s/.*build\s*\(.*\)$/\1/g")
 buildver=$(git rev-list HEAD | wc -l)
-
 if test "$tocver" = "$buildver"
 then
-	exit
+	exit 0
 else
 	echo "Bumping toc version.."
 	sed -i "s/build.*$/build $buildver/g" `grep build.*$ -rl ./Interface/Addons/RayUI/RayUI.toc`
-	git add --force -- "Interface\AddOns\RayUI\RayUI.toc"
-	git commit --amend -o -C -- "Interface\AddOns\RayUI\RayUI.toc"
-	exit
+	exit 1
 fi
