@@ -9,7 +9,7 @@ then
 else
 	echo "Bumping toc version.."
 	sed -i "s/build.*$/build $buildver/g" `grep build.*$ -rl ./Interface/Addons/RayUI/RayUI.toc`
-	git add "Interface/Addons/RayUI/RayUI.toc"
-	git commit --amend -C HEAD
+	git add --force -- "Interface\AddOns\RayUI\RayUI.toc"
+	git commit --amend -o -C -- "Interface\AddOns\RayUI\RayUI.toc"
 	exit
 fi
