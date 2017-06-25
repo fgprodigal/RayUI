@@ -28,35 +28,34 @@ local function LoadSkin()
 	for i = 1, 4 do
 		select(i, AuctionProgressFrame:GetRegions()):Hide()
 	end
-	BrowseFilterScrollFrame:GetRegions():Hide()
-	select(2, BrowseFilterScrollFrame:GetRegions()):Hide()
-	BrowseScrollFrame:GetRegions():Hide()
-	select(2, BrowseScrollFrame:GetRegions()):Hide()
-	BidScrollFrame:GetRegions():Hide()
-	select(2, BidScrollFrame:GetRegions()):Hide()
-	AuctionsScrollFrame:GetRegions():Hide()
-	select(2, AuctionsScrollFrame:GetRegions()):Hide()
-	BrowseQualitySort:DisableDrawLayer("BACKGROUND")
-	BrowseLevelSort:DisableDrawLayer("BACKGROUND")
-	BrowseDurationSort:DisableDrawLayer("BACKGROUND")
-	BrowseHighBidderSort:DisableDrawLayer("BACKGROUND")
-	BrowseCurrentBidSort:DisableDrawLayer("BACKGROUND")
-	BidQualitySort:DisableDrawLayer("BACKGROUND")
-	BidLevelSort:DisableDrawLayer("BACKGROUND")
-	BidDurationSort:DisableDrawLayer("BACKGROUND")
-	BidBuyoutable.sort:DisableDrawLayer("BACKGROUND")
-	BidStatusSort:DisableDrawLayer("BACKGROUND")
-	BidBidSort:DisableDrawLayer("BACKGROUND")
-	AuctionsQualitySort:DisableDrawLayer("BACKGROUND")
-	AuctionsDurationSort:DisableDrawLayer("BACKGROUND")
-	AuctionsHighBidderSort:DisableDrawLayer("BACKGROUND")
-	AuctionsBidSort:DisableDrawLayer("BACKGROUND")
-	select(6, BrowseCloseButton:GetRegions()):Hide()
-	select(6, BrowseBuyoutButton:GetRegions()):Hide()
-	select(6, BrowseBidButton:GetRegions()):Hide()
-	select(6, BidCloseButton:GetRegions()):Hide()
-	select(6, BidBuyoutButton:GetRegions()):Hide()
-	select(6, BidBidButton:GetRegions()):Hide()
+    AuctionFrame:StripTextures(true)
+	BrowseFilterScrollFrame:StripTextures()
+	BrowseScrollFrame:StripTextures()
+	AuctionsScrollFrame:StripTextures()
+	BidScrollFrame:StripTextures()
+
+    local sorttabs = {
+		"BrowseQualitySort",
+		"BrowseLevelSort",
+		"BrowseDurationSort",
+		"BrowseHighBidderSort",
+		"BrowseCurrentBidSort",
+		"BidQualitySort",
+		"BidLevelSort",
+		"BidDurationSort",
+		"BidBuyoutSort",
+		"BidStatusSort",
+		"BidBidSort",
+		"AuctionsQualitySort",
+		"AuctionsDurationSort",
+		"AuctionsHighBidderSort",
+		"AuctionsBidSort",
+	}
+	for _, sorttab in pairs(sorttabs) do
+		_G[sorttab.."Left"]:Kill()
+		_G[sorttab.."Middle"]:Kill()
+		_G[sorttab.."Right"]:Kill()
+	end
 
 	hooksecurefunc("FilterButton_SetUp", function(button)
 		button:SetNormalTexture("")
@@ -85,6 +84,7 @@ local function LoadSkin()
 		local reskinbutton = _G[abuttons[i]]
 		if reskinbutton then
 			S:Reskin(reskinbutton)
+            select(6, reskinbutton:GetRegions()):Kill()
 		end
 	end
 
