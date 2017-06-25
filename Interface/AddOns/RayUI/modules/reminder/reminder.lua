@@ -375,6 +375,7 @@ function RM:CreateReminder(name, index)
 
 	local cd = CreateFrame("Cooldown", nil, frame)
 	cd:SetAllPoints(frame.icon)
+    cd:SetDrawEdge(false)
 	frame.cooldown = cd
 
 	frame:RegisterUnitEvent("UNIT_AURA", "player")

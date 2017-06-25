@@ -113,6 +113,7 @@ function mod:Initialize()
 
         frame.cooldown = CreateFrame("Cooldown", frame:GetName().."Cooldown", frame, "CooldownFrameTemplate")
         frame.cooldown:SetReverse(true)
+        frame.cooldown:SetDrawEdge(false)
         frame.cooldown:SetInside(2)
         self.totembar[i] = frame
     end

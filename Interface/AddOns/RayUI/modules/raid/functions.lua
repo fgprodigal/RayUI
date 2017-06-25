@@ -338,6 +338,7 @@ function RA:ConfigureAuraWatch(frame)
                     icon.cd = CreateFrame("Cooldown", nil, icon, "CooldownFrameTemplate")
                     icon.cd:SetAllPoints(icon)
                     icon.cd:SetReverse(true)
+                    icon.cd:SetDrawEdge(true)
                     icon.cd:SetFrameLevel(icon:GetFrameLevel())
                 end
 
