@@ -7,13 +7,14 @@ RayUI:LoadEnv("Misc")
 local M = _Misc
 local mod = M:NewModule("RaidMarker", "AceEvent-3.0")
 
-
 BINDING_NAME_RAIDMARKER = L["快速团队标记"]
 local ButtonIsDown
 
 function mod:RaidMarkCanMark()
     if GetNumGroupMembers() > 0 then
         if UnitIsGroupLeader("player")or UnitIsGroupAssistant("player")then
+            return true
+        elseif IsInGroup() and not IsInRaid() then
             return true
         else
             UIErrorsFrame:AddMessage(L["你没有权限设置团队标记"], 1.0, 0.1, 0.1, 1.0, UIERRORS_HOLD_TIME)
