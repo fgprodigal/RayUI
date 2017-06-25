@@ -262,7 +262,7 @@ RayUI_HelpPlate = {
 }
 
 local HP_CP
-function RayUITutorial_HelpPlate_AnimateOnFinished(self)
+local function RayUITutorial_HelpPlate_AnimateOnFinished(self)
 	-- Hide the parent button
 	self.parent:Hide()
 	self:SetScript("OnFinished", nil)
@@ -285,7 +285,7 @@ function RayUITutorial_HelpPlate_AnimateOnFinished(self)
 	HelpPlate:Hide()
 end
 
-function RayUITutorial_HelpPlate_Hide()
+function _G.RayUITutorial_HelpPlate_Hide()
     if ( HP_CP ) then
         for i = 1, #HELP_PLATE_BUTTONS do
             local button = HELP_PLATE_BUTTONS[i]
@@ -325,7 +325,7 @@ local function RayUITutorial_HelpPlate_Show( self, parent, mainHelpButton )
 	HelpPlate:Show()
 end
 
-function RayUIShowTutorial_Stage1()
+function _G.RayUIShowTutorial_Stage1()
 	local helpPlate = RayUI_HelpPlate
 	if ( helpPlate and not HelpPlate_IsShowing(helpPlate) ) then
 		RayUITutorial_HelpPlate_Show( helpPlate, UIParent, rTB )
