@@ -127,10 +127,14 @@ end
 
 function AB:OnSetCooldown(cd, start, duration, charges, maxCharges)
 	if cd.noOCC then return end
-	cd:SetHideCountdownNumbers(true)
+    local parent = cd:GetParent()
+    cd:SetHideCountdownNumbers(true)
+
+    if parent.GetCharges then charges, maxCharges = parent:GetCharges() end
     local timer = cd.timer or self:CreateCooldownTimer(cd)
 
-    timer.charging = cd:GetDrawEdge()
+    charges = charges or 0
+    timer.charging = charges > 0
 
 	--start timer
 	if start > 0 and duration > MIN_DURATION then
@@ -165,7 +169,7 @@ end
 
 function AB:UpdateCooldown(cd)
 	local button = cd:GetParent()
-	local start, duration, enable = GetActionCooldown(button.action)
+	local start, duration, enable = button.GetCooldown and button:GetCooldown() or GetActionCooldown(button.action)
 
 	self:OnSetCooldown(cd, start, duration)
 end

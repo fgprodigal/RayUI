@@ -137,7 +137,6 @@ function mod:CreateAuraIcon(parent)
     aura.cooldown = CreateFrame("Cooldown", nil, aura, "CooldownFrameTemplate")
     aura.cooldown:SetAllPoints(aura)
     aura.cooldown:SetReverse(true)
-    aura.cooldown:SetDrawEdge(false)
     aura.cooldown.SizeOverride = 12
     -- R:RegisterCooldown(aura.cooldown)
 

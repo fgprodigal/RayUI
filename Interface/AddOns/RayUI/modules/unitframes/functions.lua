@@ -992,7 +992,6 @@ function UF:PostCreateIcon(button)
     button.backdropTexture:SetAlpha(1)
     button.overlay:Hide()
     button.cd:SetReverse(true)
-    button.cd:SetDrawEdge(false)
 
     if self.isSmartAura then
         button.value = button.RaisedElementParent:CreateFontString(nil, "OVERLAY")
