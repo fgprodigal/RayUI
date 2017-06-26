@@ -69,6 +69,7 @@
             <OnClick>
 				RayUI:LoadEnv("InfoBar")
 				RayUI_InfoBarMenuButton_OnClick(self, button)
+                RayUI:LoadDefaultEnv()
 			</OnClick>
         </Scripts>
     </Button>
@@ -138,7 +139,9 @@
                         self.Highlight:SetPoint("TOPLEFT",28,-8) self.Text:SetPoint("TOPLEFT",28,-8) self:SetNormalTexture("Interface\\Icons\\inv_pet_broom")
                     </OnLoad>
                     <OnClick>
+                        RayUI:LoadEnv("InfoBar")
                         RayUI_InfoBarButton_OnReset(self:GetParent().ref)
+                        RayUI:LoadDefaultEnv()
                     </OnClick>
                 </Scripts>
             </Button>
@@ -160,6 +163,7 @@
             <OnEvent>
 				RayUI:LoadEnv("InfoBar")
 				RayUI_InfoBarMenu_OnInit(self)
+                RayUI:LoadDefaultEnv()
 			</OnEvent>
             <OnHide>
                 local frame = self.ref if frame and not frame.infobarType then frame:SetAlpha(0) end
