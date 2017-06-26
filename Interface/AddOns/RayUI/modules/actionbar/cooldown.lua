@@ -130,7 +130,7 @@ function AB:OnSetCooldown(cd, start, duration, modRate, charges, maxCharges)
     local parent = cd:GetParent()
     cd:SetHideCountdownNumbers(true)
 
-    if parent.GetCharges then charges, maxCharges = parent:GetCharges() end
+    if parent and parent.GetCharges then charges, maxCharges = parent:GetCharges() end
     local timer = cd.timer or self:CreateCooldownTimer(cd)
 
     charges = charges or 0
