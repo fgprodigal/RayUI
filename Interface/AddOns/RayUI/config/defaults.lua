@@ -289,10 +289,6 @@ P["ActionBar"]={
     stancebarmouseover = false,
     stancebarfade = false,
 
-    cooldownalpha = false,
-    cdalpha = 1,
-    readyalpha = 0.3,
-
     clickondown = true
 }
 
@@ -317,7 +313,7 @@ P["Misc"]={
     raidcdgrowth = "UP",
     cooldowns = {
         enable = false,
-        size = 25,
+        size = 30,
         growthx = "LEFT",
         growthy = "UP",
         showbags = true,

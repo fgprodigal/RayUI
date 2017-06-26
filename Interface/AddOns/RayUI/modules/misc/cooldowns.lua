@@ -161,6 +161,7 @@ function mod:AddCooldown(type, spellID)
         icon = self:CreateCooldownIcon(n)
         tinsert(self.icons, icon)
     end
+    CooldownFrame_Set(icon.cd, start, duration, true, true)
     icon.icon:SetTexture(texture)
     icon.start = start
     icon.duration = duration
@@ -169,7 +170,6 @@ function mod:AddCooldown(type, spellID)
     icon.type = type
     icon:SetScript("OnUpdate", IconOnUpdate)
     icon:Show()
-    CooldownFrame_Set(icon.cd, start, duration, true, true)
     visible = visible + 1
 
     self:SetPosition()
