@@ -125,7 +125,7 @@ function AB:CreateCooldownTimer(parent)
 	return timer
 end
 
-function AB:OnSetCooldown(cd, start, duration, charges, maxCharges)
+function AB:OnSetCooldown(cd, start, duration, modRate, charges, maxCharges)
 	if cd.noOCC then return end
     local parent = cd:GetParent()
     cd:SetHideCountdownNumbers(true)

@@ -150,7 +150,7 @@ function mod:AddCooldown(type, spellID)
 		    icon.expirationTime = start + duration
 		    icon.spellID = spellID
 		    icon.type = type
-            CooldownFrame_Set(icon.cd, start, duration, true)
+            CooldownFrame_Set(icon.cd, start, duration, true, true)
 			self:SetPosition()
             return
         end
@@ -161,7 +161,7 @@ function mod:AddCooldown(type, spellID)
         icon = self:CreateCooldownIcon(n)
         tinsert(self.icons, icon)
     end
-    CooldownFrame_Set(icon.cd, start, duration, true)
+    CooldownFrame_Set(icon.cd, start, duration, true, true)
     icon.icon:SetTexture(texture)
     icon.start = start
     icon.duration = duration
