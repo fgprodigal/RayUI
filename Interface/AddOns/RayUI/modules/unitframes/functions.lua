@@ -1286,7 +1286,7 @@ local function createConfigEnv()
             _COLORS = RayUF.colors
         },
         {
-            __index = _G,
+            __index = _RayUIEnv,
             __newindex = function(tbl, key, value) _G[key] = value end,
         })
 

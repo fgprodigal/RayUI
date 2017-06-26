@@ -152,7 +152,7 @@ function RA:PostPower(unit, min, max)
     if owner.isForced then
         ptype = math.random(0, 4)
         local color = RayUF.colors.power[tokens[ptype]]
-        min = math.random(1, max)
+        min = math.random(1, UnitPowerMax(unit))
         self:SetValue(min)
 
         if not self.colorClass then
