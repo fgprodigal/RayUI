@@ -138,7 +138,6 @@ function mod:CreateAuraIcon(parent)
     aura.cooldown:SetAllPoints(aura)
     aura.cooldown:SetReverse(true)
     aura.cooldown.SizeOverride = 12
-    -- R:RegisterCooldown(aura.cooldown)
 
     aura.count = aura:CreateFontString(nil, "OVERLAY")
     aura.count:SetPoint("BOTTOMRIGHT")

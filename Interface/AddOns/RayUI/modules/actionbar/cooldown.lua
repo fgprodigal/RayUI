@@ -460,7 +460,7 @@ function Anim:CreateShineAnimation()
 end
 
 local visible, hooked = {}, {}
-function AB:RegisterCooldown(action, cooldown)
+function AB:RegisterCooldown(button, action, cooldown)
     cooldown.occAction = action
 
     if not hooked[cooldown] then
@@ -484,11 +484,10 @@ end
 function AB:CreateCooldown()
     self:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN")
     self:SecureHook("SetActionUIButton", "RegisterCooldown")
-    self:SecureHook("ActionBarButtonEventsFrame_RegisterFrame", "RegisterCooldown")
 
     if ActionBarButtonEventsFrame.frames then
         for _, button in pairs(ActionBarButtonEventsFrame.frames) do
-            self:RegisterCooldown(button.action, button.cooldown)
+            self:RegisterCooldown(button, button.action, button.cooldown)
         end
     end
 
