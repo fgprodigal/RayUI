@@ -494,7 +494,6 @@ function AB:Initialize()
     self:HideBlizz()
     self:CreateCooldown()
 
-    SetCVar("countdownForCooldowns", "0")
     self:SecureHook("PetActionButton_SetHotkeys", "UpdateHotkey")
     self:SecureHook("ActionButton_UpdateFlyout", "StyleFlyout")
     self:SecureHook("StanceBar_Update", "StyleShift")

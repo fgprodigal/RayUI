@@ -285,6 +285,8 @@ function Timer:ShouldShow()
 end
 
 function Timer:New(cooldown)
+    cooldown:SetHideCountdownNumbers(true)
+
     local timer = setmetatable(CreateFrame("Frame", nil, cooldown:GetParent()), {__index = Timer})
     timer:SetFrameLevel(cooldown:GetFrameLevel() + 5)
     timer:Hide()
@@ -345,6 +347,8 @@ function AB:Cooldown_CanShow(cooldown, start, duration)
 end
 
 function AB:OnSetCooldown(cooldown, ...)
+    cooldown:SetHideCountdownNumbers(true)
+
     if self:Cooldown_CanShow(cooldown, ...) then
         self:Cooldown_Setup(cooldown)
         cooldown.timer:Start(...)
@@ -482,6 +486,8 @@ function AB:ACTIONBAR_UPDATE_COOLDOWN()
 end
 
 function AB:CreateCooldown()
+    R:LockCVar("countdownForCooldowns", 0)
+
     self:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN")
     self:SecureHook("SetActionUIButton", "RegisterCooldown")
 
