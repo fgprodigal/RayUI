@@ -1,13 +1,13 @@
 ﻿## Interface: 70200
 ## Title: |cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r
-## Version: 7.2 build 1403
+## Version: 7.2 build 1404
 ## Author: Ray
 ## OptionalDeps: Blizzard_DebugTools,Skada,DBM-Core, BigWigs, AtlasLoot, SharedMedia
 ## RequiredDeps: Blizzard_CombatText
-## X-Credits: Tukz, Elv, Haste, Haleth, Tekkub, Zork, Syncrow @Dethecus-EU
+## X-Credits: Tukz, Elv, Haste, Haleth, Tekkub, Zork, Syncrow @Dethecus-EU, p3lim, Tuller, ls-(Val Voronov)
 ## X-oUF: RayUF
 ## SavedVariables: RayUIData
-## SavedVariablesPerCharacter: RayUICharacterData, RayUIDebug
+## SavedVariablesPerCharacter: RayUICharacterData
 
 env.lua
 libs\load_libs.xml
