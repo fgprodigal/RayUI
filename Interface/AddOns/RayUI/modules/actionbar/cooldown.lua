@@ -26,7 +26,6 @@ local styles = {
     hours = { scale = 0.75 },
 }
 
-local _meta = getmetatable(ActionButton1Cooldown).__index
 local Timer = CreateFrame("Frame")
 local ScriptUpdater = CreateFrame("Frame")
 local Anim = CreateFrame("Frame")
@@ -154,7 +153,7 @@ function Timer:CancelUpdate()
 end
 
 function Timer:UpdateFontSize(width, height)
-    self.abRatio = R:Round(width) / 36
+    self.abRatio = R:Round(height) / 36
 
     self:SetSize(width, height)
     self.text:ClearAllPoints()
@@ -497,6 +496,7 @@ function AB:CreateCooldown()
         end
     end
 
+    local _meta = getmetatable(ActionButton1Cooldown).__index
     if not self.hooks[_meta] then
         self:SecureHook(_meta, "SetCooldown", "OnSetCooldown")
     end
