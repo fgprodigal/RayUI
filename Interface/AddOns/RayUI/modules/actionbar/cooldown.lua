@@ -109,7 +109,7 @@ function ScriptUpdater:Cleanup()
     self.delay = nil
 end
 
-function Timer:Start(start, duration, modRate, charge)
+function Timer:Start(start, duration, modRate, charges)
     self.start, self.duration = start, duration
     self.controlled = self.cooldown.currentCooldownType == COOLDOWN_TYPE_LOSS_OF_CONTROL
     self.visible = self.cooldown:IsVisible()
@@ -118,9 +118,9 @@ function Timer:Start(start, duration, modRate, charge)
     self.enabled = true
 
     local parent = self.cooldown:GetParent()
-    if parent and parent.GetCharges then charge, maxCharges = parent:GetCharges() end
-    charge = charge or 0
-    self.charging = charge > 0
+    if parent and parent.GetCharges then charges, maxCharges = parent:GetCharges() end
+    charges = charges or 0
+    self.charging = charges > 0
 
     -- hotfix for ChargeCooldowns
     local charge = parent and parent.chargeCooldown
@@ -369,6 +369,10 @@ function AB:Cooldown_Setup(cooldown)
 end
 
 function Anim:Run(cooldown)
+    local parent = cooldown:GetParent()
+    local charge = parent and parent.chargeCooldown
+    local chargeTimer = charge and charge.timer
+    if chargeTimer and chargeTimer ~= self then cooldown = parent.cooldown end
     local shine = self.instances[cooldown]
     if shine then
         shine:Start()
