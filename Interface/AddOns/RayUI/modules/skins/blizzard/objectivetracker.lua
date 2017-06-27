@@ -3,8 +3,40 @@
 ----------------------------------------------------------
 RayUI:LoadEnv("Skins")
 
-
 local S = _Skins
+
+local function SkinProgressBar(line)
+    local progressBar = line.ProgressBar
+    local bar = progressBar.Bar
+    local label = bar.Label
+    local icon = bar.Icon
+
+    icon:SetMask(nil)
+    icon:SetDrawLayer("BORDER")
+
+    if not progressBar.styled then
+        bar.BarFrame:Kill()
+        bar.BarBG:Kill()
+        bar.IconBG:Kill()
+
+        if icon:IsShown() then
+            icon:ClearAllPoints()
+            icon:SetPoint("RIGHT", 35, 2)
+            S:ReskinIcon(icon)
+        end
+
+        bar:SetStatusBarTexture(R["media"].normal)
+        R:SetStatusBarGradient(bar, true)
+
+        label:ClearAllPoints()
+        label:SetPoint("CENTER", 0, -1)
+        label:FontTemplate(nil, nil, "OUTLINE")
+
+        bar:CreateShadow("Background")
+
+        progressBar.styled = true
+    end
+end
 
 local function LoadSkin()
     local r, g, b = _r, _g, _b
@@ -84,6 +116,20 @@ local function LoadSkin()
             end
         end)
 
+    hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, "AddProgressBar", function(self, block, line, questID)
+            local progressBar = self.usedProgressBars[block] and self.usedProgressBars[block][line]
+            if not progressBar.Bar.styled then
+                R:SetStatusBarGradient(progressBar.Bar, true)
+                progressBar.Bar:CreateShadow("Background")
+                progressBar.Bar:SetStatusBarTexture(R["media"].normal)
+                progressBar.Bar:DisableDrawLayer("ARTWORK")
+                progressBar.Bar.Label:SetDrawLayer("OVERLAY")
+                progressBar.Bar.Label:FontTemplate(nil, nil, "OUTLINE")
+
+                progressBar.Bar.styled = true
+            end
+        end)
+
     local function fixBlockHeight(block)
         if block.shouldFix then
             local height = block:GetHeight()
@@ -129,37 +175,8 @@ local function LoadSkin()
 
     -- [[ Bonus objective progress bar ]]
 
-    hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "AddProgressBar", function(self, block, line)
-            local progressBar = line.ProgressBar
-            local bar = progressBar.Bar
-            local label = bar.Label
-            local icon = bar.Icon
-
-            icon:SetMask(nil)
-            icon:SetDrawLayer("BORDER")
-
-            if not progressBar.styled then
-                bar.BarFrame:Kill()
-                bar.BarBG:Kill()
-                bar.IconBG:Kill()
-
-                if icon:IsShown() then
-                    icon:ClearAllPoints()
-                    icon:SetPoint("RIGHT", 35, 2)
-                    S:ReskinIcon(icon)
-                end
-
-                bar:SetStatusBarTexture(R["media"].normal)
-				R:SetStatusBarGradient(bar, true)
-
-                label:ClearAllPoints()
-                label:SetPoint("CENTER", 0, -1)
-                label:FontTemplate(nil, nil, "OUTLINE")
-
-                bar:CreateShadow("Background")
-
-                progressBar.styled = true
-            end
+    hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "AddProgressBar", function(_, _, line)
+            SkinProgressBar(line)
         end)
 
     WORLD_QUEST_TRACKER_MODULE.Header:StripTextures()
@@ -190,36 +207,29 @@ local function LoadSkin()
             end
         end)
 
-    hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddProgressBar", function(self, block, line)
-            local progressBar = line.ProgressBar
-            local bar = progressBar.Bar
-            local label = bar.Label
-            local icon = bar.Icon
+    hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddProgressBar", function(_, _, line)
+            SkinProgressBar(line)
+        end)
 
-            icon:SetMask(nil)
-            icon:SetDrawLayer("BORDER")
+    --Scenario Tracker ProgressBar
+    hooksecurefunc(SCENARIO_TRACKER_MODULE, "AddProgressBar", function(_, _, line)
+            if not line.ProgressBar.Bar.styled then
+                R:SetStatusBarGradient(line.ProgressBar.Bar, true)
+                line.ProgressBar.Bar:Height(18)
+                line.ProgressBar.Bar:CreateShadow("Background")
+                line.ProgressBar.Bar:SetStatusBarTexture(R["media"].normal)
+                line.ProgressBar.Bar.BarFrame:Hide()
+                line.ProgressBar.Bar.IconBG:SetAlpha(0)
+                line.ProgressBar.Bar.BarFrame2:Hide()
+                line.ProgressBar.Bar.BarFrame3:Hide()
+                line.ProgressBar.Bar.Icon:ClearAllPoints()
+                line.ProgressBar.Bar.Icon:SetPoint("LEFT", line.ProgressBar.Bar, "RIGHT", R.Border*3, 0)
+                line.ProgressBar.Bar.Icon:SetMask("")
+                line.ProgressBar.Bar.Icon:SetTexCoord(.08, .92, .08, .92)
+                line.ProgressBar.Bar.Label:SetDrawLayer("OVERLAY")
+                line.ProgressBar.Bar.Label:FontTemplate(nil, nil, "OUTLINE")
 
-            if not progressBar.styled then
-                bar.BarFrame:Kill()
-                bar.BarBG:Kill()
-                bar.IconBG:Kill()
-
-                local label = bar.Label
-
-                icon:ClearAllPoints()
-                icon:SetPoint("RIGHT", 35, 2)
-                S:ReskinIcon(icon)
-
-                bar:SetStatusBarTexture(R["media"].normal)
-				R:SetStatusBarGradient(bar, true)
-
-                label:ClearAllPoints()
-                label:SetPoint("CENTER")
-                label:FontTemplate(nil, nil, "OUTLINE")
-
-                bar:CreateShadow("Background")
-
-                progressBar.styled = true
+                line.ProgressBar.Bar.styled = true
             end
         end)
 end
