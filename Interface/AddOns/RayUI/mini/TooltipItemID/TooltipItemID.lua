@@ -4,8 +4,6 @@
 RayUI:LoadEnv()
 
 
-
-
 local f = CreateFrame("Frame")
 f:RegisterEvent("ADDON_LOADED")
 f:SetScript("OnEvent", function(_, _, name)
@@ -53,6 +51,7 @@ end
 -- end)
 
 hooksecurefunc(GameTooltip, "SetUnitAura", function(self,...)
+        if self:IsForbidden() then return end
         local id = select(11, UnitAura(...))
         local caster = select (8, UnitAura(...))
         if id then
@@ -66,6 +65,7 @@ hooksecurefunc(GameTooltip, "SetUnitAura", function(self,...)
     end)
 
 GameTooltip:HookScript("OnTooltipSetSpell", function(self)
+        if self:IsForbidden() then return end
         local id = select(3,self:GetSpell())
         if id then addLine(self,id) end
     end)
@@ -77,6 +77,7 @@ hooksecurefunc("SetItemRef", function(link, ...)
     end)
 
 local function attachItemTooltip(self)
+    if self:IsForbidden() then return end
     local link = select(2,self:GetItem())
     if not link then return end
     local itemId = tonumber(string.match(link, "item:(%d+):"))
