@@ -57,7 +57,7 @@ function mod:RaidMarkButton_OnClick(arg1)
     self:GetParent():Hide()
 end
 
-function RaidMark_HotkeyPressed(keystate)
+function _G.RaidMark_HotkeyPressed(keystate)
     ButtonIsDown = (keystate=="down") and mod:RaidMarkCanMark()
     if ButtonIsDown then
         mod:RaidMarkShowIcons()
