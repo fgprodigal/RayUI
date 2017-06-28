@@ -118,6 +118,7 @@ function Timer:Start(start, duration, modRate, charges)
     self.enabled = true
 
     local parent = self.cooldown:GetParent()
+    self.cooldown._parent = parent
     if parent and parent.GetCharges then charges, maxCharges = parent:GetCharges() end
     charges = charges or 0
     self.charging = charges > 0
@@ -369,10 +370,7 @@ function AB:Cooldown_Setup(cooldown)
 end
 
 function Anim:Run(cooldown)
-    local parent = cooldown:GetParent()
-    local charge = parent and parent.chargeCooldown
-    local chargeTimer = charge and charge.timer
-    if chargeTimer and chargeTimer ~= self then cooldown = parent.cooldown end
+    cooldown = cooldown._parent.cooldown
     local shine = self.instances[cooldown]
     if shine then
         shine:Start()
