@@ -252,7 +252,7 @@ end
 
 local logo = CreateFrame("Frame", nil, R.UIParent)
 logo:SetPoint("CENTER", 0, 150)
-logo:SetSize(256, 128)
+logo:SetSize(128, 128)
 logo.image = logo:CreateTexture(nil, "OVERLAY")
 logo.image:SetAllPoints()
 logo.image:SetTexture("Interface\\AddOns\\RayUI\\media\\logo.tga")
@@ -288,13 +288,13 @@ local function CreateSplashScreen()
 	f.lineBottom:SetTexCoord(0.00195313, 0.81835938, 0.00195313, 0.01562500)
 
 	f.logo = f:CreateTexture(nil, "OVERLAY")
-	f.logo:Size(256, 128)
+	f.logo:Size(65, 65)
 	f.logo:SetTexture("Interface\\AddOns\\RayUI\\media\\logo.tga")
 	f.logo:Point("CENTER", f, "CENTER")
 
 	f.version = f:CreateFontString(nil, "OVERLAY")
 	f.version:FontTemplate(nil, 12, nil)
-	f.version:Point("TOP", f.logo, "BOTTOM", 90, 20)
+	f.version:Point("TOP", f.logo, "BOTTOM", 0, -20)
 	f.version:SetFormattedText("v%s", R.version)
 end
 

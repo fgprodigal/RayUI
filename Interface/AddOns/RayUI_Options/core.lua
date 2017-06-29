@@ -14,7 +14,7 @@ R.Options.args = {
     header = {
         order = 1,
         type = "header",
-        name = L["版本"]..string.format(": |cff7aa6d6%s|r",R.version),
+        name = TEXT_LOGO_ICON.."   "..L["版本"]..string.format(": |cff7aa6d6%s|r",R.version),
         width = "full",
     },
     general = {

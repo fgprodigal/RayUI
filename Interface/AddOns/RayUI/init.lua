@@ -7,7 +7,6 @@ RayUI:LoadEnv()
 local AddOn = LibStub("AceAddon-3.0"):NewAddon(_AddOnName, "AceConsole-3.0", "AceEvent-3.0", "AceHook-3.0")
 local Locale = LibStub("AceLocale-3.0"):GetLocale(_AddOnName, false)
 
-
 local DEFAULT_WIDTH = 850
 local DEFAULT_HEIGHT = 650
 AddOn.callbacks = AddOn.callbacks or LibStub("CallbackHandler-1.0"):New(AddOn)
@@ -25,6 +24,7 @@ L = Locale
 P = AddOn.DF["profile"]
 G = AddOn.DF["global"]
 
+TEXT_LOGO_ICON = format("|T%s:14:14:0:0:64:64:0:64:0:64|t", "Interface\\AddOns\\RayUI\\media\\logo.tga")
 BINDING_HEADER_RAYUI = GetAddOnMetadata(..., "Title")
 
 function AddOn:OnProfileChanged(event, database, newProfileKey)
@@ -32,14 +32,14 @@ function AddOn:OnProfileChanged(event, database, newProfileKey)
 end
 
 function AddOn:PositionGameMenuButton()
-	GameMenuFrame:SetHeight(GameMenuFrame:GetHeight() + GameMenuButtonLogout:GetHeight() - 4)
-	local _, relTo, _, _, offY = GameMenuButtonLogout:GetPoint()
-	if relTo ~= GameMenuFrame[_AddOnName] then
-		GameMenuFrame[_AddOnName]:ClearAllPoints()
-		GameMenuFrame[_AddOnName]:Point("TOPLEFT", relTo, "BOTTOMLEFT", 0, -1)
-		GameMenuButtonLogout:ClearAllPoints()
-		GameMenuButtonLogout:Point("TOPLEFT", GameMenuFrame[_AddOnName], "BOTTOMLEFT", 0, offY)
-	end
+    GameMenuFrame:SetHeight(GameMenuFrame:GetHeight() + GameMenuButtonLogout:GetHeight() - 4)
+    local _, relTo, _, _, offY = GameMenuButtonLogout:GetPoint()
+    if relTo ~= GameMenuFrame[_AddOnName] then
+        GameMenuFrame[_AddOnName]:ClearAllPoints()
+        GameMenuFrame[_AddOnName]:Point("TOPLEFT", relTo, "BOTTOMLEFT", 0, -1)
+        GameMenuButtonLogout:ClearAllPoints()
+        GameMenuButtonLogout:Point("TOPLEFT", GameMenuFrame[_AddOnName], "BOTTOMLEFT", 0, offY)
+    end
 end
 
 function AddOn:OnInitialize()
@@ -57,11 +57,15 @@ function AddOn:OnInitialize()
             HideUIPanel(GameMenuFrame)
             self:OpenConfig()
         end)
+    configButton.logo = configButton:CreateTexture(nil, "OVERLAY")
+    configButton.logo:Size(12, 12)
+    configButton.logo:SetTexture("Interface\\AddOns\\RayUI\\media\\logo.tga")
+    configButton.logo:Point("RIGHT", configButton.Text, "LEFT", -10, 0)
     GameMenuFrame[_AddOnName] = configButton
 
-	configButton:Size(GameMenuButtonLogout:GetWidth(), GameMenuButtonLogout:GetHeight())
-	configButton:Point("TOPLEFT", GameMenuButtonAddons, "BOTTOMLEFT", 0, -1)
-	hooksecurefunc("GameMenuFrame_UpdateVisibleButtons", self.PositionGameMenuButton)
+    configButton:Size(GameMenuButtonLogout:GetWidth(), GameMenuButtonLogout:GetHeight())
+    configButton:Point("TOPLEFT", GameMenuButtonAddons, "BOTTOMLEFT", 0, -1)
+    hooksecurefunc("GameMenuFrame_UpdateVisibleButtons", self.PositionGameMenuButton)
 
     self:LoadDeveloperConfig()
 
@@ -76,10 +80,10 @@ function AddOn:OnInitialize()
     self:UpdateMedia()
 
     if self.global.general.theme == "Pixel" then
-		self.Border = self.mult
-		self.Spacing = 0
-		self.PixelMode = true
-	end
+        self.Border = self.mult
+        self.Spacing = 0
+        self.PixelMode = true
+    end
 
     for k, v in self:IterateModules() do
         v.db = AddOn.db[k]
@@ -90,8 +94,8 @@ end
 local f=CreateFrame("Frame")
 f:RegisterEvent("PLAYER_LOGIN")
 f:SetScript("OnEvent", function()
-	AddOn:Initialize()
-end)
+        AddOn:Initialize()
+    end)
 
 function AddOn:PLAYER_REGEN_ENABLED()
     AddOn:OpenConfig()
