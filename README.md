@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href="https://rayui.me/RayUI"><img src="http://ojpndtc2k.bkt.clouddn.com/logo_new.png"></a>
+  <a href="https://rayui.me/RayUI"><img src="http://ojpndtc2k.bkt.clouddn.com/logo_border.png"></a>
 </h1>
 
 <p align="center">
@@ -32,7 +32,7 @@
 ---
 
 <h1 align="center">
-  <a href="https://rayui.me/RayUI"><img src="http://ojpndtc2k.bkt.clouddn.com/logo_new.png"></a>
+  <a href="https://rayui.me/RayUI"><img src="http://ojpndtc2k.bkt.clouddn.com/logo_border.png"></a>
 </h1>
 
 <p align="center">
