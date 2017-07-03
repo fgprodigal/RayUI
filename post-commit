@@ -7,7 +7,7 @@ then
 	exit
 else
 	echo "Bumping toc version.."
-	sed -i -e "s/build.*$/build $buildver/g" Interface/Addons/RayUI/RayUI.toc
+	sed -i '' -e "s/build.*$/build $buildver/g" Interface/Addons/RayUI/RayUI.toc
 	git add -A --force "Interface/AddOns/RayUI/RayUI.toc"
 	git commit --amend -C HEAD
 	exit
