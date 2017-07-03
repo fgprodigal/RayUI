@@ -681,9 +681,9 @@ function UF:OnCastbarUpdate(elapsed)
         if(self.SafeZone) then
             local width = self:GetWidth()
             local _, _, _, ms = GetNetStats()
-            local safeZonePercent = (width / self.max) * (ms / 1e5)
-            if(safeZonePercent > 1) then safeZonePercent = 1 end
-            self.SafeZone:SetWidth(width * safeZonePercent)
+            local safeZoneRatio = (ms / 1e3) / self.max
+            if(safeZoneRatio > 1) then safeZoneRatio = 1 end
+            self.SafeZone:SetWidth(width * safeZoneRatio)
         end
 
         if(self.Time) then
