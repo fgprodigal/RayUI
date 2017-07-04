@@ -25,7 +25,7 @@ local cycles = {
     },
     {
         chatType = "INSTANCE_CHAT",  --副本
-        use = function(self, editbox) return select(2, IsInInstance()) == 'pvp' end,
+        use = function(self, editbox) return select(2, IsInInstance()) == "pvp" end,
     },
     {
         chatType = "GUILD",   --工会

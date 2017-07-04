@@ -866,27 +866,25 @@ function CH:Initialize()
 		GeneralDockManager:SetParent(RayUIChatBG)
 	end
 
-	CHAT_INSTANCE_CHAT_GET = "|Hchannel:INSTANCE|h".."[I]".."|h %s:\32"
-	CHAT_INSTANCE_CHAT_LEADER_GET = "|Hchannel:INSTANCE|h".."[IL]".."|h %s:\32"
-	--CHAT_BATTLEGROUND_GET = "|Hchannel:Battleground|h".."[BG]".."|h %s:\32"
-	--CHAT_BATTLEGROUND_LEADER_GET = "|Hchannel:Battleground|h".."[BG]".."|h %s:\32"
-	CHAT_BN_WHISPER_GET = "%s:\32"
-	CHAT_GUILD_GET = "|Hchannel:Guild|h".."[G]".."|h %s:\32"
-	CHAT_OFFICER_GET = "|Hchannel:o|h".."[O]".."|h %s:\32"
-	CHAT_PARTY_GET = "|Hchannel:Party|h".."[P]".."|h %s:\32"
-	CHAT_PARTY_GUIDE_GET = "|Hchannel:party|h".."[PL]".."|h %s:\32"
-	CHAT_PARTY_LEADER_GET = "|Hchannel:party|h".."[PL]".."|h %s:\32"
-	CHAT_RAID_GET = "|Hchannel:raid|h".."[R]".."|h %s:\32"
-	CHAT_RAID_LEADER_GET = "|Hchannel:raid|h".."[RL]".."|h %s:\32"
-	CHAT_RAID_WARNING_GET = "[RW]".." %s:\32"
-	CHAT_SAY_GET = "%s:\32"
-	CHAT_WHISPER_GET = "%s:\32"
-	CHAT_YELL_GET = "%s:\32"
-	ERR_FRIEND_ONLINE_SS = ERR_FRIEND_ONLINE_SS:gsub("%]%|h", "]|h|cff00ffff")
-	ERR_FRIEND_OFFLINE_S = ERR_FRIEND_OFFLINE_S:gsub("%%s", "%%s|cffff0000")
+	_G.CHAT_INSTANCE_CHAT_GET = "|Hchannel:INSTANCE|h".."[I]".."|h %s:\32"
+	_G.CHAT_INSTANCE_CHAT_LEADER_GET = "|Hchannel:INSTANCE|h".."[IL]".."|h %s:\32"
+	_G.CHAT_BN_WHISPER_GET = "%s:\32"
+	_G.CHAT_GUILD_GET = "|Hchannel:Guild|h".."[G]".."|h %s:\32"
+    _G.CHAT_OFFICER_GET = "|Hchannel:o|h".."[O]".."|h %s:\32"
+	_G.CHAT_PARTY_GET = "|Hchannel:Party|h".."[P]".."|h %s:\32"
+	_G.CHAT_PARTY_GUIDE_GET = "|Hchannel:party|h".."[PL]".."|h %s:\32"
+	_G.CHAT_PARTY_LEADER_GET = "|Hchannel:party|h".."[PL]".."|h %s:\32"
+	_G.CHAT_RAID_GET = "|Hchannel:raid|h".."[R]".."|h %s:\32"
+	_G.CHAT_RAID_LEADER_GET = "|Hchannel:raid|h".."[RL]".."|h %s:\32"
+	_G.CHAT_RAID_WARNING_GET = "[RW]".." %s:\32"
+	_G.CHAT_SAY_GET = "%s:\32"
+	_G.CHAT_WHISPER_GET = "%s:\32"
+	_G.CHAT_YELL_GET = "%s:\32"
+	_G.ERR_FRIEND_ONLINE_SS = _G.ERR_FRIEND_ONLINE_SS:gsub("%]%|h", "]|h|cff00ffff")
+	_G.ERR_FRIEND_OFFLINE_S = _G.ERR_FRIEND_OFFLINE_S:gsub("%%s", "%%s|cffff0000")
 
-	CHAT_FRAME_TAB_NORMAL_NOMOUSE_ALPHA = 0
-	CHAT_FRAME_TAB_SELECTED_NOMOUSE_ALPHA = 0
+	_G.CHAT_FRAME_TAB_NORMAL_NOMOUSE_ALPHA = 0
+	_G.CHAT_FRAME_TAB_SELECTED_NOMOUSE_ALPHA = 0
 
 	ChatTypeInfo.EMOTE.sticky = 0
 	ChatTypeInfo.YELL.sticky = 0
