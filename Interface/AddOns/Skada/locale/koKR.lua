@@ -60,6 +60,8 @@ L["Boss fights will be kept with this on, and non-boss fights are discarded."] =
 L["Broker display"] = "브로커 표시"
 L["Buff spell list"] = "버프 목록"
 L["Buff uptimes"] = "버프 지속시간"
+--Translation missing 
+-- L["Buffs"] = ""
 L["Buttons"] = "버튼"
 L["CC"] = "군중 제어"
 L["CC breakers"] = "군중 제어 해제"
@@ -423,3 +425,4 @@ L["Window height"] = "창 높이"
 L["Windows"] = "창"
 L["Wipe mode"] = "전멸 후 모드 전환"
 L["Yes"] = "예"
+

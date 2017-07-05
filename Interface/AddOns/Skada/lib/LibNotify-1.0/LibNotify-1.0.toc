@@ -1,5 +1,5 @@
 ## Interface: 70100
-## Version: @project-revision@
+## Version: 9
 
 ## Title: Lib: Notify-1.0
 ## Notes: A library to provide unobtrusive notifications.
