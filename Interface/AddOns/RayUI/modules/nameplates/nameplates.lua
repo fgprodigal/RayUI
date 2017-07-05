@@ -383,7 +383,6 @@ local function FrameOnUpdate(self)
     self.UnitFrame.Glow:SetFrameLevel(self:GetFrameLevel())
     self.UnitFrame.Buffs:SetFrameLevel(self:GetFrameLevel() + 1)
     self.UnitFrame.Debuffs:SetFrameLevel(self:GetFrameLevel() + 1)
-    parent.shadow:SetFrameLevel(parent:GetFrameLevel() - 1)
 end
 
 function mod:NAME_PLATE_CREATED(event, frame)
