@@ -87,6 +87,31 @@ function mod:PLAYER_ENTERING_WORLD()
     end
 end
 
+function mod:ClassBar_Update(frame)
+    if(not self.ClassBar) then return end
+
+    local targetFrame = self:GetNamePlateForUnit("target")
+
+    if(targetFrame and not UnitHasVehicleUI("player")) then
+        frame = targetFrame.UnitFrame
+        if(frame.UnitType == "FRIENDLY_NPC" or frame.UnitType == "FRIENDLY_PLAYER" or frame.UnitType == "HEALER") then
+            self.ClassBar:Hide()
+        else
+            if(frame.CastBar:IsShown()) then
+                frame.BottomLevelFrame = frame.CastBar
+            elseif(frame.PowerBar:IsShown()) then
+                frame.BottomLevelFrame = frame.PowerBar
+            else
+                frame.BottomLevelFrame = frame.HealthBar
+            end
+            self.ClassBar:SetPoint("TOP", frame.BottomLevelFrame or frame.CastBar, "BOTTOM", 0, -4)
+            self.ClassBar:Show()
+        end
+    else
+        self.ClassBar:Hide()
+    end
+end
+
 function mod:SetFrameScale(frame, scale)
     if(frame.HealthBar.currentScale ~= scale) then
         if(frame.HealthBar.scale:IsPlaying()) then
@@ -154,6 +179,8 @@ function mod:SetTargetFrame(frame)
             frame:SetAlpha(1)
         end
     end
+
+    mod:ClassBar_Update(frame)
 
     if (self.db.displayStyle == "TARGET" and not frame.isTarget and frame.UnitType ~= "PLAYER") then
         frame:Hide()
@@ -449,6 +476,11 @@ function mod:OnEvent(event, unit, ...)
         local arg1 = ...
         self.PowerToken = powerToken
         self.PowerType = powerType
+        if(event == "UNIT_POWER" or event == "UNIT_POWER_FREQUENT") then
+            if mod.ClassBar and arg1 == powerToken then
+                mod:ClassBar_Update(self)
+            end
+        end
 
         if arg1 == powerToken or event == "UNIT_DISPLAYPOWER" then
             mod:UpdateElement_Power(self)
@@ -573,6 +605,10 @@ function mod:PLAYER_REGEN_ENABLED()
     end
 end
 
+function mod:SetClassNameplateBar(frame)
+    mod.ClassBar = frame
+end
+
 function mod:Initialize()
     if not self.db.enable then return end
 
@@ -592,6 +628,9 @@ function mod:Initialize()
     self:RegisterEvent("UNIT_ENTERED_VEHICLE", "UpdateVehicleStatus")
     self:RegisterEvent("UNIT_EXITED_VEHICLE", "UpdateVehicleStatus")
     self:RegisterEvent("UNIT_PET", "UpdateVehicleStatus")
+
+    self.ClassBar = NamePlateDriverFrame.nameplateBar
+    hooksecurefunc(NamePlateDriverFrame, "SetClassNameplateBar", mod.SetClassNameplateBar)
 
     self:DISPLAY_SIZE_CHANGED() --Run once for good measure.
     self:SetBaseNamePlateSize()
