@@ -23,7 +23,7 @@ function mod:UpdateElement_Level(frame)
         r, g, b = color.r, color.g, color.b
     end
 
-    if(frame.UnitType ~= "FRIENDLY_NPC" or frame.isTarget) then
+    if(self.db.units[frame.UnitType].healthbar or frame.isTarget) then
         frame.Level:SetText(level)
     else
         frame.Level:SetFormattedText(" [%s]", level)
@@ -36,9 +36,9 @@ function mod:ConfigureElement_Level(frame)
 
     level:ClearAllPoints()
 
-    if(frame.UnitType ~= "FRIENDLY_NPC" or frame.isTarget) then
+    if(self.db.units[frame.UnitType].healthbar or frame.isTarget) then
         level:SetJustifyH("RIGHT")
-        level:SetPoint("BOTTOMRIGHT", frame.HealthBar, "TOPRIGHT", 0, 2)
+        level:SetPoint("LEFT", frame.HealthBar, "RIGHT", 2, 0)
     else
         level:SetPoint("LEFT", frame.Name, "RIGHT")
         level:SetJustifyH("LEFT")

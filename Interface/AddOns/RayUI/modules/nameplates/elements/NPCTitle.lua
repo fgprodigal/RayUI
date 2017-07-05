@@ -15,7 +15,7 @@ GameTooltip_SetDefaultAnchor(tooltip, UIParent)
 
 function mod:UpdateElement_NPCTitle(frame)
 	frame.NPCTitle:SetText("")
-	if not UnitIsPlayer(frame.unit) and not UnitPlayerControlled(frame.unit) and not UnitIsUnit("target", frame.unit) and frame.UnitType == "FRIENDLY_NPC" then
+	if not UnitIsPlayer(frame.unit) and not UnitPlayerControlled(frame.unit) and not UnitIsUnit("target", frame.unit) and not self.db.units[frame.UnitType].healthbar then
 		tooltip:SetOwner(UIParent, "ANCHOR_NONE")
 		tooltip:SetUnit(frame.unit)
 		tooltip:Show()

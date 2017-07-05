@@ -3,10 +3,8 @@
 ----------------------------------------------------------
 RayUI:LoadEnv("NamePlates")
 
-
 local mod = _NamePlates
 local LSM = LibStub("LibSharedMedia-3.0")
-
 
 function mod:UpdateElement_Name(frame)
     local name, realm = UnitName(frame.displayedUnit)
@@ -20,7 +18,7 @@ function mod:UpdateElement_Name(frame)
         if(class and color) then
             frame.Name:SetTextColor(color.r, color.g, color.b)
         end
-    elseif frame.UnitType == "FRIENDLY_NPC" then
+    elseif not self.db.units[frame.UnitType].healthbar and not frame.isTarget then
         local reactionType = UnitReaction(frame.unit, "player")
         local r, g, b
         if(reactionType == 4) then
@@ -42,10 +40,9 @@ function mod:ConfigureElement_Name(frame)
 
     name:SetJustifyH("LEFT")
     name:ClearAllPoints()
-    if(frame.UnitType ~= "FRIENDLY_NPC" or frame.isTarget) then
-        name:SetJustifyH("LEFT")
-        name:SetPoint("BOTTOMLEFT", frame.HealthBar, "TOPLEFT", 0, 2)
-        name:SetPoint("BOTTOMRIGHT", frame.Level, "BOTTOMLEFT")
+    if(self.db.units[frame.UnitType].healthbar or frame.isTarget) then
+        name:SetJustifyH("CENTER")
+        name:SetPoint("BOTTOM", frame.HealthBar, "TOP", 0, 2)
     else
         name:SetJustifyH("CENTER")
         name:SetPoint("TOP", frame, "CENTER")
@@ -57,6 +54,15 @@ end
 function mod:ConstructElement_Name(frame)
     local name = frame:CreateFontString(nil, "OVERLAY")
     name:SetWordWrap(false)
+
+    local g = frame:CreateTexture(nil,"BACKGROUND",nil,-5)
+    g:SetTexture([[Interface\AddOns\RayUI\media\spark.tga]])
+    g:SetVertexColor(.3, .7, 1, 1)
+    g:Hide()
+    g:SetPoint("TOPLEFT", name, -20, 8)
+    g:SetPoint("BOTTOMRIGHT", name, 20, -8)
+
+    name.NameOnlyGlow = g
 
     return name
 end

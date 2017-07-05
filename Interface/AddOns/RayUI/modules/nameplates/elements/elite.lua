@@ -29,10 +29,10 @@ function mod:ConfigureElement_Elite(frame)
 
     if frame.HealthBar:IsShown() then
         icon:SetParent(frame.HealthBar)
-        icon:SetPoint("LEFT", frame.HealthBar, "RIGHT", 2, 0)
+        icon:SetPoint("RIGHT", frame.HealthBar, "LEFT", 2, 0)
     else
         icon:SetParent(frame)
-        icon:SetPoint("LEFT", frame, "RIGHT", 2, 0)
+        icon:SetPoint("RIGHT", frame.Name, "LEFT", 2, 0)
     end
 end
 

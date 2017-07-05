@@ -113,7 +113,7 @@ function mod:SetTargetFrame(frame)
     if(UnitIsUnit(frame.unit, "target") and not frame.isTarget) then
         self:SetFrameScale(frame, self.db.targetScale)
         frame.isTarget = true
-        if frame.UnitType == "FRIENDLY_NPC" then
+        if not self.db.units[frame.UnitType].healthbar then
             frame.Name:ClearAllPoints()
             frame.Level:ClearAllPoints()
             frame.HealthBar.r, frame.HealthBar.g, frame.HealthBar.b = nil, nil, nil
@@ -138,7 +138,7 @@ function mod:SetTargetFrame(frame)
     elseif (frame.isTarget) then
         self:SetFrameScale(frame, frame.ThreatScale or 1)
         frame.isTarget = nil
-        if frame.UnitType == "FRIENDLY_NPC" then
+        if self.db.units[frame.UnitType].healthbar ~= true then
             self:UpdateAllFrame(frame)
         end
 
@@ -233,7 +233,7 @@ function mod:NAME_PLATE_UNIT_ADDED(event, unit, frame)
         mod.PlayerFrame = frame
     end
 
-    if frame.UnitType ~= "FRIENDLY_NPC" or self.db.displayStyle ~= "ALL" then
+    if self.db.units[frame.UnitFrame.UnitType].healthbar or self.db.displayStyle ~= "ALL" then
         self:ConfigureElement_HealthBar(frame.UnitFrame)
         self:ConfigureElement_PowerBar(frame.UnitFrame)
         self:ConfigureElement_CastBar(frame.UnitFrame)
@@ -317,8 +317,8 @@ end
 function mod:SetBaseNamePlateSize()
     local self = mod
     local baseWidth = self.db.hpWidth
-    local baseHeight = self.db.cbHeight + self.db.hpHeight + 30
-    NamePlateDriverFrame:SetBaseNamePlateSize(baseWidth, baseHeight)
+    local baseHeight = self.db.cbHeight + self.db.hpHeight + 10
+    NamePlateDriverFrame:SetBaseNamePlateSize(baseWidth * R.global.general.uiscale, baseHeight * R.global.general.uiscale)
 end
 
 function mod:UpdateInVehicle(frame, noEvents)
@@ -349,7 +349,7 @@ function mod:UpdateInVehicle(frame, noEvents)
 end
 
 function mod:UpdateElement_All(frame, unit, noTargetFrame)
-    if (frame.UnitType ~= "FRIENDLY_NPC" or (self.db.displayStyle ~= "ALL") or frame.isTarget) then
+    if (self.db.units[frame.UnitType].healthbar or (self.db.displayStyle ~= "ALL") or frame.isTarget) then
         mod:UpdateElement_MaxHealth(frame)
         mod:UpdateElement_Health(frame)
         mod:UpdateElement_HealthColor(frame)
@@ -358,7 +358,7 @@ function mod:UpdateElement_All(frame, unit, noTargetFrame)
         mod:UpdateElement_Cast(frame)
         mod:UpdateElement_Auras(frame)
         mod:UpdateElement_HealPrediction(frame)
-        if frame.UnitType == "HEALER" or frame.UnitType == "FRIENDLY_PLAYER" then
+        if self.db.units[frame.UnitType].powerbar then
             frame.PowerBar:Show()
             mod.OnEvent(frame, "UNIT_DISPLAYPOWER", unit or frame.unit)
         else
@@ -469,7 +469,7 @@ function mod:RegisterEvents(frame, unit)
         displayedUnit = frame.displayedUnit;
     end
 
-    if(frame.UnitType ~= "FRIENDLY_NPC" or frame.isTarget) then
+    if(self.db.units[frame.UnitType].healthbar or frame.isTarget) then
         frame:RegisterUnitEvent("UNIT_MAXHEALTH", unit, displayedUnit);
         frame:RegisterUnitEvent("UNIT_HEALTH", unit, displayedUnit);
         frame:RegisterUnitEvent("UNIT_HEALTH_FREQUENT", unit, displayedUnit);
@@ -481,19 +481,19 @@ function mod:RegisterEvents(frame, unit)
     frame:RegisterEvent("UNIT_NAME_UPDATE");
     frame:RegisterUnitEvent("UNIT_LEVEL", unit, displayedUnit);
 
-    if(frame.UnitType ~= "FRIENDLY_NPC" or frame.isTarget) then
+    if(self.db.units[frame.UnitType].healthbar or frame.isTarget) then
         if(frame.UnitType == "ENEMY_NPC") then
             frame:RegisterUnitEvent("UNIT_THREAT_LIST_UPDATE", unit, displayedUnit);
         end
 
-        if frame.UnitType == "HEALER" or frame.UnitType == "FRIENDLY_PLAYER" then
+        if self.db.units[frame.UnitType].powerbar then
             frame:RegisterUnitEvent("UNIT_POWER", unit, displayedUnit)
             frame:RegisterUnitEvent("UNIT_POWER_FREQUENT", unit, displayedUnit)
             frame:RegisterUnitEvent("UNIT_DISPLAYPOWER", unit, displayedUnit)
             frame:RegisterUnitEvent("UNIT_MAXPOWER", unit, displayedUnit)
         end
 
-        if frame.UnitType ~= "FRIENDLY_NPC" then
+        if self.db.units[frame.UnitType].castbar then
             frame:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED");
             frame:RegisterEvent("UNIT_SPELLCAST_DELAYED");
             frame:RegisterEvent("UNIT_SPELLCAST_CHANNEL_START");

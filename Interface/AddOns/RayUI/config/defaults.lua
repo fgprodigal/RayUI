@@ -71,6 +71,33 @@ P["NamePlates"]={
     friendly_minions = false,
     enemy_minions = false,
     enemy_minors = true,
+    units = {
+        HEALER = {
+            healthbar = true,
+            powerbar = true,
+            castbar = true,
+        },
+        FRIENDLY_PLAYER = {
+            healthbar = false,
+            powerbar = false,
+            castbar = false,
+        },
+        ENEMY_PLAYER = {
+            healthbar = true,
+            powerbar = true,
+            castbar = true,
+        },
+        FRIENDLY_NPC = {
+            healthbar = false,
+            powerbar = false,
+            castbar = false,
+        },
+        ENEMY_NPC = {
+            healthbar = true,
+            powerbar = false,
+            castbar = true,
+        },
+    }
 }
 
 P["Chat"]={

@@ -214,12 +214,12 @@ function mod:ConfigureElement_HealthBar(frame, configuring)
 
     --Texture
     healthBar:SetStatusBarTexture(LSM:Fetch("statusbar", R.global.media.normal))
-    if(not configuring) and (frame.UnitType ~= "FRIENDLY_NPC" or frame.isTarget) then
+    if(not configuring) and (self.db.units[frame.UnitType].healthbar or frame.isTarget) then
         healthBar:Show()
     end
     absorbBar:Hide()
 
-    healthBar.text:Point("CENTER", healthBar, "CENTER", 0, 1)
+    healthBar.text:Point("CENTER", healthBar, "BOTTOM", 0, 0)
     healthBar.text:SetFont(LSM:Fetch("font", "RayUI Font"), self.db.fontsize, "OUTLINE")
 end
 
