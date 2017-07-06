@@ -98,13 +98,16 @@ function mod:ClassBar_Update(frame)
             self.ClassBar:Hide()
         else
             if(frame.CastBar:IsShown()) then
+				frame.BottomOffset = -10
                 frame.BottomLevelFrame = frame.CastBar
             elseif(frame.PowerBar:IsShown()) then
+                frame.BottomOffset = nil
                 frame.BottomLevelFrame = frame.PowerBar
             else
+                frame.BottomOffset = nil
                 frame.BottomLevelFrame = frame.HealthBar
             end
-            self.ClassBar:SetPoint("TOP", frame.BottomLevelFrame or frame.CastBar, "BOTTOM", 0, -4)
+            self.ClassBar:SetPoint("TOP", frame.BottomLevelFrame or frame.CastBar, "BOTTOM", 0, frame.BottomOffset or -4)
             self.ClassBar:Show()
         end
     else
