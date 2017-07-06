@@ -80,7 +80,7 @@ P["NamePlates"]={
         FRIENDLY_PLAYER = {
             healthbar = false,
             powerbar = false,
-            castbar = false,
+            castbar = true,
         },
         ENEMY_PLAYER = {
             healthbar = true,

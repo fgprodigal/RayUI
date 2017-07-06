@@ -15,7 +15,7 @@ local function HighlightUpdate(self)
 end
 
 function mod:UpdateElement_Highlight(frame)
-    if not self.db.units[frame.UnitType].healthbar and not frame.isTarget then
+    if UnitIsUnit("mouseover", frame.unit) and not self.db.units[frame.UnitType].healthbar and not frame.isTarget then
         frame.Name.NameOnlyGlow:Show()
         frame.Highlight.handler:SetScript("OnUpdate", function() HighlightUpdate(frame) end)
     elseif UnitIsUnit("mouseover", frame.unit) and not frame.isTarget then
@@ -25,6 +25,7 @@ function mod:UpdateElement_Highlight(frame)
         frame.Highlight:Show()
         frame.Highlight.handler:SetScript("OnUpdate", function() HighlightUpdate(frame) end)
     else
+        frame.Name.NameOnlyGlow:Hide()
         frame.Highlight:Hide()
         frame.Highlight.handler:SetScript("OnUpdate", nil)
     end

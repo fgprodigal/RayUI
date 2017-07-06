@@ -33,7 +33,7 @@ function mod:UpdateElement_CastBarOnUpdate(elapsed)
 end
 
 function mod:UpdateElement_Cast(frame, event, ...)
-    if not self.db.units[frame.UnitType].castbar ~= true then return end
+    if not self.db.units[frame.UnitType].castbar then return end
 
     local arg1 = ...;
     local unit = frame.displayedUnit
