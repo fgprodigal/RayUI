@@ -113,10 +113,6 @@ P["Tooltip"]={
     cursor = false,
 }
 
-P["Watcher"]={
-    enable = true,
-}
-
 P["Buff"]={
     enable = true,
 }

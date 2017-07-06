@@ -18,5 +18,4 @@ tooltip.lua
 skins.lua
 misc.lua
 nameplates.lua
-watcher.lua
 combattext.lua
