@@ -791,9 +791,7 @@ end
 
 function R:LoadDeveloperConfig()
 	if not R:IsDeveloper() then return end
-	P["UnitFrames"].smartAura = true
 	P["Misc"].cooldowns.enable = true
-	P["Watcher"].enable = false
 	G["general"].logLevel = 1
 end
 

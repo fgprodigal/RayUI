@@ -317,8 +317,12 @@ function UF:CustomSmartFilter(unit, icon, name, rank, texture, count, debuffType
     end
 
     if R.db.UnitFrames.aurafilters["Whitelist"][spellID] then
-        icon.priority = R.db.UnitFrames.aurafilters["Whitelist"][spellID].priority
-        returnValue = true
+        if R.db.UnitFrames.aurafilters["Whitelist"][spellID].caster and R.db.UnitFrames.aurafilters["Whitelist"][spellID].caster ~= unitCaster then
+            returnValue = false
+        else
+            icon.priority = R.db.UnitFrames.aurafilters["Whitelist"][spellID].priority
+            returnValue = true
+        end
     end
 
     if R.db.UnitFrames.aurafilters["TurtleBuffs"][spellID] then
@@ -1016,7 +1020,8 @@ function UF:PostCreateIcon(button)
                 R.db.UnitFrames.aurafilters["Blacklist"][button.spellID] = nil
                 R.db.UnitFrames.aurafilters["Whitelist"][button.spellID] = {
                     enable = true,
-                    priority = 0
+                    priority = 0,
+                    caster = button.owner
                 }
                 UF:UpdateAuras()
             end
