@@ -104,9 +104,16 @@ function A:CreateIcon(button)
 
     button:SetScript("OnUpdate", A.UpdateTime)
     button:HookScript("OnClick", function(self, button)
+            local name, _, _, _, _, _, _, _, _, _, spellID = UnitAura(SecureButton_GetUnit(self:GetParent()), self:GetID(), self:GetParent():GetAttribute("filter"))
             if button == "LeftButton" and IsShiftKeyDown() then
-                local name, _, _, _, _, _, _, _, _, _, spellID = UnitAura(SecureButton_GetUnit(self:GetParent()), self:GetID(), self:GetParent():GetAttribute("filter"))
                 R:Print(self:GetParent():GetAttribute("filter") == "HELPFUL" and "BUFF" or "DEBUFF", name, spellID)
+            elseif button == "RightButton" and IsShiftKeyDown() then
+                R.global.unitframe.aurafilters["Blacklist"][spellID] = nil
+                R.global.unitframe.aurafilters["Whitelist"][spellID] = {
+                    enable = true,
+                    priority = 0
+                }
+                R.UnitFrames:UpdateAuras()
             end
         end)
 

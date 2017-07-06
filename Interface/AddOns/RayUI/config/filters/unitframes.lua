@@ -19,6 +19,7 @@ local function Defaults(priorityOverride)
 end
 
 _AuraFilters = {}
+P.UnitFrames.aurafilters = _AuraFilters
 
 _InvalidSpells = {
     [65148] = true,

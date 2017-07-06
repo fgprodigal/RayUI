@@ -4,7 +4,6 @@
 RayUI:LoadEnv()
 
 
-
 G["media"]={
     blank = "RayUI Blank",
     normal = "RayUI Light",
@@ -137,7 +136,7 @@ P["UnitFrames"]={
     alwaysShowHealth = false,
     aurabar = false,
     castBar = true,
-    smartAura = false,
+    smartAura = true,
     units = {
         player = {
             defaultPosition = { "BOTTOMRIGHT", R.UIParent, "BOTTOM", -80, 390 },

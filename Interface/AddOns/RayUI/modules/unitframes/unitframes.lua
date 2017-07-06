@@ -123,6 +123,12 @@ function UF:UpdateFrame(frame)
     UF:Configure_ClassBar(frame)
 end
 
+function UF:UpdateAuras()
+    for unit in pairs(_Units) do
+        self[unit]:UpdateAllElements("RayUI_UpdateAuras")
+    end
+end
+
 function UF:Update_AllFrames()
     if InCombatLockdown() then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return end
 
