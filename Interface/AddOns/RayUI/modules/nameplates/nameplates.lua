@@ -348,7 +348,7 @@ function mod:SetBaseNamePlateSize()
     local self = mod
     local baseWidth = self.db.hpWidth
     local baseHeight = self.db.cbHeight + self.db.hpHeight + 10
-    NamePlateDriverFrame:SetBaseNamePlateSize(baseWidth * R.global.general.uiscale, baseHeight * R.global.general.uiscale)
+    NamePlateDriverFrame:SetBaseNamePlateSize(baseWidth, baseHeight)
 end
 
 function mod:UpdateInVehicle(frame, noEvents)
