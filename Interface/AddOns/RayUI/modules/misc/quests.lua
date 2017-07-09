@@ -3,6 +3,7 @@
 ----------------------------------------------------------
 RayUI:LoadEnv("Misc")
 
+
 local M = _Misc
 local mod = M:NewModule("Quest", "AceEvent-3.0", "AceHook-3.0")
 
@@ -43,30 +44,18 @@ end
 local QuickQuest = CreateFrame("Frame")
 QuickQuest:SetScript("OnEvent", function(self, event, ...) self[event](...) end)
 
-local metatable = {
-    __call = function(methods, ...)
-        for _, method in next, methods do
-            method(...)
-        end
-    end
-}
-
-function QuickQuest:Register(event, method, override)
-    local newmethod
-    if(not override) then
-        newmethod = function(...)
-            if(not IsShiftKeyDown() and M.db.automation) then
+function QuickQuest:Register(event, method)
+    self:RegisterEvent(event)
+    self[event] = function(...)
+        if M.db.automation then
+            if not IsShiftKeyDown() then
+                method(...)
+            end
+        else
+            if IsShiftKeyDown() then
                 method(...)
             end
         end
-    end
-
-    local methods = self[event]
-    if(methods) then
-        self[event] = setmetatable({methods, newmethod or method}, metatable)
-    else
-        self[event] = newmethod or method
-        self:RegisterEvent(event)
     end
 end
 
@@ -78,6 +67,11 @@ local ignoreQuestNPC = {
     [88570] = true, -- Fate-Twister Tiklal
     [87391] = true, -- Fate-Twister Seress
     [111243] = true, -- Archmage Lan'dalock
+    [108868] = true, -- Hunter's order hall
+    [101462] = true, -- Reaves
+    [43929] = true, -- 4000
+    [106655] = true, -- Legendary Item Upgrade
+    [14847] = true, -- DarkMoon
 }
 
 local function GetQuestLogQuests(onlyComplete)
@@ -157,6 +151,7 @@ local ignoreGossipNPC = {
     [84268] = true, -- Lieutenant Thorn (Alliance)
     [84511] = true, -- Lieutenant Thorn (Alliance)
     [84684] = true, -- Lieutenant Thorn (Alliance)
+    [117871] = true, -- War Councilor Victoria (Class Challenges @ Broken Shore)
 }
 
 local rogueClassHallInsignia = {
@@ -211,15 +206,13 @@ QuickQuest:Register("GOSSIP_SHOW", function()
                 return SelectGossipOption(1)
             end
 
-            local _, instance = GetInstanceInfo()
-            if(instance == "raid") then
-                if(GetNumGroupMembers() > 1) then
+            local _, instance, _, _, _, _, _, mapID = GetInstanceInfo()
+            if(instance ~= "raid" and not ignoreGossipNPC[npcID] and not (instance == "scenario" and mapID == 1626)) then
+                local _, type = GetGossipOptions()
+                if type == "gossip" then
+                    SelectGossipOption(1)
                     return
                 end
-
-                SelectGossipOption(1)
-            elseif(instance ~= "raid" and not ignoreGossipNPC[npcID]) then
-                SelectGossipOption(1)
             end
         end
     end)
@@ -295,66 +288,66 @@ QuickQuest:Register("GOSSIP_CONFIRM", function(index)
         end
     end)
 
-QuestFrame:UnregisterEvent("QUEST_DETAIL")
-QuickQuest:Register("QUEST_DETAIL", function(...)
-        if(not QuestGetAutoAccept() and not QuestIsFromAreaTrigger()) then
-            QuestFrame_OnEvent(QuestFrame, "QUEST_DETAIL", ...)
-        end
-    end,
-    true)
-
-QuickQuest:Register("QUEST_DETAIL", function(questStartItemID)
-        if(QuestGetAutoAccept() or (questStartItemID ~= nil and questStartItemID ~= 0)) then
-            AcknowledgeAutoAcceptQuest()
-        else
-            -- XXX: no way to tell if the quest is trivial
+QuickQuest:Register("QUEST_DETAIL", function()
+        if(not QuestGetAutoAccept()) then
             AcceptQuest()
+        end
+    end)
+
+QuickQuest:Register("QUEST_ACCEPTED", function(id)
+        if(QuestFrame:IsShown() and QuestGetAutoAccept()) then
+            CloseQuest()
         end
     end)
 
 local function AttemptAutoComplete(event)
     if(GetNumAutoQuestPopUps() > 0) then
-        if(UnitIsDeadOrGhost("player")) then
-            QuickQuest:Register("PLAYER_REGEN_ENABLED", AttemptAutoComplete)
-            return
-        end
+		if(UnitIsDeadOrGhost("player")) then
+			QuickQuest:Register("PLAYER_REGEN_ENABLED", AttemptAutoComplete)
+			return
+		end
 
-        local questID, popUpType = GetAutoQuestPopUp(1)
-        if(popUpType == "OFFER") then
-            ShowQuestOffer(GetQuestLogIndexByID(questID))
-        else
-            ShowQuestComplete(GetQuestLogIndexByID(questID))
-        end
-    else
-        C_Timer.After(1, AttemptAutoComplete)
-    end
+		local questID, popUpType = GetAutoQuestPopUp(1)
+		local _, _, worldQuest = GetQuestTagInfo(questID)
+		if not worldQuest then
+			if(popUpType == "OFFER") then
+				ShowQuestOffer(GetQuestLogIndexByID(questID))
+			else
+				ShowQuestComplete(GetQuestLogIndexByID(questID))
+			end
+		end
+	else
+		C_Timer.After(1, AttemptAutoComplete)
+	end
 
-    if(event == "PLAYER_REGEN_ENABLED") then
-        QuickQuest:UnregisterEvent("PLAYER_REGEN_ENABLED")
-    end
+	if(event == "PLAYER_REGEN_ENABLED") then
+		QuickQuest:UnregisterEvent("PLAYER_REGEN_ENABLED")
+	end
 end
 
 QuickQuest:Register("PLAYER_LOGIN", AttemptAutoComplete)
 QuickQuest:Register("QUEST_AUTOCOMPLETE", AttemptAutoComplete)
 QuickQuest:Register("QUEST_ACCEPT_CONFIRM", AcceptQuest)
 
-
 local choiceQueue
-QuickQuest:Register("QUEST_ITEM_UPDATE", function(...)
+QuickQuest:Register("QUEST_ITEM_UPDATE", function()
         if(choiceQueue and QuickQuest[choiceQueue]) then
             QuickQuest[choiceQueue]()
         end
-    end, true)
+    end)
 
 QuickQuest:Register("QUEST_PROGRESS", function()
         if(IsQuestCompletable()) then
+            local _, _, worldQuest = GetQuestTagInfo(GetQuestID())
+            if worldQuest then return end
+
             local requiredItems = GetNumQuestItems()
             if(requiredItems > 0) then
                 for index = 1, requiredItems do
                     local link = GetQuestItemLink("required", index)
                     if(link) then
                         local id = GetItemInfoFromHyperlink(link)
-                        for _, itemID in pairs(ignoredItems) do
+                        for _, itemID in next, ignoredItems do
                             if(itemID == id) then
                                 return
                             end
@@ -367,13 +360,6 @@ QuickQuest:Register("QUEST_PROGRESS", function()
             end
 
             CompleteQuest()
-        end
-    end)
-
-QuickQuest:Register("QUEST_COMPLETE", function()
-        local choices = GetNumQuestChoices()
-        if(choices <= 1) then
-            GetQuestReward(1)
         end
     end)
 
@@ -391,8 +377,14 @@ local cashRewards = {
 }
 
 QuickQuest:Register("QUEST_COMPLETE", function()
+        -- Blingtron 6000 only!
+        local npcID = GetNPCID()
+        if npcID == 43929 or npcID == 77789 then return end
+
         local choices = GetNumQuestChoices()
-        if(choices > 1) then
+        if(choices <= 1) then
+            GetQuestReward(1)
+        elseif(choices > 1) then
             local bestValue, bestIndex = 0
 
             for index = 1, choices do
