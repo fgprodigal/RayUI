@@ -203,6 +203,59 @@ R.Options.args.UnitFrames = {
                         },
                     },
                 },
+                smartAuraGroup = {
+                    order = 3,
+                    type = "group",
+                    name = L["法术监视"],
+                    guiInline = true,
+                    get = function(info)
+                        return R.db.UnitFrames.units.player.smartaura[ info[#info] ]
+                    end,
+                    set = function(info, value)
+                        R.db.UnitFrames.units.player.smartaura[ info[#info] ] = value
+                        StaticPopup_Show("CFG_RELOAD")
+                    end,
+                    args = {
+                        enable = {
+                            order = 1,
+                            name = L["启用"],
+                            type = "toggle",
+                        },
+                        spacer = {
+                            type = "description",
+                            name = "",
+                            desc = "",
+                            order = 2,
+                        },
+                        size = {
+                            order = 3,
+                            name = L["大小"],
+                            min = 25, max = 50, step = 1,
+                            type = "range",
+                            hidden = function() return not R.db.UnitFrames.units.player.smartaura.enable end,
+                        },
+                        growthx = {
+                            order = 4,
+                            name = L["横向增长方向"],
+                            type = "select",
+                            values = {
+                                ["LEFT"] = L["左"],
+                                ["RIGHT"] = L["右"],
+                            },
+                            hidden = function() return not R.db.UnitFrames.units.player.smartaura.enable end,
+                        },
+                        growthy = {
+                            order = 5,
+                            name = L["纵向增长方向"],
+                            type = "select",
+                            values = {
+                                ["UP"] = L["上"],
+                                ["DOWN"] = L["下"],
+                            },
+                            hidden = function() return not R.db.UnitFrames.units.player.smartaura.enable end,
+                        },
+                    }
+                }
             },
         },
         targetGroup = {
@@ -291,6 +344,59 @@ R.Options.args.UnitFrames = {
                         },
                     },
                 },
+                smartAuraGroup = {
+                    order = 3,
+                    type = "group",
+                    name = L["法术监视"],
+                    guiInline = true,
+                    get = function(info)
+                        return R.db.UnitFrames.units.target.smartaura[ info[#info] ]
+                    end,
+                    set = function(info, value)
+                        R.db.UnitFrames.units.target.smartaura[ info[#info] ] = value
+                        StaticPopup_Show("CFG_RELOAD")
+                    end,
+                    args = {
+                        enable = {
+                            order = 1,
+                            name = L["启用"],
+                            type = "toggle",
+                        },
+                        spacer = {
+                            type = "description",
+                            name = "",
+                            desc = "",
+                            order = 2,
+                        },
+                        size = {
+                            order = 3,
+                            name = L["大小"],
+                            min = 25, max = 50, step = 1,
+                            type = "range",
+                            hidden = function() return not R.db.UnitFrames.units.target.smartaura.enable end,
+                        },
+                        growthx = {
+                            order = 4,
+                            name = L["横向增长方向"],
+                            type = "select",
+                            values = {
+                                ["LEFT"] = L["左"],
+                                ["RIGHT"] = L["右"],
+                            },
+                            hidden = function() return not R.db.UnitFrames.units.target.smartaura.enable end,
+                        },
+                        growthy = {
+                            order = 5,
+                            name = L["纵向增长方向"],
+                            type = "select",
+                            values = {
+                                ["UP"] = L["上"],
+                                ["DOWN"] = L["下"],
+                            },
+                            hidden = function() return not R.db.UnitFrames.units.target.smartaura.enable end,
+                        },
+                    }
+                }
             },
         },
         focusGroup = {
@@ -379,6 +485,59 @@ R.Options.args.UnitFrames = {
                         },
                     },
                 },
+                smartAuraGroup = {
+                    order = 3,
+                    type = "group",
+                    name = L["法术监视"],
+                    guiInline = true,
+                    get = function(info)
+                        return R.db.UnitFrames.units.focus.smartaura[ info[#info] ]
+                    end,
+                    set = function(info, value)
+                        R.db.UnitFrames.units.focus.smartaura[ info[#info] ] = value
+                        StaticPopup_Show("CFG_RELOAD")
+                    end,
+                    args = {
+                        enable = {
+                            order = 1,
+                            name = L["启用"],
+                            type = "toggle",
+                        },
+                        spacer = {
+                            type = "description",
+                            name = "",
+                            desc = "",
+                            order = 2,
+                        },
+                        size = {
+                            order = 3,
+                            name = L["大小"],
+                            min = 25, max = 50, step = 1,
+                            type = "range",
+                            hidden = function() return not R.db.UnitFrames.units.focus.smartaura.enable end,
+                        },
+                        growthx = {
+                            order = 4,
+                            name = L["横向增长方向"],
+                            type = "select",
+                            values = {
+                                ["LEFT"] = L["左"],
+                                ["RIGHT"] = L["右"],
+                            },
+                            hidden = function() return not R.db.UnitFrames.units.focus.smartaura.enable end,
+                        },
+                        growthy = {
+                            order = 5,
+                            name = L["纵向增长方向"],
+                            type = "select",
+                            values = {
+                                ["UP"] = L["上"],
+                                ["DOWN"] = L["下"],
+                            },
+                            hidden = function() return not R.db.UnitFrames.units.focus.smartaura.enable end,
+                        },
+                    }
+                }
             },
         },
         targettargetGroup = {
@@ -502,6 +661,59 @@ R.Options.args.UnitFrames = {
                         },
                     },
                 },
+                smartAuraGroup = {
+                    order = 3,
+                    type = "group",
+                    name = L["法术监视"],
+                    guiInline = true,
+                    get = function(info)
+                        return R.db.UnitFrames.units.pet.smartaura[ info[#info] ]
+                    end,
+                    set = function(info, value)
+                        R.db.UnitFrames.units.pet.smartaura[ info[#info] ] = value
+                        StaticPopup_Show("CFG_RELOAD")
+                    end,
+                    args = {
+                        enable = {
+                            order = 1,
+                            name = L["启用"],
+                            type = "toggle",
+                        },
+                        spacer = {
+                            type = "description",
+                            name = "",
+                            desc = "",
+                            order = 2,
+                        },
+                        size = {
+                            order = 3,
+                            name = L["大小"],
+                            min = 25, max = 50, step = 1,
+                            type = "range",
+                            hidden = function() return not R.db.UnitFrames.units.pet.smartaura.enable end,
+                        },
+                        growthx = {
+                            order = 4,
+                            name = L["横向增长方向"],
+                            type = "select",
+                            values = {
+                                ["LEFT"] = L["左"],
+                                ["RIGHT"] = L["右"],
+                            },
+                            hidden = function() return not R.db.UnitFrames.units.pet.smartaura.enable end,
+                        },
+                        growthy = {
+                            order = 5,
+                            name = L["纵向增长方向"],
+                            type = "select",
+                            values = {
+                                ["UP"] = L["上"],
+                                ["DOWN"] = L["下"],
+                            },
+                            hidden = function() return not R.db.UnitFrames.units.pet.smartaura.enable end,
+                        },
+                    }
+                }
             },
         },
         arenaGroup = {

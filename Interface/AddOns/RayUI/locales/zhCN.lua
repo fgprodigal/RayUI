@@ -47,6 +47,10 @@ do
     L["Raid40 Mover"] = "40人团队头像"
     L["RaidPets Mover"] = "团队宠物头像"
     L["RaidTank Mover"] = "团队坦克头像"
+    L["玩家法术监视"] = true
+    L["目标法术监视"] = true
+    L["焦点法术监视"] = true
+    L["宠物法术监视"] = true
 
     L["ALL"] = "全部"
     L["GENERAL"] = "综合"

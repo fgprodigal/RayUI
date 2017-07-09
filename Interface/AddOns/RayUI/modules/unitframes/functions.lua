@@ -280,10 +280,10 @@ end
 function UF:Construct_SmartAura(frame)
     local auras = CreateFrame("Frame", frame:GetName().."SmartAuras", frame)
     auras.isSmartAura = true
-    auras:SetHeight(38)
+    auras:SetHeight(auras.size or 32)
     auras:SetWidth(frame.UNIT_WIDTH * 2)
     auras.spacing = 6
-    auras.size = 32
+    auras.size = auras.size or 32
     auras.PreSetPosition = (not frame:GetScript("OnUpdate")) and UF.SortAuras or nil
     auras.PostCreateIcon = self.PostCreateIcon
     auras.PostUpdateIcon = self.PostUpdateIcon
@@ -1005,28 +1005,26 @@ function UF:PostCreateIcon(button)
         button.value:SetJustifyH("RIGHT")
     end
 
-    if UF.db.smartAura then
-        button:RegisterForClicks("RightButtonUp")
-    	button:SetScript("OnClick", function(self)
-            if not IsShiftKeyDown() then return end
-            if self:GetParent().isSmartAura then
-                R.db.UnitFrames.aurafilters["Whitelist"][button.spellID] = nil
-                R.db.UnitFrames.aurafilters["Blacklist"][button.spellID] = {
-                    enable = true,
-                    priority = 0
-                }
-                UF:UpdateAuras()
-            else
-                R.db.UnitFrames.aurafilters["Blacklist"][button.spellID] = nil
-                R.db.UnitFrames.aurafilters["Whitelist"][button.spellID] = {
-                    enable = true,
-                    priority = 0,
-                    caster = button.owner
-                }
-                UF:UpdateAuras()
-            end
-        end)
-    end
+    button:RegisterForClicks("RightButtonUp")
+	button:SetScript("OnClick", function(self)
+        if not IsShiftKeyDown() then return end
+        if self:GetParent().isSmartAura then
+            R.db.UnitFrames.aurafilters["Whitelist"][button.spellID] = nil
+            R.db.UnitFrames.aurafilters["Blacklist"][button.spellID] = {
+                enable = true,
+                priority = 0
+            }
+            UF:UpdateAuras()
+        else
+            R.db.UnitFrames.aurafilters["Blacklist"][button.spellID] = nil
+            R.db.UnitFrames.aurafilters["Whitelist"][button.spellID] = {
+                enable = true,
+                priority = 0,
+                caster = button.owner
+            }
+            UF:UpdateAuras()
+        end
+    end)
 
     button.pushed = true
     button:StyleButton(true)
@@ -1044,7 +1042,7 @@ function UF:CustomFilter(unit, icon, name, rank, texture, count, debuffType, dur
         icon.owner = unitCaster
     end
 
-    if UF.db.smartAura then
+    if UF.db.units[unit].smartaura.enable then
         return not UF:CustomSmartFilter(unit, icon, name, rank, texture, count, debuffType, duration, expirationTime, unitCaster, isStealable, _, spellID)
     end
 

@@ -107,10 +107,8 @@ function UF:LoadUnitFrames()
         R:CreateMover(BossHeader, "BossHeaderMover", "首领头像", nil, nil, "ALL,RAID15,RAID25,RAID40")
     end
 
-    if self.db.smartAura then
-        SpellActivationOverlayFrame:SetFrameStrata("BACKGROUND")
-        SpellActivationOverlayFrame:SetFrameLevel(0)
-    end
+    SpellActivationOverlayFrame:SetFrameStrata("BACKGROUND")
+    SpellActivationOverlayFrame:SetFrameLevel(0)
 end
 
 function UF:PLAYER_REGEN_ENABLED()

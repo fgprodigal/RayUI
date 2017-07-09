@@ -132,7 +132,6 @@ P["UnitFrames"]={
     alwaysShowHealth = false,
     aurabar = false,
     castBar = true,
-    smartAura = true,
     units = {
         player = {
             defaultPosition = { "BOTTOMRIGHT", R.UIParent, "BOTTOM", -80, 390 },
@@ -144,6 +143,12 @@ P["UnitFrames"]={
                 width = 350,
                 height = 7,
             },
+            smartaura = {
+                enable = true,
+                size = 32,
+                growthx = "LEFT",
+                growthy = "UP",
+            },
         },
         target = {
             defaultPosition = { "BOTTOMLEFT", R.UIParent, "BOTTOM", 80, 390 },
@@ -154,6 +159,12 @@ P["UnitFrames"]={
                 iconposition = "LEFT",
                 width = 220,
                 height = 20,
+            },
+            smartaura = {
+                enable = true,
+                size = 32,
+                growthx = "RIGHT",
+                growthy = "UP",
             },
         },
         targettarget = {
@@ -177,6 +188,12 @@ P["UnitFrames"]={
                 width = 250,
                 height = 5,
             },
+            smartaura = {
+                enable = true,
+                size = 30,
+                growthx = "LEFT",
+                growthy = "UP",
+            },
         },
         focustarget = {
             defaultPosition = { "RIGHT", "RayUF_Focus", "LEFT", -6, 1 },
@@ -187,6 +204,12 @@ P["UnitFrames"]={
             defaultPosition = { "RIGHT", "RayUF_Player", "LEFT", -6, 0 },
             width = 120,
             height = 30,
+            smartaura = {
+                enable = true,
+                size = 30,
+                growthx = "LEFT",
+                growthy = "UP",
+            },
         },
         arena = {
             enable = true,

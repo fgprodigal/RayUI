@@ -47,6 +47,10 @@ do
     L["Raid40 Mover"] = "Raid40"
     L["RaidPets Mover"] = "RaidPets"
     L["RaidTank Mover"] = "RaidTank"
+    L["玩家法术监视"] = "Player aura watch"
+    L["目标法术监视"] = "Target aura watch"
+    L["焦点法术监视"] = "Focus aura watch"
+    L["宠物法术监视"] = "Pet aura watch"
 
     L["ALL"] = "All"
     L["GENERAL"] = "General"
