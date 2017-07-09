@@ -70,6 +70,7 @@ P["NamePlates"]={
     friendly_minions = false,
     enemy_minions = false,
     enemy_minors = true,
+    classbar = true,
     units = {
         HEALER = {
             healthbar = true,

@@ -177,5 +177,11 @@ R.Options.args.NamePlates = {
             },
             hidden = function() return not R.db.NamePlates.enable end,
         },
+        classbar = {
+            order = 22,
+            type = "toggle",
+            name = L["职业特有条"],
+            hidden = function() return not R.db.NamePlates.enable end,
+        }
     },
 }

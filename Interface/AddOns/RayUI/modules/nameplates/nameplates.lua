@@ -90,25 +90,29 @@ end
 function mod:ClassBar_Update(frame)
     if(not self.ClassBar) then return end
 
-    local targetFrame = self:GetNamePlateForUnit("target")
+    if self.db.classbar then
+        local targetFrame = self:GetNamePlateForUnit("target")
 
-    if(targetFrame and not UnitHasVehicleUI("player")) then
-        frame = targetFrame.UnitFrame
-        if(frame.UnitType == "FRIENDLY_NPC" or frame.UnitType == "FRIENDLY_PLAYER" or frame.UnitType == "HEALER") then
-            self.ClassBar:Hide()
-        else
-            if(frame.CastBar:IsShown()) then
-				frame.BottomOffset = -10
-                frame.BottomLevelFrame = frame.CastBar
-            elseif(frame.PowerBar:IsShown()) then
-                frame.BottomOffset = nil
-                frame.BottomLevelFrame = frame.PowerBar
+        if(targetFrame and not UnitHasVehicleUI("player")) then
+            frame = targetFrame.UnitFrame
+            if(frame.UnitType == "FRIENDLY_NPC" or frame.UnitType == "FRIENDLY_PLAYER" or frame.UnitType == "HEALER") then
+                self.ClassBar:Hide()
             else
-                frame.BottomOffset = nil
-                frame.BottomLevelFrame = frame.HealthBar
+                if(frame.CastBar:IsShown()) then
+                    frame.BottomOffset = -10
+                    frame.BottomLevelFrame = frame.CastBar
+                elseif(frame.PowerBar:IsShown()) then
+                    frame.BottomOffset = nil
+                    frame.BottomLevelFrame = frame.PowerBar
+                else
+                    frame.BottomOffset = nil
+                    frame.BottomLevelFrame = frame.HealthBar
+                end
+                self.ClassBar:SetPoint("TOP", frame.BottomLevelFrame or frame.CastBar, "BOTTOM", 0, frame.BottomOffset or -4)
+                self.ClassBar:Show()
             end
-            self.ClassBar:SetPoint("TOP", frame.BottomLevelFrame or frame.CastBar, "BOTTOM", 0, frame.BottomOffset or -4)
-            self.ClassBar:Show()
+        else
+            self.ClassBar:Hide()
         end
     else
         self.ClassBar:Hide()
