@@ -59,28 +59,6 @@ function RA:Construct_RaidFrames()
 end
 
 function RA:RaidSmartVisibility(event)
---[[    local inInstance, instanceType = IsInInstance()
-    local _, _, _, _, maxPlayers, _, _, mapID, instanceGroupSize = GetInstanceInfo()
-    if event == "PLAYER_REGEN_ENABLED" then self:UnregisterEvent("PLAYER_REGEN_ENABLED") end
-    if not InCombatLockdown() then
-        if(inInstance and (instanceType == "raid" or instanceType == "pvp")) then
-            if _MapIDs[mapID] then
-                maxPlayers = _MapIDs[mapID]
-            end
-            UnregisterStateDriver(self, "visibility")
-            if maxPlayers <= 25 then
-                self:Show()
-            else
-                self:Hide()
-            end
-        else
-            RegisterStateDriver(self, "visibility", _GroupConfig.raid.visibility)
-        end
-    else
-        self:RegisterEvent("PLAYER_REGEN_ENABLED")
-        return
-    end
-    ]]
     RegisterStateDriver(self, "visibility", _GroupConfig.raid.visibility)
 end
 
