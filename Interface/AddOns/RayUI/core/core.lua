@@ -257,7 +257,7 @@ logo.image = logo:CreateTexture(nil, "OVERLAY")
 logo.image:SetAllPoints()
 logo.image:SetTexture("Interface\\AddOns\\RayUI\\media\\logo.tga")
 logo:Hide()
-R.logo = logo
+R.logo = "Interface\\AddOns\\RayUI\\media\\logo.tga"
 
 local function CreateSplashScreen()
 	local f = CreateFrame("Frame", "RayUISplashScreen", R.UIParent)
@@ -300,6 +300,7 @@ end
 
 local function HideSplashScreen()
 	RayUISplashScreen:Hide()
+    R.Changelog:CheckVersion()
 end
 
 local function FadeSplashScreen()
@@ -356,7 +357,9 @@ function R:Initialize()
 	elseif self.global.general.logo then
 		CreateSplashScreen()
 		C_Timer.After(6, ShowSplashScreen)
-	end
+	else
+        C_Timer.After(6, R.Changelog.CheckVersion)
+    end
 
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -612,46 +615,6 @@ elseif R.myclass == "WARRIOR" then
 else
 	Unusable = {{}, {}}
 end
-
---[[
-LE_ITEM_CLASS_WEAPON 2
-LE_ITEM_CLASS_ARMOR 4
-
-LE_ITEM_WEAPON_AXE1H 0
-LE_ITEM_WEAPON_AXE2H 1
-LE_ITEM_WEAPON_BOWS 2
-LE_ITEM_WEAPON_GUNS 3
-LE_ITEM_WEAPON_MACE1H 4
-LE_ITEM_WEAPON_MACE2H 5
-LE_ITEM_WEAPON_POLEARM 6
-LE_ITEM_WEAPON_SWORD1H 7
-LE_ITEM_WEAPON_SWORD2H 8
-LE_ITEM_WEAPON_WARGLAIVE 9 (DH Only?)
-LE_ITEM_WEAPON_STAFF 10
-LE_ITEM_WEAPON_BEARCLAW 11
-LE_ITEM_WEAPON_CATCLAW 12
-LE_ITEM_WEAPON_UNARMED 13 (Fist Weapons)
-LE_ITEM_WEAPON_GENERIC 14
-LE_ITEM_WEAPON_DAGGER 15
-LE_ITEM_WEAPON_THROWN 16
-Spears? 17 (Not in game)
-LE_ITEM_WEAPON_CROSSBOW 18
-LE_ITEM_WEAPON_WAND 19
-LE_ITEM_WEAPON_FISHINGPOLE 20
-
-LE_ITEM_ARMOR_GENERIC 0
-LE_ITEM_ARMOR_CLOTH 1
-LE_ITEM_ARMOR_LEATHER 2
-LE_ITEM_ARMOR_MAIL 3
-LE_ITEM_ARMOR_PLATE 4
-LE_ITEM_ARMOR_COSMETIC 5
-LE_ITEM_ARMOR_SHIELD 6
-LE_ITEM_ARMOR_LIBRAM 7
-LE_ITEM_ARMOR_IDOL 8
-LE_ITEM_ARMOR_TOTEM 9
-LE_ITEM_ARMOR_SIGIL 10
-LE_ITEM_ARMOR_RELIC 11
-]]
 
 R.unusable = {}
 R.cannotDual = Unusable[3]

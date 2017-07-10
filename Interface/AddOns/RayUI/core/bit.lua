@@ -4,7 +4,6 @@
 RayUI:LoadEnv()
 
 
-
 if bit.bnot(0) ~= 0xFFFFFFFF then
     local _bnot = bit.bnot
     function bit.bnot(value)
