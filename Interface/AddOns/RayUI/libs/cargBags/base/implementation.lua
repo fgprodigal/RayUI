@@ -301,25 +301,22 @@ do
     local function scheduler()
         for id = BACKPACK_CONTAINER, NUM_BAG_SLOTS do
             scheduled:UpdateBag(id)
-            scheduled:OnEvent("BAG_UPDATE")
         end
 
         if scheduled:AtBank() then
             scheduled:UpdateBag(BANK_CONTAINER)
             for id = NUM_BAG_SLOTS + 1, NUM_BAG_SLOTS + NUM_BANKBAGSLOTS do
                 scheduled:UpdateBag(id)
-                scheduled:OnEvent("BAG_UPDATE")
             end
 
             if IsReagentBankUnlocked() then
                 scheduled:UpdateBag(REAGENTBANK_CONTAINER)
-                scheduled:OnEvent("BAG_UPDATE")
             end
         end
         scheduled = false
     end
     function Implementation:UpdateAll()
-        if not scheduled and not InCombatLockdown() then
+        if not scheduled then
             scheduled = self
             C_Timer.After(0, scheduler)
         end
