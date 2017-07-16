@@ -75,7 +75,7 @@ function BagButton:Create(bagID)
 
 	button.Icon:SetTexCoord(.08, .92, .08, .92)
 	button.Icon:SetInside(button, 1, 1)
-	button.Border:Hide()
+	button:StripTextures()
 	button:StyleButton(1)
 
 	if not button.border then

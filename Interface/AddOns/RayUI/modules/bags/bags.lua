@@ -433,7 +433,7 @@ function B:Initialize()
 				local buyReagent = CreateFrame("Button", nil, self, "UIPanelButtonTemplate")
 				buyReagent:SetText(BANKSLOTPURCHASE)
 				buyReagent:SetWidth(buyReagent:GetTextWidth() + 20)
-				buyReagent:Point("TOPRIGHT", self, "TOPRIGHT", -5, -14)
+				buyReagent:Point("TOPRIGHT", self, "TOPRIGHT", -6, -21)
 				buyReagent:SetScript("OnEnter", function(self)
 					GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 					GameTooltip:AddLine(REAGENT_BANK_HELP, 1, 1, 1, true)
@@ -445,11 +445,14 @@ function B:Initialize()
 				buyReagent:SetScript("OnClick", function()
 					StaticPopup_Show("CONFIRM_BUY_REAGENTBANK_TAB")
 				end)
-				buyReagent:SetScript("OnEvent", function(...)
+				buyReagent:SetScript("OnEvent", function(self, event)
+                    if event == "REAGENTBANK_PURCHASED" then
+                        f.reagent:OnContentsChanged()
+                    end
 					if IsReagentBankUnlocked() then
 						buyReagent:UnregisterAllEvents()
 						buyReagent:Hide()
-					end
+                    end
 				end)
 				S:Reskin(buyReagent)
 				buyReagent:RegisterEvent("REAGENTBANK_PURCHASED")
@@ -462,6 +465,9 @@ function B:Initialize()
 			bankname:SetPoint("TOPLEFT", self, "TOPLEFT",5,-5)
 			bankname:SetFont(R["media"].font, R["media"].fontsize, "THINOUTLINE")
 			bankname:SetText(BANK)
+
+            self.sortButton:ClearAllPoints()
+            self.sortButton:SetPoint("LEFT", bankname, "RIGHT", 5, 0)
 
 			self.reagentToggle = CreateFrame("Button", nil, self)
 			self.reagentToggle:Point("LEFT", self.bagsButton, "RIGHT", 3, 0)
@@ -481,6 +487,9 @@ function B:Initialize()
 				ReagentBankFrame:Show()
 				BankFrame.selectedTab = 2
 				f.reagent:Show()
+                if not IsReagentBankUnlocked() then
+                    f.reagent:SetSize(200, 50)
+                end
 				f.bank:Hide()
 			end)
 		end

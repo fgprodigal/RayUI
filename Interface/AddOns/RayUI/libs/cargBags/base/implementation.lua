@@ -83,7 +83,7 @@ function Implementation:OnShow()
     end
 
     if(self.OnOpen) then self:OnOpen() end
-    self:UpdateAll()
+	self:OnEvent("BAG_UPDATE")
 end
 
 --[[!
@@ -519,7 +519,11 @@ Updates a set of items
 @callback Container:OnBagUpdate(bagID, slotID)
 ]]
 function Implementation:BAG_UPDATE(event, bagID)
-    if bagID then self:UpdateBag(bagID) end
+    if bagID then
+        self:UpdateBag(bagID)
+    else
+        self:UpdateAll()
+    end
     if self.OnBagUpdate then self:OnBagUpdate() end
 end
 
