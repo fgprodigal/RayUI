@@ -122,15 +122,14 @@ _RaidDebuffsList = {
             [234128] = Defaults(), -- Driven Assault
             -- Sisters of the Moon
             [236603] = Defaults(), -- Rapid Shot
-            [234996] = Defaults(), -- Umbra Suffusion
-            [234995] = Defaults(), -- Lunar Suffusion
-            [236519] = Defaults(), -- Moon Burn
+            [236598] = Defaults(5), -- 急速射击1
+            [236596] = Defaults(5), -- 急速射击2
+            [236519] = Defaults(4), -- Moon Burn
             [236697] = Defaults(), -- Deathly Screech
             [239264] = Defaults(), -- Lunar Flare (Tank)
-            [236712] = Defaults(), -- Lunar Beacon
+            [236712] = Defaults(5), -- Lunar Beacon
             [236304] = Defaults(), -- Incorporeal Shot
             [236550] = Defaults(), -- Discorporate (Tank)
-            [236330] = Defaults(), -- Astral Vulnerability
             [236541] = Defaults(), -- Twilight Glaive
             [233263] = Defaults(), -- Embrace of the Eclipse
             -- Mistress Sassz'ine
