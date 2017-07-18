@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 ----------------------------------------------------------
 RayUI:LoadEnv("Bags")
 
+
 local cargBags = _cargBags
 
 --[[!
@@ -83,7 +84,7 @@ function Implementation:OnShow()
     end
 
     if(self.OnOpen) then self:OnOpen() end
-	self:OnEvent("BAG_UPDATE")
+    self:OnEvent("BAG_UPDATE")
 end
 
 --[[!
