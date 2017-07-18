@@ -458,7 +458,7 @@ end
 
 function CH:FaneifyTab(frame, sel)
 	local i = frame:GetID()
-	if(i == SELECTED_CHAT_FRAME:GetID()) then
+	if(i == _G.SELECTED_CHAT_FRAME:GetID()) then
 		updateFS(frame,nil, nil, .5, 1, 1)
 	else
 		updateFS(frame,nil, nil, 1, 1, 1)

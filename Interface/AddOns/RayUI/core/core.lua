@@ -755,7 +755,7 @@ end
 function R:LoadDeveloperConfig()
 	if not R:IsDeveloper() then return end
 	P["Misc"].cooldowns.enable = true
-	G["general"].logLevel = 1
+	G["general"].logLevel = 2
 end
 
 function R:ThrowError(err)
