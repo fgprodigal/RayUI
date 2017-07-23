@@ -28,7 +28,7 @@ G["general"]={
     theme = "Shadow",
     textureStyle = 2,
     numberType = 1,
-    logLevel = 3,
+    logLevel = "ERROR",
 }
 
 P["InfoBar"]={

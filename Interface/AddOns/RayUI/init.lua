@@ -76,6 +76,8 @@ function AddOn:OnInitialize()
     self.db = self.data.profile
     self.global = self.data.global
 
+    Logger:SetLevel(self.global.general.logLevel)
+
     self:UIScale()
     self:UpdateMedia()
 

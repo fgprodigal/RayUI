@@ -3,6 +3,7 @@
 ----------------------------------------------------------
 RayUI:LoadEnv()
 
+
 R.myclass            = select(2, UnitClass("player"))
 R.myname             = UnitName("player")
 R.myrealm            = GetRealmName()

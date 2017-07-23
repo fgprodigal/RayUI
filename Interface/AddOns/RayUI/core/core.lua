@@ -129,8 +129,9 @@ end
 
 function R:RegisterModule(name)
 	if not R[name] then R[name] = R:GetModule(name) end
+    R[name].Logger = Logger:GetLogger(name)
 	if self.initialized then
-		R:Debug(1, "%s Initializing ...", name)
+		R[name].Logger:Debug(name .. " Initializing ...")
 		R:GetModule(name):Initialize()
 		tinsert(self["RegisteredModules"], name)
 	else
@@ -242,7 +243,7 @@ function R:InitializeModules()
 			local name =  module.GetName and module:GetName() or module
 			if not R[name] then R[name] = module end
 			if module.Initialize then
-				R:Debug(1, "%s Initializing...", name)
+                R[name].Logger:Debug(name .. " Initializing ...")
 				local _, catch = pcall(module.Initialize, module)
 				self:ThrowError(catch)
 			end
@@ -380,6 +381,9 @@ function R:Initialize()
 
 	self:Delay(5, function() collectgarbage("collect") end)
 	self:LockCVar("overrideArchive", 0)
+
+    R.Logger = Logger:GetLogger(_AddOnName)
+
 	self.initialized = true
 end
 
@@ -755,7 +759,7 @@ end
 function R:LoadDeveloperConfig()
 	if not R:IsDeveloper() then return end
 	P["Misc"].cooldowns.enable = true
-	G["general"].logLevel = 2
+	G["general"].logLevel = "DEBUG"
 end
 
 function R:ThrowError(err)
