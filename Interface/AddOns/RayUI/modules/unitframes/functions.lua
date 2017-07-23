@@ -1262,6 +1262,153 @@ function UF:UpdatePrep(event)
     end
 end
 
+local SpellRangeTable = {}
+
+local function AddTable(tbl)
+	SpellRangeTable[R.myclass] = SpellRangeTable[R.myclass] or {}
+	SpellRangeTable[R.myclass][tbl] = {}
+end
+
+local function AddSpell(tbl, spellID)
+	SpellRangeTable[R.myclass][tbl][#SpellRangeTable[R.myclass][tbl] + 1] = spellID
+end
+
+function UF:UpdateRangeCheckSpells()
+	for tbl, spells in pairs(_SpellRangeCheck[R.myclass]) do
+		AddTable(tbl) --Create the table holding spells, even if it ends up being an empty table
+		for spellID in pairs(spells) do
+			local enabled = spells[spellID]
+			if enabled then --We will allow value to be false to disable this spell from being used
+				AddSpell(tbl, spellID, enabled)
+			end
+		end
+	end
+end
+
+local function getUnit(unit)
+	if not unit:find("party") or not unit:find("raid") then
+		for i=1, 4 do
+			if UnitIsUnit(unit, "party"..i) then
+				return "party"..i
+			end
+		end
+
+		for i=1, 40 do
+			if UnitIsUnit(unit, "raid"..i) then
+				return "raid"..i
+			end
+		end
+	else
+		return unit
+	end
+end
+
+local function friendlyIsInRange(unit)
+	if not UnitInPhase(unit) then --Different phase
+		return false
+	end
+
+	if CheckInteractDistance(unit, 1) then --Inspect (28 yards)
+		return true
+	end
+
+	if UnitIsDeadOrGhost(unit) and #SpellRangeTable[R.myclass].resSpells > 0 then
+		for _, spellID in ipairs(SpellRangeTable[R.myclass].resSpells) do
+			if SpellRange.IsSpellInRange(spellID, unit) == 1 then
+				return true
+			end
+		end
+
+		return false
+	end
+
+	if #SpellRangeTable[R.myclass].friendlySpells == 0 and (UnitInRaid(unit) or UnitInParty(unit)) then
+		unit = getUnit(unit)
+		return unit and UnitInRange(unit)
+	else
+		for _, spellID in ipairs(SpellRangeTable[R.myclass].friendlySpells) do
+			if SpellRange.IsSpellInRange(spellID, unit) == 1 then
+				return true
+			end
+		end
+	end
+
+	return false
+end
+
+local function petIsInRange(unit)
+	if CheckInteractDistance(unit, 2) then
+		return true
+	end
+
+	for _, spellID in ipairs(SpellRangeTable[R.myclass].friendlySpells) do
+		if SpellRange.IsSpellInRange(spellID, unit) == 1 then
+			return true
+		end
+	end
+	for _, spellID in ipairs(SpellRangeTable[R.myclass].petSpells) do
+		if SpellRange.IsSpellInRange(spellID, unit) == 1 then
+			return true
+		end
+	end
+
+	return false
+end
+
+local function enemyIsInRange(unit)
+	if CheckInteractDistance(unit, 2) then
+		return true
+	end
+
+	for _, spellID in ipairs(SpellRangeTable[R.myclass].enemySpells) do
+		if SpellRange.IsSpellInRange(spellID, unit) == 1 then
+			return true
+		end
+	end
+
+	return false
+end
+
+local function enemyIsInLongRange(unit)
+	for _, spellID in ipairs(SpellRangeTable[R.myclass].longEnemySpells) do
+		if SpellRange.IsSpellInRange(spellID, unit) == 1 then
+			return true
+		end
+	end
+
+	return false
+end
+
+function UF:UpdateRange(event)
+    local range = self.Range
+	local unit = self.unit
+	if(unit) then
+		if UnitCanAttack("player", unit) then
+			if enemyIsInRange(unit) then
+				self:SetAlpha(range.insideAlpha)
+			elseif enemyIsInLongRange(unit) then
+				self:SetAlpha(range.insideAlpha)
+			else
+				self:SetAlpha(range.outsideAlpha)
+			end
+		elseif UnitIsUnit(unit, "pet") then
+			if petIsInRange(unit) then
+				self:SetAlpha(range.insideAlpha)
+			else
+				self:SetAlpha(range.outsideAlpha)
+			end
+		else
+			if friendlyIsInRange(unit) and UnitIsConnected(unit) then
+				self:SetAlpha(range.insideAlpha)
+			else
+				self:SetAlpha(range.outsideAlpha)
+			end
+		end
+	else
+		self:SetAlpha(range.insideAlpha)
+	end
+end
+
 local attributeBlacklist = {["showplayer"] = true, ["showraid"] = true, ["showparty"] = true, ["showsolo"] = true}
 local configEnv
 local originalEnvs = {}

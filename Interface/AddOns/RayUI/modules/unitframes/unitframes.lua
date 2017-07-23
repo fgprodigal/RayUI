@@ -146,6 +146,7 @@ end
 
 function UF:Initialize()
     if self.db.enable then
+        self:UpdateRangeCheckSpells()
         RayUF:RegisterStyle("RayUF", function(frame, unit)
             UF:Construct_UnitFrames(frame, unit)
         end)

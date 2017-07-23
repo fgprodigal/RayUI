@@ -44,6 +44,7 @@ function RA:Construct_RaidFrames()
         insideAlpha = 1,
         outsideAlpha = RA.db.outsideRange,
     }
+    self.Range.Override = UF.UpdateRange
 
     RA:ConfigureAuraWatch(self)
     UF:EnableHealPredictionAndAbsorb(self)

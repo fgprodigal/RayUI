@@ -1,6 +1,6 @@
 ﻿## Interface: 70200
 ## Title: |cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r
-## Version: 7.2 build 1449
+## Version: 7.2 build 1450
 ## Author: Ray
 ## OptionalDeps: Blizzard_DebugTools,Skada,DBM-Core, BigWigs, AtlasLoot, SharedMedia
 ## RequiredDeps: Blizzard_CombatText

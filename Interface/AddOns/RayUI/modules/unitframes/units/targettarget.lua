@@ -33,6 +33,7 @@ function UF:Construct_TargetTargetFrame(frame, unit)
             insideAlpha = 1,
             outsideAlpha = 0.4
         }
+    frame.Range.Override = UF.UpdateRange
 
     self:EnableHealPredictionAndAbsorb(frame)
 
