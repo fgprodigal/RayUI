@@ -31,27 +31,27 @@ local function MiniMapTrackingDropDown_Initialize(self, level)
             -- make sure there are at least two options in dropdown
             for id=1, count do
                 name, texture, active, category, nested = GetTrackingInfo(id);
-                if (nested == HUNTER_TRACKING and category == "spell") then
+                if (nested == _G.HUNTER_TRACKING and category == "spell") then
                     numTracking = numTracking + 1;
                 end
             end
             if (numTracking > 1) then
-                info.text = HUNTER_TRACKING_TEXT;
+                info.text = _G.HUNTER_TRACKING_TEXT;
                 info.func = nil;
                 info.notCheckable = true;
                 info.keepShownOnClick = false;
                 info.hasArrow = true;
-                info.value = HUNTER_TRACKING;
+                info.value = _G.HUNTER_TRACKING;
                 Lib_UIDropDownMenu_AddButton(info, level)
             end
         end
 
-        info.text = TOWNSFOLK_TRACKING_TEXT;
+        info.text = _G.TOWNSFOLK_TRACKING_TEXT;
         info.func = nil;
         info.notCheckable = true;
         info.keepShownOnClick = false;
         info.hasArrow = true;
-        info.value = TOWNSFOLK;
+        info.value = _G.TOWNSFOLK;
         Lib_UIDropDownMenu_AddButton(info, level)
     end
     for id=1, count do
@@ -77,10 +77,10 @@ local function MiniMapTrackingDropDown_Initialize(self, level)
         end
         if (level == 1 and
             (nested < 0 or -- this tracking shouldn't be nested
-                (nested == HUNTER_TRACKING and class ~= "HUNTER") or
+                (nested == _G.HUNTER_TRACKING and class ~= "HUNTER") or
                 (numTracking == 1 and category == "spell"))) then -- this is a hunter tracking ability, but you only have one
             Lib_UIDropDownMenu_AddButton(info, level);
-        elseif (level == 2 and (nested == TOWNSFOLK or (nested == HUNTER_TRACKING and class == "HUNTER")) and nested == LIB_UIDROPDOWNMENU_MENU_VALUE) then
+        elseif (level == 2 and (nested == _G.TOWNSFOLK or (nested == _G.HUNTER_TRACKING and class == "HUNTER")) and nested == _G.LIB_UIDROPDOWNMENU_MENU_VALUE) then
             Lib_UIDropDownMenu_AddButton(info, level);
         end
     end
