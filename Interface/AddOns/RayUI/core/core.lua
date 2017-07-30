@@ -131,7 +131,7 @@ function R:RegisterModule(name)
 	if not R[name] then R[name] = R:GetModule(name) end
     R[name].Logger = Logger:GetLogger(name)
 	if self.initialized then
-		R[name].Logger:Debug(name .. " Initializing ...")
+		-- R[name].Logger:Debug(name .. " Initializing ...")
 		R:GetModule(name):Initialize()
 		tinsert(self["RegisteredModules"], name)
 	else
@@ -243,7 +243,7 @@ function R:InitializeModules()
 			local name =  module.GetName and module:GetName() or module
 			if not R[name] then R[name] = module end
 			if module.Initialize then
-                R[name].Logger:Debug(name .. " Initializing ...")
+                -- R[name].Logger:Debug(name .. " Initializing ...")
 				local _, catch = pcall(module.Initialize, module)
 				self:ThrowError(catch)
 			end

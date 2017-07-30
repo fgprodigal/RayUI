@@ -7,6 +7,7 @@ RayUI:LoadEnv("Misc")
 local M = _Misc
 local mod = M:NewModule("Quest", "AceEvent-3.0", "AceHook-3.0")
 
+
 function mod:ObjectiveTracker_Update()
     local tracker = ObjectiveTrackerFrame
     if ( not tracker.initialized )then
@@ -48,6 +49,29 @@ function mod:QuestLogQuests_Update()
         end
     end
 end
+
+local errors = {
+    [ERR_QUEST_ALREADY_DONE] = true,
+    [ERR_QUEST_FAILED_LOW_LEVEL] = true,
+    [ERR_QUEST_NEED_PREREQS] = true,
+}
+
+ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", function(self, event, message)
+        if M.db.automation then
+            return errors[message]
+        end
+    end)
+
+QuestInfoDescriptionText.SetAlphaGradient = function() return false end
+
+function mod:Initialize()
+    self:SecureHook("QuestLogQuests_Update")
+    self:SecureHook("ObjectiveTracker_Update")
+end
+
+M:RegisterMiscModule(mod:GetName())
+
+if not R:IsDeveloper() then return end
 
 local QuickQuest = CreateFrame("Frame")
 QuickQuest:SetScript("OnEvent", function(self, event, ...) self[event](...) end)
@@ -436,24 +460,3 @@ end
 
 QuickQuest:Register("PLAYER_LOGIN", AttemptAutoComplete)
 QuickQuest:Register("QUEST_AUTOCOMPLETE", AttemptAutoComplete)
-
-local errors = {
-    [ERR_QUEST_ALREADY_DONE] = true,
-    [ERR_QUEST_FAILED_LOW_LEVEL] = true,
-    [ERR_QUEST_NEED_PREREQS] = true,
-}
-
-ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", function(self, event, message)
-        if M.db.automation then
-            return errors[message]
-        end
-    end)
-
-QuestInfoDescriptionText.SetAlphaGradient = function() return false end
-
-function mod:Initialize()
-    self:SecureHook("QuestLogQuests_Update")
-    self:SecureHook("ObjectiveTracker_Update")
-end
-
-M:RegisterMiscModule(mod:GetName())

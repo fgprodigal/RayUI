@@ -192,6 +192,7 @@ R.Options.args.Misc = {
                     name = L["自动交接任务"],
                     desc = L["自动交接任务，按shift点npc则不自动交接"],
                     disabled = function() return not M.db.quest end,
+                    hidden = function() return not R:IsDeveloper() end,
                     type = "toggle",
                     set = function(info, value)
                         R.db.Misc.automation = value

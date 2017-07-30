@@ -20,7 +20,7 @@ function M:Initialize()
     for _, name in pairs(_Modules) do
         local module = self:GetModule(name, true)
         if module then
-            M.Logger:Debug(name .. " Initializing...")
+            -- M.Logger:Debug(name .. " Initializing...")
             local _, catch = pcall(module.Initialize, module)
             R:ThrowError(catch)
         else
