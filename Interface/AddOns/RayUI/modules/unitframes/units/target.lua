@@ -95,7 +95,7 @@ function UF:Construct_TargetFrame(frame, unit)
     frame.Buffs.initialAnchor = "BOTTOMLEFT"
     frame.Buffs:Point("BOTTOMLEFT", frame.Debuffs, "TOPLEFT", 0, 4)
 
-    if self.db.units[unit].smartaura.enable then
+    if R:IsDeveloper() then
         frame.Auras = self:Construct_SmartAura(frame)
         frame.Auras.size = self.db.units[unit].smartaura.size
         frame.Auras["growth-x"] = self.db.units[unit].smartaura.growthx

@@ -215,6 +215,7 @@ R.Options.args.UnitFrames = {
                         R.db.UnitFrames.units.player.smartaura[ info[#info] ] = value
                         StaticPopup_Show("CFG_RELOAD")
                     end,
+                    hidden = function() return not R:IsDeveloper() end,
                     args = {
                         enable = {
                             order = 1,
@@ -232,7 +233,7 @@ R.Options.args.UnitFrames = {
                             name = L["大小"],
                             min = 25, max = 50, step = 1,
                             type = "range",
-                            hidden = function() return not R.db.UnitFrames.units.player.smartaura.enable end,
+                            hidden = function() return not R:IsDeveloper() end,
                         },
                         growthx = {
                             order = 4,
@@ -242,7 +243,7 @@ R.Options.args.UnitFrames = {
                                 ["LEFT"] = L["左"],
                                 ["RIGHT"] = L["右"],
                             },
-                            hidden = function() return not R.db.UnitFrames.units.player.smartaura.enable end,
+                            hidden = function() return not R:IsDeveloper() end,
                         },
                         growthy = {
                             order = 5,
@@ -252,7 +253,7 @@ R.Options.args.UnitFrames = {
                                 ["UP"] = L["上"],
                                 ["DOWN"] = L["下"],
                             },
-                            hidden = function() return not R.db.UnitFrames.units.player.smartaura.enable end,
+                            hidden = function() return not R:IsDeveloper() end,
                         },
                     }
                 }

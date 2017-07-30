@@ -89,7 +89,7 @@ function UF:Construct_FocusFrame(frame, unit)
     frame.Debuffs.CustomFilter = self.CustomFilter
     frame.Debuffs:Point("BOTTOMRIGHT", frame, "TOPRIGHT", 0, 7)
 
-    if self.db.units[unit].smartaura.enable then
+    if R:IsDeveloper() then
         frame.Auras = self:Construct_SmartAura(frame)
         frame.Auras.size = self.db.units[unit].smartaura.size
         frame.Auras["growth-x"] = self.db.units[unit].smartaura.growthx

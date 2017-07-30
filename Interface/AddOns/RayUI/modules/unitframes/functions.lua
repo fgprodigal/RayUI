@@ -1042,7 +1042,7 @@ function UF:CustomFilter(unit, icon, name, rank, texture, count, debuffType, dur
         icon.owner = unitCaster
     end
 
-    if UF.db.units[unit].smartaura.enable then
+    if R:IsDeveloper() then
         return not UF:CustomSmartFilter(unit, icon, name, rank, texture, count, debuffType, duration, expirationTime, unitCaster, isStealable, _, spellID)
     end
 
