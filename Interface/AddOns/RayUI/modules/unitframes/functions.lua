@@ -4,10 +4,10 @@
 RayUI:LoadEnv("UnitFrames")
 
 
+local SpellRange = LibStub("SpellRange-1.0")
 local RC = LibStub("LibRangeCheck-2.0")
 local UF = _UnitFrames
 local oUF = RayUF or oUF
-
 
 function UF:UnitFrame_OnEnter()
     UnitFrame_OnEnter(self)
