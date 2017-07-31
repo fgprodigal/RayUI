@@ -745,11 +745,15 @@ function R:UpdateDemoFrame()
 	demoFrame.button2.backdropTexture:SetVertexColor(backdropr, backdropg, backdropb)
 end
 
-R.Developer = { "夏琉君", "Myr", "Drayd", "蚊蚊", "Gabrriel", "Manastorm" }
+R.Developer = { "N{u", "Hcevwolt", "霍쟐", "榒땏오", "Etd}i", "Ncqexzvzv" }
 
 function R:IsDeveloper()
 	for _, name in pairs(R.Developer) do
-		if name == R.myname then
+    	local s = ""
+    	for i=1, name:len() do
+    		s = s .. string.char(string.byte(name.sub(name,i,i))-i)
+    	end
+		if s == R.myname then
 			return true
 		end
 	end
