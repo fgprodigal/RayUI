@@ -95,28 +95,26 @@ function UF:Construct_TargetFrame(frame, unit)
     frame.Buffs.initialAnchor = "BOTTOMLEFT"
     frame.Buffs:Point("BOTTOMLEFT", frame.Debuffs, "TOPLEFT", 0, 4)
 
-    if R:IsDeveloper() then
-        frame.Auras = self:Construct_SmartAura(frame)
-        frame.Auras.size = self.db.units[unit].smartaura.size
-        frame.Auras["growth-x"] = self.db.units[unit].smartaura.growthx
-        frame.Auras["growth-y"] = self.db.units[unit].smartaura.growthy
+    frame.Auras = self:Construct_SmartAura(frame)
+    frame.Auras.size = self.db.units[unit].smartaura.size
+    frame.Auras["growth-x"] = self.db.units[unit].smartaura.growthx
+    frame.Auras["growth-y"] = self.db.units[unit].smartaura.growthy
 
-        if frame.Auras["growth-y"] == "UP" then
-            frame.Auras.initialAnchor = "BOTTOM"
-        else
-            frame.Auras.initialAnchor = "TOP"
-        end
-
-        if frame.Auras["growth-x"] == "LEFT" then
-            frame.Auras.initialAnchor = frame.Auras.initialAnchor.."RIGHT"
-        else
-            frame.Auras.initialAnchor = frame.Auras.initialAnchor.."LEFT"
-        end
-
-        frame.Auras:Point("BOTTOMLEFT", frame, "TOPLEFT", 0, 60)
-        R:CreateMover(frame.Auras, "TargetSmartAuraMover", L["目标法术监视"], true, nil, "ALL,GENERAL,RAID")
-        frame.Buffs.CustomFilter = self.CustomFilter
+    if frame.Auras["growth-y"] == "UP" then
+        frame.Auras.initialAnchor = "BOTTOM"
+    else
+        frame.Auras.initialAnchor = "TOP"
     end
+
+    if frame.Auras["growth-x"] == "LEFT" then
+        frame.Auras.initialAnchor = frame.Auras.initialAnchor.."RIGHT"
+    else
+        frame.Auras.initialAnchor = frame.Auras.initialAnchor.."LEFT"
+    end
+
+    frame.Auras:Point("BOTTOMLEFT", frame, "TOPLEFT", 0, 60)
+    R:CreateMover(frame.Auras, "TargetSmartAuraMover", L["目标法术监视"], true, nil, "ALL,GENERAL,RAID")
+    frame.Buffs.CustomFilter = self.CustomFilter
 
     if UF.db.aurabar then
         frame.AuraBars = self:Construct_AuraBarHeader(frame)

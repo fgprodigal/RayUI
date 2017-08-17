@@ -71,8 +71,6 @@ end
 
 M:RegisterMiscModule(mod:GetName())
 
-if not R:IsDeveloper() then return end
-
 local QuickQuest = CreateFrame("Frame")
 QuickQuest:SetScript("OnEvent", function(self, event, ...) self[event](...) end)
 
