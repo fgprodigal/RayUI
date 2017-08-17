@@ -54,25 +54,27 @@ function UF:Construct_PetFrame(frame, unit)
     frame.Debuffs.num = 5
     frame.Debuffs:Point("BOTTOMRIGHT", frame, "TOPRIGHT", 0, 8)
 
-    frame.Auras = self:Construct_SmartAura(frame)
-    frame.Auras.size = self.db.units[unit].smartaura.size
-    frame.Auras["growth-x"] = self.db.units[unit].smartaura.growthx
-    frame.Auras["growth-y"] = self.db.units[unit].smartaura.growthy
+    if self.db.units[unit].smartaura.enable then
+        frame.Auras = self:Construct_SmartAura(frame)
+        frame.Auras.size = self.db.units[unit].smartaura.size
+        frame.Auras["growth-x"] = self.db.units[unit].smartaura.growthx
+        frame.Auras["growth-y"] = self.db.units[unit].smartaura.growthy
 
-    if frame.Auras["growth-y"] == "UP" then
-        frame.Auras.initialAnchor = "BOTTOM"
-    else
-        frame.Auras.initialAnchor = "TOP"
+        if frame.Auras["growth-y"] == "UP" then
+            frame.Auras.initialAnchor = "BOTTOM"
+        else
+            frame.Auras.initialAnchor = "TOP"
+        end
+
+        if frame.Auras["growth-x"] == "LEFT" then
+            frame.Auras.initialAnchor = frame.Auras.initialAnchor.."RIGHT"
+        else
+            frame.Auras.initialAnchor = frame.Auras.initialAnchor.."LEFT"
+        end
+
+        frame.Auras:Point("BOTTOMRIGHT", frame, "TOPRIGHT", 0, 30)
+        R:CreateMover(frame.Auras, "PetSmartAuraMover", L["宠物法术监视"], true, nil, "ALL,GENERAL,RAID")
     end
-
-    if frame.Auras["growth-x"] == "LEFT" then
-        frame.Auras.initialAnchor = frame.Auras.initialAnchor.."RIGHT"
-    else
-        frame.Auras.initialAnchor = frame.Auras.initialAnchor.."LEFT"
-    end
-
-    frame.Auras:Point("BOTTOMRIGHT", frame, "TOPRIGHT", 0, 30)
-    R:CreateMover(frame.Auras, "PetSmartAuraMover", L["宠物法术监视"], true, nil, "ALL,GENERAL,RAID")
 end
 
 tinsert(_UnitsToLoad, "pet")

@@ -89,25 +89,27 @@ function UF:Construct_FocusFrame(frame, unit)
     frame.Debuffs.CustomFilter = self.CustomFilter
     frame.Debuffs:Point("BOTTOMRIGHT", frame, "TOPRIGHT", 0, 7)
 
-    frame.Auras = self:Construct_SmartAura(frame)
-    frame.Auras.size = self.db.units[unit].smartaura.size
-    frame.Auras["growth-x"] = self.db.units[unit].smartaura.growthx
-    frame.Auras["growth-y"] = self.db.units[unit].smartaura.growthy
+    if self.db.units[unit].smartaura.enable then
+        frame.Auras = self:Construct_SmartAura(frame)
+        frame.Auras.size = self.db.units[unit].smartaura.size
+        frame.Auras["growth-x"] = self.db.units[unit].smartaura.growthx
+        frame.Auras["growth-y"] = self.db.units[unit].smartaura.growthy
 
-    if frame.Auras["growth-y"] == "UP" then
-        frame.Auras.initialAnchor = "BOTTOM"
-    else
-        frame.Auras.initialAnchor = "TOP"
+        if frame.Auras["growth-y"] == "UP" then
+            frame.Auras.initialAnchor = "BOTTOM"
+        else
+            frame.Auras.initialAnchor = "TOP"
+        end
+
+        if frame.Auras["growth-x"] == "LEFT" then
+            frame.Auras.initialAnchor = frame.Auras.initialAnchor.."RIGHT"
+        else
+            frame.Auras.initialAnchor = frame.Auras.initialAnchor.."LEFT"
+        end
+
+        frame.Auras:Point("BOTTOMRIGHT", frame, "TOPRIGHT", 0, 30)
+        R:CreateMover(frame.Auras, "FocusSmartAuraMover", L["焦点法术监视"], true, nil, "ALL,GENERAL,RAID")
     end
-
-    if frame.Auras["growth-x"] == "LEFT" then
-        frame.Auras.initialAnchor = frame.Auras.initialAnchor.."RIGHT"
-    else
-        frame.Auras.initialAnchor = frame.Auras.initialAnchor.."LEFT"
-    end
-
-    frame.Auras:Point("BOTTOMRIGHT", frame, "TOPRIGHT", 0, 30)
-    R:CreateMover(frame.Auras, "FocusSmartAuraMover", L["焦点法术监视"], true, nil, "ALL,GENERAL,RAID")
 end
 
 tinsert(_UnitsToLoad, "focus")

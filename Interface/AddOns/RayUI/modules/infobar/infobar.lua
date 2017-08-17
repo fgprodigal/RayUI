@@ -387,7 +387,7 @@ function IF:Initialize()
     font:SetShadowColor(0, 0, 0)
     font:SetShadowOffset(R.mult, -R.mult)
 
-    for i = 1, 8 do
+    for i = 1, maxMenuButtons do
         local infoBar = CreateFrame("Button", "RayUI_InfoBar"..i, R.UIParent, "RayUI_InfoBarButtonTemplate")
         infoBar:SetNormalFontObject(font)
         infoBar:SetSize(140, 35)
