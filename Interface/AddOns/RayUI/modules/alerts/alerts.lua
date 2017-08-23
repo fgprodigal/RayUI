@@ -1506,7 +1506,8 @@ end
 
 local function LFGToast_SetUp(isScenario)
     local toast = GetToast("scenario")
-    local name, _, subtypeID, textureFilename, moneyBase, moneyVar, experienceBase, experienceVar, numStrangers, numRewards = GetLFGCompletionReward()
+    -- local name, _, subtypeID, textureFilename, moneyBase, moneyVar, experienceBase, experienceVar, numStrangers, numRewards = GetLFGCompletionReward()
+    local name, _, subtypeID, iconTextureFile, moneyBase, moneyVar, experienceBase, experienceVar, numStrangers, numRewards = GetLFGCompletionReward()
     -- local name, typeID, subtypeID, textureFilename, moneyBase, moneyVar, experienceBase, experienceVar, numStrangers, numRewards =
     -- "The Vortex Pinnacle", 1, 2, "THEVORTEXPINNACLE", 308000, 0, 0, 0, 0, 0
     local money = moneyBase + moneyVar * numStrangers
@@ -1572,7 +1573,8 @@ local function LFGToast_SetUp(isScenario)
     toast.Title:SetText(title)
     toast.Text:SetText(name)
     toast.BG:SetTexture("Interface\\AddOns\\RayUI\\media\\toast-bg-dungeon")
-    toast.Icon:SetTexture("Interface\\LFGFrame\\LFGIcon-"..textureFilename)
+    -- toast.Icon:SetTexture("Interface\\LFGFrame\\LFGIcon-"..textureFilename)
+    toast.Icon:SetTexture(iconTextureFile)
     toast.usedRewards = usedRewards
 
     if isScenario then
