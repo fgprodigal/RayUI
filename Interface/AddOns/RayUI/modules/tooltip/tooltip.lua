@@ -384,6 +384,7 @@ function TT:PLAYER_ENTERING_WORLD(event)
         "LanguageMenu",
         "VoiceMacroMenu",
         "RayUI_InfoBar_BrokerTooltip",
+        "ReputationParagonTooltip"
     }
 
     for _, name in pairs(tooltips) do

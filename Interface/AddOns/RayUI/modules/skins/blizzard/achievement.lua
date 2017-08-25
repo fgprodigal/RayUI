@@ -330,6 +330,120 @@ local function LoadSkin()
 	S:ReskinScroll(AchievementFrameCategoriesContainerScrollBar)
 	S:ReskinScroll(AchievementFrameComparisonContainerScrollBar)
 	S:ReskinDropDown(AchievementFrameFilterDropDown)
+
+	-- Search Preview
+	-- Following is taken from RayUI\modules\skins\blizzard\encounter.lua "-- [[ Search results ]]"
+
+	local f = AchievementFrame.searchResults
+	for i = 3, 11 do
+		select(i, f:GetRegions()):Hide()
+	end
+
+	f:StripTextures()
+	S:CreateBD(f, .75)
+
+	AchievementFrame.searchPreviewContainer.borderAnchor:Hide()
+	AchievementFrame.searchPreviewContainer.botRightCorner:Hide()
+	AchievementFrame.searchPreviewContainer.topBorder:Hide()
+	AchievementFrame.searchPreviewContainer.bottomBorder:Hide()
+	AchievementFrame.searchPreviewContainer.leftBorder:Hide()
+	AchievementFrame.searchPreviewContainer.rightBorder:Hide()
+
+	local function resultOnEnter(self)
+		self.hl:Show()
+	end
+
+	local function resultOnLeave(self)
+		self.hl:Hide()
+	end
+
+	local function styleSearchPreview(preview, index)
+		if index == 1 then
+			preview:SetPoint("TOPLEFT", AchievementFrame.searchBox, "BOTTOMLEFT", 0, 1)
+			preview:SetPoint("TOPRIGHT", AchievementFrame.searchBox, "BOTTOMRIGHT", 80, 1)
+		else
+			preview:SetPoint("TOPLEFT", AchievementFrame.searchPreview[index - 1], "BOTTOMLEFT", 0, 1)
+			preview:SetPoint("TOPRIGHT", AchievementFrame.searchPreview[index - 1], "BOTTOMRIGHT", 0, 1)
+		end
+
+		preview:SetNormalTexture("")
+		preview:SetPushedTexture("")
+		preview:SetHighlightTexture("")
+
+		local hl = preview:CreateTexture(nil, "BACKGROUND")
+		hl:SetAllPoints()
+		hl:SetTexture(R["media"].normal)
+		hl:SetVertexColor(r, g, b, .2)
+		hl:Hide()
+		preview.hl = hl
+
+		S:CreateBD(preview)
+		preview:SetBackdropColor(.1, .1, .1, .9)
+
+		if preview.icon then
+			preview:GetRegions():Hide() -- icon frame
+
+			preview.icon:SetTexCoord(.08, .92, .08, .92)
+
+			local bg = S:CreateBG(preview.icon)
+			bg:SetDrawLayer("BACKGROUND", 1)
+		end
+
+		preview:HookScript("OnEnter", resultOnEnter)
+		preview:HookScript("OnLeave", resultOnLeave)
+	end
+
+	for i = 1, 5 do
+		styleSearchPreview(AchievementFrame.searchPreview[i], i)
+	end
+
+	styleSearchPreview(AchievementFrame.showAllSearchResults, 6)
+
+	hooksecurefunc("AchievementFrame_UpdateFullSearchResults", function()
+		local numResults = GetNumFilteredAchievements()
+
+		local scrollFrame = AchievementFrame.searchResults.scrollFrame
+		local offset = HybridScrollFrame_GetOffset(scrollFrame)
+		local results = scrollFrame.buttons
+		local result, index
+
+		for i = 1, #results do
+			result = results[i]
+			index = offset + i
+
+			if index <= numResults then
+				if not result.styled then
+					result:SetNormalTexture("")
+					result:SetPushedTexture("")
+					result:GetRegions():Hide()
+
+					result.resultType:SetTextColor(1, 1, 1)
+					result.path:SetTextColor(1, 1, 1)
+
+					S:CreateBG(result.icon)
+
+					result.styled = true
+				end
+
+				if result.icon:GetTexCoord() == 0 then
+					result.icon:SetTexCoord(.08, .92, .08, .92)
+				end
+			end
+		end
+	end)
+
+	hooksecurefunc(AchievementFrame.searchResults.scrollFrame, "update", function(self)
+		for i = 1, #self.buttons do
+			local result = self.buttons[i]
+
+			if result.icon:GetTexCoord() == 0 then
+				result.icon:SetTexCoord(.08, .92, .08, .92)
+			end
+		end
+	end)
+
+	S:ReskinClose(AchievementFrame.searchResults.closeButton)
+	S:ReskinScroll(AchievementFrameScrollFrameScrollBar)
 end
 
 S:AddCallbackForAddon("Blizzard_AchievementUI", "Achievement", LoadSkin)

@@ -358,6 +358,16 @@ local function LoadSkin()
 
     hooksecurefunc(FriendsFrameFriendsScrollFrame, "update", updateFriendsColor)
     hooksecurefunc("FriendsFrame_UpdateFriends", updateFriendsColor)
+
+    local QuickJoinRoleSelectionFrame = QuickJoinRoleSelectionFrame
+    S:CreateBD(QuickJoinRoleSelectionFrame)
+    S:CreateSD(QuickJoinRoleSelectionFrame)
+    S:ReskinCheck(QuickJoinRoleSelectionFrame.RoleButtonDPS.CheckButton)
+    S:ReskinCheck(QuickJoinRoleSelectionFrame.RoleButtonTank.CheckButton)
+    S:ReskinCheck(QuickJoinRoleSelectionFrame.RoleButtonHealer.CheckButton)
+    S:Reskin(QuickJoinRoleSelectionFrame.AcceptButton)
+    S:Reskin(QuickJoinRoleSelectionFrame.CancelButton)
+    S:ReskinClose(QuickJoinRoleSelectionFrame.CloseButton)
 end
 
 S:AddCallback("Friends", LoadSkin)

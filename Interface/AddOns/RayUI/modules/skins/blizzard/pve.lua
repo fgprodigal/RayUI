@@ -236,6 +236,7 @@ local function LoadSkin()
 
 	S:Reskin(ScenarioQueueFrameFindGroupButton)
 	S:ReskinDropDown(ScenarioQueueFrameTypeDropDown)
+	S:ReskinScroll(LFDQueueFrameRandomScrollFrameScrollBar)
 
 	-- Looking for raid
 	LFRBrowseFrameRoleInset:DisableDrawLayer("BORDER")
@@ -435,6 +436,7 @@ local function LoadSkin()
 	S:ReskinCheck(EntryCreation.ItemLevel.CheckButton)
 	S:ReskinCheck(EntryCreation.HonorLevel.CheckButton)
 	S:ReskinCheck(EntryCreation.VoiceChat.CheckButton)
+	S:ReskinCheck(EntryCreation.PrivateGroup.CheckButton)
 
 	S:ReskinCheck(LFGListFrame.ApplicationViewer.AutoAcceptButton)
 
@@ -455,6 +457,28 @@ local function LoadSkin()
 	S:Reskin(ActivityFinder.Dialog.CancelButton)
 	S:ReskinInput(ActivityFinder.Dialog.EntryBox)
 	S:ReskinScroll(LFGListEntryCreationSearchScrollFrameScrollBar)
+
+	-- [[ Dialog ]]
+	local FrameBDs = {"LFGListApplicationDialog", "LFGListInviteDialog"}
+		for i = 1, #FrameBDs do
+		local FrameBD = _G[FrameBDs[i]]
+		S:CreateBD(FrameBD)
+		S:CreateSD(FrameBD)
+	end
+
+	S:ReskinCheck(LFGListApplicationDialog.DamagerButton.CheckButton)
+	S:ReskinCheck(LFGListApplicationDialog.TankButton.CheckButton)
+	S:ReskinCheck(LFGListApplicationDialog.HealerButton.CheckButton)
+	S:Reskin(LFGListApplicationDialog.SignUpButton)
+	S:Reskin(LFGListApplicationDialog.CancelButton)
+	S:Reskin(LFGListInviteDialog.AcceptButton)
+	S:Reskin(LFGListInviteDialog.DeclineButton)
+	S:Reskin(LFGListInviteDialog.AcknowledgeButton)
+	for i = 1, 9 do
+		select(i, LFGListApplicationDialogDescription:GetRegions()):Hide()
+	end
+	S:CreateBD(LFGListApplicationDialogDescription, 0)
+	S:ReskinInput(LFGListApplicationDialogDescription)
 end
 
 S:AddCallback("PVE", LoadSkin)
