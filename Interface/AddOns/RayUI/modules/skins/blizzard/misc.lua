@@ -26,6 +26,8 @@ local function LoadSkin()
         bu:StyleButton(true)
         S:CreateBG(bu)
 
+        if bu.IconBorder then bu.IconBorder:Kill() end
+
         S:ReskinInput(_G["StaticPopup"..i.."EditBox"], 20)
     end
 
@@ -497,6 +499,8 @@ local function LoadSkin()
     for i = 1, #dropdowns do
         S:ReskinDropDown(_G[dropdowns[i]])
     end
+
+    if foglightmenu then S:ReskinDropDown(foglightmenu) end
 
     local sliders = {
         "Graphics_Quality",

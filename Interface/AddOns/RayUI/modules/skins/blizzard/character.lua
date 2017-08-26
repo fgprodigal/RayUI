@@ -320,6 +320,32 @@ local function LoadSkin()
         end
     end)
 
+    -- Reputation Paragon Tooltip
+    local tooltip = ReputationParagonTooltip
+    local statusBar = ReputationParagonTooltipStatusBar.Bar
+    local reward = tooltip.ItemTooltip
+    local icon = reward.Icon
+
+    if statusBar then
+        statusBar:StripTextures()
+        statusBar:SetStatusBarTexture(R["media"].normal)
+
+        if not statusBar.reskinned then
+            R:SetStatusBarGradient(statusBar, true)
+            local frame = CreateFrame("Frame",nil, statusBar)
+            S:CreateBD(frame)
+            frame:SetFrameLevel(statusBar:GetFrameLevel() -1)
+            frame:Point("TOPLEFT", -1, 1)
+            frame:Point("BOTTOMRIGHT", 1, -1)
+
+            statusBar.reskinned = true
+        end
+    end
+
+    if icon then S:ReskinIcon(icon) end
+
+    if reward.IconBorder then reward.IconBorder:Kill() end
+
     -- Pet stuff
     if R.myclass == "HUNTER" or R.myclass == "MAGE" or R.myclass == "DEATHKNIGHT" or R.myclass == "WARLOCK" then
         if R.myclass == "HUNTER" then

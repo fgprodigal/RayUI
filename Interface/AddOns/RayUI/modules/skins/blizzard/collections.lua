@@ -463,14 +463,51 @@ local function LoadSkin()
 	S:ReskinArrow(ItemsCollectionFrame.PagingFrame.PrevPageButton, "left")
 	S:ReskinArrow(ItemsCollectionFrame.PagingFrame.NextPageButton, "right")
 
+	local SetsCollectionFrame = WardrobeCollectionFrame["SetsCollectionFrame"]
+	SetsCollectionFrame:DisableDrawLayer("BACKGROUND")
+	SetsCollectionFrame:DisableDrawLayer("BORDER")
+	SetsCollectionFrame:DisableDrawLayer("ARTWORK")
+	SetsCollectionFrame:DisableDrawLayer("OVERLAY")
+
+	SetsCollectionFrame.LeftInset:StripTextures()
+	-- S:CreateBD(SetsCollectionFrame.LeftInset, .25)
+
+	SetsCollectionFrame.RightInset:StripTextures()
+	SetsCollectionFrame.DetailsFrame.ModelFadeTexture:Hide()
+	S:CreateBD(SetsCollectionFrame.DetailsFrame, .25)
+
+	for i = 1, 11 do
+		local bu = _G["WardrobeCollectionFrameScrollFrameButton"..i]
+		local ic = bu.Icon
+
+		bu:GetRegions():Hide()
+		bu:SetHighlightTexture("")
+		bu.SelectedTexture:SetTexture("")
+
+		local bg = CreateFrame("Frame", nil, bu)
+		bg:SetPoint("TOPLEFT", 0, -1)
+		bg:SetPoint("BOTTOMRIGHT", 0, 1)
+		bg:SetFrameLevel(bu:GetFrameLevel()-1)
+		S:CreateBD(bg, .25)
+		bu.bg = bg
+
+		ic:SetTexCoord(.08, .92, .08, .92)
+		ic.bg = S:CreateBG(ic)
+	end
+
+	S:ReskinFilterButton(WardrobeSetsCollectionVariantSetsButton)
+	S:ReskinScroll(WardrobeCollectionFrameScrollFrameScrollBar)
+	S:ReskinClose(WardrobeCollectionFrame.SetsTabHelpBox.CloseButton)
+
 	-- Progress bar
 
 	local progressBar = WardrobeCollectionFrame.progressBar
+	progressBar.border:Hide()
 	progressBar:DisableDrawLayer("BACKGROUND")
 
 	progressBar.text:SetPoint("CENTER", 0, 1)
 	progressBar:SetStatusBarTexture(R["media"].normal)
-    R:SetStatusBarGradient(progressBar)
+	R:SetStatusBarGradient(progressBar)
 
 	S:CreateBDFrame(progressBar, .25)
 
@@ -519,6 +556,20 @@ local function LoadSkin()
 			S:ReskinIcon(slot.Icon)
 		end
 	end
+
+	-- Outfit & OutfitEdit Frame
+	local WardrobeOutfitFrame = WardrobeOutfitFrame
+	local WardrobeOutfitEditFrame = WardrobeOutfitEditFrame
+	S:CreateBD(WardrobeOutfitFrame, .75)
+	S:CreateBD(WardrobeOutfitEditFrame, .75)
+	S:Reskin(WardrobeOutfitEditFrame.AcceptButton)
+	S:Reskin(WardrobeOutfitEditFrame.CancelButton)
+	S:Reskin(WardrobeOutfitEditFrame.DeleteButton)
+
+	WardrobeOutfitEditFrame.EditBox.LeftTexture:Hide()
+	WardrobeOutfitEditFrame.EditBox.MiddleTexture:Hide()
+	WardrobeOutfitEditFrame.EditBox.RightTexture:Hide()
+	S:ReskinInput(WardrobeOutfitEditFrame.EditBox)
 
 	-- [[ WardrobeTransmogFrameControlFrame Button ]]
 	WardrobeTransmogFrameControlFrame:DisableDrawLayer("BACKGROUND")
