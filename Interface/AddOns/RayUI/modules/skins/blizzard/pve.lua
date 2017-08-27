@@ -117,6 +117,8 @@ local function LoadSkin()
 	LFDQueueFrameSpecificListScrollFrameScrollBackgroundTopLeft:Hide()
 	LFDQueueFrameSpecificListScrollFrameScrollBackgroundBottomRight:Hide()
 	LFDQueueFrameSpecificListScrollFrameScrollBarScrollDownButton:SetPoint("TOP", LFDQueueFrameSpecificListScrollFrameScrollBar, "BOTTOM", 0, 2)
+	LFDQueueFrameRandomScrollFrameScrollBackgroundTopLeft:Hide()
+	LFDQueueFrameRandomScrollFrameScrollBackgroundBottomRight:Hide()
 	LFDQueueFrameRandomScrollFrameScrollBarScrollDownButton:SetPoint("TOP", LFDQueueFrameRandomScrollFrameScrollBar, "BOTTOM", 0, 2)
 	LFDQueueFrameRandomScrollFrame:SetWidth(304)
 
@@ -173,6 +175,7 @@ local function LoadSkin()
 	S:Reskin(LFGDungeonReadyDialogEnterDungeonButton)
 	S:Reskin(LFGDungeonReadyDialogLeaveQueueButton)
 	S:Reskin(LFDQueueFrameNoLFDWhileLFRLeaveQueueButton)
+	S:ReskinClose(LFGDungeonReadyDialogCloseButton)
 
 	for i = 1, 9 do
 		select(i, QueueStatusFrame:GetRegions()):Hide()
@@ -236,7 +239,6 @@ local function LoadSkin()
 
 	S:Reskin(ScenarioQueueFrameFindGroupButton)
 	S:ReskinDropDown(ScenarioQueueFrameTypeDropDown)
-	S:ReskinScroll(LFDQueueFrameRandomScrollFrameScrollBar)
 
 	-- Looking for raid
 	LFRBrowseFrameRoleInset:DisableDrawLayer("BORDER")
