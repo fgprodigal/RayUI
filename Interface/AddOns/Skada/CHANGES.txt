@@ -1,14 +1,8 @@
 ------------------------------------------------------------------------
-r738 | zarnivoop | 2017-06-25 04:15:29 -0500 (Sun, 25 Jun 2017) | 1 line
+r748 | zarnivoop | 2017-08-30 11:59:44 -0500 (Wed, 30 Aug 2017) | 1 line
 Changed paths:
-   M /trunk/locale/enUS.lua
+   M /trunk/Skada.toc
 
-hps datatext localization
-------------------------------------------------------------------------
-r737 | zarnivoop | 2017-06-25 04:15:08 -0500 (Sun, 25 Jun 2017) | 1 line
-Changed paths:
-   M /trunk/modules/Healing.lua
-
-hps datatexts
+.toc update
 ------------------------------------------------------------------------
 
