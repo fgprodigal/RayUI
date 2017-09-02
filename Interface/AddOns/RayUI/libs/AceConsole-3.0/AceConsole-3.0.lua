@@ -31,6 +31,7 @@ local _G = _G
 
 -- Global vars/functions that we don't upvalue since they might get hooked, or upgraded
 -- List them here for Mikk's FindGlobals script
+-- GLOBALS: DEFAULT_CHAT_FRAME, SlashCmdList, hash_SlashCmdList
 
 local tmp={}
 local function Print(self,frame,...)
@@ -135,7 +136,7 @@ end
 
 --- Retreive one or more space-separated arguments from a string. 
 -- Treats quoted strings and itemlinks as non-spaced.
--- @param string The raw argument string
+-- @param str The raw argument string
 -- @param numargs How many arguments to get (default 1)
 -- @param startpos Where in the string to start scanning (default  1)
 -- @return Returns arg1, arg2, ..., nextposition\\
