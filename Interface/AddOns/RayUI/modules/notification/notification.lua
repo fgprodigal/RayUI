@@ -427,6 +427,6 @@ function NF:VIGNETTE_ADDED(event, vignetteInstanceID)
 end
 
 function NF:RESURRECT_REQUEST(name)
-    PlaySound("ReadyCheck")
+    PlaySound(SOUNDKIT.READY_CHECK)
 end
 R:RegisterModule(NF:GetName())

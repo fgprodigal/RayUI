@@ -65,7 +65,7 @@ local function GuildMember_OnMouseUp(tooltipCell, playerEntry, button)
 		LoadAddOn("Blizzard_GuildUI")
 	end
 
-	PlaySound("igMainMenuOptionCheckBoxOn")
+	PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
 
 	local playerName = playerEntry.Realm == R.myrealm and playerEntry.ToonName or playerEntry.FullToonName
 

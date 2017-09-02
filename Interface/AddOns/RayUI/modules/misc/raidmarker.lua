@@ -52,7 +52,7 @@ function mod:RaidMarkButton_OnLeave()
 end
 
 function mod:RaidMarkButton_OnClick(arg1)
-    PlaySound("UChatScrollButton")
+    PlaySound(SOUNDKIT.U_CHAT_SCROLL_BUTTON)
     SetRaidTarget("target", (arg1~="RightButton") and self:GetID()or 0)
     self:GetParent():Hide()
 end

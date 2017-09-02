@@ -114,7 +114,7 @@ function CL:ToggleChangeLog()
     if not RayUIChangeLog then
     	self:CreateChangelog()
     end
-	PlaySound("igMainMenuOptionCheckBoxOff")
+	PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF)
 
     local fadeInfo = {}
     fadeInfo.mode = "IN"
