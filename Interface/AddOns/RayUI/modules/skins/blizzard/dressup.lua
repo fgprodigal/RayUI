@@ -7,29 +7,48 @@ RayUI:LoadEnv("Skins")
 local S = _Skins
 
 local function LoadSkin()
-	S:SetBD(DressUpFrame, 10, -12, -34, 74)
-	DressUpFramePortrait:Hide()
-	DressUpBackgroundTopLeft:Hide()
-	DressUpBackgroundTopRight:Hide()
-	DressUpBackgroundBotLeft:Hide()
-	DressUpBackgroundBotRight:Hide()
+    local r, g, b = _r, _g, _b
+	S:SetBD(DressUpFrame)
+    DressUpFrame.ModelBackground:Kill()
+    DressUpFrameInset:Kill()
+	DressUpFramePortrait:Kill()
+    DressUpFrame:StripTextures()
+    MaximizeMinimizeFrame:StripTextures()
+    for _, button in pairs{MaximizeMinimizeFrame.MaximizeButton, MaximizeMinimizeFrame.MinimizeButton} do
+        button:SetSize(17, 17)
+        button:ClearAllPoints()
+        button:SetPoint("RIGHT", DressUpFrameCloseButton, "LEFT", -1, 0)
+
+        S:Reskin(button)
+
+        local arrow = button:CreateFontString(nil, "OVERLAY")
+
+        if button == MaximizeMinimizeFrame.MaximizeButton then
+            arrow:FontTemplate(R["media"].arrowfont, 26 * R.mult, "OUTLINE,MONOCHROME")
+            arrow:Point("CENTER", 1, -2)
+            arrow:SetText("W")
+        else
+            arrow:FontTemplate(R["media"].arrowfont, 27 * R.mult, "OUTLINE,MONOCHROME")
+            arrow:Point("CENTER", 0, -4)
+            arrow:SetText("V")
+        end
+
+        button:SetScript("OnEnter", function() arrow:SetTextColor(r, g, b) end)
+        button:SetScript("OnLeave", function() arrow:SetTextColor(1, 1, 1) end)
+    end
 	for i = 2, 5 do
 		select(i, DressUpFrame:GetRegions()):Hide()
 	end
 	DressUpFrameResetButton:SetPoint("RIGHT", DressUpFrameCancelButton, "LEFT", -1, 0)
 	S:Reskin(DressUpFrameCancelButton)
 	S:Reskin(DressUpFrameResetButton)
-	S:ReskinClose(DressUpFrameCloseButton, "TOPRIGHT", DressUpFrame, "TOPRIGHT", -38, -16)
+	S:ReskinClose(DressUpFrameCloseButton)
 
 	S:Reskin(DressUpFrameOutfitDropDown.SaveButton)
-	S:Reskin(DressUpFrameCancelButton)
-	S:Reskin(DressUpFrameResetButton)
 	S:ReskinDropDown(DressUpFrameOutfitDropDown)
-	S:ReskinClose(DressUpFrameCloseButton, "TOPRIGHT", DressUpFrame, "TOPRIGHT", -38, -16)
 
 	DressUpFrameOutfitDropDown:SetHeight(32)
 	DressUpFrameOutfitDropDown.SaveButton:SetPoint("LEFT", DressUpFrameOutfitDropDown, "RIGHT", -13, 2)
-	DressUpFrameResetButton:SetPoint("RIGHT", DressUpFrameCancelButton, "LEFT", -1, 0)
 
 	-- SideDressUp
 

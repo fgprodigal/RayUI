@@ -31,8 +31,8 @@ function WM:SetLargeWorldMap()
         SetUIPanelAttribute(WorldMapFrame, "allowOtherPanels", true)
     end
 
-    WorldMapFrameSizeUpButton:Hide()
-    WorldMapFrameSizeDownButton:Show()
+    WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MaximizeButton:Hide()
+    WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MinimizeButton:Show()
 
     WorldMapFrame:ClearAllPoints()
     WorldMapFrame:SetPoint("CENTER", R.UIParent, "CENTER", 0, 100)
@@ -42,8 +42,8 @@ end
 function WM:SetSmallWorldMap()
     if InCombatLockdown() then return; end
 
-    WorldMapFrameSizeUpButton:Show()
-    WorldMapFrameSizeDownButton:Hide()
+    WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MaximizeButton:Show()
+    WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MinimizeButton:Hide()
     FixTooltip()
 
     -- WorldMapFrame:ClearAllPoints()

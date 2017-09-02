@@ -43,9 +43,7 @@ local function LoadSkin()
 
     -- [[ Size up / down buttons ]]
 
-    for _, buttonName in pairs{"WorldMapFrameSizeUpButton", "WorldMapFrameSizeDownButton"} do
-        local button = _G[buttonName]
-
+    for _, button in pairs{WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MaximizeButton, WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MinimizeButton} do
         button:SetSize(17, 17)
         button:ClearAllPoints()
         button:SetPoint("RIGHT", BorderFrame.CloseButton, "LEFT", -1, 0)
@@ -54,7 +52,7 @@ local function LoadSkin()
 
         local arrow = button:CreateFontString(nil, "OVERLAY")
 
-        if buttonName == "WorldMapFrameSizeUpButton" then
+        if button == WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MaximizeButton then
             arrow:FontTemplate(R["media"].arrowfont, 26 * R.mult, "OUTLINE,MONOCHROME")
             arrow:Point("CENTER", 1, -2)
             arrow:SetText("W")

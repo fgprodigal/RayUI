@@ -8,9 +8,7 @@ local S = _Skins
 
 local function LoadSkin()
 	S:SetBD(HelpFrame)
-	ReportPlayerNameDialog:StripTextures()
 	ReportCheatingDialog:StripTextures()
-	S:SetBD(ReportPlayerNameDialog)
 	S:SetBD(ReportCheatingDialog)
 	HelpFrameHeader:Hide()
 	HelpFrameLeftInsetBg:Hide()
@@ -43,8 +41,6 @@ local function LoadSkin()
 		"HelpFrameButton16",
 		"HelpFrameSubmitSuggestionSubmit",
 		"HelpFrameReportBugSubmit",
-		"ReportPlayerNameDialogReportButton",
-		"ReportPlayerNameDialogCancelButton",
 		"ReportCheatingDialogReportButton",
 		"ReportCheatingDialogCancelButton",
 		"HelpFrameAccountSecurityOpenTicket",
