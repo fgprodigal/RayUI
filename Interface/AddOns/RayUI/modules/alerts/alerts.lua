@@ -565,11 +565,7 @@ local function ToastButton_OnShow(self)
     local soundFile = self.soundFile
 
     if CFG.sfx_enabled and soundFile then
-        if type(soundFile) == "number" then
-            PlaySoundKitID(soundFile)
-        elseif type(soundFile) == "string" then
-            PlaySound(soundFile)
-        end
+        PlaySound(soundFile)
     end
 
     self.AnimIn:Play()
@@ -1276,7 +1272,7 @@ function AL:ARTIFACT_DIGSITE_COMPLETE(...)
     toast.Icon:SetPoint("TOPLEFT", 7, -3)
     toast.Icon:SetSize(76, 76)
     toast.Icon:SetTexture(raceTexture)
-    toast.soundFile = "UI_DigsiteCompletion_Toast"
+    toast.soundFile = SOUNDKIT.UI_DIG_SITE_COMPLETION_TOAST
 
     SpawnToast(toast, CFG.dnd.archaeology)
 end
@@ -1341,7 +1337,7 @@ local function GarrisonMissionToast_SetUp(followerType, garrisonType, missionID,
     toast.Level:SetText(level)
     toast.Border:SetVertexColor(color.r, color.g, color.b)
     toast.Icon:SetAtlas(missionInfo.typeAtlas, false)
-    toast.soundFile = "UI_Garrison_Toast_MissionComplete"
+    toast.soundFile = SOUNDKIT.UI_GARRISON_TOAST_MISSION_COMPLETE
     toast.id = missionID
 
     SpawnToast(toast, garrisonType == LE_GARRISON_TYPE_7_0 and CFG.dnd.garrison_7_0 or CFG.dnd.garrison_6_0)
@@ -1424,7 +1420,7 @@ local function GarrisonFollowerToast_SetUp(followerType, garrisonType, followerI
 
     toast.Text:SetText(name)
     toast.Border:SetVertexColor(color.r, color.g, color.b)
-    toast.soundFile = "UI_Garrison_Toast_FollowerGained"
+    toast.soundFile = SOUNDKIT.UI_GARRISON_TOAST_FOLLOWER_GAINED
     toast.id = followerID
 
     SpawnToast(toast, garrisonType == LE_GARRISON_TYPE_7_0 and CFG.dnd.garrison_7_0 or CFG.dnd.garrison_6_0)
@@ -1449,7 +1445,7 @@ function AL:GARRISON_BUILDING_ACTIVATABLE(...)
     toast.Title:SetText(GARRISON_UPDATE)
     toast.Text:SetText(buildingName)
     toast.Icon:SetTexture("Interface\\Icons\\Garrison_Build")
-    toast.soundFile = "UI_Garrison_Toast_BuildingComplete"
+    toast.soundFile = SOUNDKIT.UI_GARRISON_TOAST_BUILDING_COMPLETE
 
     SpawnToast(toast, CFG.dnd.garrison_6_0)
 end
@@ -1463,7 +1459,7 @@ function AL:GARRISON_TALENT_COMPLETE(...)
     toast.Title:SetText(GARRISON_TALENT_ORDER_ADVANCEMENT)
     toast.Text:SetText(talent.name)
     toast.Icon:SetTexture(talent.icon)
-    toast.soundFile = "UI_OrderHall_Talent_Ready_Toast"
+    toast.soundFile = SOUNDKIT.UI_ORDERHALL_TALENT_READY_TOAST
 
     SpawnToast(toast, CFG.dnd.garrison_7_0)
 end
@@ -1578,9 +1574,9 @@ local function LFGToast_SetUp(isScenario)
     toast.usedRewards = usedRewards
 
     if isScenario then
-        toast.soundFile = "UI_Scenario_Ending"
+        toast.soundFile = SOUNDKIT.UI_SCENARIO_ENDING
     else
-        toast.soundFile = "LFG_Rewards"
+        toast.soundFile = SOUNDKIT.LFG_REWARDS
     end
 
     SpawnToast(toast, CFG.dnd.instance)
@@ -1619,19 +1615,19 @@ local function LootWonToast_Setup(itemLink, quantity, rollType, roll, showFactio
             toast = GetToast("item")
             itemLink = ParseLink(itemLink)
             local title = YOU_WON_LABEL
-            local soundFile = 31578
+            local soundFile = SOUNDKIT.UI_EPICLOOT_TOAST
             local name, _, quality, _, _, _, _, _, _, icon = GetItemInfo(itemLink)
 
             if isPersonal or lessAwesome then
                 title = YOU_RECEIVED_LABEL
 
                 if lessAwesome then
-                    soundFile = 51402
+                    soundFile = SOUNDKIT.UI_RAID_LOOT_TOAST_LESSER_ITEM_WON
                 end
             end
 
             if isUpgraded then
-                soundFile = 51561
+                soundFile = SOUNDKIT.UI_WARFORGED_ITEM_LOOT_TOAST
                 title = ITEM_UPGRADED_LABEL
                 local upgradeTexture = LOOTUPGRADEFRAME_QUALITY_TEXTURES[quality or 2]
 
@@ -1675,11 +1671,11 @@ local function LootWonToast_Setup(itemLink, quantity, rollType, roll, showFactio
             toast.link = itemLink
 
             if lessAwesome then
-                toast.soundFile = 51402
+                toast.soundFile = SOUNDKIT.UI_RAID_LOOT_TOAST_LESSER_ITEM_WON
             elseif isUpgraded then
-                toast.soundFile = 51561
+                toast.soundFile = SOUNDKIT.UI_WARFORGED_ITEM_LOOT_TOAST
             else
-                toast.soundFile = 31578
+                toast.soundFile = SOUNDKIT.UI_EPICLOOT_TOAST
             end
         end
     elseif isMoney then
@@ -1690,7 +1686,7 @@ local function LootWonToast_Setup(itemLink, quantity, rollType, roll, showFactio
         toast.Title:SetText(YOU_WON_LABEL)
         toast.Text:SetText(GetMoneyString(quantity))
         toast.Icon:SetTexture("Interface\\Icons\\INV_Misc_Coin_02")
-        toast.soundFile = 31578
+        toast.soundFile = SOUNDKIT.UI_EPICLOOT_TOAST
     end
 
     if toast then
@@ -1745,7 +1741,7 @@ function AL:SHOW_LOOT_TOAST_LEGENDARY_LOOTED(...)
         toast.Icon:SetTexture(icon)
         toast.UpgradeIcon:SetShown(IsItemAnUpgrade(itemLink))
         toast.Dragon:Show()
-        toast.soundFile = "UI_LegendaryLoot_Toast"
+        toast.soundFile = SOUNDKIT.UI_LEGENDARY_LOOT_TOAST
         toast.link = itemLink
 
         SpawnToast(toast, CFG.dnd.loot_special)
@@ -1774,7 +1770,7 @@ function AL:SHOW_LOOT_TOAST_UPGRADE(...)
         toast.IconBorder:SetVertexColor(color.r, color.g, color.b)
         toast.Icon:SetTexture(icon)
         toast.UpgradeIcon:SetShown(IsItemAnUpgrade(itemLink))
-        toast.soundFile = 51561
+        toast.soundFile = SOUNDKIT.UI_WARFORGED_ITEM_LOOT_TOAST
         toast.link = itemLink
 
         for i = 1, 5 do
@@ -1815,7 +1811,7 @@ function AL:STORE_PRODUCT_DELIVERED(...)
     toast.Border:SetVertexColor(color.r, color.g, color.b)
     toast.IconBorder:SetVertexColor(color.r, color.g, color.b)
     toast.Icon:SetTexture(icon)
-    toast.soundFile = "UI_igStore_PurchaseDelivered_Toast_01"
+    toast.soundFile = SOUNDKIT.UI_IG_STORE_PURCHASE_DELIVERED_TOAST_01
     toast.id = payloadID
 
     SpawnToast(toast, CFG.dnd.loot_special)
@@ -1963,7 +1959,7 @@ function AL:CHAT_MSG_CURRENCY(event, message)
         toast.Border:SetVertexColor(color.r, color.g, color.b)
         toast.IconBorder:SetVertexColor(color.r, color.g, color.b)
         toast.Icon:SetTexture(icon)
-        toast.soundFile = 31578
+        toast.soundFile = SOUNDKIT.UI_EPICLOOT_TOAST
         toast.itemCount = quantity
         toast.link = itemLink
 
@@ -2026,7 +2022,7 @@ function AL:NEW_RECIPE_LEARNED(...)
             toast.Rank:SetText(rankTexture)
             toast.RankBG:SetShown(not not rank)
             toast.Icon:SetTexture(C_TradeSkillUI.GetTradeSkillTexture(tradeSkillID))
-            toast.soundFile = "UI_Professions_NewRecipeLearned_Toast"
+            toast.soundFile = SOUNDKIT.UI_PROFESSIONS_NEW_RECIPE_LEARNED_TOAST
             toast.id = recipeID
 
             SpawnToast(toast, CFG.dnd.recipe)
@@ -2106,7 +2102,7 @@ local function InvasionToast_SetUp(questID, name, moneyReward, xpReward, numCurr
     toast.Border:SetVertexColor(60 / 255, 255 / 255, 38 / 255) -- fel green #3cff26
     toast.IconBorder:SetVertexColor(60 / 255, 255 / 255, 38 / 255) -- fel green #3cff26
     toast.usedRewards = usedRewards
-    toast.soundFile = "UI_Scenario_Ending"
+    toast.soundFile = SOUNDKIT.UI_SCENARIO_ENDING
     toast.id = questID
 
     SpawnToast(toast, CFG.dnd.world)
@@ -2187,7 +2183,7 @@ local function WorldQuestToast_SetUp(questID)
     toast.Border:SetVertexColor(color.r, color.g, color.b)
     toast.IconBorder:SetVertexColor(color.r, color.g, color.b)
     toast.usedRewards = usedRewards
-    toast.soundFile = "UI_WorldQuest_Complete"
+    toast.soundFile = SOUNDKIT.UI_WORLDQUEST_COMPLETE
     toast.id = questID
 
     SpawnToast(toast, CFG.dnd.world)
@@ -2281,7 +2277,7 @@ local function TransmogToast_SetUp(sourceID, isAdded)
     toast.Border:SetVertexColor(1, 128 / 255, 1)
     toast.IconBorder:SetVertexColor(1, 128 / 255, 1)
     toast.Icon:SetTexture(icon)
-    toast.soundFile = "UI_DigsiteCompletion_Toast"
+    toast.soundFile = SOUNDKIT.UI_DIG_SITE_COMPLETION_TOAST
     toast.id = sourceID
     toast.link = transmogLink
 

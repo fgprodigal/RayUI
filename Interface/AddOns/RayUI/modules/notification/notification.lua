@@ -59,7 +59,7 @@ function NF:SpawnToast(toast)
     toast.AnimOut.AnimMove:SetOffset(0, -YOffset)
     toast.AnimIn:Play()
     toast.AnimOut:Play()
-    PlaySoundKitID(18019)
+    PlaySound(18019)
 end
 
 function NF:RefreshToasts()

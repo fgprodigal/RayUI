@@ -51,13 +51,13 @@ function WM:SetSmallWorldMap()
 end
 
 function WM:PLAYER_REGEN_ENABLED()
-    WorldMapFrameSizeDownButton:Enable()
-    WorldMapFrameSizeUpButton:Enable()
+    WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MinimizeButton:Enable()
+    WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MaximizeButton:Enable()
 end
 
 function WM:PLAYER_REGEN_DISABLED()
-    WorldMapFrameSizeDownButton:Disable()
-    WorldMapFrameSizeUpButton:Disable()
+    WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MinimizeButton:Disable()
+    WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MaximizeButton:Disable()
 end
 
 function WM:ResetDropDownListPosition(frame)
