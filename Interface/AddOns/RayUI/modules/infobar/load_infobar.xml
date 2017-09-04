@@ -130,6 +130,56 @@
                     <Anchor point="TOP" relativeKey="$parent.Button9" relativePoint="BOTTOM" x="0" y="10"/>
                 </Anchors>
             </Button>
+            <Button parentKey="Button11" inherits="RayUI_InfoBarMenuButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent.Button10" relativePoint="BOTTOM" x="0" y="5"/>
+                </Anchors>
+            </Button>
+            <Button parentKey="Button12" inherits="RayUI_InfoBarMenuButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent.Button11" relativePoint="BOTTOM" x="0" y="5"/>
+                </Anchors>
+            </Button>
+            <Button parentKey="Button13" inherits="RayUI_InfoBarMenuButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent.Button12" relativePoint="BOTTOM" x="0" y="5"/>
+                </Anchors>
+            </Button>
+            <Button parentKey="Button14" inherits="RayUI_InfoBarMenuButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent.Button13" relativePoint="BOTTOM" x="0" y="5"/>
+                </Anchors>
+            </Button>
+            <Button parentKey="Button15" inherits="RayUI_InfoBarMenuButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent.Button14" relativePoint="BOTTOM" x="0" y="5"/>
+                </Anchors>
+            </Button>
+            <Button parentKey="Button16" inherits="RayUI_InfoBarMenuButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent.Button15" relativePoint="BOTTOM" x="0" y="5"/>
+                </Anchors>
+            </Button>
+            <Button parentKey="Button17" inherits="RayUI_InfoBarMenuButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent.Button16" relativePoint="BOTTOM" x="0" y="5"/>
+                </Anchors>
+            </Button>
+            <Button parentKey="Button18" inherits="RayUI_InfoBarMenuButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent.Button17" relativePoint="BOTTOM" x="0" y="5"/>
+                </Anchors>
+            </Button>
+            <Button parentKey="Button19" inherits="RayUI_InfoBarMenuButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent.Button18" relativePoint="BOTTOM" x="0" y="5"/>
+                </Anchors>
+            </Button>
+            <Button parentKey="Button20" inherits="RayUI_InfoBarMenuButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent.Button19" relativePoint="BOTTOM" x="0" y="10"/>
+                </Anchors>
+            </Button>
             <Button parentKey="Clear" inherits="RayUI_InfoBarMenuButtonTemplate">
                 <Anchors>
                     <Anchor point="BOTTOMLEFT" x="-5" y="0"/>
