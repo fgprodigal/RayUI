@@ -5,9 +5,9 @@
 
 local LibStub = LibStub
 local gui = LibStub("AceGUI-3.0")
-local reg = LibStub("AceConfigRegistry-3.0-ElvUI")
+local reg = LibStub("AceConfigRegistry-3.0")
 
-local MAJOR, MINOR = "AceConfigDialog-3.0-ElvUI", 2
+local MAJOR, MINOR = "AceConfigDialog-3.0", 2
 local AceConfigDialog, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not AceConfigDialog then return end
@@ -1320,7 +1320,7 @@ local function FeedOptions(appName, options,container,rootframe,path,group,inlin
 							local value = valuesort[i]
 							local text = values[value]
 							if dragdrop then
-								local button = gui:Create("Button-ElvUI")
+								local button = gui:Create("Button")
 								button:SetDisabled(disabled)
 								button:SetUserData("value", value)
 								button:SetUserData("text", text)
@@ -1381,7 +1381,7 @@ local function FeedOptions(appName, options,container,rootframe,path,group,inlin
 					del(valuesort)
 
 				elseif v.type == "color" then
-					control = gui:Create("ColorPicker-ElvUI")
+					control = gui:Create("ColorPicker")
 					control:SetLabel(name)
 					control:SetHasAlpha(GetOptionsMemberValue("hasAlpha",v, options, path, appName))
 					control:SetColor(GetOptionsMemberValue("get",v, options, path, appName))

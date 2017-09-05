@@ -11,7 +11,7 @@
 -- @release $Id: AceConfigRegistry-3.0.lua 1105 2013-12-08 22:11:58Z nevcairiel $
 local CallbackHandler = LibStub:GetLibrary("CallbackHandler-1.0")
 
-local MAJOR, MINOR = "AceConfigRegistry-3.0-ElvUI", 2
+local MAJOR, MINOR = "AceConfigRegistry-3.0", 2
 local AceConfigRegistry = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not AceConfigRegistry then return end
