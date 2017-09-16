@@ -117,6 +117,8 @@ local function LoadSkin()
 	LFDQueueFrameSpecificListScrollFrameScrollBackgroundTopLeft:Hide()
 	LFDQueueFrameSpecificListScrollFrameScrollBackgroundBottomRight:Hide()
 	LFDQueueFrameSpecificListScrollFrameScrollBarScrollDownButton:SetPoint("TOP", LFDQueueFrameSpecificListScrollFrameScrollBar, "BOTTOM", 0, 2)
+	LFDQueueFrameRandomScrollFrameScrollBackgroundTopLeft:Hide()
+	LFDQueueFrameRandomScrollFrameScrollBackgroundBottomRight:Hide()
 	LFDQueueFrameRandomScrollFrameScrollBarScrollDownButton:SetPoint("TOP", LFDQueueFrameRandomScrollFrameScrollBar, "BOTTOM", 0, 2)
 	LFDQueueFrameRandomScrollFrame:SetWidth(304)
 
@@ -173,6 +175,7 @@ local function LoadSkin()
 	S:Reskin(LFGDungeonReadyDialogEnterDungeonButton)
 	S:Reskin(LFGDungeonReadyDialogLeaveQueueButton)
 	S:Reskin(LFDQueueFrameNoLFDWhileLFRLeaveQueueButton)
+	S:ReskinClose(LFGDungeonReadyDialogCloseButton)
 
 	for i = 1, 9 do
 		select(i, QueueStatusFrame:GetRegions()):Hide()
@@ -236,7 +239,6 @@ local function LoadSkin()
 
 	S:Reskin(ScenarioQueueFrameFindGroupButton)
 	S:ReskinDropDown(ScenarioQueueFrameTypeDropDown)
-	S:ReskinScroll(LFDQueueFrameRandomScrollFrameScrollBar)
 
 	-- Looking for raid
 	LFRBrowseFrameRoleInset:DisableDrawLayer("BORDER")
@@ -469,16 +471,15 @@ local function LoadSkin()
 	S:ReskinCheck(LFGListApplicationDialog.DamagerButton.CheckButton)
 	S:ReskinCheck(LFGListApplicationDialog.TankButton.CheckButton)
 	S:ReskinCheck(LFGListApplicationDialog.HealerButton.CheckButton)
+	for i = 1, 10 do
+		select(i, LFGListApplicationDialogDescription:GetRegions()):Hide()
+	end
+	S:ReskinInput(LFGListApplicationDialogDescription)
 	S:Reskin(LFGListApplicationDialog.SignUpButton)
 	S:Reskin(LFGListApplicationDialog.CancelButton)
 	S:Reskin(LFGListInviteDialog.AcceptButton)
 	S:Reskin(LFGListInviteDialog.DeclineButton)
 	S:Reskin(LFGListInviteDialog.AcknowledgeButton)
-	for i = 1, 9 do
-		select(i, LFGListApplicationDialogDescription:GetRegions()):Hide()
-	end
-	S:CreateBD(LFGListApplicationDialogDescription, 0)
-	S:ReskinInput(LFGListApplicationDialogDescription)
 end
 
 S:AddCallback("PVE", LoadSkin)

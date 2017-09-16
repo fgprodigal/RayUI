@@ -331,16 +331,13 @@ local function LoadSkin()
 	S:ReskinScroll(AchievementFrameComparisonContainerScrollBar)
 	S:ReskinDropDown(AchievementFrameFilterDropDown)
 
-	-- Search Preview
-	-- Following is taken from RayUI\modules\skins\blizzard\encounter.lua "-- [[ Search results ]]"
+	-- Search results
 
-	local f = AchievementFrame.searchResults
-	for i = 3, 11 do
-		select(i, f:GetRegions()):Hide()
+	for i = 1, 14 do
+		select(i, AchievementFrame.searchResults:GetRegions()):Hide()
 	end
-
-	f:StripTextures()
-	S:CreateBD(f, .75)
+	AchievementFrame.searchResults.titleText:Show()
+	S:CreateBD(AchievementFrame.searchResults, .75)
 
 	AchievementFrame.searchPreviewContainer.borderAnchor:Hide()
 	AchievementFrame.searchPreviewContainer.botRightCorner:Hide()

@@ -71,6 +71,17 @@ local function LoadSkin()
 	SideDressUpModel.bg:SetFrameLevel(SideDressUpModel:GetFrameLevel()-1)
 	S:CreateBD(SideDressUpModel.bg)
 
+	-- Edit frame
+	S:CreateBD(WardrobeOutfitFrame, .55)
+	S:CreateBD(WardrobeOutfitEditFrame, .55)
+	WardrobeOutfitEditFrame.EditBox.LeftTexture:Hide()
+	WardrobeOutfitEditFrame.EditBox.MiddleTexture:Hide()
+	WardrobeOutfitEditFrame.EditBox.RightTexture:Hide()
+	S:ReskinInput(WardrobeOutfitEditFrame.EditBox)
+	S:Reskin(WardrobeOutfitEditFrame.AcceptButton)
+	S:Reskin(WardrobeOutfitEditFrame.CancelButton)
+	S:Reskin(WardrobeOutfitEditFrame.DeleteButton)
+
 	-- [[ DressUpModelControlFrame Button ]]
 	DressUpModelControlFrame:DisableDrawLayer("BACKGROUND")
 	local buttons = {

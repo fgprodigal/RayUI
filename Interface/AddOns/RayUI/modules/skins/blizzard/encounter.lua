@@ -13,7 +13,7 @@ local function LoadSkin()
 	EncounterJournal:DisableDrawLayer("BORDER")
 	EncounterJournalInset:DisableDrawLayer("BORDER")
 	EncounterJournalNavBar:DisableDrawLayer("BORDER")
-	EncounterJournalSearchResults:DisableDrawLayer("BORDER")
+	-- EncounterJournalSearchResults:DisableDrawLayer("BORDER")
 	EncounterJournal:DisableDrawLayer("OVERLAY")
 	EncounterJournalInstanceSelectSuggestTab:DisableDrawLayer("OVERLAY")
 	EncounterJournalInstanceSelectDungeonTab:DisableDrawLayer("OVERLAY")
@@ -303,12 +303,10 @@ local function LoadSkin()
 
 	-- [[ Search results ]]
 
-	EncounterJournalSearchResultsBg:Hide()
-	for i = 3, 11 do
+	for i = 1, 11 do
 		select(i, EncounterJournalSearchResults:GetRegions()):Hide()
 	end
-
-	S:SetBD(EncounterJournalSearchResults)
+	EncounterJournalSearchResultsTitleText:Show()
 
 	EncounterJournal.searchBox.searchPreviewContainer.botLeftCorner:Hide()
 	EncounterJournal.searchBox.searchPreviewContainer.botRightCorner:Hide()
