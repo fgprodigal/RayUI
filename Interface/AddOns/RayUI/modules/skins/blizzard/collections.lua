@@ -557,19 +557,25 @@ local function LoadSkin()
 		end
 	end
 
-	-- Outfit & OutfitEdit Frame
-	local WardrobeOutfitFrame = WardrobeOutfitFrame
-	local WardrobeOutfitEditFrame = WardrobeOutfitEditFrame
-	S:CreateBD(WardrobeOutfitFrame, .75)
-	S:CreateBD(WardrobeOutfitEditFrame, .75)
-	S:Reskin(WardrobeOutfitEditFrame.AcceptButton)
-	S:Reskin(WardrobeOutfitEditFrame.CancelButton)
-	S:Reskin(WardrobeOutfitEditFrame.DeleteButton)
+	local SetsTransmogFrame = WardrobeCollectionFrame.SetsTransmogFrame
 
+	SetsTransmogFrame:DisableDrawLayer("BACKGROUND")
+	SetsTransmogFrame:DisableDrawLayer("BORDER")
+	SetsTransmogFrame:DisableDrawLayer("ARTWORK")
+	SetsTransmogFrame:DisableDrawLayer("OVERLAY")
+	S:ReskinArrow(SetsTransmogFrame.PagingFrame.PrevPageButton, "left")
+	S:ReskinArrow(SetsTransmogFrame.PagingFrame.NextPageButton, "right")
+
+	-- Edit frame
+	S:CreateBD(WardrobeOutfitFrame, .55)
+	S:CreateBD(WardrobeOutfitEditFrame, .55)
 	WardrobeOutfitEditFrame.EditBox.LeftTexture:Hide()
 	WardrobeOutfitEditFrame.EditBox.MiddleTexture:Hide()
 	WardrobeOutfitEditFrame.EditBox.RightTexture:Hide()
 	S:ReskinInput(WardrobeOutfitEditFrame.EditBox)
+	S:Reskin(WardrobeOutfitEditFrame.AcceptButton)
+	S:Reskin(WardrobeOutfitEditFrame.CancelButton)
+	S:Reskin(WardrobeOutfitEditFrame.DeleteButton)
 
 	-- [[ WardrobeTransmogFrameControlFrame Button ]]
 	WardrobeTransmogFrameControlFrame:DisableDrawLayer("BACKGROUND")

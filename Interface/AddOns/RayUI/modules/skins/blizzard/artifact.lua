@@ -65,6 +65,14 @@ local function LoadSkin()
 
 	ArtifactFrame.PerksTabButton:ClearAllPoints()
 	ArtifactFrame.PerksTabButton:SetPoint("TOPLEFT", ArtifactFrame, "BOTTOMLEFT", 11, 2)
+
+	-- Netherlight crucible
+	for i = 1, 28 do
+		select(i, ArtifactRelicForgeFrame:GetRegions()):Hide()
+	end
+	ArtifactRelicForgeFrame.PreviewRelicCover:Kill()
+	S:SetBD(ArtifactRelicForgeFrame)
+	S:ReskinClose(ArtifactRelicForgeFrameCloseButton)
 end
 
 S:AddCallbackForAddon("Blizzard_ArtifactUI", "Artifact", LoadSkin)
