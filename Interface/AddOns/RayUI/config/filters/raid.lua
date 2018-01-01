@@ -109,27 +109,24 @@ _RaidDebuffsList = {
             -- 加洛西灭世者
             [244590] = Defaults(), -- 炽熔邪能
             [246920] = Defaults(), -- 错乱屠戮
-            [244761] = Defaults(), -- 歼灭
-            [244122] = Defaults(), -- 灭杀
             [245294] = Defaults(), -- 强化屠戮
             [244410] = Defaults(), -- 屠戮
             [246220] = Defaults(), -- 邪能轰炸
-            [246848] = Defaults(), -- 引力毁灭
-            [246368] = Defaults(), -- 灼热弹幕
 
             -- 萨格拉斯的恶犬
             [245024] = Defaults(5), -- 被吞噬
             [245022] = Defaults(), -- 炽然
-            [248815] = Defaults(), -- 点燃
-            [245098] = Defaults(), -- 腐烂
-            [244071] = Defaults(), -- 黑暗压迫
+            [248815] = Defaults(), -- 燃烧腐蚀
+            [245098] = Defaults(), -- 腐蚀
+            [244071] = Defaults(), -- 恐惧
             [254429] = Defaults(), -- 黑暗压迫
-            [248819] = Defaults(), -- 虹吸
+            [248819] = Defaults(), -- 虹吸腐蚀
             [244768] = Defaults(), -- 荒芜凝视
             [251445] = Defaults(), -- 闷烧
             [244072] = Defaults(), -- 熔火之触
             [244091] = Defaults(), -- 烧焦
-            [244131] = Defaults(), -- 吞噬之球
+            [244055] = Defaults(), -- 暗影触痕
+            [244054] = Defaults(), -- 烈焰触痕
 
             -- 安托兰统帅议会
             [254771] = Defaults(), -- 干扰力场
@@ -137,19 +134,16 @@ _RaidDebuffsList = {
             [244388] = Defaults(), -- 灵能创伤
             [244172] = Defaults(), -- 灵能突袭
             [244892] = Defaults(), -- 弱点攻击
-            --[253290] = Defaults(), -- 熵能爆裂
             [244910] = Defaults(), -- 邪能护盾
             [244737] = Defaults(), -- 震荡手雷
             [244748] = Defaults(), -- 震晕
+            [253037] = Defaults(), -- 恶魔冲锋
 
             -- 传送门守护者哈萨贝尔
             [245118] = Defaults(), -- 饱足幽影
-            [246316] = Defaults(), -- 毒素精华
             [245040] = Defaults(), -- 腐蚀
             [244849] = Defaults(), -- 腐蚀烂泥
-            [246075] = Defaults(), -- 毁灭内爆
             [245075] = Defaults(), -- 饥饿幽影
-            [244607] = Defaults(), -- 克索诺斯之焰
             [244709] = Defaults(), -- 烈焰引爆
             [245050] = Defaults(), -- 欺骗幻境
             [244016] = Defaults(), -- 时空裂隙
@@ -164,11 +158,11 @@ _RaidDebuffsList = {
             [249016] = Defaults(), -- 反馈-目标锁定
             [249015] = Defaults(), -- 反馈-燃烧的余烬
             [249014] = Defaults(), -- 反馈-邪污足迹
-            [248861] = Defaults(), -- 末日之矛
             [250691] = Defaults(), -- 燃烧的余烬
             [248795] = Defaults(), -- 邪能池
             [248332] = Defaults(), -- 邪能之雨
             [250140] = Defaults(), -- 邪污足迹
+            [249194] = Defaults(), -- 痛苦
 
             -- 猎魂者伊墨纳尔
             [247716] = Defaults(), -- 充能轰炸
@@ -177,7 +171,6 @@ _RaidDebuffsList = {
             [248252] = Defaults(), -- 地狱火火箭
             [248321] = Defaults(), -- 洪荒烈火
             [247641] = Defaults(), -- 静滞陷阱
-            [248424] = Defaults(), -- 聚合之力
             [248070] = Defaults(), -- 强化霰弹爆破
             [250255] = Defaults(), -- 强化震击之枪
             [247687] = Defaults(), -- 撕裂
@@ -185,15 +178,14 @@ _RaidDebuffsList = {
             [247367] = Defaults(), -- 震击之枪
             [250224] = Defaults(), -- 震晕
             [254183] = Defaults(), -- 灼伤皮肤
+            [250006] = Defaults(), -- 强化脉冲手雷
 
             -- 金加洛斯
             [233062] = Defaults(), -- 地狱燃烧
             [249686] = Defaults(), -- 轰鸣屠戮
             [246840] = Defaults(5), -- 毁灭者
-            [230345] = Defaults(), -- 彗星冲撞
-            [248061] = Defaults(), -- 净化协议
             [246698] = Defaults(), -- 破坏
-            [246706] = Defaults(), -- 破坏
+            [249535] = Defaults(), -- 破坏术
             [245919] = Defaults(), -- 熔铸之击
             [245770] = Defaults(), -- 屠戮
 
@@ -210,22 +202,20 @@ _RaidDebuffsList = {
             [245634] = Defaults(), -- 飞旋的军刀
             [253020] = Defaults(), -- 黑暗风暴
             [244899] = Defaults(), -- 火焰打击
-            [245671] = Defaults(), -- 卡兹格罗斯之焰
             [245518] = Defaults(), -- 快速冻结
             [245586] = Defaults(), -- 冷凝之血
-            [245921] = Defaults(), -- 诺甘农的幽灵军团
             [250757] = Defaults(), -- 宇宙之光
+            [253753] = Defaults(), -- 恐惧
+            [253697] = Defaults(), -- 冰霜之球
 
             -- 阿格拉玛
-            --[247091] = Defaults(), -- 催化
-            --[245631] = Defaults(), -- 狂野烈焰
             [245990] = Defaults(), -- 泰沙拉克之触
             [254452] = Defaults(), -- 饕餮烈焰
             [244736] = Defaults(), -- 烈焰之迹
             [244291] = Defaults(), -- 破敌者
             [255060] = Defaults(), -- 强化破敌者
             [247079] = Defaults(), -- 强化撕裂烈焰
-            --[245916] = Defaults(), -- 熔火残渣
+            [245916] = Defaults(), -- 熔火残渣
             [244912] = Defaults(), -- 烈焰喷薄
             [246014] = Defaults(), -- 灼热风暴
             [245995] = Defaults(), -- 灼热之焰
@@ -234,21 +224,43 @@ _RaidDebuffsList = {
             [255200] = Defaults(), -- 阿格拉玛的恩赐
             [255199] = Defaults(), -- 阿格拉玛的化身
             [258647] = Defaults(5), -- 海洋之赐
-            [253901] = Defaults(5), -- 海洋之力
+            [253901] = Defaults(), -- 海洋之力
             [248499] = Defaults(), -- 巨镰横扫
             [250669] = Defaults(), -- 灵魂爆发
-            [248396] = Defaults(), -- 灵魂凋零
+            [248396] = Defaults(5), -- 灵魂凋零
             [256899] = Defaults(), -- 灵魂引爆
             [251570] = Defaults(), -- 灵魂炸弹
             [257299] = Defaults(), -- 怒火余烬
             [258039] = Defaults(), -- 死亡之镰
             [248167] = Defaults(), -- 死亡之雾
-            [258646] = Defaults(), -- 天空之赐
+            [258646] = Defaults(5), -- 天空之赐
             [253903] = Defaults(), -- 天空之力
-            [251815] = Defaults(), -- 湮灭刀锋
             [252616] = Defaults(), -- 宇宙道标
             [252729] = Defaults(), -- 宇宙射线
             [252634] = Defaults(), -- 宇宙重击
+            [258373] = Defaults(), -- 寂灭者之握
+            [257961] = Defaults(), -- 萨格拉斯的锁链
+            [257966] = Defaults(), -- 萨格拉斯的判决
+            [258026] = Defaults(), -- 连坐惩罚
+            [258000] = Defaults(), -- 断裂羁绊
+            [257930] = Defaults(), -- 毁灭之惧
+            [257931] = Defaults(), -- 萨格拉斯的恐惧
+            [257869] = Defaults(), -- 萨格拉斯的狂怒
+            [257911] = Defaults(), -- 狂野怒意
+
+            -- 小怪
+            [252621] = Defaults(), -- 魔化束缚
+            [257920] = Defaults(), -- 魔能火炬
+            [244590] = Defaults(), -- 炽热熔火魔能
+            [249297] = Defaults(), -- 归源之焰
+            [253600] = Defaults(), -- 灵魂燃烧
+            [252760] = Defaults(), -- 破坏
+            [245770] = Defaults(), -- 屠戮
+            [252797] = Defaults(), -- 屠戮
+            [249297] = Defaults(), -- 重构之焰
+            [254122] = Defaults(), -- 混乱之云
+            [246209] = Defaults(), -- 惩戒之焰
+            [246199] = Defaults(), -- 燃烧之风
         },
         [1147] = {
             -- Tomb of Sargeras
