@@ -8,6 +8,7 @@
 	<Script file="extracd.lua"/>
 	<Script file="friendsmenuxp.lua"/>
 	<Script file="mogit.lua"/>
+	<Script file="postal.lua"/>
 	<Script file="skada.lua"/>
 	<Script file="tellmewhen.lua"/>
 	<Script file="weakauras.lua"/>
