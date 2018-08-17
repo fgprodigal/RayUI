@@ -14,6 +14,7 @@ local getmetatable, setmetatable, rawset, rawget = getmetatable, setmetatable, r
 
 -- Global vars/functions that we don't upvalue since they might get hooked, or upgraded
 -- List them here for Mikk's FindGlobals script
+-- GLOBALS: GAME_LOCALE, geterrorhandler
 
 local gameLocale = GetLocale()
 if gameLocale == "enGB" then

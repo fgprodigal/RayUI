@@ -222,7 +222,6 @@
     </Frame>
 
     <Script file="infobar_durability.lua"/>
-    <Script file="infobar_fps.lua"/>
     <Script file="infobar_friends.lua"/>
     <Script file="infobar_guild.lua"/>
     <Script file="infobar_system.lua"/>

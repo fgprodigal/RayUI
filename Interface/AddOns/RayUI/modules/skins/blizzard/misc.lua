@@ -129,7 +129,6 @@ local function LoadSkin()
         "ReadyCheckFrame",
         "RolePollPopup",
         "GuildInviteFrame",
-        "ChannelFrameDaughterFrame",
         "LFDRoleCheckPopup",
         "LFGDungeonReadyStatus",
         "LFGDungeonReadyDialog",
@@ -190,7 +189,6 @@ local function LoadSkin()
         "RaidInfoFrame",
         "ScrollOfResurrectionSelectionFrame",
         "ScrollOfResurrectionFrame",
-        "VoiceChatTalkers",
         "QueueStatusFrame"
     }
 
@@ -422,20 +420,14 @@ local function LoadSkin()
     S:CreateBD(AudioOptionsSoundPanelPlayback, .25)
     S:CreateBD(AudioOptionsSoundPanelHardware, .25)
     S:CreateBD(AudioOptionsSoundPanelVolume, .25)
-    S:CreateBD(AudioOptionsVoicePanelTalking, .25)
-    S:CreateBD(AudioOptionsVoicePanelBinding, .25)
-    S:CreateBD(AudioOptionsVoicePanelListening, .25)
 
     AudioOptionsSoundPanelPlaybackTitle:SetPoint("BOTTOMLEFT", AudioOptionsSoundPanelPlayback, "TOPLEFT", 5, 2)
     AudioOptionsSoundPanelHardwareTitle:SetPoint("BOTTOMLEFT", AudioOptionsSoundPanelHardware, "TOPLEFT", 5, 2)
     AudioOptionsSoundPanelVolumeTitle:SetPoint("BOTTOMLEFT", AudioOptionsSoundPanelVolume, "TOPLEFT", 5, 2)
-    AudioOptionsVoicePanelTalkingTitle:SetPoint("BOTTOMLEFT", AudioOptionsVoicePanelTalking, "TOPLEFT", 5, 2)
-    AudioOptionsVoicePanelListeningTitle:SetPoint("BOTTOMLEFT", AudioOptionsVoicePanelListening, "TOPLEFT", 5, 2)
 
     local dropdowns = {
         "Display_DisplayModeDropDown",
         "Display_ResolutionDropDown",
-        "Display_RefreshDropDown",
         "Display_PrimaryMonitorDropDown",
         "Display_AntiAliasingDropDown",
         "Display_VerticalSyncDropDown",
@@ -461,7 +453,6 @@ local function LoadSkin()
         "RaidGraphics_SSAODropDown",
         "Advanced_BufferingDropDown",
         "Advanced_LagDropDown",
-        "Advanced_HardwareCursorDropDown",
         "Advanced_MultisampleAntiAliasingDropDown",
         "Advanced_MultisampleAlphaTest",
         "Advanced_PostProcessAntiAliasingDropDown",
@@ -471,9 +462,6 @@ local function LoadSkin()
         "AudioOptionsSoundPanelHardwareDropDown",
         "AudioOptionsSoundPanelSoundChannelsDropDown",
         "AudioOptionsSoundPanelSoundCacheSizeDropDown",
-        "AudioOptionsVoicePanelInputDeviceDropDown",
-        "AudioOptionsVoicePanelChatModeDropDown",
-        "AudioOptionsVoicePanelOutputDeviceDropDown",
         "InterfaceOptionsLanguagesPanelLocaleDropDown",
         "InterfaceOptionsLanguagesPanelAudioLocaleDropDown",
         "InterfaceOptionsControlsPanelAutoLootKeyDropDown",
@@ -510,18 +498,12 @@ local function LoadSkin()
         "Advanced_UIScaleSlider",
         "Advanced_MaxFPSSlider",
         "Advanced_MaxFPSBKSlider",
-        "Advanced_RenderScaleSlider",
         "Advanced_GammaSlider",
         "AudioOptionsSoundPanelMasterVolume",
         "AudioOptionsSoundPanelSoundVolume",
         "AudioOptionsSoundPanelMusicVolume",
         "AudioOptionsSoundPanelDialogVolume",
         "AudioOptionsSoundPanelAmbienceVolume",
-        "AudioOptionsVoicePanelMicrophoneVolume",
-        "AudioOptionsVoicePanelSpeakerVolume",
-        "AudioOptionsVoicePanelSoundFade",
-        "AudioOptionsVoicePanelMusicFade",
-        "AudioOptionsVoicePanelAmbienceFade"
     }
     for i = 1, #sliders do
         S:ReskinSlider(_G[sliders[i]])
@@ -534,8 +516,6 @@ local function LoadSkin()
         "Advanced_UseUIScale",
         "Advanced_MaxFPSCheckBox",
         "Advanced_MaxFPSBKCheckBox",
-        "Advanced_ShowHDModels",
-        "Advanced_DesktopGamma",
         "NetworkOptionsPanelOptimizeSpeed",
         "NetworkOptionsPanelUseIPv6",
         "NetworkOptionsPanelAdvancedCombatLogging",
@@ -552,18 +532,10 @@ local function LoadSkin()
         "AudioOptionsSoundPanelSoundInBG",
         "AudioOptionsSoundPanelReverb",
         "AudioOptionsSoundPanelHRTF",
-        "AudioOptionsSoundPanelEnableDSPs",
-        "AudioOptionsVoicePanelEnableVoice",
-        "AudioOptionsVoicePanelEnableMicrophone",
-        "AudioOptionsVoicePanelPushToTalkSound"
     }
     for i = 1, #checkboxes do
         S:ReskinCheck(_G[checkboxes[i]])
     end
-
-    S:Reskin(RecordLoopbackSoundButton)
-    S:Reskin(PlayLoopbackSoundButton)
-    S:Reskin(AudioOptionsVoicePanelChatMode1KeyBindingButton)
 
     local line = InterfaceOptionsFrame:CreateTexture(nil, "ARTWORK")
     line:Size(1, 536)
@@ -691,9 +663,7 @@ local function LoadSkin()
         "ChatConfigCategoryFrame",
         "ChatConfigBackgroundFrame",
         "ChatConfigChatSettingsLeft",
-        "ChatConfigChatSettingsClassColorLegend",
         "ChatConfigChannelSettingsLeft",
-        "ChatConfigChannelSettingsClassColorLegend",
         "ChatConfigOtherSettingsCombat",
         "ChatConfigOtherSettingsSystem",
         "ChatConfigOtherSettingsPVP",
@@ -706,7 +676,7 @@ local function LoadSkin()
         S:CreateBD(_G[lightbds[i]], .25)
     end
 
-    S:ReskinClose(BNToastFrameCloseButton)
+    S:ReskinClose(BNToastFrame.CloseButton)
     ChatConfigFrameDefaultButton:SetWidth(125)
     ChatConfigFrameDefaultButton:SetPoint("TOPLEFT", ChatConfigCategoryFrame, "BOTTOMLEFT", 0, -4)
     ChatConfigFrameRedockButton:SetPoint("TOPLEFT", ChatConfigCategoryFrame, "BOTTOMLEFT", 127, -4)
@@ -836,6 +806,23 @@ local function LoadSkin()
     SplashFrame.TopCloseButton:ClearAllPoints()
 
     SplashFrame.TopCloseButton:SetPoint("TOPRIGHT", SplashFrame, "TOPRIGHT", -18, -18)
+
+    local function SkinNavBarButtons(self)
+		if not (self:GetParent():GetName() == "EncounterJournal" or self:GetParent():GetName() == "WorldMapFrame" or self:GetParent():GetName() == "HelpFrameKnowledgebase") then
+			return
+		end
+		local navButton = self.navList[#self.navList]
+		if navButton and not navButton.isSkinned then
+			S:Reskin(navButton)
+			if navButton.MenuArrowButton then
+				S:ReskinArrow(navButton.MenuArrowButton, "down")
+			end
+
+			navButton.isSkinned = true
+		end
+	end
+	hooksecurefunc("NavBar_AddButton", SkinNavBarButtons)
+
 end
 
 S:AddCallback("Misc", LoadSkin)

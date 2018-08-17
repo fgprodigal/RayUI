@@ -9,90 +9,97 @@ local S = _Skins
 local function LoadSkin()
     local r, g, b = _r, _g, _b
 
-    local WorldMapFrame = WorldMapFrame
-    local BorderFrame = WorldMapFrame.BorderFrame
+	local WorldMapFrame = _G["WorldMapFrame"]
+	WorldMapFrame:StripTextures()
+	WorldMapFrame.BorderFrame:StripTextures()
+	WorldMapFrame.BorderFrame:SetFrameStrata(WorldMapFrame:GetFrameStrata())
+	WorldMapFrame.NavBar:StripTextures()
+	WorldMapFrame.NavBar.overlay:StripTextures()
+	WorldMapFrame.NavBar:SetPoint("TOPLEFT", 1, -40)
 
-    WorldMapFrame.UIElementsFrame.CloseQuestPanelButton:GetRegions():Hide()
-    WorldMapFrame.UIElementsFrame.OpenQuestPanelButton:GetRegions():Hide()
-    BorderFrame.Bg:Hide()
-    select(2, BorderFrame:GetRegions()):Hide()
-    BorderFrame.portrait:SetTexture("")
-    BorderFrame.portraitFrame:SetTexture("")
-    for i = 5, 7 do
-        select(i, BorderFrame:GetRegions()):SetAlpha(0)
-    end
-    BorderFrame.TopTileStreaks:SetTexture("")
-    for i = 10, 14 do
-        select(i, BorderFrame:GetRegions()):Hide()
-    end
-    BorderFrame.ButtonFrameEdge:Hide()
-    BorderFrame.InsetBorderTop:Hide()
-    BorderFrame.Inset.Bg:Hide()
-    BorderFrame.Inset:DisableDrawLayer("BORDER")
+	S:CreateBD(WorldMapFrame.ScrollContainer)
+	S:SetBD(WorldMapFrame)
 
-    S:SetBD(BorderFrame, 1, 0, -3, 2)
-    S:ReskinClose(BorderFrame.CloseButton)
-    S:ReskinArrow(WorldMapFrame.UIElementsFrame.CloseQuestPanelButton, "left")
-    S:ReskinArrow(WorldMapFrame.UIElementsFrame.OpenQuestPanelButton, "right")
-    S:ReskinDropDown(WorldMapLevelDropDown)
-    S:ReskinNavBar(WorldMapFrameNavBar)
+	-- WorldMapFrameHomeButton:StripTextures()
+	-- S:Reskin(WorldMapFrameHomeButton)
+	-- WorldMapFrameHomeButton:SetFrameLevel(1)
+    -- WorldMapFrameHomeButton.text:FontTemplate()
+    S:ReskinNavBar(WorldMapFrame.NavBar)
 
-    BorderFrame.CloseButton:SetPoint("TOPRIGHT", -9, -6)
+	-- Quest Frames
+	local QuestMapFrame = _G["QuestMapFrame"]
+	QuestMapFrame.VerticalSeparator:Hide()
 
-    WorldMapLevelDropDown:SetPoint("TOPLEFT", -14, 2)
+	local QuestScrollFrame = _G["QuestScrollFrame"]
+	QuestScrollFrame.DetailFrame:StripTextures()
+	QuestScrollFrame.Contents.Separator.Divider:Hide()
+	
+	S:CreateBD(QuestScrollFrame.DetailFrame, 0)
+	QuestScrollFrame.Contents.StoryHeader.Background:SetWidth(251)
+	QuestScrollFrame.Contents.StoryHeader.Background:SetPoint("TOP", 0, -9)
+	QuestScrollFrame.Contents.StoryHeader.Text:SetPoint("TOPLEFT", 18, -20)
+	QuestScrollFrame.Contents.StoryHeader.HighlightTexture:SetAllPoints(QuestScrollFrame.Contents.StoryHeader.Background)
+	QuestScrollFrame.Contents.StoryHeader.HighlightTexture:SetAlpha(0)
+	S:ReskinScroll(QuestScrollFrameScrollBar)
+	QuestScrollFrameScrollBar:SetPoint("TOPLEFT", QuestScrollFrame.DetailFrame, "TOPRIGHT", 1, -16)
+	QuestScrollFrameScrollBar:SetPoint("BOTTOMLEFT", QuestScrollFrame.DetailFrame, "BOTTOMRIGHT", 6, 16)
 
-    -- [[ Size up / down buttons ]]
+	local QuestMapFrame = _G["QuestMapFrame"]
+	S:Reskin(QuestMapFrame.DetailsFrame.BackButton)
+	S:Reskin(QuestMapFrame.DetailsFrame.AbandonButton)
+	S:Reskin(QuestMapFrame.DetailsFrame.ShareButton)
+	S:Reskin(QuestMapFrame.DetailsFrame.TrackButton)
+	S:Reskin(QuestMapFrame.DetailsFrame.CompleteQuestFrame.CompleteButton)
 
-    for _, button in pairs{WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MaximizeButton, WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MinimizeButton} do
-        button:SetSize(17, 17)
-        button:ClearAllPoints()
-        button:SetPoint("RIGHT", BorderFrame.CloseButton, "LEFT", -1, 0)
+    -- R.Tooltip:SetStyle(QuestMapFrame.QuestsFrame.StoryTooltip)
+    -- R.Tooltip:SetStyle(QuestScrollFrame.WarCampaignTooltip)
 
-        S:Reskin(button)
+	QuestMapFrame.DetailsFrame.CompleteQuestFrame:StripTextures()
 
-        local arrow = button:CreateFontString(nil, "OVERLAY")
+	S:ReskinArrow(WorldMapFrame.SidePanelToggle.CloseButton, "left")
+	S:ReskinArrow(WorldMapFrame.SidePanelToggle.OpenButton, "right")
 
-        if button == WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MaximizeButton then
-            arrow:FontTemplate(R["media"].arrowfont, 26 * R.mult, "OUTLINE,MONOCHROME")
-            arrow:Point("CENTER", 1, -2)
-            arrow:SetText("W")
-        else
-            arrow:FontTemplate(R["media"].arrowfont, 27 * R.mult, "OUTLINE,MONOCHROME")
-            arrow:Point("CENTER", 0, -4)
-            arrow:SetText("V")
-        end
+	S:ReskinClose(WorldMapFrameCloseButton)
+    S:ReskinMaxMinFrame(WorldMapFrame.BorderFrame.MaximizeMinimizeFrame)
+    
+    WorldMapFrame.BorderFrame.MaximizeMinimizeFrame:ClearAllPoints()
+    WorldMapFrame.BorderFrame.MaximizeMinimizeFrame:SetPoint("RIGHT", WorldMapFrameCloseButton, "LEFT", 5, 0)
 
-        button:SetScript("OnEnter", function() arrow:SetTextColor(r, g, b) end)
-        button:SetScript("OnLeave", function() arrow:SetTextColor(1, 1, 1) end)
-    end
+	WorldMapFrame.BorderFrame.Tutorial:Kill()
 
-    -- [[ Misc ]]
+	-- Floor Dropdown
+	local function WorldMapFloorNavigationDropDown(Frame)
+		S:ReskinWorldMapDropDownMenu(Frame)
+	end
 
-    WorldMapFrameTutorialButton.Ring:Hide()
-    WorldMapFrameTutorialButton:SetPoint("TOPLEFT", WorldMapFrame, "TOPLEFT", -12, 12)
+	-- Tracking Button
+	local function WorldMapTrackingOptionsButton(Button)
+		local shadow = Button:GetRegions()
+		shadow:Hide()
 
-    do
-        local topLine = WorldMapFrame.UIElementsFrame:CreateTexture()
-        topLine:SetColorTexture(0, 0, 0)
-        topLine:SetHeight(1)
-        topLine:SetPoint("TOPLEFT", 0, 1)
-        topLine:SetPoint("TOPRIGHT", 1, 1)
+		Button.Background:Hide()
+		Button.IconOverlay:SetAlpha(0)
+		Button.Border:Hide()
 
-        local rightLine = WorldMapFrame.UIElementsFrame:CreateTexture()
-        rightLine:SetColorTexture(0, 0, 0)
-        rightLine:SetWidth(1)
-        rightLine:SetPoint("BOTTOMRIGHT", 1, 0)
-        rightLine:SetPoint("TOPRIGHT", 1, 1)
-    end
+		local tex = Button:GetHighlightTexture()
+		tex:SetTexture([[Interface\Minimap\Tracking\None]], "ADD")
+		tex:SetAllPoints(Button.Icon)
+	end
 
-    -- [[ Tracking options ]]
+	-- Bounty Board
+	local function WorldMapBountyBoard(Frame)
+		Frame.BountyName:FontTemplate()
 
-    local TrackingOptions = WorldMapFrame.UIElementsFrame.TrackingOptionsButton
+		S:ReskinClose(Frame.TutorialBox.CloseButton)
+	end
 
-    TrackingOptions:GetRegions():Hide()
-    TrackingOptions.Background:Hide()
-    TrackingOptions.IconOverlay:SetTexture("")
-    TrackingOptions.Button.Border:Hide()
+	-- Add a hook to adjust the OverlayFrames
+	-- hooksecurefunc(WorldMapFrame, "AddOverlayFrame", S.WorldMapMixin_AddOverlayFrame)
+
+	-- Elements
+	WorldMapFloorNavigationDropDown(WorldMapFrame.overlayFrames[1]) -- NavBar handled in ElvUI/modules/skins/misc
+	WorldMapTrackingOptionsButton(WorldMapFrame.overlayFrames[2]) -- Buttons
+	WorldMapBountyBoard(WorldMapFrame.overlayFrames[3]) -- BountyBoard
 end
 
 S:AddCallback("WorldMap", LoadSkin)

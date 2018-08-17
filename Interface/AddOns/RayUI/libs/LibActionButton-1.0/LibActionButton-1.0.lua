@@ -1,5 +1,5 @@
 --[[
-Copyright (c) 2010-2016, Hendrik "nevcairiel" Leppkes <h.leppkes@gmail.com>
+Copyright (c) 2010-2017, Hendrik "nevcairiel" Leppkes <h.leppkes@gmail.com>
 
 All rights reserved.
 
@@ -28,8 +28,9 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ]]
+
 local MAJOR_VERSION = "LibActionButton-1.0-RayUI"
-local MINOR_VERSION = 9
+local MINOR_VERSION = 14
 
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
@@ -45,6 +46,18 @@ local C_ToyBox = C_ToyBox
 -- Global vars/functions that we don't upvalue since they might get hooked, or upgraded
 -- List them here for Mikk's FindGlobals script
 -- Note: No WoW API function get upvalued to allow proper interaction with any addons that try to hook them.
+-- GLOBALS: LibStub, CreateFrame, InCombatLockdown, ClearCursor, GetCursorInfo, GameTooltip, GameTooltip_SetDefaultAnchor
+-- GLOBALS: GetBindingKey, GetBindingText, SetBinding, SetBindingClick, GetCVar, GetMacroInfo
+-- GLOBALS: PickupAction, PickupItem, PickupMacro, PickupPetAction, PickupSpell, PickupCompanion, PickupEquipmentSet
+-- GLOBALS: CooldownFrame_SetTimer, UIParent, IsSpellOverlayed, SpellFlyout, GetMouseFocus, SetClampedTextureRotation
+-- GLOBALS: GetActionInfo, GetActionTexture, HasAction, GetActionText, GetActionCount, GetActionCooldown, IsAttackAction
+-- GLOBALS: IsAutoRepeatAction, IsEquippedAction, IsCurrentAction, IsConsumableAction, IsUsableAction, IsStackableAction, IsActionInRange
+-- GLOBALS: GetSpellLink, GetMacroSpell, GetSpellTexture, GetSpellCount, GetSpellCooldown, IsAttackSpell, IsCurrentSpell
+-- GLOBALS: FindSpellBookSlotBySpellID, IsUsableSpell, IsConsumableSpell, IsSpellInRange, IsAutoRepeatSpell
+-- GLOBALS: GetItemIcon, GetItemCount, GetItemCooldown, IsEquippedItem, IsCurrentItem, IsUsableItem, IsConsumableItem, IsItemInRange
+-- GLOBALS: GetActionCharges, IsItemAction, GetSpellCharges
+-- GLOBALS: RANGE_INDICATOR, ATTACK_BUTTON_FLASH_TIME, TOOLTIP_UPDATE_TIME
+-- GLOBALS: ZoneAbilityFrame, HasZoneAbility, GetLastZoneAbilitySpellTexture
 
 local KeyBound = LibStub("LibKeyBound-1.0", true)
 local CBH = LibStub("CallbackHandler-1.0")
@@ -110,6 +123,13 @@ local ShowOverlayGlow, HideOverlayGlow
 local EndChargeCooldown
 
 local InitializeEventHandler, OnEvent, ForAllButtons, OnUpdate
+
+local function GameTooltip_GetOwnerForbidden()
+	if GameTooltip:IsForbidden() then
+		return nil
+	end
+	return GameTooltip:GetOwner()
+end
 
 local DefaultConfig = {
 	outOfRangeColoring = "button",
@@ -564,6 +584,7 @@ function Generic:OnEnter()
 end
 
 function Generic:OnLeave()
+	if GameTooltip:IsForbidden() then return end
 	GameTooltip:Hide()
 	self:SetScript('OnUpdate', nil)
 end
@@ -644,7 +665,7 @@ function Generic:UpdateConfig(config)
 		error("LibActionButton-1.0: UpdateConfig requires a valid configuration!", 2)
 	end
 	local oldconfig = self.config
-	if not self.config then self.config = {} end
+	self.config = {}
 	-- merge the two configs
 	merge(self.config, config, DefaultConfig)
 
@@ -686,12 +707,15 @@ function InitializeEventHandler()
 	lib.eventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 	lib.eventFrame:RegisterEvent("ACTIONBAR_SHOWGRID")
 	lib.eventFrame:RegisterEvent("ACTIONBAR_HIDEGRID")
+	lib.eventFrame:RegisterEvent("PET_BAR_SHOWGRID")
+	lib.eventFrame:RegisterEvent("PET_BAR_HIDEGRID")
 	--lib.eventFrame:RegisterEvent("ACTIONBAR_PAGE_CHANGED")
 	--lib.eventFrame:RegisterEvent("UPDATE_BONUS_ACTIONBAR")
 	lib.eventFrame:RegisterEvent("ACTIONBAR_SLOT_CHANGED")
 	lib.eventFrame:RegisterEvent("UPDATE_BINDINGS")
 	lib.eventFrame:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
 	lib.eventFrame:RegisterEvent("UPDATE_VEHICLE_ACTIONBAR")
+	lib.eventFrame:RegisterEvent("PLAYER_MOUNT_DISPLAY_CHANGED")
 
 	lib.eventFrame:RegisterEvent("ACTIONBAR_UPDATE_STATE")
 	lib.eventFrame:RegisterEvent("ACTIONBAR_UPDATE_USABLE")
@@ -731,8 +755,8 @@ end
 
 function OnEvent(frame, event, arg1, ...)
 	if (event == "UNIT_INVENTORY_CHANGED" and arg1 == "player") or event == "LEARNED_SPELL_IN_TAB" then
-		local tooltipOwner = GameTooltip:GetOwner()
-		if ButtonRegistry[tooltipOwner] then
+		local tooltipOwner = GameTooltip_GetOwnerForbidden()
+		if tooltipOwner and ButtonRegistry[tooltipOwner] then
 			tooltipOwner:SetTooltip()
 		end
 	elseif event == "ACTIONBAR_SLOT_CHANGED" then
@@ -746,10 +770,10 @@ function OnEvent(frame, event, arg1, ...)
 		ForAllButtons(Update)
 	elseif event == "ACTIONBAR_PAGE_CHANGED" or event == "UPDATE_BONUS_ACTIONBAR" then
 		-- TODO: Are these even needed?
-	elseif event == "ACTIONBAR_SHOWGRID" then
-		ShowGrid()
-	elseif event == "ACTIONBAR_HIDEGRID" then
-		HideGrid()
+	elseif event == "ACTIONBAR_SHOWGRID" or event == "PET_BAR_SHOWGRID" then
+		ShowGrid(event)
+	elseif event == "ACTIONBAR_HIDEGRID" or event == "PET_BAR_HIDEGRID" then
+		HideGrid(event)
 	elseif event == "UPDATE_BINDINGS" then
 		ForAllButtons(UpdateHotkeys)
 	elseif event == "PLAYER_TARGET_CHANGED" then
@@ -766,24 +790,28 @@ function OnEvent(frame, event, arg1, ...)
 		for button in next, NonActionButtons do
 			UpdateUsable(button)
 		end
+	elseif event == "PLAYER_MOUNT_DISPLAY_CHANGED" then
+		for button in next, ActiveButtons do
+			UpdateUsable(button)
+		end
 	elseif event == "ACTIONBAR_UPDATE_COOLDOWN" then
 		for button in next, ActionButtons do
 			UpdateCooldown(button)
-			if GameTooltip:GetOwner() == button then
+			if GameTooltip_GetOwnerForbidden() == button then
 				UpdateTooltip(button)
 			end
 		end
 	elseif event == "SPELL_UPDATE_COOLDOWN" then
 		for button in next, NonActionButtons do
 			UpdateCooldown(button)
-			if GameTooltip:GetOwner() == button then
+			if GameTooltip_GetOwnerForbidden() == button then
 				UpdateTooltip(button)
 			end
 		end
 	elseif event == "LOSS_OF_CONTROL_ADDED" then
 		for button in next, ActiveButtons do
 			UpdateCooldown(button)
-			if GameTooltip:GetOwner() == button then
+			if GameTooltip_GetOwnerForbidden() == button then
 				UpdateTooltip(button)
 			end
 		end
@@ -927,7 +955,16 @@ function OnUpdate(_, elapsed)
 end
 
 local gridCounter = 0
-function ShowGrid()
+local isPetGrid = false
+function ShowGrid(event)
+	if event == "PET_BAR_SHOWGRID" then
+		isPetGrid = true
+	elseif isPetGrid then
+		return
+		-- when PET_BAR_SHOWGRID fires then ACTIONBAR_SHOWGRID fires
+		-- ACTIONBAR_HIDEGRID will not get called but PET_BAR_HIDEGRID does
+		-- LIKELY A BLIZZARD ISSUE.
+	end
 	gridCounter = gridCounter + 1
 	if gridCounter >= 1 then
 		for button in next, ButtonRegistry do
@@ -938,7 +975,12 @@ function ShowGrid()
 	end
 end
 
-function HideGrid()
+function HideGrid(event)
+	if event == "PET_BAR_HIDEGRID" then
+		isPetGrid = false
+	elseif isPetGrid then
+		return --see comment above related to `isPetGrid`
+	end
 	if gridCounter > 0 then
 		gridCounter = gridCounter - 1
 	end
@@ -984,19 +1026,19 @@ local function getKeys(binding, keys)
 		if keys ~= "" then
 			keys = keys .. ", "
 		end
-		keys = keys .. GetBindingText(hotKey, "KEY_")
+		keys = keys .. GetBindingText(hotKey)
 	end
 	return keys
 end
 
 function Generic:GetBindings()
-	local keys, binding
+	local keys
 
 	if self.config.keyBoundTarget then
 		keys = getKeys(self.config.keyBoundTarget)
 	end
 
-	keys = getKeys("CLICK "..self:GetName()..":LeftButton")
+	keys = getKeys("CLICK "..self:GetName()..":LeftButton", keys)
 
 	return keys
 end
@@ -1091,7 +1133,9 @@ function Update(self)
 
 	-- Zone ability button handling
 	self.zoneAbilityDisabled = false
-	self.icon:SetDesaturated(false)
+	if not self.saturationLocked then
+		self.icon:SetDesaturated(false)
+	end
 	if self._state_type == "action" then
 		local action_type, id = GetActionInfo(self._state_action)
 		if ((action_type == "spell" or action_type == "companion") and ZoneAbilityFrame and ZoneAbilityFrame.baseName and not HasZoneAbility()) then
@@ -1100,7 +1144,9 @@ function Update(self)
 			if name == abilityName then
 				texture = GetLastZoneAbilitySpellTexture()
 				self.zoneAbilityDisabled = true
-				self.icon:SetDesaturated(true)
+				if not self.saturationLocked then
+					self.icon:SetDesaturated(true)
+				end
 			end
 		end
 	end
@@ -1138,7 +1184,7 @@ function Update(self)
 
 	UpdateNewAction(self)
 
-	if GameTooltip:GetOwner() == self then
+	if GameTooltip_GetOwnerForbidden() == self then
 		UpdateTooltip(self)
 	end
 
@@ -1233,7 +1279,7 @@ local function StartChargeCooldown(parent, chargeStart, chargeDuration, chargeMo
 		end
 		cooldown:SetParent(parent)
 		cooldown:SetAllPoints(parent)
-		-- cooldown:SetFrameStrata("TOOLTIP")
+		cooldown:SetFrameStrata("TOOLTIP")
 		cooldown:Show()
 		parent.chargeCooldown = cooldown
 		cooldown.parent = parent
@@ -1272,7 +1318,7 @@ function UpdateCooldown(self)
 			self.cooldown:SetHideCountdownNumbers(true)
 			self.cooldown.currentCooldownType = COOLDOWN_TYPE_LOSS_OF_CONTROL
 		end
-		CooldownFrame_Set(self.cooldown, locStart, locDuration, true, true)
+		CooldownFrame_Set(self.cooldown, locStart, locDuration, true, true, modRate)
 	else
 		if self.cooldown.currentCooldownType ~= COOLDOWN_TYPE_NORMAL then
 			self.cooldown:SetEdgeTexture("Interface\\Cooldown\\edge")
@@ -1285,12 +1331,13 @@ function UpdateCooldown(self)
 		end
 
 		if charges and maxCharges and charges > 0 and charges < maxCharges then
-			StartChargeCooldown(self, chargeStart, chargeDuration)
+			StartChargeCooldown(self, chargeStart, chargeDuration, chargeModRate)
 		elseif self.chargeCooldown then
 			EndChargeCooldown(self.chargeCooldown)
 		end
-		CooldownFrame_Set(self.cooldown, start, duration, enable, false)
+		CooldownFrame_Set(self.cooldown, start, duration, enable, false, modRate)
 	end
+	lib.callbacks:Fire("OnCooldownUpdate", self, start, duration, enable, modRate)
 end
 
 function StartFlash(self)
@@ -1314,6 +1361,7 @@ function UpdateFlash(self)
 end
 
 function UpdateTooltip(self)
+	if GameTooltip:IsForbidden() then return end
 	if (GetCVar("UberTooltips") == "1") then
 		GameTooltip_SetDefaultAnchor(GameTooltip, self);
 	else
@@ -1520,8 +1568,7 @@ Action.GetSpellId              = function(self)
 	if actionType == "spell" then
 		return id
 	elseif actionType == "macro" then
-		local _, _, spellId = GetMacroSpell(id)
-		return spellId
+		return (GetMacroSpell(id))
 	end
 end
 Action.GetLossOfControlCooldown = function(self) return GetActionLossOfControlCooldown(self._state_action) end

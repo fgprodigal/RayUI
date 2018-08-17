@@ -5,7 +5,6 @@ ns.itemBlacklist = ns.itemBlacklist or {}
 -- http://www.wowhead.com/spells/uncategorized/name:Bonus?filter=84:109:16;1:6:7;::
 for spellID, encounterInfo in next, {
     --- World
-	-- BrokenIsles
     [227128] = {1790, 822, 14}, -- Ana-Mouz
     [227129] = {1774, 822, 14}, -- Calamir
     [227130] = {1789, 822, 14}, -- Drugon the Frostblood
@@ -17,18 +16,10 @@ for spellID, encounterInfo in next, {
     [227136] = {1763, 822, 14}, -- Shar'thos
     [227137] = {1756, 822, 14}, -- The Soultakers
     [227138] = {1796, 822, 14}, -- Withered J'im
-	-- Broken Shore
     [242969] = {1956, 822, 14}, -- Apocron
     [242970] = {1883, 822, 14}, -- Brutallus
     [242971] = {1884, 822, 14}, -- Malificus
     [242972] = {1885, 822, 14}, -- Si'vash
-	-- Invasion Points
-	[254441] = {2010, 959, 14}, -- Matron Folnuna
-	[254437] = {2011, 959, 14}, -- Mistress Alluradel
-	[254435] = {2012, 959, 14}, -- Inquisitor Meto
-	[254443] = {2013, 959, 14}, -- Occularus
-	[254446] = {2014, 959, 14}, -- Sotanathor
-	[254439] = {2015, 959, 14}, -- Pit Lord Vilemus
 
     --- Raids
     -- The Emerald Nightmare
@@ -67,19 +58,6 @@ for spellID, encounterInfo in next, {
     [240661] = {1897, 875, nil, 14}, -- Maiden of Vigilance
     [240662] = {1873, 875, nil, 14}, -- Fallen Avatar
     [240663] = {1898, 875, nil, 14}, -- Kil'jaeden
-	
-	-- Antorus, the Burning Throne
-	[250588] = {1992, 946, nil, 14}, -- Garothi Worldbreaker
-	[250598] = {1987, 946, nil, 14}, -- Felhounds of Sargeras
-	[250600] = {1997, 946, nil, 14}, -- Antoran High Command
-	[250601] = {1985, 946, nil, 14}, -- Portal Keeper Hasabel
-	[250602] = {2025, 946, nil, 14}, -- Eonar the Life-Binder
-	[250603] = {2009, 946, nil, 14}, -- Imonar the Soulhunter
-	[250604] = {2004, 946, nil, 14}, -- Kin'garoth
-	[250605] = {1983, 946, nil, 14}, -- Varimathras
-	[250606] = {1986, 946, nil, 14}, -- The Coven of Shivarra
-	[250607] = {1984, 946, nil, 14}, -- Aggramar
-	[250608] = {2031, 946, nil, 14}, -- Argus the Unmaker
 
     --- Dungeons
     -- Return to Karazhan (Mythic)
@@ -165,13 +143,6 @@ for spellID, encounterInfo in next, {
     [244783] = {1906, 900, 23}, -- Thrashbite the Scornful
     [244784] = {1904, 900, 23}, -- Domatrax
     [244786] = {1878, 900, 23}, -- Mephistroth
-	
-    -- Seat of the Triumvirate (Mythic)
-    [247488] = {1979, 945, 13}, -- Zuraal the Ascended
-    [247489] = {1980, 945, 13}, -- Saprish
-    [247490] = {1981, 945, 13}, -- Viceroy Nezhar
-    [247491] = {1982, 945, 13}, -- L'ura
-	
 } do
     ns.encounterInfo[spellID] = encounterInfo
 end

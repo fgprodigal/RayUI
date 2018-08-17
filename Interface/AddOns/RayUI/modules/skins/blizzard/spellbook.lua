@@ -116,8 +116,7 @@ local function LoadSkin()
 		"PrimaryProfession2",
 		"SecondaryProfession1",
 		"SecondaryProfession2",
-		"SecondaryProfession3",
-		"SecondaryProfession4"
+		"SecondaryProfession3"
 	}
 
 	for _, button in pairs(professions) do
@@ -177,9 +176,7 @@ local function LoadSkin()
 		"SecondaryProfession2SpellButtonLeft",
 		"SecondaryProfession2SpellButtonRight",
 		"SecondaryProfession3SpellButtonLeft",
-		"SecondaryProfession3SpellButtonRight",
-		"SecondaryProfession4SpellButtonLeft",
-		"SecondaryProfession4SpellButtonRight"
+		"SecondaryProfession3SpellButtonRight"
 	}
 
 	for _, button in pairs(professionbuttons) do

@@ -154,16 +154,6 @@ function AB:HideBlizz()
 
     MainMenuBar:EnableMouse(false)
     MainMenuBar:SetAlpha(0)
-    MainMenuExpBar:UnregisterAllEvents()
-    MainMenuExpBar:Hide()
-    MainMenuExpBar:SetParent(blizzHider)
-
-    -- Fix：神器经验条--
-    ArtifactWatchBar:EnableMouse(false)
-    ArtifactWatchBar:SetAlpha(0)
-    ArtifactWatchBar:UnregisterAllEvents()
-    ArtifactWatchBar:Hide()
-    ArtifactWatchBar:SetParent(blizzHider)
 
     for i=1, MainMenuBar:GetNumChildren() do
         local child = select(i, MainMenuBar:GetChildren())
@@ -173,10 +163,6 @@ function AB:HideBlizz()
             child:SetParent(blizzHider)
         end
     end
-
-    ReputationWatchBar:UnregisterAllEvents()
-    ReputationWatchBar:Hide()
-    ReputationWatchBar:SetParent(blizzHider)
 
     MainMenuBarArtFrame:UnregisterEvent("ACTIONBAR_PAGE_CHANGED")
     MainMenuBarArtFrame:UnregisterEvent("ADDON_LOADED")

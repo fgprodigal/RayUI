@@ -1,6 +1,6 @@
 local parent, ns = ...
 local global = GetAddOnMetadata(parent, 'X-oUF')
-local _VERSION = GetAddOnMetadata(parent, 'version')
+local _VERSION = '@project-version@'
 if(_VERSION:find('project%-version')) then
 	_VERSION = 'devel'
 end
@@ -18,6 +18,11 @@ local callback, objects, headers = {}, {}, {}
 
 local elements = {}
 local activeElements = {}
+
+local PetBattleFrameHider = CreateFrame('Frame', (global or parent) .. '_PetBattleFrameHider', UIParent, 'SecureHandlerStateTemplate')
+PetBattleFrameHider:SetAllPoints()
+PetBattleFrameHider:SetFrameStrata('LOW')
+RegisterStateDriver(PetBattleFrameHider, 'visibility', '[petbattle] hide; show')
 
 -- updating of "invalid" units.
 local function enableTargetUpdate(object)
@@ -91,9 +96,10 @@ local frame_metatable = {
 Private.frame_metatable = frame_metatable
 
 for k, v in next, {
+	-- RayUI block
 	UpdateElement = function(self, name)
 		local unit = self.unit
-		if(not unit or not UnitExists(unit)) then return end
+		if(not unit or not UnitExists(unit)) then return end	
 
 		local element = elements[name]
 		if(not element or not self:IsElementEnabled(name) or not activeElements[self]) then return end
@@ -101,6 +107,7 @@ for k, v in next, {
 			element.update(self, 'OnShow', unit)
 		end
 	end,
+	-- end block
 
 	--[[ frame:EnableElement(name, unit)
 	Used to activate an element for the given unit frame.
@@ -114,7 +121,7 @@ for k, v in next, {
 		argcheck(unit, 3, 'string', 'nil')
 
 		local element = elements[name]
-		if(not element or self:IsElementEnabled(name) or not activeElements[self]) then return end
+		if(not element or self:IsElementEnabled(name) or not activeElements[self]) then return end -- RayUI changed
 
 		if(element.enable(self, unit or self.unit)) then
 			activeElements[self][name] = true
@@ -190,7 +197,13 @@ for k, v in next, {
 		UnregisterUnitWatch(self)
 		self:Hide()
 	end,
+	--[[ frame:IsEnabled()
+	Used to check if a unit frame is registered with the unit existence monitor. This is a reference to
+	`UnitWatchRegistered`.
 
+	* self - unit frame
+	--]]
+	IsEnabled = UnitWatchRegistered,
 	--[[ frame:UpdateAllElements(event)
 	Used to update all enabled elements on the given frame.
 
@@ -268,6 +281,7 @@ local function initObject(unit, style, styleFunc, header, ...)
 		if(not (suffix == 'target' or objectUnit and objectUnit:match('target'))) then
 			object:RegisterEvent('UNIT_ENTERED_VEHICLE', updateActiveUnit)
 			object:RegisterEvent('UNIT_EXITED_VEHICLE', updateActiveUnit)
+			object:RegisterEvent('UNIT_EXITING_VEHICLE', updateActiveUnit)
 
 			-- We don't need to register UNIT_PET for the player unit. We register it
 			-- mainly because UNIT_EXITED_VEHICLE and UNIT_ENTERED_VEHICLE doesn't always
@@ -284,7 +298,12 @@ local function initObject(unit, style, styleFunc, header, ...)
 
 			-- No need to enable this for *target frames.
 			if(not (unit:match('target') or suffix == 'target')) then
-				object:SetAttribute('toggleForVehicle', true)
+				if(unit:match('raid') or unit:match('party')) then
+					-- See issue #404
+					object:SetAttribute('toggleForVehicle', false)
+				else
+					object:SetAttribute('toggleForVehicle', true)
+				end
 			end
 
 			-- Other boss and target units are handled by :HandleUnit().
@@ -314,7 +333,7 @@ local function initObject(unit, style, styleFunc, header, ...)
 
 		styleFunc(object, objectUnit, not header)
 
-		object:SetScript('OnAttributeChanged', onAttributeChanged)
+		object:HookScript('OnAttributeChanged', onAttributeChanged)
 		object:SetScript('OnShow', onShow)
 
 		activeElements[object] = {}
@@ -344,7 +363,7 @@ local function walkObject(object, unit)
 	-- Check if we should leave the main frame blank.
 	if(object:GetAttribute('oUF-onlyProcessChildren')) then
 		object.hasChildren = true
-		object:SetScript('OnAttributeChanged', onAttributeChanged)
+		object:HookScript('OnAttributeChanged', onAttributeChanged)
 		return initObject(unit, style, styleFunc, header, object:GetChildren())
 	end
 
@@ -455,13 +474,15 @@ end
 local function generateName(unit, ...)
 	local name = 'oUF_' .. style:gsub('^oUF_?', ''):gsub('[^%a%d_]+', '')
 
-	local raid, party, groupFilter
+	local raid, party, groupFilter, unitsuffix
 	for i = 1, select('#', ...), 2 do
 		local att, val = select(i, ...)
-		if(att == 'showRaid') then
-			raid = true
+		if(att == 'oUF-initialConfigFunction') then
+			unitsuffix = val:match('unitsuffix[%p%s]+(%a+)')
+		elseif(att == 'showRaid') then
+			raid = val ~= false and val ~= nil
 		elseif(att == 'showParty') then
-			party = true
+			party = val ~= false and val ~= nil
 		elseif(att == 'groupFilter') then
 			groupFilter = val
 		end
@@ -471,10 +492,10 @@ local function generateName(unit, ...)
 	if(raid) then
 		if(groupFilter) then
 			if(type(groupFilter) == 'number' and groupFilter > 0) then
-				append = groupFilter
-			elseif(groupFilter:match('TANK')) then
+				append = 'Raid' .. groupFilter
+			elseif(groupFilter:match('MAINTANK')) then
 				append = 'MainTank'
-			elseif(groupFilter:match('ASSIST')) then
+			elseif(groupFilter:match('MAINASSIST')) then
 				append = 'MainAssist'
 			else
 				local _, count = groupFilter:gsub(',', '')
@@ -494,13 +515,15 @@ local function generateName(unit, ...)
 	end
 
 	if(append) then
-		name = name .. append
+		name = name .. append .. (unitsuffix or '')
 	end
 
 	-- Change oUF_LilyRaidRaid into oUF_LilyRaid
 	name = name:gsub('(%u%l+)([%u%l]*)%1', '%1')
 	-- Change oUF_LilyTargettarget into oUF_LilyTargetTarget
 	name = name:gsub('t(arget)', 'T%1')
+	name = name:gsub('p(et)', 'P%1')
+	name = name:gsub('f(ocus)', 'F%1')
 
 	local base = name
 	local i = 2
@@ -560,7 +583,6 @@ do
 
 				frame:SetAttribute('*type1', 'target')
 				frame:SetAttribute('*type2', 'togglemenu')
-				frame:SetAttribute('toggleForVehicle', true)
 				frame:SetAttribute('oUF-guessUnit', unit)
 			end
 
@@ -588,7 +610,7 @@ do
 	* template     - name of a template to be used for creating the header. Defaults to `'SecureGroupHeaderTemplate'`
 	                 (string?)
 	* visibility   - macro conditional(s) which define when to display the header (string).
-	* ...          - further argument pairs. Consult [Group Headers](http://wowprogramming.com/docs/secure_template/Group_Headers)
+	* ...          - further argument pairs. Consult [Group Headers](http://wowprogramming.com/docs/secure_template/Group_Headers.html)
 	                 for possible values.
 
 	In addition to the standard group headers, oUF implements some of its own attributes. These can be supplied by the
@@ -605,7 +627,7 @@ do
 
 		local isPetHeader = template:match('PetHeader')
 		local name = overrideName or generateName(nil, ...)
-		local header = CreateFrame('Frame', name, oUF_PetBattleFrameHider, template)
+		local header = CreateFrame('Frame', name, PetBattleFrameHider, template)
 
 		header:SetAttribute('template', 'oUF_ClickCastUnitTemplate')
 		for i = 1, select('#', ...), 2 do
@@ -657,14 +679,14 @@ Used to create a single unit frame and apply the currently active style to it.
 * overrideName - unique global name to use for the unit frame. Defaults to an auto-generated name based on the unit
                  (string?)
 --]]
-function oUF:Spawn(unit, overrideName, overrideTemplate)
+function oUF:Spawn(unit, overrideName, overrideTemplate) -- RayUI adds overrideTemplate
 	argcheck(unit, 2, 'string')
 	if(not style) then return error('Unable to create frame. No styles have been registered.') end
 
 	unit = unit:lower()
 
 	local name = overrideName or generateName(unit)
-	local object = CreateFrame('Button', name, oUF_PetBattleFrameHider, overrideTemplate or 'SecureUnitButtonTemplate')
+	local object = CreateFrame('Button', name, PetBattleFrameHider, overrideTemplate or 'SecureUnitButtonTemplate') -- RayUI changed
 	Private.UpdateUnits(object, unit)
 
 	self:DisableBlizzard(unit)
@@ -748,8 +770,8 @@ function oUF:SpawnNamePlates(namePrefix, nameplateCallback, nameplateCVars)
 				Private.UpdateUnits(nameplate.unitFrame, unit)
 
 				walkObject(nameplate.unitFrame, unit)
-            else
-                Private.UpdateUnits(nameplate.unitFrame, unit)
+			else
+				Private.UpdateUnits(nameplate.unitFrame, unit)
 			end
 
 			nameplate.unitFrame:SetAttribute('unit', unit)
@@ -807,7 +829,9 @@ oUF.headers = headers
 
 if(global) then
 	if(parent ~= 'oUF' and global == 'oUF') then
-		error('%s is doing it wrong and setting its global to oUF.', parent)
+		error('%s is doing it wrong and setting its global to "oUF".', parent)
+	elseif(_G[global]) then
+		error('%s is setting its global to an existing name "%s".', parent, global)
 	else
 		_G[global] = oUF
 	end

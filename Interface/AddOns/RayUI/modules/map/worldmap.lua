@@ -3,145 +3,120 @@
 ----------------------------------------------------------
 RayUI:LoadEnv("WorldMap")
 
-
 local WM = R:NewModule("WorldMap", "AceEvent-3.0", "AceHook-3.0", "AceTimer-3.0")
 
 WM.modName = L["世界地图"]
 _WorldMap = WM
 
-local function FixTooltip()
-    WorldMapTooltip:SetFrameStrata("TOOLTIP")
-    WorldMapCompareTooltip1:SetFrameStrata("TOOLTIP")
-    WorldMapCompareTooltip2:SetFrameStrata("TOOLTIP")
+local mapRects = {}
+local tempVec2D = CreateVector2D(0, 0)
+local MOUSE_LABEL = MOUSE_LABEL:gsub("|T.-|t","")
+
+function WM:GetPlayerMapPos(mapID)
+	tempVec2D.x, tempVec2D.y = UnitPosition("player")
+	if not tempVec2D.x then return end
+
+	local mapRect = mapRects[mapID]
+	if not mapRect then
+		mapRect = {}
+		mapRect[1] = select(2, C_Map.GetWorldPosFromMapPos(mapID, CreateVector2D(0, 0)))
+		mapRect[2] = select(2, C_Map.GetWorldPosFromMapPos(mapID, CreateVector2D(1, 1)))
+		mapRect[2]:Subtract(mapRect[1])
+
+		mapRects[mapID] = mapRect
+	end
+	tempVec2D:Subtract(mapRect[1])
+
+	return tempVec2D.y/mapRect[2].y, tempVec2D.x/mapRect[2].x
 end
 
-function WM:SetLargeWorldMap()
+function WM:SetLargeWorldMap(self)
     if InCombatLockdown() then return end
-
-    WorldMapFrame:SetParent(R.UIParent)
-    WorldMapFrame:EnableKeyboard(false)
-    WorldMapFrame:EnableMouse(true)
-    FixTooltip()
-
-    if WorldMapFrame:GetAttribute("UIPanelLayout-area") ~= "center" then
-        SetUIPanelAttribute(WorldMapFrame, "area", "center");
-    end
-
-    if WorldMapFrame:GetAttribute("UIPanelLayout-allowOtherPanels") ~= true then
-        SetUIPanelAttribute(WorldMapFrame, "allowOtherPanels", true)
-    end
-
-    WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MaximizeButton:Hide()
-    WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MinimizeButton:Show()
-
-    WorldMapFrame:ClearAllPoints()
-    WorldMapFrame:SetPoint("CENTER", R.UIParent, "CENTER", 0, 100)
-    WorldMapFrame:SetSize(1002, 668)
+	self:SetScale(1)
 end
 
-function WM:SetSmallWorldMap()
-    if InCombatLockdown() then return; end
-
-    WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MaximizeButton:Show()
-    WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MinimizeButton:Hide()
-    FixTooltip()
-
-    -- WorldMapFrame:ClearAllPoints()
-    -- WorldMapFrame:SetPoint("CENTER", R.UIParent, "CENTER", 0, 100)
+function WM:SetSmallWorldMap(self)
+    if InCombatLockdown() then return end
+	self:SetScale(WM.db.scale)
 end
 
-function WM:PLAYER_REGEN_ENABLED()
-    WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MinimizeButton:Enable()
-    WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MaximizeButton:Enable()
+function WM:OnFrameSizeChanged()
+    _width, _height = _mapBody:GetWidth(), _mapBody:GetHeight()
 end
 
-function WM:PLAYER_REGEN_DISABLED()
-    WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MinimizeButton:Disable()
-    WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MaximizeButton:Disable()
-end
-
-function WM:ResetDropDownListPosition(frame)
-    DropDownList1:ClearAllPoints()
-    DropDownList1:Point("TOPRIGHT", frame, "BOTTOMRIGHT", -17, -4)
-end
-
-local inRestrictedArea = false
-function WM:PLAYER_ENTERING_WORLD()
-    local x = GetPlayerMapPosition("player")
-    if not x then
-        inRestrictedArea = true
-        self:CancelTimer(self.CoordsTimer)
-        self.CoordsTimer = nil
-        RayUI_CoordsHolder.playerCoords:SetText("")
-        RayUI_CoordsHolder.mouseCoords:SetText("")
-    elseif not self.CoordsTimer then
-        inRestrictedArea = false
-        self.CoordsTimer = self:ScheduleRepeatingTimer("UpdateCoords", 0.05)
-    end
-end
-
-function WM:UpdateCoords()
-    if not WorldMapFrame:IsShown() then return end
-    local inInstance, _ = IsInInstance()
-    local x, y = GetPlayerMapPosition("player")
-
-    x = R:Round(100 * x, 2)
-    y = R:Round(100 * y, 2)
-
-    if x ~= 0 and y ~= 0 then
-        RayUI_CoordsHolder.playerCoords:SetText(PLAYER..": "..string.format("%.2f", x)..", "..string.format("%.2f", y))
+function WM:OnMapChanged(self)
+    if self:GetMapID() == C_Map.GetBestMapForUnit("player") then
+        _mapID = self:GetMapID()
     else
-        RayUI_CoordsHolder.playerCoords:SetText(nil)
+        _mapID = nil
     end
+end
 
-    local scale = WorldMapDetailFrame:GetEffectiveScale()
-    local width = WorldMapDetailFrame:GetWidth()
-    local height = WorldMapDetailFrame:GetHeight()
-    local centerX, centerY = WorldMapDetailFrame:GetCenter()
+local function CursorCoords()
+    local left, top = _mapBody:GetLeft() or 0, _mapBody:GetTop() or 0
     local x, y = GetCursorPosition()
-    local adjustedX = (x / scale - (centerX - (width/2))) / width
-    local adjustedY = (centerY + (height/2) - y / scale) / height
+    local cx = (x/_scale - left) / _width
+    local cy = (top - y/_scale) / _height
+    if cx < 0 or cx > 1 or cy < 0 or cy > 1 then return end
+    return cx, cy
+end
 
-    if (adjustedX >= 0 and adjustedY >= 0 and adjustedX <= 1 and adjustedY <= 1) then
-        adjustedX = R:Round(100 * adjustedX, 2)
-        adjustedY = R:Round(100 * adjustedY, 2)
-        RayUI_CoordsHolder.mouseCoords:SetText(MOUSE_LABEL..": "..string.format("%.2f", adjustedX)..", "..string.format("%.2f", adjustedY))
-    else
-        RayUI_CoordsHolder.mouseCoords:SetText(nil)
+local function CoordsFormat(owner, none)
+    local text = none and ": --,--" or ": %.1f,%.1f"
+    return owner..text
+end
+
+local function UpdateCoords(self, elapsed)
+    self.elapsed = (self.elapsed or 0) + elapsed
+    if self.elapsed > .1 then
+        local cx, cy = CursorCoords()
+        if cx and cy then
+            WM.cursorCoords:SetFormattedText(CoordsFormat(MOUSE_LABEL), 100 * cx, 100 * cy)
+        else
+            WM.cursorCoords:SetText(CoordsFormat(MOUSE_LABEL, true))
+        end
+
+        if not _mapID then
+            WM.playerCoords:SetText(CoordsFormat(PLAYER, true))
+        else
+            local x, y = WM:GetPlayerMapPos(_mapID)
+            if not x or (x == 0 and y == 0) then
+                WM.playerCoords:SetText(CoordsFormat(PLAYER, true))
+            else
+                WM.playerCoords:SetFormattedText(CoordsFormat(PLAYER), 100 * x, 100 * y)
+            end
+        end
+
+        self.elapsed = 0
     end
 end
 
 function WM:Initialize()
-    local CoordsHolder = CreateFrame("Frame", "RayUI_CoordsHolder", WorldMapFrame)
-    CoordsHolder:SetPoint("BOTTOMRIGHT", WorldMapFrame.UIElementsFrame, "BOTTOMRIGHT", -30, 5)
-    CoordsHolder:SetFrameLevel(WorldMapDetailFrame:GetFrameLevel() + 1)
-    CoordsHolder:SetFrameStrata(WorldMapDetailFrame:GetFrameStrata())
-    CoordsHolder:Size(150, 5)
-    CoordsHolder.playerCoords = CoordsHolder:CreateFontString(nil, "OVERLAY")
-    CoordsHolder.playerCoords:SetJustifyH("LEFT")
-    CoordsHolder.mouseCoords = CoordsHolder:CreateFontString(nil, "OVERLAY")
-    CoordsHolder.mouseCoords:SetJustifyH("LEFT")
-    CoordsHolder.playerCoords:SetFontObject(NumberFontNormal)
-    CoordsHolder.mouseCoords:SetFontObject(NumberFontNormal)
-    CoordsHolder.playerCoords:SetText(PLAYER..": 0, 0")
-    CoordsHolder.mouseCoords:SetText(MOUSE_LABEL..": 0, 0")
-    CoordsHolder.playerCoords:SetPoint("BOTTOMLEFT", CoordsHolder, "BOTTOMLEFT")
-    CoordsHolder.mouseCoords:SetPoint("BOTTOMLEFT", CoordsHolder.playerCoords, "TOPLEFT")
+    if not WorldMapFrame.isMaximized then WorldMapFrame:SetScale(self.db.scale) end
+    
+	self:SecureHook(WorldMapFrame, "Maximize", "SetLargeWorldMap")
+	self:SecureHook(WorldMapFrame, "Minimize", "SetSmallWorldMap")
 
-    self.CoordsTimer = self:ScheduleRepeatingTimer("UpdateCoords", 0.05)
-    self:RegisterEvent("PLAYER_ENTERING_WORLD")
+    -- Generate Coords
+    local CoordsHolder = CreateFrame("Frame", "CoordsHolder", WorldMapFrame)
+    CoordsHolder:SetFrameLevel(WorldMapFrame.BorderFrame:GetFrameLevel() + 1)
+    CoordsHolder:SetFrameStrata(WorldMapFrame.BorderFrame:GetFrameStrata())
 
-    BlackoutWorld:SetTexture(nil)
-    self:SecureHook("WorldMap_ToggleSizeDown", "SetSmallWorldMap")
-    self:SecureHook("WorldMap_ToggleSizeUp", "SetLargeWorldMap")
-    self:RegisterEvent("PLAYER_REGEN_ENABLED")
-    self:RegisterEvent("PLAYER_REGEN_DISABLED")
+    self.playerCoords = CoordsHolder:CreateFontString(nil, "OVERLAY")
+    self.playerCoords:FontTemplate(nil, nil, "OUTLINE")
+	self.playerCoords:SetPoint("BOTTOMLEFT", WorldMapFrame.BorderFrame, 10, 10)
+	self.cursorCoords = CoordsHolder:CreateFontString(nil, "OVERLAY")
+    self.cursorCoords:FontTemplate(nil, nil, "OUTLINE")
+	self.cursorCoords:SetPoint("LEFT", self.playerCoords, "RIGHT", 20, 0)
 
-    if WORLDMAP_SETTINGS.size == WORLDMAP_FULLMAP_SIZE then
-        self:SetLargeWorldMap()
-    elseif WORLDMAP_SETTINGS.size == WORLDMAP_WINDOWED_SIZE then
-        self:SetSmallWorldMap()
-    end
+	_mapBody = WorldMapFrame:GetCanvasContainer()
+    _scale, _width, _height = _mapBody:GetEffectiveScale(), _mapBody:GetWidth(), _mapBody:GetHeight()
+    
+    self:SecureHook(WorldMapFrame, "OnFrameSizeChanged")
+    self:SecureHook(WorldMapFrame, "OnMapChanged")
+
+	local CoordsUpdater = CreateFrame("Frame", nil, WorldMapFrame.BorderFrame)
+	CoordsUpdater:SetScript("OnUpdate", UpdateCoords)
 end
 
 function WM:Info()

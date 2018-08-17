@@ -115,7 +115,6 @@ function mod:CreateHonorBar()
 
     self.HonorBar:SetScript("OnEvent", self.UpdateHonorBar)
     self.HonorBar:RegisterEvent("HONOR_XP_UPDATE")
-    self.HonorBar:RegisterEvent("HONOR_PRESTIGE_UPDATE")
     self.HonorBar:RegisterEvent("PLAYER_ENTERING_WORLD")
 
     self.HonorBar:SetScript("OnEnter", function(self)
@@ -156,7 +155,6 @@ end
 
 function mod:UpdateHonorBar()
     local level = UnitHonorLevel("player")
-    local levelmax = GetMaxPlayerHonorLevel()
     if UnitLevel("player") < MAX_PLAYER_LEVEL or level == levelmax then
         self:Hide()
     else
@@ -164,11 +162,7 @@ function mod:UpdateHonorBar()
         local current = UnitHonor("player")
         local max = UnitHonorMax("player")
 
-        if (level == levelmax) then
-            self:SetAnimatedValues(1, 0, 1, level)
-        else
-            self:SetAnimatedValues(current, 0, max, level)
-        end
+        self:SetAnimatedValues(current, 0, max, level)
 
         local exhaustionStateID = GetHonorRestState()
         if (exhaustionStateID == 1) then

@@ -61,7 +61,7 @@ function mod:UpdateElement_Auras(frame)
     self:HideAuraIcons(frame.Debuffs)
     if mod.db.showauras then
         while ( frameNum <= maxAuras ) do
-            name, _, icon, count, _, duration, expirationTime, unitCaster, _, _, spellId, _, isBossAura = UnitDebuff(frame.displayedUnit, index)
+            name, icon, count, _, duration, expirationTime, unitCaster, _, _, spellId, _, isBossAura = UnitDebuff(frame.displayedUnit, index)
             if ( name ) then
                 if isBossAura or (unitCaster == mod.playerUnitToken and (duration > 0 or durationOverride[spellId]) and duration <= mod.db.maxDuration ) then
                     auraFrame = frame.Debuffs.icons[frameNum]
@@ -84,7 +84,7 @@ function mod:UpdateElement_Auras(frame)
     self:HideAuraIcons(frame.Buffs)
     if mod.db.showauras then
         while ( frameNum <= maxAuras ) do
-            name, _, icon, count, _, duration, expirationTime, unitCaster, _, _, spellId, _, isBossAura = UnitBuff(frame.displayedUnit, index)
+            name, icon, count, _, duration, expirationTime, unitCaster, _, _, spellId, _, isBossAura = UnitBuff(frame.displayedUnit, index)
             if ( name ) then
                 if isBossAura or (unitCaster == mod.playerUnitToken and (duration > 0 or durationOverride[spellId]) and duration <= mod.db.maxDuration ) then
                     auraFrame = frame.Buffs.icons[frameNum];

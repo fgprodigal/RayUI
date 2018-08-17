@@ -94,7 +94,7 @@ oUF.Tags.Methods["RayUF:pp"] = function(u)
         return hex(oUF.colors.power[str])..R:ShortValue(min).." | "..math.floor(min/max*100+.5).."%".."|r"
     end
 end
-oUF.Tags.Events["RayUF:pp"] = "UNIT_POWER"
+oUF.Tags.Events["RayUF:pp"] = "UNIT_POWER_UPDATE"
 
 oUF.Tags.Methods["RayUF:color"] = function(u, r)
     local _, class = UnitClass(u)
@@ -110,7 +110,7 @@ oUF.Tags.Methods["RayUF:color"] = function(u, r)
         return hex(1, 1, 1)
     end
 end
-oUF.Tags.Events["RayUF:color"] = "UNIT_REACTION UNIT_HEALTH UNIT_HAPPINESS"
+oUF.Tags.Events["RayUF:color"] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_CONNECTION PLAYER_FLAGS_CHANGED"
 
 oUF.Tags.Methods["RayUF:name"] = function(u, r)
     local name = UnitName(r or u)
@@ -141,4 +141,4 @@ oUF.Tags.Methods["RayUF:altpower"] = function(u)
 
     return format("%d", per > 0 and per or 0).."%"
 end
-oUF.Tags.Events["RayUF:altpower"] = "UNIT_POWER UNIT_MAXPOWER"
+oUF.Tags.Events["RayUF:altpower"] = "UNIT_POWER_UPDATE UNIT_MAXPOWER"

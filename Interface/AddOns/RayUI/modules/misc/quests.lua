@@ -39,15 +39,19 @@ function mod:QuestLogQuests_Update()
     local numEntries, numQuests = GetNumQuestLogEntries()
     local titleIndex = 1
 
-    for i = 1, numEntries do
-        local title, level, suggestedGroup, isHeader, isCollapsed, isComplete, frequency, questID, startEvent, displayQuestID, isOnMap, hasLocalPOI, isTask, isStory = GetQuestLogTitle(i)
-        local titleButton = QuestLogQuests_GetTitleButton(titleIndex)
-        if title and (not isHeader) and titleButton.questID == questID then
-            titleButton.Text:SetText("[" .. level .. "] " .. title)
-            titleButton.Check:SetPoint("LEFT", titleButton.Text, titleButton.Text:GetWrappedWidth() + 2, 0);
-            titleIndex = titleIndex + 1
-        end
-    end
+    -- for i = 1, numEntries do
+    --     local title, level, suggestedGroup, isHeader, isCollapsed, isComplete, frequency, questID, startEvent, displayQuestID, isOnMap, hasLocalPOI, isTask, isStory = GetQuestLogTitle(i)
+    --     local titleButton = QuestLogQuests_GetTitleButton(titleIndex)
+    --     if title and (not isHeader) and titleButton.questID == questID then
+    --         titleButton.Text:SetText("[" .. level .. "] " .. title)
+    --         titleButton.Check:SetPoint("LEFT", titleButton.Text, titleButton.Text:GetWrappedWidth() + 2, 0);
+    --         titleIndex = titleIndex + 1
+    --     end
+    -- end
+
+    for line in QuestScrollFrame.objectiveFramePool:EnumerateActive() do
+		print(line.Text:GetText())
+	end
 end
 
 local errors = {
@@ -65,7 +69,7 @@ ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", function(self, event, message
 QuestInfoDescriptionText.SetAlphaGradient = function() return false end
 
 function mod:Initialize()
-    self:SecureHook("QuestLogQuests_Update")
+    -- self:SecureHook("QuestLogQuests_Update")
     self:SecureHook("ObjectiveTracker_Update")
 end
 

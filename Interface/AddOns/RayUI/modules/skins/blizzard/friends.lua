@@ -84,9 +84,6 @@ local function LoadSkin()
         "WhoFrameColumnHeader2",
         "WhoFrameColumnHeader3",
         "WhoFrameColumnHeader4",
-        "ChannelListScrollFrame",
-        "ChannelRoster",
-        "ChannelFrameDaughterFrame",
         "AddFriendFrame",
         "AddFriendNoteFrame",
     }
@@ -100,8 +97,6 @@ local function LoadSkin()
     FriendsFrameInset:StripTextures()
     WhoFrameListInset:StripTextures()
     WhoFrameEditBoxInset:StripTextures()
-    ChannelFrameRightInset:StripTextures()
-    ChannelFrameLeftInset:StripTextures()
     LFRQueueFrameListInset:StripTextures()
     LFRQueueFrameRoleInset:StripTextures()
     LFRQueueFrameCommentInset:StripTextures()
@@ -127,13 +122,6 @@ local function LoadSkin()
     local function UpdateWhoSkins()
         WhoListScrollFrame:StripTextures()
     end
-    --Channel Frame
-    local function UpdateChannel()
-        ChannelRosterScrollFrame:StripTextures()
-    end
-
-    ChannelFrame:HookScript("OnShow", UpdateChannel)
-    hooksecurefunc("FriendsFrame_OnEvent", UpdateChannel)
 
     WhoFrame:HookScript("OnShow", UpdateWhoSkins)
     hooksecurefunc("FriendsFrame_OnEvent", UpdateWhoSkins)
@@ -145,15 +133,10 @@ local function LoadSkin()
     S:ReskinScroll(FriendsFrameFriendsScrollFrameScrollBar)
     S:ReskinScroll(WhoListScrollFrameScrollBar)
     S:ReskinScroll(FriendsFriendsScrollFrameScrollBar)
-    S:ReskinScroll(ChannelRosterScrollFrameScrollBar)
     S:ReskinScroll(FriendsFrameIgnoreScrollFrameScrollBar)
     S:ReskinInput(AddFriendNameEditBox)
     S:ReskinInput(FriendsFrameBroadcastInput)
-    S:ReskinInput(ChannelFrameDaughterFrameChannelName)
-    S:ReskinInput(ChannelFrameDaughterFrameChannelPassword)
-    S:ReskinClose(ChannelFrameDaughterFrameDetailCloseButton)
     S:ReskinClose(FriendsFrameCloseButton)
-    ChannelRosterScrollFrame:Point("TOPRIGHT", ChannelFrame, "TOPRIGHT", -39, -60)
     FriendsTabHeaderSoRButton:StyleButton(true)
     FriendsFriendsFrame:StripTextures()
     FriendsFriendsList:StripTextures()
@@ -162,16 +145,8 @@ local function LoadSkin()
     S:Reskin(FriendsFriendsSendRequestButton)
     S:Reskin(FriendsFriendsCloseButton)
 
-    for i = 1, 4 do
+    for i = 1, 3 do
         S:CreateTab(_G["FriendsFrameTab"..i])
-    end
-
-    for i = 1, MAX_DISPLAY_CHANNEL_BUTTONS do
-        _G["ChannelButton"..i]:SetNormalTexture("")
-    end
-
-    for i=1, MAX_CHANNEL_BUTTONS do
-        _G["ChannelButton"..i.."Text"]:SetFont(R["media"].font, R["media"].fontsize)
     end
 
     for i = 1, 6 do
@@ -187,11 +162,8 @@ local function LoadSkin()
         "WhoFrameWhoButton",
         "WhoFrameAddFriendButton",
         "WhoFrameGroupInviteButton",
-        "ChannelFrameNewButton",
         "FriendsFrameIgnorePlayerButton",
         "FriendsFrameUnsquelchButton",
-        "ChannelFrameDaughterFrameOkayButton",
-        "ChannelFrameDaughterFrameCancelButton",
         "AddFriendEntryFrameAcceptButton",
         "AddFriendEntryFrameCancelButton",
         "AddFriendInfoFrameContinueButton",

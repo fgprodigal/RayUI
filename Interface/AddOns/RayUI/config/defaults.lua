@@ -38,7 +38,7 @@ P["InfoBar"]={
 P["WorldMap"]={
     enable = true,
     lock = false,
-    scale = 0.8,
+    scale = 1,
     ejbuttonscale = 0.8,
     partymembersize = 25,
 }

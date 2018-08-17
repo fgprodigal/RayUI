@@ -68,8 +68,10 @@ in the `oUF.Tags.SharedEvents` table as follows: `oUF.Tags.SharedEvents.EVENT_NA
 local _, ns = ...
 local oUF = ns.oUF
 
+-- RayUI
 local format = string.format
 local tinsert, tremove = table.insert, table.remove
+-- end block
 
 local _PATTERN = '%[..-%]+'
 
@@ -82,9 +84,13 @@ local _ENV = {
 				r, g, b = unpack(r)
 			end
 		end
+
+		-- RayUI
 		if not r or type(r) == 'string' then --wtf?
 			return '|cffFFFFFF'
 		end
+		-- end block
+
 		return string.format('|cff%02x%02x%02x', r * 255, g * 255, b * 255)
 	end,
 	ColorGradient = oUF.ColorGradient,
@@ -472,18 +478,18 @@ local tagEvents = {
 	['classification']      = 'UNIT_CLASSIFICATION_CHANGED',
 	['shortclassification'] = 'UNIT_CLASSIFICATION_CHANGED',
 	['group']               = 'GROUP_ROSTER_UPDATE',
-	['curpp']               = 'UNIT_POWER',
+	['curpp']               = 'UNIT_POWER_UPDATE',
 	['maxpp']               = 'UNIT_MAXPOWER',
-	['missingpp']           = 'UNIT_MAXPOWER UNIT_POWER',
-	['perpp']               = 'UNIT_MAXPOWER UNIT_POWER',
+	['missingpp']           = 'UNIT_MAXPOWER UNIT_POWER_UPDATE',
+	['perpp']               = 'UNIT_MAXPOWER UNIT_POWER_UPDATE',
 	['offline']             = 'UNIT_HEALTH UNIT_CONNECTION',
 	['status']              = 'UNIT_HEALTH PLAYER_UPDATE_RESTING UNIT_CONNECTION',
-	['curmana']             = 'UNIT_POWER UNIT_MAXPOWER',
-	['maxmana']             = 'UNIT_POWER UNIT_MAXPOWER',
-	['soulshards']          = 'UNIT_POWER',
-	['holypower']           = 'UNIT_POWER SPELLS_CHANGED',
-	['chi']                 = 'UNIT_POWER SPELLS_CHANGED',
-	['arcanecharges']       = 'UNIT_POWER SPELLS_CHANGED',
+	['curmana']             = 'UNIT_POWER_UPDATE UNIT_MAXPOWER',
+	['maxmana']             = 'UNIT_POWER_UPDATE UNIT_MAXPOWER',
+	['soulshards']          = 'UNIT_POWER_UPDATE',
+	['holypower']           = 'UNIT_POWER_UPDATE SPELLS_CHANGED',
+	['chi']                 = 'UNIT_POWER_UPDATE SPELLS_CHANGED',
+	['arcanecharges']       = 'UNIT_POWER_UPDATE SPELLS_CHANGED',
 	['powercolor']          = 'UNIT_DISPLAYPOWER',
 }
 
@@ -500,9 +506,9 @@ local frame = CreateFrame('Frame')
 frame:SetScript('OnEvent', function(self, event, unit)
 	local strings = events[event]
 	if(strings) then
-		for _, fontstring in next, strings do
-			if(fontstring:IsVisible() and (unitlessEvents[event] or fontstring.parent.unit == unit)) then
-				fontstring:UpdateTag()
+		for _, fs in next, strings do
+			if(fs:IsVisible() and (unitlessEvents[event] or fs.parent.unit == unit or (fs.extraUnits and fs.extraUnits[unit]))) then
+				fs:UpdateTag()
 			end
 		end
 	end
@@ -555,7 +561,7 @@ local function registerEvent(fontstr, event)
 	if(not events[event]) then events[event] = {} end
 
 	frame:RegisterEvent(event)
-	tinsert(events[event], fontstr)
+	tinsert(events[event], fontstr) -- RayUI changed
 end
 
 local function registerEvents(fontstr, tagstr)
@@ -584,6 +590,7 @@ local function unregisterEvents(fontstr)
 	end
 end
 
+-- RayUI block
 local OnEnter = function(self)
 	for _, fs in pairs(self.__mousetags) do
 		fs:SetAlpha(1)
@@ -597,29 +604,32 @@ local OnLeave = function(self)
 end
 
 local onUpdateDelay = {}
-local tagPool = {}
-local funcPool = {}
-local tmp = {}
 local escapeSequences = {
 	["||c"] = "|c",
 	["||r"] = "|r",
 	["||T"] = "|T",
 	["||t"] = "|t",
 }
+-- end block
 
---[[ Tags: frame:Tag(fs, tagstr)
+local tagPool = {}
+local funcPool = {}
+local tmp = {}
+
+--[[ Tags: frame:Tag(fs, tagstr, ...)
 Used to register a tag on a unit frame.
 
 * self   - the unit frame on which to register the tag
 * fs     - the font string to display the tag (FontString)
 * tagstr - the tag string (string)
+* ...    - additional optional unitID(s) the tag should update for
 --]]
-local function Tag(self, fs, tagstr)
+local function Tag(self, fs, tagstr, ...)
 	if(not fs or not tagstr) then return end
 
 	if(not self.__tags) then
 		self.__tags = {}
-		self.__mousetags = {}
+		self.__mousetags = {} -- RayUI
 		table.insert(self.__elements, onShow)
 	else
 		-- Since people ignore everything that's good practice - unregister the tag
@@ -634,13 +644,14 @@ local function Tag(self, fs, tagstr)
 	end
 
 	fs.parent = self
-	
+
+	-- RayUI
 	for escapeSequence, replacement in pairs(escapeSequences) do
 		while tagstr:find(escapeSequence) do
 			tagstr = tagstr:gsub(escapeSequence, replacement)
 		end
 	end
-	
+
 	if tagstr:find('%[mouseover%]') then
 		tinsert(self.__mousetags, fs)
 		fs:SetAlpha(0)
@@ -657,14 +668,16 @@ local function Tag(self, fs, tagstr)
 				fs:SetAlpha(1)
 			end
 		end
-	end	
-	
+	end
+
 	local containsOnUpdate
 	for tag in tagstr:gmatch(_PATTERN) do
-		if not tagEvents[tag:sub(2, -2)] then
-			containsOnUpdate = onUpdateDelay[tag:sub(2, -2)] or 0.15;
-		end	
+		tag = getTagName(tag)
+		if not tagEvents[tag] then
+			containsOnUpdate = onUpdateDelay[tag] or 0.15;
+		end
 	end
+	-- end block
 
 	local func = tagPool[tagstr]
 	if(not func) then
@@ -718,10 +731,12 @@ local function Tag(self, fs, tagstr)
 			if(tagFunc) then
 				table.insert(args, tagFunc)
 			else
+				-- RayUI changed
 				numTags = -1
 				func = function(self)
-					return self:SetFormattedText('[invalid tag]')
+					return self:SetText(bracket)
 				end
+				-- end block
 			end
 		end
 
@@ -772,7 +787,7 @@ local function Tag(self, fs, tagstr)
 					args[3](unit, realUnit) or ''
 				)
 			end
-		elseif numTags ~= -1 then
+		elseif numTags ~= -1 then -- RayUI changed (from else)
 			func = function(self)
 				local parent = self.parent
 				local unit = parent.unit
@@ -790,33 +805,48 @@ local function Tag(self, fs, tagstr)
 				return self:SetFormattedText(format, unpack(tmp, 1, numTags))
 			end
 		end
-	
+
+		-- RayUI added check
 		if numTags ~= -1 then
 			tagPool[tagstr] = func
 		end
+		-- end block
 	end
 	fs.UpdateTag = func
 
 	local unit = self.unit
-	if(self.__eventless or fs.frequentUpdates) or containsOnUpdate then
+	if(self.__eventless or fs.frequentUpdates) or containsOnUpdate then -- RayUI changed
 		local timer
 		if(type(fs.frequentUpdates) == 'number') then
 			timer = fs.frequentUpdates
+		-- RayUI added check
 		elseif containsOnUpdate then
 			timer = containsOnUpdate
+		-- end block
 		else
 			timer = .5
 		end
 
 		if(not eventlessUnits[timer]) then eventlessUnits[timer] = {} end
-		tinsert(eventlessUnits[timer], fs)
+		tinsert(eventlessUnits[timer], fs) -- RayUI changed
 
 		createOnUpdate(timer)
 	else
 		registerEvents(fs, tagstr)
+
+		if(...) then
+			if(not fs.extraUnits) then
+				fs.extraUnits = {}
+			end
+
+			for index = 1, select('#', ...) do
+				local unit = select(index, ...)
+				fs.extraUnits[unit] = true
+			end
+		end
 	end
 
-	tinsert(self.__tags, fs)
+	tinsert(self.__tags, fs) -- RayUI changed
 end
 
 --[[ Tags: frame:Untag(fs)
@@ -850,7 +880,7 @@ oUF.Tags = {
 	Methods = tags,
 	Events = tagEvents,
 	SharedEvents = unitlessEvents,
-	OnUpdateThrottle = onUpdateDelay,
+	OnUpdateThrottle = onUpdateDelay, -- RayUI
 }
 
 oUF:RegisterMetaFunction('Tag', Tag)

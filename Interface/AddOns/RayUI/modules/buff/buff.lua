@@ -132,7 +132,7 @@ end
 function A:UpdateAura(button, index)
     local filter = button:GetParent():GetAttribute("filter")
     local unit = button:GetParent():GetAttribute("unit")
-    local name, rank, texture, count, dtype, duration, expirationTime, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossDebuff = UnitAura(unit, index, filter)
+    local name, texture, count, dtype, duration, expirationTime = UnitAura(unit, index, filter)
 
     if(name) then
         if(duration > 0 and expirationTime) then

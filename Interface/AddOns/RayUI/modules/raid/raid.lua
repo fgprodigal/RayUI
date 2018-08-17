@@ -34,9 +34,8 @@ _MapIDs = {
 }
 
 function RA:RegisterDebuffs()
-    SetMapToCurrentZone()
     local _, instanceType = IsInInstance()
-    local zone = GetCurrentMapAreaID()
+    local zone = C_Map.GetBestMapForUnit("player")
     local ORD = ns.oUF_RaidDebuffs or oUF_RaidDebuffs
     if ORD then
         ORD:ResetDebuffData()

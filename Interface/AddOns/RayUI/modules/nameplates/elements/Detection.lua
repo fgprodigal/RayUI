@@ -7,12 +7,23 @@ RayUI:LoadEnv("NamePlates")
 local mod = _NamePlates
 
 --Cache detection buff names
-local DETECTION_BUFF = GetSpellInfo(203761) --Detector
-local DETECTION_BUFF2 = GetSpellInfo(213486) --Demonic Vision
+local DETECTION_BUFFS = {
+	[203761] = true, --Detector
+	[213486] = true, --Demonic Vision
+}
 
 function mod:UpdateElement_Detection(frame)
-	local name = UnitAura(frame.displayedUnit, DETECTION_BUFF) or UnitAura(frame.displayedUnit, DETECTION_BUFF2)
-	if (name) then
+    local canDetect
+	for i=1, BUFF_MAX_DISPLAY do
+		local name, _, _, _, _, _, _, _, _, spellId = UnitAura(frame.displayedUnit, i, "HELPFUL")
+		if not name then break end
+		if spellId and DETECTION_BUFFS[spellId] then
+			canDetect = true
+			break
+		end
+	end
+
+	if canDetect then
 		frame.DetectionModel:Show()
 		frame.DetectionModel:SetModel("Spells\\Blackfuse_LaserTurret_GroundBurn_State_Base")
 	end

@@ -263,8 +263,8 @@ do -- Initialize
     info.title = FRIENDS
     info.icon = "Interface\\Icons\\achievement_guildperk_everybodysfriend"
     info.clickFunc = Social_OnClick
-    info.events = { "PLAYER_ENTERING_WORLD", "BN_FRIEND_ACCOUNT_ONLINE", "BN_FRIEND_ACCOUNT_OFFLINE", "BN_FRIEND_INFO_CHANGED", "BN_FRIEND_TOON_ONLINE",
-        "BN_FRIEND_TOON_OFFLINE", "BN_TOON_NAME_UPDATED", "FRIENDLIST_UPDATE", "CHAT_MSG_SYSTEM" }
+    info.events = { "PLAYER_ENTERING_WORLD", "BN_FRIEND_ACCOUNT_ONLINE", "BN_FRIEND_ACCOUNT_OFFLINE", "BN_FRIEND_INFO_CHANGED",
+            "FRIENDLIST_UPDATE", "CHAT_MSG_SYSTEM" }
     info.eventFunc = Social_OnEvent
     info.initFunc = Social_OnEvent
     info.tooltipFunc = Social_OnEnter

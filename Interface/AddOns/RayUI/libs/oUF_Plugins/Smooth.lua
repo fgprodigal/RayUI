@@ -1,5 +1,3 @@
-local R, C, L, DB = unpack(select(2, ...))
-
 local _, ns = ...
 local oUF = ns.oUF or oUF
 if not oUF then return end
@@ -34,8 +32,8 @@ local function hook(frame)
 	if frame.Power then
 		SmoothBar(frame.Power)
 	end
-	if frame.AltPowerBar then
-		SmoothBar(frame.AltPowerBar)
+	if frame.AlternativePower then
+		SmoothBar(frame.AlternativePower)
 	end
 end
 
@@ -60,7 +58,7 @@ f:SetScript('OnUpdate', function()
 			smoothing[bar] = nil
 		elseif not bar.Smooth then
 			bar:SetValue_(value)
-			smoothing[bar] = nil
+			smoothing[bar] = nil		
 		end
 	end
 end)

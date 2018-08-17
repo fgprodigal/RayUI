@@ -19,11 +19,13 @@ local colors = {
 		{173 / 255, 235 / 255, 66 / 255}, -- unholy
 	},
 	class = {},
+	debuff = {},
 	reaction = {},
 	power = {},
 }
 
 -- We do this because people edit the vars directly, and changing the default
+-- globals makes SPICE FLOW!
 local function customClassColors()
 	if(CUSTOM_CLASS_COLORS) then
 		local function updateColors()
@@ -56,6 +58,10 @@ if(not customClassColors()) then
 			self:SetScript('OnEvent', nil)
 		end
 	end)
+end
+
+for debuffType, color in next, DebuffTypeColor do
+	colors.debuff[debuffType] = {color.r, color.g, color.b}
 end
 
 for eclass, color in next, FACTION_BAR_COLORS do

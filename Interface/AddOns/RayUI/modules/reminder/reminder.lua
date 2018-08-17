@@ -12,7 +12,7 @@ function RM:PlayerHasFilteredBuff(frame, db, checkPersonal)
 	for buff, value in pairs(db) do
 		if value == true then
 			local name = GetSpellInfo(buff)
-			local _, _, icon, _, _, _, _, unitCaster, _, _, _ = UnitBuff("player", name)
+			local _, icon, _, _, _, _, unitCaster, _, _, _ = UnitBuff("player", name)
 
 			if checkPersonal then
 				if (name and icon and unitCaster == "player") then
@@ -33,7 +33,7 @@ function RM:PlayerHasFilteredDebuff(frame, db)
 	for debuff, value in pairs(db) do
 		if value == true then
 			local name = GetSpellInfo(debuff)
-			local _, _, icon, _, _, _, _, unitCaster, _, _, _ = UnitDebuff("player", name)
+			local _, icon, _, _, _, _, unitCaster, _, _, _ = UnitDebuff("player", name)
 
 			if (name and icon) then
 				return true

@@ -174,7 +174,6 @@ function MM:SkinMiniMap()
         "MinimapZoneTextButton",
         "MinimapZoomOut",
         "MinimapZoomIn",
-        "MiniMapVoiceChatFrame",
         "MiniMapWorldMapButton",
         "MiniMapMailBorder",
     }
@@ -249,7 +248,7 @@ function MM:SkinMiniMap()
 end
 
 function MM:CheckMail()
-    local inv = CalendarGetNumPendingInvites()
+    local inv = C_Calendar.GetNumInvites()
     local mail = MiniMapMailFrame:IsShown() and true or false
     if inv > 0 and mail then -- New invites and mail
         Minimap.shadow:SetBackdropBorderColor(1, .5, 0)

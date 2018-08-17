@@ -504,9 +504,6 @@ function UF:SetCastTicks(frame, numTicks, extraTick)
     frame.SafeZone:Hide()
 end
 
-local MageSpellName = GetSpellInfo(5143) --Arcane Missiles
-local MageBuffName = GetSpellInfo(166872) --4p T17 bonus proc for arcane
-
 function UF:PostCastStart(unit, name, rank, castid)
     if unit == "vehicle" then unit = "player" end
     local r, g, b
@@ -572,10 +569,6 @@ function UF:PostCastStart(unit, name, rank, castid)
 
             UF:SetCastTicks(self, baseTicks, extraTickRatio)
         elseif baseTicks then
-            local hasBuff = UnitBuff("player", MageBuffName)
-            if name == MageSpellName and hasBuff then
-                baseTicks = baseTicks + 5
-            end
             UF:SetCastTicks(self, baseTicks)
         else
             UF:HideTicks(self)

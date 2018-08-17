@@ -314,11 +314,11 @@ function CH:ScrollToBottom(frame)
 
 	self:CancelTimer(frame.ScrollTimer, true)
 
-	_G[frame:GetName().."ButtonFrameBottomButton"]:Hide()
+    frame.ScrollToBottomButton:Hide()
 end
 
 function CH:OnMouseScroll(frame, dir)
-	local bb = _G[frame:GetName().."ButtonFrameBottomButton"]
+	local bb = frame.ScrollToBottomButton
 	if dir > 0 then
 		if IsShiftKeyDown() then
 			frame:ScrollToTop()
@@ -479,7 +479,7 @@ end
 function CH:FCF_Tab_OnClick(tab)
 	local id = tab:GetID()
 	local chatFrame = _G["ChatFrame"..id]
-	local bb = _G["ChatFrame"..id.."ButtonFrameBottomButton"]
+	local bb = chatFrame.ScrollToBottomButton
 
 	if chatFrame:AtBottom() then
 		bb:Hide()
@@ -690,9 +690,10 @@ function CH:ApplyStyle(event, ...)
 			local function BottomButtonClick(self)
 				self:GetParent():ScrollToBottom()
 				self:Hide()
-			end
-			local bb = _G[frameName.."ButtonFrameBottomButton"]
-			local flash = _G[frameName.."ButtonFrameBottomButtonFlash"]
+            end
+            cf.ScrollBar:Kill()
+			local bb = cf.ScrollToBottomButton
+			local flash = bb.Flash
 			R.Skins:ReskinArrow(bb, "down")
 			bb:SetParent(cf)
 			bb:ClearAllPoints()
@@ -716,7 +717,14 @@ function CH:ApplyStyle(event, ...)
 
 			cf.styled = true
 		end
+    end
+
+    if not self.HookSecured then
+		self:SecureHook("FCF_OpenTemporaryWindow", "ApplyStyle")
+		self.HookSecured = true
 	end
+
+    ChatFrameChannelButton:Kill()
 	CH:SetChatPosition(true)
 end
 
@@ -746,7 +754,7 @@ function CH:SetChat()
 			ChatFrame_AddMessageGroup(frame, "WHISPER")
 			ChatFrame_AddMessageGroup(frame, "BN_WHISPER")
 		end
-	end
+    end
 	ChatFrame1:SetFrameLevel(8)
 	FCF_SavePositionAndDimensions(ChatFrame1)
 	FCF_SetLocked(ChatFrame1, 1)
@@ -924,7 +932,6 @@ function CH:Initialize()
 
 	self:RegisterEvent("UPDATE_CHAT_WINDOWS", "ApplyStyle")
 	self:RegisterEvent("UPDATE_FLOATING_CHAT_WINDOWS", "ApplyStyle")
-	self:SecureHook("FCF_OpenTemporaryWindow", "ApplyStyle")
 	self:RegisterEvent("PET_BATTLE_CLOSE")
 	self:ApplyStyle()
 
@@ -937,8 +944,8 @@ function CH:Initialize()
 	self:RawHook("SetItemRef", true)
 	self:RawHook("GetColoredName", true)
 
-	ChatHistoryEvent:RegisterEvent("CHAT_MSG_BATTLEGROUND")
-	ChatHistoryEvent:RegisterEvent("CHAT_MSG_BATTLEGROUND_LEADER")
+	-- ChatHistoryEvent:RegisterEvent("CHAT_MSG_BATTLEGROUND")
+	-- ChatHistoryEvent:RegisterEvent("CHAT_MSG_BATTLEGROUND_LEADER")
 	ChatHistoryEvent:RegisterEvent("CHAT_MSG_BN_WHISPER")
 	ChatHistoryEvent:RegisterEvent("CHAT_MSG_BN_WHISPER_INFORM")
 	ChatHistoryEvent:RegisterEvent("CHAT_MSG_CHANNEL")
@@ -959,7 +966,7 @@ function CH:Initialize()
 			CH:SaveChatHistory(event, ...)
 		end)
 	CH:DisplayChatHistory()
-
+    
 	InterfaceOptionsSocialPanelTimestamps:SetScale(0.0001)
 	InterfaceOptionsSocialPanelChatStyle:SetScale(0.0001)
 	InterfaceOptionsSocialPanelProfanityFilter:SetScale(0.0001)

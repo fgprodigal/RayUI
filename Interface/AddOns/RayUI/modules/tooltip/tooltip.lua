@@ -411,8 +411,8 @@ function TT:SetStyle(tooltip)
     if self.db.hideincombat and InCombatLockdown() then
         return tooltip:Hide()
     end
+    tooltip:SetBackdrop(nil)
     if not tooltip.styled then
-        tooltip:SetBackdrop(nil)
         R.Skins:CreateStripesThin(tooltip)
         tooltip:CreateShadow("Background")
         tooltip.stripesthin:SetInside(tooltip)

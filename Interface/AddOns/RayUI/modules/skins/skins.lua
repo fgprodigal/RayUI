@@ -502,9 +502,15 @@ function S:ReskinSlider(f)
     S:CreateBD(bd, 0)
     S:CreateBackdropTexture(bd)
 
-    local slider = select(4, f:GetRegions())
-    slider:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
-    slider:SetBlendMode("ADD")
+    for i = 1, f:GetNumRegions() do
+		local region = select(i, f:GetRegions())
+		if region:GetObjectType() == "Texture" then
+			region:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
+			region:SetBlendMode("ADD")
+			if verticle then region:SetRotation(math.rad(90)) end
+			return
+		end
+	end
 end
 
 function S:SetBD(f, x, y, x2, y2)
@@ -723,6 +729,110 @@ function S:ReskinIconSelectionFrame(frame, numIcons, buttonNameTemplate, frameNa
         icon:SetTexCoord(.08, .92, .08, .92)
     end
 end
+
+function S:ReskinMaxMinFrame(frame)
+	assert(frame, "does not exist.")
+
+	frame:StripTextures()
+
+	for _, name in next, {"MaximizeButton", "MinimizeButton"} do
+		local button = frame[name]
+		if button then
+			button:Size(17, 17)
+			button:ClearAllPoints()
+			button:SetPoint("CENTER")
+            button:SetHitRectInsets(0, 0, 0, 0)
+            
+            button:SetNormalTexture("")
+            button:SetPushedTexture("")
+            button:SetHighlightTexture("")
+
+			if not button.backdrop then
+				button:SetTemplate("Default", true)
+                button.backdropTexture:SetAlpha(0.75)
+            end
+            
+            local arrow = button:CreateFontString(nil, "OVERLAY")
+
+            if name == "MaximizeButton" then
+                arrow:FontTemplate(R["media"].arrowfont, 26 * R.mult, "OUTLINE,MONOCHROME")
+                arrow:Point("CENTER", 1, -2)
+                arrow:SetText("W")
+            else
+                arrow:FontTemplate(R["media"].arrowfont, 27 * R.mult, "OUTLINE,MONOCHROME")
+                arrow:Point("CENTER", 0, -4)
+                arrow:SetText("V")
+            end
+
+            button:SetScript("OnEnter", function() arrow:SetTextColor(r, g, b) end)
+            button:SetScript("OnLeave", function() arrow:SetTextColor(1, 1, 1) end)
+		end
+	end
+end
+
+function S:ReskinWorldMapDropDownMenu(frame)
+	local left = frame.Left
+	local middle = frame.Middle
+	local right = frame.Right
+	if left then
+		left:SetAlpha(0)
+		left:SetSize(25, 64)
+		left:SetPoint("TOPLEFT", 0, 17)
+	end
+	if middle then
+		middle:SetAlpha(0)
+		middle:SetHeight(64)
+	end
+	if right then
+		right:SetAlpha(0)
+		right:SetSize(25, 64)
+	end
+
+	local button = frame.Button
+	if button then
+		button:ClearAllPoints()
+		button:Point("RIGHT", frame, "RIGHT", -10, 3)
+		button:SetSize(20, 20)
+
+		button.NormalTexture:SetTexture("")
+		button.PushedTexture:SetTexture("")
+		button.HighlightTexture:SetTexture("")
+		hooksecurefunc(button, "SetPoint", function(btn, _, _, _, _, _, noReset)
+			if not noReset then
+				btn:ClearAllPoints()
+				btn:SetPoint("RIGHT", frame, "RIGHT", E:Scale(-10), E:Scale(3), true)
+			end
+		end)
+
+		self:ReskinArrow(button, "right")
+	end
+
+	local disabled = button and button.DisabledTexture
+	if disabled then
+		disabled:SetAllPoints(button)
+		disabled:SetColorTexture(0, 0, 0, .3)
+		disabled:SetDrawLayer("OVERLAY")
+	end
+
+	if right and frame.Text then
+		frame.Text:FontTemplate(nil, 10)
+		frame.Text:SetSize(0, 10)
+		frame.Text:SetPoint("RIGHT", right, -43, 2)
+	end
+
+	if middle and (not frame.noResize) then
+		frame:SetWidth(40)
+		middle:SetWidth(115)
+	end
+
+	frame:SetHeight(32)
+	frame:CreateShadow("Background")
+
+	if button then
+		-- frame.backdrop:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 2, -2)
+	end
+end
+
 
 --Add callback for skin that relies on another addon.
 --These events will be fired when the addon is loaded.

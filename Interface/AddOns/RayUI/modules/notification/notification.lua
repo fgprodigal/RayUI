@@ -262,7 +262,7 @@ function NF:Initialize()
     self:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES")
     self:RegisterEvent("CALENDAR_UPDATE_GUILD_EVENTS")
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
-    self:RegisterEvent("VIGNETTE_ADDED")
+    self:RegisterEvent("VIGNETTE_MINIMAP_UPDATED")
     self:RegisterEvent("RESURRECT_REQUEST")
     self:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
 end
@@ -322,15 +322,15 @@ end
 local numInvites = 0
 local function GetGuildInvites()
     local numGuildInvites = 0
-    local _, currentMonth = CalendarGetDate()
+    local currentMonth = (C_Calendar.GetDate()).month
 
-    for i = 1, CalendarGetNumGuildEvents() do
-        local month, day = CalendarGetGuildEventInfo(i)
+    for i = 1, C_Calendar.GetNumGuildEvents() do
+        local month, day = C_Calendar.GetGuildEventInfo(i)
         local monthOffset = month - currentMonth
-        local numDayEvents = CalendarGetNumDayEvents(monthOffset, day)
+        local numDayEvents = C_Calendar.GetNumDayEvents(monthOffset, day)
 
         for i = 1, numDayEvents do
-            local _, _, _, _, _, _, _, _, inviteStatus = CalendarGetDayEvent(monthOffset, day, i)
+            local _, _, _, _, _, _, _, _, inviteStatus = C_Calendar.GetDayEvent(monthOffset, day, i)
             if inviteStatus == 8 then
                 numGuildInvites = numGuildInvites + 1
             end
@@ -347,7 +347,7 @@ end
 
 local function alertEvents()
     if CalendarFrame and CalendarFrame:IsShown() then return end
-    local num = CalendarGetNumPendingInvites()
+    local num = C_Calendar.GetNumInvites()
     if num ~= numInvites then
         if num > 1 then
             NF:DisplayToast(CALENDAR, format(L["你有%s个未处理的活动邀请."], num), toggleCalendar)
@@ -380,14 +380,15 @@ end
 local function LoginCheck()
     alertEvents()
     alertGuildEvents()
-    local month, day, year = select(2, CalendarGetDate())
-    local numDayEvents = CalendarGetNumDayEvents(0, day)
-    local numDays = select(3, CalendarGetAbsMonth(month, year))
+    local day = (C_Calendar.GetDate()).monthDay
+    local numDayEvents = C_Calendar.GetNumDayEvents(0, day)
+    local monthInfo = C_Calendar.GetMonthInfo()
+    local numDays = monthInfo.numDays
     local hournow, minutenow = GetGameTime()
 
     -- Today
     for i = 1, numDayEvents do
-        local title, hour, minute, calendarType, sequenceType, eventType, texture, modStatus, inviteStatus, invitedBy, difficulty, inviteType = CalendarGetDayEvent(0, day, i)
+        local title, hour, minute, calendarType, sequenceType, eventType, texture, modStatus, inviteStatus, invitedBy, difficulty, inviteType = C_Calendar.GetDayEvent(0, day, i)
         if calendarType == "HOLIDAY" and ( sequenceType == "END" or sequenceType == "" ) and hournow < hour then
             NF:DisplayToast(CALENDAR, format(L["活动\"%s\"今天结束."], title), toggleCalendar)
         end
@@ -407,9 +408,9 @@ local function LoginCheck()
     else
         day = day + 1
     end
-    numDayEvents = CalendarGetNumDayEvents(offset, day)
+    numDayEvents = C_Calendar.GetNumDayEvents(offset, day)
     for i = 1, numDayEvents do
-        local title, hour, minute, calendarType, sequenceType, eventType, texture, modStatus, inviteStatus, invitedBy, difficulty, inviteType = CalendarGetDayEvent(offset, day, i)
+        local title, hour, minute, calendarType, sequenceType, eventType, texture, modStatus, inviteStatus, invitedBy, difficulty, inviteType = C_Calendar.GetDayEvent(offset, day, i)
         if calendarType == "HOLIDAY" and ( sequenceType == "END" or sequenceType == "" ) then
             NF:DisplayToast(CALENDAR, format(L["活动\"%s\"明天结束."], title), toggleCalendar)
         end
@@ -421,9 +422,33 @@ function NF:PLAYER_ENTERING_WORLD()
     self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 end
 
-function NF:VIGNETTE_ADDED(event, vignetteInstanceID)
-    local ofsX, ofsY, name = C_Vignettes.GetVignetteInfoFromInstanceID(vignetteInstanceID)
-    self:DisplayToast("发现稀有", name)
+local isIgnored = {
+    [1153] = true,		-- 部落要塞
+    [1159] = true,		-- 联盟要塞
+    [1803] = true,		-- 涌泉海滩
+}
+
+local cache = {}
+
+function NF:VIGNETTE_MINIMAP_UPDATED(event, vignetteInstanceID)
+    local instID = select(8, GetInstanceInfo())
+    if isIgnored[instID] then return end
+
+    if id and not cache[id] then
+        local info = C_VignetteInfo.GetVignetteInfo(id)
+        if not info then return end
+        local filename, width, height, txLeft, txRight, txTop, txBottom = GetAtlasInfo(info.atlasName)
+        if not filename then return end
+
+        local atlasWidth = width/(txRight-txLeft)
+        local atlasHeight = height/(txBottom-txTop)
+
+        local tex = string.format("|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t", filename, 0, 0, atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
+
+        PlaySoundFile("Sound\\Interface\\PVPFlagTakenMono.ogg", "master")
+        self:DisplayToast("发现稀有", name)
+        cache[id] = true
+    end
 end
 
 function NF:RESURRECT_REQUEST(name)

@@ -1,29 +1,32 @@
 
 local questAreas = {
-	-- Global
-	[24629] = true,
+    -- Global
+    [24629] = true,
 
-	-- Icecrown
-	[14108] = 541,
+    -- Icecrown
+    [14108] = 170,
 
-	-- Northern Barrens
-	[13998] = 11,
+    -- Northern Barrens
+    [13998] = 11,
 
-	-- Un'Goro Crater
-	[24735] = 201,
+    -- Un'Goro Crater
+    [24735] = 78,
 
-	-- Darkmoon Island
-	[29506] = 823,
-	[29510] = 823,
+    -- Darkmoon Island
+    [29506] = 407,
+    [29510] = 407,
+    [29515] = 407,
+    [29516] = 407,
+    [29517] = 407,
 
-	-- Mulgore
-	[24440] = 9,
-	[14491] = 9,
-	[24456] = 9,
-	[24524] = 9,
+    -- Mulgore
+    [24440] = 7,
+    [14491] = 7,
+    [24456] = 7,
+    [24524] = 7,
 
-	-- Mount Hyjal
-	[25577] = 606,
+    -- Mount Hyjal
+    [25577] = 198,
 }
 
 -- Quests items with incorrect or missing quest area blobs
@@ -32,56 +35,77 @@ local itemAreas = {
 	[34862] = true,
 	[34833] = true,
 	[39700] = true,
+	[155915] = true,
+	[156474] = true,
+	[156477] = true,
+	[155918] = true,
 
 	-- Deepholm
-	[58167] = 640,
-	[60490] = 640,
+	[58167] = 207,
+	[60490] = 207,
 
 	-- Ashenvale
-	[35237] = 43,
+	[35237] = 63,
 
 	-- Thousand Needles
-	[56011] = 61,
+	[56011] = 64,
 
 	-- Tanaris
-	[52715] = 161,
+	[52715] = 71,
 
 	-- The Jade Forest
-	[84157] = 806,
-	[89769] = 806,
+	[84157] = 371,
+	[89769] = 371,
 
 	-- Hellfire Peninsula
-	[28038] = 465,
-	[28132] = 465,
+	[28038] = 100,
+	[28132] = 100,
 
 	-- Borean Tundra
-	[35352] = 486,
-	[34772] = 486,
-	[34711] = 486,
-	[35288] = 486,
-	[34782] = 486,
+	[35352] = 114,
+	[34772] = 114,
+	[34711] = 114,
+	[35288] = 114,
+	[34782] = 114,
+
+	-- Dragonblight
+	[37881] = 115,
+	[37923] = 115,
+	[44450] = 115,
+	[37887] = 115,
 
 	-- Zul'Drak
-	[41161] = 496,
-	[39157] = 496,
-	[39206] = 496,
-	[39238] = 496,
-	[39664] = 496,
-	[38699] = 496,
-	[41390] = 496,
+	[41161] = 121,
+	[39157] = 121,
+	[39206] = 121,
+	[39238] = 121,
+	[39664] = 121,
+	[38699] = 121,
+	[41390] = 121,
+
+	-- Grizzly Hills
+	[38083] = 116,
+	[35797] = 116,
+	[37716] = 116,
+	[35739] = 116,
+	[36851] = 116,
+	-- [36859] = 116,
+
+	-- Icecrown
+	[41265] = 170,
 
 	-- Dalaran (Broken Isles)
-	[129047] = 1014,
+	[129047] = 625,
 
 	-- Stormheim
-	[128287] = 1017,
-	[129161] = 1017,
+	[128287] = 634,
+	[129161] = 634,
 
 	-- Azsuna
-	[118330] = 1015,
+	[118330] = 630,
 
 	-- Suramar
-	[133882] = 1033,
+	[133882] = 680,
 }
 
 local ExtraQuestButton = CreateFrame("Button", "ExtraQuestButton", UIParent, "SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate")
@@ -211,15 +235,15 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	self:RegisterEvent("UPDATE_BINDINGS")
 	self:RegisterEvent("BAG_UPDATE_COOLDOWN")
 	self:RegisterEvent("BAG_UPDATE_DELAYED")
-	self:RegisterEvent("WORLD_MAP_UPDATE")
 	self:RegisterEvent("QUEST_LOG_UPDATE")
 	self:RegisterEvent("QUEST_POI_UPDATE")
 	self:RegisterEvent("QUEST_WATCH_LIST_CHANGED")
 	self:RegisterEvent("QUEST_ACCEPTED")
-
-	if(not WorldMapFrame:IsShown()) then
-		SetMapToCurrentZone()
-	end
+	self:RegisterEvent("QUEST_REMOVED")
+	self:RegisterEvent("ZONE_CHANGED")
+	self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+	self:RegisterEvent("VIGNETTES_UPDATED")
+	self:RegisterEvent("CURRENT_SPELL_CAST_CHANGED")
 end
 
 local worldQuests = {}

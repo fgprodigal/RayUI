@@ -19,23 +19,39 @@ local function LoadSkin()
 		select(i, GuildControlUIRankBankFrameInset:GetRegions()):Hide()
 	end
 
-	GuildControlUIRankSettingsFrameChatBg:SetAlpha(0)
+	GuildControlUIRankSettingsFrameOfficerBg:SetAlpha(0)
 	GuildControlUIRankSettingsFrameRosterBg:SetAlpha(0)
-	GuildControlUIRankSettingsFrameInfoBg:SetAlpha(0)
 	GuildControlUIRankSettingsFrameBankBg:SetAlpha(0)
 	GuildControlUITopBg:Hide()
 	GuildControlUIHbar:Hide()
 	GuildControlUIRankBankFrameInsetScrollFrameTop:SetAlpha(0)
 	GuildControlUIRankBankFrameInsetScrollFrameBottom:SetAlpha(0)
 
-	hooksecurefunc("GuildControlUI_RankOrder_Update", function()
-		if not reskinnedranks then
+	do
+		local function updateGuildRanks()
 			for i = 1, GuildControlGetNumRanks() do
-				S:ReskinInput(_G["GuildControlUIRankOrderFrameRank"..i.."NameEditBox"], 20)
+				local rank = _G["GuildControlUIRankOrderFrameRank"..i]
+				if not rank.styled then
+					rank.upButton.icon:Hide()
+					rank.downButton.icon:Hide()
+					rank.deleteButton.icon:Hide()
+
+					S:ReskinArrow(rank.upButton, "up")
+					S:ReskinArrow(rank.downButton, "down")
+					S:ReskinClose(rank.deleteButton)
+
+					S:ReskinInput(rank.nameBox, 20)
+
+					rank.styled = true
+				end
 			end
-			reskinnedranks = true
 		end
-	end)
+
+		local f = CreateFrame("Frame")
+		f:RegisterEvent("GUILD_RANKS_UPDATE")
+		f:SetScript("OnEvent", updateGuildRanks)
+		hooksecurefunc("GuildControlUI_RankOrder_Update", updateGuildRanks)
+	end
 
 	hooksecurefunc("GuildControlUI_BankTabPermissions_Update", function()
 		for i = 1, GetNumGuildBankTabs()+1 do
@@ -59,7 +75,7 @@ local function LoadSkin()
 	S:ReskinDropDown(GuildControlUINavigationDropDown)
 	S:ReskinDropDown(GuildControlUIRankSettingsFrameRankDropDown)
 	S:ReskinDropDown(GuildControlUIRankBankFrameRankDropDown)
-	S:ReskinInput(GuildControlUIRankSettingsFrameGoldBox, 20)
+    S:ReskinInput(GuildControlUIRankSettingsFrameGoldBox, 20)
 end
 
 S:AddCallbackForAddon("Blizzard_GuildControlUI", "GuildControl", LoadSkin)
