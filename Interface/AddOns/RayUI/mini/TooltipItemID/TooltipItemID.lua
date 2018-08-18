@@ -52,8 +52,8 @@ end
 
 hooksecurefunc(GameTooltip, "SetUnitAura", function(self,...)
         if self:IsForbidden() then return end
-        local id = select(11, UnitAura(...))
-        local caster = select (8, UnitAura(...))
+        local id = select(10, UnitAura(...))
+        local caster = select (7, UnitAura(...))
         if id then
             self:AddLine(" ")
             if caster ~= nil then

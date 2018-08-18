@@ -928,7 +928,7 @@ function UF:PostAltUpdate(min, cur, max)
 end
 
 function UF:PostUpdateIcon(unit, icon, index, offset)
-    local name, _, _, _, dtype, duration, expirationTime, unitCaster, canStealOrPurge = UnitAura(unit, index, icon.filter)
+    local name, _, _,  dtype, duration, expirationTime, unitCaster, canStealOrPurge = UnitAura(unit, index, icon.filter)
 
     local texture = icon.icon
     if icon.isDebuff and not self.isSmartAura then
