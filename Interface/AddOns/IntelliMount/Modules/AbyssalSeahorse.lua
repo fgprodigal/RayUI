@@ -21,7 +21,7 @@ local SEA_LEGS = GetSpellInfo(73701) -- The buff which determines whether the pl
 
 addon:RegisterEventCallback("PreClick", function()
 	local seahorse
-	if addon.db.seahorseFirst and IsUsableSpell(75207) and UnitBuff("player", SEA_LEGS) then
+	if addon.db.seahorseFirst and IsUsableSpell(75207) and AuraUtil.FindAuraByName(SEA_LEGS, "player") then
 		seahorse = addon:QueryName("Abyssal Seahorse")
 	end
 

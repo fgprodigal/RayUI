@@ -251,8 +251,10 @@ function addon:CheckZoneInfo()
 		self:SetAttribute("battleground", nil)
 	end
 
-	local mc = GetCurrentMapContinent()
-	if (mc < 0 and not IsInInstance()) or (mc == 7 and not self.db.draenorFlyable) or (mc == 8 and not self.db.legionFlyable) then
+    local mapInfo = C_Map.GetMapInfo(C_Map.GetBestMapForUnit("player"))
+    local instanceID = select(4, UnitPosition("player"))
+
+	if (mapInfo.mapType == Enum.UIMapType.Cosmic and not IsInInstance()) or (instanceID == 1116 and not self.db.draenorFlyable) or (instanceID == 1220 and not self.db.legionFlyable) then
 		self:SetAttribute("flyForbidden", 1)
 	else
 		self:SetAttribute("flyForbidden", nil)

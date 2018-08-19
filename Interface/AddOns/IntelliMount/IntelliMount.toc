@@ -1,4 +1,4 @@
-## Interface: 70100
+## Interface: 80000
 ## Title: IntelliMount
 ## Version: 1.22
 ## Author: Abin
