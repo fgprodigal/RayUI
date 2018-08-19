@@ -59,8 +59,7 @@ L["Boss fights will be kept with this on, and non-boss fights are discarded."] =
 L["Broker display"] = "Extension para Mostrar en la Interface de Usuario"
 L["Buff spell list"] = "Lista de hechizos de beneficios"
 L["Buff uptimes"] = "Tiempos de funcionamiento de beneficios"
---Translation missing 
--- L["Buffs"] = ""
+L["Buffs"] = "Beneficios"
 L["Buttons"] = "Botones"
 L["CC"] = "Controles de masas"
 L["CC breakers"] = "Interruptores de controles de masas"
@@ -188,34 +187,33 @@ L["Hides HPS from the Healing modes."] = "Oculta SPS de los modos de sanación."
 L["Hides Skada's window when in Battlegrounds/Arenas."] = "Ocultar la ventana de Skada cuando se está en Campos de Batalla/Arenas."
 L["Hides Skada's window when in combat."] = "Ocultar la ventana de Skada en combate"
 L["Hides Skada's window when not in a party or raid."] = "Ocultar ventana de Skada cuando no está en grupo o banda"
---Translation missing 
--- L["Hint: Left-Click to set active mode."] = ""
+--[[Translation missing --]]
+--[[ L["Hint: Left-Click to set active mode."] = ""--]] 
 L["Hint: Left-Click to toggle Skada window."] = "Consejo: Click izquierdo para abrir/cerrar ventana"
 L["Hit"] = "Golpe"
---Translation missing 
--- L["Holy power gain sources"] = ""
---Translation missing 
--- L["Holy power gained"] = ""
---Translation missing 
--- L["How often windows are updated. Shorter for faster updates. Increases CPU usage."] = ""
+--[[Translation missing --]]
+--[[ L["Holy power gain sources"] = ""--]] 
+--[[Translation missing --]]
+--[[ L["Holy power gained"] = ""--]] 
+--[[Translation missing --]]
+--[[ L["How often windows are updated. Shorter for faster updates. Increases CPU usage."] = ""--]] 
 L["HPS"] = "SPS"
 L["HPS:"] = "SPS"
---Translation missing 
--- L["If checked, bar width is fixed. Otherwise, bar width depends on the text width."] = ""
+L["If checked, bar width is fixed. Otherwise, bar width depends on the text width."] = "Si está activado, el ancho de la barra será fijo. Si no, el ancho dependerá de lo que ocupe el texto."
 L["Ignore Main Tanks"] = "Ignorar tanques principales"
 L["Immune"] = "Inmune"
 L["Include set"] = "Incluir conjunto"
 L["Include set name in title bar"] = "Incluir nombre establecido en la barra de título"
 L["Informative tooltips"] = "Tooltips informativos"
---Translation missing 
--- L["Inline bar display"] = ""
---Translation missing 
--- L["Inline display is a horizontal window style."] = ""
+--[[Translation missing --]]
+--[[ L["Inline bar display"] = ""--]] 
+--[[Translation missing --]]
+--[[ L["Inline display is a horizontal window style."] = ""--]] 
 L["Instance"] = "Estancia"
 L["Interrupts"] = "Interrupciones"
 L["Keep segment"] = "Guardar fragmento"
---Translation missing 
--- L["Keeps the player shown last even if there is not enough space."] = ""
+--[[Translation missing --]]
+--[[ L["Keeps the player shown last even if there is not enough space."] = ""--]] 
 L["Last fight"] = "Última lucha"
 L["Left to right"] = "Izquierda a derecha"
 L["Lines"] = "Lineas"
@@ -289,11 +287,11 @@ L["Reverse bar growth"] = "Invertir crecimiento de la barra"
 L["Right to left"] = "Derecha a izquierda"
 L["Right-click to configure"] = "Click derecho para configurar"
 L["Right-click to open menu"] = "Click derecho para abrir menú"
---Translation missing 
--- L["Right-click to set active set."] = ""
+--[[Translation missing --]]
+--[[ L["Right-click to set active set."] = ""--]] 
 L["Role icons"] = "Iconos de rol"
---Translation missing 
--- L["Runic power gain sources"] = ""
+--[[Translation missing --]]
+--[[ L["Runic power gain sources"] = ""--]] 
 L["Runic power gained"] = "Poder Rúnico Ganado"
 L["'s "] = "De"
 L["'s Absorbs"] = "Absorciones de"
@@ -350,8 +348,8 @@ L["Snaps the window size to best fit when resizing."] = "Ajustar el tamaño de l
 L["Sort modes by usage"] = "Ordena los Modos por usados"
 L["Spell details"] = "Detalle de hechizos"
 L["Spell list"] = "Lista de hechizos"
---Translation missing 
--- L["Spell school colors"] = ""
+--[[Translation missing --]]
+--[[ L["Spell school colors"] = ""--]] 
 L["Start new segment"] = "Comenzar nuevo fragmento"
 L["Stop"] = "Parar"
 L["Stop description"] = "Para o resume el segmento actual. Útil para descontar los datos después de una muerte del grupo. Puede ser establecido para que se pare automáticamente en las opciones."
@@ -372,12 +370,11 @@ L["The height of the title frame."] = "Altura del cuadro de título."
 L["The height of the window. If this is 0 the height is dynamically changed according to how many bars exist."] = "La altura de la ventana. Si ésta es 0, la altura será cambiada dinámicamente acorde a cuantas barras existan."
 L["The margin between the outer edge and the background texture."] = "El margen entre el filo exterior y la textura del fundo"
 L["The maximum number of bars shown."] = "El máximo número de barras mostradas"
---Translation missing 
--- L["The mode list will be sorted to reflect usage instead of alphabetically."] = ""
+--[[Translation missing --]]
+--[[ L["The mode list will be sorted to reflect usage instead of alphabetically."] = ""--]] 
 L["The number of fight segments to keep. Persistent segments are not included in this."] = "El número de fragmentos de combate para guardar. Los fragmentos permanentes no están incluídos en esto."
 L["The number of rows from each subview to show when using informative tooltips."] = "El número de filas desde cada subvista para mostrar cuando se usan los tooltips informativos."
---Translation missing 
--- L["The size of the texture pattern."] = ""
+L["The size of the texture pattern."] = "El tamaño del patrón de la textura."
 L["The sound that will be played when your threat percentage reaches a certain point."] = "El sonido que será reproducido cuando tu porcentaje de amenaza alcance un porcentaje concreto."
 L["The text color of the title."] = "El color del texo del Título"
 L["The texture used as the background of the title."] = "La textura usada como fondo del título"
@@ -387,17 +384,13 @@ L["The texture used for the border of the title."] = "La textura usada como bord
 L["The texture used for the borders."] = "La textura usada para los bordes"
 L["The thickness of the borders."] = "El grosor de los bordes"
 L["The width of the bars."] = "La anchura de las barras"
---Translation missing 
--- L["Theme"] = ""
---Translation missing 
--- L["Theme applied!"] = ""
---Translation missing 
--- L["Themes"] = ""
+L["Theme"] = "Tema"
+L["Theme applied!"] = "¡Tema aplicado!"
+L["Themes"] = "Temas"
 L["There is nothing to report."] = "No hay nada que informar"
 L["Thick outline"] = "Contorno grueso"
 L["This change requires a UI reload. Are you sure?"] = "Este cambio requiere una recarga de la interfaz. ¿Estás seguro?"
---Translation missing 
--- L["This determines what other frames will be in front of the frame."] = ""
+L["This determines what other frames will be in front of the frame."] = "Ésto determina qué otros marcos pueden estar en frente del marco."
 L["This will cause the screen to flash as a threat warning."] = "Esto causará un destello en la pantalla como aviso de amenaza"
 L["This will cause the screen to shake as a threat warning."] = "Esto causará que se agite la pantalla como aviso de amenaza"
 L["This will play a sound as a threat warning."] = "Esto reproducirá un sonido como aviso de amenaza"
@@ -407,15 +400,15 @@ L["Threat threshold"] = "Umbral de amenaza"
 L["Threat warning"] = "Aviso de amenaza"
 L["Threat: Personal Threat"] = "Amenaza: Amenaza Personal"
 L["Tick the modules you want to disable."] = "Marca los módulos que quieras deshabilitar."
---Translation missing 
--- L["Tile"] = ""
---Translation missing 
--- L["Tile size"] = ""
---Translation missing 
--- L["Tile the background texture."] = ""
+--[[Translation missing --]]
+--[[ L["Tile"] = ""--]] 
+--[[Translation missing --]]
+--[[ L["Tile size"] = ""--]] 
+--[[Translation missing --]]
+--[[ L["Tile the background texture."] = ""--]] 
 L["Title bar"] = "Título de la barra"
---Translation missing 
--- L["Title color"] = ""
+--[[Translation missing --]]
+--[[ L["Title color"] = ""--]] 
 L["Title height"] = "Altura del título"
 L["Toggle window"] = "Abrir/Cerrar ventana"
 L["Toggles showing the minimap button."] = "Mostrar/No mostrar el botón del minimapa"
@@ -427,24 +420,22 @@ L["Total"] = "Total"
 L["Total healing"] = "Sanación total"
 L["TotalHealing"] = "Sanación Total"
 L["TPS"] = "APS"
---Translation missing 
--- L["Tweaks"] = ""
---Translation missing 
--- L["Update frequency"] = ""
+--[[Translation missing --]]
+--[[ L["Tweaks"] = ""--]] 
+L["Update frequency"] = "Frecuencia de actualización"
 L["Use class icons where applicable."] = "Usar iconos de clase cuando sea posible."
 L["Use focus target"] = "Usar el objetivo del foco"
 L["Use role icons where applicable."] = "Utilizar iconos de rol donde sea aplicable."
---Translation missing 
--- L["Use spell school colors where applicable."] = ""
---Translation missing 
--- L["Various tweaks to get around deficiences and problems in the game's combat logs. Carries a small performance penalty."] = ""
+--[[Translation missing --]]
+--[[ L["Use spell school colors where applicable."] = ""--]] 
+--[[Translation missing --]]
+--[[ L["Various tweaks to get around deficiences and problems in the game's combat logs. Carries a small performance penalty."] = ""--]] 
 L["When possible, bar text will be colored according to player class."] = "Cuando sea posible, el texto será coloreado acorde con la clase del jugador."
 L["When possible, bars will be colored according to player class."] = "Cuando sea posible, las barras será coloreado acorde con la clase del jugador."
 L["When your threat reaches this level, relative to tank, warnings are shown."] = "Cuando tu amenaza alcance este nivel, relativo al tanque, las avisos son mostrados"
 L["Whisper"] = "Susurro"
 L["Whisper Target"] = "Susurrar objetivo"
---Translation missing 
--- L["Width"] = ""
+L["Width"] = "Ancho"
 L["Window"] = "Ventana"
 L["Window height"] = "Altura de la ventana"
 L["Windows"] = "Ventanas"

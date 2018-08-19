@@ -1,5 +1,5 @@
 ## Interface: 70200
-## Version: 104
+## Version: @project-revision@
 
 ## Title: Lib: BossIDs-1.0
 ## Notes: A library to provide mobIDs for bosses.

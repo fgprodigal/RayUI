@@ -20,7 +20,7 @@ L["All data has been reset."] = "Toutes les données ont été réinitialisées.
 L["All Skada functionality is now in 1 addon folder."] = "Toutes les fonctionnalités de Skada sont désormais dans un seul répertoire d'add-ons."
 L["Alternate color"] = "Couleur alternative"
 L["Always show self"] = "Toujours s'afficher soi-même"
-L["Animate bar changes smoothly rather than immediately."] = "Anime les changements des barres de façon fluide."
+L["Animate bar changes smoothly rather than immediately."] = "Animation fluide pour les barres"
 L["Announce CC breaking to party"] = "Annoncer les casseurs de contrôle au groupe"
 L["Appearance"] = "Apparence"
 L["Append a count to set names with duplicate mob names."] = "Ajoute un compteur aux noms d'ensemble ayant des noms de monstres dupliqués."
@@ -113,10 +113,8 @@ L["Data Collection"] = "Collecte de données"
 L["Data feed"] = "Flux de données"
 L["Data resets"] = "RÀZ des données"
 L["Data segments to keep"] = "Segments à garder"
---Translation missing 
--- L["Data text"] = ""
---Translation missing 
--- L["Data text acts as an LDB data feed. It can be integrated in any LDB display such as Titan Panel or ChocolateBar. It also has an optional internal frame."] = ""
+L["Data text"] = "Texte de données"
+L["Data text acts as an LDB data feed. It can be integrated in any LDB display such as Titan Panel or ChocolateBar. It also has an optional internal frame."] = "Les textes de données agissent comme une source LDB. Ils peuvent être intégrés dans n'importe quel affichage LDB comme Titan Panel ou ChocolateBar. Ils ont également un fenêtre interne optionnelle. "
 L["Death log"] = "Journalisation des morts"
 L["Deaths"] = "Morts"
 L["Deaths:"] = "Morts :"
@@ -189,12 +187,12 @@ L["Hides HPS from the Healing modes."] = "Cache le SPS des modes Soins."
 L["Hides Skada's window when in Battlegrounds/Arenas."] = "Cache la fenêtre de Skada quand vous êtes dans un champ de bataille ou une arène."
 L["Hides Skada's window when in combat."] = "Cache la fenêtre de Skada quand vous êtes en combat."
 L["Hides Skada's window when not in a party or raid."] = "Cache la fenêtre de Skada quand vous n'êtes pas dans un groupe ou un raid."
-L["Hint: Left-Click to set active mode."] = "Astuce : clic-gauche pour définir le mode actif."
+L["Hint: Left-Click to set active mode."] = "Astuce : clic-gauche pour activer."
 L["Hint: Left-Click to toggle Skada window."] = "Astuce : clic-gauche pour afficher/cacher la fenêtre de Skada."
 L["Hit"] = "Touche"
 L["Holy power gain sources"] = "Sources des gains de puissance sacré"
 L["Holy power gained"] = "Puissance sacré obtenue"
-L["How often windows are updated. Shorter for faster updates. Increases CPU usage."] = "La rapidité avec laquelle les fenêtres sont mises à jour. Plus court pour des mises à jour plus fréquentes. Augmente l'utilisation de l'UC."
+L["How often windows are updated. Shorter for faster updates. Increases CPU usage."] = "La fréquence de rafraichissement des fenêtres. Plus court pour des mises à jour plus fréquentes. Augmente l'utilisation du CPU."
 L["HPS"] = "SPS"
 L["HPS:"] = "SPS :"
 L["If checked, bar width is fixed. Otherwise, bar width depends on the text width."] = "Si coché, la largeur de barre sera fixe. Autrement, la largeur de barre dépend de la largeur du texte."
@@ -203,10 +201,10 @@ L["Immune"] = "Insensible"
 L["Include set"] = "Inclure l'ensemble"
 L["Include set name in title bar"] = "Inclure le nom d'ensemble dans la barre de titre"
 L["Informative tooltips"] = "Bulles d'aide informatives"
---Translation missing 
--- L["Inline bar display"] = ""
---Translation missing 
--- L["Inline display is a horizontal window style."] = ""
+--[[Translation missing --]]
+--[[ L["Inline bar display"] = ""--]] 
+--[[Translation missing --]]
+--[[ L["Inline display is a horizontal window style."] = ""--]] 
 L["Instance"] = "Instance"
 L["Interrupts"] = "Interruptions"
 L["Keep segment"] = "Garder segment"
@@ -242,8 +240,8 @@ L["No mode or segment selected for report."] = "Aucun mode ou segment n'a été 
 L["No mode selected for report."] = "Aucun mode n'a été sélectionné pour le rapport"
 L["None"] = "Aucun"
 L["Number format"] = "Format des nombres"
---Translation missing 
--- L["Number set duplicates"] = ""
+--[[Translation missing --]]
+--[[ L["Number set duplicates"] = ""--]] 
 L["Officer"] = "Officier"
 L["Only keep boss fighs"] = "Ne garder que les boss"
 L["opens the configuration window"] = "ouvre la fenêtre de configuration"
@@ -338,7 +336,7 @@ L["Skada: %s for %s:"] = "Skada: %s pour %s:"
 L["Skada: Fights"] = "Skada : combats"
 L["Skada: Modes"] = "Skada : modes"
 L["Smart"] = "Intelligent"
-L["Smooth bars"] = "Barres fluides"
+L["Smooth bars"] = "Barres fluides "
 L["Snap to best fit"] = "Corriger pour adapter"
 L["Snaps the window size to best fit when resizing."] = "Corrige la taille de la fenêtre afin qu'elle s'adapte mieux à son contenu lors des redimensionnements."
 L["Sort modes by usage"] = "Trier les modes par utilisation"
@@ -347,8 +345,8 @@ L["Spell list"] = "Liste des techniques"
 L["Spell school colors"] = "Couleurs des écoles de magie"
 L["Start new segment"] = "Lancer nv segment"
 L["Stop"] = "Stop"
---Translation missing 
--- L["Stop description"] = ""
+--[[Translation missing --]]
+--[[ L["Stop description"] = ""--]] 
 L["Strata"] = "Couche"
 L["Subview rows"] = "Rangées sous-vue"
 L["Switch to mode"] = "Passer au mode"
@@ -395,12 +393,10 @@ L["Threat threshold"] = "Seuil de menace"
 L["Threat warning"] = "Avertissement de la menace"
 L["Threat: Personal Threat"] = "Menace : Menace perso."
 L["Tick the modules you want to disable."] = "Cocher les modules que vous souhaitez désactiver."
---Translation missing 
--- L["Tile"] = ""
---Translation missing 
--- L["Tile size"] = ""
---Translation missing 
--- L["Tile the background texture."] = ""
+L["Tile"] = "Tuile"
+L["Tile size"] = "Taille des tuiles"
+--[[Translation missing --]]
+--[[ L["Tile the background texture."] = ""--]] 
 L["Title bar"] = "Barre du titre"
 L["Title color"] = "Couleur du titre"
 L["Title height"] = "Hauteur du titre"

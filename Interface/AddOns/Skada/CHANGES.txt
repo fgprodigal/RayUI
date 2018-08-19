@@ -1,8 +1,14 @@
 ------------------------------------------------------------------------
-r748 | zarnivoop | 2017-08-30 11:59:44 -0500 (Wed, 30 Aug 2017) | 1 line
+r761 | nebula169 | 2018-08-09 04:38:07 +0000 (Thu, 09 Aug 2018) | 1 line
 Changed paths:
-   M /trunk/Skada.toc
+   M /trunk/modules/Tweaks.lua
 
-.toc update
+Tweaks: Handle the Animal Companion Hunter pet
+------------------------------------------------------------------------
+r760 | nebula169 | 2018-08-09 04:37:41 +0000 (Thu, 09 Aug 2018) | 1 line
+Changed paths:
+   M /trunk/Skada.lua
+
+Reset the LDB text when reset
 ------------------------------------------------------------------------
 
