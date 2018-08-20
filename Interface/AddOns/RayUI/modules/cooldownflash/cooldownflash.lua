@@ -66,7 +66,7 @@ local function OnUpdate(_,update)
                     texture = v[3]
                     start, duration, enabled = GetItemCooldown(i)
                 elseif (v[2] == "pet") then
-                    texture = select(3,GetPetActionInfo(v[3]))
+                    texture = select(2,GetPetActionInfo(v[3]))
                     start, duration, enabled = GetPetActionCooldown(v[3])
                     isPet = true
                 end
@@ -154,7 +154,7 @@ function _DCP:COMBAT_LOG_EVENT_UNFILTERED(...)
         if (bit.band(sourceFlags,COMBATLOG_OBJECT_TYPE_PET) == COMBATLOG_OBJECT_TYPE_PET and bit.band(sourceFlags,COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE) then
             local name = GetSpellInfo(spellID)
             local index = GetPetActionIndexByName(name)
-            if (index and not select(7,GetPetActionInfo(index))) then
+            if (index and not select(6,GetPetActionInfo(index))) then
                 watching[name] = {GetTime(),"pet",index}
             elseif (not index and name) then
                 watching[name] = {GetTime(),"spell",name}

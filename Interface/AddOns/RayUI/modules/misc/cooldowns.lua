@@ -139,7 +139,7 @@ function mod:AddCooldown(type, spellID)
         texture = GetSpellTexture(spellID)
         start, duration, enabled = GetSpellCooldown(spellID)
     elseif type == "pet" then
-        texture = select(3, GetPetActionInfo(spellID))
+        texture = select(2, GetPetActionInfo(spellID))
         start, duration, enabled = GetPetActionCooldown(spellID)
     end
 
@@ -280,7 +280,7 @@ function mod:PET_BAR_UPDATE_COOLDOWN()
     for i = 1, 10, 1 do
         local start, duration, enable = GetPetActionCooldown(i)
         if enable == 1 then
-            local name, _, texture = GetPetActionInfo(i)
+            local name, texture = GetPetActionInfo(i)
             if name then
                 if start > 0 then
                     if duration > 5 then

@@ -157,7 +157,7 @@ local function LoadSkin()
 
 		local function UpdateLootSlot(self, id)
 			local lootSlot = GetLootSlot(self, id)
-			local texture, item, quantity, quality, locked, isQuestItem, questId, isActive = GetLootSlotInfo(id)
+            local texture, item, quantity, _, quality, locked, isQuestItem, questId, isActive = GetLootSlotInfo(id)
 			if not item then return end
             local color = ITEM_QUALITY_COLORS[quality]
             lootSlot.quality = quality
