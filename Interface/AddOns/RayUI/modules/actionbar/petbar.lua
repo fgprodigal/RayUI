@@ -19,13 +19,13 @@ function AB:CreateBarPet()
 
 	local function PetBarUpdate(self, event)
 		local petActionButton, petActionIcon, petAutoCastableTexture, petAutoCastShine
-		for i=1, NUM_PET_ACTION_SLOTS, 1 do
+		for i = 1, NUM_PET_ACTION_SLOTS, 1 do
 			local buttonName = "PetActionButton" .. i
 			petActionButton = _G[buttonName]
 			petActionIcon = _G[buttonName.."Icon"]
 			petAutoCastableTexture = _G[buttonName.."AutoCastable"]
 			petAutoCastShine = _G[buttonName.."Shine"]
-			local name, subtext, texture, isToken, isActive, autoCastAllowed, autoCastEnabled = GetPetActionInfo(i)
+			local name, texture, isToken, isActive, autoCastAllowed, autoCastEnabled = GetPetActionInfo(i)
 
 			if not isToken then
 				petActionIcon:SetTexture(texture)
