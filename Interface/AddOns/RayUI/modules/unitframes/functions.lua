@@ -292,7 +292,7 @@ function UF:Construct_SmartAura(frame)
     return auras
 end
 
-function UF:CustomSmartFilter(unit, icon, name, rank, texture, count, debuffType, duration, expirationTime, unitCaster, isStealable, _, spellID, canApplyAura, isBossDebuff, _, nameplateShowAll, timeMod, value1, value2, value3)
+function UF:CustomSmartFilter(unit, icon, name, texture, count, debuffType, duration, expirationTime, unitCaster, isStealable, _, spellID, canApplyAura, isBossDebuff, _, nameplateShowAll, timeMod, value1, value2, value3)
     local returnValue = true
     local isPlayer = unitCaster == "player" or unitCaster == "vehicle"
 
@@ -1023,7 +1023,7 @@ function UF:PostCreateIcon(button)
     button:StyleButton(true)
 end
 
-function UF:CustomFilter(unit, icon, name, rank, texture, count, debuffType, duration, expirationTime, unitCaster, isStealable, _, spellID)
+function UF:CustomFilter(unit, icon, name, texture, count, debuffType, duration, expirationTime, unitCaster, isStealable, _, spellID)
     local isPlayer
 
     if(unitCaster == "player" or unitCaster == "vehicle") then
@@ -1036,7 +1036,7 @@ function UF:CustomFilter(unit, icon, name, rank, texture, count, debuffType, dur
     end
 
     if UF.db.units[unit].smartaura.enable then
-        return not UF:CustomSmartFilter(unit, icon, name, rank, texture, count, debuffType, duration, expirationTime, unitCaster, isStealable, _, spellID)
+        return not UF:CustomSmartFilter(unit, icon, name, texture, count, debuffType, duration, expirationTime, unitCaster, isStealable, _, spellID)
     end
 
     return true
