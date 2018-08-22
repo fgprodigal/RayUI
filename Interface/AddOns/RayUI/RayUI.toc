@@ -1,6 +1,6 @@
 ﻿## Interface: 80000
 ## Title: |cff7aa6d6Ray|r|cffff0000U|r|cff7aa6d6I|r
-## Version: 8.0 build 1490
+## Version: 8.0 build 1491
 ## Author: Ray
 ## OptionalDeps: Blizzard_DebugTools,Skada,DBM-Core, BigWigs, AtlasLoot, SharedMedia
 ## RequiredDeps: Blizzard_CombatText

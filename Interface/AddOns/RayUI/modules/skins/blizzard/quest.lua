@@ -134,7 +134,7 @@ local function LoadSkin()
 	npcLine:SetFrameLevel(0)
 	S:CreateBD(npcLine, 0)
 
-	hooksecurefunc("QuestFrame_ShowQuestPortrait", function(parentFrame, _, _, _, x, y)
+	hooksecurefunc("QuestFrame_ShowQuestPortrait", function(parentFrame, _, _, _, _, x, y)
 		if parentFrame == QuestLogPopupDetailFrame or parentFrame == QuestFrame then
 			x = x + 3
 		end
