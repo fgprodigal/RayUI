@@ -501,12 +501,10 @@ function RA:Construct_PowerBar(frame)
 end
 
 function RA:Construct_NameText(frame)
-    local name = frame.RaisedElementParent:CreateFontString(nil, "ARTKWORK")
+    local name = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY")
     name:SetPoint("CENTER", frame.Health, 0, 2)
     name:SetJustifyH("CENTER")
     name:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
-    name:SetPoint("LEFT")
-    name:SetPoint("RIGHT")
     name.overrideUnit = true
     frame:Tag(name, "[RayUFRaid:name]")
     return name
