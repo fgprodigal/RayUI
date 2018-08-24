@@ -124,27 +124,16 @@ function mod:CreateHonorBar()
             local current = UnitHonor("player");
             local max = UnitHonorMax("player");
             local level = UnitHonorLevel("player")
-            local levelmax = GetMaxPlayerHonorLevel()
-
+            
             GameTooltip:AddLine(HONOR)
             GameTooltip:SetPrevLineJustify("CENTER")
             GameTooltip:AddDivider()
-
-            if (CanPrestige()) then
-                GameTooltip:AddLine(PVP_HONOR_PRESTIGE_AVAILABLE)
-                GameTooltip:AddDivider()
-            end
+         
             GameTooltip:AddDoubleLine(HONOR_LEVEL_LABEL:gsub("%%d",""), level, 1, 1, 1)
-            GameTooltip:AddLine(" ")
-
-            if (CanPrestige()) then
-                GameTooltip:AddLine(PVP_HONOR_PRESTIGE_AVAILABLE);
-            elseif (level == levelmax) then
-                GameTooltip:AddLine(MAX_HONOR_LEVEL);
-            else
-                GameTooltip:AddDoubleLine(HONOR_BAR:gsub("%%d/%%d",""), format('%d / %d (%d%%)', current, max, current/max * 100), 1, 1, 1)
-                GameTooltip:AddDoubleLine(L["剩余"], format("%d (%d%%)", max - current, (max - current) / max * 100), 1, 1, 1)
-            end
+            GameTooltip:AddLine(" ")       
+			GameTooltip:AddDoubleLine(HONOR, format('%d / %d (%d%%)', current, max, current/max * 100), 1, 1, 1)
+			GameTooltip:AddDoubleLine(L["剩余"], format("%d (%d%%)", max - current, (max - current) / max * 100), 1, 1, 1)
+            
             GameTooltip:Show()
         end)
 
@@ -163,17 +152,11 @@ function mod:UpdateHonorBar()
         local max = UnitHonorMax("player")
 
         self:SetAnimatedValues(current, 0, max, level)
-
-        local exhaustionStateID = GetHonorRestState()
-        if (exhaustionStateID == 1) then
-            self:SetStatusBarColor(1.0, 0.71, 0)
-            R:SetStatusBarGradient(self)
-            self:SetAnimatedTextureColors(1.0, 0.71, 0)
-        else
-            self:SetStatusBarColor(1.0, 0.24, 0)
-            R:SetStatusBarGradient(self)
-            self:SetAnimatedTextureColors(1.0, 0.24, 0)
-        end
+      
+		self:SetStatusBarColor(1.0, 0.71, 0)
+		R:SetStatusBarGradient(self)
+		self:SetAnimatedTextureColors(1.0, 0.71, 0)
+       
     end
 end
 
@@ -310,11 +293,71 @@ function mod:UpdateArtiBar()
     end
 end
 
+function mod:CreateAzeriteBar()
+    self.AzeriteBar = self:CreateBar("RayUIAzeriteBar", self.ArtiBar, 8)
+
+    self.AzeriteBar:SetScript("OnEvent", self.UpdateAzeriteBar)
+    self.AzeriteBar:RegisterEvent("AZERITE_ITEM_EXPERIENCE_CHANGED")
+    self.AzeriteBar:RegisterEvent("PLAYER_ENTERING_WORLD")
+
+	local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem(); 
+	
+	if (not azeriteItemLocation) then 
+		self.AzeriteBar:Hide()
+		return; 
+	end
+	
+	local xp, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(azeriteItemLocation);
+	local currentLevel = C_AzeriteItem.GetPowerLevel(azeriteItemLocation); 
+	local xpToNextLevel = totalLevelXP - xp; 
+
+    self.AzeriteBar:SetScript("OnEnter", function(self)
+            GameTooltip:ClearLines()
+            GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -5)
+
+            
+			-- GameTooltip:AddLine(string.format("%s (%s %d)", data.name, LEVEL, data.numRanksPurchased))
+			GameTooltip:AddDoubleLine(AZERITE_POWER_TOOLTIP_TITLE:format(currentLevel, totalLevelXP - xp))
+			GameTooltip:SetPrevLineJustify("CENTER")
+			-- GameTooltip:AddDivider()
+			
+            -- GameTooltip:AddLine(" ")  
+			-- GameTooltip:AddDoubleLine(AZERITE_POWER_TOOLTIP_BODY:format('%d / %d (%d%%)', xp, totalLevelXP, xp/totalLevelXP * 100), 1, 1, 1)
+			-- GameTooltip:AddDoubleLine(L["剩余"], format("%d (%d%%)", totalLevelXP - xp, (totalLevelXP - xp) / totalLevelXP * 100), 1, 1, 1)
+            
+            GameTooltip:Show()
+        end)
+
+    self.AzeriteBar:SetScript("OnLeave", function()
+            GameTooltip:Hide()
+        end)
+end
+
+function mod:UpdateAzeriteBar()
+    local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem(); 
+	
+	if (not azeriteItemLocation) then 
+		self:Hide()
+		return; 
+	end
+	
+	local xp, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(azeriteItemLocation);
+	local currentLevel = C_AzeriteItem.GetPowerLevel(azeriteItemLocation); 
+	local xpToNextLevel = totalLevelXP - xp; 
+
+	self:SetStatusBarColor(.901, .8, .601)
+	self:SetAnimatedValues(xp, 0, totalLevelXP, currentLevel)
+	
+	self:Show()
+    
+end
+
 function mod:Initialize()
     self:CreateExpBar()
     self:CreateHonorBar()
     self:CreateRepBar()
     self:CreateArtiBar()
+	self:CreateAzeriteBar()
 end
 
 M:RegisterMiscModule(mod:GetName())
