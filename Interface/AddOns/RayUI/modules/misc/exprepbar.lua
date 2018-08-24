@@ -300,31 +300,26 @@ function mod:CreateAzeriteBar()
     self.AzeriteBar:RegisterEvent("AZERITE_ITEM_EXPERIENCE_CHANGED")
     self.AzeriteBar:RegisterEvent("PLAYER_ENTERING_WORLD")
 
-	local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem(); 
 	
-	if (not azeriteItemLocation) then 
-		self.AzeriteBar:Hide()
-		return; 
-	end
-	
-	local xp, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(azeriteItemLocation);
-	local currentLevel = C_AzeriteItem.GetPowerLevel(azeriteItemLocation); 
-	local xpToNextLevel = totalLevelXP - xp; 
 
     self.AzeriteBar:SetScript("OnEnter", function(self)
             GameTooltip:ClearLines()
             GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -5)
+			
+			local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem(); 
+	
+			if (not azeriteItemLocation) then 
+				self.AzeriteBar:Hide()
+				return; 
+			end
+			
+			local xp, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(azeriteItemLocation);
+			local currentLevel = C_AzeriteItem.GetPowerLevel(azeriteItemLocation); 
+			local xpToNextLevel = totalLevelXP - xp; 
 
-            
-			-- GameTooltip:AddLine(string.format("%s (%s %d)", data.name, LEVEL, data.numRanksPurchased))
 			GameTooltip:AddDoubleLine(AZERITE_POWER_TOOLTIP_TITLE:format(currentLevel, totalLevelXP - xp))
 			GameTooltip:SetPrevLineJustify("CENTER")
-			-- GameTooltip:AddDivider()
-			
-            -- GameTooltip:AddLine(" ")  
-			-- GameTooltip:AddDoubleLine(AZERITE_POWER_TOOLTIP_BODY:format('%d / %d (%d%%)', xp, totalLevelXP, xp/totalLevelXP * 100), 1, 1, 1)
-			-- GameTooltip:AddDoubleLine(L["剩余"], format("%d (%d%%)", totalLevelXP - xp, (totalLevelXP - xp) / totalLevelXP * 100), 1, 1, 1)
-            
+
             GameTooltip:Show()
         end)
 
