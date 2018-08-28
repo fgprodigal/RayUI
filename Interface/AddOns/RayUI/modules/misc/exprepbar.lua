@@ -210,7 +210,7 @@ function mod:UpdateRepBar()
             min, max, value = 0, threshold, currentValue
         end
         local level
-        if ( ReputationWatchBar.friendshipID ) then
+        if ( GetFriendshipReputation(factionID) ) then
             friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
             level = GetFriendshipReputationRanks(factionID)
             if ( nextFriendThreshold ) then
