@@ -144,7 +144,7 @@ end
 
 function mod:UpdateHonorBar()
     local level = UnitHonorLevel("player")
-    if UnitLevel("player") < MAX_PLAYER_LEVEL or level == levelmax then
+    if not IsWatchingHonorAsXP() then
         self:Hide()
     else
         self:Show()
