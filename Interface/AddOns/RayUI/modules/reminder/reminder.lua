@@ -197,7 +197,7 @@ function RM:ReminderIcon_OnEvent(event, unit)
 	--Negate Spells Check
 	if db.negateGroup and RM:PlayerHasFilteredBuff(self, db.negateGroup) and not self.ForceShow then return end
 
-	local hasOffhandWeapon = OffhandHasWeapon()
+	local hasOffhandWeapon = C_PaperDollInfo.OffhandHasWeapon()
 	local hasMainHandEnchant, _, _, hasOffHandEnchant, _, _ = GetWeaponEnchantInfo()
 	local hasBuff, hasDebuff
 	if db.spellGroup and not db.CDSpell then
